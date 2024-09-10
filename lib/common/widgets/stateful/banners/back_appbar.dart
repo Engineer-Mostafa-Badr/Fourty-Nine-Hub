@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
 
 import '../../../../res/style/styles.dart';
 import '../../stateless/labels/label.dart';
@@ -18,8 +18,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.label,
       this.backColor,
       this.iconColor,
-      this.actions,
-      this.centerTitle = true});
+      this.actions, this.centerTitle=false});
 
   @override
   Widget build(BuildContext context) {

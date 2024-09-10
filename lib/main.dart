@@ -12,12 +12,17 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/get_ser
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/screenutil_init.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
+import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
+import 'features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'features/competition/data/repository/competition_repo_impl.dart';
+import 'features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
+import 'features/competition/presentation/cubit/winner_cubit/winner_cubit.dart';
 import 'features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'routes/pages.dart';
 
@@ -56,6 +61,18 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => serviceLocator<UserCubit>(),
         ),
+        BlocProvider(
+            create: (context) =>
+                CompetitionCubit(serviceLocator.get<CompetitionRepoImpl>())..fetchCompetition(context)),
+        BlocProvider(
+          create: (BuildContext context) => serviceLocator<WalletCubit>(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => serviceLocator<CreateCompanyAdCubit>(),
+        ),
+        BlocProvider(
+            create: (context) => WinnerCubit(serviceLocator.get<CompetitionRepoImpl>())..fetchWinners(context)),
+        //    BlocProvider(create: (_) => CompanyAdvertiseCubit(serviceLocator<CompanyAdvertiseRepoImpl>())),
         // BlocProvider(
         //   create: (context) => serviceLocator<RiderequestCubit>(),
         // ),

@@ -14,7 +14,7 @@ class WheelWalletModel extends WheelWalletEntity {
         id: json['walletId'] as String,
         amount: double.parse(json['amount'].toString()),
         points: double.parse(json['points'].toString()),
-        playCount: json['playCount'],
+        playCount: json['count'],
         maxCount: json['maxCount'],
       );
 }

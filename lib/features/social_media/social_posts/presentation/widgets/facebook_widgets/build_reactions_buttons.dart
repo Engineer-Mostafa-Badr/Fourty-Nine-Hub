@@ -315,8 +315,8 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
-          height: from == 'view' ? 30 : 30,
-          width: from == 'view' ? 30 : 30,
+          height: from == 'view' ? 28 : 28,
+          width: from == 'view' ? 28 : 28,
           child: from == 'view'
               ? Image.asset(
                   item.imageAsset(),

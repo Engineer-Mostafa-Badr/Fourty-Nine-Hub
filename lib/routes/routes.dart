@@ -21,6 +21,7 @@ abstract class Routes {
   static const TRANSFERMONEY = '/Wallet/TransferMoney';
   static const SOCIAL = '/Social';
   static const OTHERSACCOUNT = '/Social/OthersAccount';
+  static const INSTAGRAMPROFILE = '/Instagram/InstagramProfile';
   static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
@@ -38,17 +39,17 @@ abstract class Routes {
   static const AUDIOSTREAMSCREEN = '/Social/ClubHouse/ClubHouseRoom';
   static const CHAT = '/Chat';
   static const CHATROOM = '/ChatRoom';
+  static const CHATROOMCAMERAPICKER = '/ChatRoom/CameraPicker';
+  static const MEDIASLIDER = '/ChatRoom/MediaSlider';
   static const MAZADAT = '/Mazadat';
   static const VISITA = '/Visita';
   static const VISITAEMERGENCY = '/Visita/VisitaEmergency';
   static const CREATEDOCTOR = '/Visita/CreateDoctor';
   static const FILTERDOCTORSUBCATEGORY = '/Visita/FilterDoctorSubcategory';
-  static const FILTERDOCTORAREA =
-      '/Visita/FilterDoctorSubcategory/FilterDoctorCity/FilterDoctorArea';
+  static const FILTERDOCTORAREA = '/Visita/FilterDoctorSubcategory/FilterDoctorCity/FilterDoctorArea';
   static const VISITADOCTORLISTBYLOCATION =
       '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate/FilterDoctorCity/VisitaDoctorsList';
-  static const VISITADOCTORLISTBYCALL =
-      '/Visita/FilterDoctorSubcategory/VisitaDoctorsList';
+  static const VISITADOCTORLISTBYCALL = '/Visita/FilterDoctorSubcategory/VisitaDoctorsList';
   static const FILTERDOCTORGOVERNORATE = '/Visita/FilterDoctorGovernorate';
 
   static const FILTERDOCTORCITY = '/Visita/FilterDoctorCity';
@@ -61,8 +62,7 @@ abstract class Routes {
   static const EDITDOCTORPERSONALINFO = '/Visita/EditDoctorPersonalInfo';
   static const DOCTORSTATISTICS = '/Visita/DoctorStatistics';
   static const DOCTORTODAYAPPOINTMENTS = '/Visita/DoctorTodayAppointments';
-  static const DOCTORUNHANDLEDAPPOINTMENTS =
-      '/Visita/DoctorUnhandledAppointments';
+  static const DOCTORUNHANDLEDAPPOINTMENTS = '/Visita/DoctorUnhandledAppointments';
   static const ALLDOCTORRESERVATIONS = '/Visita/AllDoctorReservations';
   static const FOOD = '/Food';
 
@@ -98,8 +98,7 @@ abstract class Routes {
   static const INSTALLMENT = '/Installment';
   static const CREATEINSTALLMENT = '/Installment/CreateInstallment';
   static const INSTALLMENTDETAILS = '/Installment/Installment-details';
-  static const INSTALLMENTORDERDETAILS =
-      '/Installment/Installment-order-details';
+  static const INSTALLMENTORDERDETAILS = '/Installment/Installment-order-details';
   static const INSTALLMENTORDERS = '/Installment/Installment-orders';
   static const LOGIN = '/Login';
   static const REGISTER = '/Register';
@@ -126,6 +125,9 @@ abstract class Routes {
   static const TRIP_JOIN = '/TripJoin';
   static const AVAILABLE_TRIPS = '/AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = '/TripJoinRequestNotification';
+
+  static const SPOTLIGHT = '/Spotlight';
+  static const SNAP = '/Snap';
 }
 
 abstract class Paths {
@@ -148,11 +150,14 @@ abstract class Paths {
   static const INSTAGRAM = 'Instagram';
   static const SOCIAL = 'Social';
   static const OTHERSACCOUNT = 'OthersAccount';
+  static const INSTAGRAMPROFILE = 'InstagramProfile';
   static const MAZADAT = 'Mazadat';
   static const MAZADDETAILS = 'MazadDetails';
   static const CREATEAUCTION = 'CreateAuction';
   static const CHAT = 'Chat';
   static const CHATROOM = 'ChatRoom';
+  static const CHATROOMCAMERAPICKER = 'CameraPicker';
+  static const MEDIASLIDER = 'MediaSlider';
   static const REELS = 'Reels';
   static const MUSICREELS = 'MUSICREELS';
   static const TWITTER = 'Twitter';
@@ -240,4 +245,7 @@ abstract class Paths {
   static const TRIP_JOIN = 'TripJoin';
   static const AVAILABLE_TRIPS = 'AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = 'TripJoinRequestNotification';
+
+  static const SPOTLIGHT = 'Spotlight';
+  static const SNAP = 'Snap';
 }

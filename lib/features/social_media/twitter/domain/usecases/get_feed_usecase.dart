@@ -18,9 +18,11 @@ class GetTwitterFeedUseCase
 class TwitterFeedParams {
   final int page;
   final int limit;
+  String? search;
   TwitterFeedParams({
     required this.page,
     required this.limit,
+    this.search
   });
   Map<String, dynamic> toJson() => {
         'page': page,

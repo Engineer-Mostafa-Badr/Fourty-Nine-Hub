@@ -5,11 +5,14 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/build_meta_verified.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class BuildTwitterDocumentCard extends StatefulWidget {
   const BuildTwitterDocumentCard({super.key});
@@ -27,23 +30,27 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ?? const UnknownFailure(),
+            state.failure ??  UnknownFailure(''),
             context,
           ),
         );
       }
     }, builder: (context, state) {
-      final controller = context.read<TwitterCubit>();
+      context.read<TwitterCubit>();
       return InkWell(
         splashColor: Colors.transparent,
         hoverColor: Colors.transparent,
         highlightColor: Colors.transparent,
         onTap: () {
-          bottomSheet(
-            context: context,
-            isScrollControlled: true,
-            widget: const BuildMetaVerified(),
-          );
+          if(context.read<UserCubit>().isLoggedIn){
+            bottomSheet(
+              context: context,
+              isScrollControlled: true,
+              widget: const BuildMetaVerified(),
+            );
+          }else{
+            context.push(Routes.LOGIN);
+          }
         },
         child: Container(
           height: 120,

@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
@@ -52,6 +53,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
           children: [
             ProfileImage(
               accountId: 0,
+              userId: '',
               withBorder: false,
               imageURL: widget.comment.user.image.isNotEmpty
                   ? widget.comment.user.image
@@ -71,43 +73,22 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                     style: Styles.mediumText(color: widget.textColor)),
               ],
             )),
-            IconButton(
-                onPressed: () {
-                  bottomSheet(
-                      context: context,
-                      widget: ReportView(
-                        id: widget.comment.id,
-                        categoryId: '66a3583454e6e337915514db',
-                      ));
-                },
-                icon: Icon(
-                  Icons.more_vert,
-                  color: widget.textColor,
-                )),
-            if (user?.id == widget.comment.user.id) ...[
-              // const Sizer(),
-              GestureDetector(
-                  onTap: () {
-                    widget.comment.edit = !widget.comment.edit!;
-                    editTextController.text = widget.comment.content;
-                    setState(() {});
-                  },
-                  child: Icon(
-                    Icons.edit,
-                    color: widget.textColor,
-                    size: 20,
-                  )),
-              const Sizer()
-            ],
             GestureDetector(
-                onTap: () {
-                  widget.onDeleteComment(widget.comment.id);
-                },
-                child: Icon(
-                  Icons.close,
-                  color: widget.textColor,
-                  size: 20,
-                ))
+              onTap: () {
+                bottomSheet(
+                  context: context,
+                  widget: _buildPostOptions(
+                    isMyComment: widget.comment.user.id == user?.id,
+                    post: widget.comment,
+                  ),
+                );
+              },
+              child: Icon(
+                Icons.more_horiz_outlined,
+                color: widget.textColor,
+                size: 20,
+              ),
+            ),
           ],
         ),
         const Sizer(),
@@ -117,35 +98,48 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
           style: Styles.mediumText(color: widget.textColor),
         ),
         if (widget.comment.edit == true)
-          Row(
-            children: [
-              Expanded(
-                  child: FormTextField(
-                      hint: 'Type your comment ....',
-                      action: (v) {
+          SizedBox(
+            height: kToolbarHeight,
+            child: Row(
+              children: [
+                Expanded(
+                    child: TextFormField(
+                      maxLines: null,
+                      controller: editTextController,
+                      onChanged: (v) {
                         setState(() {});
                       },
-                      controller: editTextController)),
-              const Sizer(),
-              if (editTextController.text.isNotEmpty)
-                IconAppButton(
-                  icon: Icons.send,
-                  isCircle: true,
-                  onPressed: () async {
-                    var result = await widget.onEditComment(PostCommentParams(
-                        postId: widget.comment.id,
-                        content: editTextController.text));
-                    if (result == true) {
-                      widget.comment.content = editTextController.text;
-                      widget.comment.edit = false;
-                    }
-                    setState(() {});
-                  },
-                ),
-            ],
+                      style: Styles.headerText(fontSize: 26),
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        contentPadding: EdgeInsets.all(5),
+                        hintText: 'Type your comment ....',
+                        hintStyle: Styles.mediumText(),
+                      ),
+                    )),
+                const Sizer(),
+                if (editTextController.text.isNotEmpty)
+                  IconAppButton(
+                    icon: Icons.send,
+                    size: 20,
+                    isCircle: true,
+                    onPressed: () async {
+                      var result = await widget.onEditComment(PostCommentParams(
+                          postId: widget.comment.id,
+                          content: editTextController.text));
+                      if (result == true) {
+                        widget.comment.content = editTextController.text;
+                        widget.comment.edit = false;
+                      }
+                      setState(() {});
+                    },
+                  ),
+              ],
+            ),
           ),
+        Sizer(height: 4,),
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             InkWell(
               onTap: () {
@@ -191,7 +185,78 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                 })
           ],
         ),
+        Sizer(height: 4,),
       ],
     );
   }
+
+  Widget _buildPostOptions(
+      {required bool isMyComment, required CommentEntity post}) {
+    return SizedBox(
+      height: isMyComment ? 150 : 80,
+      child: Column(
+        children: [
+          if (!isMyComment)
+            listTile(
+                icon: Icons.report,
+                iconColor: Colors.red,
+                title: 'Report post',
+                subTitle: 'Your well reports this post.',
+                onTap: () async {
+                  Future.delayed(const Duration(milliseconds: 200), () {
+                    bottomSheet(
+                        context: context,
+                        widget: ReportView(
+                          id: post.id,
+                          categoryId: '66a3583454e6e337915514db',
+                        ));
+                  });
+                }),
+          if (isMyComment)
+            listTile(
+                icon: Icons.delete,
+                title: 'Delete Comment',
+                subTitle:
+                'Your comment will be deleted, and you cannot get it again',
+                onTap: () {
+                  widget.onDeleteComment(widget.comment.id);
+                }),
+          if (isMyComment)
+            listTile(
+                icon: Icons.edit,
+                title: 'Edit Comment',
+                subTitle: 'Your Will Edit Your Comment.',
+                onTap: () {
+                  widget.comment.edit = !widget.comment.edit!;
+                  editTextController.text = widget.comment.content;
+                  setState(() {});
+                }),
+        ],
+      ),
+    );
+  }
+
+  Widget listTile(
+      {required IconData icon,
+        Color? iconColor,
+        required String title,
+        required String subTitle,
+        required Function onTap}) {
+    return ListTile(
+      title: Label(text: title),
+      onTap: () {
+        onTap();
+        context.pop();
+      },
+      leading: Icon(
+        icon,
+        color: iconColor ?? Colors.black,
+      ),
+      subtitle: Label(
+        text: subTitle,
+        style: Styles.mediumText(color: Colors.grey),
+      ),
+    );
+  }
+
 }

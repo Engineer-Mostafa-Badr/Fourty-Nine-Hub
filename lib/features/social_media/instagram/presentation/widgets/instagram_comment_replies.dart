@@ -128,21 +128,30 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
                   ),
                   child: Row(
                     children: [
-                      const ProfileImage(accountId: 0),
+                      const ProfileImage(accountId: 0,userId: '',),
                       const Sizer(),
                       Expanded(
-                          child: FormTextField(
-                              hint: 'Type your reply ....',
-                              height: kToolbarHeight * .7,
-                              action: (v) {
-                                setState(() {});
-                              },
-                              controller: replyTextController)),
+                          child: TextFormField(
+                        maxLines: null,
+                        controller: replyTextController,
+                        onChanged: (v) {
+                          setState(() {});
+                        },
+                        style: Styles.headerText(fontSize: 26),
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.all(5),
+                          hintText: 'Type your reply ....',
+                          hintStyle: Styles.mediumText(),
+                        ),
+                      )
+                      ),
                       const Sizer(),
                       if (replyTextController.text.isNotEmpty)
                         IconAppButton(
                           icon: Icons.send,
                           isCircle: true,
+                          size: 20,
                           onPressed: () async {
                             CommentEntity data = await widget.onAddReply(
                               ReplyOnCommentParams(

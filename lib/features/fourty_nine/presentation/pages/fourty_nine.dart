@@ -16,7 +16,7 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/firebas
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -24,7 +24,6 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../common/widgets/dynamic/floating_button.dart';
-import '../../../../common/widgets/dynamic/google_ads_banner.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/dynamic/wallet_widget.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
@@ -115,13 +114,13 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           children: [
             //carousel slider
             const AnnounceWidget(),
-            const Sizer(),
+            // const Sizer(),
             //wallet
             const WalletWidget(),
-            const Sizer(),
+            //    const Sizer(),
             //admob
-            const GoogleAddsBanner(),
-            const Sizer(),
+            //   const GoogleAddsBanner(),
+            //  const Sizer(),
             //pick me and come with U
             _pickMeAndComeWithUWidget(),
             const Sizer(),
@@ -168,7 +167,10 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         onTap: () {
                           context.push(Routes.SUBCATEGORIES, extra: state.data![index]);
                         },
-                        child: MainCategoryBanner(category: state.data![index]),
+                        child: MainCategoryBanner(
+                          category: state.data![index],
+                          onFavorite: () {},
+                        ),
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) => const Sizer(),

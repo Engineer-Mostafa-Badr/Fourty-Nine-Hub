@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/data/models/auction_model.dart';
-import '../../../../../core/api/api_consumer.dart';
-import '../../../../../core/api/end_points.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../food_feature/restaurants_list/domain/usecases/get_nearby_restaurants_usecase.dart';
 import '../../domain/entities/auction_entity.dart';

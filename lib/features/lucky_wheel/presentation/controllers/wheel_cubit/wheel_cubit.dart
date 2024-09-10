@@ -15,8 +15,10 @@ class WheelCubit extends Cubit<BasicState<WheelEntity>> {
     final result = await _getWheelUseCase(const NoParams());
     emit(
       result.fold(
-        (failure) =>
-            state.copyWith(status: StateStatus.error, failure: failure),
+        (failure) {
+          print(failure);
+          return state.copyWith(status: StateStatus.error, failure: failure);
+        },
         (wheel) => state.copyWith(status: StateStatus.success, data: wheel),
       ),
     );

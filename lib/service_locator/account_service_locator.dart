@@ -10,12 +10,16 @@ import 'package:fourtyninehub/features/account_taps/lists/domain/usecases/get_bl
 import 'package:fourtyninehub/features/account_taps/lists/domain/usecases/get_followers_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/lists/domain/usecases/get_friend_requests_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/lists/domain/usecases/get_friends_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/data/datasources/Gift/gift_remote_data_source.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/datasources/wallet_remote_datasource.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/data/repositories/Gift/gift_repository_impl.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/repositories/wallet_repo_impl.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/gift_repository.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/wallet_repo.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_competitions_usecase.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/delete_subscription_use_case.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_gifts_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:get_it/get_it.dart';
 import '../features/account_taps/account/data/repositories/account_repo_impl.dart';
@@ -24,62 +28,110 @@ import '../features/account_taps/account/presentation/cubit/managers/favourite_a
 import '../features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import '../features/account_taps/lists/presentation/cubit/lists_cubit.dart';
 import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
+import '../features/account_taps/wallet/domain/usecases/get_subscription_use_case.dart';
+import '../features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
+import '../features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
+import '../features/account_taps/wallet/domain/usecases/sub_category_use_case.dart';
 
 class AccountServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<AccountRemoteDataSource>(
-        () => AccountRemoteDataSourceImpl(serviceLocator()));
+            () => AccountRemoteDataSourceImpl(serviceLocator()));
 
-    serviceLocator.registerLazySingleton<WalletRemoteDataSouce>(
-        () => WalletRemoteDataSouceImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<GiftRemoteDataSource>(
+            () => GiftRemoteDataSourceImpl(serviceLocator()));
+
+    serviceLocator.registerLazySingleton<WalletRemoteDataSource>(
+            () => WalletRemoteDataSourceImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<ListsRemoteDataSource>(
-        () => ListsRemoteDataSourceImpl(serviceLocator()));
+            () => ListsRemoteDataSourceImpl(serviceLocator()));
     // AccountRepo
     serviceLocator.registerLazySingleton<ListsRepo>(
-        () => ListsRepoImpl(serviceLocator()));
+            () => ListsRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<WalletRepo>(
-        () => WalletRepoImpl(serviceLocator()));
+            () => WalletRepoImpl(serviceLocator()));
+
+    serviceLocator.registerLazySingleton<GiftRepository>(
+            () => GiftRepositoryImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<AccountRepo>(
-        () => AccountRepoImpl(serviceLocator()));
+            () => AccountRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<GetFavouriteAdsUsecase>(
-        () => GetFavouriteAdsUsecase(serviceLocator()));
+            () => GetFavouriteAdsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetFavouriteCategoriesUseCase>(
-        () => GetFavouriteCategoriesUseCase(serviceLocator()));
+            () => GetFavouriteCategoriesUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetFavouriteSubCategoriesUseCase>(
-        () => GetFavouriteSubCategoriesUseCase(serviceLocator()));
+            () => GetFavouriteSubCategoriesUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetFriendsUsecase>(
-        () => GetFriendsUsecase(serviceLocator()));
+            () => GetFriendsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetFollowersUseCase>(
-        () => GetFollowersUseCase(serviceLocator()));
+            () => GetFollowersUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetFriendRequestsUsecase>(
-        () => GetFriendRequestsUsecase(serviceLocator()));
+            () => GetFriendRequestsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetBlockedUseCase>(
-        () => GetBlockedUseCase(serviceLocator()));
+            () => GetBlockedUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetWalletHistoryUseCase>(
-        () => GetWalletHistoryUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<GetCompetitionsUsecase>(
-        () => GetCompetitionsUsecase(serviceLocator()));
+            () => GetWalletHistoryUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetSubscriptionWalletUseCase>(
+            () => GetSubscriptionWalletUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetWalletUseCase>(
-        () => GetWalletUseCase(serviceLocator()));
+            () => GetWalletUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetWalletGiftsUseCase>(
+            () => GetWalletGiftsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<MainCategoryUseCase>(
+            () => MainCategoryUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<SubCategoryUseCase>(
+            () => SubCategoryUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<DeleteSubscriptionUseCase>(
+            () => DeleteSubscriptionUseCase(serviceLocator()));
 
     serviceLocator.registerFactory<FavouriteAdsCubit>(
-        () => FavouriteAdsCubit(serviceLocator())..loadData());
+            () =>
+        FavouriteAdsCubit(serviceLocator())
+          ..loadData());
 
     serviceLocator.registerFactory<FavouriteSubCategoryCubit>(
-        () => FavouriteSubCategoryCubit(serviceLocator())..loadData());
+            () =>
+        FavouriteSubCategoryCubit(serviceLocator())
+          ..loadData());
     serviceLocator.registerFactory<FavouriteCategoryCubit>(
-        () => FavouriteCategoryCubit(serviceLocator())..loadData());
+            () =>
+        FavouriteCategoryCubit(serviceLocator())
+          ..loadData());
     serviceLocator.registerFactory<ShareAppCubit>(() => ShareAppCubit());
 
-    serviceLocator.registerFactory<ListsCubit>(() => ListsCubit(
+    serviceLocator.registerFactory<ListsCubit>(() =>
+        ListsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
+    serviceLocator.registerFactory<WalletCubit>(() =>
+    WalletCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+    )
+      ..loadData());
+    serviceLocator.registerFactory<WalletCubit>(() => WalletCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
         )..loadData());
-    serviceLocator.registerFactory<WalletCubit>(() =>
-        WalletCubit(serviceLocator(), serviceLocator(), serviceLocator())
-          ..loadData());
+
+    serviceLocator.registerFactory<GiftCubit>(() => GiftCubit(
+          serviceLocator(),
+        )..loadData());
   }
 }

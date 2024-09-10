@@ -8,4 +8,6 @@ abstract class SubcategoriesRepo {
       GetSubCategoriesParams params);
 
   Future<Either<Failure, bool>> toggleFavoriteSubcategory(String sucategoryId);
+  Future<Either<Failure, bool>> toggleFavoriteCategory(String sucategoryId);
+  Future<Either<Failure, bool>> deleteFavoriteCategory(String sucategoryId);
 }

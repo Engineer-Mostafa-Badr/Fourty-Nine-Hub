@@ -6,7 +6,8 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart'
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -69,6 +70,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             IconAppButton(
               onPressed: () => context.pop(),
               icon: Icons.arrow_back_ios,
+              size: 20,
             ),
           Expanded(
             child: Container(
@@ -78,7 +80,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   BoxDecoration(borderRadius: BorderRadius.circular(40.zR), color: AppColors.AUTH_CONTAINER_COLOR),
               child: InkWell(
                 borderRadius: BorderRadius.circular(40.zR),
-                onTap: () {},
+                onTap: () {
+                  showDialog(context: context, builder: (_) => const SearchAppUsers());
+                },
                 child: Row(
                   children: [
                     Icon(

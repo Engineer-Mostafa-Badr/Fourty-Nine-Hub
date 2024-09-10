@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../res/assets/assets.dart';
@@ -31,11 +31,11 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
             BottomItemModel(
               icon: FontAwesomeIcons.microphone,
               height: 30,
-              label: 'voice',
+              label: 'snap',
               // Translated text
               index: 0,
-              image: Assets.voiceLive,
-              route: Routes.CLUBHOUSE,
+              image: Assets.cameraIcon,
+              route: Routes.SNAP,
             ),
             BottomItemModel(
               icon: FontAwesomeIcons.stream,
@@ -56,13 +56,13 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
               route: Routes.ZOOM,
             ),
             BottomItemModel(
-              icon: Icons.video_call,
-              label: 'cast',
+              icon: Icons.light_mode_rounded,
+              label: 'spotlight',
               // Translated text
               index: 0,
               height: 25,
-              image: Assets.radio,
-              route: Routes.CLUBHOUSE,
+              image: Assets.spotlightIcon,
+              route: Routes.SPOTLIGHT,
             ),
           ]
         : mainCategory == 2
@@ -224,10 +224,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
       builder: (BuildContext context, Widget? child) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 400),
-          height: scrollController.position.userScrollDirection ==
-                  ScrollDirection.reverse
-              ? 0
-              : 90.zH,
+          height: 90.zH,
           child: CustomPaint(
             painter: BottomBarPainter(
               color: Colors.black,

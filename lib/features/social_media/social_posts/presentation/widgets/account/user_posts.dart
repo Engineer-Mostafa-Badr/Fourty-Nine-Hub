@@ -36,7 +36,7 @@ class _UserPostsState extends State<UserPosts> {
           showErrorMessage(
             context,
             getFailureMessage(
-              state.failure ?? const UnknownFailure(),
+              state.failure ??  UnknownFailure(''),
               context,
             ),
           );
@@ -44,11 +44,7 @@ class _UserPostsState extends State<UserPosts> {
       }, builder: (context, state) {
         final controller = context.read<SocialPostsCubit>();
         return PagedSliverList<int, PostEntity>(
-          // padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
           pagingController: controller.userPostsPagingController,
-          // shrinkWrap: true,
-          // physics: const BouncingScrollPhysics(
-          //     parent: AlwaysScrollableScrollPhysics()),
           builderDelegate: PagedChildBuilderDelegate<PostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.userPostsPagingController.itemList?.length);
@@ -194,7 +190,7 @@ class _UserPostsState extends State<UserPosts> {
                     : Center(
                         child: Label(
                             text: getFailureMessage(
-                          state.failure ?? const UnknownFailure(),
+                          state.failure ??  UnknownFailure(''),
                           context,
                         )),
                       );

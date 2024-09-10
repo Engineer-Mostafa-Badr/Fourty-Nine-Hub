@@ -9,8 +9,11 @@ import 'other_voice.dart';
 
 class ReelsRecordingScreen extends StatefulWidget {
   final String? voiceUrl;
+  final String? comeFromCompany;
+  final String? totalPrice;
+  final String? advertisementType;
 
-  const ReelsRecordingScreen({super.key, this.voiceUrl});
+  const ReelsRecordingScreen({super.key, this.voiceUrl, this.comeFromCompany, this.totalPrice, this.advertisementType});
 
   @override
   ReelsRecordingScreenState createState() => ReelsRecordingScreenState();
@@ -36,17 +39,31 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
               builder: (context) {
                 switch (selectedIndex) {
                   case 0:
-                    return const MyVoiceVideoRecordingScreen();
+                    return MyVoiceVideoRecordingScreen(
+                      advertisementType: widget.advertisementType,
+                      comeFrom: widget.comeFromCompany,
+                      totalPrice: widget.totalPrice,
+                    );
                   case 1:
                     return OtherVoiceVideoRecordingScreen(
                       voiceUrl: widget.voiceUrl ?? '',
+                      advertisementType: widget.advertisementType,
+                      comeFrom: widget.comeFromCompany,
+                      totalPrice: widget.totalPrice,
                     );
                   case 2:
                     return MixVoiceVideoRecordingScreen(
                       voiceUrl: widget.voiceUrl ?? '',
+                      advertisementType: widget.advertisementType,
+                      comeFrom: widget.comeFromCompany,
+                      totalPrice: widget.totalPrice,
                     );
                 }
-                return const MyVoiceVideoRecordingScreen();
+                return MyVoiceVideoRecordingScreen(
+                  advertisementType: widget.advertisementType,
+                  comeFrom: widget.comeFromCompany,
+                  totalPrice: widget.totalPrice,
+                );
               },
             ),
           ),
@@ -77,8 +94,7 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     color: isSelected ? Colors.white : Colors.grey,
-                    fontWeight:
-                        isSelected ? FontWeight.bold : FontWeight.normal,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),
               ),
@@ -109,8 +125,7 @@ class ProgressPainter extends CustomPainter {
     const startAngle = -3.14 / 2;
     final sweepAngle = 2 * 3.14 * progress;
 
-    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle,
-        sweepAngle, false, paint);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle, sweepAngle, false, paint);
   }
 
   @override
@@ -172,8 +187,7 @@ class HorizontalTextWheelPicker extends StatefulWidget {
   });
 
   @override
-  HorizontalTextWheelPickerState createState() =>
-      HorizontalTextWheelPickerState();
+  HorizontalTextWheelPickerState createState() => HorizontalTextWheelPickerState();
 }
 
 class HorizontalTextWheelPickerState extends State<HorizontalTextWheelPicker> {
@@ -184,8 +198,7 @@ class HorizontalTextWheelPickerState extends State<HorizontalTextWheelPicker> {
   void initState() {
     super.initState();
     selectedItemIndex = 1; // Set the second item as initially selected
-    _scrollController =
-        FixedExtentScrollController(initialItem: selectedItemIndex);
+    _scrollController = FixedExtentScrollController(initialItem: selectedItemIndex);
   }
 
   @override

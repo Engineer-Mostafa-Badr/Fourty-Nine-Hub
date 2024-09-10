@@ -5,7 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
@@ -86,7 +85,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ?? const UnknownFailure(),
+            state.failure ??  UnknownFailure(''),
             context,
           ),
         );
@@ -174,7 +173,114 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     ],
                   ),
                 ),
-                Row(
+                Padding(
+                  padding: const EdgeInsets.only(left: 8,right: 8),
+                  child: Row(
+                    children: [
+                      if (myPost.likesCount != 0)
+                        _buildCounterWidget(
+                            value: myPost.likesCount!, image: Assets.like),
+                      if (myPost.hahaCount != 0)
+                        _buildCounterWidget(
+                            value: myPost.hahaCount!, image: Assets.haha),
+                      if (myPost.loveCount != 0)
+                        _buildCounterWidget(
+                            value: myPost.loveCount!, image: Assets.heart),
+                      if (myPost.wowCount != 0)
+                        _buildCounterWidget(
+                            value: myPost.wowCount!, image: Assets.wow),
+                      if (myPost.sadCount != 0)
+                        _buildCounterWidget(
+                            value: myPost.sadCount!, image: Assets.sad),
+                      if (myPost.angryCount != 0)
+                        _buildCounterWidget(
+                            value: myPost.angryCount!, image: Assets.angry),
+                      const Spacer(),
+                      InkWell(
+                        onTap: () => widget.showPostComments(myPost.id),
+                        child: Row(
+                          children: [
+                            Label(
+                              text: myPost.commentsCount.toString(),
+                              style: Styles.mediumText(),
+                            ),
+                            const Sizer(
+                              width: 5,
+                            ),
+                            Label(
+                              text: 'Comments',
+                              style: Styles.mediumText(),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(
+                  color: AppColors.LIGHT_GRAY_COLOR,
+                ),
+                SizedBox(
+                  height: kToolbarHeight * .95,
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: BuildReactionsButtons(
+                        post: myPost,
+                        from: widget.from,
+                      )),
+                      if (widget.from == 'posts')
+                        Expanded(
+                          child: _buildReactionPlaceHolder(
+                              icon: FontAwesomeIcons.message,
+                              label: 'Comment',
+                              image: Assets.comment,
+                              onTap: () => widget.showPostComments(myPost.id)),
+                        ),
+                      Expanded(
+                        child: _buildReactionPlaceHolder(
+                            label: 'Share',
+                            isImage: true,
+                            image: Assets.facebookShare,
+                            onTap: () async {
+                              var result = await controller.onShare(
+                                  postId: myPost.isShared == true
+                                      ? myPost.mainPost!.id
+                                      : myPost.id);
+                              if (result == true) {
+                                showSuccessMessage(
+                                    context, "Post shared successfully");
+                              }
+                            }),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      } else {
+        var myPost = widget.from == 'details'
+            ? widget.post
+            : controller.feedPagingController.itemList![widget.index];
+        return InkWell(
+          onTap: (widget.from == 'posts' && widget.post.isShared == true)
+              ? () => widget.showPostDetails(
+                  controller.feedPagingController.itemList![widget.index])
+              : null,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (myPost.type != 'advertisement')
+                _buildAccountHeader(context: context, post: myPost),
+              _buildContentWidget(
+                  content: myPost.content ?? '',
+                  backgroundColor: myPost.backgroundColor,
+                  images: myPost.images),
+              Padding(
+                padding: const EdgeInsets.only(left: 8,right: 8),
+                child: Row(
                   children: [
                     if (myPost.likesCount != 0)
                       _buildCounterWidget(
@@ -215,105 +321,6 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     ),
                   ],
                 ),
-                const Divider(
-                  color: AppColors.LIGHT_GRAY_COLOR,
-                ),
-                SizedBox(
-                  height: kToolbarHeight * .95,
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: BuildReactionsButtons(
-                        post: myPost,
-                        from: widget.from,
-                      )),
-                      if (widget.from == 'posts')
-                        Expanded(
-                          child: _buildReactionPlaceHolder(
-                              icon: FontAwesomeIcons.message,
-                              label: 'Comment',
-                              onTap: () => widget.showPostComments(myPost.id)),
-                        ),
-                      Expanded(
-                        child: _buildReactionPlaceHolder(
-                            icon: FontAwesomeIcons.share,
-                            label: 'Share',
-                            onTap: () async {
-                              var result = await controller.onShare(
-                                  postId: myPost.isShared == true
-                                      ? myPost.mainPost!.id
-                                      : myPost.id);
-                              if (result == true) {
-                                showSuccessMessage(
-                                    context, "Post shared successfully");
-                              }
-                            }),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
-      } else {
-        var myPost = widget.from == 'details'
-            ? widget.post
-            : controller.feedPagingController.itemList![widget.index];
-        return InkWell(
-          onTap: (widget.from == 'posts' && widget.post.isShared == true)
-              ? () => widget.showPostDetails(
-                  controller.feedPagingController.itemList![widget.index])
-              : null,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (myPost.type != 'advertisement')
-                _buildAccountHeader(context: context, post: myPost),
-              _buildContentWidget(
-                  content: myPost.content ?? '',
-                  backgroundColor: myPost.backgroundColor,
-                  images: myPost.images),
-              Row(
-                children: [
-                  if (myPost.likesCount != 0)
-                    _buildCounterWidget(
-                        value: myPost.likesCount!, image: Assets.like),
-                  if (myPost.hahaCount != 0)
-                    _buildCounterWidget(
-                        value: myPost.hahaCount!, image: Assets.haha),
-                  if (myPost.loveCount != 0)
-                    _buildCounterWidget(
-                        value: myPost.loveCount!, image: Assets.heart),
-                  if (myPost.wowCount != 0)
-                    _buildCounterWidget(
-                        value: myPost.wowCount!, image: Assets.wow),
-                  if (myPost.sadCount != 0)
-                    _buildCounterWidget(
-                        value: myPost.sadCount!, image: Assets.sad),
-                  if (myPost.angryCount != 0)
-                    _buildCounterWidget(
-                        value: myPost.angryCount!, image: Assets.angry),
-                  const Spacer(),
-                  InkWell(
-                    onTap: () => widget.showPostComments(myPost.id),
-                    child: Row(
-                      children: [
-                        Label(
-                          text: myPost.commentsCount.toString(),
-                          style: Styles.mediumText(),
-                        ),
-                        const Sizer(
-                          width: 5,
-                        ),
-                        Label(
-                          text: 'Comments',
-                          style: Styles.mediumText(),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
               ),
               const Divider(
                 color: AppColors.LIGHT_GRAY_COLOR,
@@ -331,6 +338,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                       Expanded(
                         child: _buildReactionPlaceHolder(
                             icon: FontAwesomeIcons.message,
+                            image: Assets.comment,
                             label: 'Comment',
                             onTap: () => widget.showPostComments(myPost.id)),
                       ),
@@ -338,6 +346,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                       child: _buildReactionPlaceHolder(
                           icon: FontAwesomeIcons.share,
                           label: 'Share',
+                          isImage: true,
+                          image: Assets.facebookShare,
                           onTap: () async {
                             var result = await controller.onShare(
                                 postId: myPost.isShared == true
@@ -383,9 +393,24 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   Widget _buildPostOptions(
       {required bool fromDetails, required PostEntity post}) {
     return SizedBox(
-      height: widget.isMyPost ? 150 : 80,
+      height: widget.isMyPost ? 150 : 150,
       child: Column(
         children: [
+          if (!widget.isMyPost)listTile(
+              icon: Icons.report,
+              iconColor: Colors.red,
+              title: 'Report post',
+              subTitle: 'Your well reports this post.',
+              onTap: () async{
+                Future.delayed(const Duration(milliseconds: 200), () {
+                  bottomSheet(
+                    context: context,
+                    widget: ReportView(id: widget.post.id,
+                      categoryId: '66a3583454e6e337915514db',)
+                  );
+                });
+
+              }),
           if (widget.isMyPost)
             listTile(
                 icon: Icons.delete,
@@ -414,7 +439,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   }
 
   Widget listTile(
-      {required IconData icon,
+      {required IconData icon, Color? iconColor,
       required String title,
       required String subTitle,
       required Function onTap}) {
@@ -426,7 +451,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       },
       leading: Icon(
         icon,
-        color: Colors.black,
+        color: iconColor??Colors.black,
       ),
       subtitle: Label(
         text: subTitle,
@@ -439,122 +464,114 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
     required BuildContext context,
     required PostEntity post,
   }) {
-    final user = context.read<UserCubit>().state.data;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            InkWell(
-              onTap: () {
-                if (widget.fromProfile == false) {
-                  context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-                }
-              },
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                backgroundImage: NetworkImage((post.user.image.isNotEmpty)
-                    ? post.user.image
-                    : UIConst.profilePlaceHolder),
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 8,right: 8,top: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: () {
+                  if (widget.fromProfile == false) {
+                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                  }
+                },
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  backgroundImage: NetworkImage((post.user.image.isNotEmpty)
+                      ? post.user.image
+                      : UIConst.profilePlaceHolder),
+                ),
               ),
-            ),
-            const Sizer(),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      if (widget.fromProfile == false) {
-                        context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-                      }
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextAppButton(
-                            label: post.user.firstName,
-                            onPressed: () {
-                              if (widget.fromProfile == false) {
-                                context.push(Routes.OTHERSACCOUNT,
-                                    extra: post.user.id);
-                              }
-                            }),
-                        RichText(
-                            text: TextSpan(children: [
-                          TextSpan(
-                              text: post.sinceTime,
-                              style: Styles.mediumText(color: Colors.grey)),
-                          const WidgetSpan(
-                              child: Icon(
-                            Icons.group,
-                            size: 14,
-                            color: Colors.grey,
-                          ))
-                        ])),
-                      ],
+              const Sizer(),
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        if (widget.fromProfile == false) {
+                          context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                        }
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextAppButton(
+                              label: post.user.firstName,
+                              onPressed: () {
+                                if (widget.fromProfile == false) {
+                                  context.push(Routes.OTHERSACCOUNT,
+                                      extra: post.user.id);
+                                }
+                              }),
+                          RichText(
+                              text: TextSpan(children: [
+                            TextSpan(
+                                text: post.sinceTime,
+                                style: Styles.mediumText(color: Colors.grey)),
+                            const WidgetSpan(
+                                child: Icon(
+                              Icons.group,
+                              size: 14,
+                              color: Colors.grey,
+                            ))
+                          ])),
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(child: _buildActivityFeelingWidget(post)),
-                ],
+                    Expanded(child: _buildActivityFeelingWidget(post)),
+                  ],
+                ),
               ),
-            ),
-            if (post.user.id == user?.id)
-              IconAppButton(
-                onPressed: () {
-                  bottomSheet(
-                      context: context,
-                      widget: ReportView(
-                        id: widget.post.id,
-                        categoryId: '66a3583454e6e337915514db',
-                      ));
-                },
-                icon: Icons.report,
-                color: AppColors.SECONDARY_COLOR,
-              ),
-            const Sizer(),
-            if (post.user.id == user?.id)
-              IconAppButton(
-                icon: Icons.clear,
-                onPressed: () {
-                  bottomSheet(
-                      context: context,
-                      widget: _buildPostOptions(
-                          fromDetails: widget.from == 'details', post: post));
-                },
-              ),
-          ],
-        ),
-        if (post.location != null)
-          Padding(
-            padding: const EdgeInsetsDirectional.only(start: 40.0),
-            child: InkWell(
-              onTap: () {
-                showDialog(
-                    context: context,
-                    builder: (_) => Scaffold(
-                          body: FacebookUserOnMap(
-                            location: post.location!,
-                          ),
-                        ));
-              },
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.location_on,
-                    size: 20,
-                  ),
-                  Expanded(
-                      child: Label(
-                    text: post.location?.place ?? '',
-                    style: Styles.mediumText(fontSize: 14),
-                  ))
-                ],
-              ),
-            ),
+              const Sizer(),
+                IconAppButton(
+                  icon: Icons.more_horiz_outlined,
+                  onPressed: () {
+                    bottomSheet(
+                        context: context,
+                        widget: _buildPostOptions(
+                            fromDetails: widget.from == 'details',
+                            post: post,
+                        ),
+                    );
+                  },
+                ),
+            ],
           ),
-      ],
+          if (post.location != null)
+            Padding(
+              padding: const EdgeInsetsDirectional.only(start: 40.0),
+              child: InkWell(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => Scaffold(
+                            body: FacebookUserOnMap(
+                              location: post.location!,
+                            ),
+                          ));
+                },
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.location_on,
+                      size: 20,
+                    ),
+                    Expanded(
+                        child: Label(
+                      text: post.location?.place ?? '',
+                      style: Styles.mediumText(fontSize: 14),
+                    ))
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -562,62 +579,65 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
     required BuildContext context,
     required MainPostEntity post,
   }) {
-    return Row(
-      children: [
-        InkWell(
-          onTap: () {
-            if (widget.fromProfile == false) {
-              context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-            }
-          },
-          child: CircleAvatar(
-            backgroundColor: Colors.white,
-            backgroundImage: NetworkImage((post.user.image.isNotEmpty)
-                ? post.user.image
-                : UIConst.profilePlaceHolder),
-          ),
-        ),
-        const Sizer(),
-        Expanded(
-            child: Row(
-          children: [
-            InkWell(
-              onTap: () {
-                if (widget.fromProfile == false) {
-                  context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-                }
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextAppButton(
-                      style: TextStyle(color: Theme.of(context).primaryColor),
-                      label: post.user.firstName,
-                      onPressed: () {
-                        if (widget.fromProfile == false) {
-                          context.push(Routes.OTHERSACCOUNT,
-                              extra: post.user.id);
-                        }
-                      }),
-                  RichText(
-                      text: TextSpan(children: [
-                    TextSpan(
-                        text: post.sinceTime,
-                        style: Styles.mediumText(color: Colors.grey)),
-                    const WidgetSpan(
-                        child: Icon(
-                      Icons.group,
-                      size: 14,
-                      color: Colors.grey,
-                    ))
-                  ]))
-                ],
-              ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        children: [
+          InkWell(
+            onTap: () {
+              if (widget.fromProfile == false) {
+                context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+              }
+            },
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              backgroundImage: NetworkImage((post.user.image.isNotEmpty)
+                  ? post.user.image
+                  : UIConst.profilePlaceHolder),
             ),
-            // _buildActivityFeelingWidget(post),
-          ],
-        )),
-      ],
+          ),
+          const Sizer(),
+          Expanded(
+              child: Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  if (widget.fromProfile == false) {
+                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                  }
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextAppButton(
+                        style: TextStyle(color: Theme.of(context).primaryColor),
+                        label: post.user.firstName,
+                        onPressed: () {
+                          if (widget.fromProfile == false) {
+                            context.push(Routes.OTHERSACCOUNT,
+                                extra: post.user.id);
+                          }
+                        }),
+                    RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                          text: post.sinceTime,
+                          style: Styles.mediumText(color: Colors.grey)),
+                      const WidgetSpan(
+                          child: Icon(
+                        Icons.group,
+                        size: 14,
+                        color: Colors.grey,
+                      ))
+                    ]))
+                  ],
+                ),
+              ),
+              // _buildActivityFeelingWidget(post),
+            ],
+          )),
+        ],
+      ),
     );
   }
 
@@ -731,15 +751,18 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   }
 
   Widget _buildReactionPlaceHolder({
-    required IconData icon,
+    IconData? icon,
     required String label,
+    String? image,
+    bool? isImage=false,
     Function? onTap,
   }) {
     if (onTap == null) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          FaIcon(
+          if(image!=null)Image.asset(image,width: 24,height: 24,),
+          if(isImage==false)FaIcon(
             icon,
             color: AppColors.GREY_DARK_COLOR,
             size: 20,
@@ -753,7 +776,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FaIcon(
+            if(image!=null)Image.asset(image??'',width: 22,height: 22,),
+            if(image==null)FaIcon(
               icon,
               color: AppColors.GREY_DARK_COLOR,
               size: 20,
@@ -774,7 +798,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         children: [
           if (post.feeling != null || post.activity != null) ...[
             Text(
-              'feeling ${post.feeling?.name}, ${post.activity?.name}',
+              'feeling ${post.feeling!=null?post.feeling?.name??'':''}${post.activity!=null?', ${post.activity?.name}':''}',
               style: Styles.mediumText(),
             ),
             const SizedBox(

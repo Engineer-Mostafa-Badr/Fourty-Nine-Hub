@@ -1,26 +1,29 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 class MainCategoryBanner extends StatefulWidget {
   final MainCategoryEntity category;
   final bool canRegister;
   final Function()? onRegister;
-  final bool? Function()? onFavorite;
-
-  const MainCategoryBanner({
+  final Function() onFavorite;
+  bool? isFavorite;
+  MainCategoryBanner({
     super.key,
     this.canRegister = false,
     this.onRegister,
     required this.category,
-    this.onFavorite,
+    required this.onFavorite,
+    this.isFavorite,
   });
 
   @override
@@ -28,11 +31,11 @@ class MainCategoryBanner extends StatefulWidget {
 }
 
 class _MainCategoryBannerState extends State<MainCategoryBanner> {
-  late bool _isFavorite;
+  // late bool _isFavorite;
 
   @override
   void initState() {
-    _isFavorite = widget.category.isFavorite;
+    widget.isFavorite = widget.category.isFavorite ?? false;
     super.initState();
   }
 
@@ -70,20 +73,25 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
             start: 0,
             child: Column(
               children: [
-                InkWell(
-                  onTap: () async {
-                    final result = widget.onFavorite?.call();
-                    if (result != null && result != _isFavorite) {
-                      setState(() {
-                        _isFavorite = result;
-                      });
-                    }
-                  },
-                  child: Icon(
-                    _isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: AppColors.SECONDARY_COLOR,
-                  ),
-                ),
+                context.read<UserCubit>().isLoggedIn
+                    ? InkWell(
+                        onTap: () async {
+                          final result = await widget.onFavorite();
+                          if (result != null && result != widget.isFavorite) {
+                            setState(() {
+                              widget.isFavorite = result;
+                              print("===================$result");
+                            });
+                          }
+                        },
+                        child: Icon(
+                          widget.isFavorite == true
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: AppColors.SECONDARY_COLOR,
+                        ),
+                      )
+                    : SizedBox.shrink(),
                 Sizer(
                   height: 15.zH,
                 ),

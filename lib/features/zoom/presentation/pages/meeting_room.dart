@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/zoom_state.dart';
+import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_state.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 
 import '../../../../service_locator/service_locator.dart';
-import '../../../social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import '../../../social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
 class MeetingRoom extends StatefulWidget {
   const MeetingRoom(
       {super.key,
       required this.liveID,
       required this.isHost,
+      required this.userName,
       this.shareScreen = false});
 
   final String liveID;
+  final String userName;
   final bool isHost;
   final bool shareScreen;
 
@@ -32,9 +34,8 @@ class _MeetingRoomState extends State<MeetingRoom> {
 
   @override
   Widget build(BuildContext context) {
-    print('live id is ${widget.liveID}');
+    // print('live id is ${widget.liveID}');
     final String userId = context.read<UserCubit>().state.data!.id;
-    final String userName = context.read<UserCubit>().state.data!.fullName;
     zegoUIKitPrebuiltLiveStreamingHostConfig() =>
         (ZegoUIKitPrebuiltLiveStreamingConfig.host()
           ..slideSurfaceToHide = false
@@ -74,13 +75,13 @@ class _MeetingRoomState extends State<MeetingRoom> {
         create: (context) => serviceLocator<MeetingCubit>(),
         child: BlocBuilder<MeetingCubit, MeetingState>(
           builder: (context, state) {
-            var cubit = context.read<MeetingCubit>();
+            // var cubit = context.read<MeetingCubit>();
             return ZegoUIKitPrebuiltLiveStreaming(
               appID: UIConst.appId,
               appSign: UIConst.appSign,
               userID: userId,
               isLiveStream: false,
-              userName: userName,
+              userName: widget.userName,
               liveID: widget.liveID,
 
               // Modify your custom configurations here.
@@ -95,8 +96,8 @@ class _MeetingRoomState extends State<MeetingRoom> {
   }
 
   void _turnOnShareScreenWhenJoining() async {
-    print('share screen mode');
-    print('share screen mode ${widget.shareScreen}');
+    // print('share screen mode');
+    // print('share screen mode ${widget.shareScreen}');
     if (widget.shareScreen) {
       await ZegoUIKit().startSharingScreen();
       ZegoUIKit().getScreenSharingStateNotifier().value = true;

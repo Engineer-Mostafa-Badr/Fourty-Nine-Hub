@@ -20,13 +20,12 @@ class SavedReelsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<InstagramCubit>(
       create: (_) => serviceLocator()..loadSaverReels(userData.id),
-      child: BlocConsumer<InstagramCubit, InstagramState>(
-          listener: (context, state) {
+      child: BlocConsumer<InstagramCubit, InstagramState>(listener: (context, state) {
         if (state.status == StateStatus.error) {
           showErrorMessage(
             context,
             getFailureMessage(
-              state.failure ?? const UnknownFailure(),
+              state.failure ?? UnknownFailure(''),
               context,
             ),
           );
@@ -34,29 +33,22 @@ class SavedReelsView extends StatelessWidget {
       }, builder: (context, state) {
         final controller = context.read<InstagramCubit>();
         return PagedSliverList<int, PostEntity>(
-          // padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
           pagingController: controller.savedReelsPagingController,
-          // shrinkWrap: true,
-          // physics: const BouncingScrollPhysics(
-          //     parent: AlwaysScrollableScrollPhysics()),
           builderDelegate: PagedChildBuilderDelegate<PostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.savedReelsPagingController.itemList?.length);
-                return const Padding(
-                    padding: EdgeInsets.only(top: 200),
-                    child: Center(
-                      child: Text(
-                        "No Reels",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ));
+                return const Center(
+                  child: Text(
+                    "No Reels",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                    ),
+                  ),
+                );
               },
               itemBuilder: (context, item, index) {
-                final post =
-                    controller.savedReelsPagingController.itemList![index];
+                final post = controller.savedReelsPagingController.itemList![index];
                 print(post.videoMedia);
                 return state.status == StateStatus.success
                     ? Container(
@@ -70,17 +62,15 @@ class SavedReelsView extends StatelessWidget {
                     : Center(
                         child: Label(
                             text: getFailureMessage(
-                          state.failure ?? const UnknownFailure(),
+                          state.failure ?? UnknownFailure(''),
                           context,
                         )),
                       );
               },
               noMoreItemsIndicatorBuilder: (context) => Container(),
-              firstPageProgressIndicatorBuilder: (context) => Container(
-                  margin: const EdgeInsets.only(top: 150),
-                  child: const CupertinoActivityIndicator()),
-              newPageProgressIndicatorBuilder: (context) =>
-                  const CupertinoActivityIndicator()),
+              firstPageProgressIndicatorBuilder: (context) =>
+                  Container(margin: const EdgeInsets.only(top: 150), child: const CupertinoActivityIndicator()),
+              newPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator()),
         );
       }),
     );

@@ -9,12 +9,25 @@ abstract class Assets {
   static String angryReaction = 'assets/lottie/angry_reaction.json';
   static String sadReaction = 'assets/lottie/sad_reaction.json';
   static String wowReaction = 'assets/lottie/OMG_reaction.json';
+  static String warning = 'assets/lottie/warning.json';
 
   // navigator
   static String logo = 'assets/images/logo_600.png';
+  static String facebookShare = 'assets/icons/share.png';
+  static String savedReels = 'assets/icons/savedReels.png';
+  static String userReels = 'assets/icons/userReels.png';
+  static String userMedia = 'assets/icons/userMedia.png';
+  static String comment = 'assets/icons/comment.png';
+  static String single = 'assets/icons/single.png';
+  static String married = 'assets/icons/married.png';
+  static String divorced = 'assets/icons/divorce.png';
+  static String widowed = 'assets/icons/widowed.png';
   static String tinder = 'assets/images/tinder.svg';
   static String social = 'assets/images/social.svg';
   static String hand = 'assets/images/hand.png';
+  static String fawry = 'assets/images/fawry.png';
+  static String instaPay = 'assets/images/instapay.png';
+  static String paymob = 'assets/images/paymob.png';
   static String share = 'assets/images/share.png';
   static String message = 'assets/images/message.svg';
   static String ride = 'assets/images/ride_icon.svg';
@@ -88,4 +101,8 @@ abstract class Assets {
   static String azkar = 'assets/49-New-icons/Group 3.png';
   static String policy = 'assets/49-New-icons/Group 8.png';
   static String history = 'assets/49-New-icons/Group 9.png';
+  static String snapDemo = 'assets/images/snap_demo.jpg';
+  static String spotLightDemo = 'assets/images/spot_light_demo.jpg';
+  static String spotlightIcon = 'assets/icons/spotlight.svg';
+  static String cameraIcon = 'assets/icons/camera_icon.svg';
 }

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
@@ -12,7 +13,6 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/save_toke
 import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
-import '../../../../../core/api/api_consumer.dart';
 import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/entities/user_tokens_entity.dart';
@@ -31,7 +31,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   final CacheService cacheService;
 
   // final UserRepository repository;
-  bool _isTokenAttached = false;
+  bool isTokenAttached = false;
 
   UserCubit(
       this._getUserUseCase,
@@ -52,17 +52,17 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   }
 
   Future<Either<Failure, UserEntity>?> getUser() async {
-    if (!_isTokenAttached) return null;
+    if (!isTokenAttached) return null;
     final result = await _getUserUseCase(const NoParams());
     emit(
       result.fold(
-        (failure) {
+            (failure) {
           return state.copyWith(
             status: StateStatus.error,
             failure: failure,
           );
         },
-        (user) {
+            (user) {
           return state.copyWith(status: StateStatus.success, data: user);
         },
       ),
@@ -83,7 +83,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   //         token = tokens.accessToken.toString();
   //       }
   //       _attachTokenUseCase(tokens);
-  //       _isTokenAttached = true;
+  //       isTokenAttached = true;
   //       getUser();
   //     },
   //   );
@@ -92,11 +92,13 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   void attachToken() async {
     String? accessToken = await TokenManager.getAccessToken();
     String? refreshToken = await TokenManager.getRefreshToken();
-    _attachTokenUseCase(UserTokensEntity(
-      accessToken: accessToken!,
-      refreshToken: refreshToken!,
-    ));
-    _isTokenAttached = true;
+    if (accessToken != null && refreshToken != null) {
+      _attachTokenUseCase(UserTokensEntity(
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      ));
+    }
+    isTokenAttached = accessToken != null && refreshToken != null;
     getUser();
   }
 
@@ -104,7 +106,20 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     cacheService.setLogin(false);
     _attachTokenUseCase(null);
     _saveTokensUseCase(null);
-    _isTokenAttached = false;
+    isTokenAttached = false;
+    state.copyWith(
+        status: StateStatus.success,
+        data: const UserEntity(
+            id: '',
+            firstName: '',
+            lastName: '',
+            email: '',
+            profilePicture: '',
+            profileCover: '',
+            friendsCount: 0,
+            followersCount: 0,
+            followingCount: 0,
+            wallet: 0));
     await _signOutUseCase(const NoParams());
 
     emit(const BasicState());
@@ -119,10 +134,10 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
 
     // UserTokensEntity? token;
     result.fold(
-      (_) {},
-      (tokens) {
+          (_) {},
+          (tokens) {
         _attachTokenUseCase(tokens);
-        _isTokenAttached = true;
+        isTokenAttached = true;
         // token = tokens!;
         emit(state.copyWith(status: StateStatus.success, token: tokens));
       },
@@ -130,8 +145,9 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     // TinderSharedUtils.initializeToken(token!.accessToken);
     // return token;
   }
+
 // getWallet() async {
-//   if (!_isTokenAttached) return;
+//   if (!isTokenAttached) return;
 //   var response = await repository.getWallet();
 //   response.fold(
 //     (error) {
@@ -155,11 +171,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
             data: {'profilePictureId': data.mediaId},
           );
           return response.fold(
-            (failure) {
+                (failure) {
               emit(state.copyWith(status: StateStatus.error, failure: failure));
               return Left(failure);
             },
-            (data) {
+                (data) {
               getUser();
               emit(state.copyWith(
                 status: StateStatus.success,

@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
@@ -34,7 +32,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ?? const UnknownFailure(),
+            state.failure ??  UnknownFailure(''),
             context,
           ),
         );
@@ -55,30 +53,15 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Label(
-                            text: "Peaple you may know",
-                            style: Styles.headerText(),
-                          ),
-                          Row(
-                            children: [
-                              IconAppButton(
-                                  icon: Icons.more_horiz, onPressed: () {}),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              IconAppButton(
-                                  icon: Icons.clear, onPressed: () {}),
-                            ],
-                          ),
-                        ],
+                      Label(
+                        text: "People you may know",
+                        style: Styles.headerText(),
                       ),
                       Container(
                         alignment: AlignmentDirectional.topStart,
-                        height: 350,
+                        height: 250,
                         child: PagedListView<int, SuggestUserEntity>(
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.symmetric(
@@ -118,7 +101,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                 .id);
                                       },
                                       child: Container(
-                                        width: 260,
+                                        width: 200,
                                         padding:
                                             const EdgeInsets.only(bottom: 10),
                                         margin:
@@ -126,9 +109,9 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                 end: 10),
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(20),
+                                              BorderRadius.circular(5),
                                           border: Border.all(
-                                              color: AppColors.DARK_GRAY_COLOR),
+                                              color: AppColors.DIVIDER_GRAY_COLOR),
                                         ),
                                         child: Column(
                                           crossAxisAlignment:
@@ -141,8 +124,8 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                 width: 300,
                                                 borderRadius:
                                                     const BorderRadius.only(
-                                                  topLeft: Radius.circular(20),
-                                                  topRight: Radius.circular(20),
+                                                  topLeft: Radius.circular(5),
+                                                  topRight: Radius.circular(5),
                                                 ),
                                               ),
                                             ),
@@ -249,31 +232,33 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                           title:
                                                                               Label(
                                                                             text:
-                                                                                'Enter greet message',
+                                                                                'Enter Greet Message',
                                                                             style:
                                                                                 Styles.headerText(),
                                                                           ),
                                                                           content:
-                                                                              TextFormField(
-                                                                            controller:
-                                                                                messageController,
-                                                                            onChanged:
-                                                                                (c) {
-                                                                              setState(() {});
-                                                                            },
-                                                                            decoration: InputDecoration(
-                                                                                hintText: "Greet message",
-                                                                                fillColor: Colors.white,
-                                                                                hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
+                                                                          TextField(
+                                                                            // focusNode: focusNode,
+                                                                            maxLines: null,
+                                                                            maxLength: 150,
+                                                                            onChanged: (c) {},
+                                                                            controller: messageController,
+                                                                            decoration: InputDecoration(hintText: "Greet Message", fillColor: Colors.white, hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
                                                                           ),
                                                                           actions: <Widget>[
                                                                             TextButton(
                                                                               onPressed: () {
                                                                                 Navigator.of(context).pop(); // Close the dialog
                                                                               },
-                                                                              child: Label(
-                                                                                text: 'Cancel',
-                                                                                style: Styles.headerText(),
+                                                                              child: Container(
+                                                                                width: 100,
+                                                                                padding: const EdgeInsets.all(2),
+                                                                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4),border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                                                                                alignment: Alignment.center,
+                                                                                child: Label(
+                                                                                  text: 'Cancel',
+                                                                                  style: Styles.headerText(color: Colors.red),
+                                                                                ),
                                                                               ),
                                                                             ),
                                                                             InkWell(
@@ -288,8 +273,8 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                               },
                                                                               child: Container(
                                                                                 width: 100,
-                                                                                padding: const EdgeInsets.all(5),
-                                                                                decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(15)),
+                                                                                padding: const EdgeInsets.all(2),
+                                                                                decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(4)),
                                                                                 alignment: Alignment.center,
                                                                                 child: Label(
                                                                                   text: 'Send',
@@ -313,7 +298,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                       )
                                                                     : Container(
                                                                         height:
-                                                                            30,
+                                                                            25,
                                                                         alignment:
                                                                             Alignment.center,
                                                                         decoration:
@@ -322,7 +307,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                               ? Border.all()
                                                                               : null,
                                                                           borderRadius:
-                                                                              BorderRadius.circular(5),
+                                                                              BorderRadius.circular(4),
                                                                           color: item.addedSuccessfully == false
                                                                               ? AppColors.PRIMARY_COLOR
                                                                               : item.addedSuccessfully == true && item.followSuccessfully == false
@@ -338,7 +323,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                                   : "Send Greet Message",
                                                                           style: Styles.mediumText(
                                                                               color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
-                                                                              fontSize: 14,
+                                                                              fontSize: 24,
                                                                               fontWeight: FontWeight.bold),
                                                                         ),
                                                                       ),
@@ -372,7 +357,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                   },
                                                                   child:
                                                                       Container(
-                                                                    height: 30,
+                                                                    height: 25,
                                                                     alignment:
                                                                         Alignment
                                                                             .center,
@@ -380,7 +365,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                         BoxDecoration(
                                                                       borderRadius:
                                                                           BorderRadius.circular(
-                                                                              5),
+                                                                              4),
                                                                       color: Colors
                                                                           .grey,
                                                                     ),
@@ -392,7 +377,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                           color: Colors
                                                                               .black,
                                                                           fontSize:
-                                                                              14,
+                                                                              22,
                                                                           fontWeight:
                                                                               FontWeight.bold),
                                                                     ),

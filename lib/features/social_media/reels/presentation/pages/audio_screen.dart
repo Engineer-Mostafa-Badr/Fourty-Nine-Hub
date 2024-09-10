@@ -345,11 +345,14 @@ import 'package:chewie/chewie.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:share_plus/share_plus.dart';
@@ -451,9 +454,12 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: const Icon(
-          Icons.arrow_back,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
           color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         title: const Text('Audio',
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
@@ -564,7 +570,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                 child: ElevatedButton(
                   style: const ButtonStyle(
                       backgroundColor:
-                          MaterialStatePropertyAll(Colors.lightBlueAccent)),
+                          MaterialStatePropertyAll(AppColors.PRIMARY_COLOR)),
                   onPressed: () {
                     _player.dispose();
                     Navigator.push(
@@ -577,7 +583,9 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                   },
                   child: const Text(
                     'Use audio',
-                    style: TextStyle(color: Colors.white),
+                    textScaler: TextScaler.linear(1.2),
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -769,7 +777,7 @@ class ReelsScreenForAudio extends StatefulWidget {
 
 class ReelsScreenForAudioState extends State<ReelsScreenForAudio> {
   final PageController _pageController = PageController();
-  int _currentPage = 0;
+  final int _currentPage = 0;
 
   @override
   void initState() {
@@ -813,6 +821,8 @@ class ReelsScreenForAudioState extends State<ReelsScreenForAudio> {
     super.dispose();
   }
 }
+
+//----------------------------------------------------------------------------------------
 
 class ReelItemFromAudio extends StatefulWidget {
   final Reel reel;
@@ -959,6 +969,13 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
     super.build(context);
     return GestureDetector(
       onTap: _togglePlayPause,
+      onVerticalDragEnd: (details) {
+        // Check if the swipe was upwards (primaryVelocity < 0)
+        if (details.primaryVelocity! < 0) {
+          // Show the bottom sheet for any upward swipe
+          ProfileBottomSheet.show(context, widget.reel);
+        }
+      },
       child: Stack(
         fit: StackFit.expand,
         children: [
@@ -1036,10 +1053,36 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
     return Padding(
       padding: const EdgeInsets.all(0.0),
       child: SizedBox(
-        height: height * 0.8,
+        height: height * 0.5,
         width: double.infinity,
         child: Stack(
           children: [
+            // Positioned(
+            //
+            //   top: 100,
+            //   right: 100,
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(8.0),
+            //     child: IconButton(
+            //
+            //       onPressed: () {
+            //         _pauseVideo();
+            //
+            //         Navigator.push(
+            //             context,
+            //             MaterialPageRoute(
+            //               builder: (context) => const ReelsRecordingScreen(),
+            //             ));
+            //       },
+            //       icon: const FaIcon(
+            //         Icons.camera_alt_outlined,
+            //         color: Colors.white,
+            //         size: 35,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+
             Positioned(
               bottom: 16,
               left: 4,
@@ -1050,9 +1093,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
                     children: [
                       _buildUserAvatar(),
                       const SizedBox(width: 12),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width / 2,
-                          child: FittedBox(child: _buildUserInfo())),
+                      FittedBox(child: _buildUserInfo()),
                     ],
                   ),
                   _buildAudioAndButtons(width),
@@ -1061,7 +1102,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
             ),
             Positioned(
               right: 8,
-              bottom: 8,
+              bottom: 0,
               child: _buildActionButtons(),
             ),
           ],
@@ -1084,7 +1125,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
       child: CircleAvatar(
         radius: 30,
         backgroundImage: CachedNetworkImageProvider(
-          widget.reel.user.profilePictureSignedUrl,
+          widget.reel.user.profilePictureSignedUrl!,
         ),
       ),
     );
@@ -1106,8 +1147,8 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
         Text(
           capitalizeAndSplit(
               '${widget.reel.user.firstName} ${widget.reel.user.lastName}'),
-          textScaler: const TextScaler.linear(1),
           style: const TextStyle(
+            fontSize: 26,
             decoration: TextDecoration.none,
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -1115,42 +1156,50 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
         ),
         const SizedBox(width: 4),
         if (widget.reel.user.verified)
-          Icon(
+          const Icon(
             Icons.verified,
-            color: Colors.blue,
-            size: MediaQuery.of(context).size.width * 0.1,
+            color: AppColors.PRIMARY_COLOR_DARK,
+            size: 25,
           ),
       ],
     );
   }
 
   Widget _buildReelNameAndViews() {
-    return Row(
-      children: [
-        Text(
-          widget.reel.name,
-          textScaler: const TextScaler.linear(0.6),
-          style: const TextStyle(
-            color: AppColors.DARK_GRAY_COLOR,
-            decoration: TextDecoration.none,
+    return SizedBox(
+      width: 200,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(
+            child: Text(
+              widget.reel.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: AppColors.DARK_GRAY_COLOR,
+                decoration: TextDecoration.none,
+                fontSize: 18,
+              ),
+            ),
           ),
-        ),
-        const SizedBox(width: 16),
-        FaIcon(
-          FontAwesomeIcons.eye,
-          size: 20,
-          color: AppColors.PRIMARY_COLOR_DARK.withOpacity(0.6),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          widget.reel.viewCount.toString(),
-          textScaler: const TextScaler.linear(0.6),
-          style: const TextStyle(
-            color: AppColors.DARK_GRAY_COLOR,
-            decoration: TextDecoration.none,
+          const SizedBox(width: 16),
+          FaIcon(
+            FontAwesomeIcons.eye,
+            size: 20,
+            color: AppColors.PRIMARY_COLOR_DARK.withOpacity(0.6),
           ),
-        ),
-      ],
+          const SizedBox(width: 8),
+          Text(
+            widget.reel.viewCount.toString(),
+            style: const TextStyle(
+              color: AppColors.DARK_GRAY_COLOR,
+              fontSize: 18,
+              decoration: TextDecoration.none,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -1158,15 +1207,34 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
     return Row(
       children: [
         const SizedBox(width: 4),
-        FaIcon(
-          FontAwesomeIcons.music,
-          color: AppColors.PRIMARY_COLOR_DARK.withOpacity(0.5),
-        ),
-        const SizedBox(width: 4),
+        // FaIcon(
+        //   FontAwesomeIcons.music,
+        //   color: AppColors.PRIMARY_COLOR_DARK.withOpacity(0.5),
+        // ),
         Container(
-          color: Colors.blueGrey.withOpacity(0.1),
+          color: Colors.blueGrey.withOpacity(0.2),
           width: width / 2,
           child: ScrollingText(text: widget.reel.audio.audioName),
+        ),
+        const SizedBox(width: 4),
+        RoundedButtonWithImage(
+          imagePath: widget.reel.audio.audioPicture,
+          onPressed: () {
+            _pauseVideo();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BlocProvider.value(
+                  value: serviceLocator<ReelsCubit>()
+                    ..fetchReelsWithSameAudio(widget.reel.audio.id),
+                  child: InstagramAudioScreen(
+                    audio: widget.reel.audio,
+                    reel: widget.reel,
+                  ),
+                ),
+              ),
+            );
+          },
         ),
         const Spacer(),
       ],
@@ -1177,6 +1245,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
     final reelsCubit = context.read<ReelsCubit>();
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         _buildActionButton(
@@ -1187,7 +1256,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
           () async {
             await _handleLikeAction(reelsCubit);
           },
-          iconColor: Colors.red,
+          iconColor: widget.reel.likeCount == 0 ? Colors.white : Colors.red,
         ),
         _buildActionButton(
           FontAwesomeIcons.comment,
@@ -1211,7 +1280,8 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
           () async {
             await _handleSaveAction(reelsCubit);
           },
-          iconColor: Colors.yellowAccent,
+          iconColor:
+              widget.reel.saveCount == 0 ? Colors.white : Colors.yellowAccent,
         ),
         _buildActionButton(
           Icons.card_giftcard,
@@ -1290,9 +1360,9 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
           FaIcon(
             icon,
             color: iconColor ?? Colors.white,
-            size: 35,
+            size: 30,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           if (count != 0)
             Text(
               '$count',
@@ -1313,3 +1383,379 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
     super.dispose();
   }
 }
+
+class ProfileBottomSheet extends StatelessWidget {
+  final ScrollController scrollController;
+  final Reel reel;
+
+  const ProfileBottomSheet(
+      {super.key, required this.scrollController, required this.reel});
+
+  static void show(BuildContext context, Reel reel) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.5,
+        maxChildSize: 0.9,
+        expand: false,
+        builder: (context, scrollController) => ProfileBottomSheet(
+          scrollController: scrollController,
+          reel: reel,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      controller: scrollController,
+      child: ProfileContent(reel: reel),
+    );
+  }
+}
+
+class ProfileContent extends StatelessWidget {
+  final Reel reel;
+
+  const ProfileContent({super.key, required this.reel});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        SizedBox(
+          height: MediaQuery.of(context).size.width * 0.75,
+          width: double.infinity,
+          child: Image.network(
+            reel.user.coverPictureSignedUrl!.isEmpty ||
+                    reel.user.coverPictureSignedUrl == null
+                ? reel.user.profilePictureSignedUrl!
+                : reel.user.coverPictureSignedUrl! ,
+            errorBuilder: (context, error, stackTrace) => Image.network(
+              UIConst.profilePlaceHolder,
+            ),
+            fit: BoxFit.cover,
+          ),
+        ),
+        Card(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+          ),
+          elevation: 2,
+          margin: EdgeInsets.zero,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                ProfileHeader(reel: reel),
+                const SizedBox(height: 20),
+                ActionButton(reel: reel),
+                const SizedBox(height: 20),
+                LocationAndContact(reel: reel),
+                const SizedBox(height: 20),
+                const SizedBox(height: 20),
+                // SocialLink(reel: reel),
+                // const SizedBox(height: 20),
+                Description(reel: reel),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+        ),
+        const Sizer(),
+        MediaHighlights(reel: reel),
+      ],
+    );
+  }
+}
+
+class ProfileHeader extends StatelessWidget {
+  final Reel reel;
+
+  const ProfileHeader({super.key, required this.reel});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        CircleAvatar(
+          radius: 65,
+          backgroundColor:
+              reel.user.story ? AppColors.SECONDARY_COLOR : Colors.transparent,
+          child: CircleAvatar(
+            radius: 60,
+            backgroundImage: NetworkImage(
+              reel.user.profilePictureSignedUrl ?? UIConst.profilePlaceHolder,
+            ),
+            onBackgroundImageError: (exception, stackTrace) =>
+                const NetworkImage(
+              UIConst.profilePlaceHolder,
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      capitalizeAndSplit2Only(
+                          "${reel.user.firstName} ${reel.user.lastName}"),
+                      style: Theme.of(context).textTheme.headlineSmall,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  if (reel.user.verified)
+                    const Icon(
+                      Icons.verified,
+                      color: AppColors.SECONDARY_COLOR,
+                    )
+                ],
+              ),
+              Text(
+                '${reel.user.firstName}${reel.user.lastName} · ${reel.user.job ?? ''}',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: Colors.grey[600]),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ActionButton extends StatelessWidget {
+  final Reel reel;
+
+  const ActionButton({super.key, required this.reel});
+
+  @override
+  Widget build(BuildContext context) {
+    final currentUserId = serviceLocator<UserCubit>().state.data!.id;
+    return SizedBox(
+      width: double.infinity,
+      child: Builder(builder: (context) {
+        if (currentUserId == reel.user.id) {
+          return ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.black,
+                backgroundColor: Colors.yellow,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: const Text('Your Account'));
+        } else if (reel.user.isFriend) {
+          return ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.black,
+                backgroundColor: Colors.yellow,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: const Text('Friend'));
+        }
+        return ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.yellow,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+            ),
+            child: const Text('+ Add'));
+      }),
+    );
+  }
+}
+
+class LocationAndContact extends StatelessWidget {
+  final Reel reel;
+
+  const LocationAndContact({super.key, required this.reel});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        if (reel.user.country!.isNotEmpty)
+          _buildInfoRow(Icons.location_on,
+              '${capitalize(reel.user.country ?? '')}, ${capitalize(reel.user.city ?? '')}'),
+        if (reel.user.phone!.isNotEmpty)
+          _buildInfoRow(Icons.contact_mail, '${reel.user.phone}'),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow(IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(icon),
+        const SizedBox(width: 5),
+        Text(text),
+      ],
+    );
+  }
+}
+
+class SocialLink extends StatelessWidget {
+  final Reel reel;
+
+  const SocialLink({super.key, required this.reel});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Icon(Icons.link),
+        const SizedBox(width: 5),
+        Text(
+          'instagram.com/...',
+          style: TextStyle(color: Theme.of(context).primaryColor),
+        ),
+      ],
+    );
+  }
+}
+
+class Description extends StatelessWidget {
+  final Reel reel;
+
+  const Description({super.key, required this.reel});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        if (reel.user.bio!.isNotEmpty)
+          const Icon(
+            FontAwesomeIcons.userPen,
+            size: 20,
+          ),
+        const Sizer(),
+        const Sizer(),
+        Text(
+          reel.user.bio ?? '',
+          style: Theme.of(context).textTheme.bodyLarge,
+          textAlign: TextAlign.start,
+        ),
+      ],
+    );
+  }
+}
+
+class MediaHighlights extends StatelessWidget {
+  final Reel reel;
+
+  const MediaHighlights({super.key, required this.reel});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: (reel.user.birthday!.isEmpty &&
+              reel.user.country!.isEmpty &&
+              reel.user.job!.isEmpty)
+          ? const Sizer()
+          : GridView.count(
+              crossAxisCount: 3,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              children: [
+                MediaHighlightItem(
+                  label:
+                      reel.user.birthday!.isEmpty || reel.user.birthday == null
+                          ? 'AST 1999'
+                          : reel.user.birthday!,
+                  icon: Icons.event,
+                  reel: reel,
+                ),
+                MediaHighlightItem(
+                    label: capitalize(reel.user.country ?? '') ?? '',
+                    icon: Icons.flag,
+                    reel: reel),
+                MediaHighlightItem(
+                    label: capitalize(reel.user.job ?? ''),
+                    icon: FontAwesomeIcons.briefcase,
+                    reel: reel),
+              ],
+            ),
+    );
+  }
+}
+
+class MediaHighlightItem extends StatelessWidget {
+  final Reel reel;
+
+  final String label;
+  final IconData icon;
+
+  const MediaHighlightItem(
+      {super.key, required this.label, required this.icon, required this.reel});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, size: 40),
+          ),
+        ),
+        const SizedBox(height: 5),
+        Expanded(
+          child: Text(label,
+              textAlign: TextAlign.center, overflow: TextOverflow.ellipsis),
+        ),
+      ],
+    );
+  }
+}
+
+// class HomePage extends StatelessWidget {
+//   const HomePage({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text('Profile')),
+//       body: GestureDetector(
+//         onVerticalDragEnd: (details) {
+//           // Check if the user swipes up (primaryVelocity is negative for upward swipes)
+//           if (details.primaryVelocity! < 0) {
+//             // If the swipe is upward, show the bottom sheet
+//             ProfileBottomSheet.show(context,widget);
+//           }
+//         },
+//         child: Container(
+//           color: Colors.red,
+//           height: double.infinity,
+//           width: double.infinity,
+//           child: Center(
+//             child: Text('Swipe up to show profile'),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

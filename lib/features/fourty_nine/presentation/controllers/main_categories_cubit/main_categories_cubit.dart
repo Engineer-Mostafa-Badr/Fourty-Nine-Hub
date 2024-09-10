@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 
 class MainCategoriesCubit extends Cubit<BasicState<List<MainCategoryEntity>>> {
   final GetMainCategoriesUseCase _getMainCategoriesUseCase;
@@ -22,12 +23,17 @@ class MainCategoriesCubit extends Cubit<BasicState<List<MainCategoryEntity>>> {
           PaginationParams(page: 1, limit: 100));
 
       result.fold(
-        (failure) => emit(state.copyWith(
-          failure: failure,
-          status: StateStatus.error,
-        )),
+        (failure)
+        {
+          emit(state.copyWith(
+            failure: failure,
+            status: StateStatus.error,
+          ));
+          CliLogger.error('can\'t load main categories there is an error ${failure.toString()}');
+        },
         (r) {
           _fourtyNineSharedData.mainCategories = r;
+          CliLogger.info('main categories loaded : ${r.length}');
           // emit(state.copyWith(status: StateStatus.loading));
           emit(state.copyWith(status: StateStatus.success, data: r));
         },

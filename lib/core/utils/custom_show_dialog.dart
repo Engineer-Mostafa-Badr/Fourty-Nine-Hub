@@ -6,7 +6,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../../common/functions/global/upload_file.dart';
 import '../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../service_locator/service_locator.dart';
-import '../api/api_consumer.dart';
 
 Future customShowDialog(context) => showDialog(
       context: context,

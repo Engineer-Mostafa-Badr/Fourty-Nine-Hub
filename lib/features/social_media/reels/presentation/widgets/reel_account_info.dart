@@ -25,7 +25,7 @@ class ReelAccountInfo extends StatelessWidget {
           children: [
             const ProfileImage(
               withBorder: true,
-              accountId: 0,
+              accountId: 0, userId: '',
             ),
             const Sizer(),
             TextAppButton(

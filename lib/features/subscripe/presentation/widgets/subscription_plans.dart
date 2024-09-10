@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/subscripe/domain/usecases/subscribe_useca
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,8 +28,7 @@ class SubscriptionPlansWidget extends StatefulWidget {
   });
 
   @override
-  State<SubscriptionPlansWidget> createState() =>
-      _SubscriptionPlansWidgetState();
+  State<SubscriptionPlansWidget> createState() => _SubscriptionPlansWidgetState();
 }
 
 class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
@@ -45,11 +43,12 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
         children: [
           const SizedBox(height: 20),
           Text(
-            widget.title ?? '',
-            style: Styles.headerText(),
+            widget.title ?? "",
             textAlign: TextAlign.center,
+            style: const TextStyle(color: AppColors.PRIMARY_COLOR_LIGHT, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
+          // const SizedBox(height: 20),
           Row(
             children: [
               Expanded(
@@ -58,18 +57,14 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
-                      color: !_isPremium
-                          ? AppColors.PRIMARY_COLOR
-                          : Colors.transparent,
+                      color: !_isPremium ? AppColors.PRIMARY_COLOR : Colors.transparent,
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Text(
                       Labels.regular,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: !_isPremium
-                            ? Colors.white
-                            : Theme.of(context).primaryColor,
+                        color: !_isPremium ? Colors.white : Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -82,9 +77,8 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
-                      color: _isPremium
-                          ? Theme.of(context).primaryColor
-                          : Colors.red,
+                      color: _isPremium ? Colors.red : Theme.of(context).primaryColor,
+                      // : Colors.red,
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Text(
@@ -104,13 +98,11 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
           _buildList(),
           const SizedBox(height: 20),
           const AppInfoText(
-              text:
-                  'The Premium Package gives you the opportunity to be seen more and get more cashback.'),
+              text: 'The Premium Package gives you the opportunity to be seen more and get more cashback.'),
           ElevatedAppButton(
             label: Labels.confirm,
             onPressed: () async {
-              if (widget.paymentMenthods == null ||
-                  widget.paymentMenthods!.isEmpty) {
+              if (widget.paymentMenthods == null || widget.paymentMenthods!.isEmpty) {
                 showLoadingDialog(context);
                 await serviceLocator<SubscriptionController>().subscribe(
                   subscribeParams: SubscribeParams(
@@ -166,9 +158,19 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               setState(() => _groupValue = v!);
             },
           ),
-          Expanded(child: ElevatedAppButton(label: period, onPressed: () {})),
+          Expanded(
+              child: ElevatedAppButton(
+            label: period,
+            onPressed: () {},
+            backColor: _isPremium ? Colors.red : AppColors.PRIMARY_COLOR,
+          )),
           const SizedBox(width: 10),
-          Expanded(child: ElevatedAppButton(label: '$price', onPressed: () {})),
+          Expanded(
+              child: ElevatedAppButton(
+            label: '$price',
+            onPressed: () {},
+            backColor: _isPremium ? Colors.red : AppColors.PRIMARY_COLOR,
+          )),
         ],
       ),
     );

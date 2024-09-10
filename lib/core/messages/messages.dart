@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
@@ -52,7 +53,10 @@ void showErrorMessage(BuildContext context, String message) {
   );
 }
 
-void showSuccessMessage(BuildContext context, String message) {
+ showSuccessMessage(BuildContext context, String message,{
+  Color color=Colors.green,
+  IconData icon=Icons.check_circle,
+}) {
   WidgetsBinding.instance.addPostFrameCallback(
     (_) => ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -72,9 +76,9 @@ void showSuccessMessage(BuildContext context, String message) {
               ),
             ),
             const SizedBox(width: 10),
-            const Icon(
-              Icons.check_circle,
-              color: Colors.green,
+             Icon(
+              icon,
+              color: color,
             ),
           ],
         ),
@@ -138,7 +142,7 @@ Future<void> showPermissionDialog({required String message}) async =>
         ),
         actions: [
           TextAppButton(
-            label: LocaleKeys.openAppSettings,
+            label: LocaleKeys.openAppSettings.tr(),
             onPressed: () async {
               await openAppSettings();
               AppPages.router.configuration.navigatorKey.currentContext!.pop();

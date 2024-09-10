@@ -13,21 +13,32 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/post_details_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_people_you_may_know.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/Stories.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/pages/facebook_stories.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_card.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_comments.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
+import '../../../../stories/presentation/cubit/stories_cubit.dart';
+
 class FacebookBody extends StatelessWidget {
   const FacebookBody({super.key, required this.scrollController});
+
   final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SocialPostsCubit>(
-      create: (_) => serviceLocator()..loadData(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SocialPostsCubit>(
+          create: (_) => serviceLocator()..loadData(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<StoryCubit>()..fetchStories(),
+          // create: (context) => serviceLocator<StoryCubit>(),
+        ),
+      ],
       child: BlocConsumer<SocialPostsCubit, SocialPostsState>(
           listener: (context, state) {
         if (state.status == StateStatus.error) {
@@ -42,12 +53,24 @@ class FacebookBody extends StatelessWidget {
       }, builder: (context, state) {
         final controller = context.read<SocialPostsCubit>();
         return RefreshIndicator(
-          onRefresh: () async => controller.onRefresh(),
+          onRefresh: () async {
+            context.read<StoryCubit>().fetchStories(loadMore: true);
+            controller.onRefresh();
+          },
           child: CustomScrollView(
             controller: scrollController,
             slivers: [
-              const SliverToBoxAdapter(
-                child: Stories(),
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 5,
+                      color: AppColors.LIGHT_GRAY_COLOR,
+                    ),
+                    const Stories(),
+                  ],
+                ),
               ),
               const SliverToBoxAdapter(
                 child: BuildPeopleYouMayKnow(),

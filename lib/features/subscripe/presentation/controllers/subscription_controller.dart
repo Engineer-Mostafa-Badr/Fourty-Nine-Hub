@@ -16,23 +16,19 @@ import '../widgets/subscription_plans.dart';
 
 class SubscriptionController {
   //to pass current context
-  final BuildContext context =
-      AppPages.router.configuration.navigatorKey.currentContext!;
+  final BuildContext context = AppPages.router.configuration.navigatorKey.currentContext!;
   final CheckIfUserSubscribedUseCase _checkIfUserSubscribedUseCase;
   final GetSubscriptionPlansUseCase _getSubscriptionPlansUseCase;
   final SubscribeUseCase _subscribeUseCase;
-  final GetActiveSubscriptionAmountsUseCase
-      _getActiveSubscriptionAmountsUseCase;
+  final GetActiveSubscriptionAmountsUseCase _getActiveSubscriptionAmountsUseCase;
 
-  SubscriptionController(
-      this._checkIfUserSubscribedUseCase,
-      this._getSubscriptionPlansUseCase,
-      this._subscribeUseCase,
+  SubscriptionController(this._checkIfUserSubscribedUseCase, this._getSubscriptionPlansUseCase, this._subscribeUseCase,
       this._getActiveSubscriptionAmountsUseCase);
 
   void checkIfUserSubscribed({
     required Function onSubscribed,
     required String subCategoryId,
+    String? title,
   }) async {
     showLoadingDialog(context);
     final response = await _checkIfUserSubscribedUseCase(subCategoryId);
@@ -45,15 +41,12 @@ class SubscriptionController {
       if (data) {
         onSubscribed();
       } else {
-        showSubscriptionPlans(subCategoryId: subCategoryId);
+        showSubscriptionPlans(subCategoryId: subCategoryId, title: title);
       }
     });
   }
 
-  Future<void> showSubscriptionPlans(
-      {List<WalletTypes>? wallets,
-      required String subCategoryId,
-      String? title}) async {
+  Future<void> showSubscriptionPlans({List<WalletTypes>? wallets, required String subCategoryId, String? title}) async {
     showLoadingDialog(context);
     final plansResponse = await _getSubscriptionPlansUseCase(subCategoryId);
     AppPages.router.pop();
@@ -66,18 +59,16 @@ class SubscriptionController {
           context: context,
           backColor: Theme.of(context).scaffoldBackgroundColor,
           widget: SubscriptionPlansWidget(
+            title: title,
             subscribePlans: plans,
             subCategoryId: subCategoryId,
             paymentMenthods: wallets,
-            title: title,
           ));
     });
   }
 
-  Future<void> showActiveSubscriptionAmounts(
-      {required WalletTypes walletType}) async {
-    final response =
-        await _getActiveSubscriptionAmountsUseCase(const NoParams());
+  Future<void> showActiveSubscriptionAmounts({required WalletTypes walletType}) async {
+    final response = await _getActiveSubscriptionAmountsUseCase(const NoParams());
     response.fold(
       (l) => showErrorMessage(
         context,

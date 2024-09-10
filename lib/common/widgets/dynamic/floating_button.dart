@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../res/assets/assets.dart';
@@ -29,14 +29,15 @@ class FloatingButton extends StatelessWidget {
         onPressed: onTap != null
             ? () => onTap!()
             : () {
-                if (changeView == 1) {
-                  context.push(Routes.SOCIAL);
-                } else if (changeView == 2) {
-                  context.push(Routes.INSTAGRAM);
-                }
-              },
-        backgroundColor:
-            changeView == 2 ? AppColors.PRIMARY_COLOR : Colors.white,
+          if (changeView == 1) {
+            context.push(Routes.SOCIAL);
+          } else if (changeView == 2) {
+            context.push(Routes.INSTAGRAM);
+          }else{
+            context.push(Routes.HOME);
+          }
+        },
+        backgroundColor: changeView == 2 ? AppColors.PRIMARY_COLOR : Colors.white,
         child: icon != null
             ? Icon(
                 icon,

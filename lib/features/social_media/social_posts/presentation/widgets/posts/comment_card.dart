@@ -7,13 +7,14 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/comment_replies.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
-import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/comment_entity.dart';
@@ -53,12 +54,13 @@ class _CommentCardState extends State<CommentCard> {
       children: [
         Row(
           children: [
-            ProfileImage(
+            UserProfileImage(
               accountId: 0,
               withBorder: false,
               imageURL: widget.comment.user.image.isNotEmpty
                   ? widget.comment.user.image
                   : null,
+              userId: widget.comment.user.id,
             ),
             const Sizer(),
             Expanded(
@@ -74,43 +76,37 @@ class _CommentCardState extends State<CommentCard> {
                     style: Styles.mediumText(color: widget.textColor)),
               ],
             )),
-            GestureDetector(
-                onTap: () {
-                  bottomSheet(
-                      context: context,
-                      widget: ReportView(
-                        id: widget.comment.id,
-                        categoryId: '66a3583454e6e337915514db',
-                      ));
-                },
-                child: Icon(
-                  Icons.more_vert,
-                  color: widget.textColor,
-                )),
-            if (user?.id == widget.comment.user.id) ...[
-              const Sizer(),
+            if (widget.comment.user.id != user?.id)
               GestureDetector(
                   onTap: () {
-                    widget.comment.edit = !widget.comment.edit!;
-                    editTextController.text = widget.comment.content;
-                    setState(() {});
+                    bottomSheet(
+                        context: context,
+                        widget: ReportView(
+                          id: widget.comment.id,
+                          categoryId: '66a3583454e6e337915514db',
+                        ));
                   },
                   child: Icon(
-                    Icons.edit,
+                    Icons.more_vert,
                     color: widget.textColor,
-                    size: 20,
                   )),
-            ],
             const Sizer(),
             GestureDetector(
-                onTap: () {
-                  widget.onDeleteComment(widget.comment.id);
-                },
-                child: Icon(
-                  Icons.close,
-                  color: widget.textColor,
-                  size: 20,
-                )),
+              onTap: () {
+                bottomSheet(
+                  context: context,
+                  widget: _buildPostOptions(
+                    isMyComment: widget.comment.user.id == user?.id,
+                    post: widget.comment,
+                  ),
+                );
+              },
+              child: Icon(
+                Icons.more_horiz_outlined,
+                color: widget.textColor,
+                size: 20,
+              ),
+            ),
           ],
         ),
         const Sizer(),
@@ -119,34 +115,46 @@ class _CommentCardState extends State<CommentCard> {
           style: Styles.mediumText(color: widget.textColor),
         ),
         if (widget.comment.edit == true)
-          Row(
-            children: [
-              Expanded(
-                  child: FormTextField(
-                      hint: 'Type your comment ....',
-                      action: (v) {
+          SizedBox(
+            height: kToolbarHeight,
+            child: Row(
+              children: [
+                Expanded(
+                    child: TextFormField(
+                  maxLines: null,
+                  controller: editTextController,
+                  onChanged: (v) {
+                    setState(() {});
+                  },
+                  style: Styles.headerText(fontSize: 26),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    contentPadding: EdgeInsets.all(5),
+                    hintText: 'Type your comment ....',
+                    hintStyle: Styles.mediumText(),
+                  ),
+                )),
+                const Sizer(),
+                if (editTextController.text.isNotEmpty)
+                  IconAppButton(
+                      icon: Icons.send,
+                      isCircle: true,
+                      size: 20,
+                      onPressed: () async {
+                        var result = await widget.onEditComment(PostCommentParams(
+                            postId: widget.comment.id,
+                            content: editTextController.text));
+                        if (result == true) {
+                          widget.comment.content = editTextController.text;
+                          widget.comment.edit = false;
+                        }
                         setState(() {});
-                      },
-                      controller: editTextController)),
-              const Sizer(),
-              if (editTextController.text.isNotEmpty)
-                IconAppButton(
-                    icon: Icons.send,
-                    isCircle: true,
-                    onPressed: () async {
-                      var result = await widget.onEditComment(PostCommentParams(
-                          postId: widget.comment.id,
-                          content: editTextController.text));
-                      if (result == true) {
-                        widget.comment.content = editTextController.text;
-                        widget.comment.edit = false;
-                      }
-                      setState(() {});
-                    })
-            ],
+                      })
+              ],
+            ),
           ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             BuildReactionsButtons(
               post: widget.comment,
@@ -179,7 +187,77 @@ class _CommentCardState extends State<CommentCard> {
                 })
           ],
         ),
+        const Sizer(),
       ],
+    );
+  }
+
+  Widget _buildPostOptions(
+      {required bool isMyComment, required CommentEntity post}) {
+    return SizedBox(
+      height: isMyComment ? 150 : 80,
+      child: Column(
+        children: [
+          if (!isMyComment)
+            listTile(
+                icon: Icons.report,
+                iconColor: Colors.red,
+                title: 'Report post',
+                subTitle: 'Your well reports this post.',
+                onTap: () async {
+                  Future.delayed(const Duration(milliseconds: 200), () {
+                    bottomSheet(
+                        context: context,
+                        widget: ReportView(
+                          id: post.id,
+                          categoryId: '66a3583454e6e337915514db',
+                        ));
+                  });
+                }),
+          if (isMyComment)
+            listTile(
+                icon: Icons.delete,
+                title: 'Delete Post',
+                subTitle:
+                    'Your comment will be deleted, and you cannot get it again',
+                onTap: () {
+                  widget.onDeleteComment(widget.comment.id);
+                }),
+          if (isMyComment)
+            listTile(
+                icon: Icons.visibility_off,
+                title: 'Edit Comment',
+                subTitle: 'Your Will Edit Your Comment.',
+                onTap: () {
+                  widget.comment.edit = !widget.comment.edit!;
+                  editTextController.text = widget.comment.content;
+                  setState(() {});
+                }),
+        ],
+      ),
+    );
+  }
+
+  Widget listTile(
+      {required IconData icon,
+      Color? iconColor,
+      required String title,
+      required String subTitle,
+      required Function onTap}) {
+    return ListTile(
+      title: Label(text: title),
+      onTap: () {
+        onTap();
+        context.pop();
+      },
+      leading: Icon(
+        icon,
+        color: iconColor ?? Colors.black,
+      ),
+      subtitle: Label(
+        text: subTitle,
+        style: Styles.mediumText(color: Colors.grey),
+      ),
     );
   }
 }

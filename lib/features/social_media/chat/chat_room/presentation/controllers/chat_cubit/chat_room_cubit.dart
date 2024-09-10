@@ -1,15 +1,14 @@
 import 'dart:async';
-import 'dart:developer';
-
+import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/file_picker_helper.dart';
-import 'package:fourtyninehub/common/widgets/stateful/picker/image_picker.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/core/service/socket_service.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_user_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/chat_messgaes_model.dart';
@@ -18,34 +17,40 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entiti
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/deleteMessage_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/getChatMessages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 
-part 'chat_view_state.dart';
+part 'chat_room_state.dart';
 
 class ChatRoomCubit extends Cubit<ChatRoomState> {
   final GetTokensUseCase _getTokensUseCase;
-  final GetChatMessagesUseCase _getChatMessagesUseCase;
+
+  // final GetChatMessagesUseCase _getChatMessagesUseCase;
+  final GetMessagesUseCase _getMessagesUseCase;
   final GetUserUseCase _getUserUseCase;
   final DeleteChatMessageUseCase _deleteChatMessageUseCase;
-  final SocketServiceContract _socketService;
+  final ChatSocketServiceContract _socketService;
+  final ListenToNewMessageUseCase _listenToNewMessageUseCase;
+  final SendMessageUseCase _sendMessageUseCase;
   List<MessageEntity> chatMessages = [];
   ChatMessagesModel chatMessagesModel = ChatMessagesModel();
-  final ScrollController? scrollController = ScrollController();
+  final ScrollController scrollController = ScrollController();
 
   String? userToken;
   String? userId;
   String? chatId;
-  final ImagePicker _imagePicker = ImagePicker();
   final FilePicker _filePicker = FilePicker.platform;
 
   ChatRoomCubit(
     this._getTokensUseCase,
-    this._getChatMessagesUseCase,
+    this._listenToNewMessageUseCase,
+    this._getMessagesUseCase,
     this._deleteChatMessageUseCase,
     this._getUserUseCase,
     this._socketService,
+    this._sendMessageUseCase,
   ) : super(const ChatRoomState());
 
   Future<String?> getUserToken() async {
@@ -54,69 +59,68 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     });
   }
 
-  // _joinRoom(String chatId) async {
-  //   _socketService.joinRoom(chatId);
-  // }
+  // final messagesStreamController = StreamController<MessageEntity>();
 
-  // BehaviorSubject<List<MessageEntity>> messages =
-  //     BehaviorSubject<List<MessageEntity>>();
 
-  getChatMessages(String chatID) async {
-    chatId = chatID;
-    final response = await _getChatMessagesUseCase.call(chatID);
-    response.fold(
-        (failure) => emit(
-            state.copyWith(failure: failure, status: ChatRoomStates.error)),
-        (data) {
-      chatMessages = data.messages ?? [];
-      chatMessagesModel = data;
-
-      emit(state.copyWith(
-          chatData: data,
-          chatMessages: data.messages!,
-          status: ChatRoomStates.initState));
-    });
-
-    Timer(
-        const Duration(milliseconds: 200),
-        () => scrollController!
-            .jumpTo(scrollController!.position.maxScrollExtent));
-
-    // to listen new message
+  Future<void> getChatMessages(String chatID) async {
+    // emit(state.copyWith(status: ChatRoomStates.loading));
+    // chatId = chatID;
+    // final response = await _getChatMessagesUseCase(chatID);
+    // response.fold(
+    //     (failure) => emit(
+    //         state.copyWith(failure: failure, status: ChatRoomStates.error)),
+    //     (data) {
+    //   chatMessages = data.messages ?? [];
+    //   chatMessagesModel = data;
+    //
+    //   emit(state.copyWith(
+    //       chatData: data,
+    //       messages: data.messages!,
+    //       status: ChatRoomStates.success));
+    //   _scrollDown();
+    //   listenToNewMessages();
+    // });
+    emit(
+        state.copyWith(status: ChatRoomStates.success, messages: chatMessages));
     listenToNewMessages();
   }
 
   Future<void> sendMessage(
       {required String message, String? replyMessageId}) async {
-    if (chatId != null) {
-      _socketService.sendMessage(
-          message: message, chatId: chatId!, replyMessageId: replyMessageId);
-      // emit.call(state.copyWith(
-      //     chatData: chatMessagesModel,
-      //     chatMessages: chatMessages.reversed.toList(),
-      //     status: ChatRoomStates.initState));
-    } else {
-      debugPrint("Error chat id not found");
-    }
+    // if (chatId != null) {
+    // _socketService.sendMessage(
+    //     message: message, chatId: chatId!, replyMessageId: replyMessageId);
+    _sendMessageUseCase(SendMessageParams(
+        message: message,
+        chatId: '66d874ec3b4cc1d6bdb4626e',
+        mediaIds: [],
+        oneTimeView: false));
+    // } else {
+    //   CliLogger.error("Error chat id not found");
+    // }
   }
 
-  Future<void> sendMessageFromTinder(
-      {required String message,
-      String? replyMessageId,
-      required chatID}) async {
-    if (chatID != null) {
-      _socketService.sendMessage(
-          message: message, chatId: chatID!, replyMessageId: replyMessageId);
-
-      log("anonymous message sent =================");
-      // emit.call(state.copyWith(
-      //     chatData: chatMessagesModel,
-      //     chatMessages: chatMessages.reversed.toList(),
-      //     status: ChatRoomStates.initState));
-    } else {
-      debugPrint("Error chat id not found");
-    }
+  void selectMessageForReplaying(MessageEntity message) {
+    emit(state.copyWith(replayedMessage: message));
   }
+
+  void cancelReplay() {
+    emit(state.copyWith(replayedMessage: null));
+  }
+
+  // Future<void> sendMessageFromTinder(
+  //     {required String message,
+  //     String? replyMessageId,
+  //     required chatID}) async {
+  //   if (chatID != null) {
+  //     _socketService.sendMessage(
+  //         message: message, chatId: chatID!, replyMessageId: replyMessageId);
+
+  //     log("anonymous message sent =================");
+  //   } else {
+  //     debugPrint("Error chat id not found");
+  //   }
+  // }
 
   typingMessage() {
     _socketService.typingMessage(chatId: chatId!);
@@ -134,33 +138,48 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     );
   }
 
-  listenToNewMessages() {
-    _socketService.socketMessageStream.listen((event) {
-      chatMessages.add(event);
-      emit.call(state.copyWith(
-          chatData: chatMessagesModel,
-          chatMessages: chatMessages,
-          status: ChatRoomStates.initState));
 
-      Timer(
-          const Duration(milliseconds: 200),
-          () => scrollController!
-              .jumpTo(scrollController!.position.maxScrollExtent));
+
+  listenToNewMessages() {
+    // _socketService.socketMessageStream.listen((event) {
+    //   chatMessages.add(event);
+    //   emit.call(state.copyWith(
+    //       chatData: chatMessagesModel,
+    //       messages: chatMessages,
+    //       status: ChatRoomStates.success));
+    //
+    //   _scrollDown();
+    // });
+
+    // messagesStreamController.stream.listen((message) {
+    //
+    // });
+    CliLogger.success("listen to new messages called");
+
+    _listenToNewMessageUseCase((message) {
+      CliLogger.warning("listen to new messages called from Cubit lelelelel");
+      // messagesStreamController.add(message);
+
+      chatMessages.add(message);
+      emit.call(state.copyWith(
+        // chatData: chatMessagesModel,
+          messages: chatMessages,
+          status: ChatRoomStates.success));
     });
   }
 
   listenToMessageTyping() {
-    _socketService.socketChatTypingStream.listen((event) {
-      debugPrint("chatListen $event");
-
-      List<TypingAndOnlineModel> chatsIds = event ?? [];
-      chatsIds.map((e) {}).toList();
-
-      emit.call(state.copyWith(
-          chatData: chatMessagesModel,
-          chatMessages: chatMessages,
-          status: ChatRoomStates.typing));
-    });
+    // _socketService.socketChatTypingStream.listen((event) {
+    //   debugPrint("chatListen $event");
+    //
+    //   List<TypingAndOnlineModel> chatsIds = event ?? [];
+    //   chatsIds.map((e) {}).toList();
+    //
+    //   emit.call(state.copyWith(
+    //       chatData: chatMessagesModel,
+    //       messages: chatMessages,
+    //       status: ChatRoomStates.typing));
+    // });
   }
 
   deleteMessage({required String chatId, required String messageId}) async {
@@ -172,123 +191,73 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   Future<void> pickDocuments() async {
     try {
-      // Pick document files only
-      if (await Permission.storage.request().isGranted) {
-        FilePickerResult? result = await _filePicker.pickFiles(
-          type: FileType.custom,
-          allowMultiple: true,
-          allowedExtensions: [
-            'doc',
-            'docx',
-            'pdf',
-            'txt',
-            'xls',
-            'xlsx',
-            'ppt',
-            'pptx'
-          ],
-        );
+      FilePickerResult? result = await _filePicker.pickFiles(
+        type: FileType.custom,
+        allowMultiple: true,
+        allowedExtensions: docsExtensions,
+      );
 
-        if (result != null) {
-          // File picked successfully
-
-          for (var file in result.files) {
-            debugPrint('Picked file: ${file.name}');
-          }
-          // Handle the file (e.g., upload, read, etc.)
-        } else {
-          // User canceled the picker
-          debugPrint('File picking canceled');
+      if (result != null) {
+        for (var file in result.files) {
+          debugPrint('Picked file: ${file.name}');
         }
       } else {
-        showPermissionDialog(message: 'Please allow storage permission');
+        debugPrint('File picking canceled');
       }
     } catch (e) {
       CliLogger.error('Error picking file: $e');
+      if (e is PlatformException) {
+        showPermissionDialog(message: 'Please allow access to files');
+      }
     }
   }
 
   Future<void> pickMedia() async {
     try {
-      // Pick document files only
-      if (await Permission.storage.request().isGranted) {
-        FilePickerResult? result = await _filePicker.pickFiles(
-          type: FileType.custom,
-          allowMultiple: true,
-          allowedExtensions: [
-            // Image Extensions
-            'jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp', 'heic', 'svg',
-            // Video Extensions
-            'mp4', 'mov', 'avi', 'mkv', 'flv', 'wmv', 'webm', 'm4v', '3gp'
-          ],
-        );
+      FilePickerResult? result = await _filePicker.pickFiles(
+        type: FileType.media,
+        allowMultiple: true,
+      );
 
-        if (result != null) {
-          // File picked successfully
-
-          for (var file in result.files) {
-            debugPrint('Picked file: ${file.name}');
-          }
-          // Handle the file (e.g., upload, read, etc.)
-        } else {
-          // User canceled the picker
-          debugPrint('File picking canceled');
+      if (result != null) {
+        for (var file in result.files) {
+          debugPrint('Picked file: ${file.name}');
         }
       } else {
-        showPermissionDialog(message: 'Please allow storage permission');
+        debugPrint('File picking canceled');
       }
     } catch (e) {
       CliLogger.error('Error picking file: $e');
+      if (e is PlatformException) {
+        showPermissionDialog(message: 'Please allow access to files');
+      }
     }
   }
 
   Future<void> pickAudio() async {
     try {
-      // Pick document files only
-      if (await Permission.storage.request().isGranted) {
-        FilePickerResult? result = await _filePicker.pickFiles(
-          type: FileType.custom,
-          allowMultiple: true,
-          allowedExtensions: [
-            'mp3', // MPEG Layer 3 Audio
-            'wav', // Waveform Audio File Format
-            'flac', // Free Lossless Audio Codec
-            'aac', // Advanced Audio Codec
-            'ogg', // Ogg Vorbis Audio
-            'm4a', // MPEG-4 Audio
-            'wma', // Windows Media Audio
-            'alac', // Apple Lossless Audio Codec
-            'opus', // Opus Audio
-            'aiff', // Audio Interchange File Format
-          ],
-        );
+      FilePickerResult? result = await _filePicker.pickFiles(
+        type: FileType.audio,
+        allowMultiple: true,
+      );
 
-        if (result != null) {
-          // File picked successfully
-
-          for (var file in result.files) {
-            debugPrint('Picked file: ${file.name}');
-          }
-          // Handle the file (e.g., upload, read, etc.)
-        } else {
-          // User canceled the picker
-          debugPrint('File picking canceled');
+      if (result != null) {
+        for (var file in result.files) {
+          debugPrint('Picked file: ${file.name}');
         }
       } else {
-        showPermissionDialog(message: 'Please allow storage permission');
+        debugPrint('File picking canceled');
       }
     } catch (e) {
       CliLogger.error('Error picking file: $e');
+      if (e is PlatformException) {
+        showPermissionDialog(message: 'Please allow access to files');
+      }
     }
   }
 
-  Future<void> pickFromCamera() async {
-    try {
-      _imagePicker.pickImage(source: ImageSource.gallery);
-    } catch (e) {
-      debugPrint('Error picking file: $e');
-    }
-  }
+  void _scrollDown() => Timer(const Duration(milliseconds: 200),
+      () => scrollController.jumpTo(scrollController.position.maxScrollExtent));
 
   @override
   Future<void> close() {

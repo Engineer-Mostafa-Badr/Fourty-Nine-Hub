@@ -2,8 +2,8 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/api/end_points.dart';
-import 'package:fourtyninehub/core/api/google_api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/google_api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/data/models/location_model/location_model.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/location_entity.dart';

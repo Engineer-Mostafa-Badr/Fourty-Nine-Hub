@@ -38,7 +38,7 @@ class _UserTweetsState extends State<UserTweets> {
           showErrorMessage(
             context,
             getFailureMessage(
-              state.failure ?? const UnknownFailure(),
+              state.failure ??  UnknownFailure(''),
               context,
             ),
           );
@@ -251,7 +251,7 @@ class _UserTweetsState extends State<UserTweets> {
                     : Center(
                         child: Label(
                             text: getFailureMessage(
-                          state.failure ?? const UnknownFailure(),
+                          state.failure ??  UnknownFailure(''),
                           context,
                         )),
                       );

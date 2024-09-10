@@ -811,6 +811,18 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     }
   }
 
+  Future<void> fetchFavoritesCategory() async {
+    emit(state.copyWith(getFavCategoryListState: DataState.initial));
+    final apiResponse = await tinderRepository.fetchFavoritesCategory();
+    if (apiResponse != null) {
+      emit(state.copyWith(
+          getFavCategoryListState: DataState.success,
+          FavoriteCategoryList: apiResponse));
+    } else {
+      emit(state.copyWith(getFavCategoryListState: DataState.failure));
+    }
+  }
+
   Future<void> addFavoriteCategory({String? categoryId}) async {
     emit(state.copyWith(addCategoryModelState: DataState.initial));
     final isSuccess = await tinderRepository.addFavoriteCategory(categoryId!);
@@ -834,7 +846,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     }
   }
 
-  Future<String> sendGift({
+  Future<dynamic> sendGift({
     required String receiverId,
     required String giftId,
     required String subCategoryId,
@@ -843,7 +855,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     final response =
         await tinderRepository.sendGift(receiverId, giftId, subCategoryId);
     if (response != null) {
-      log(response);
+      log(response.toString()+"--------------------------------------");
       emit(state.copyWith(sendGiftErrorDataState: DataState.success));
       return response;
     } else {

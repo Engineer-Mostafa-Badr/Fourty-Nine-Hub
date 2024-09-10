@@ -36,7 +36,7 @@ class MealBanner extends StatelessWidget {
                 } else {
                   context.push(Routes.REGISTER);
                 }
-              });
+              }, onFavorite: () {  },);
         } else {
           return const SizedBox.shrink();
         }
