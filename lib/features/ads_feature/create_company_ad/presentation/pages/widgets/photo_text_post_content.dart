@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../../common/widgets/stateful/dynamic/pagination_view.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../domain/entities/company_ad_entity.dart';
 import 'build_item_photo_text_post.dart';
 
@@ -23,23 +26,26 @@ class PhotoAndTextPostContent extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: PaginationView<CompanyAdEntity>(
             build: (scrollController, data) {
-              return ListView.separated(
-                itemBuilder: (context, index) => BuildItemPhotoTextPost(
-                  length: data[index].media!.length,
-                  advertises:data[index],
-                ),
-                separatorBuilder: (context, index) => const Divider(
-                  color: AppColors.GREY_LIGHT_COLOR,
-                  height: 30,
-                  endIndent: 30,
-                ),
-                itemCount: data.length,
-              );
+              return data.isNotEmpty
+                  ? ListView.separated(
+                      itemBuilder: (context, index) => BuildItemPhotoTextPost(
+                        length: data[index].media!.length,
+                        advertises: data[index],
+                      ),
+                      separatorBuilder: (context, index) => const Divider(
+                        color: AppColors.GREY_LIGHT_COLOR,
+                        height: 30,
+                        endIndent: 30,
+                      ),
+                      itemCount: data.length,
+                    )
+                  : Center(child: Label(text: LocaleKeys.noPosts.localize));
             },
             fetchData: (PaginationParams paginationParams) {
-              return context
-                  .read<CreateCompanyAdCubit>()
-                  .getCompanyAdPosts('photo_written', params: paginationParams,);
+              return context.read<CreateCompanyAdCubit>().getCompanyAdPosts(
+                    'photo_written',
+                    params: paginationParams,
+                  );
             },
           ),
         );

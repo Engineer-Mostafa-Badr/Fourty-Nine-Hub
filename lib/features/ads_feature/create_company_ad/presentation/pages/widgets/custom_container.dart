@@ -47,7 +47,7 @@ class CustomContainerAdvertise extends StatelessWidget {
             ),
             const Spacer(),
             Text(
-              '\$${price * numberOfAdvertises}',
+              '$price',
               style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
             ),
             IconButton(

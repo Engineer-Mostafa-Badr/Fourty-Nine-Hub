@@ -48,7 +48,7 @@ class BuildItemPhotoPost extends StatelessWidget {
                         builder: (context) => ImageDetails(
                               image: advertises.media![index].photo!,
                               function: () {
-                                context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!, filter: 'photo');
+                                context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!);
                                 // context
                                 //     .read<CompanyAdvertiseCubit>()
                                 //     .deletePost(context, advertises.media![index].sId!, 'photo');
@@ -100,7 +100,7 @@ class BuildItemPhotoPost extends StatelessWidget {
             if(isPhoto!)
             IconButton(
               onPressed: () {
-                context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!, filter: 'photo');
+                context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!,);
                 // context
                 //     .read<CompanyAdvertiseCubit>()
                 //     .deletePost(context, advertises.sId!, 'photo');

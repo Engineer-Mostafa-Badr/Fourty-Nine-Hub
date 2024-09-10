@@ -2,6 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../../core/enums/base_status_enum.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/messages/messages.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/company_ad_entity.dart';
 import '../../cubit/create_company_ad_cubit.dart';
@@ -20,12 +25,21 @@ class BuildItemTextPost extends StatelessWidget {
     final String formattedDayTime =
         DateFormat('EEEE, h:mm a').format(egyptTime);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        const SizedBox(height: 5),
-        isScalable!
-            ? Slidable(
+    return BlocProvider<CreateCompanyAdCubit>(
+      create: (BuildContext context) =>serviceLocator(),
+      child: BlocConsumer<CreateCompanyAdCubit,CreateCompanyAdState>(
+        listener: (BuildContext context, state) {
+          if (state.status == StateStatus.success) {
+            showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
+          }
+        },
+        builder: (BuildContext context, state) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              const SizedBox(height: 5),
+              isScalable!
+                  ? Slidable(
                 key: ValueKey(advertises.sId),
                 endActionPane: ActionPane(
                   dragDismissible: false,
@@ -36,8 +50,8 @@ class BuildItemTextPost extends StatelessWidget {
                     const SizedBox(width: 5),
                     GestureDetector(
                       onTap: (){
-                       // context.read<CompanyAdvertiseCubit>().deletePost(context, advertises.sId!, 'written');
-                        context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!, filter: 'written');
+                        // context.read<CompanyAdvertiseCubit>().deletePost(context, advertises.sId!, 'written');
+                        context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!);
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -49,27 +63,19 @@ class BuildItemTextPost extends StatelessWidget {
                           Icons.delete_outlined,
                           color: Theme.of(context).scaffoldBackgroundColor,
                         ),
-                        // child: SlidableAction(
-                        //   padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        //   borderRadius: BorderRadius.circular(10),
-                        //   onPressed: (context) async {
-                        //     context.read<CompanyAdvertiseCubit>().deletePost(context, advertises.sId!, 'written');
-                        //   },
-                        //   backgroundColor: Theme.of(context).primaryColor,
-                        //   foregroundColor: Theme.of(context).primaryColor,
-                        //   icon: Icons.delete_outlined,
-                        //   label: 'Delete',
-                        // ),
                       ),
                     ),
                   ],
                 ),
                 child: buildItem(context),
               )
-            : buildItem(context),
-        const SizedBox(height: 2),
-        Text(formattedDayTime),
-      ],
+                  : buildItem(context),
+              const SizedBox(height: 2),
+              Text(formattedDayTime),
+            ],
+          );
+        },
+      ),
     );
   }
 

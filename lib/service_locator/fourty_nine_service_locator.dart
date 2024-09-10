@@ -308,14 +308,14 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       )..loadData(),
     );
-    serviceLocator.registerFactory<CreateCompanyAdCubit>(
-      () => CreateCompanyAdCubit(
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-      )..loadData(),
-    );
+    // serviceLocator.registerFactory<CreateCompanyAdCubit>(
+    //   () => CreateCompanyAdCubit(
+    //     serviceLocator(),
+    //     serviceLocator(),
+    //     serviceLocator(),
+    //     serviceLocator(),
+    //   )..loadData(),
+    // );
 
     serviceLocator.registerFactory<MyAddsCubit>(
       () => MyAddsCubit(

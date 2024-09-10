@@ -25,27 +25,29 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
 
   void loadData() async {
     await getCompanyAdPrice();
-   // await getCompanyAdPosts();
   }
 
   Future<void> getCompanyAdPrice() async {
+    emit(state.copyWith(status: StateStatus.loading));
     final response = await _getPriceUseCases.call(const NoParams());
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-        (data) => emit(state.copyWith(price: data)));
+        (data) => emit(state.copyWith(price: data,status: StateStatus.success)));
   }
 
-  List<CompanyAdEntity> company = [];
+
   Future<List<CompanyAdEntity>> getCompanyAdPosts(String filter,{required PaginationParams params}) async {
 
+    List<CompanyAdEntity> company = [];
     final response = await _getPostsCompanyAdUseCase(
         FetchPostCompanyAdvertiseParams(filter: filter, paginationParams:params)
     );
+
     response.fold(
             (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
             (data) {
               company=data;
-              emit(state.copyWith(posts: data));
+             // emit(state.copyWith(posts: company));
             });
     return company;
   }
@@ -82,7 +84,6 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
 
   Future<void> deleteCompanyAd({
     required String id,
-    required String filter,
   }) async {
     emit(state.copyWith(status: StateStatus.loading)); // Start loading state
 
@@ -96,13 +97,17 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
         emit(state.copyWith(failure: failure, status: StateStatus.error));
       },
           (success) {
-        // Filter out the deleted ad from the current list of posts
-        final updatedPosts = (state.posts ?? []).where((ad) => ad.sId != id).toList();
-
-        // Emit the new state with the updated posts list
-        emit(state.copyWith(posts: updatedPosts, status: StateStatus.success));
+      //  final updatedPosts = (state.posts ?? []).where((ad) => ad.sId != id).toList();
+        emit(state.copyWith(status: StateStatus.success));
       },
     );
   }
+
+  // void onRefresh() async {
+  //   companyAdController.refresh();
+  // }
+  //
+  // final PagingController<int, TwitterPostEntity> companyAdController =
+  // PagingController(firstPageKey: 1);
 
 }

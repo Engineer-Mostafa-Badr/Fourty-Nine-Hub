@@ -28,7 +28,7 @@ class BuildItemPhotoTextPost extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!, filter: 'photo_written');
+                context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!,);
                // context
                     // .read<CompanyAdvertiseCubit>()
                     // .deletePost(context, advertises.sId!, 'photo_witten');
