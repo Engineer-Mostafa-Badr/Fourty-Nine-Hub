@@ -38,7 +38,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   Future<void> getChats(ChatCategories chatCategories) async {
     switch (chatCategories) {
       case ChatCategories.social:
-        return _getServicesChats();
+        return _getSocialChats();
       case ChatCategories.greet:
         return _getGreetChats();
       case ChatCategories.service:

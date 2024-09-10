@@ -232,5 +232,6 @@ abstract class  LocaleKeys {
   static const phone = 'phone';
   static const name = 'name';
   static const nameMessage = 'nameMessage';
+  static const selectContact = 'selectContact';
 
 }
