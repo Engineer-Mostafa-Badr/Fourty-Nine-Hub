@@ -9,6 +9,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
@@ -74,6 +75,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.read<UserCubit>().state.data;
+    print('userId111111111${user?.id??''}');
+
     return Scaffold(
       appBar: const HomeAppbar(
         isWithBackArrow: false,
@@ -118,6 +122,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           BlocBuilder<MainCategoriesCubit,
               BasicState<List<MainCategoryEntity>>>(
             builder: (context, state) {
+              final controller = context.read<MainCategoriesCubit>();
               if (state.isLoading) {
                 return Shimmer.fromColors(
                   baseColor: Colors.grey[100]!,
@@ -157,7 +162,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                       },
                       child: MainCategoryBanner(
                         category: state.data![index],
-                        onFavorite: () {},
+                        onFavorite: () {
+                          return controller.toggleFavoriteMedicalService(state.data![index].id);
+                        },
                       ),
                     );
                   },

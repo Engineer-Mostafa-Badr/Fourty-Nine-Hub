@@ -336,7 +336,8 @@ class FourtyNineServiceLocator {
     serviceLocator.registerFactory<MainCategoriesCubit>(
       () => MainCategoriesCubit(
         serviceLocator(),
-      )..loadData(),
+        serviceLocator(),
+      ),
     );
 
     serviceLocator.registerFactory<AdsCubit>(

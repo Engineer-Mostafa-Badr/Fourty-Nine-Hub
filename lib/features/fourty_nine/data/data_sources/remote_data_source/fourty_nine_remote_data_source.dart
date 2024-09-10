@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/fourty_nine/data/models/parent_main_categ
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/parent_main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../../res/assets/jsons.dart';
@@ -20,7 +21,7 @@ abstract class FourtyNineRemoteDataSource {
       getParentMainCategories();
 
   Future<Either<Failure, List<MainCategoryModel>>> getMainCategories(
-      PaginationParams params);
+      MainCategoriesParams params);
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems();
 
   Future<Either<Failure, MainCategoryEntity>> getMainCategoryDetails(String id);
@@ -50,7 +51,7 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
 
   @override
   Future<Either<Failure, List<MainCategoryModel>>> getMainCategories(
-      PaginationParams params) async {
+      MainCategoriesParams params) async {
     final result = await _apiConsumer.get(
       EndPoints.getMainCategoriesWithoutSubcategories,
       queryParameters: params.toJson(),

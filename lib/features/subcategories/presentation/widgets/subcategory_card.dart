@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart'
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
@@ -26,10 +27,8 @@ class SubCategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.ADS, extra: item.id),
+      onTap: () => context.push(Routes.ADS, extra: AdsViewParams(mainCategory: mainCategory, subCategory: item)),
       child: Container(
-        // width: kToolbarHeight * 2.5.zW,
-        // height: kToolbarHeight * 3.zH,
         margin: EdgeInsets.all(10.zW),
         decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
@@ -79,7 +78,7 @@ class SubCategoryCard extends StatelessWidget {
                           style: Styles.mediumText(fontWeight: FontWeight.bold),
                         ),
                         Label(
-                          text: '0 ${LocaleKeys.ads.localize}',
+                          text: 'dd ${LocaleKeys.ads.localize}',
                           style: Styles.smallText(fontSize: 25),
                         )
                       ],

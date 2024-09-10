@@ -211,7 +211,9 @@ class AppPages {
               create: (context) => serviceLocator<ThumbnailsCubit>(),
             ),
             BlocProvider(
-              create: (context) => serviceLocator<MainCategoriesCubit>(),
+              create: (context) {
+                return serviceLocator<MainCategoriesCubit>()..loadData(context);
+              },
             ),
           ],
           child: const FourtyNineView(),
