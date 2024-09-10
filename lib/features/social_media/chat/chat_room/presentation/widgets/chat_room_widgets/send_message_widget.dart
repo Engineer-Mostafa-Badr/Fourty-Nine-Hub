@@ -414,6 +414,8 @@
 // ========================================================================================================================================================================================
 // ========================================================================================================================================================================================
 
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -502,58 +504,68 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
       builder: (context, state) {
         Radius topRadius = state.replayedMessage == null ? radius : Radius.zero;
 
-        return Container(
-          decoration: BoxDecoration(
-            boxShadow: state.replayedMessage == null
-                ? [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5), // Shadow color
-                      spreadRadius: 1, // Spread the shadow
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ]
-                : [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5), // Shadow color
-                      spreadRadius: 1, // Spread the shadow
-                      blurRadius: 1,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-            borderRadius: BorderRadius.vertical(
-              top: topRadius,
-              bottom: radius,
-            ),
-          ),
-          child: TextFormField(
-            controller: _messageTextController,
-            focusNode: _messageFocusNode,
-            onTap: () {
+        return WillPopScope(
+          onWillPop: () async {
+            if (_showEmojiKeyboard) {
               _closeEmojiKeyboard();
               _openTextKeyboard();
-            },
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              hintText: LocaleKeys.message.tr(),
-              hintStyle: const TextStyle(color: Colors.grey),
-              contentPadding: const EdgeInsets.symmetric(vertical: 10),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: topRadius,
-                  bottom: radius,
-                ),
-                borderSide: BorderSide.none,
+              return Future.value(false);
+            }
+            return Future.value(true);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: state.replayedMessage == null
+                  ? [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5), // Shadow color
+                        spreadRadius: 1, // Spread the shadow
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
+                      ),
+                    ]
+                  : [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5), // Shadow color
+                        spreadRadius: 1, // Spread the shadow
+                        blurRadius: 1,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+              borderRadius: BorderRadius.vertical(
+                top: topRadius,
+                bottom: radius,
               ),
-              prefixIcon:
-                  _showEmojiKeyboard ? _keyboardButton() : _emojiButton(),
-              suffixIcon: _attachmentButton(),
             ),
-            style: const TextStyle(color: Colors.black),
-            keyboardType: TextInputType.multiline,
-            maxLines: 3,
-            minLines: 1,
+            child: TextFormField(
+              controller: _messageTextController,
+              focusNode: _messageFocusNode,
+              onTap: () {
+                _closeEmojiKeyboard();
+                _openTextKeyboard();
+              },
+              decoration: InputDecoration(
+                fillColor: Colors.white,
+                filled: true,
+                hintText: LocaleKeys.message.tr(),
+                hintStyle: const TextStyle(color: Colors.grey),
+                contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: topRadius,
+                    bottom: radius,
+                  ),
+                  borderSide: BorderSide.none,
+                ),
+                prefixIcon:
+                    _showEmojiKeyboard ? _keyboardButton() : _emojiButton(),
+                suffixIcon: _attachmentButton(),
+              ),
+              style: const TextStyle(color: Colors.black),
+              keyboardType: TextInputType.multiline,
+              maxLines: 3,
+              minLines: 1,
+            ),
           ),
         );
       },
