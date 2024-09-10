@@ -6,7 +6,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:flutter_styled_toast/flutter_styled_toast.dart' as styled_toast;
+// import 'package:flutter_styled_toast/flutter_styled_toast.dart' as styled_toast;
+
+import '../../../../../../../../../../core/messages/messages.dart';
+import '../../../../../../../../../../routes/pages.dart';
 
 typedef ContextQuery = BuildContext Function();
 
@@ -15,6 +18,7 @@ class ZegoLiveAudioRoomToast {
   factory ZegoLiveAudioRoomToast() => instance;
 
   ZegoLiveAudioRoomToast._internal();
+
   ContextQuery? contextQuery;
   static final ZegoLiveAudioRoomToast instance =
       ZegoLiveAudioRoomToast._internal();
@@ -31,15 +35,9 @@ class ZegoLiveAudioRoomToast {
   }
 
   void show(String message, {Color? backgroundColor}) {
-    styled_toast.showToast(
+    showErrorMessage(
+      AppPages.router.configuration.navigatorKey.currentContext!,
       message,
-      duration: const Duration(seconds: 3),
-      context: contextQuery?.call(),
-      position: styled_toast.StyledToastPosition.top,
-      textStyle: textStyle,
-      toastHorizontalMargin: 0,
-      fullWidth: true,
-      backgroundColor: backgroundColor,
     );
   }
 }

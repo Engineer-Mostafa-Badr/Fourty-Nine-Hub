@@ -6,9 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:flutter_styled_toast/flutter_styled_toast.dart' as styled_toast;
+// import 'package:flutter_styled_toast/flutter_styled_toast.dart' as styled_toast;
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/minimizing/overlay_machine.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+
+import '../../../../../../../../../../core/messages/messages.dart';
+import '../../../../../../../../../../routes/pages.dart';
 
 // Project imports:
 
@@ -42,15 +45,9 @@ class ZegoLiveStreamingToast {
   }
 
   void show(String message, {Color? backgroundColor}) {
-    styled_toast.showToast(
+    showErrorMessage(
+      AppPages.router.configuration.navigatorKey.currentContext!,
       message,
-      duration: const Duration(seconds: 3),
-      context: contextQuery?.call(),
-      position: styled_toast.StyledToastPosition.top,
-      textStyle: textStyle,
-      toastHorizontalMargin: 0,
-      fullWidth: true,
-      backgroundColor: backgroundColor,
     );
   }
 }
