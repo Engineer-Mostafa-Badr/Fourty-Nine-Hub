@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class RequestTripJoinNotificationView extends StatefulWidget {
   const RequestTripJoinNotificationView({super.key, required this.payload});
   final Map<String, dynamic> payload;
   @override
-  State<RequestTripJoinNotificationView> createState() =>
-      _RequestTripJoinNotificationViewState();
+  State<RequestTripJoinNotificationView> createState() => _RequestTripJoinNotificationViewState();
 }
 
-class _RequestTripJoinNotificationViewState
-    extends State<RequestTripJoinNotificationView> {
+class _RequestTripJoinNotificationViewState extends State<RequestTripJoinNotificationView> {
   @override
   Widget build(BuildContext context) {
-    // pr('notication page build method is called');
-    // pr(widget.payload);
+    pr('notication page build method is called');
+    pr(widget.payload);
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
@@ -26,8 +25,8 @@ class _RequestTripJoinNotificationViewState
               ),
             ),
           ),
-          body: const Center(
-            child: Text('Notifications'),
+          body: Center(
+            child: Text(widget.payload['firstName'] ?? 'payload not recieved'),
           )),
     );
   }

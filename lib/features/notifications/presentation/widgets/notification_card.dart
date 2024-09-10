@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -84,9 +85,11 @@ class _NotificationCardState extends State<NotificationCard> {
                     SizedBox(
                       height: kToolbarHeight,
                       width: kToolbarHeight,
-                      child: Image.asset(
-                        Assets.icon,
-                      ),
+                      child: widget.notificationEntity.userImageUrl == null
+                          ? Image.asset(
+                              Assets.icon,
+                            )
+                          : _networkImage(),
                     ),
                     // const Sizer(),
                     Expanded(
@@ -117,6 +120,24 @@ class _NotificationCardState extends State<NotificationCard> {
           ),
         );
       },
+    );
+  }
+
+  Container _networkImage() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 5),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+      clipBehavior: Clip.hardEdge,
+      child: CachedNetworkImage(
+        imageUrl: widget.notificationEntity.userImageUrl ?? '',
+        placeholder: (context, url) => Image.asset(
+          Assets.icon,
+        ),
+        errorWidget: (context, url, error) => Image.asset(
+          Assets.icon,
+        ),
+        fit: BoxFit.cover,
+      ),
     );
   }
 

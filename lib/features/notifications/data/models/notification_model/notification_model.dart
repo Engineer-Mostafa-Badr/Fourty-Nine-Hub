@@ -6,7 +6,7 @@ class NotificationModel extends NotificationEntity {
   @override
   String? id;
   dynamic userId;
-  ReceiverId? receiverId;
+  ReceiverInfo? receiverInfo;
   @override
   String? filterType;
   String? subcategoryId;
@@ -28,11 +28,13 @@ class NotificationModel extends NotificationEntity {
   bool? hasNextPage;
   @override
   int? nextPageNumber;
+  @override
+  String? userImageUrl;
 
   NotificationModel({
     this.id,
     this.userId,
-    this.receiverId,
+    this.receiverInfo,
     this.filterType,
     this.subcategoryId,
     this.mainCategoryId,
@@ -47,10 +49,12 @@ class NotificationModel extends NotificationEntity {
     this.v,
     this.hasNextPage,
     this.nextPageNumber,
+    this.userImageUrl,
   }) : super(
           id: id,
-          firstName: receiverId?.firstName,
-          lastName: receiverId?.lastName,
+          receiverId: receiverInfo?.id,
+          firstName: receiverInfo?.firstName,
+          lastName: receiverInfo?.lastName,
           filterType: filterType,
           title: titleTranslationCode,
           body: bodyTranslationCode,
@@ -60,20 +64,20 @@ class NotificationModel extends NotificationEntity {
           hasNextPage: hasNextPage,
           nextPageNumber: nextPageNumber,
           read: read,
+          userImageUrl: userImageUrl,
         );
 
   @override
   String toString() {
-    return 'NotificationModel(id: $id, userId: $userId, receiverId: $receiverId, filterType: $filterType, subcategoryId: $subcategoryId, mainCategoryId: $mainCategoryId, read: $read, titleTranslationCode: $titleTranslationCode, bodyTranslationCode: $bodyTranslationCode, path: $path, metadata: $payload, time: $time, createdAt: $createdAt, updatedAt: $updatedAt, v: $v , hasNextPage: $hasNextPage , nextpageNumber: $nextPageNumber )';
+    return 'NotificationModel(id: $id, userId: $userId, receiverInfo: $receiverInfo, filterType: $filterType, subcategoryId: $subcategoryId, mainCategoryId: $mainCategoryId, read: $read, titleTranslationCode: $titleTranslationCode, bodyTranslationCode: $bodyTranslationCode, path: $path, metadata: $payload, time: $time, createdAt: $createdAt, updatedAt: $updatedAt, v: $v , hasNextPage: $hasNextPage , nextpageNumber: $nextPageNumber , userImageUrl: $userImageUrl )';
   }
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
       id: json['_id'] as String?,
       userId: json['userId'] as dynamic,
-      receiverId: json['receiverId'] == null
-          ? null
-          : ReceiverId.fromJson(json['receiverId'] as Map<String, dynamic>),
+      receiverInfo:
+          json['receiverInfo'] == null ? null : ReceiverInfo.fromJson(json['receiverInfo'] as Map<String, dynamic>),
       filterType: json['filterType'] as String?,
       subcategoryId: json['subcategoryId'] as String?,
       mainCategoryId: json['mainCategoryId'] as String?,
@@ -81,24 +85,19 @@ class NotificationModel extends NotificationEntity {
       titleTranslationCode: json['titleTranslationCode'] as String?,
       bodyTranslationCode: json['bodyTranslationCode'] as String?,
       path: json['path'] as String?,
-      payload: json['metadata'] == null
-          ? null
-          : json['metadata'] as Map<String, dynamic>,
+      payload: json['metadata'] == null ? null : json['metadata'] as Map<String, dynamic>,
       time: json['time'] as int?,
-      createdAt: json['createdAt'] == null
-          ? null
-          : DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null
-          ? null
-          : DateTime.parse(json['updatedAt'] as String),
+      createdAt: json['createdAt'] == null ? null : DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null ? null : DateTime.parse(json['updatedAt'] as String),
       v: json['__v'] as int?,
+      userImageUrl: json['userInfo']?['image'] == null ? null : json['userInfo']?['image'] as String,
     );
   }
 
   Map<String, dynamic> toJson() => {
         '_id': id,
         'userId': userId,
-        'receiverId': receiverId?.toJson(),
+        'receiverInfo': receiverInfo?.toJson(),
         'filterType': filterType,
         'subcategoryId': subcategoryId,
         'mainCategoryId': mainCategoryId,

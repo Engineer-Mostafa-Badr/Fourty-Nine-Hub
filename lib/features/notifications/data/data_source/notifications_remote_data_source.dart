@@ -63,7 +63,7 @@ class NotificationsRemoteDataSourceImp implements NotificationsRemoteDataSource 
     return response.fold(
       (failure) => Left(pr(failure)),
       (data) {
-        // pr(data);
+        pr(data);
         List<NotificationEntity> notifications = (data['data']['docs'] as List).map<NotificationModel>((json) {
           NotificationModel notification = NotificationModel.fromJson(json);
           notification.hasNextPage = hasNextPage(data);

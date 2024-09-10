@@ -55,6 +55,7 @@ class _ServicesNotificationBuilderState extends State<ServicesNotificationBuilde
 
   @override
   Widget build(BuildContext context) {
+    // _fetchNotificationsIfEmpty();
     return BlocConsumer<GetServicesNotificationsCubit, GetServicesNotificationsState>(
       listener: (context, state) {
         if (state is GetServicesNotificationsFailed) {
@@ -134,6 +135,7 @@ class _ServicesNotificationBuilderState extends State<ServicesNotificationBuilde
   void _fetchNotificationsIfEmpty() {
     if (getServicesNotificationsCubit.notifications.isEmpty) {
       getServicesNotificationsCubit.page = 1;
+      // getServicesNotificationsCubit.notifications = [];
       getServicesNotificationsCubit.getServicesNotifications();
     }
   }
