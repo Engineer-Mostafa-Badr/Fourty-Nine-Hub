@@ -243,5 +243,9 @@ abstract class  LocaleKeys {
   static const yearly = 'yearly';
   static const noSubscriptionPlans = 'noSubscriptionPlans';
   static const premiumPackage = 'premiumPackage';
+  static const requestWithdrawal = 'requestWithdrawal';
+  static const complete = 'complete';
+  static const yearsLast = 'yearsLast';
+  static const checkRequest = 'checkRequest';
 
 }

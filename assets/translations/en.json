@@ -245,5 +245,9 @@
   "monthly": "Monthly",
   "yearly": "Yearly",
   "noSubscriptionPlans": "No subscription plans available",
-  "premiumPackage": "The Premium Package gives you the opportunity to be seen more and get more cashback."
+  "premiumPackage": "The Premium Package gives you the opportunity to be seen more and get more cashback.",
+  "requestWithdrawal": "Your request withdrawal sent successfully waiting for administration approval",
+  "complete": "Complete",
+  "yearsLast": "years last",
+  "checkRequest": "Please wait to check request"
 }

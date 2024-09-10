@@ -258,7 +258,11 @@ class CodegenLoader extends AssetLoader{
   "monthly": "شهريًا",
   "yearly": "سنويًا",
   "noSubscriptionPlans": "لا توجد خطط اشتراك متاحة",
-  "premiumPackage": "تمنحك الباقة المميزة الفرصة للظهور بشكل أكبر والحصول على المزيد من النقود المستردة."
+  "premiumPackage": "تمنحك الباقة المميزة الفرصة للظهور بشكل أكبر والحصول على المزيد من النقود المستردة.",
+  "requestWithdrawal": "تم إرسال طلب السحب الخاص بك بنجاح في انتظار موافقة الإدارة",
+  "complete": "تم إكماله",
+  "yearsLast": "السنوات مضت",
+  "checkRequest": "يرجى الانتظار للتحقق من الطلب"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -507,7 +511,11 @@ static const Map<String,dynamic> en = {
   "monthly": "Monthly",
   "yearly": "Yearly",
   "noSubscriptionPlans": "No subscription plans available",
-  "premiumPackage": "The Premium Package gives you the opportunity to be seen more and get more cashback."
+  "premiumPackage": "The Premium Package gives you the opportunity to be seen more and get more cashback.",
+  "requestWithdrawal": "Your request withdrawal sent successfully waiting for administration approval",
+  "complete": "Complete",
+  "yearsLast": "years last",
+  "checkRequest": "Please wait to check request"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

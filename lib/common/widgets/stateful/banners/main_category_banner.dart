@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -17,12 +19,13 @@ class MainCategoryBanner extends StatefulWidget {
   final Function()? onRegister;
   final Function() onFavorite;
   bool? isFavorite;
-   MainCategoryBanner({
+
+  MainCategoryBanner({
     super.key,
     this.canRegister = false,
     this.onRegister,
     required this.category,
-     required this.onFavorite,
+    required this.onFavorite,
     this.isFavorite,
   });
 
@@ -61,36 +64,42 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          PositionedDirectional(
-            end: 0,
-              child: _buildRegisterButton()),
+          PositionedDirectional(end: 0, child: _buildRegisterButton()),
           Label(
             text: widget.category.name,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 45.zSP),
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 45.zSP),
           ),
           PositionedDirectional(
             start: 0,
             child: Column(
               children: [
-                context.read<UserCubit>().isLoggedIn ?  InkWell(
-                  onTap: () async {
-                    final result = await widget.onFavorite();
-                    if (result != null && result != widget.isFavorite) {
-                      setState(() {
-                        widget.isFavorite = result;
-                        print("===================$result");
-
-                      });
-                    }
-                  },
-                  child: Icon(
-                    widget.isFavorite == true ? Icons.favorite : Icons.favorite_border,
-                    color: AppColors.SECONDARY_COLOR,
-                  ),
-                ) : SizedBox.shrink(),
-                Sizer(height: 15.zH,),
+                context.read<UserCubit>().isLoggedIn
+                    ? InkWell(
+                        onTap: () async {
+                          final result = await widget.onFavorite();
+                          if (result != null && result != widget.isFavorite) {
+                            setState(() {
+                              widget.isFavorite = result;
+                              print("===================$result");
+                            });
+                          }
+                        },
+                        child: Icon(
+                          widget.isFavorite == true
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: AppColors.SECONDARY_COLOR,
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+                Sizer(
+                  height: 15.zH,
+                ),
                 Label(
-                  text: '${widget.category.total.toShortScale} ${Labels.ads}',
+                  text: '${widget.category.total.toShortScale} ${LocaleKeys.ad.localize}',
                   style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -109,7 +118,8 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       return InkWell(
         onTap: () => widget.onRegister?.call(),
         child: Text(Labels.register,
-            style: Styles.mediumText(color: Colors.white,fontWeight: FontWeight.bold)),
+            style: Styles.mediumText(
+                color: Colors.white, fontWeight: FontWeight.bold)),
       );
     } else {
       return const SizedBox.shrink();
