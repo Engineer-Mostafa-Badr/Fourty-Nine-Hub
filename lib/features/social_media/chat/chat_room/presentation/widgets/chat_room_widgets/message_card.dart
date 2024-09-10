@@ -257,7 +257,7 @@ class MessageCard extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           log(messageEntity.hasReply.toString());
-          log(messageEntity.reply?.text??"no reply");
+          log(messageEntity.reply?.text ?? "no reply");
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -320,7 +320,7 @@ class MessageCard extends StatelessWidget {
                                               maxWidth: width * 0.7,
                                             ),
                                             child: Text(
-                                              "replyed message sender",
+                                              messageEntity.reply!.sender.name,
                                               overflow: TextOverflow.ellipsis,
                                               style: Styles.mediumText(
                                                   color:
@@ -333,7 +333,7 @@ class MessageCard extends StatelessWidget {
                                               maxWidth: width * 0.7,
                                             ),
                                             child: Text(
-                                              "This is the replyed message",
+                                              messageEntity.reply!.text,
                                               overflow: TextOverflow.ellipsis,
                                               style: Styles.mediumText(
                                                 color:
@@ -543,7 +543,7 @@ class MessageCard extends StatelessWidget {
                                             maxWidth: width * 0.55,
                                           ),
                                           child: Text(
-                                            "replyed message sender",
+                                            messageEntity.reply!.sender.name,
                                             overflow: TextOverflow.ellipsis,
                                             style: Styles.mediumText(
                                                 color: AppColors.PRIMARY_COLOR,
@@ -555,7 +555,7 @@ class MessageCard extends StatelessWidget {
                                             maxWidth: width * 0.55,
                                           ),
                                           child: Text(
-                                            "This is the replyed message",
+                                            messageEntity.reply!.text,
                                             overflow: TextOverflow.ellipsis,
                                             style: Styles.mediumText(
                                               color: AppColors.DARK_GRAY_COLOR,
