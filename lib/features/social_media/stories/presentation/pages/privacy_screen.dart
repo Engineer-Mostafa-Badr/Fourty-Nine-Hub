@@ -374,7 +374,7 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
       children: [
         Text(
           'Who can see my status updates',
-          style: Theme.of(context).textTheme.headline6?.copyWith(
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontSize: isLargeScreen ? 24 : 18,
               ),
         ),
@@ -420,7 +420,7 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
         children: [
           Text(
             'Select Contacts:',
-            style: Theme.of(context).textTheme.subtitle1?.copyWith(
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontSize: isLargeScreen ? 20 : 16,
                 ),
           ),
@@ -473,7 +473,7 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
           Flexible(
             child: Text(
               "Changes to your privacy settings will affect all of your statuses.",
-              style: Theme.of(context).textTheme.caption?.copyWith(
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     fontSize: MediaQuery.of(context).size.width > 600 ? 16 : 12,
                   ),
               textAlign: TextAlign.center,

@@ -11,7 +11,6 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities/edit_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/widgets/privact_icon.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -66,7 +65,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 label: 'Edit Profile',
               ),
               body: ListView(
-                padding: EdgeInsets.all(15.zW),
+                padding: EdgeInsets.all(15),
                 shrinkWrap: true,
                 children: [
                   Text(
@@ -338,10 +337,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                           });
                         },
                         child: Container(
-                          padding: EdgeInsets.all(10.zR),
+                          padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                               color: state.isMale == true ? AppColors.PRIMARY_COLOR : Colors.white,
-                              borderRadius: BorderRadius.circular(15.zR),
+                              borderRadius: BorderRadius.circular(15),
                               border: Border.all(color: AppColors.PRIMARY_COLOR)),
                           alignment: AlignmentDirectional.center,
                           child: Text(
@@ -360,10 +359,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                             });
                           },
                           child: Container(
-                            padding: EdgeInsets.all(10.zR),
+                            padding: EdgeInsets.all(10),
                             decoration: BoxDecoration(
                                 color: state.isMale == false ? AppColors.PRIMARY_COLOR : Colors.white,
-                                borderRadius: BorderRadius.circular(15.zR),
+                                borderRadius: BorderRadius.circular(15),
                                 border: Border.all(color: AppColors.PRIMARY_COLOR)),
                             alignment: AlignmentDirectional.center,
                             child: Text(
@@ -403,10 +402,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                             );
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10.zW, vertical: 20.zH),
+                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                             decoration: BoxDecoration(
                                 color: AppColors.PRIMARY_COLOR,
-                                borderRadius: BorderRadius.circular(15.zR),
+                                borderRadius: BorderRadius.circular(15),
                                 border: Border.all(color: AppColors.PRIMARY_COLOR)),
                             alignment: AlignmentDirectional.center,
                             child: Text(
