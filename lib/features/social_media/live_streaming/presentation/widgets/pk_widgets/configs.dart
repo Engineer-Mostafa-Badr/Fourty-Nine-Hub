@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../zego/zego_uikit_prebuilt_live_streaming.dart';
+import '../components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
+import '../components/zego_uikit/src/services/defines/user.dart';
 
 ZegoLiveStreamingPKBattleConfig pkConfig() {
   return ZegoLiveStreamingPKBattleConfig(

@@ -8,7 +8,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 // import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_state.dart';
@@ -226,9 +226,9 @@ class MeetingView extends StatelessWidget {
                               ),
                               SizedBox(width: 15.zW),
                               InkWell(
-                                onTap: ()  {
+                                onTap: () {
                                   //to unschedule
-                                   joinRoom(context.read<MeetingCubit>(),
+                                  joinRoom(context.read<MeetingCubit>(),
                                       scheduledMeeting.roomId);
                                   if (context.mounted) {
                                     context.go(Routes.MEETINGROOM,

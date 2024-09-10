@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import '../zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+
+import '../components/zego_prebuilt_live_streaming/src/events.dart';
 
 class PKEvents extends ChangeNotifier {
   PKEvents({

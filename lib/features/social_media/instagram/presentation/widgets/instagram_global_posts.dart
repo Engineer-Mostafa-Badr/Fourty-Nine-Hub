@@ -39,6 +39,11 @@ class InstagramGlobalPosts extends StatefulWidget {
 
 class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
   @override
+  void dispose() {
+    widget.scrollController.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     return BlocProvider<InstagramCubit>(
       create: (_) => serviceLocator()..loadGlobalData(),

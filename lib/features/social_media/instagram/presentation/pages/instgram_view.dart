@@ -22,21 +22,23 @@ class InstagramView extends StatefulWidget {
 }
 
 class _InstagramViewState extends State<InstagramView> {
-  late ScrollController scrollController;
+  ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
   @override
   void initState() {
     super.initState();
-    scrollController = ScrollController();
+
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
         if (!_isScrollingDown) {
           setState(() {
             _isScrollingDown = true;
           });
         }
-      } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      } else if (scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
         if (_isScrollingDown) {
           setState(() {
             _isScrollingDown = false;
@@ -46,11 +48,11 @@ class _InstagramViewState extends State<InstagramView> {
     });
   }
 
-  @override
-  void dispose() {
-    // scrollController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   scrollController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -80,16 +82,19 @@ class _InstagramViewState extends State<InstagramView> {
                     children: [
                       _buildTabBar(context),
                       Expanded(
-                        child: InstagramPosts(scrollController: scrollController),
+                        child:
+                            InstagramPosts(scrollController: scrollController),
                       ),
                     ],
                   )
                 : Column(
-                  children: [
-                    _buildTabBar(context),
-                    Expanded(child: InstagramGlobalPosts(scrollController: scrollController)),
-                  ],
-                );
+                    children: [
+                      _buildTabBar(context),
+                      Expanded(
+                          child: InstagramGlobalPosts(
+                              scrollController: scrollController)),
+                    ],
+                  );
           },
         ),
       ),
@@ -108,14 +113,17 @@ class _InstagramViewState extends State<InstagramView> {
             onTap: () {
               if (i == 1) {
                 print(context.read<UserCubit>().token);
-                !context.read<UserCubit>().isTokenAttached?context.push(Routes.LOGIN):context.push(Routes.INSTAGRAMPROFILE, extra: user?.id);
+                !context.read<UserCubit>().isTokenAttached
+                    ? context.push(Routes.LOGIN)
+                    : context.push(Routes.INSTAGRAMPROFILE, extra: user?.id);
               }
             },
             child: Container(
               decoration: i == 0
                   ? const BoxDecoration(
                       border: Border(
-                        bottom: BorderSide(color: AppColors.PRIMARY_COLOR, width: 2),
+                        bottom: BorderSide(
+                            color: AppColors.PRIMARY_COLOR, width: 2),
                       ),
                     )
                   : null,

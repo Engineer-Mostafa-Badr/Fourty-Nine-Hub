@@ -11,13 +11,15 @@ import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 // import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_bottom_navigator.dart';
 
+import '../widgets/components/zego_uikit/src/components/audio_video_container/layout.dart';
+import '../widgets/components/zego_uikit/src/services/defines/user.dart';
 import '../widgets/liveview/super_gifts/gift_manager.dart';
 import '../widgets/liveview/super_gifts/gift_sheet.dart';
 import '../widgets/liveview/super_gifts/mp4_player_widget.dart';
 import '../widgets/liveview/super_gifts/zego_gift_item.dart';
 import '../widgets/pk_widgets/events.dart';
 import '../widgets/pk_widgets/mute_widget.dart';
-import '../widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import '../widgets/components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
 class LiveStreamView extends StatefulWidget {
   final String liveID;
