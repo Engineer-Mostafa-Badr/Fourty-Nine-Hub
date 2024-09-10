@@ -28,7 +28,7 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
         children: [
           GestureDetector(
             onTap: () {
-              widget.chatsCubit.changeChatMuteState(widget.ChatCategoryEntity.id);
+              // widget.chatsCubit.changeChatMuteState(widget.ChatCategoryEntity.id);
             },
             child: bottomSheetItem(
               context: context,
@@ -165,13 +165,13 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
               TextButton(
                   onPressed: () async {
                     if (widget.ChatCategoryEntity.locked) {
-                      await widget.chatsCubit.unLockChat(
-                          chatId: widget.ChatCategoryEntity.id,
-                          lockChatPassword: passwordController.text.trim());
+                      // await widget.chatsCubit.unLockChat(
+                      //     chatId: widget.ChatCategoryEntity.id,
+                      //     lockChatPassword: passwordController.text.trim());
                     } else {
-                      await widget.chatsCubit.lockChat(
-                          chatId: widget.ChatCategoryEntity.id,
-                          lockChatPassword: passwordController.text.trim());
+                      // await widget.chatsCubit.lockChat(
+                      //     chatId: widget.ChatCategoryEntity.id,
+                      //     lockChatPassword: passwordController.text.trim());
                     }
 
                     Navigator.of(context).pop(false);

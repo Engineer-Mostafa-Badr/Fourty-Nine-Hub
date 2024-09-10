@@ -175,9 +175,7 @@ class _ChatCardState extends State<ChatCard> {
                     widget.chat?.lastSeenCount == null
                         ? const SizedBox()
                         : GestureDetector(
-                            onTap: () {
-                              getSeenHistory(widget.chat!.id);
-                            },
+                            onTap: () {},
                             child: Row(
                               children: [
                                 Label(
@@ -212,11 +210,5 @@ class _ChatCardState extends State<ChatCard> {
         ],
       ),
     );
-  }
-
-  //
-
-  getSeenHistory(String chatId) async {
-    await widget.chatsCubit?.getSeenHistory(chatId, context);
   }
 }

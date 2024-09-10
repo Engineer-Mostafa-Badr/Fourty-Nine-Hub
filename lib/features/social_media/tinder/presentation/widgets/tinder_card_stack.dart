@@ -1110,7 +1110,7 @@ class ChatAlertDialogue extends StatelessWidget {
         final chatId =
             tinderCubit.state.anonymousChatResponse?.data.chat.id ?? '';
         if (chatId.isNotEmpty) {
-          chatsCubit.initSocketConnection();
+          chatsCubit.init();
           _navigateToChatRoom(context, chatId, chatRoomCubit, chatsCubit);
         } else {
           log("Chat ID is empty.");
@@ -1127,7 +1127,7 @@ class ChatAlertDialogue extends StatelessWidget {
           .then((_) {
         final chatId = tinderCubit.state.normalChatResponse?.data.chat.id ?? '';
         if (chatId.isNotEmpty) {
-          chatsCubit.initSocketConnection();
+          chatsCubit.init();
           _navigateToChatRoom(context, chatId, chatRoomCubit, chatsCubit);
         } else {
           log("Chat ID is empty.");

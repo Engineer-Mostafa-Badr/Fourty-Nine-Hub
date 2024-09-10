@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/datasources/chats_remote_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_category_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/repositories/chats_repository.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_request.dart';
@@ -13,7 +14,7 @@ class ChatsRepositoryImplementation extends ChatsRepository {
   ChatsRepositoryImplementation(this._chatsRemoteDataSource);
 
   @override
-  Future<Either<Failure, ChatCategoryEntity>> getChats(GetChatsParams params) {
+  Future<Either<Failure, List<ChatEntity>>> getChats(GetChatsParams params) {
     return _chatsRemoteDataSource.getChats(params);
   }
 
