@@ -66,13 +66,18 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   // =========================================== send message ===========================================
 
   Future<void> sendMessage() async {
-    _sendMessageUseCase(SendMessageParams(
+    final result = await _sendMessageUseCase(SendMessageParams(
         replyMessageId: _replayMessage?.id,
         message: messageTextController.text,
         chatId: _chat.id,
         mediaIds: [],
         oneTimeView: false));
-    messageTextController.text = '';
+    result.fold(
+        (l) => emit(state.copyWith(failure: l, status: ChatRoomStates.error)),
+        (r) {
+      cancelReplay();
+      messageTextController.text = '';
+    });
   }
 
   void selectMessageForReplaying(MessageEntity message) {
