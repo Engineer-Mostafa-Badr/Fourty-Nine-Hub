@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/select_contacts_to_share_cart.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -37,11 +39,14 @@ class _SelectContactsToShareViewState extends State<SelectContactsToShareView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.PRIMARY_COLOR, // Background color
+        backgroundColor: AppColors.PRIMARY_COLOR,
         elevation: 0,
         leadingWidth: 26,
         leading: IconButton(
-          onPressed: () => context.pop(),
+          onPressed: () {
+            context.pop();
+            context.pop();
+          },
           icon: const Icon(
             Icons.arrow_back,
             color: Colors.white,
@@ -57,11 +62,21 @@ class _SelectContactsToShareViewState extends State<SelectContactsToShareView> {
           )
         ],
         title: Text(
-          "Select Contacts to Share",
+          LocaleKeys.selectContact.tr(),
           style: Styles.headerText(color: Colors.white),
         ),
       ),
       body: _body(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // context.push(Routes.CONTACTSVIEW);
+        },
+        backgroundColor: AppColors.PRIMARY_COLOR,
+        child: const Icon(
+          Icons.arrow_forward_ios,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 

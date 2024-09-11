@@ -247,7 +247,8 @@ class CodegenLoader extends AssetLoader{
   "about": "الاخبار",
   "phone": "الهاتف",
   "name": "الاسم",
-  "nameMessage": "هذا ليس اسم المستخدم أو الرقم السري الخاص بك. سيكون هذا الاسم مرئيًا لجهات اتصال FortyNine الخاصة بك."
+  "nameMessage": "هذا ليس اسم المستخدم أو الرقم السري الخاص بك. سيكون هذا الاسم مرئيًا لجهات اتصال FortyNine الخاصة بك.",
+  "selectContact": "حدد جهات الاتصال للمشاركة"
 };
 static const Map<String,dynamic> en = {
   "join": "Join",
@@ -483,7 +484,8 @@ static const Map<String,dynamic> en = {
   "about": "About",
   "phone": "Phone",
   "name": "Name",
-  "nameMessage": "This is not your username or pin. This name will be visible to your FortyNine contacts."
+  "nameMessage": "This is not your username or pin. This name will be visible to your FortyNine contacts.",
+  "selectContact": "Select Contacts to Share"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

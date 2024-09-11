@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
@@ -6,51 +5,87 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class SelectContactToShareCart extends StatelessWidget {
-  
-
+class SelectContactToShareCart extends StatefulWidget {
   final Contact contact;
 
   const SelectContactToShareCart({super.key, required this.contact});
 
   @override
+  State<SelectContactToShareCart> createState() =>
+      _SelectContactToShareCartState();
+}
+
+class _SelectContactToShareCartState extends State<SelectContactToShareCart> {
+  bool isSelected = false;
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      color: AppColors.BACKGROUND_COLOR,
-      child: Row(
-        children: [
-          const SizedBox(
-            width: 16,
-          ),
-          const CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(
-              UIConst.profilePlaceHolder,
+    return InkWell(
+      onTap: () => {
+        setState(() {
+          isSelected = !isSelected;
+        })
+      },
+      splashColor:
+          AppColors.PRIMARY_COLOR.withOpacity(0.3), // Ripple effect color
+      highlightColor:
+          AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2), // Highlight color on tap
+      child: AnimatedContainer(
+        duration:
+            const Duration(milliseconds: 200), // Smooth transition when tapped
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        color: isSelected
+            ? AppColors.PRIMARY_COLOR.withOpacity(0.1)
+            : AppColors.BACKGROUND_COLOR, // Change background when selected
+        child: Row(
+          children: [
+            const SizedBox(
+              width: 16,
             ),
-          ),
-          const SizedBox(
-            width: 16,
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.75,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  contact.displayName,
-                  overflow: TextOverflow.ellipsis,
-                  style: Styles.mediumText(fontWeight: FontWeight.w600),
+            const CircleAvatar(
+              backgroundImage: CachedNetworkImageProvider(
+                UIConst.profilePlaceHolder,
+              ),
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Expanded(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.75,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.contact.displayName,
+                      overflow: TextOverflow.ellipsis,
+                      style: Styles.mediumText(fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      "A bird in the hand is better than two on the tree.",
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          Styles.smallText(color: AppColors.LIGHT_GRAY_COLOR2),
+                    )
+                  ],
                 ),
-                Text(
-                  "A bird in the hand is better than two on the tree.",
-                  overflow: TextOverflow.ellipsis,
-                  style:
-                      Styles.smallText(color: AppColors.LIGHT_GRAY_COLOR2),
-                )
-              ],
+              ),
             ),
-          ),
-        ],
+            isSelected
+                ? const CircleAvatar(
+                    backgroundColor: AppColors.PRIMARY_COLOR,
+                    radius: 12,
+                    child: Icon(
+                      Icons.check,
+                      color: AppColors.BACKGROUND_COLOR,
+                      size: 14,
+                    ),
+                  )
+                : const SizedBox(),
+            const SizedBox(
+              width: 16,
+            ),
+          ],
+        ),
       ),
     );
   }
