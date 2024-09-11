@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -8,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entiti
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -26,13 +30,42 @@ class ChatCard extends StatefulWidget {
 
 class _ChatCardState extends State<ChatCard> {
   List<SeenHistoryModel> seenHistoryList = [];
-
+  bool isSelected = false;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.read<ChatsCubit>().selectChat = widget.chat!;
-        context.push(Routes.CHATROOM, extra: widget.chatsCubit);
+        if (context.read<ChatsCubit>().selectedChats.isEmpty) {
+          context.read<ChatsCubit>().selectChat = widget.chat!;
+          context.push(Routes.CHATROOM, extra: widget.chatsCubit);
+        } else {
+          setState(() {
+            isSelected = !isSelected;
+            if (isSelected) {
+              context
+                  .read<ChatsCubit>()
+                  .addChatToSelectedChats(chat: widget.chat!);
+            } else {
+              context
+                  .read<ChatsCubit>()
+                  .removeChatToSelectedChats(chat: widget.chat!);
+            }
+          });
+        }
+      },
+      onLongPress: () {
+        setState(() {
+          isSelected = !isSelected;
+          if (isSelected) {
+            context
+                .read<ChatsCubit>()
+                .addChatToSelectedChats(chat: widget.chat!);
+          } else {
+            context
+                .read<ChatsCubit>()
+                .removeChatToSelectedChats(chat: widget.chat!);
+          }
+        });
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -61,20 +94,37 @@ class _ChatCardState extends State<ChatCard> {
                             //   ),
                             // ),
 
-                            Image.asset(
-                              Assets.profileIcon,
-                              color: Theme.of(context).primaryColor,
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: Image.network(
+                                UIConst.profilePlaceHolder,
+                              ),
                             ),
 
-                            Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: CircleAvatar(
-                                  radius: 5,
-                                  backgroundColor: widget.chat!.online
-                                      ? Colors.green
-                                      : Colors.transparent,
-                                ))
+                            isSelected
+                                ? const Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: CircleAvatar(
+                                      radius: 8,
+                                      backgroundColor: AppColors.PRIMARY_COLOR,
+                                      child: Icon(
+                                        Icons.check,
+                                        color: AppColors.BACKGROUND_COLOR,
+                                        size: 10,
+                                      ),
+                                    ),
+                                  )
+                                : Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: CircleAvatar(
+                                      radius: 5,
+                                      backgroundColor: widget.chat!.online
+                                          ? Colors.green
+                                          : Colors.transparent,
+                                    ),
+                                  )
                           ],
                         ),
                 ),
@@ -100,7 +150,6 @@ class _ChatCardState extends State<ChatCard> {
                           const SizedBox(
                             width: 10,
                           ),
-
                           widget.chat!.typing
                               ? const SizedBox()
                               : widget.chat!.lastMessage?.seen ?? false
@@ -125,7 +174,7 @@ class _ChatCardState extends State<ChatCard> {
                                         ? "No messages until now"
                                         : '${widget.chat?.lastMessage?.text}',
                                 style: Styles.mediumText(
-                                  fontSize: 14,
+                                  fontSize: 20,
                                   color: widget.chat!.typing
                                       ? AppColors.SPLASH_BLACK_COLOR
                                       : AppColors.DARK_GRAY_COLOR,
@@ -152,14 +201,14 @@ class _ChatCardState extends State<ChatCard> {
                 widget.chat?.unreadCount == 0
                     ? const SizedBox()
                     : CircleAvatar(
-                        maxRadius: 15,
+                        maxRadius: 10,
                         backgroundColor: AppColors.PRIMARY_COLOR,
                         child: Label(
                             text: '${widget.chat?.unreadCount}',
                             style: Styles.mediumText(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16)),
+                                fontSize: 10)),
                       ),
 
                 const SizedBox(

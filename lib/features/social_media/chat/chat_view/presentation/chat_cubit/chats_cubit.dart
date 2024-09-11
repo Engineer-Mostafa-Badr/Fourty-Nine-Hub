@@ -22,12 +22,24 @@ class ChatsCubit extends Cubit<ChatsState> {
   ChatCategories _selectedChatCategory = ChatCategories.values.first;
   late String lockChatPassword;
   late ChatEntity _selectedChat;
+  List<ChatEntity> selectedChats = [];
 
   ChatsCubit(
     this._getChatsUseCase,
     this._listenToNewMessageUseCase,
     this._stopListenToMessagesUseCase,
   ) : super(const ChatsState());
+
+  // Selected Chats
+  void addChatToSelectedChats({required ChatEntity chat}) {
+    selectedChats.add(chat);
+    emit(state.copyWith(status: ChatsStates.chatsSelected));
+  }
+
+  void removeChatToSelectedChats({required ChatEntity chat}) {
+    selectedChats.removeWhere((chatIterator) => chatIterator.id == chat.id);
+    emit(state.copyWith(status: ChatsStates.chatsSelected));
+  }
 
   Future<void> init() async {
     await getChatsByCategory(_selectedChatCategory);
