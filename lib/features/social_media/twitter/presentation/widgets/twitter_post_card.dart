@@ -257,11 +257,11 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (label != null) ReadMoreLabel(text: label),
-        const Sizer(),
+        if (label != null||label!='')... [ReadMoreLabel(text: label??'',style: Styles.headerText(fontSize: 30),),
+        const Sizer(),],
         if (myImages!.isNotEmpty)
           GridView.builder(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.only(right:10,left:10,bottom: 10),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -300,6 +300,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                     children: [
                       ImageFromInternet(
                         image: myImages?[index] ?? '',
+                        defaultLogo: true,
                       ),
                       if (index == 3 && myImages!.length > 4)
                         Container(
@@ -335,6 +336,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
   }) {
     final user = context.read<UserCubit>().state.data;
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         post.user.image != ''
             ? UserProfileImage(

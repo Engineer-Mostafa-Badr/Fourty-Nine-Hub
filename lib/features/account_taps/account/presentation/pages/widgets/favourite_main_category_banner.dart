@@ -4,42 +4,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_category_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 import 'package:shimmer/shimmer.dart';
 
-class MainCategoryBanner extends StatefulWidget {
-  final MainCategoryEntity category;
+class FavouriteMainCategoryBanner extends StatefulWidget {
+  const FavouriteMainCategoryBanner({super.key, required this.category, required this.canRegister, this.onRegister, required this.onFavorite, this.isFavorite=false});
+  final FavouriteCategoryEntity category;
   final bool canRegister;
   final Function()? onRegister;
   final Function() onFavorite;
-  bool? isFavorite;
-  MainCategoryBanner({
-    super.key,
-    this.canRegister = false,
-    this.onRegister,
-    required this.category,
-    required this.onFavorite,
-    this.isFavorite,
-  });
+  final bool? isFavorite;
 
   @override
-  State<MainCategoryBanner> createState() => _MainCategoryBannerState();
+  State<FavouriteMainCategoryBanner> createState() => _FavouriteMainCategoryBannerState();
 }
 
-class _MainCategoryBannerState extends State<MainCategoryBanner> {
-  // late bool _isFavorite;
-
-  @override
-  void initState() {
-    widget.isFavorite = widget.category.isFavorite ?? false;
-    super.initState();
-  }
-
+class _FavouriteMainCategoryBannerState extends State<FavouriteMainCategoryBanner> {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
@@ -67,10 +51,10 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
               text: widget.category.name,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 45.zSP),
+                  fontSize: 45),
             ),
             PositionedDirectional(
               start: 0,
@@ -78,31 +62,18 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 children: [
                   context.read<UserCubit>().isLoggedIn
                       ? InkWell(
-                    onTap: () async {
-                      final result = await widget.onFavorite();
-                      if (result==true) {
-                        print(result);
-                        setState(() {
-                          widget.category.isFavorite=!widget.category.isFavorite!;
-                          print(widget.category.isFavorite);
-                          widget.isFavorite = result;
-                          print("===================$result");
-                        });
-                      }
-                    },
-                    child: Icon(
-                      widget.category.isFavorite == true
-                          ? Icons.favorite
-                          : Icons.favorite_border,
+                    onTap: () async =>await widget.onFavorite(),
+                    child: const Icon(
+                      Icons.favorite,
                       color: AppColors.SECONDARY_COLOR,
                     ),
                   )
                       : const SizedBox.shrink(),
-                  Sizer(
-                    height: 15.zH,
+                  const Sizer(
+                    height: 15,
                   ),
                   Label(
-                    text: '${widget.category.total.toShortScale} ${Labels.ads}',
+                    text: '${widget.category.numberOfAds.toShortScale} ${Labels.ads}',
                     style: Styles.mediumText(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -138,10 +109,10 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
               text: widget.category.name,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 45.zSP),
+                  fontSize: 45),
             ),
             PositionedDirectional(
               start: 0,
@@ -149,28 +120,18 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 children: [
                   context.read<UserCubit>().isLoggedIn
                       ? InkWell(
-                    onTap: () async {
-                      final result = await widget.onFavorite();
-                      if (result != null && result != widget.isFavorite) {
-                        setState(() {
-                          widget.isFavorite = result;
-                          print("===================$result");
-                        });
-                      }
-                    },
-                    child: Icon(
-                      widget.isFavorite == true
-                          ? Icons.favorite
-                          : Icons.favorite_border,
+                    onTap: () async =>await widget.onFavorite(),
+                    child: const Icon(
+                      Icons.favorite,
                       color: AppColors.SECONDARY_COLOR,
                     ),
                   )
                       : const SizedBox.shrink(),
-                  Sizer(
-                    height: 15.zH,
+                  const Sizer(
+                    height: 15,
                   ),
                   Label(
-                    text: '${widget.category.total.toShortScale} ${Labels.ads}',
+                    text: '${widget.category.numberOfAds.toShortScale} ${Labels.ads}',
                     style: Styles.mediumText(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,

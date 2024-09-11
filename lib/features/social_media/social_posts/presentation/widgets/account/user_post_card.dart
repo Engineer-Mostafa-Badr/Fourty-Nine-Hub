@@ -102,7 +102,6 @@ class _UserPostCardState extends State<UserPostCard> {
         children: [
           _buildAccountHeader(context: context, post: myPost),
           // Label(text: myPost.mainPost?.content??''),
-          if (myPost.content!.isNotEmpty)
             _buildContentWidget(
                 content: myPost.content ?? '',
                 backgroundColor: myPost.backgroundColor,
@@ -584,7 +583,7 @@ class _UserPostCardState extends State<UserPostCard> {
               text: content,
               style: Styles.headerText(
                   color: Colors.black,
-                  fontSize: 24,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold),
             ),
           )
@@ -595,7 +594,7 @@ class _UserPostCardState extends State<UserPostCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ReadMoreLabel(text: content),
+                if(content.isNotEmpty)ReadMoreLabel(text: content),
                 const SizedBox(
                   height: 10,
                 ),

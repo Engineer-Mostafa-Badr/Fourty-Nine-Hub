@@ -63,6 +63,7 @@ class FacebookAdvertisementCard extends StatelessWidget {
                           ImageFromInternet(
                             image: post.images?[index] ?? '',
                             borderRadius: BorderRadius.circular(15),
+                            defaultLogo: true,
                           ),
 
                           // Container(

@@ -1,4 +1,3 @@
-import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
@@ -86,7 +85,6 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/pages/ree
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/instagram_profile.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
@@ -211,7 +209,9 @@ class AppPages {
               create: (context) => serviceLocator<ThumbnailsCubit>(),
             ),
             BlocProvider(
-              create: (context) => serviceLocator<MainCategoriesCubit>(),
+              create: (context) {
+                return serviceLocator<MainCategoriesCubit>()..loadData(context);
+              },
             ),
           ],
           child: const FourtyNineView(),
@@ -534,9 +534,7 @@ class AppPages {
                     builder: (context, state) =>
                         BlocProvider<FavouriteCategoryCubit>(
                           create: (_) => serviceLocator(),
-                          child: const FavouriteCategoryView(
-                            favoriteCategory: [],
-                          ),
+                          child: const FavouriteCategoryView(),
                         )),
                 GoRoute(
                   path: Paths.FAVOURITESUBCATEGORIES,
@@ -545,7 +543,6 @@ class AppPages {
                       BlocProvider<FavouriteSubCategoryCubit>(
                     create: (_) => serviceLocator(),
                     child: const FavSubCategoryView(
-                      favoriteSubCategory: [],
                     ),
                   ),
                 ),

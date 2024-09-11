@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/account_taps/lists/data/models/user_friend_model.dart';
@@ -82,7 +83,7 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   Future<Either<Failure, List<PostEntity>>> getFeed(
       {required TwitterFeedParams params}) async {
     final response = await _apiConsumer.get(EndPoints.getFeedPosts(params),
-        data: {'subCategory': '66b77e77bb35968b535dc944'});
+        data: {'subCategory': Constants.facebookSubCategory});
 
     return response.fold((l) {
       return Left(l);
@@ -296,7 +297,7 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   Future<Either<Failure, List<PostEntity>>> getTweet(
       {required TwitterFeedParams params}) async {
     final response = await _apiConsumer.get(
-        "${EndPoints.getTwitterFeedPosts}?page=${params.page}&limit=${params.limit}");
+        "${EndPoints.getTwitterFeedPosts}&page=${params.page}&limit=${params.limit}");
 
     return response.fold((l) {
       return Left(l);

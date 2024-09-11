@@ -69,7 +69,6 @@ class RideServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
-          serviceLocator(),
         )..loadData());
     serviceLocator
         .registerFactory<RequestHistoryCubit>(() => RequestHistoryCubit(

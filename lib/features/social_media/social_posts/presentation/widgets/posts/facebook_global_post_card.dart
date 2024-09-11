@@ -658,6 +658,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                                     children: [
                                       ImageFromInternet(
                                         image: images[index],
+                                        defaultLogo: true,
                                       ),
                                       if (index == 3 && images.length > 4)
                                         Container(
