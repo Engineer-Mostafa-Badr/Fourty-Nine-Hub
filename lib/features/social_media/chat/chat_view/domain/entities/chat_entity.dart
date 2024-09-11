@@ -1,6 +1,7 @@
 class ChatEntity {
   String id;
   String categoryId;
+  bool isService;
   bool archived;
   bool locked;
   bool muted;
@@ -19,6 +20,7 @@ class ChatEntity {
 bool online;
   ChatEntity({
     required this.id,
+    required this.isService,
     required this.categoryId,
     required this.archived,
     required this.locked,

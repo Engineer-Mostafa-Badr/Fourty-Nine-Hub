@@ -53,4 +53,5 @@ enum ChatPrivacy { normal, anonymous }
 class ChatCategoriesIds {
   static const String social = '668e7dc4e8cfec5bcc752afc';
   static const String greet = '668e7af1e8cfec5bcc752af8';
+  static const String anonymous = '668e7e2ce8cfec5bcc752afd';
 }

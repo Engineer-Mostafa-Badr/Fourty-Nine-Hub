@@ -494,7 +494,7 @@ class _ChatViewState extends State<ChatView> {
         labelColor: AppColors.PRIMARY_COLOR,
         indicatorColor: Colors.red,
         onTap: (index) {
-         chatCubit.getChats(ChatCategories.values[index]);
+         chatCubit.getChatsByCategory(ChatCategories.values[index]);
         },
         tabAlignment: TabAlignment.start,
         isScrollable: true,
@@ -521,7 +521,7 @@ class _ChatViewState extends State<ChatView> {
 
   Widget _buildCategoryChats({bool isSecret = false}) {
     return BlocBuilder<ChatsCubit, ChatsState>(builder: (context, state) {
-      return state.chats == null
+      return state.chats == null || state.isLoading
           ? const Center(
               child: CircularProgressIndicator.adaptive(),
             )

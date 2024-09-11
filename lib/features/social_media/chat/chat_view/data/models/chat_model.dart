@@ -1,7 +1,4 @@
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
-
-
 
 class ChatModel extends ChatEntity {
   ChatModel({
@@ -23,6 +20,7 @@ class ChatModel extends ChatEntity {
     required super.typing,
     required super.avatar,
     required super.online,
+    required super.isService,
   });
 
   factory ChatModel.fromJson(Map<String, dynamic> json) => ChatModel(
@@ -35,7 +33,7 @@ class ChatModel extends ChatEntity {
         isLastMessageByMe: json['isLastMessageByMe'],
         seen: json['seen'],
         delivered: json['delivered'],
-        lastMessageText: json['lastMessageText']??'',
+        lastMessageText: json['lastMessageText'] ?? '',
         name: json['name'],
         lastSeenCount: json['lastSeenCount'],
         unreadCount: json['unreadCount'],
@@ -44,5 +42,6 @@ class ChatModel extends ChatEntity {
         avatar: json['avatar'],
         typing: false,
         online: false,
+        isService: json['isService'] ?? false,
       );
 }
