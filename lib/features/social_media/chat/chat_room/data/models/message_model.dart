@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/reply_message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_sender_entity.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 
 class MessageModel extends MessageEntity {
   MessageModel(
@@ -29,9 +30,9 @@ class MessageModel extends MessageEntity {
       text: json['text'],
       media: [],
       sender: MessageSenderEntity(
-        id: json['ownerUserId'],
-        name: json['username'] ?? json['user'] ?? '',
-        avatar: json['avatar'],
+        id: json['ownerUserId'] ?? '',
+        name: json['username'] ?? '',
+        avatar: json['avatar'] ?? UIConst.profilePlaceHolder,
       ),
       reply: json['replyMessage'] != null
           ? ReplyMessageModel.fromJson(json['replyMessage'])
@@ -42,13 +43,13 @@ class MessageModel extends MessageEntity {
       updateAt: (json['updatedAt'] != null && json['updatedAt'] != "")
           ? DateTime.parse(json['updatedAt'])
           : DateTime.now(),
-      byMe: json['byMe'],
-      isUpdated: json['isUpdated'],
-      seen: json['seen'],
-      delivered: json['delivered'],
-      hasReply: json['isReply'],
-      time: json['formattedCreatedAt'],
-      isDeleted: json['isDeleted'],
+      byMe: json['byMe'] ?? false,
+      isUpdated: json['isUpdated'] ?? false,
+      seen: json['seen'] ?? false,
+      delivered: json['delivered'] ?? false,
+      hasReply: json['isReply'] ?? false,
+      time: json['formattedCreatedAt'] ?? '00:00',
+      isDeleted: json['isDeleted'] ?? false,
       chatId: json['chatId'],
       groupId: json['groupId'],
     );

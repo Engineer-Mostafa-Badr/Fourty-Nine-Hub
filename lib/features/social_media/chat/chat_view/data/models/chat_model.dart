@@ -25,7 +25,7 @@ class ChatModel extends ChatEntity {
         archived: json['archived'],
         locked: json['locked'],
         muted: json['muted'],
-        name: json['name'],
+        name: json['username'],
         lastSeenCount: json['lastSeenCount'],
         unreadCount: json['unreadCount'],
         userId: json['userId'],

@@ -292,6 +292,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import '../../../../stories/presentation/cubit/stories_cubit.dart';
 import '../widgets/calling_card.dart';
@@ -306,13 +307,28 @@ class ChatView extends StatefulWidget {
   State<ChatView> createState() => _ChatViewState();
 }
 
-class _ChatViewState extends State<ChatView> {
+class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
   late ChatsCubit chatCubit;
+  late TabController tabController;
 
   @override
   void initState() {
     chatCubit = context.read<ChatsCubit>()..init();
+    tabController =
+        TabController(length: ChatCategories.values.length, vsync: this)
+          ..addListener(() {
+            if (tabController.previousIndex != tabController.index) {
+              chatCubit.getChatsByCategory(
+                  ChatCategories.values[tabController.index]);
+            }
+          });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -491,11 +507,9 @@ class _ChatViewState extends State<ChatView> {
 
   Widget _buildCategoriesLabels() {
     return TabBar(
+        controller: tabController,
         labelColor: AppColors.PRIMARY_COLOR,
         indicatorColor: Colors.red,
-        onTap: (index) {
-         chatCubit.getChatsByCategory(ChatCategories.values[index]);
-        },
         tabAlignment: TabAlignment.start,
         isScrollable: true,
         tabs: ChatCategories.values.map((e) {
@@ -504,7 +518,7 @@ class _ChatViewState extends State<ChatView> {
   }
 
   Widget _buildCategoriesViews() {
-    return TabBarView(children: [
+    return TabBarView(controller: tabController, children: [
       _buildCategoryChats(),
       _buildCategoryChats(),
       _buildCallingHistory(isVideo: false),
