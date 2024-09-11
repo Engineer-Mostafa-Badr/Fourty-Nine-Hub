@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
@@ -127,11 +126,11 @@ class FormTextField extends StatelessWidget {
               fillColor: fillColor ?? Colors.transparent,
               labelText: label,
               hintStyle: style ??
-                  TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+                  TextStyle(fontSize: 30, color: AppColors.QUANTITY_COLOR),
               labelStyle: style ??
-                  TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+                  TextStyle(fontSize: 30, color: AppColors.QUANTITY_COLOR),
               prefixIcon: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.zW),
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: prefix,
               ),
               suffixIcon: suffix,
