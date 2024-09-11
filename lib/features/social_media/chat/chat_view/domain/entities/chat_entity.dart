@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
+
 class ChatEntity {
   String id;
   String categoryId;
@@ -5,19 +7,15 @@ class ChatEntity {
   bool archived;
   bool locked;
   bool muted;
-  String updatedAt;
-  bool isLastMessageByMe;
-  bool seen;
-  bool delivered;
-  String lastMessageText;
   String name;
   int lastSeenCount;
   int unreadCount;
-  String formattedUpdatedAt;
   String userId;
   String avatar;
   bool typing;
-bool online;
+  bool online;
+  MessageEntity? lastMessage;
+
   ChatEntity({
     required this.id,
     required this.isService,
@@ -25,19 +23,13 @@ bool online;
     required this.archived,
     required this.locked,
     required this.muted,
-    required this.updatedAt,
-    required this.isLastMessageByMe,
-    required this.seen,
-    required this.delivered,
-    required this.lastMessageText,
     required this.name,
     required this.lastSeenCount,
     required this.unreadCount,
-    required this.formattedUpdatedAt,
     required this.userId,
     required this.avatar,
     required this.typing,
     required this.online,
+    this.lastMessage,
   });
-
 }

@@ -117,7 +117,8 @@ class ChatsCubit extends Cubit<ChatsState> {
 
   Future<void> _getUnreadChats() async {
     await _getChats(
-        flag: (chat) => chat.seen, params: GetChatsParams(isUnread: true));
+        flag: (chat) => chat.lastMessage?.seen ?? false,
+        params: GetChatsParams(isUnread: true));
   }
 
   Future<void> _getArchivedChats() async {
@@ -129,7 +130,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   _listenToNewMessages() {
     _listenToNewMessageUseCase((message) {
       emit(state.copyWith(newMessage: message, status: ChatsStates.newMessage));
-      _chats[message.chatId]?.lastMessageText = message.text;
+      _chats[message.chatId]?.lastMessage = message;
       getChatsByCategory(_selectedChatCategory);
     });
   }

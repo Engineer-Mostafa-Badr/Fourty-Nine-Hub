@@ -30,7 +30,7 @@ class MessageModel extends MessageEntity {
       media: [],
       sender: MessageSenderEntity(
         id: json['ownerUserId'],
-        name: json['username'],
+        name: json['username'] ?? json['user'] ?? '',
         avatar: json['avatar'],
       ),
       reply: json['replyMessage'] != null
