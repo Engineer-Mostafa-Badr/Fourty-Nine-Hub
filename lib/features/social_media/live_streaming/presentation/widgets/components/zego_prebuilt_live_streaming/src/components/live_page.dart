@@ -96,10 +96,10 @@ class _ZegoLiveStreamingLivePageState extends State<ZegoLiveStreamingLivePage>
           .listen(onTurnOnYourCameraRequest))
       ..add(ZegoUIKit()
           .getTurnOnYourMicrophoneRequestStream()
-          .listen(onTurnOnYourMicrophoneRequest ))
+          .listen(onTurnOnYourMicrophoneRequest))
       ..add(ZegoUIKit()
           .getInRoomLocalMessageStream()
-          .listen(onInRoomLocalMessageFinished ));
+          .listen(onInRoomLocalMessageFinished));
 
     ZegoLiveStreamingManagers().updateContextQuery(() => context);
     ZegoLiveStreamingManagers()
@@ -158,53 +158,73 @@ class _ZegoLiveStreamingLivePageState extends State<ZegoLiveStreamingLivePage>
           }
           return canLeave;
         },
-        child: ZegoScreenUtilInit(
-          designSize: const Size(750, 1334),
-          minTextAdapt: true,
-          splitScreenMode: true,
-          builder: (context, child) {
-            return clickListener(
-              child: LayoutBuilder(builder: (context, constraints) {
-                return ValueListenableBuilder<ZegoUIKitUser?>(
-                    valueListenable: widget.hostManager.notifier,
-                    builder: (context, host, _) {
-                      return Stack(
-                        children: [
-                          ...background(
-                            constraints.maxWidth,
-                            constraints.maxHeight,
-                          ),
-                          ZegoLiveStreamingCentralAudioVideoView(
-                            config: widget.config,
-                            hostManager: widget.hostManager,
-                            liveStatusManager: widget.liveStatusManager,
-                            popUpManager: widget.popUpManager,
-                            plugins: widget.plugins,
-                            constraints: constraints,
-                          ),
-                          ZegoLiveStreamingLivePageSurface(
-                            config: widget.config,
-                            events: widget.events,
-                            defaultEndAction: widget.defaultEndAction,
-                            defaultLeaveConfirmationAction:
-                                widget.defaultLeaveConfirmationAction,
-                            hostManager: widget.hostManager,
-                            liveStatusManager: widget.liveStatusManager,
-                            liveDurationManager: widget.liveDurationManager,
-                            popUpManager: widget.popUpManager,
-                            connectManager:
-                                ZegoLiveStreamingManagers().connectManager!,
-                            plugins: widget.plugins,
-                            isLiveStream: widget.isLiveStream,
-                          ),
-                        ],
-                      );
-                    });
-              }),
-            );
-          },
-        ),
+        child: widget.isLiveStream ? _tiktokLivePage() : _zoomLivePage(),
       ),
+    );
+  }
+
+  Container _tiktokLivePage() {
+    return Container(
+      height: double.infinity,
+      color: Colors.purple,
+      child: Center(
+          child: ElevatedButton(
+        child: const Text(
+          'Demo Press To Get Back',
+          // ignore: unnecessary_const
+          style: const TextStyle(color: Colors.white),
+        ),
+        onPressed: () => Navigator.pop(context),
+      )),
+    );
+  }
+
+  ZegoScreenUtilInit _zoomLivePage() {
+    return ZegoScreenUtilInit(
+      designSize: const Size(750, 1334),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return clickListener(
+          child: LayoutBuilder(builder: (context, constraints) {
+            return ValueListenableBuilder<ZegoUIKitUser?>(
+                valueListenable: widget.hostManager.notifier,
+                builder: (context, host, _) {
+                  return Stack(
+                    children: [
+                      ...background(
+                        constraints.maxWidth,
+                        constraints.maxHeight,
+                      ),
+                      ZegoLiveStreamingCentralAudioVideoView(
+                        config: widget.config,
+                        hostManager: widget.hostManager,
+                        liveStatusManager: widget.liveStatusManager,
+                        popUpManager: widget.popUpManager,
+                        plugins: widget.plugins,
+                        constraints: constraints,
+                      ),
+                      ZegoLiveStreamingLivePageSurface(
+                        config: widget.config,
+                        events: widget.events,
+                        defaultEndAction: widget.defaultEndAction,
+                        defaultLeaveConfirmationAction:
+                            widget.defaultLeaveConfirmationAction,
+                        hostManager: widget.hostManager,
+                        liveStatusManager: widget.liveStatusManager,
+                        liveDurationManager: widget.liveDurationManager,
+                        popUpManager: widget.popUpManager,
+                        connectManager:
+                            ZegoLiveStreamingManagers().connectManager!,
+                        plugins: widget.plugins,
+                        isLiveStream: widget.isLiveStream,
+                      ),
+                    ],
+                  );
+                });
+          }),
+        );
+      },
     );
   }
 

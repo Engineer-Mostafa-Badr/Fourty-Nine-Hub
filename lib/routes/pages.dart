@@ -669,7 +669,7 @@ class AppPages {
                             //club voice
                             BlocProvider<ClubVoiceCubit>(
                               create: (context) =>
-                                  serviceLocator()..getAllRooms(),
+                                  serviceLocator()..loadData(),
                               child: const ClubHouseHome(),
                             ),
                           ],

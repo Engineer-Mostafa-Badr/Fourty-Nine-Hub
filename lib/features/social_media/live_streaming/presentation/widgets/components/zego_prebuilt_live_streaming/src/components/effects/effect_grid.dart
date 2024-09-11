@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
+import '../../../../../../../../../../res/style/app_colors.dart';
+
 /// @nodoc
 class ZegoLiveStreamingEffectGridItem<T> {
   String id;
@@ -164,12 +166,12 @@ class _ZegoEffectGridState extends State<ZegoEffectGrid> {
   Widget gridItem(
       ZegoLiveStreamingEffectGridItem<dynamic> item, Size buttonSize) {
     final selectedIconBorderColor =
-        widget.selectedIconBorderColor ?? const Color(0xffA653FF);
+        widget.selectedIconBorderColor ?? AppColors.SECONDARY_COLOR;
     final normalIconBorderColor =
         widget.normalIconBorderColor ?? Colors.transparent;
     final selectedTextStyle = widget.selectedTextStyle ??
         TextStyle(
-          color: const Color(0xffA653FF),
+          color: AppColors.SECONDARY_COLOR,
           fontSize: 24.zR,
           fontWeight: FontWeight.w500,
         );

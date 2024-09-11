@@ -81,11 +81,11 @@ class _ZegoSeatForegroundState extends State<ZegoLiveAudioRoomSeatBackground> {
               return lockedSeat.contains(userSeatIndex)
                   ? (widget.config.seat.closeIcon ??
                       ZegoLiveAudioRoomImage.asset(
-                        ZegoLiveAudioRoomIconUrls.seatLock,
+                        'assets/49-New-icons/locked.png',
                       ))
                   : (widget.config.seat.openIcon ??
                       ZegoLiveAudioRoomImage.asset(
-                        ZegoLiveAudioRoomIconUrls.seatEmpty,
+                        'assets/49-New-icons/chair.png',
                       ));
             },
           )),
