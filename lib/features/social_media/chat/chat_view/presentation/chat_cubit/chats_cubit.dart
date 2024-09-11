@@ -33,11 +33,13 @@ class ChatsCubit extends Cubit<ChatsState> {
   // Selected Chats
   void addChatToSelectedChats({required ChatEntity chat}) {
     selectedChats.add(chat);
+    chat.isSelected = true;
     emit(state.copyWith(status: ChatsStates.chatsSelected));
   }
 
   void removeChatToSelectedChats({required ChatEntity chat}) {
     selectedChats.removeWhere((chatIterator) => chatIterator.id == chat.id);
+    chat.isSelected = false;
     emit(state.copyWith(status: ChatsStates.chatsSelected));
   }
 

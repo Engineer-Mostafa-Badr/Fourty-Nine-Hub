@@ -15,6 +15,7 @@ class ChatEntity {
   bool typing;
   bool online;
   MessageEntity? lastMessage;
+  bool isSelected = false;
 
   ChatEntity({
     required this.id,
@@ -31,5 +32,6 @@ class ChatEntity {
     required this.typing,
     required this.online,
     this.lastMessage,
+    this.isSelected = false,
   });
 }

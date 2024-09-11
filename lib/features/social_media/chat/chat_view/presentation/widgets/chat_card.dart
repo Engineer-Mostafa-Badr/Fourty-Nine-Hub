@@ -29,8 +29,6 @@ class ChatCard extends StatefulWidget {
 }
 
 class _ChatCardState extends State<ChatCard> {
-  bool isSelected = false;
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -44,8 +42,7 @@ class _ChatCardState extends State<ChatCard> {
           context.push(Routes.CHATROOM, extra: widget.chatsCubit);
         } else {
           setState(() {
-            isSelected = !isSelected;
-            if (isSelected) {
+            if (!widget.chat!.isSelected) {
               context
                   .read<ChatsCubit>()
                   .addChatToSelectedChats(chat: widget.chat!);
@@ -59,8 +56,7 @@ class _ChatCardState extends State<ChatCard> {
       },
       onLongPress: () {
         setState(() {
-          isSelected = !isSelected;
-          if (isSelected) {
+          if (!widget.chat!.isSelected) {
             context
                 .read<ChatsCubit>()
                 .addChatToSelectedChats(chat: widget.chat!);
@@ -75,11 +71,11 @@ class _ChatCardState extends State<ChatCard> {
         duration: const Duration(milliseconds: 200),
         // curve: Curves.easeInOut,
         decoration: BoxDecoration(
-          color: isSelected
+          color: widget.chat!.isSelected
               ? AppColors.PRIMARY_COLOR.withOpacity(0.001)
               : AppColors.BACKGROUND_COLOR,
           borderRadius: BorderRadius.circular(8),
-          boxShadow: isSelected
+          boxShadow: widget.chat!.isSelected
               ? [
                   BoxShadow(
                     color: AppColors.PRIMARY_COLOR.withOpacity(0.2),
@@ -115,7 +111,7 @@ class _ChatCardState extends State<ChatCard> {
                                   UIConst.profilePlaceHolder,
                                 ),
                               ),
-                              isSelected
+                              widget.chat!.isSelected
                                   ? const Positioned(
                                       bottom: 0,
                                       right: 0,
