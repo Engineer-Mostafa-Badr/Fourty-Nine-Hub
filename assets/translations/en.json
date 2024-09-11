@@ -233,5 +233,8 @@
   "phone": "Phone",
   "name": "Name",
   "nameMessage": "This is not your username or pin. This name will be visible to your FortyNine contacts.",
-  "selectContact": "Select Contacts to Share"
+  "selectContact": "Select Contacts to Share",
+  "addChatShortcut": "Add chat shortcut",
+  "markAsUnread": "Mark as unread",
+  "selectAll": "Select all"
 }

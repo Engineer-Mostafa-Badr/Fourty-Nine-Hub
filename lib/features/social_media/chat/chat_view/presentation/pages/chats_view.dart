@@ -398,20 +398,31 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                                 onPressed: () {},
                                                 icon:
                                                     const Icon(Icons.push_pin),
+                                                color: AppColors.PRIMARY_COLOR,
                                               ),
                                               IconButton(
                                                 onPressed: () {},
                                                 icon: const Icon(
-                                                    Icons.delete_forever),
+                                                  Icons.delete_forever,
+                                                  color:
+                                                      AppColors.PRIMARY_COLOR,
+                                                ),
                                               ),
                                               IconButton(
                                                 onPressed: () {},
                                                 icon: const Icon(
-                                                    Icons.notifications_off),
+                                                  Icons.notifications_off,
+                                                  color:
+                                                      AppColors.PRIMARY_COLOR,
+                                                ),
                                               ),
                                               IconButton(
                                                 onPressed: () {},
-                                                icon: const Icon(Icons.archive),
+                                                icon: const Icon(
+                                                  Icons.archive,
+                                                  color:
+                                                      AppColors.PRIMARY_COLOR,
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -457,7 +468,34 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                                 PopupMenuItem<int>(
                                                   value: 0,
                                                   child: Text(
-                                                    "Archive",
+                                                    "Add chat shortcut",
+                                                    style: Styles.mediumText(
+                                                        color: AppColors
+                                                            .PRIMARY_COLOR),
+                                                  ),
+                                                ),
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Text(
+                                                    "Mark as unread",
+                                                    style: Styles.mediumText(
+                                                        color: AppColors
+                                                            .PRIMARY_COLOR),
+                                                  ),
+                                                ),
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Text(
+                                                    "Select all",
+                                                    style: Styles.mediumText(
+                                                        color: AppColors
+                                                            .PRIMARY_COLOR),
+                                                  ),
+                                                ),
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Text(
+                                                    "Lock chat",
                                                     style: Styles.mediumText(
                                                         color: AppColors
                                                             .PRIMARY_COLOR),
