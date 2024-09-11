@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 
-
 // Project imports:
 import '../../../../zego_uikit/src/services/defines/user.dart';
 import '../../../../zego_uikit/src/services/uikit_service.dart';

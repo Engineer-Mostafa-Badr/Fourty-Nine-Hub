@@ -171,6 +171,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _CustomBottomNavigationBarState createState() =>
       _CustomBottomNavigationBarState(
         scrollController: scrollController,
@@ -211,11 +212,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     super.initState();
   }
 
-  @override
-  void dispose() {
-    scrollController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   scrollController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

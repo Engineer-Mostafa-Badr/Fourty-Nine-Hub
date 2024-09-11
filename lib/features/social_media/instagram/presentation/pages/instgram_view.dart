@@ -22,13 +22,13 @@ class InstagramView extends StatefulWidget {
 }
 
 class _InstagramViewState extends State<InstagramView> {
-  late ScrollController scrollController;
+  ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
   @override
   void initState() {
     super.initState();
-    scrollController = ScrollController();
+
     scrollController.addListener(() {
       if (scrollController.position.userScrollDirection ==
           ScrollDirection.reverse) {
@@ -48,11 +48,11 @@ class _InstagramViewState extends State<InstagramView> {
     });
   }
 
-  @override
-  void dispose() {
-    // scrollController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   scrollController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
