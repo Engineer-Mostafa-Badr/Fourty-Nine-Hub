@@ -18,6 +18,6 @@ class SubcategoriesServiceLocator {
         () => GetSubCategoriesUseCase(serviceLocator()));
     // --------------------Cubit ---------------------------
     serviceLocator.registerFactory<SubcategoriesCubit>(
-        () => SubcategoriesCubit(serviceLocator()));
+        () => SubcategoriesCubit(serviceLocator(),serviceLocator()));
   }
 }

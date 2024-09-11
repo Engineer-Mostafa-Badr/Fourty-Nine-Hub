@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/banner.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
@@ -18,6 +17,7 @@ abstract class FourtyNineRepository {
   Future<Either<Failure, MainCategoryEntity>> getMainCategoryDetails(String id);
 
   Future<Either<Failure, bool>> addMainCategoryToFavorites(String id);
+  Future<Either<Failure, bool>> toggleSubCategoryToFavorites(String id);
 
   Future<Either<Failure, bool>> removeMainCategoryFromFavorites(String id);
 

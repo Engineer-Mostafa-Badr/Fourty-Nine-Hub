@@ -6,35 +6,28 @@ import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart'
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
-import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_subcategory_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../res/style/styles.dart';
-import '../../../../routes/routes.dart';
-import '../../domain/entities/sub_category_entity.dart';
-
-class SubCategoryCard extends StatefulWidget {
-  final SubCategoryEntity item;
-  final MainCategoryEntity mainCategory;
+class FavouriteSubCategoryCard extends StatefulWidget {
+  const FavouriteSubCategoryCard({super.key, required this.item, required this.onFav});
+  final FavouriteSubcategoryEntity item;
   final Function() onFav;
-  const SubCategoryCard(
-      {super.key, required this.item, required this.mainCategory, required this.onFav});
 
   @override
-  State<SubCategoryCard> createState() => _SubCategoryCardState();
+  State<FavouriteSubCategoryCard> createState() => _FavouriteSubCategoryCardState();
 }
 
-class _SubCategoryCardState extends State<SubCategoryCard> {
+class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.ADS, extra: AdsViewParams(mainCategory: widget.mainCategory, subCategory: widget.item)),
+      // onTap: () => context.push(Routes.ADS, extra: AdsViewParams(mainCategory: mainCategory, subCategory: item)),
       child: Container(
-        margin: EdgeInsets.all(10.zW),
+        margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(5),
@@ -55,23 +48,15 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                     child: SquareImage(
                       fit: BoxFit.cover,
                       radius: 5,
-                      url: widget.item.image,
+                      url: widget.item.picture,
                     ),
                   ),
                   Positioned(
-                      top: 10.zH,
-                      right: 10.zW,
+                      top: 10,
+                      right: 10,
                       child: IconAppButton(
-                        icon: widget.item.isFavorite==false?Icons.favorite_outline:Icons.favorite,
-                        onPressed: () async{
-                          var result = await widget.onFav();
-                          if(result==true){
-                            widget.item.isFavorite=!widget.item.isFavorite!;
-                            setState(() {
-
-                            });
-                          }
-                        },
+                        icon: Icons.favorite,
+                        onPressed: () =>widget.onFav(),
                         color: AppColors.SECONDARY_COLOR,
                       ))
                 ],
@@ -79,7 +64,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
             ),
             const Sizer(),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0.zW),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
                 children: [
                   Expanded(
@@ -91,7 +76,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                           style: Styles.mediumText(fontWeight: FontWeight.bold),
                         ),
                         Label(
-                          text: '${widget.item.numberOfContent} ${LocaleKeys.ads.localize}',
+                          text: 'dd ${LocaleKeys.ads.localize}',
                           style: Styles.smallText(fontSize: 25),
                         )
                       ],
@@ -99,13 +84,13 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                   ),
                   IconAppButton(
                       icon: Icons.add_box_rounded,
-                      size: 40.zH,
+                      size: 40,
                       onPressed: () {
                         if (AuthHelper().isLoggedIn()) {
-                          context.push(Routes.CREATEAD,
-                              extra: CategorizationEntity(
-                                  mainCategory: widget.mainCategory,
-                                  subCategory: widget.item));
+                          // context.push(Routes.CREATEAD,
+                          //     extra: CategorizationEntity(
+                          //         mainCategory: mainCategory,
+                          //         subCategory: item));
                         } else {
                           context.push(Routes.LOGIN);
                         }

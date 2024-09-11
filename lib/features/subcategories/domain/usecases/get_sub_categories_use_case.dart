@@ -19,8 +19,9 @@ class GetSubCategoriesUseCase
 
 class GetSubCategoriesParams {
   String mainCategoryId;
+  String userId;
   PaginationParams paginationParams;
 
   GetSubCategoriesParams(
-      {required this.mainCategoryId, required this.paginationParams});
+      {required this.mainCategoryId, required this.paginationParams,required this.userId});
 }
