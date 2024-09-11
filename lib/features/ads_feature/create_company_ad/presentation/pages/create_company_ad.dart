@@ -47,7 +47,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
         centerTitle: false,
         label: LocaleKeys.companyAdvertise.localize,
         actions: [
-          IconButton(
+          context.read<UserCubit>().isLoggedIn?  IconButton(
             onPressed: () {
               Navigator.push(
                 context,
@@ -60,7 +60,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
               Icons.access_time_outlined,
               color: Theme.of(context).primaryColor,
             ),
-          ),
+          ) :const SizedBox.shrink(),
         ],
       ),
       body: context.read<UserCubit>().isLoggedIn

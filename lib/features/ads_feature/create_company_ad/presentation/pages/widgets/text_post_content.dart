@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentatio
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../../common/models/public/pagination_params.dart';
 import '../../../../../../common/widgets/stateful/dynamic/pagination_view.dart';
+import '../../../../../../service_locator/service_locator.dart';
 import '../../../domain/entities/company_ad_entity.dart';
 import '../../cubit/create_company_ad_cubit.dart';
 

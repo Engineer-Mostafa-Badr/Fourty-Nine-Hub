@@ -55,33 +55,14 @@ class MyApp extends StatelessWidget {
           create: (context) => serviceLocator<UserCubit>(),
         ),
         BlocProvider(
-          create: (context) =>
-              CompetitionCubit(serviceLocator.get<CompetitionRepoImpl>())
-                ..fetchCompetition(context)
-        ),
-        BlocProvider(
           create: (BuildContext context) =>serviceLocator<WalletCubit>(),
 
         ),
-        BlocProvider(
-          create: (BuildContext context) =>serviceLocator<CreateCompanyAdCubit>(),
-
-        ),
-        BlocProvider(
-            create: (context) =>
-            WinnerCubit(serviceLocator.get<CompetitionRepoImpl>())
-              ..fetchWinners(context)
-        ),
-    //    BlocProvider(create: (_) => CompanyAdvertiseCubit(serviceLocator<CompanyAdvertiseRepoImpl>())),
         // BlocProvider(
         //   create: (context) => serviceLocator<RiderequestCubit>(),
         // ),
         // BlocProvider(
         //   create: (context) => serviceLocator<CreateShippingRequestCubit>(),
-        // ),
-        // // CreateAdCubit
-        // BlocProvider(
-        //   create: (context) => serviceLocator<CreateAdCubit>(),
         // ),
         // //  tinder to be reviewed
         BlocProvider(

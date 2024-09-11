@@ -8,7 +8,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 
-class FormTextField extends StatefulWidget {
+class FormTextField extends StatelessWidget {
   final String? initialValue;
   final bool? obsecure;
   final bool? enabled;
@@ -69,11 +69,6 @@ class FormTextField extends StatefulWidget {
       this.controller,
       this.textStyle});
 
-  @override
-  State<FormTextField> createState() => _FormTextFieldState();
-}
-
-class _FormTextFieldState extends State<FormTextField> {
   bool validate = false;
 
   @override
@@ -81,106 +76,102 @@ class _FormTextFieldState extends State<FormTextField> {
     return Column(
       children: [
         SizedBox(
-          height: widget.maxLines != null
-              ? null
-              : validate
-                  ? (widget.height ?? 100.zH) * 1.5.zH
-                  : widget.height ?? 100.zH,
+          height:   height ?? 70,
           child: TextFormField(
-            style: widget.textStyle ??
+            style: textStyle ??
                 Styles.mediumText(color: AppColors.QUANTITY_COLOR),
-            textAlignVertical: widget.textAlignVertical,
-            maxLines: widget.maxLines ?? 1,
-            maxLength: widget.maxLength,
+            textAlignVertical: textAlignVertical,
+            maxLines: maxLines ?? 1,
+            maxLength: maxLength,
             onFieldSubmitted: (v) {
-              if (widget.onConfirm != null) {
-                widget.onConfirm!();
+              if (onConfirm != null) {
+                onConfirm!();
               }
             },
-            validator: widget.validator ??
+            validator: validator ??
                 (value) {
                   validate = true;
                   final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
 
-                  setState(() {});
+               //   setState(() {});
                   if ((value == null || value.isEmpty) &&
-                      (widget.required ?? true)) {
+                      (required ?? true)) {
                     return LocaleKeys.required.localize;
-                  } else if (widget.extraValidation ?? false) {
-                    return widget.extraValidationMessage ?? '';
+                  } else if (extraValidation ?? false) {
+                    return extraValidationMessage ?? '';
                   } else if (!emailRegExp.hasMatch(value!.trim()) &&
-                      (widget.isEmail ?? false)) {
+                      (isEmail ?? false)) {
                     return LocaleKeys.emailFormat.localize;
                   } else {
                     validate = false;
-                    setState(() {});
+                   // setState(() {});
                     return null;
                   }
                 },
             onTap: () {
-              if (widget.onTap != null) {
-                widget.onTap!();
+              if (onTap != null) {
+                onTap!();
               }
             },
-            enabled: widget.enabled ?? true,
-            controller: widget.controller,
-            autofillHints: widget.autofill,
-            keyboardType: widget.type,
-            initialValue: widget.initialValue,
-            obscureText: widget.obsecure ?? false,
-            onChanged: widget.action,
+            enabled: enabled ?? true,
+            controller: controller,
+            autofillHints: autofill,
+            keyboardType: type,
+            initialValue: initialValue,
+            obscureText: obsecure ?? false,
+            onChanged: action,
             decoration: InputDecoration(
-              constraints: widget.constraints,
-              hintText: widget.hint,
+              constraints: constraints,
+              hintText: hint,
               filled: true,
-              fillColor: widget.fillColor ?? Colors.transparent,
-              labelText: widget.label,
-              hintStyle: widget.style ??
+              fillColor: fillColor ?? Colors.transparent,
+              labelText: label,
+              hintStyle: style ??
                   TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
-              labelStyle: widget.style ??
+              labelStyle: style ??
                   TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
               prefixIcon: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.zW),
-                child: widget.prefix,
+                child: prefix,
               ),
-              suffixIcon: widget.suffix,
-              enabledBorder: widget.noBorder
+              suffixIcon: suffix,
+              enabledBorder: noBorder
                   ? InputBorder.none
                   : OutlineInputBorder(
                       borderSide: const BorderSide(
                         color: AppColors.LIGHT_GRAY_COLOR,
                       ),
                       borderRadius:
-                          widget.borderRadius ?? BorderRadius.circular(10),
+                          borderRadius ?? BorderRadius.circular(10),
                     ),
-              focusedBorder: widget.noBorder
+              focusedBorder: noBorder
                   ? InputBorder.none
                   : OutlineInputBorder(
                       borderSide: const BorderSide(
                         color: AppColors.PRIMARY_COLOR,
                       ),
                       borderRadius:
-                          widget.borderRadius ?? BorderRadius.circular(10),
+                          borderRadius ?? BorderRadius.circular(10),
                     ),
               errorBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
                   color: Colors.red,
                 ),
-                borderRadius: widget.borderRadius ?? BorderRadius.circular(10),
+                borderRadius: borderRadius ?? BorderRadius.circular(10),
               ),
-              focusedErrorBorder: widget.noBorder
+              focusedErrorBorder: noBorder
                   ? InputBorder.none
                   : OutlineInputBorder(
                       borderSide: const BorderSide(
                         color: Colors.red,
                       ),
                       borderRadius:
-                          widget.borderRadius ?? BorderRadius.circular(10),
+                          borderRadius ?? BorderRadius.circular(10),
                     ),
             ),
           ),
         ),
-        if (widget.info != null)
+        if (info != null)
           Container(
             margin: const EdgeInsets.only(top: 5),
             child: Row(
@@ -194,7 +185,7 @@ class _FormTextFieldState extends State<FormTextField> {
                 const Sizer(),
                 Expanded(
                     child: Label(
-                  text: widget.info ?? '',
+                  text: info ?? '',
                   style: Styles.smallText(color: Colors.grey),
                 ))
               ],

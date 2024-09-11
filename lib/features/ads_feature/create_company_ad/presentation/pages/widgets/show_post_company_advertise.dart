@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -6,6 +7,8 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
+import '../../../../../../service_locator/service_locator.dart';
+import '../../cubit/create_company_ad_cubit.dart';
 import 'photo_post_content.dart';
 import 'photo_text_post_content.dart';
 import 'reel_post_content.dart';
@@ -28,37 +31,40 @@ class _ShowPostCompanyAdvertiseState extends State<ShowPostCompanyAdvertise> {
         centerTitle: false,
         label: LocaleKeys.myPosts.localize,
       ),
-      body: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8.0),
-            height: kToolbarHeight * 1,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                listItem(
-                  label: LocaleKeys.textPost.localize,
-                  type: 'Text Post',
-                ),
-                listItem(
-                  label: LocaleKeys.photoPost.localize,
-                  type: 'Photo Post',
-                ),
-                listItem(
-                  label:LocaleKeys.photoAndTextPost.localize,
-                  type: 'Photo And Text Post',
-                ),
-                listItem(
-                  label: LocaleKeys.reelsPost.localize,
-                  type: 'Reels Post',
-                ),
-              ],
+      body: BlocProvider(
+        create: (_) =>serviceLocator<CreateCompanyAdCubit>(),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8.0),
+              height: kToolbarHeight * 1,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  listItem(
+                    label: LocaleKeys.textPost.localize,
+                    type: 'Text Post',
+                  ),
+                  listItem(
+                    label: LocaleKeys.photoPost.localize,
+                    type: 'Photo Post',
+                  ),
+                  listItem(
+                    label:LocaleKeys.photoAndTextPost.localize,
+                    type: 'Photo And Text Post',
+                  ),
+                  listItem(
+                    label: LocaleKeys.reelsPost.localize,
+                    type: 'Reels Post',
+                  ),
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: _buildContentWidget(_selectedType),
-          ),
-        ],
+            Expanded(
+              child: _buildContentWidget(_selectedType),
+            ),
+          ],
+        ),
       ),
     );
   }
