@@ -344,7 +344,6 @@ class FourtyNineServiceLocator {
       () => MainCategoriesCubit(
         serviceLocator(),
         serviceLocator(),
-        serviceLocator(),
       ),
     );
 
