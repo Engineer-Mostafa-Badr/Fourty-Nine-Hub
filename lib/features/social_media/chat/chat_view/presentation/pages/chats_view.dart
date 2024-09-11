@@ -518,19 +518,30 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
   }
 
   Widget _buildCategoriesViews() {
-    return TabBarView(controller: tabController, children: [
-      _buildCategoryChats(),
-      _buildCategoryChats(),
-      _buildCallingHistory(isVideo: false),
-      _buildCallingHistory(isVideo: true),
-      _buildCallingHistory(isVideo: false),
-      _buildCallingHistory(isVideo: true),
-      _buildCategoryChats(isSecret: true),
-      _buildCategoryChats(),
-      _buildCategoryChats(),
-      _buildCategoryChats(),
-      _buildCategoryChats(),
-    ]);
+    return TabBarView(
+        controller: tabController,
+        children: ChatCategories.values
+            .map((e) => _chatCategoryWidgetMapper(e))
+            .toList());
+  }
+
+  Widget _chatCategoryWidgetMapper(ChatCategories category) {
+    switch (category) {
+      case ChatCategories.social:
+      case ChatCategories.service:
+      case ChatCategories.groups:
+      case ChatCategories.greet:
+      case ChatCategories.unread:
+      case ChatCategories.archived:
+      case ChatCategories.anonymous:
+      case ChatCategories.broadcast:
+        return _buildCategoryChats();
+      case ChatCategories.socialCalls:
+      case ChatCategories.serviceCalls:
+        return _buildCallingHistory(isVideo: false);
+      case ChatCategories.locked:
+        return _buildCategoryChats(isSecret: true);
+    }
   }
 
   Widget _buildCategoryChats({bool isSecret = false}) {
