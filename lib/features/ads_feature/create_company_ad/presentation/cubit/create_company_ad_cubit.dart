@@ -63,6 +63,7 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
     required int totalPrice,
     List<String>? mediaIds,
   }) async {
+    emit(state.copyWith(status: StateStatus.loading));
     var response = await _companyAddUseCases(
       CompanyAddParams(
         advertisementType: type,

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/functions/global/upload_file.dart';
@@ -69,9 +70,16 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                 if (state.status == StateStatus.success) {
                   showSuccessMessage(
                       context, LocaleKeys.postSuccessfully.localize);
+                  context
+                      .read<CreateCompanyAdCubit>()
+                      .getCompanyAdPosts(widget.type,
+                      params: PaginationParams(
+                        page: 1,
+                        limit: 20,
+                      ));
                   Navigator.of(context).pop();
-                }
 
+                }
               },
               builder: (BuildContext context, Object? state) {
                 return Scaffold(
@@ -89,18 +97,22 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                               context
                                   .read<CreateCompanyAdCubit>()
                                   .addPostCompanyAdvertise(
-                                  mediaIds: widget.picture ? controller
-                                      .selectedImages!.isNotEmpty ?
-                                  controller.selectedImages : showSuccessMessage(
-                                    context, 'Image not selected',
-                                    color: AppColors.SECONDARY_COLOR,
-                                    icon: Icons.error,)
-                                      :null,
-                                type: widget.type,
-                                post: widget.text
-                                ? postContentTextController.text
-                                    : null,
-                                  totalPrice: 10,
+                                    mediaIds: widget.picture
+                                        ? controller.selectedImages!.isNotEmpty
+                                            ? controller.selectedImages
+                                            : showSuccessMessage(
+                                                context,
+                                                'Image not selected',
+                                                color:
+                                                    AppColors.SECONDARY_COLOR,
+                                                icon: Icons.error,
+                                              )
+                                        : null,
+                                    type: widget.type,
+                                    post: widget.text
+                                        ? postContentTextController.text
+                                        : null,
+                                    totalPrice: 10,
                                   );
                               // CompanyAdvertiseCubit.get(context)
                               //     .addPostCompanyAdvertise(
