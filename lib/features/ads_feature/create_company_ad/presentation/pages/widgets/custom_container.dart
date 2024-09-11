@@ -57,20 +57,22 @@ class CustomContainerAdvertise extends StatelessWidget {
                   style: Styles.headerText(color: Theme.of(context).scaffoldBackgroundColor),
                 ),
                 const SizedBox(width: 6),
-                Text(
-                  '($numberOfAdvertises)',
-                  style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
-                ),
+                if(numberOfAdvertises >0)
+                  Text(
+                    '($numberOfAdvertises)',
+                    style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
+                  ),
                 const Spacer(),
+                if(numberOfAdvertises >0)
                 Text(
                   '$totalPrice',
                   style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(
+                  icon:  Icon(
                     Icons.check_circle,
-                    color: AppColors.SECONDARY_COLOR,
+                    color:numberOfAdvertises >0? AppColors.SECONDARY_COLOR :Colors.transparent,
                   ),
                 ),
               ],
