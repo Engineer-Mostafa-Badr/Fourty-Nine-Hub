@@ -52,12 +52,11 @@ import 'package:get_it/get_it.dart';
 class FaceBookServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<CreatePostRemoteDataSource>(
-            () => CreatePostRemoteDataSourceImpl(serviceLocator(), serviceLocator()));
-    serviceLocator.registerLazySingleton<SocialPostsRemoteDataSource>(
-            () => SocialPostsRemoteDataSourceImpl(serviceLocator()));
+        () => CreatePostRemoteDataSourceImpl(serviceLocator(), serviceLocator()));
+    serviceLocator
+        .registerLazySingleton<SocialPostsRemoteDataSource>(() => SocialPostsRemoteDataSourceImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<EditProfileRemoteDataSource>(
-            () => EditProfileRemoteDataSourceImpl(serviceLocator(), serviceLocator()));
-
+        () => EditProfileRemoteDataSourceImpl(serviceLocator(), serviceLocator()));
 
     serviceLocator.registerLazySingleton<CreatePostRepo>(() => CreatePostRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<SocialPostsRepo>(() => SocialPostsRepoImpl(serviceLocator()));
@@ -70,177 +69,173 @@ class FaceBookServiceLocator {
     serviceLocator.registerLazySingleton<HidePostUseCase>(() => HidePostUseCase(serviceLocator()));
 
     serviceLocator.registerLazySingleton<GetFeedUseCase>(() => GetFeedUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
     serviceLocator.registerLazySingleton<PostReactUseCase>(() => PostReactUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
     serviceLocator.registerLazySingleton<GetPostCommentsUseCase>(() => GetPostCommentsUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
     serviceLocator.registerLazySingleton<PostCommentUseCase>(() => PostCommentUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
     serviceLocator.registerLazySingleton<GetUserPostsUseCase>(() => GetUserPostsUseCase(
-      serviceLocator(),
-    ));
-
-
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<SuggestedFriendsUseCase>(() => SuggestedFriendsUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<FriedRequestUseCase>(() => FriedRequestUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<FollowUserUseCase>(() => FollowUserUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<RemoveSuggestUserUseCase>(() => RemoveSuggestUserUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<SendGreetMessageUseCase>(() => SendGreetMessageUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<SharePostUseCase>(() => SharePostUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<CommentReactUseCase>(() => CommentReactUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<GetPostCommentRepliesUseCase>(() => GetPostCommentRepliesUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<ReplyOnCommentUseCase>(() => ReplyOnCommentUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<FaceTweetUseCase>(() => FaceTweetUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<FaceAdvertisementUseCase>(() => FaceAdvertisementUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<FriendsFollowersUseCase>(() => FriendsFollowersUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<GetPostUseCase>(() => GetPostUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<SearchUsersUsecase>(() => SearchUsersUsecase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<DeleteCommentUseCase>(() => DeleteCommentUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<UserProfileUseCase>(() => UserProfileUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<ViewProfileUseCase>(() => ViewProfileUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<UnFollowUserUseCase>(() => UnFollowUserUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<RemoveFriedRequestUseCase>(() => RemoveFriedRequestUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<BlocUserUseCase>(() => BlocUserUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<EditCommentUseCase>(() => EditCommentUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<GetGlobalFeedUseCase>(() => GetGlobalFeedUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<GetPlacesUseCase>(() => GetPlacesUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<EditProfileUseCase>(() => EditProfileUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<GetSavedReelsUseCase>(() => GetSavedReelsUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<AcceptRejectFriendRequestUseCase>(() => AcceptRejectFriendRequestUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<DeleteFriendUseCase>(() => DeleteFriendUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-    ));
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
 
     serviceLocator.registerFactory<EditProfileCubit>(() => EditProfileCubit(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerFactory<SocialPostsCubit>(() => SocialPostsCubit(
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-    ));
-
-
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
   }
 }

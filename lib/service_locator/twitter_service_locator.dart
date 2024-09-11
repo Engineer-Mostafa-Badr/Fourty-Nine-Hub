@@ -24,104 +24,102 @@ import 'package:get_it/get_it.dart';
 
 class TwitterServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
-
     serviceLocator.registerLazySingleton<TwitterRemoteDataSource>(() => TwitterRemoteDataSourceImpl(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<TwitterRepo>(() => TwitterRepoImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<GetTwitterFeedUseCase>(() => GetTwitterFeedUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<TwitterPostReactUseCase>(() => TwitterPostReactUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<GetTwitterPostCommentsUseCase>(() => GetTwitterPostCommentsUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<CreateTwitterPostUseCase>(() => CreateTwitterPostUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<TwitterCommentReactUseCase>(() => TwitterCommentReactUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<GetTwitterPostUseCase>(() => GetTwitterPostUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<TwitterSharePostUseCase>(() => TwitterSharePostUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<TwitterPostCommentUseCase>(() => TwitterPostCommentUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<TwitterCommentReplyUseCase>(() => TwitterCommentReplyUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<GetTwitterCommentRepliesUseCase>(() => GetTwitterCommentRepliesUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<TwitterReportUseCase>(() => TwitterReportUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<RequestDocumentUseCase>(() => RequestDocumentUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<GetUserTweetsUseCase>(() => GetUserTweetsUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<HideTwitterPostUseCase>(() => HideTwitterPostUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<DeleteTwitterPostUseCase>(() => DeleteTwitterPostUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<EditTwitterCommentUseCase>(() => EditTwitterCommentUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<DeleteTwitterCommentUseCase>(() => DeleteTwitterCommentUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<GetTwitterGlobalFeedUseCase>(() => GetTwitterGlobalFeedUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator.registerFactory<TwitterCubit>(() => TwitterCubit(
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-    ));
-
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
   }
 }

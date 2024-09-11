@@ -8,6 +8,6 @@ class DeleteFriendUseCase extends UseCase<bool, String> {
   DeleteFriendUseCase(this._repo);
   @override
   Future<Either<Failure, bool>> call(String params) async {
-    return await _repo.deleteFriend( userId: params);
+    return await _repo.deleteFriend(userId: params);
   }
 }

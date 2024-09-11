@@ -1,0 +1,34 @@
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+
+/// @nodoc
+mixin ZegoLiveStreamingControllerPrivate {
+  final _impl = ZegoLiveStreamingControllerPrivateImpl();
+
+  /// Don't call that
+  ZegoLiveStreamingControllerPrivateImpl get private => _impl;
+}
+
+/// @nodoc
+class ZegoLiveStreamingControllerPrivateImpl {
+  /// Please do not call this interface. It is the internal logic of Prebuilt.
+  /// DO NOT CALL!!!
+  /// Call Inside By Prebuilt
+  void initByPrebuilt() {
+    ZegoLoggerService.logInfo(
+      'init by prebuilt',
+      tag: 'live-streaming',
+      subTag: 'controller.p',
+    );
+  }
+
+  /// Please do not call this interface. It is the internal logic of Prebuilt.
+  /// DO NOT CALL!!!
+  /// Call Inside By Prebuilt
+  void uninitByPrebuilt() {
+    ZegoLoggerService.logInfo(
+      'uninit by prebuilt',
+      tag: 'live-streaming',
+      subTag: 'controller.p',
+    );
+  }
+}

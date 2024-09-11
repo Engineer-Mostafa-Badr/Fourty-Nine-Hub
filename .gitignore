@@ -45,3 +45,8 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 .fvm/
+
+# Ignore macOS specific generated files
+macos/Flutter/GeneratedPluginRegistrant.swift
+macos/Flutter/ephemeral/flutter_export_environment.sh
+macos/Flutter/ephemeral/Flutter-Generated.xcconfig

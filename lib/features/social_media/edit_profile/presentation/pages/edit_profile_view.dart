@@ -11,7 +11,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities/edit_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/widgets/privact_icon.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -37,14 +37,20 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   @override
   void initState() {
-    firstNameTextController.text = context.read<UserCubit>().state.data?.firstName ?? '';
-    lastNameTextController.text = context.read<UserCubit>().state.data?.lastName ?? '';
-    phoneTextController.text = context.read<UserCubit>().state.data?.phone ?? '';
+    firstNameTextController.text =
+        context.read<UserCubit>().state.data?.firstName ?? '';
+    lastNameTextController.text =
+        context.read<UserCubit>().state.data?.lastName ?? '';
+    phoneTextController.text =
+        context.read<UserCubit>().state.data?.phone ?? '';
     cityTextController.text = context.read<UserCubit>().state.data?.city ?? '';
-    countryTextController.text = context.read<UserCubit>().state.data?.country ?? '';
+    countryTextController.text =
+        context.read<UserCubit>().state.data?.country ?? '';
     jobTextController.text = context.read<UserCubit>().state.data?.job ?? '';
     bioTextController.text = context.read<UserCubit>().state.data?.bio ?? '';
-    context.read<EditProfileCubit>().initGender(context.read<UserCubit>().state.data?.gender ?? '');
+    context
+        .read<EditProfileCubit>()
+        .initGender(context.read<UserCubit>().state.data?.gender ?? '');
     super.initState();
   }
 
@@ -339,14 +345,19 @@ class _EditProfileViewState extends State<EditProfileView> {
                         child: Container(
                           padding: EdgeInsets.all(10.zR),
                           decoration: BoxDecoration(
-                              color: state.isMale == true ? AppColors.PRIMARY_COLOR : Colors.white,
+                              color: state.isMale == true
+                                  ? AppColors.PRIMARY_COLOR
+                                  : Colors.white,
                               borderRadius: BorderRadius.circular(15.zR),
-                              border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                              border:
+                                  Border.all(color: AppColors.PRIMARY_COLOR)),
                           alignment: AlignmentDirectional.center,
                           child: Text(
                             'Male',
                             style: Styles.mediumText(
-                                color: state.isMale == false ? AppColors.PRIMARY_COLOR : Colors.white),
+                                color: state.isMale == false
+                                    ? AppColors.PRIMARY_COLOR
+                                    : Colors.white),
                           ),
                         ),
                       )),
@@ -361,14 +372,19 @@ class _EditProfileViewState extends State<EditProfileView> {
                           child: Container(
                             padding: EdgeInsets.all(10.zR),
                             decoration: BoxDecoration(
-                                color: state.isMale == false ? AppColors.PRIMARY_COLOR : Colors.white,
+                                color: state.isMale == false
+                                    ? AppColors.PRIMARY_COLOR
+                                    : Colors.white,
                                 borderRadius: BorderRadius.circular(15.zR),
-                                border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                                border:
+                                    Border.all(color: AppColors.PRIMARY_COLOR)),
                             alignment: AlignmentDirectional.center,
                             child: Text(
                               'Female',
                               style: Styles.mediumText(
-                                  color: state.isMale == true ? AppColors.PRIMARY_COLOR : Colors.white),
+                                  color: state.isMale == true
+                                      ? AppColors.PRIMARY_COLOR
+                                      : Colors.white),
                             ),
                           ),
                         ),
@@ -402,11 +418,13 @@ class _EditProfileViewState extends State<EditProfileView> {
                             );
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10.zW, vertical: 20.zH),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10.zW, vertical: 20.zH),
                             decoration: BoxDecoration(
                                 color: AppColors.PRIMARY_COLOR,
                                 borderRadius: BorderRadius.circular(15.zR),
-                                border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                                border:
+                                    Border.all(color: AppColors.PRIMARY_COLOR)),
                             alignment: AlignmentDirectional.center,
                             child: Text(
                               'Edit',

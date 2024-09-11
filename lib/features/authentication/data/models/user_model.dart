@@ -1,30 +1,38 @@
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 
 class UserModel extends UserEntity {
-  const UserModel({
-    required super.id,
-    required super.firstName,
-    required super.lastName,
-    super.email,
-    super.profilePicture,
-    super.profileCover,
-    super.friendsCount,
-    super.wallet,
-    super.followersCount,
-    super.followingCount,
-    super.isRider,
-    super.isDoctor,
-    super.isRestaurant,
-    super.isLoading,
-    super.isDocument,
-    super.bio, super.phone, super.city, super.country, super.job, super.gender
-  });
+  const UserModel(
+      {required super.id,
+      required super.firstName,
+      required super.lastName,
+      super.email,
+      super.profilePicture,
+      super.profileCover,
+      super.friendsCount,
+      super.wallet,
+      super.followersCount,
+      super.followingCount,
+      super.isRider,
+      super.isDoctor,
+      super.isRestaurant,
+      super.isLoading,
+      super.isDocument,
+      super.bio,
+      super.phone,
+      super.city,
+      super.country,
+      super.job,
+      super.gender});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['userId'] ?? json['_id'],
-      firstName:  json['firstName'][0].toUpperCase() + json['firstName'].substring(1).toLowerCase() ?? '',
-      lastName:json['lastName'][0].toUpperCase() + json['lastName'].substring(1).toLowerCase() ?? '',
+      firstName: json['firstName'][0].toUpperCase() +
+              json['firstName'].substring(1).toLowerCase() ??
+          '',
+      lastName: json['lastName'][0].toUpperCase() +
+              json['lastName'].substring(1).toLowerCase() ??
+          '',
       email: json['email'] ?? '',
       profilePicture: json['profilePicture'] ??
           json['profilePicture'] ??

@@ -1,4 +1,4 @@
-// import 'package:flutter/src/widgets/basic.dart';
+import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
@@ -85,6 +85,8 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/pages/mus
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/instagram_profile.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
@@ -106,6 +108,11 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/trip_join_view.dart';
+import 'package:fourtyninehub/features/trip_join/notifications/presentation/views/request_trip_join_notification.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/request_trip_join_usecase.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/view_all_trip_join_usecase.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/request_trip_join_cubit/request_trip_join_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/avaiable_trips_view.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
@@ -490,9 +497,10 @@ class AppPages {
               builder: (context, state) => const NotificationView(),
               routes: [
                 GoRoute(
-                    path: Paths.NOTIFICATIONS,
-                    name: Routes.NOTIFICATIONS,
-                    builder: (context, state) => const NotificationView()),
+                  path: Paths.NOTIFICATIONS,
+                  name: Routes.NOTIFICATIONS,
+                  builder: (context, state) => const NotificationView(),
+                ),
                 GoRoute(
                     path: Paths.SETTINGS,
                     name: Routes.SETTINGS,
@@ -575,8 +583,15 @@ class AppPages {
                 },
               ),
             ],
-            builder: (context, state) => BlocProvider<InstagramCubit>(
-              create: (_) => serviceLocator()..loadData(),
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) =>  serviceLocator<InstagramCubit>()..loadData(),
+                ),
+                BlocProvider(
+                  create: (context) => serviceLocator<StoryCubit>(),
+                ),
+              ],
               child: const InstagramView(),
             ),
           ),
@@ -776,7 +791,17 @@ class AppPages {
           GoRoute(
               path: Paths.SPOTLIGHT,
               name: Routes.SPOTLIGHT,
-              builder: (context, state) => const SpotlightView()),
+              builder: (context, state) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                          create: (context) => serviceLocator<ReelsCubit>()),
+                      BlocProvider<StoryCubit>(
+                        create: (_) =>
+                            serviceLocator<StoryCubit>(),
+                      ),
+                    ],
+                    child: const SpotlightView(),
+                  )),
           // _________________ services ____________
 
           GoRoute(
@@ -1164,8 +1189,32 @@ class AppPages {
           GoRoute(
             path: Paths.AVAILABLE_TRIPS,
             name: Routes.AVAILABLE_TRIPS,
-            builder: (context, state) => const AvailableTripsView(),
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) => ViewAllTripJoinCubit(
+                    viewAllTripJoinUseCase:
+                        serviceLocator<ViewAllTripJoinUseCase>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (_) => RequestTripJoinCubit(
+                    requestTripJoinUseCase:
+                        serviceLocator<RequstTripJoinUseCase>(),
+                  ),
+                ),
+              ],
+              child: const AvailableTripsView(),
+            ),
           ),
+          GoRoute(
+            path: Paths.TRIP_JOIN_REQUEST_NOTIFICATIONS,
+            name: Routes.TRIP_JOIN_REQUEST_NOTIFICATIONS,
+            builder: (context, state) {
+              return RequestTripJoinNotificationView(
+                  payload: state.extra! as Map<String, dynamic>);
+            },
+          )
         ],
       ),
     ],

@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../../common/widgets/dynamic/floating_button.dart';
@@ -22,13 +23,13 @@ class InstagramView extends StatefulWidget {
 }
 
 class _InstagramViewState extends State<InstagramView> {
-  late ScrollController scrollController;
+  ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
   @override
   void initState() {
     super.initState();
-    scrollController = ScrollController();
+
     scrollController.addListener(() {
       if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
         if (!_isScrollingDown) {
@@ -46,11 +47,11 @@ class _InstagramViewState extends State<InstagramView> {
     });
   }
 
-  @override
-  void dispose() {
-    scrollController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   scrollController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -85,11 +86,11 @@ class _InstagramViewState extends State<InstagramView> {
                     ],
                   )
                 : Column(
-                  children: [
-                    _buildTabBar(context),
-                    Expanded(child: InstagramGlobalPosts(scrollController: scrollController)),
-                  ],
-                );
+                    children: [
+                      _buildTabBar(context),
+                      Expanded(child: InstagramGlobalPosts(scrollController: scrollController)),
+                    ],
+                  );
           },
         ),
       ),
@@ -108,7 +109,9 @@ class _InstagramViewState extends State<InstagramView> {
             onTap: () {
               if (i == 1) {
                 print(context.read<UserCubit>().token);
-                !context.read<UserCubit>().isTokenAttached?context.push(Routes.LOGIN):context.push(Routes.INSTAGRAMPROFILE, extra: user?.id);
+                !context.read<UserCubit>().isTokenAttached
+                    ? context.push(Routes.LOGIN)
+                    : context.push(Routes.INSTAGRAMPROFILE, extra: user?.id);
               }
             },
             child: Container(

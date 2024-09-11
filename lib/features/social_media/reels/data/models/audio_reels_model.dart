@@ -19,8 +19,6 @@ class ReelsForAudioResponse {
       data: json['data'] != null ? ReelsData.fromJson(json['data']) : null,
     );
   }
-
-
 }
 
 class ReelsData {
@@ -43,7 +41,6 @@ class ReelsData {
           : null,
     );
   }
-
 }
 
 class User {

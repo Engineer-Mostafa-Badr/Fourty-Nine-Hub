@@ -11,7 +11,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 class MainCategoryBanner extends StatefulWidget {
   final MainCategoryEntity category;
@@ -25,7 +25,7 @@ class MainCategoryBanner extends StatefulWidget {
     this.canRegister = false,
     this.onRegister,
     required this.category,
-    required this.onFavorite,
+     required this.onFavorite,
     this.isFavorite,
   });
 
@@ -64,7 +64,9 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          PositionedDirectional(end: 0, child: _buildRegisterButton()),
+          PositionedDirectional(
+            end: 0,
+              child: _buildRegisterButton()),
           Label(
             text: widget.category.name,
             style: TextStyle(
@@ -118,8 +120,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       return InkWell(
         onTap: () => widget.onRegister?.call(),
         child: Text(Labels.register,
-            style: Styles.mediumText(
-                color: Colors.white, fontWeight: FontWeight.bold)),
+            style: Styles.mediumText(color: Colors.white,fontWeight: FontWeight.bold)),
       );
     } else {
       return const SizedBox.shrink();
