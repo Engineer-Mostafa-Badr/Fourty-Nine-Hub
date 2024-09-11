@@ -153,31 +153,6 @@ class BuildItemPhotoPost extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // PositionedDirectional(
-                  //   end: 5,
-                  //   top: 5,
-                  //   child: InkWell(
-                  //     onTap: () async {
-                  //       context.read<CompanyAdvertiseCubit>()
-                  //           .deletePost(context, advertises.media![index].sId!, 'photo');
-                  //     //  Navigator.pop(context);
-                  //     },
-                  //     child: Container(
-                  //       height: 30,
-                  //       width: 30,
-                  //       alignment: Alignment.center,
-                  //       padding: const EdgeInsets.all(5),
-                  //       decoration: const BoxDecoration(
-                  //         color: Colors.white,
-                  //         shape: BoxShape.circle,
-                  //       ),
-                  //       child: const Icon(
-                  //         Icons.close,
-                  //         color: Colors.red,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),

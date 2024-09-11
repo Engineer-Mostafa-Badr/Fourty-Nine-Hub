@@ -24,10 +24,20 @@ class SubscriptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime createdAt = subscription.isActive == true ||
-            subscription.isActive == false && subscription.isPremium == false
-        ? DateTime.parse(subscription.expireSubscription ?? '')
-        : DateTime.parse(subscription.expirePremium ?? '');
+    final DateTime createdAt =
+        subscription.isActive == true && subscription.isPremium == true
+            ? DateTime.parse(subscription.expirePremium ?? '')
+            : subscription.isActive == true ||
+                    subscription.isActive == false &&
+                        subscription.isPremium == false
+                ? DateTime.parse(subscription.expireSubscription ?? '')
+                : DateTime.parse(
+                    subscription.expirePremium ?? '',
+                  );
+    // final DateTime createdAt = subscription.isActive == true ||
+    //         subscription.isActive == false && subscription.isPremium == false
+    //     ? DateTime.parse(subscription.expireSubscription ?? '')
+    //     : DateTime.parse(subscription.expirePremium ?? '');
     final DateTime egyptTime = createdAt.toUtc().add(const Duration(hours: 3));
     final String formattedDateTime = DateFormat('dd/MM/yyyy').format(egyptTime);
     return Column(
@@ -50,24 +60,48 @@ class SubscriptionWidget extends StatelessWidget {
                   width: 5,
                 ),
                 Label(
-                  text: subscription.isActive == false &&
-                          subscription.isPremium == false
-                      ? '(${LocaleKeys.notSubscription.localize})'
-                      : subscription.isActive == true
-                          ? '(${LocaleKeys.regular.localize})'
-                          : '(${LocaleKeys.premium.localize})',
+                  text: subscription.isActive == true &&
+                          subscription.isPremium == true
+                      ? '(${LocaleKeys.premium.localize})'
+                      : subscription.isActive == false &&
+                              subscription.isPremium == false
+                          ? '(${LocaleKeys.notSubscription.localize})'
+                          : subscription.isActive == true
+                              ? '(${LocaleKeys.regular.localize})'
+                              : '(${LocaleKeys.premium.localize})',
                   color: AppColors.GREY_NORMAL_COLOR,
                 )
+                // Label(
+                //   text: subscription.isActive == false &&
+                //           subscription.isPremium == false
+                //       ? '(${LocaleKeys.notSubscription.localize})'
+                //       : subscription.isActive == true
+                //           ? '(${LocaleKeys.regular.localize})'
+                //           : '(${LocaleKeys.premium.localize})',
+                //   color: AppColors.GREY_NORMAL_COLOR,
+                // )
               ],
             )),
             Label(
               text: formattedDateTime,
               style: Styles.mediumText(
-                  color: subscription.isActive == false &&
-                          subscription.isPremium == false
-                      ? AppColors.SECONDARY_COLOR
-                      : AppColors.WHATS_APP_COLOR),
+                color: subscription.isActive == true &&
+                        subscription.isPremium == true
+                    ? AppColors.WHATS_APP_COLOR
+                    : subscription.isActive == false &&
+                            subscription.isPremium == false
+                        ? AppColors.SECONDARY_COLOR
+                        : AppColors.WHATS_APP_COLOR,
+              ),
             )
+            // Label(
+            //   text: formattedDateTime,
+            //   style: Styles.mediumText(
+            //       color: subscription.isActive == false &&
+            //               subscription.isPremium == false
+            //           ? AppColors.SECONDARY_COLOR
+            //           : AppColors.WHATS_APP_COLOR),
+            // )
           ],
         ),
         const Sizer(
