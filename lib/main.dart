@@ -6,16 +6,12 @@ import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
-import 'package:fourtyninehub/features/competition/data/repository/competition_repo_impl.dart';
-import 'package:fourtyninehub/features/competition/presentation/cubit/winner_cubit/winner_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
-import 'features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
 import 'features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'routes/pages.dart';
 
