@@ -54,14 +54,20 @@ import '../../../data/models/new_reels_model.dart';
 import '../../../data/repositories/reels_repository_impl.dart';
 
 class ReelsState {
-  final List<Reel> reels;
+  final List<Reel> globalReels;
+
+  final List<Reel> reelsForFollower;
 
   final List<Reel>? reelsForAudio;
   final int? playingIndex;
 
-  final bool isLoading;
-  final bool hasReachedMax;
-  final int currentPage;
+  final bool globalReelsIsLoading;
+  final bool globalReelsHasReachedMax;
+  final int globalReelsCurrentPage;
+
+  final bool reelsForFollowerIsLoading;
+  final bool reelsForFollowerHasReachedMax;
+  final int reelsForFollowerCurrentPage;
 
   final bool isLikingComment;
   final String likeReelCommentErrorMessage;
@@ -96,17 +102,21 @@ class ReelsState {
   final bool? uploadReelSuccess;
 
   ReelsState({
+    required this.reelsForFollower,
+    this.reelsForFollowerIsLoading = false,
+    this.reelsForFollowerHasReachedMax = false,
+    this.reelsForFollowerCurrentPage = 0,
     this.reelsForAudio,
     this.isLikingComment = false,
     this.likeReelCommentErrorMessage = '',
     this.likeReelCommentResponseMessage = '',
     required this.reelSaveResponse,
     required this.reelShareResponse,
-    required this.reels,
-    required this.isLoading,
+    required this.globalReels,
+    required this.globalReelsIsLoading,
     this.playingIndex,
-    required this.hasReachedMax,
-    required this.currentPage,
+    required this.globalReelsHasReachedMax,
+    required this.globalReelsCurrentPage,
     this.isLikingReel = false,
     this.likeReelErrorMessage,
     this.likeReelResponse,
@@ -125,6 +135,10 @@ class ReelsState {
   });
 
   ReelsState copyWith({
+    List<Reel>? reelsForFollower,
+    bool? reelsForFollowerIsLoading,
+    bool? reelsForFollowerHasReachedMax,
+    int? reelsForFollowerCurrentPage,
     int? playingIndex,
     bool? isLikingComment,
     String? likeReelCommentErrorMessage,
@@ -153,38 +167,45 @@ class ReelsState {
     bool? uploadReelSuccess,
   }) {
     return ReelsState(
-      isLikingComment: isLikingComment ?? this.isLikingComment,
-      likeReelCommentErrorMessage:
-          likeReelCommentErrorMessage ?? this.likeReelCommentErrorMessage,
-      likeReelCommentResponseMessage:
-          likeReelCommentResponseMessage ?? this.likeReelCommentResponseMessage,
-      reels: reels ?? this.reels,
-      reelsForAudio: reelsForAudio ?? this.reelsForAudio,
-      isLoading: isLoading ?? this.isLoading,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
-      currentPage: currentPage ?? this.currentPage,
-      isLikingReel: isLikingReel ?? this.isLikingReel,
-      likeReelErrorMessage: likeReelErrorMessage ?? this.likeReelErrorMessage,
-      likeReelResponse: likeReelResponse ?? this.likeReelResponse,
-      isCommenting: isCommenting ?? this.isCommenting,
-      commentErrorMessage: commentErrorMessage ?? this.commentErrorMessage,
-      commentResponse: commentResponse ?? this.commentResponse,
-      isFetchingComments: isFetchingComments ?? this.isFetchingComments,
-      fetchCommentsErrorMessage:
-          fetchCommentsErrorMessage ?? this.fetchCommentsErrorMessage,
-      fetchedComments: fetchedComments ?? this.fetchedComments,
-      isReplyingComment: isReplyingComment ?? this.isReplyingComment,
-      replyCommentErrorMessage:
-          replyCommentErrorMessage ?? this.replyCommentErrorMessage,
-      replyCommentResponse: replyCommentResponse ?? this.replyCommentResponse,
-      isUploadingReel: isUploadingReel ?? this.isUploadingReel,
-      uploadReelErrorMessage:
-          uploadReelErrorMessage ?? this.uploadReelErrorMessage,
-      uploadReelSuccess: uploadReelSuccess ?? this.uploadReelSuccess,
-      reelSaveResponse: reelSaveResponse ?? this.reelSaveResponse,
-      reelShareResponse: reelShareResponse ?? this.reelShareResponse,
-      playingIndex: playingIndex ?? this.playingIndex,
-    );
+        isLikingComment: isLikingComment ?? this.isLikingComment,
+        likeReelCommentErrorMessage:
+            likeReelCommentErrorMessage ?? this.likeReelCommentErrorMessage,
+        likeReelCommentResponseMessage: likeReelCommentResponseMessage ??
+            this.likeReelCommentResponseMessage,
+        globalReels: reels ?? this.globalReels,
+        reelsForAudio: reelsForAudio ?? this.reelsForAudio,
+        globalReelsIsLoading: isLoading ?? this.globalReelsIsLoading,
+        globalReelsHasReachedMax:
+            hasReachedMax ?? this.globalReelsHasReachedMax,
+        globalReelsCurrentPage: currentPage ?? this.globalReelsCurrentPage,
+        isLikingReel: isLikingReel ?? this.isLikingReel,
+        likeReelErrorMessage: likeReelErrorMessage ?? this.likeReelErrorMessage,
+        likeReelResponse: likeReelResponse ?? this.likeReelResponse,
+        isCommenting: isCommenting ?? this.isCommenting,
+        commentErrorMessage: commentErrorMessage ?? this.commentErrorMessage,
+        commentResponse: commentResponse ?? this.commentResponse,
+        isFetchingComments: isFetchingComments ?? this.isFetchingComments,
+        fetchCommentsErrorMessage:
+            fetchCommentsErrorMessage ?? this.fetchCommentsErrorMessage,
+        fetchedComments: fetchedComments ?? this.fetchedComments,
+        isReplyingComment: isReplyingComment ?? this.isReplyingComment,
+        replyCommentErrorMessage:
+            replyCommentErrorMessage ?? this.replyCommentErrorMessage,
+        replyCommentResponse: replyCommentResponse ?? this.replyCommentResponse,
+        isUploadingReel: isUploadingReel ?? this.isUploadingReel,
+        uploadReelErrorMessage:
+            uploadReelErrorMessage ?? this.uploadReelErrorMessage,
+        uploadReelSuccess: uploadReelSuccess ?? this.uploadReelSuccess,
+        reelSaveResponse: reelSaveResponse ?? this.reelSaveResponse,
+        reelShareResponse: reelShareResponse ?? this.reelShareResponse,
+        playingIndex: playingIndex ?? this.playingIndex,
+        reelsForFollower: reelsForFollower ?? this.reelsForFollower,
+        reelsForFollowerCurrentPage:
+            reelsForFollowerCurrentPage ?? this.reelsForFollowerCurrentPage,
+        reelsForFollowerHasReachedMax:
+            reelsForFollowerHasReachedMax ?? this.reelsForFollowerHasReachedMax,
+        reelsForFollowerIsLoading:
+            reelsForFollowerIsLoading ?? this.reelsForFollowerIsLoading);
   }
 }
 
@@ -193,16 +214,22 @@ class ReelsCubit extends Cubit<ReelsState> {
 
   ReelsCubit({required this.repository})
       : super(ReelsState(
+            reelsForFollower: [],
             reelSaveResponse: ReelSaveResponse(),
             reelShareResponse: ReelShareResponse(),
-            reels: [],
-            isLoading: false,
-            hasReachedMax: false,
-            currentPage: 0));
+            globalReels: [],
+            globalReelsIsLoading: false,
+            globalReelsHasReachedMax: false,
+            globalReelsCurrentPage: 0));
 
 //---------------------------------------------------------------------------------------
 
-  Future<void> uploadReel(File videoFile) async {
+  Future<void> uploadReel(
+    File videoFile, {
+    String? comeFrom,
+    String? totalPrice,
+    String? advertisementType,
+  }) async {
     // Step 1: Generate Signed URL
     final token = await TokenManager.getAccessToken();
     final response = await http.post(
@@ -242,8 +269,11 @@ class ReelsCubit extends Cubit<ReelsState> {
       );
 
       if (uploadResponse.statusCode == 200) {
-        print(
-            'Video uploaded successfully!>>>>1111111111111111111111111111111111111111111111111111111111111111111111');
+        log('Video uploaded successfully!>>>>${responseData['data']['mediaId']}/////////1111111111111111111111111111111111111111111111111111111111111111111111');
+        if (comeFrom == 'company') {
+          createAdvertisement([responseData['data']['mediaId']],
+              advertisementType!, double.parse(totalPrice!));
+        }
       } else {
         print('Failed to upload video: ${uploadResponse.statusCode}');
         print('Response body: ${uploadResponse.body}');
@@ -255,20 +285,62 @@ class ReelsCubit extends Cubit<ReelsState> {
   }
 
 //---------------------------------------------------------------------------------------
+  Future<void> createAdvertisement(
+      List<String> mediaIds, String type, double totalPrice) async {
+    final token = await TokenManager.getAccessToken();
+
+    final url = Uri.parse('https://49dev.com/api/v1/advertisementCompany');
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+    final body = jsonEncode({
+      "advertisements": [
+        {
+          "media": mediaIds,
+          "advertisement_type": type,
+          "totalPrice": totalPrice,
+        }
+      ]
+    });
+
+    try {
+      final response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        // Handle success
+        print(
+            'Advertisement created successfully!  ${response.body} ****************************************************');
+      } else {
+        // Handle failure
+        print('Failed to create advertisement: ${response.body}');
+        print('Response: ${response.body}');
+      }
+    } catch (e) {
+      // Handle error
+      print('Error occurred: $e');
+    }
+  }
+
+//---------------------------------------------------------------------------------------
   Future<void> fetchReels() async {
-    if (state.isLoading || state.hasReachedMax) return;
+    if (state.globalReelsIsLoading || state.globalReelsHasReachedMax) return;
 
     emit(state.copyWith(isLoading: true));
 
     try {
       // Fetch 3 reels at a time
       final ReelsResponse response = await repository.fetchReels(
-        page: state.currentPage + 1,
-        limit: 3,
+        page: state.globalReelsCurrentPage + 1,
+        limit: 2,
       );
 
       emit(state.copyWith(
-        reels: [...state.reels, ...response.data.reels],
+        reels: [...state.globalReels, ...response.data.reels],
         isLoading: false,
         hasReachedMax: response.data.pagination.currentPage >=
             response.data.pagination.pageCount,
@@ -276,6 +348,35 @@ class ReelsCubit extends Cubit<ReelsState> {
       ));
     } catch (e) {
       emit(state.copyWith(isLoading: false));
+    }
+  }
+
+//--------------------------------------------------------------------------------------------//---------------------------------------------------------------------------------------
+  Future<void> fetchReelsForFollowers() async {
+    if (state.reelsForFollowerIsLoading ||
+        state.reelsForFollowerHasReachedMax) {
+      return;
+    }
+
+    emit(state.copyWith(reelsForFollowerIsLoading: true));
+
+    try {
+      // Fetch 3 reels at a time
+      final ReelsResponse response = await repository.fetchReelsForFollowers(
+        page: state.reelsForFollowerCurrentPage + 1,
+        limit: 2,
+      );
+
+      log('from fetchReelsForFollowers --> ${response.data.reels.first.user.firstName}');
+      emit(state.copyWith(
+        reelsForFollower: [...state.reelsForFollower, ...response.data.reels],
+        reelsForFollowerIsLoading: false,
+        reelsForFollowerHasReachedMax: response.data.pagination.currentPage >=
+            response.data.pagination.pageCount,
+        reelsForFollowerCurrentPage: response.data.pagination.currentPage,
+      ));
+    } catch (e) {
+      emit(state.copyWith(reelsForFollowerIsLoading: false));
     }
   }
 
@@ -329,7 +430,7 @@ class ReelsCubit extends Cubit<ReelsState> {
       final response = await repository.likeReel(reelId);
 
       // Assuming you might want to update the specific reel in the list with the like status
-      List<Reel> updatedReels = state.reels.map((reel) {
+      List<Reel> updatedReels = state.globalReels.map((reel) {
         if (reel.id == reelId) {
           // Update the reel here if needed
         }
@@ -442,13 +543,14 @@ class ReelsCubit extends Cubit<ReelsState> {
 
   Future<void> fetchReelsWithSameAudio(String audioId,
       {bool isInitialLoad = false}) async {
-    if (state.isLoading || state.hasReachedMax) return;
+    if (state.globalReelsIsLoading || state.globalReelsHasReachedMax) return;
 
     emit(state.copyWith(isLoading: true));
 
     try {
       // If it's an initial load, start from the first page
-      final int pageToFetch = isInitialLoad ? 1 : state.currentPage + 1;
+      final int pageToFetch =
+          isInitialLoad ? 1 : state.globalReelsCurrentPage + 1;
 
       final ReelsForAudioResponse response =
           await repository.fetchReelsWithSameAudio(audioId, page: pageToFetch);

@@ -13,6 +13,15 @@ abstract class Assets {
 
   // navigator
   static String logo = 'assets/images/logo_600.png';
+  static String facebookShare = 'assets/icons/share.png';
+  static String savedReels = 'assets/icons/savedReels.png';
+  static String userReels = 'assets/icons/userReels.png';
+  static String userMedia = 'assets/icons/userMedia.png';
+  static String comment = 'assets/icons/comment.png';
+  static String single = 'assets/icons/single.png';
+  static String married = 'assets/icons/married.png';
+  static String divorced = 'assets/icons/divorce.png';
+  static String widowed = 'assets/icons/widowed.png';
   static String tinder = 'assets/images/tinder.svg';
   static String social = 'assets/images/social.svg';
   static String hand = 'assets/images/hand.png';

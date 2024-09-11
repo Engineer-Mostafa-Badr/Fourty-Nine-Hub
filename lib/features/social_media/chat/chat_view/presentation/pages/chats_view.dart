@@ -342,11 +342,12 @@ class _ChatViewState extends State<ChatView> {
           scrollController: ScrollController(),
           appBars: [
             SliverAppBar(
-              expandedHeight: kToolbarHeight * 1.5,
+              expandedHeight: MediaQuery.of(context).size.height * 0.15, // Responsive height
               automaticallyImplyLeading: false,
               floating: true,
-              flexibleSpace: BlocProvider.value(
-                value: serviceLocator<StoryCubit>()..fetchStories(),
+              flexibleSpace: BlocProvider(
+                create: (context) =>
+                    serviceLocator<StoryCubit>()..fetchStories(),
                 child: const ChatStories(),
               ),
             ),

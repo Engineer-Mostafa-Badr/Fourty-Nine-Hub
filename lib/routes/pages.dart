@@ -1,4 +1,4 @@
-// import 'package:flutter/src/widgets/basic.dart';
+import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
@@ -85,6 +85,8 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/pages/mus
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/instagram_profile.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
@@ -575,8 +577,15 @@ class AppPages {
                 },
               ),
             ],
-            builder: (context, state) => BlocProvider<InstagramCubit>(
-              create: (_) => serviceLocator()..loadData(),
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) =>  serviceLocator<InstagramCubit>()..loadData(),
+                ),
+                BlocProvider(
+                  create: (context) => serviceLocator<StoryCubit>(),
+                ),
+              ],
               child: const InstagramView(),
             ),
           ),
@@ -776,7 +785,17 @@ class AppPages {
           GoRoute(
               path: Paths.SPOTLIGHT,
               name: Routes.SPOTLIGHT,
-              builder: (context, state) => const SpotlightView()),
+              builder: (context, state) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                          create: (context) => serviceLocator<ReelsCubit>()),
+                      BlocProvider<StoryCubit>(
+                        create: (_) =>
+                            serviceLocator<StoryCubit>(),
+                      ),
+                    ],
+                    child: const SpotlightView(),
+                  )),
           // _________________ services ____________
 
           GoRoute(

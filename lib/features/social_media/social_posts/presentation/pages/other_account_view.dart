@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
@@ -162,7 +164,10 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           loginUser?.id == widget.userId)
                                         IconButton(
                                             onPressed: () {
-                                              showDialog(context: context, builder: (_)=>const SearchAppUsers());
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (_) =>
+                                                      const SearchAppUsers());
                                             },
                                             icon: const Icon(
                                               Icons.search,
@@ -466,18 +471,48 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         alignment: AlignmentDirectional.bottomEnd,
                         children: [
                           state.newCover != null
-                              ? Image.file(
-                                  File(state.newCover!.file.path),
-                                  fit: BoxFit.fill,
-                                  width: double.infinity,
-                                )
-                              : Image.network(
-                                  user.profileCover!.isNotEmpty
-                                      ? user.profileCover!
-                                      : UIConst.socialImagePlaceHolder,
-                                  fit: BoxFit.fill,
-                                  width: double.infinity,
-                                ),
+                              ? InkWell(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => ImageDetailsScreen(
+                                    image: state.newCover?.file.path??'',
+                                    fromPost: false,
+                                    onRemoveImage: () {
+                                      // controller
+                                      //     .removePhoto(images![index]);
+                                      context.pop();
+                                    },
+                                  ));
+                            },
+                            child: Image.file(
+                                    File(state.newCover!.file.path),
+                                    fit: BoxFit.fill,
+                                    width: double.infinity,
+                                  ),
+                              )
+                              : InkWell(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => ImageDetailsScreen(
+                                    image: user.profileCover??'',
+                                    fromPost: true,
+                                    onRemoveImage: () {
+                                      // controller
+                                      //     .removePhoto(images![index]);
+                                      context.pop();
+                                    },
+                                  ));
+                            },
+                            child: Image.network(
+                                    user.profileCover!.isNotEmpty
+                                        ? user.profileCover!
+                                        : UIConst.socialImagePlaceHolder,
+                                    fit: BoxFit.fill,
+                                    width: double.infinity,
+                                  ),
+                              ),
                           if (loginUser?.id == user.id)
                             InkWell(
                               onTap: () {
@@ -605,21 +640,53 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                       alignment: AlignmentDirectional.bottomEnd,
                       children: [
                         state.newImage != null
-                            ? CircleAvatar(
-                                radius: 60,
-                                child: CircleAvatar(
+                            ? InkWell(
+
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => ImageDetailsScreen(
+                                  image: state.newImage?.file.path??'',
+                                  fromPost: false,
+                                  onRemoveImage: () {
+                                    // controller
+                                    //     .removePhoto(images![index]);
+                                    context.pop();
+                                  },
+                                ));
+                          },
+                          child: CircleAvatar(
                                   radius: 60,
-                                  backgroundColor: Colors.white,
-                                  backgroundImage: FileImage(
-                                      File(state.newImage!.file.path)),
+                                  child: CircleAvatar(
+                                    radius: 60,
+                                    backgroundColor: Colors.white,
+                                    backgroundImage: FileImage(
+                                        File(state.newImage!.file.path)),
+                                  ),
                                 ),
-                              )
-                            : ImageFromInternet(
-                          image: user.profilePicture ?? UIConst.profilePlaceHolder,
-                          height: 140,
-                          width: 140,
-                          isCircle: true,
-                        ),
+                            )
+                            : InkWell(
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => ImageDetailsScreen(
+                                        image: user.profilePicture??'',
+                                        fromPost: true,
+                                        onRemoveImage: () {
+                                          // controller
+                                          //     .removePhoto(images![index]);
+                                          context.pop();
+                                        },
+                                      ));
+                                },
+                                child: ImageFromInternet(
+                                  image: user.profilePicture ??
+                                      UIConst.profilePlaceHolder,
+                                  height: 140,
+                                  width: 140,
+                                  isCircle: true,
+                                ),
+                              ),
                         if (loginUser?.id == user.id)
                           InkWell(
                             onTap: () {
@@ -646,22 +713,43 @@ class _OtherAccountViewState extends State<OtherAccountView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Sizer(),
-                RichText(
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    text: TextSpan(children: [
-                      TextSpan(
-                          text:
-                          "${user.firstName} ${user.lastName}",
-                          style: Styles.headerText(fontWeight: FontWeight.w600,color: Colors.black)),
-                      if(user.job.isNotEmpty)TextSpan(
-                          text: '\t(${user.job})',
-                          style: Styles.headerText(
-                              color: Colors.black, fontSize: 26)),
-                    ])),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Expanded(
+                      child: user.isDocument == true
+                          ? Row(
+                              children: [
+                                Label(
+                                    text: "${user.firstName} ${user.lastName}",
+                                    style: Styles.headerText(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black)),
+                                const Sizer(
+                                  width: 5,
+                                ),
+                                const Icon(
+                                  Icons.verified,
+                                  color: AppColors.SECONDARY_COLOR,
+                                  size: 20,
+                                )
+                              ],
+                            )
+                          : RichText(
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(children: [
+                                TextSpan(
+                                    text: "${user.firstName} ${user.lastName}",
+                                    style: Styles.headerText(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black)),
+                                if (user.job.isNotEmpty)
+                                  TextSpan(
+                                      text: '\t(${user.job})',
+                                      style: Styles.headerText(
+                                          color: Colors.black, fontSize: 26)),
+                              ])),
+                    ),
                     if (loginUser?.id != widget.userId)
                       PopupMenuButton(
                           child: Container(
@@ -734,11 +822,16 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if(user.city.isNotEmpty)...[
+                      if (user.city.isNotEmpty) ...[
                         Row(
                           children: [
-                            const Icon(Icons.home_rounded,size: 24,),
-                            const Sizer(width: 5,),
+                            const Icon(
+                              Icons.home_rounded,
+                              size: 24,
+                            ),
+                            const Sizer(
+                              width: 5,
+                            ),
                             Label(
                                 text: 'Lives in',
                                 style: Styles.headerText(
@@ -748,8 +841,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             ),
                             Expanded(
                               child: Label(
-                                text:
-                                user.city,
+                                text: user.city,
                                 style: Styles.headerText(
                                     color: Colors.black, fontSize: 30),
                                 maxLines: 1,
@@ -764,8 +856,13 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                       if (user.country.isNotEmpty) ...[
                         Row(
                           children: [
-                            const Icon(Icons.location_on,size: 24,),
-                            const Sizer(width: 5,),
+                            const Icon(
+                              Icons.location_on,
+                              size: 24,
+                            ),
+                            const Sizer(
+                              width: 5,
+                            ),
                             Label(
                                 text: 'From',
                                 style: Styles.headerText(
@@ -775,8 +872,38 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             ),
                             Expanded(
                               child: Label(
-                                text:
-                                    user.country,
+                                text: user.country,
+                                style: Styles.headerText(
+                                    color: Colors.black, fontSize: 30),
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Sizer(
+                          height: 5,
+                        ),
+                      ],
+                      if (user.job.isNotEmpty && user.isDocument == true) ...[
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.home_repair_service,
+                              size: 24,
+                            ),
+                            const Sizer(
+                              width: 5,
+                            ),
+                            Label(
+                                text: 'Work',
+                                style: Styles.headerText(
+                                    color: Colors.grey, fontSize: 30)),
+                            const Sizer(
+                              height: 5,
+                            ),
+                            Expanded(
+                              child: Label(
+                                text: user.job,
                                 style: Styles.headerText(
                                     color: Colors.black, fontSize: 30),
                                 maxLines: 1,
@@ -791,8 +918,13 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                       if (user.phone.isNotEmpty) ...[
                         Row(
                           children: [
-                            const Icon(Icons.phone_android,size: 24,),
-                            const Sizer(width: 5,),
+                            const Icon(
+                              Icons.phone_android,
+                              size: 24,
+                            ),
+                            const Sizer(
+                              width: 5,
+                            ),
                             Label(
                                 text: 'Phone',
                                 style: Styles.headerText(
@@ -815,8 +947,13 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                       if (user.maritalStatus.isNotEmpty) ...[
                         Row(
                           children: [
-                            const Icon(Icons.favorite,size: 24,),
-                            const Sizer(width: 5,),
+                            const Icon(
+                              Icons.favorite,
+                              size: 24,
+                            ),
+                            const Sizer(
+                              width: 5,
+                            ),
                             Expanded(
                               child: Label(
                                 text: user.maritalStatus,

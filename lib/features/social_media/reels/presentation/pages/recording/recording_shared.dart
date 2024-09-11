@@ -9,8 +9,16 @@ import 'other_voice.dart';
 
 class ReelsRecordingScreen extends StatefulWidget {
   final String? voiceUrl;
+  final String? comeFromCompany;
+  final String? totalPrice;
+  final String? advertisementType;
 
-  const ReelsRecordingScreen({super.key,  this.voiceUrl});
+  const ReelsRecordingScreen(
+      {super.key,
+      this.voiceUrl,
+      this.comeFromCompany,
+      this.totalPrice,
+      this.advertisementType});
 
   @override
   ReelsRecordingScreenState createState() => ReelsRecordingScreenState();
@@ -36,17 +44,31 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
               builder: (context) {
                 switch (selectedIndex) {
                   case 0:
-                    return const MyVoiceVideoRecordingScreen();
+                    return MyVoiceVideoRecordingScreen(
+                      advertisementType: widget.advertisementType,
+                      comeFrom: widget.comeFromCompany,
+                      totalPrice: widget.totalPrice,
+                    );
                   case 1:
                     return OtherVoiceVideoRecordingScreen(
-                      voiceUrl: widget.voiceUrl??'',
+                      voiceUrl: widget.voiceUrl ?? '',
+                      advertisementType: widget.advertisementType,
+                      comeFrom: widget.comeFromCompany,
+                      totalPrice: widget.totalPrice,
                     );
                   case 2:
                     return MixVoiceVideoRecordingScreen(
-                      voiceUrl: widget.voiceUrl??'',
+                      voiceUrl: widget.voiceUrl ?? '',
+                      advertisementType: widget.advertisementType,
+                      comeFrom: widget.comeFromCompany,
+                      totalPrice: widget.totalPrice,
                     );
                 }
-                return const MyVoiceVideoRecordingScreen();
+                return MyVoiceVideoRecordingScreen(
+                  advertisementType: widget.advertisementType,
+                  comeFrom: widget.comeFromCompany,
+                  totalPrice: widget.totalPrice,
+                );
               },
             ),
           ),
