@@ -380,7 +380,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                                 .read<ChatsCubit>()
                                                 .selectedChats
                                                 .isNotEmpty
-                                            ? "${context.read<ChatsCubit>().selectedChats.length} selected"
+                                            ? "${context.read<ChatsCubit>().selectedChats.length} ${LocaleKeys.selected.tr()}"
                                             : "",
                                         style: Styles.mediumText(
                                             color: AppColors.PRIMARY_COLOR),
@@ -468,7 +468,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                                 PopupMenuItem<int>(
                                                   value: 0,
                                                   child: Text(
-                                                    "Add chat shortcut",
+                                                    LocaleKeys.addShortcut.tr(),
                                                     style: Styles.mediumText(
                                                         color: AppColors
                                                             .PRIMARY_COLOR),
@@ -477,7 +477,8 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                                 PopupMenuItem<int>(
                                                   value: 0,
                                                   child: Text(
-                                                    "Mark as unread",
+                                                    LocaleKeys.markAsUnread
+                                                        .tr(),
                                                     style: Styles.mediumText(
                                                         color: AppColors
                                                             .PRIMARY_COLOR),
@@ -486,7 +487,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                                 PopupMenuItem<int>(
                                                   value: 0,
                                                   child: Text(
-                                                    "Select all",
+                                                    LocaleKeys.selectAll.tr(),
                                                     style: Styles.mediumText(
                                                         color: AppColors
                                                             .PRIMARY_COLOR),
@@ -495,7 +496,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                                 PopupMenuItem<int>(
                                                   value: 0,
                                                   child: Text(
-                                                    "Lock chat",
+                                                    LocaleKeys.lockChat.tr(),
                                                     style: Styles.mediumText(
                                                         color: AppColors
                                                             .PRIMARY_COLOR),

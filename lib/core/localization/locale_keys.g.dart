@@ -233,5 +233,9 @@ abstract class  LocaleKeys {
   static const name = 'name';
   static const nameMessage = 'nameMessage';
   static const selectContact = 'selectContact';
+  static const addChatShortcut = 'addChatShortcut';
+  static const markAsUnread = 'markAsUnread';
+  static const selectAll = 'selectAll';
+  static const selected = 'selected';
 
 }

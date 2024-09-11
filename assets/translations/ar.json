@@ -235,5 +235,6 @@
   "selectContact": "حدد جهات الاتصال للمشاركة",
   "addChatShortcut": "اضافة اختصار للدردشة",
   "markAsUnread": "تمييز كغير مقروء",
-  "selectAll": "تحديد الكل"
+  "selectAll": "تحديد الكل",
+  "selected": "تم تحديده"
 }
