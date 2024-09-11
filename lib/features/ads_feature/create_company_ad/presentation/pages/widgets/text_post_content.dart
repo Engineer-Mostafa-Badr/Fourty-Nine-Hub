@@ -22,7 +22,9 @@ class TextPostContent extends StatelessWidget {
           return data.isNotEmpty? ListView.separated(
             controller: scrollController,
             itemBuilder: (context, index) => BuildItemTextPost(
-              advertises: data[index],
+              advertises: data[index], function: (){
+              context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: data[index].sId!);
+            },
             ),
             separatorBuilder: (context, index) => const Divider(
               color: AppColors.GREY_LIGHT_COLOR,

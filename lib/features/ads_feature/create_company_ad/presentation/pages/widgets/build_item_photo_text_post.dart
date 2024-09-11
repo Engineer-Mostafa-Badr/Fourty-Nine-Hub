@@ -23,7 +23,7 @@ class BuildItemPhotoTextPost extends StatelessWidget {
             Column(
               children: [
                 BuildItemPhotoPost(length: length, advertises: advertises,isPhoto: false,),
-                BuildItemTextPost(advertises: advertises,isScalable: false,),
+                BuildItemTextPost(advertises: advertises,isScalable: false, function: (){},),
               ],
             ),
             IconButton(

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/functions/global/upload_file.dart';
@@ -12,6 +11,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
@@ -69,9 +69,9 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                 if (state.status == StateStatus.success) {
                   showSuccessMessage(
                       context, LocaleKeys.postSuccessfully.localize);
-
                   Navigator.of(context).pop();
                 }
+
               },
               builder: (BuildContext context, Object? state) {
                 return Scaffold(
