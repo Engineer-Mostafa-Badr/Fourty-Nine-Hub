@@ -19,9 +19,6 @@ import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'features/competition/data/repository/competition_repo_impl.dart';
-import 'features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
-import 'features/competition/presentation/cubit/winner_cubit/winner_cubit.dart';
 import 'features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'routes/pages.dart';
 
