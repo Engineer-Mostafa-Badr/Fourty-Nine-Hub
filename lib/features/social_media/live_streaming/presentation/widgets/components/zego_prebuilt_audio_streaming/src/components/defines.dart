@@ -35,11 +35,16 @@ class ZegoLiveAudioRoomPopupItem {
 /// @nodoc
 class ZegoLiveAudioRoomImage {
   static Image asset(String name) {
-    return Image.asset(name, package: 'zego_uikit_prebuilt_live_audio_room');
+    return Image.asset(
+      name,
+      width: 25,
+    );
   }
 
   static AssetImage assetImage(String name) {
-    return AssetImage(name, package: 'zego_uikit_prebuilt_live_audio_room');
+    return AssetImage(
+      name,
+    );
   }
 }
 
@@ -65,9 +70,9 @@ class ZegoLiveAudioRoomIconUrls {
   static const String topQuit = 'assets/icons/top_quit.png';
 
   static const String seatAdd = 'assets/icons/seat_add.png';
-  static const String seatEmpty = 'assets/icons/seat_empty.png';
+  static const String seatEmpty = 'assets/icons/chair.png';
   static const String seatHost = 'assets/icons/seat_host.png';
   static const String seatCoHost = 'assets/icons/seat_cohost.png';
-  static const String seatLock = 'assets/icons/seat_lock.png';
+  static const String seatLock = 'assets/icons/locked.png';
   static const String seatMicrophoneOff = 'assets/icons/seat_mic_off.png';
 }

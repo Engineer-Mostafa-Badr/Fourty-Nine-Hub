@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 
-
 // Project imports:
 import '../../../../zego_uikit/src/services/defines/user.dart';
 import '../../../../zego_uikit/src/services/uikit_service.dart';
@@ -81,11 +80,11 @@ class _ZegoSeatForegroundState extends State<ZegoLiveAudioRoomSeatBackground> {
               return lockedSeat.contains(userSeatIndex)
                   ? (widget.config.seat.closeIcon ??
                       ZegoLiveAudioRoomImage.asset(
-                        'assets/49-New-icons/locked.png',
+                        ZegoLiveAudioRoomIconUrls.seatLock,
                       ))
                   : (widget.config.seat.openIcon ??
                       ZegoLiveAudioRoomImage.asset(
-                        'assets/49-New-icons/chair.png',
+                        ZegoLiveAudioRoomIconUrls.seatEmpty,
                       ));
             },
           )),
