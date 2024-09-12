@@ -129,8 +129,11 @@ class _NotificationCardState extends State<NotificationCard> {
 
   Container _networkImage() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 5),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+      margin: const EdgeInsets.only(right: 5),
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        // borderRadius: BorderRadius.circular(5),
+      ),
       clipBehavior: Clip.hardEdge,
       child: CachedNetworkImage(
         imageUrl: widget.notificationEntity.userImageUrl ?? '',

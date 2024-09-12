@@ -67,9 +67,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         }
       }
     });
-    context
-        .read<FirebaseNotficationsCubit>()
-        .setupInterceptedMessage(context: context);
+    context.read<FirebaseNotficationsCubit>().setupInterceptedMessage(context: context);
+    context.read<NotificationSocketIoCubit>().notificationListener();
     super.initState();
   }
 

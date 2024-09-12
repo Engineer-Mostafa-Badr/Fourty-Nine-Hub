@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -47,10 +48,10 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
         } else if (state is ResendOtpSuccess) {
           showSuccessMessage(context, 'resend otp success');
         } else if (state is VerifyOtpSuccess) {
-          await TokenManager.saveAccessToken(
-              state.userTokensEntity.accessToken);
-          await TokenManager.saveRefreshToken(
-              state.userTokensEntity.refreshToken);
+          await TokenManager.saveAccessToken(state.userTokensEntity.accessToken);
+          await TokenManager.saveRefreshToken(state.userTokensEntity.refreshToken);
+          context.read<NotificationSocketIoCubit>().notificationListener();
+          context.read<NotificationSocketIoCubit>().clearAllNotificationsAndRefeatchAfterLogin();
 
           serviceLocator<UserCubit>()
             ..setLogin(true)
@@ -62,12 +63,10 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
               String? accessToken = await TokenManager.getAccessToken();
               String? refreshToken = await TokenManager.getRefreshToken();
 
-              print(
-                  '/////////////////////////////////////////////////////////////////////////');
+              print('/////////////////////////////////////////////////////////////////////////');
               print('Refresh Token: $refreshToken');
               print('Access Token: $accessToken');
-              print(
-                  '/////////////////////////////////////////////////////////////////////////');
+              print('/////////////////////////////////////////////////////////////////////////');
               print(serviceLocator<UserCubit>().state.data.toString());
 
               // Navigate to the home screen
@@ -82,8 +81,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                     context: context,
                     builder: (BuildContext context) {
                       return Dialog(
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
+                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24.0.r),
                         ),
@@ -107,12 +105,10 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                               SizedBox(height: 40.h),
                               ElevatedButton(
                                 onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
+                                  Navigator.of(context).pop(); // Close the dialog
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      Theme.of(context).primaryColor,
+                                  backgroundColor: Theme.of(context).primaryColor,
                                   shape: RoundedRectangleBorder(
                                     borderRadius:
                                         BorderRadius.circular(16.0.r),
@@ -125,9 +121,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                                   ),
                                   child: Text(
                                     LocaleKeys.close.localize,
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .scaffoldBackgroundColor),
+                                    style: TextStyle(color: Theme.of(context).scaffoldBackgroundColor),
                                   ),
                                 ),
                               ),
