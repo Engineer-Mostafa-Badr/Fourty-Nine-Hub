@@ -1096,7 +1096,6 @@ class _AdvancedSnapchatCameraScreenState
 
                                 return GestureDetector(
                                   onTap: () {
-
                                     // if (selectedFilterIndex == index) {
                                     //   _showOverlay(context);
                                     //
@@ -1119,7 +1118,6 @@ class _AdvancedSnapchatCameraScreenState
                                     //   });
                                     //   log("Filter $index selected");
                                     // }
-
                                   },
                                   onLongPress: _toggleRecording,
                                   child: AnimatedOpacity(
