@@ -1096,6 +1096,7 @@ class _AdvancedSnapchatCameraScreenState
 
                                 return GestureDetector(
                                   onTap: () {
+
                                     // if (selectedFilterIndex == index) {
                                     //   _showOverlay(context);
                                     //
