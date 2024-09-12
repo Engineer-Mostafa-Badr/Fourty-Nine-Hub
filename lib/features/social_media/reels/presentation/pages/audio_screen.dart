@@ -543,7 +543,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                         capitalizeAndSplit(widget.audio.audioName),
                         softWrap: true,
                         style:  TextStyle(
-                          fontSize: 18.sp,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -552,7 +552,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                       Text(capitalizeAndSplit(widget.audio.username),
                           style: const TextStyle(color: Colors.white)),
                       SizedBox(
-                        height: 16.h,
+                        height: 16,
                       ),
                       Text('${widget.audio.reelsCount} reels',
                           style: const TextStyle(color: Colors.white70)),
@@ -1148,7 +1148,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
           capitalizeAndSplit(
               '${widget.reel.user.firstName} ${widget.reel.user.lastName}'),
           style:  TextStyle(
-            fontSize: 26.sp,
+            fontSize: 26,
             decoration: TextDecoration.none,
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -1179,7 +1179,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
               style:  TextStyle(
                 color: AppColors.DARK_GRAY_COLOR,
                 decoration: TextDecoration.none,
-                fontSize: 18.sp,
+                fontSize: 18,
               ),
             ),
           ),
@@ -1194,7 +1194,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
             widget.reel.viewCount.toString(),
             style:  TextStyle(
               color: AppColors.DARK_GRAY_COLOR,
-              fontSize: 18.sp,
+              fontSize: 18,
               decoration: TextDecoration.none,
             ),
           ),
@@ -1362,7 +1362,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
             color: iconColor ?? Colors.white,
             size: 30,
           ),
-          SizedBox(height: 2.h),
+          SizedBox(height: 2),
           if (count != 0)
             Text(
               '$count',
@@ -1456,16 +1456,16 @@ class ProfileContent extends StatelessWidget {
             child: Column(
               children: [
                 ProfileHeader(reel: reel),
-                SizedBox(height: 20.h),
+                SizedBox(height: 20),
                 ActionButton(reel: reel),
-                SizedBox(height: 20.h),
+                SizedBox(height: 20),
                 LocationAndContact(reel: reel),
-                SizedBox(height: 20.h),
-                SizedBox(height: 20.h),
+                SizedBox(height: 20),
+                SizedBox(height: 20),
                 // SocialLink(reel: reel),
-                // SizedBox(height: 20.h),
+                // SizedBox(height: 20),
                 Description(reel: reel),
-                SizedBox(height: 20.h),
+                SizedBox(height: 20),
               ],
             ),
           ),
@@ -1556,7 +1556,7 @@ class ActionButton extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.black,
                 backgroundColor: Colors.yellow,
-                padding: EdgeInsets.symmetric(vertical: 16.h),
+                padding: EdgeInsets.symmetric(vertical: 16),
               ),
               child: const Text('Your Account'));
         } else if (reel.user.isFriend) {
@@ -1565,7 +1565,7 @@ class ActionButton extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.black,
                 backgroundColor: Colors.yellow,
-                padding: EdgeInsets.symmetric(vertical: 16.h),
+                padding: EdgeInsets.symmetric(vertical: 16),
               ),
               child: const Text('Friend'));
         }
@@ -1574,7 +1574,7 @@ class ActionButton extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.black,
               backgroundColor: Colors.yellow,
-              padding: EdgeInsets.symmetric(vertical: 16.h),
+              padding: EdgeInsets.symmetric(vertical: 16),
             ),
             child: const Text('+ Add'));
       }),
@@ -1722,7 +1722,7 @@ class MediaHighlightItem extends StatelessWidget {
             child: Icon(icon, size: 40),
           ),
         ),
-        SizedBox(height: 5.h),
+        SizedBox(height: 5),
         Expanded(
           child: Text(label,
               textAlign: TextAlign.center, overflow: TextOverflow.ellipsis),
