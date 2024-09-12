@@ -9,7 +9,7 @@
 //     Widget? action,
 //     int duration = 4,
 //     EdgeInsetsGeometry? margin =
-//         const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 15.0)}) {
+//         EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 15.0)}) {
 //   if (message is RedundantRequestException || message.toString().length > 100)
 //     return log(message.toString());
 //

@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/banner_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../domain/entities/parent_main_category_entity.dart';
@@ -22,7 +22,7 @@ class FourtyNineRepositoryImpl implements FourtyNineRepository {
 
   @override
   Future<Either<Failure, List<MainCategoryEntity>>> getMainCategories(
-      PaginationParams params) {
+      MainCategoriesParams params) {
     return _fourtyNineRemoteDataSource.getMainCategories(params);
   }
 
@@ -40,6 +40,11 @@ class FourtyNineRepositoryImpl implements FourtyNineRepository {
   @override
   Future<Either<Failure, bool>> addMainCategoryToFavorites(String id) {
     return _fourtyNineRemoteDataSource.addMainCategoryToFavorites(id);
+  }
+
+  @override
+  Future<Either<Failure, bool>> toggleSubCategoryToFavorites(String id) {
+    return _fourtyNineRemoteDataSource.toggleSubCategoryToFavorites(id);
   }
 
   @override

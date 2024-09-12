@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AvaialbleTripsButton extends StatelessWidget {
   const AvaialbleTripsButton({
     super.key,
@@ -21,7 +21,7 @@ class AvaialbleTripsButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 5),
+        padding: EdgeInsets.symmetric(vertical: 5.h),
         decoration: BoxDecoration(
           color: noFill ? null : color,
           borderRadius: BorderRadius.circular(5),
@@ -33,11 +33,11 @@ class AvaialbleTripsButton extends StatelessWidget {
           children: [
             icon != null
                 ? Icon(icon, color: Colors.white, size: 20)
-                : const SizedBox(),
-            const Sizer(width: 5),
+                : SizedBox(),
+            Sizer(width: 5),
             Text(
               title,
-              style: Styles.headerText(color: Colors.white, fontSize: 30),
+              style: Styles.headerText(color: Colors.white, fontSize: 30.sp),
               textAlign: TextAlign.center,
             ),
           ],

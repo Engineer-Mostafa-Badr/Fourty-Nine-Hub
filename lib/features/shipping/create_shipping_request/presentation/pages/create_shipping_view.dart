@@ -13,7 +13,7 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/shipping_banner.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card_selected.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -26,7 +26,7 @@ import '../../../../../common/widgets/stateful/maps/map_picker.dart';
 import '../../../../ride/RideRequest/domain/entity/address_search_params_entity.dart';
 
 class CreateShippingView extends StatefulWidget {
-  const CreateShippingView({super.key});
+   CreateShippingView({super.key});
   @override
   State<CreateShippingView> createState() => _CreateShippingViewState();
 }
@@ -50,7 +50,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
       body: Form(
         key: formKey,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding:  const EdgeInsets.symmetric(horizontal: 10),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -68,14 +68,14 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                     }
                   },
                 ),
-                const Sizer(),
-                const DashboardBanner(
+                Sizer(),
+                 const DashboardBanner(
                   title: Labels.driverDashboard,
                   subTitle: Labels.driverDashboardBannerDiscription,
                   route: Routes.DOCTORDASHBOARD,
                 ),
-                const SizedBox(
-                  height: 30,
+                 SizedBox(
+                  height: 30.h,
                 ),
                 FormField(
                   validator: (value) {
@@ -126,8 +126,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                               if (field.hasError)
                                 Column(
                                   children: [
-                                    const SizedBox(
-                                      height: 8,
+                                     SizedBox(
+                                      height: 8.h,
                                     ),
                                     Text(
                                       field.errorText ?? "",
@@ -145,8 +145,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                     );
                   },
                 ),
-                const SizedBox(
-                  height: 30,
+                 SizedBox(
+                  height: 30.h,
                 ),
                 DefaultTextFormField(
                   validator: (value) {
@@ -159,8 +159,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   currentFocusNode: FocusNode(),
                   hint: Labels.receiptPoint,
                 ),
-                const SizedBox(
-                  height: 20,
+                 SizedBox(
+                  height: 20.h,
                 ),
                 DefaultTextFormField(
                   validator: (value) {
@@ -173,8 +173,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   currentFocusNode: FocusNode(),
                   hint: Labels.deliveryPoint,
                 ),
-                const SizedBox(
-                  height: 20,
+                 SizedBox(
+                  height: 20.h,
                 ),
                 DefaultTextFormField(
                   validator: (value) {
@@ -190,8 +190,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   // hint: "نقطة الاستلام",
                   hint: Labels.time,
                 ),
-                const SizedBox(
-                  height: 20,
+                 SizedBox(
+                  height: 20.h,
                 ),
 
                 TextFormField(
@@ -205,7 +205,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   minLines: 6,
                   maxLines: 6,
                   maxLength: 100,
-                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
+                  style:  const TextStyle(color: AppColors.QUANTITY_COLOR),
                   decoration: InputDecoration(
                       fillColor: AppColors.AUTH_CONTAINER_COLOR,
                       border: OutlineInputBorder(
@@ -221,13 +221,13 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12)),
                       hintText: Labels.description,
-                      hintStyle: const TextStyle(
-                          fontSize: 12, color: AppColors.QUANTITY_COLOR)),
+                      hintStyle:  TextStyle(
+                          fontSize: 12.sp, color: AppColors.QUANTITY_COLOR)),
                 ),
-                const SizedBox(
-                  height: 20,
+                 SizedBox(
+                  height: 20.h,
                 ),
-                // const CustomTextField(hint: "عرض سعر"),
+                //  CustomTextField(hint: "عرض سعر"),
                 DefaultTextFormField(
                   // isRequired: true,
                   validator: (value) {
@@ -242,10 +242,10 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   // hint: "نقطة الاستلام",
                   hint: Labels.offerPrice,
                 ),
-                const SizedBox(
-                  height: 20,
+                 SizedBox(
+                  height: 20.h,
                 ),
-                // const CustomTextField(hint: "المحمول"),
+                //  CustomTextField(hint: "المحمول"),
                 DefaultTextFormField(
                   validator: (value) {
                     return shippingcubit.validation(
@@ -258,8 +258,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   // hint: "نقطة الاستلام",
                   hint: Labels.phone,
                 ),
-                const SizedBox(
-                  height: 20,
+                 SizedBox(
+                  height: 20.h,
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,19 +269,19 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                         child: Image.asset(
                       Assets.logo,
                       width: 25,
-                      height: 25,
+                      height: 25.h,
                     )),
-                    const SizedBox(width: 10),
-                    const Flexible(
+                     const SizedBox(width: 10),
+                     Flexible(
                         flex: 3,
                         child: Text(Labels.theApplicationDoesNot,
                             textAlign: TextAlign.start,
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold))),
+                                fontSize: 20.sp, fontWeight: FontWeight.bold))),
                   ],
                 ),
-                const SizedBox(height: 30),
-                // const Gap(),
+                 SizedBox(height: 30.h),
+                //  Gap(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -290,23 +290,23 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                         child: Image.asset(
                       Assets.logo,
                       width: 25,
-                      height: 25,
+                      height: 25.h,
                     )),
-                    const SizedBox(width: 10),
+                     const SizedBox(width: 10),
 
-                    // const Gap(10),
-                    const Flexible(
+                    //  Gap(10),
+                     Flexible(
                         flex: 3,
                         child: Text(
                           Labels.thePremiumPackageGivesYou,
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                              fontSize: 20.sp, fontWeight: FontWeight.bold),
                         )),
                   ],
                 ),
-                const SizedBox(height: 30),
-                // const Gap(30),
+                 SizedBox(height: 30.h),
+                //  Gap(30),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -315,40 +315,40 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                         child: Image.asset(
                       Assets.logo,
                       width: 25,
-                      height: 25,
+                      height: 25.h,
                     )),
-                    // const Gap(10),
-                    const SizedBox(width: 10),
-                    const Flexible(
+                    //  Gap(10),
+                     const SizedBox(width: 10),
+                     Flexible(
                       flex: 3,
                       child: Text(
                         Labels.freeCancellation,
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 20.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 50),
-                // const Gap(50),
+                 SizedBox(height: 50.h),
+                //  Gap(50),
                 Row(
                   children: [
                     Flexible(
                       child: AppButton(
-                          height: 60,
+                          height: 60.h,
                           label: Labels.premiumRequest,
                           style: Styles.headerText(color: Colors.white),
                           onPressed: () {}),
                     ),
-                    // const Gap(6),
-                    const SizedBox(width: 6),
+                    //  Gap(6),
+                     const SizedBox(width: 6),
                     Flexible(
                       child: AppButton(
-                          height: 60,
-                          backColor: const Color(0xFF0B1135),
+                          height: 60.h,
+                          backColor:  const Color(0xFF0B1135),
                           label: Labels.request,
                           style: Styles.headerText(color: Colors.white),
                           onPressed: () async {
@@ -360,8 +360,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                     ),
                   ],
                 ),
-                // const Gap(100),
-                const SizedBox(height: 100),
+                //  Gap(100),
+                 SizedBox(height: 100.h),
               ],
             ),
           ),
@@ -421,7 +421,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                         item: category.subcategories![index]),
                   );
                 },
-                separatorBuilder: (context, index) => const Sizer(),
+                separatorBuilder: (context, index) => Sizer(),
                 itemCount: category.subcategories?.length ?? 0),
           )
       ],
@@ -430,7 +430,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
 }
 
 class CustomTextField extends StatelessWidget {
-  const CustomTextField(
+   CustomTextField(
       {super.key,
       required this.hint,
       this.prefixIcon,
@@ -451,22 +451,22 @@ class CustomTextField extends StatelessWidget {
       decoration: InputDecoration(
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide: const BorderSide(color: Colors.red)),
+            borderSide:  const BorderSide(color: Colors.red)),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide: const BorderSide(color: Colors.red)),
+            borderSide:  const BorderSide(color: Colors.red)),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide: const BorderSide(color: Colors.red)),
+            borderSide:  const BorderSide(color: Colors.red)),
         disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide: const BorderSide(color: Colors.red)),
+            borderSide:  const BorderSide(color: Colors.red)),
         fillColor: Colors.grey.shade300,
         filled: true,
         prefixIcon: prefixIcon,
         hintText: hint,
-        hintStyle: const TextStyle(
-          fontSize: 18,
+        hintStyle:  TextStyle(
+          fontSize: 18.sp,
         ),
       ),
       textAlign: TextAlign.right,

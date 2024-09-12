@@ -70,12 +70,12 @@
 //                 constraints: BoxConstraints(minHeight: constraints.maxHeight),
 //                 child: IntrinsicHeight(
 //                   child: Padding(
-//                     padding: const EdgeInsets.all(16.0),
+//                     padding: EdgeInsets.all(16.0),
 //                     child: Column(
 //                       crossAxisAlignment: CrossAxisAlignment.start,
 //                       children: [
 //                         _buildPrivacyOptionsSection(),
-//                         const SizedBox(height: 20),
+//                         SizedBox(height: 20.h),
 //                         _buildContactSelector(),
 //                         const Spacer(),
 //                         const Divider(),
@@ -102,7 +102,7 @@
 //           'Who can see my status updates',
 //           style: Theme.of(context).textTheme.headline6,
 //         ),
-//         const SizedBox(height: 16),
+//         SizedBox(height: 16.h),
 //         ..._buildPrivacyOptions(),
 //       ],
 //     );
@@ -144,9 +144,9 @@
 //             'Select Contacts:',
 //             style: Theme.of(context).textTheme.subtitle1,
 //           ),
-//           const SizedBox(height: 8),
+//           SizedBox(height: 8.h),
 //           Container(
-//             height: 200, // Set a fixed height or use a more responsive approach
+//             height: 200.h, // Set a fixed height or use a more responsive approach
 //             child: ListView.builder(
 //               itemCount: _allContacts.length,
 //               itemBuilder: (context, index) {
@@ -184,7 +184,7 @@
 //           'Share my status updates across my accounts',
 //           style: Theme.of(context).textTheme.subtitle1,
 //         ),
-//         const SizedBox(height: 8),
+//         SizedBox(height: 8.h),
 //         _buildFacebookLink(),
 //       ],
 //     );
@@ -206,7 +206,7 @@
 //
 //   Widget _buildFooterMessage() {
 //     return Padding(
-//       padding: const EdgeInsets.symmetric(vertical: 16.0),
+//       padding: EdgeInsets.symmetric(vertical: 16.h),
 //       child: Text(
 //         "Changes to your privacy settings will affect all of your statuses.",
 //         style: Theme.of(context).textTheme.caption,
@@ -224,7 +224,7 @@
 //           child: ListBody(
 //             children: [
 //               Text('Choose who can see your status updates:'),
-//               SizedBox(height: 8),
+//               SizedBox(height: 8.h),
 //               Text('• My contacts: All your contacts can see your status.'),
 //               Text(
 //                   '• My contacts except...: Select contacts who won\'t see your status.'),
@@ -249,6 +249,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
@@ -321,7 +322,6 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
 
               log(getPrivacyOption(_selectedPrivacyOption)!.toString());
 
-
               context
                   .read<StoryCubit>()
                   .updateStoryPrivacy(getPrivacyOption(_selectedPrivacyOption)!,
@@ -345,7 +345,7 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: mediaQuery.size.width * 0.05,
-                      vertical: 16.0,
+                      vertical: 16.h,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -374,11 +374,11 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
       children: [
         Text(
           'Who can see my status updates',
-          style: Theme.of(context).textTheme.headline6?.copyWith(
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontSize: isLargeScreen ? 24 : 18,
               ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
         ..._buildPrivacyOptions(),
       ],
     );
@@ -420,11 +420,11 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
         children: [
           Text(
             'Select Contacts:',
-            style: Theme.of(context).textTheme.subtitle1?.copyWith(
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontSize: isLargeScreen ? 20 : 16,
                 ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           BlocBuilder<StoryCubit, StoryState>(
             builder: (context, state) {
               return SizedBox(
@@ -467,13 +467,13 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
 
   Widget _buildFooterMessage() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: EdgeInsets.symmetric(vertical: 16.h),
       child: Row(
         children: [
           Flexible(
             child: Text(
               "Changes to your privacy settings will affect all of your statuses.",
-              style: Theme.of(context).textTheme.caption?.copyWith(
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     fontSize: MediaQuery.of(context).size.width > 600 ? 16 : 12,
                   ),
               textAlign: TextAlign.center,
@@ -496,15 +496,15 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Privacy Settings Help'),
-        content: const SingleChildScrollView(
+        content:  SingleChildScrollView(
           child: ListBody(
             children: [
-              Text('Choose who can see your status updates:'),
-              SizedBox(height: 8),
-              Text('• My contacts: All your contacts can see your status.'),
-              Text(
+              const Text('Choose who can see your status updates:'),
+              SizedBox(height: 8.h),
+              const Text('• My contacts: All your contacts can see your status.'),
+              const Text(
                   '• My contacts except...: Select contacts who won\'t see your status.'),
-              Text(
+              const Text(
                   '• Only share with...: Choose specific contacts to share your status.'),
             ],
           ),

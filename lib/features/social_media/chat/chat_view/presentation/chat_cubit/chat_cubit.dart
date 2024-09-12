@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -337,20 +338,20 @@ class ChatsCubit extends Cubit<ChatsState> {
                 style: Styles.headerText(
                     fontWeight: FontWeight.bold, color: Colors.black)),
             content: Container(
-                height: 300,
+                height: 300.h,
                 width: 400,
                 child: Column(
                   children: [
                     Label(
                       text: seenHistoryList[0].name ?? "",
-                      style: const TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.w700),
+                      style:  TextStyle(
+                          fontSize: 12.sp, fontWeight: FontWeight.w700),
                     ),
                     Flexible(
                       flex: 1,
                       child: ListView.builder(
                         itemCount: seenHistoryList.length,
-                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        padding:  EdgeInsets.symmetric(vertical: 8.h),
                         itemBuilder: (context, index) {
                           return Container(
                               margin: const EdgeInsets.all(8),

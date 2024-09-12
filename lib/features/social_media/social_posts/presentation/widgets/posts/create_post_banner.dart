@@ -11,37 +11,40 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../../res/style/styles.dart';
 import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CreatePostBanner extends StatelessWidget {
   const CreatePostBanner({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: EdgeInsets.symmetric(horizontal: 10.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           context.read<UserCubit>().isLoggedIn
               ? UserProfileImage(
-                  userId: context.read<UserCubit>().state.data!.id,
+                  userId: context.read<UserCubit>().state.data?.id ?? '',
                   imageURL:
-                      context.read<UserCubit>().state.data!.profilePicture,
+                      context.read<UserCubit>().state.data?.profilePicture,
                   accountId: 0,
                 )
               : const ProfileImage(
-                  accountId: 0, userId: '',
+                  accountId: 0,
+                  userId: '',
                 ),
-          const Sizer(
+          Sizer(
             width: 10,
           ),
           Expanded(
               child: InkWell(
             onTap: () {
-              !context.read<UserCubit>().isLoggedIn?context.push(Routes.LOGIN):context.push(Routes.CREATEPOST, extra: 'facebook');
+              !context.read<UserCubit>().isLoggedIn
+                  ? context.push(Routes.LOGIN)
+                  : context.push(Routes.CREATEPOST, extra: 'facebook');
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+              padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey, width: .5),
                 borderRadius: BorderRadius.circular(8),
@@ -52,7 +55,7 @@ class CreatePostBanner extends StatelessWidget {
               ),
             ),
           )),
-          const Sizer(
+          Sizer(
             width: 10,
           ),
           InkWell(
@@ -62,10 +65,10 @@ class CreatePostBanner extends StatelessWidget {
               children: [
                 SvgPicture.asset(
                   Assets.reels,
-                  height: 20,
+                  height: 20.h,
                 ),
-                const Sizer(
-                  height: 3,
+                Sizer(
+                  height: 3.h,
                 ),
                 Label(
                   text: 'Reel',

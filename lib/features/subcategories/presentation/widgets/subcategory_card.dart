@@ -6,9 +6,10 @@ import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart'
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,21 +17,29 @@ import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../domain/entities/sub_category_entity.dart';
 
-class SubCategoryCard extends StatelessWidget {
+class SubCategoryCard extends StatefulWidget {
   final SubCategoryEntity item;
   final MainCategoryEntity mainCategory;
-
+  final Function() onFav;
   const SubCategoryCard(
-      {super.key, required this.item, required this.mainCategory});
+      {super.key,
+      required this.item,
+      required this.mainCategory,
+      required this.onFav});
 
+  @override
+  State<SubCategoryCard> createState() => _SubCategoryCardState();
+}
+
+class _SubCategoryCardState extends State<SubCategoryCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.ADS, extra: item.id),
+      onTap: () => context.push(Routes.ADS,
+          extra: AdsViewParams(
+              mainCategory: widget.mainCategory, subCategory: widget.item)),
       child: Container(
-        // width: kToolbarHeight * 2.5.zW,
-        // height: kToolbarHeight * 3.zH,
-        margin: EdgeInsets.all(10.zW),
+        margin: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(5),
@@ -51,23 +60,31 @@ class SubCategoryCard extends StatelessWidget {
                     child: SquareImage(
                       fit: BoxFit.cover,
                       radius: 5,
-                      url: item.image,
+                      url: widget.item.image,
                     ),
                   ),
                   Positioned(
-                      top: 10.zH,
-                      right: 10.zW,
+                      top: 10.h,
+                      right: 10.w,
                       child: IconAppButton(
-                        icon: Icons.favorite_outline,
-                        onPressed: () {},
+                        icon: widget.item.isFavorite == false
+                            ? Icons.favorite_outline
+                            : Icons.favorite,
+                        onPressed: () async {
+                          var result = await widget.onFav();
+                          if (result == true) {
+                            widget.item.isFavorite = !widget.item.isFavorite!;
+                            setState(() {});
+                          }
+                        },
                         color: AppColors.SECONDARY_COLOR,
                       ))
                 ],
               ),
             ),
-            const Sizer(),
+            Sizer(),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0.zW),
+              padding: EdgeInsets.symmetric(horizontal: 20.0.w),
               child: Row(
                 children: [
                   Expanded(
@@ -75,25 +92,26 @@ class SubCategoryCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Label(
-                          text: item.name,
+                          text: widget.item.name,
                           style: Styles.mediumText(fontWeight: FontWeight.bold),
                         ),
                         Label(
-                          text: '0 ${LocaleKeys.ads.localize}',
-                          style: Styles.smallText(fontSize: 25),
+                          text:
+                              '${widget.item.numberOfContent} ${LocaleKeys.ads.localize}',
+                          style: Styles.smallText(fontSize: 25.sp),
                         )
                       ],
                     ),
                   ),
                   IconAppButton(
                       icon: Icons.add_box_rounded,
-                      size: 40.zH,
+                      size: 40.h,
                       onPressed: () {
                         if (AuthHelper().isLoggedIn()) {
                           context.push(Routes.CREATEAD,
                               extra: CategorizationEntity(
-                                  mainCategory: mainCategory,
-                                  subCategory: item));
+                                  mainCategory: widget.mainCategory,
+                                  subCategory: widget.item));
                         } else {
                           context.push(Routes.LOGIN);
                         }

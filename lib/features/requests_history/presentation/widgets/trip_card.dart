@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -60,7 +61,7 @@ class TripCard extends StatelessWidget {
               children: [
                 const Icon(FontAwesomeIcons.car,
                     color: AppColors.PRIMARY_COLOR),
-                const Sizer(),
+                Sizer(),
                 Label(
                   text: trip.category?.name ?? '',
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
@@ -89,7 +90,7 @@ class TripCard extends StatelessWidget {
                   Icons.location_searching,
                   color: AppColors.PRIMARY_COLOR,
                 ),
-                const Sizer(),
+                Sizer(),
                 Expanded(child: Label(text: trip.fromAddress)),
               ],
             ),
@@ -99,7 +100,7 @@ class TripCard extends StatelessWidget {
                   Icons.location_on,
                   color: AppColors.SECONDARY_COLOR,
                 ),
-                const Sizer(),
+                Sizer(),
                 Expanded(child: Label(text: trip.toAddress)),
               ],
             ),
@@ -107,7 +108,7 @@ class TripCard extends StatelessWidget {
               Row(
                 children: [
                   TextAppButton(label: 'Offers', onPressed: () {}),
-                  const Sizer(),
+                  Sizer(),
                   Expanded(
                     child: SizedBox(
                       height: kToolbarHeight * .5,
@@ -129,7 +130,7 @@ class TripCard extends StatelessWidget {
                   ),
                 ],
               ),
-            const Sizer(),
+            Sizer(),
             if (requests?.isNotEmpty ?? false)
               ListView.builder(
                   itemCount: requests?.length ?? 0,
@@ -138,7 +139,7 @@ class TripCard extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return _buildRequestCard(request: requests![index]);
                   }),
-            const Sizer(),
+            Sizer(),
             StaticMapWidget(
               height: kToolbarHeight * 1.5,
               radius: 10,
@@ -153,7 +154,7 @@ class TripCard extends StatelessWidget {
                 Location(trip.toCoordinates[0], trip.toCoordinates[1]),
               ],
             ),
-            const Sizer(),
+            Sizer(),
             if (onRequest != null)
               AppButton(
                   label: 'Request',
@@ -186,16 +187,16 @@ class TripCard extends StatelessWidget {
             Label(
                 text: 'Contact Phone',
                 style: Styles.mediumText(fontWeight: FontWeight.bold)),
-            const Sizer(),
+            Sizer(),
             FormTextField(
                 hint: 'Phone',
                 type: TextInputType.number,
-                style: const TextStyle(
-                    fontSize: 20,
+                style:  TextStyle(
+                    fontSize: 20.sp,
                     color: Colors.grey,
                     fontWeight: FontWeight.bold),
                 action: (v) => phone = v),
-            const Sizer(),
+            Sizer(),
             AppButton(
                 label: 'Done',
                 onPressed: () {
@@ -229,7 +230,7 @@ class TripCard extends StatelessWidget {
                           onReject!(request.id);
                         }
                       })),
-              const Sizer(),
+              Sizer(),
               Expanded(
                   child: AppButton(
                       label: 'Accept',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -19,7 +20,7 @@ class WalletCardWidget extends StatelessWidget {
     return Container(
       height: kToolbarHeight * 2,
       width: double.infinity,
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
           color: AppColors.PRIMARY_COLOR,
           borderRadius: BorderRadius.circular(10)),
@@ -47,7 +48,8 @@ class WalletCardWidget extends StatelessWidget {
                   ),
                 Label(
                   text: balance,
-                  style: Styles.headerText(color: Colors.white, fontSize: 25),
+                  style:
+                      Styles.headerText(color: Colors.white, fontSize: 25.sp),
                 ),
                 Label(
                   text: LocaleKeys.hUB.localize,
@@ -68,7 +70,7 @@ class WalletCardWidget extends StatelessWidget {
           //       child: Text(
           //         '${((balance / (target ?? 1)) * 100).toStringAsFixed(0)} %',
           //         style: const TextStyle(
-          //             fontSize: 20,
+          //             fontSize: 20.sp,
           //             fontWeight: FontWeight.w600,
           //             color: Colors.white),
           //       ),

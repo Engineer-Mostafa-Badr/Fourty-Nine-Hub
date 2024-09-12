@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../../common/widgets/dynamic/floating_button.dart';
@@ -104,7 +105,7 @@ class _InstagramViewState extends State<InstagramView> {
   Widget _buildTabBar(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: List.generate(

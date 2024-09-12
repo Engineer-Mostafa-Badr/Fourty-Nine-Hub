@@ -26,7 +26,7 @@ class CusineRestaurantsView extends StatelessWidget {
                         isVert: false,
                         // item:,// state.cusineRestaurants![index],
                       ),
-                  separatorBuilder: (context, index) => const Sizer(),
+                  separatorBuilder: (context, index) => Sizer(),
                   itemCount: state.cusineRestaurants?.length ?? 0),
             ),
           );

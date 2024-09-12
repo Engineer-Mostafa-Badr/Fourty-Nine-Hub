@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 abstract class Styles {
@@ -11,7 +11,7 @@ abstract class Styles {
       List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
-        fontSize: fontSize.zSP,
+        fontSize: fontSize.sp,
         color: color,
         decoration: decoration,
         shadows: shadows,
@@ -26,7 +26,7 @@ abstract class Styles {
       List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
-        fontSize: fontSize.zSP,
+        fontSize: fontSize.sp,
         color: color,
         // overflow: TextOverflow.ellipsis,
         shadows: shadows,
@@ -42,10 +42,6 @@ abstract class Styles {
       Color? color,
       FontWeight fontWeight = FontWeight.w600}) {
     return TextStyle(
-        fontSize: fontSize.zSP,
-        fontWeight: fontWeight,
-        shadows: shadows,
-        decorationColor: color,
-        color: color);
+        fontSize: fontSize.sp, fontWeight: fontWeight, shadows: shadows, decorationColor: color, color: color);
   }
 }

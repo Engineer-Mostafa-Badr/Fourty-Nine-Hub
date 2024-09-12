@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -67,8 +68,8 @@ class SearchRestaurantView extends StatelessWidget {
                 decoration: InputDecoration(
                   hintText: LocaleKeys.search.tr(),
                   prefixIcon: const Icon(Icons.search),
-                  contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 10.0, vertical: 10.0),
+                  contentPadding:  EdgeInsets.symmetric(
+                      horizontal: 10.0, vertical: 10.h),
                   filled: false,
                 ),
               ),
@@ -117,7 +118,7 @@ class SearchRestaurantView extends StatelessWidget {
                                     width:
                                         MediaQuery.of(context).size.width * 0.2,
                                   ),
-                                  const Sizer(),
+                                  Sizer(),
                                   Text(getLang() == "ar"
                                       ? (category?.nameAr ?? "")
                                       : (category?.nameEn ?? "")),
@@ -146,7 +147,7 @@ class SearchRestaurantView extends StatelessWidget {
                                     width:
                                         MediaQuery.of(context).size.width * 0.2,
                                   ),
-                                  const Sizer(),
+                                  Sizer(),
                                   Text(getLang() == "ar"
                                       ? (category?.nameAr ?? "")
                                       : (category?.nameEn ?? "")),

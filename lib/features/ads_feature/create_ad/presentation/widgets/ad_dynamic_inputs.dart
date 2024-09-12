@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AdDynamicInputWidget extends StatefulWidget {
   final AdPropertiesEntity property;
@@ -69,8 +70,8 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           },
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-            margin: const EdgeInsets.all(5),
+            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 5),
+            margin: EdgeInsets.all(5),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey),
               borderRadius: BorderRadius.circular(5),
@@ -132,8 +133,8 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
               setState(() {});
             },
             child: Container(
-              padding: const EdgeInsets.all(5),
-              margin: const EdgeInsets.all(5),
+              padding: EdgeInsets.all(5),
+              margin: EdgeInsets.all(5),
               decoration: BoxDecoration(
                 border: Border.all(
                     color:

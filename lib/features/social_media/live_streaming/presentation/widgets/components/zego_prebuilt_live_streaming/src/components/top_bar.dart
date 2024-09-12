@@ -162,7 +162,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                           ),
                         ],
                       ),
-                      const Sizer(
+                       Sizer(
                         height: 15,
                       ),
                       if (widget.config.role == ZegoLiveStreamingRole.host)
@@ -176,7 +176,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                               await context
                                   .read<MeetingCubit>()
                                   .endRoom(ZegoUIKit().getRoom().id);
-                              Navigator.of(context).pop(true);
+                              Navigator.of(context).pop();
                             }
                           },
                           child: Container(
@@ -199,13 +199,13 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                             ),
                           ),
                         ),
-                      const Sizer(
+                       Sizer(
                         height: 15,
                       ),
                       InkWell(
                         onTap: () async {
                           Navigator.of(context).pop();
-                          Navigator.of(context).pop();
+                          // Navigator.of(context).pop();
                         },
                         child: Container(
                           width: MediaQuery.sizeOf(context).width / 1.3,
@@ -336,3 +336,62 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
     });
   }
 }
+  // Positioned(
+  //                   top: 100,
+  //                   right: 50,
+  //                   left: 50,
+  //                   child: Column(
+  //                     crossAxisAlignment: CrossAxisAlignment.stretch,
+  //                     children: [
+  //                       Container(
+  //                         width: double.infinity,
+  //                         height: 100,
+  //                         decoration: BoxDecoration(
+  //                           color: Colors.grey.withOpacity(0.7),
+  //                           borderRadius: BorderRadius.all(
+  //                             Radius.circular(10.0.zR),
+  //                           ),
+  //                         ),
+  //                         child: Row(
+  //                           children: [
+  //                             ImageFromInternet(
+  //                               image:
+  //                                   UserCubit.to.state.data!.profilePicture ??
+  //                                       '',
+  //                               isCircle: false,
+  //                             ),
+  //                             Expanded(
+  //                               child: Container(),
+  //                             )
+  //                           ],
+  //                         ),
+  //                       ),
+  //                       const Sizer(),
+  //                       Container(
+  //                         width: double.infinity,
+  //                         height: 100,
+  //                         decoration: BoxDecoration(
+  //                           color: Colors.grey.withOpacity(0.7),
+  //                           borderRadius: BorderRadius.all(
+  //                             Radius.circular(10.0.zR),
+  //                           ),
+  //                         ),
+  //                         child: const Row(
+  //                           children: [
+  //                             Expanded(
+  //                               child: Text(
+  //                                 'Ali Mazen',
+  //                               ),
+  //                             ),
+  //                             Expanded(
+  //                               child: Text(
+  //                                 'Helwan University',
+  //                               ),
+  //                             )
+  //                           ],
+  //                         ),
+  //                       )
+  //                     ],
+  //                   ),
+  //                 ),
+                

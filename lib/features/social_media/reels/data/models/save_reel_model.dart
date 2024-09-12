@@ -1,4 +1,3 @@
-
 class ReelSaveResponse {
   final bool? status;
   final String? message;
@@ -7,8 +6,10 @@ class ReelSaveResponse {
 
   factory ReelSaveResponse.fromJson(Map<String, dynamic> json) {
     return ReelSaveResponse(
-      status: json['status'] ?? false, // Handling null with a default value of `false`
-      message: json['message'] ?? '',  // Handling null with a default empty string
+      status: json['status'] ??
+          false, // Handling null with a default value of `false`
+      message:
+          json['message'] ?? '', // Handling null with a default empty string
     );
   }
 

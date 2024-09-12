@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -34,7 +35,7 @@ class WalletHistory extends StatelessWidget {
                   Icons.info_outline,
                   color: Colors.grey,
                 ),
-                const Sizer(),
+                Sizer(),
                 Expanded(
                     child: Label(
                   text: 'Minimum 1002 EGP for personal transaction',
@@ -58,7 +59,7 @@ class WalletHistory extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.send_to_mobile_rounded),
-                  const Sizer(),
+                  Sizer(),
                   Label(
                       text: Labels.withDrawel,
                       style: Styles.mediumText(color: Colors.white)),
@@ -93,10 +94,10 @@ class WalletHistory extends StatelessWidget {
       required Function onTap,
       required IconData icon}) {
     return ListTile(
-      title: Label(text: title, style: Styles.mediumText(fontSize: 12)),
+      title: Label(text: title, style: Styles.mediumText(fontSize: 12.sp)),
       subtitle: Label(
         text: subTitle,
-        style: Styles.mediumText(fontSize: 10),
+        style: Styles.mediumText(fontSize: 10.sp),
       ),
       leading: Container(
           height: kToolbarHeight * .7,

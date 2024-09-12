@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -16,7 +17,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Container(
       height: kToolbarHeight,
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding:  EdgeInsets.symmetric(vertical: 5.h),
       decoration: const BoxDecoration(
         color: AppColors.PRIMARY_COLOR,
       ),
@@ -33,7 +34,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
             backgroundColor: Colors.white,
             backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
           ),
-          const Sizer(),
+          Sizer(),
           Expanded(
             child: BlocBuilder<ChatRoomCubit, ChatRoomState>(
                 builder: (context, state) {
@@ -57,12 +58,12 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                       ),
                                     ),
                                   ),
-                                  const Padding(
+                                   Padding(
                                     padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
+                                        const EdgeInsets.symmetric(horizontal: 10),
                                     child: SizedBox(
                                       width: 5,
-                                      height: 5,
+                                      height: 5.h,
                                     ),
                                   )
                                 ],
@@ -73,7 +74,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         //       radius: 3,
                         //       backgroundColor: Colors.red,
                         //     ),
-                        //     const Sizer(),
+                        //     Sizer(),
                         //     state.chatData?.chat?.contact?.name == null
                         //         ? const SizedBox()
                         //         : Label(
@@ -94,7 +95,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
             onPressed: () {},
             color: Colors.white,
           ),
-          const Sizer(
+          Sizer(
             width: 15,
           ),
           // call

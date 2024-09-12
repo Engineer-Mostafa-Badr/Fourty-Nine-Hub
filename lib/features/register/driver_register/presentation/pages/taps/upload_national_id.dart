@@ -19,7 +19,7 @@ class UploadNationalID extends StatelessWidget {
         label: label,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(8.0),
         child: SingleChildScrollView(
           child: Column(
             children: [

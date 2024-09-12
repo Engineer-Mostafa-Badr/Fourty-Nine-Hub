@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
@@ -12,7 +13,8 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -37,9 +39,9 @@ class DrawerWidget extends StatelessWidget {
       create: (context) => GetWalletCubit(serviceLocator()),
       child: BlocBuilder<UserCubit, BasicState<UserEntity>>(
         builder: (context, state) {
-          var walletCubit = context.read<GetWalletCubit>();
+          context.read<GetWalletCubit>();
           return Drawer(
-            width: 600.zW,
+            width: 600.h,
             child: SafeArea(
               child: SingleChildScrollView(
                 child: Column(
@@ -72,7 +74,10 @@ class DrawerWidget extends StatelessWidget {
                         image: Assets.favorite_main_category_icon,
                         label: LocaleKeys.favouriteCategories.localize,
                         requireLogin: true,
-                        onTap: () => context.push(Routes.FAVOURITECATEGORIES)),
+                        onTap: () async {
+                          await context.push(Routes.FAVOURITECATEGORIES);
+                          context.read<MainCategoriesCubit>().loadData(context);
+                        }),
 
                     drawerListTile(
                         // icon: Icons.favorite,
@@ -159,7 +164,7 @@ class DrawerWidget extends StatelessWidget {
     required BuildContext context,
   }) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 20.zH),
+      margin: EdgeInsets.symmetric(vertical: 20.h.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -167,8 +172,8 @@ class DrawerWidget extends StatelessWidget {
             child: Column(
               children: [
                 IconAppButton(
-                  width: 100.zW,
-                  height: 100.zH,
+                  width: 100.h,
+                  height: 100.h,
                   isCircle: true,
                   icon: Icons.person,
                   onPressed: () => context.push(Routes.LOGIN),
@@ -183,8 +188,8 @@ class DrawerWidget extends StatelessWidget {
             child: Column(
               children: [
                 IconAppButton(
-                    width: 100.zW,
-                    height: 100.zH,
+                    width: 100.h,
+                    height: 100.h,
                     isCircle: true,
                     icon: Icons.person_add,
                     onPressed: () => context.push(Routes.REGISTER)),
@@ -297,7 +302,7 @@ class DrawerWidget extends StatelessWidget {
                     TextSpan(
                         text: '/1002',
                         style: Styles.mediumText(
-                          fontSize: 8,
+                          fontSize: 8.sp,
                         ))
                   ]))))
                 ],
@@ -320,19 +325,19 @@ class DrawerWidget extends StatelessWidget {
       return const SizedBox();
     }
     return Padding(
-      padding: EdgeInsets.only(top: 10.zH),
+      padding: EdgeInsets.only(top: 10.h),
       child: ListTile(
         onTap: () => onTap(),
         leading: image != null && icon == null
             ? Image.asset(
                 image,
-                width: 40.zW,
-                height: 40.zH,
+                width: 40.h,
+                height: 40.h,
                 fit: BoxFit.cover,
               )
             : Icon(
                 icon,
-                size: 40.zW,
+                size: 40.w,
               ),
         title: Label(
             text: label,
@@ -346,7 +351,7 @@ class DrawerWidget extends StatelessWidget {
             : null,
         trailing: Icon(
           Icons.arrow_forward_ios,
-          size: 28.zW,
+          size: 28.w,
         ),
       ),
     );
@@ -359,10 +364,10 @@ class DrawerWidget extends StatelessWidget {
       ),
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.all(20.zW),
-        margin: EdgeInsets.all(10.zW),
+        padding: EdgeInsets.all(20.w),
+        margin: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.zR),
+            borderRadius: BorderRadius.circular(10.r),
             color: AppColors.LIGHT_GRAY_COLOR),
         child: Row(
           children: [
@@ -411,10 +416,10 @@ class DrawerWidget extends StatelessWidget {
           children: [
             CircleAvatar(
               backgroundColor: AppColors.GREY_BORDER_COLOR,
-              radius: 45.zW,
+              radius: 45.w,
               child: Icon(
                 icon,
-                size: 40.zW,
+                size: 40.w,
                 color: AppColors.QUANTITY_COLOR,
               ),
             ),
@@ -436,20 +441,20 @@ class DrawerWidget extends StatelessWidget {
     required BuildContext context,
     required UserEntity? user,
   }) {
-    var walletCubit = context.read<GetWalletCubit>();
+    context.read<GetWalletCubit>();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
           SizedBox(
-            height: kToolbarHeight * 2.5.zH,
-            width: kToolbarHeight * 2.5.zW,
+            height: kToolbarHeight * 2.5.h,
+            width: kToolbarHeight * 2.5.w,
             child: Stack(
               alignment: AlignmentDirectional.bottomEnd,
               children: [
                 Positioned.fill(
                   child: BlocConsumer<UserCubit, BasicState>(
-                    listener: (context,state){
+                    listener: (context, state) {
                       // if(state.isSuccess){
                       //   context.pop();
                       //   showSuccessMessage(context, 'Picture Uploaded Successfully');
@@ -465,7 +470,7 @@ class DrawerWidget extends StatelessWidget {
                         Shimmer.fromColors(
                           baseColor: Colors.amber,
                           highlightColor: Colors.black,
-                          child:  CircleAvatar(
+                          child: CircleAvatar(
                             child: Container(
                               color: Colors.red,
                             ),
@@ -520,7 +525,7 @@ class DrawerWidget extends StatelessWidget {
                     right: 0,
                     child: Icon(
                       Icons.camera_alt_outlined,
-                      size: 40.zW,
+                      size: 40.w,
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
@@ -528,7 +533,7 @@ class DrawerWidget extends StatelessWidget {
               ],
             ),
           ),
-          const Sizer(),
+          Sizer(),
           Expanded(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -546,7 +551,7 @@ class DrawerWidget extends StatelessWidget {
                     Icon(
                       Icons.verified,
                       color: AppColors.PRIMARY_COLOR,
-                      size: 40.zW,
+                      size: 40.w,
                     ),
                 ],
               ),
@@ -555,7 +560,7 @@ class DrawerWidget extends StatelessWidget {
               //   style: Styles.mediumText(),
               // ),
               Sizer(
-                height: 10.zH,
+                height: 10.h,
               ),
               InkWell(
                 onTap: () {
@@ -567,11 +572,11 @@ class DrawerWidget extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.wallet,
-                      size: 35.zW,
+                      size: 35.w,
                     ),
                     Sizer(
-                      width: 8.zW,
-                      height: 8.zH,
+                      width: 8.h,
+                      height: 8.h,
                     ),
                     Expanded(
                       child: Label(

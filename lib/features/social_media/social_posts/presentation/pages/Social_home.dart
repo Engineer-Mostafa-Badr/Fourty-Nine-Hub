@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../../common/widgets/dynamic/floating_button.dart';
@@ -50,7 +51,6 @@ class _SocialHomeViewState extends State<SocialHomeView>
     });
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -101,28 +101,28 @@ class _SocialHomeViewState extends State<SocialHomeView>
                       scrollController: scrollController,
                     ))
                 : NestedAppbar(
-                scrollController: ScrollController(),
-                appBars: [
-                  SliverAppBar(
-                    backgroundColor:
-                    Theme.of(context).scaffoldBackgroundColor,
-                    automaticallyImplyLeading: false,
-                    floating: true,
-                    // pinned: true,
-                    flexibleSpace: const CreatePostBanner(),
-                  ),
-                  SliverAppBar(
-                    backgroundColor:
-                    Theme.of(context).scaffoldBackgroundColor,
-                    automaticallyImplyLeading: false,
-                    // floating: true,
-                    pinned: true,
-                    flexibleSpace: _buildTabBar(),
-                  )
-                ],
-                body: FacebookGlobalBody(
-                  scrollController: scrollController,
-                ));
+                    scrollController: ScrollController(),
+                    appBars: [
+                      SliverAppBar(
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        automaticallyImplyLeading: false,
+                        floating: true,
+                        // pinned: true,
+                        flexibleSpace: const CreatePostBanner(),
+                      ),
+                      SliverAppBar(
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        automaticallyImplyLeading: false,
+                        // floating: true,
+                        pinned: true,
+                        flexibleSpace: _buildTabBar(),
+                      )
+                    ],
+                    body: FacebookGlobalBody(
+                      scrollController: scrollController,
+                    ));
           })),
     );
   }
@@ -130,7 +130,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
   Widget _buildTabBar() {
     final user = context.read<UserCubit>().state.data;
     return Container(
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.all(10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: List.generate(
@@ -138,19 +138,21 @@ class _SocialHomeViewState extends State<SocialHomeView>
             (i) => GestureDetector(
               onTap: () {
                 if (i == 1) {
-                  context.read<UserCubit>().isLoggedIn?context.push(Routes.OTHERSACCOUNT, extra: user?.id):context.push(Routes.LOGIN);
+                  context.read<UserCubit>().isLoggedIn
+                      ? context.push(Routes.OTHERSACCOUNT, extra: user?.id)
+                      : context.push(Routes.LOGIN);
                 }
               },
               child: Container(
                   decoration: i == 0
                       ? const BoxDecoration(
                           border: Border(
-                              bottom: BorderSide(color: AppColors.PRIMARY_COLOR, width: 2)))
+                              bottom: BorderSide(
+                                  color: AppColors.PRIMARY_COLOR, width: 2)))
                       : null,
                   child: Icon(
                     i == 0 ? Icons.home : Icons.person,
-                    color:
-                        i == 0 ? AppColors.PRIMARY_COLOR : Colors.grey,
+                    color: i == 0 ? AppColors.PRIMARY_COLOR : Colors.grey,
                   )),
             ),
           ),

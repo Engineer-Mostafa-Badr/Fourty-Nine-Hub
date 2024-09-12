@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/utils/type_defs.dart';
 import '../../../../res/style/app_colors.dart';
@@ -11,10 +11,10 @@ class DefaultButton extends StatefulWidget {
     super.key,
     this.label,
     required this.onPressed,
-    this.padding = const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+    this.padding = const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
     this.margin = const EdgeInsets.only(),
     this.labelStyle = const TextStyle(
-      fontSize: 16.0,
+      fontSize: 16,
       color: Colors.white,
       height: 2,
       fontWeight: FontWeight.normal,
@@ -73,13 +73,12 @@ class _DefaultButtonState extends State<DefaultButton>
     final iconOnStart = widget.iconLocation == DefaultButtonIconLocation.Start;
     final buttonContents = <Widget>[
       ...widget.icon != null
-          ? [widget.icon!, if (widget.label != null) const SizedBox(width: 8.0)]
+          ? [widget.icon!, if (widget.label != null) SizedBox(width: 8.0)]
           : [],
       if (widget.label != null)
         Padding(
-          padding: widget.icon != null
-              ? const EdgeInsets.only(top: 3.0)
-              : EdgeInsets.zero,
+          padding:
+              widget.icon != null ? EdgeInsets.only(top: 3.0) : EdgeInsets.zero,
           child: Text(
             widget.label!,
             style: widget.labelStyle,
@@ -89,7 +88,7 @@ class _DefaultButtonState extends State<DefaultButton>
     return Container(
       margin: widget.margin,
       width: widget.width,
-      height: 110.zH,
+      height: 100.h,
       child: AnimatedSize(
         duration: const Duration(milliseconds: 300),
         curve: Curves.bounceInOut,

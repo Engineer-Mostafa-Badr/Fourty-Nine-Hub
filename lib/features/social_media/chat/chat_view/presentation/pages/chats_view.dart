@@ -23,7 +23,7 @@
 // import '../widgets/chat_card.dart';
 //
 // class ChatView extends StatefulWidget {
-//   const ChatView({super.key});
+//    ChatView({super.key});
 //
 //   @override
 //   State<ChatView> createState() => _ChatViewState();
@@ -65,7 +65,7 @@
 //         mainCategoryId: 2,
 //         body: NestedAppbar(
 //           appBars: [
-//             const SliverAppBar(
+//              SliverAppBar(
 //               expandedHeight: kToolbarHeight * 1.5,
 //               automaticallyImplyLeading: false,
 //               floating: true,
@@ -149,20 +149,20 @@
 //                   child: Label(
 //                       text: 'No Chats until now',
 //                       style: Styles.mediumText(
-//                           color: const Color.fromARGB(255, 87, 87, 87),
+//                           color:  Color.fromARGB(255, 87, 87, 87),
 //                           fontWeight: FontWeight.bold,
-//                           fontSize: 18)),
+//                           fontSize: 18.sp)),
 //                 )
 //               : ListView.separated(
 //                   shrinkWrap: true,
-//                   physics: const NeverScrollableScrollPhysics(),
+//                   physics:  NeverScrollableScrollPhysics(),
 //                   itemBuilder: (context, index) => Slidable(
 //                     key: ValueKey(index),
 //                     // All actions are defined in the children parameter.
 //
 //                     closeOnScroll: false,
 //                     endActionPane: ActionPane(
-//                       motion: const ScrollMotion(),
+//                       motion:  ScrollMotion(),
 //                       dismissible: DismissiblePane(onDismissed: () {}),
 //                       children: [
 //                         SlidableAction(
@@ -176,7 +176,7 @@
 //                                 ));
 //                           },
 //                           backgroundColor:
-//                               const Color.fromARGB(255, 191, 191, 191),
+//                                Color.fromARGB(255, 191, 191, 191),
 //                           foregroundColor: Colors.white,
 //                           icon: Icons.more_horiz,
 //                           label: 'More',
@@ -205,7 +205,7 @@
 //                       chatsCubit: chatCubit,
 //                     ),
 //                   ),
-//                   separatorBuilder: (context, index) => const SizedBox(),
+//                   separatorBuilder: (context, index) => SizedBox(),
 //                   itemCount: state.chats?.length ?? 0,
 //                 );
 //     });
@@ -214,11 +214,11 @@
 //   Widget _buildCallingHistory({required bool isVideo}) {
 //     return ListView.separated(
 //         shrinkWrap: true,
-//         physics: const NeverScrollableScrollPhysics(),
+//         physics:  NeverScrollableScrollPhysics(),
 //         itemBuilder: (context, index) => CallingCard(
 //               isVideo: isVideo,
 //             ),
-//         separatorBuilder: (context, index) => const SizedBox(),
+//         separatorBuilder: (context, index) => SizedBox(),
 //         itemCount: 8);
 //   }
 //
@@ -237,7 +237,7 @@
 //                     fontWeight: FontWeight.bold, color: Colors.black)),
 //             content: Material(
 //               child: ConstrainedBox(
-//                 constraints: const BoxConstraints(maxHeight: 100.0),
+//                 constraints:  BoxConstraints(maxHeight: 100.0),
 //                 child: Column(
 //                   mainAxisSize: MainAxisSize.min,
 //                   children: [
@@ -246,8 +246,8 @@
 //                         hint: 'password',
 //                         type: TextInputType.number,
 //                         // initialValue: '',
-//                         style: const TextStyle(
-//                             fontSize: 20,
+//                         style:  TextStyle(
+//                             fontSize: 20.sp,
 //                             color: Colors.grey,
 //                             fontWeight: FontWeight.bold),
 //                         action: (v) => () {}),
@@ -262,7 +262,7 @@
 //                         index: 8, password: passwordController.text.trim());
 //                     Navigator.of(context).pop(false);
 //                   },
-//                   child: const Text('Confirm password')),
+//                   child:  Text('Confirm password')),
 //             ],
 //           )),
 //     );
@@ -273,6 +273,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
@@ -297,7 +298,7 @@ import '../widgets/chat_card.dart';
 class ChatView extends StatefulWidget {
   final int initialTabIndex;
 
-  const ChatView({super.key, this.initialTabIndex = 0});
+   const ChatView({super.key, this.initialTabIndex = 0});
 
   @override
   State<ChatView> createState() => _ChatViewState();
@@ -342,13 +343,14 @@ class _ChatViewState extends State<ChatView> {
           scrollController: ScrollController(),
           appBars: [
             SliverAppBar(
-              expandedHeight: MediaQuery.of(context).size.height * 0.15, // Responsive height
+              expandedHeight: MediaQuery.of(context).size.height *
+                  0.15, // Responsive height
               automaticallyImplyLeading: false,
               floating: true,
               flexibleSpace: BlocProvider(
                 create: (context) =>
                     serviceLocator<StoryCubit>()..fetchStories(),
-                child: const ChatStories(),
+                child:  const ChatStories(),
               ),
             ),
             SliverAppBar(
@@ -430,7 +432,7 @@ class _ChatViewState extends State<ChatView> {
   Widget _buildCategoryChats({bool isSecret = false}) {
     return BlocBuilder<ChatsCubit, ChatsState>(builder: (context, state) {
       return state.chats == null || state.isLoading
-          ? const Center(
+          ?  const Center(
               child: CircularProgressIndicator.adaptive(),
             )
           : state.chats?.length == 0
@@ -438,16 +440,16 @@ class _ChatViewState extends State<ChatView> {
                   child: Label(
                       text: 'No Chats until now',
                       style: Styles.mediumText(
-                          fontWeight: FontWeight.bold, fontSize: 18)),
+                          fontWeight: FontWeight.bold, fontSize: 18.sp)),
                 )
               : ListView.separated(
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics:  const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) => Slidable(
                     key: ValueKey(index),
                     closeOnScroll: false,
                     endActionPane: ActionPane(
-                      motion: const ScrollMotion(),
+                      motion:  const ScrollMotion(),
                       dismissible: DismissiblePane(onDismissed: () {}),
                       children: [
                         SlidableAction(
@@ -463,7 +465,7 @@ class _ChatViewState extends State<ChatView> {
                                 ));
                           },
                           backgroundColor:
-                              const Color.fromARGB(255, 191, 191, 191),
+                               const Color.fromARGB(255, 191, 191, 191),
                           foregroundColor: Colors.white,
                           icon: Icons.more_horiz,
                           label: 'More',
@@ -499,7 +501,7 @@ class _ChatViewState extends State<ChatView> {
   Widget _buildCallingHistory({required bool isVideo}) {
     return ListView.separated(
         shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
+        physics:  const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) => CallingCard(
               isVideo: isVideo,
             ),
@@ -522,7 +524,7 @@ class _ChatViewState extends State<ChatView> {
                     fontWeight: FontWeight.bold, color: Colors.black)),
             content: Material(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 100.0),
+                constraints:  BoxConstraints(maxHeight: 100.0.h),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -530,8 +532,8 @@ class _ChatViewState extends State<ChatView> {
                         controller: passwordController,
                         hint: 'password',
                         type: TextInputType.number,
-                        style: const TextStyle(
-                            fontSize: 20,
+                        style:  TextStyle(
+                            fontSize: 20.sp,
                             color: Colors.grey,
                             fontWeight: FontWeight.bold),
                         action: (v) => () {}),
@@ -546,7 +548,7 @@ class _ChatViewState extends State<ChatView> {
                         index: 8, password: passwordController.text.trim());
                     Navigator.of(context).pop(false);
                   },
-                  child: const Text('Confirm password')),
+                  child:  const Text('Confirm password')),
             ],
           )),
     );

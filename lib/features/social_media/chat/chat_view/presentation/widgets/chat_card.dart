@@ -10,6 +10,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatCard extends StatefulWidget {
   final bool isSecret;
@@ -35,7 +36,7 @@ class _ChatCardState extends State<ChatCard> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.h),
             child: Row(
               children: [
                 SizedBox(
@@ -75,7 +76,7 @@ class _ChatCardState extends State<ChatCard> {
                           ],
                         ),
                 ),
-                const Sizer(),
+                Sizer(),
                 Flexible(
                   flex: 1,
                   child: Column(
@@ -123,15 +124,15 @@ class _ChatCardState extends State<ChatCard> {
                                         ? "No messages until now"
                                         : '${widget.chatItemModel?.lastMessageText}',
                                 style: Styles.mediumText(
-                                  fontSize: 14,
+                                  fontSize: 14.sp,
                                   color: widget.chatItemModel!.typing!
                                       ? AppColors.SPLASH_BLACK_COLOR
                                       : AppColors.DARK_GRAY_COLOR,
                                 )),
                           ),
 
-                          const SizedBox(
-                            height: 10,
+                          SizedBox(
+                            height: 10.h,
                           ),
                           widget.chatItemModel!.muted!
                               ? const Icon(
@@ -157,7 +158,7 @@ class _ChatCardState extends State<ChatCard> {
                             style: Styles.mediumText(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16)),
+                                fontSize: 16.sp)),
                       ),
 
                 const SizedBox(
@@ -202,7 +203,7 @@ class _ChatCardState extends State<ChatCard> {
             ),
           ),
           Container(
-            height: 0.4,
+            height: 0.h,
             width: MediaQuery.of(context).size.width,
             color: AppColors.GREY_DARK_COLOR,
           ),

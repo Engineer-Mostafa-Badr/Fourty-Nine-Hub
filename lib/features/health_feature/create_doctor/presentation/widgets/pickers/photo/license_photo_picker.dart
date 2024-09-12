@@ -21,7 +21,7 @@ class CreateDoctorLicensePhotoPicker extends StatelessWidget {
           text: "License",
           style: Styles.headerText(),
         ),
-        const Sizer(),
+        Sizer(),
         Row(
           children: [
             InkWell(
@@ -46,7 +46,7 @@ class CreateDoctorLicensePhotoPicker extends StatelessWidget {
                 },
               ),
             ),
-            const Sizer(),
+            Sizer(),
             InkWell(
               onTap: () async {
                 await createDoctorCubit.uploadPracticingBehindImage();

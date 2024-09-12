@@ -38,14 +38,14 @@ class ContactUsView extends StatelessWidget {
             child: ListView(
               children: [
                 const Label(text: '49Hub Team is ready to help'),
-                const Sizer(),
+                Sizer(),
                 FormTextField(
                   textStyle: TextStyle(color: Theme.of(context).primaryColor),
                   label: 'Phone (Optional)',
                   required: false,
                   controller: controller.phoneController,
                 ),
-                const Sizer(),
+                Sizer(),
                 FormTextField(
                   textStyle: TextStyle(color: Theme.of(context).primaryColor),
                   hint: 'Message',

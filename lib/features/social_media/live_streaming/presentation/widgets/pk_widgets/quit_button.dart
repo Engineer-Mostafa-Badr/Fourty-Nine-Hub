@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/controller.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/defines.dart';
@@ -27,7 +28,7 @@ class _PKQuitButtonState extends State<PKQuitButton> {
       builder: (context, state, _) {
         return Container(
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
-          height: 30,
+          height: 30.h,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,

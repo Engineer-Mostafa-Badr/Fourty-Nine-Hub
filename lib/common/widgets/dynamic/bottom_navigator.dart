@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../res/assets/assets.dart';
@@ -30,7 +31,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         ? <BottomItemModel>[
             BottomItemModel(
               icon: FontAwesomeIcons.microphone,
-              height: 30,
+              height: 30.h,
               label: 'snap',
               // Translated text
               index: 0,
@@ -42,7 +43,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
               label: 'live',
               // Translated text
               index: 0,
-              height: 25,
+              height: 25.h,
               image: Assets.live,
               route: Routes.LIVE,
             ),
@@ -51,7 +52,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
               label: 'meet',
               // Translated text
               index: 0,
-              height: 25,
+              height: 25.h,
               image: Assets.zoomMeeting,
               route: Routes.ZOOM,
             ),
@@ -60,7 +61,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
               label: 'spotlight',
               // Translated text
               index: 0,
-              height: 25,
+              height: 25.h,
               image: Assets.spotlightIcon,
               route: Routes.SPOTLIGHT,
             ),
@@ -171,6 +172,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _CustomBottomNavigationBarState createState() =>
       _CustomBottomNavigationBarState(
         scrollController: scrollController,
@@ -211,11 +213,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     super.initState();
   }
 
-  @override
-  void dispose() {
-    scrollController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   scrollController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -224,13 +226,13 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
       builder: (BuildContext context, Widget? child) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 400),
-          height: 90.zH,
+          height: 90.h,
           child: CustomPaint(
             painter: BottomBarPainter(
               color: Colors.black,
             ),
             child: Container(
-              padding: const EdgeInsets.only(bottom: 20, top: 10),
+              padding: EdgeInsets.only(bottom: 20, top: 10),
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
                 boxShadow: const [
@@ -240,7 +242,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
               ),
               child: SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  padding: EdgeInsets.symmetric(horizontal: 0.w),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: List.generate(widget.items.length, (index) {
@@ -252,9 +254,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                         },
                         child: Padding(
                           padding: index == index1
-                              ? EdgeInsets.only(right: 30.zW)
+                              ? EdgeInsets.only(right: 30.w)
                               : index == index2
-                                  ? EdgeInsets.only(left: 60.zW)
+                                  ? EdgeInsets.only(left: 60.w)
                                   : EdgeInsets.zero,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -262,7 +264,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                               Expanded(
                                 child: SvgPicture.asset(
                                   widget.items[index].image,
-                                  height: widget.items[index].height * 1.8.zH,
+                                  height: widget.items[index].height * 1.8.h,
                                   // color: context.read<ThemeCubit>().isDarkTheme
                                   //     ? Colors.white
                                   //     : null,

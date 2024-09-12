@@ -43,7 +43,7 @@ class TransferMoneyView extends StatelessWidget {
             style: Styles.mediumText(
                 color: AppColors.PRIMARY_COLOR, fontWeight: FontWeight.bold),
           ),
-          const Sizer(),
+          Sizer(),
           FormTextField(
             hint: 'Payment Address',
             action: (v) {},
@@ -54,7 +54,7 @@ class TransferMoneyView extends StatelessWidget {
                   Label(
                       text: '@49hub',
                       style: Styles.mediumText(fontWeight: FontWeight.bold)),
-                  const Sizer(
+                  Sizer(
                     width: 5,
                   ),
                   IconAppButton(
@@ -64,7 +64,7 @@ class TransferMoneyView extends StatelessWidget {
               ),
             ),
           ),
-          const Sizer(),
+          Sizer(),
           FormTextField(
             hint: 'Amount',
             type: TextInputType.number,
@@ -78,7 +78,7 @@ class TransferMoneyView extends StatelessWidget {
               ],
             ),
           ),
-          const Sizer(),
+          Sizer(),
           AppButton(
               label: 'Confirm', onPressed: () => context.push(Routes.PAYMENT)),
         ],

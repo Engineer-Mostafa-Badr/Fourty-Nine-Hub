@@ -49,7 +49,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
           return Column(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.zW),
+                padding: EdgeInsets.symmetric(horizontal: 10.w),
                 child: Row(
                   children: [
                     _BaseIcon(
@@ -60,7 +60,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                     ),
                     const Spacer(),
                     _BaseIcon(icon: Icons.plus_one_rounded, onTap: () {}),
-                    SizedBox(width: 20.zW),
+                    SizedBox(width: 20.h),
                     _BaseIcon(
                       icon: Icons.edit,
                       onTap: () async {
@@ -77,7 +77,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                         ).then((value) async {
                           if (editedImage != null) {
                             _media[_selectedIndex] =
-                            await _convertUint8ListToFile(editedImage!);
+                                await _convertUint8ListToFile(editedImage!);
                             setState(() {});
                           }
                         });
@@ -101,12 +101,12 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                 ),
               ),
               SizedBox(
-                height: 150.zW,
+                height: 150.h.w,
                 child: ListView.separated(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   scrollDirection: Axis.horizontal,
                   itemCount: _media.length,
-                  separatorBuilder: (context, index) => const Sizer(),
+                  separatorBuilder: (context, index) => Sizer(),
                   itemBuilder: (context, index) {
                     CliLogger.info('building index: $index');
                     final file = _media[index];
@@ -129,7 +129,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                               baseColor: Colors.grey[300]!,
                               highlightColor: Colors.grey[100]!,
                               child: Container(
-                                width: 150.zW,
+                                width: 150.h,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
@@ -193,7 +193,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
         }
       },
       child: Container(
-        width: 150.zW,
+        width: 150.h,
         decoration: BoxDecoration(
           border: _selectedIndex == index
               ? Border.all(color: Colors.white, width: 3)
@@ -203,21 +203,21 @@ class _MediaSliderViewState extends State<MediaSliderView> {
         ),
         child: isPhoto
             ? index == _selectedIndex
-            ? const Center(
-          child: Icon(
-            Icons.delete,
-            color: Colors.white,
-          ),
-        )
-            : null
+                ? const Center(
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
+                  )
+                : null
             : Center(
-          child: Icon(
-            _selectedIndex == index
-                ? Icons.delete
-                : Icons.play_arrow_rounded,
-            color: Colors.white,
-          ),
-        ),
+                child: Icon(
+                  _selectedIndex == index
+                      ? Icons.delete
+                      : Icons.play_arrow_rounded,
+                  color: Colors.white,
+                ),
+              ),
       ),
     );
   }
@@ -276,7 +276,7 @@ class _TrimmerViewState extends State<_TrimmerView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20.zH),
+      padding: EdgeInsets.symmetric(vertical: 20.h.h),
       color: Colors.black,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -291,16 +291,16 @@ class _TrimmerViewState extends State<_TrimmerView> {
 
           Expanded(
             child: InkWell(
-                onTap: () async {
-                  // bool playbackState = await _trimmer.videoPlaybackControl(
-                  //   startValue: _startValue,
-                  //   endValue: _endValue,
-                  // );
-                  // setState(() {
-                  //   _isPlaying = playbackState;
-                  // });
-                },
-                // child: VideoViewer(trimmer: _trimmer)
+              onTap: () async {
+                // bool playbackState = await _trimmer.videoPlaybackControl(
+                //   startValue: _startValue,
+                //   endValue: _endValue,
+                // );
+                // setState(() {
+                //   _isPlaying = playbackState;
+                // });
+              },
+              // child: VideoViewer(trimmer: _trimmer)
             ),
           ),
           Row(
@@ -318,11 +318,11 @@ class _TrimmerViewState extends State<_TrimmerView> {
               //         setState(() => _isPlaying = value),
               //   ),
               // ),
-              SizedBox(width: 5.zW),
+              SizedBox(width: 5.h),
               Center(child: _BaseIcon(icon: Icons.check, onTap: _saveVideo)),
             ],
           ),
-          // const Sizer(),
+          // Sizer(),
           // ElevatedAppButton(
           //   onPressed: () async {
           //     if (_progressVisibility) {

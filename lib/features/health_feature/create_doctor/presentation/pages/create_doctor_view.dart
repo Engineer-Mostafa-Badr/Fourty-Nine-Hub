@@ -24,6 +24,7 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/presentation
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 
@@ -54,7 +55,7 @@ class CreateDoctorView extends StatelessWidget {
       child: Scaffold(
         appBar: const HomeAppbar(),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(15.0),
+          padding: EdgeInsets.all(15.0),
           child: Form(
             key: context.read<CreateDoctorCubit>().formKey,
             child: Column(
@@ -64,27 +65,27 @@ class CreateDoctorView extends StatelessWidget {
                     text: Labels.doctor,
                     style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
                 const CreateDoctorSubcategoryDropdown(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 CreateDoctorOptionsCheckbox(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorNameField(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorProfilePhotoPicker(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorIDPhotoPicker(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 CreateDoctorIDExpiryDatePicker(
                   onDateSelected: (date) {
                     context.read<CreateDoctorCubit>().pickIDExpiryDate(date!);
                   },
                 ),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorLicensePhotoPicker(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorLicenseExpiryDatePicker(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorDescriptionField(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 CreateDoctorGovernorateDropdown(
                   onSelected: (value) {
                     if (value != null) {
@@ -94,25 +95,25 @@ class CreateDoctorView extends StatelessWidget {
                     }
                   },
                 ),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorCitiesDropdowns(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorAddressField(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorClinicTimeTable(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorCallTimeTable(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorHomeVisitTimeTable(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const AppInfoText(
                     text:
                         "The application does not deduct any percentage from the service provider."),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const AppInfoText(
                     text:
                         'You will get EGP 3,650 per year if you subscribe daily.'),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorSubmitButton(),
               ],
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -130,12 +131,12 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                             builderDelegate:
                                 PagedChildBuilderDelegate<CommentEntity>(
                               noItemsFoundIndicatorBuilder: (context) {
-                                return const Center(
+                                return  Center(
                                   child: Text(
                                     "No Comments",
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 18,
+                                      fontSize: 18.sp,
                                     ),
                                   ),
                                 );
@@ -201,20 +202,33 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                       color: Colors.white,
                     ),
                     child: Row(children: [
-                      const ProfileImage(accountId: 0, userId: '',),
-                      const Sizer(),
+                      ProfileImage(
+                        accountId: 0,
+                        userId: state.postDetails?.user.id,
+                        imageURL: user?.profilePicture,
+                        fromProfile: true,
+                      ),
+                      Sizer(),
                       Expanded(
-                          child: FormTextField(
-                              hint: 'Type your comment ....',
-                              height: kToolbarHeight * .7,
-                              action: (v) {
-                                setState(() {});
-                              },
-                              controller: commentTextController)),
-                      const Sizer(),
+                          child: TextFormField(
+                        maxLines: null,
+                        controller: commentTextController,
+                        onChanged: (v) {
+                          setState(() {});
+                        },
+                        style: Styles.headerText(fontSize: 26.sp),
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          contentPadding: EdgeInsets.all(5),
+                          hintText: 'Type your comment ....',
+                          hintStyle: Styles.mediumText(),
+                        ),
+                      )),
+                      Sizer(),
                       if (commentTextController.text.isNotEmpty)
                         IconAppButton(
                           icon: Icons.send,
+                          size: 20,
                           isCircle: true,
                           onPressed: () async {
                             CommentEntity data = await widget.onAddComment(
@@ -293,7 +307,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
         ),
         if (comment.repliesCount != 0)
           Container(
-              margin: const EdgeInsets.only(left: 30),
+              margin: EdgeInsets.only(left: 30),
               child: TextAppButton(
                   label: 'show ${comment.repliesCount} replies',
                   onPressed: () {}))

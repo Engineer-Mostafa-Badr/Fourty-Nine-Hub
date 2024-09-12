@@ -27,14 +27,14 @@ class RestaurantOrderCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildRestaurantInfoWidget(),
-          const Sizer(),
+          Sizer(),
           _buildAddressWidget(),
           Label(
             text: 'Meals',
             style: Styles.mediumText(fontWeight: FontWeight.bold),
           ),
           _buildMealsWidget(),
-          const Sizer(),
+          Sizer(),
           Row(
             children: [
               Expanded(
@@ -47,7 +47,7 @@ class RestaurantOrderCard extends StatelessWidget {
                           subTitle: 'Do you want to approve this request?',
                           action: () => (int v) {},
                           context: context))),
-              const Sizer(),
+              Sizer(),
               Expanded(
                   child: AppButton(
                       icon: Icons.clear,
@@ -120,7 +120,7 @@ class RestaurantOrderCard extends StatelessWidget {
             radius: 10,
             source:
                 NetworkImage(item.user?.image ?? UIConst.profilePlaceHolder)),
-        const Sizer(),
+        Sizer(),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

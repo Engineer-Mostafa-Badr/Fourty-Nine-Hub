@@ -20,6 +20,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
 import '../cubit/meal_cubit/restaurants_list_cubit.dart';
 import '../widgets/restaurant_card.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RestaurantsListsView extends StatelessWidget {
   const RestaurantsListsView({super.key});
@@ -28,168 +29,171 @@ class RestaurantsListsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-  create: (context) => serviceLocator<RestaurantsListCubit>(),
-  child: SharedScaffold(
-        mainCategoryId: 1,
-        body: RefreshIndicator(
-          onRefresh: () async =>
-              context.read<RestaurantsListCubit>().loadData(),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
-              builder: (context, state) {
-                if (state.isLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  );
-                }
-                return context.watch<RestaurantsListCubit>().user == null
-                    ? Center(
-                        child: Label(
-                        text: LocaleKeys.needToLogin.tr(),
-                      ))
-                    : Stack(
-                        children: [
-                          ListView(
-                            children: [
-                              const MealBanner(),
-                              Visibility(
-                                visible:
-                                    state.isResturant?.isRestaurant == false,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    if (context.read<UserCubit>().isLoggedIn) {
-                                      context.push(Routes.CREATERESTURANT);
-                                    } else {
-                                      context.push(Routes.REGISTER);
-                                    }
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5.0),
-                                    child: Text(
-                                      LocaleKeys
-                                          .youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove
-                                          .tr(),
-                                      style: Styles.mediumText(
-                                        color: Colors.red,
+        create: (context) => serviceLocator<RestaurantsListCubit>(),
+        child: SharedScaffold(
+          mainCategoryId: 1,
+          body: RefreshIndicator(
+            onRefresh: () async =>
+                context.read<RestaurantsListCubit>().loadData(),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
+                builder: (context, state) {
+                  if (state.isLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    );
+                  }
+                  return context.watch<RestaurantsListCubit>().user == null
+                      ? Center(
+                          child: Label(
+                          text: LocaleKeys.needToLogin.tr(),
+                        ))
+                      : Stack(
+                          children: [
+                            ListView(
+                              children: [
+                                const MealBanner(),
+                                Visibility(
+                                  visible:
+                                      state.isResturant?.isRestaurant == false,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      if (context
+                                          .read<UserCubit>()
+                                          .isLoggedIn) {
+                                        context.push(Routes.CREATERESTURANT);
+                                      } else {
+                                        context.push(Routes.REGISTER);
+                                      }
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5.0),
+                                      child: Text(
+                                        LocaleKeys
+                                            .youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove
+                                            .tr(),
+                                        style: Styles.mediumText(
+                                          color: Colors.red,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              const Sizer(),
-                              Visibility(
-                                  visible: (state.isResturant?.isRestaurant ??
-                                          false) &&
-                                      (state.isResturant?.approved ?? false),
-                                  child: const ResturantDashboardButton()),
-                              const Sizer(),
-                              GestureDetector(
-                                onTap: () {
-                                  if (context.read<UserCubit>().isLoggedIn) {
-                                    context.push(Routes.SEARCHMEALS);
-                                  } else {
-                                    context.push(Routes.REGISTER);
-                                  }
-                                },
-                                child: Container(
-                                    alignment: Alignment.centerLeft,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    height: 36,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                          width: .5, color: Colors.grey),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(LocaleKeys.search.tr()),
-                                        const Icon(Icons.search,
-                                            color: Colors.grey),
-                                      ],
-                                    )),
-                              ),
-                              const Sizer(),
-                              if (state.mealCategories?.isNotEmpty ?? false)
-                                const MealCategories(),
-                              if (state.loadingSubCategories) ...[
-                                Shimmer.fromColors(
-                                    baseColor: Colors.grey[100]!,
-                                    highlightColor: Colors.white,
-                                    child: Row(
-                                      children: List.generate(
-                                        2,
-                                        (index) => Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.2,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.2,
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                        ),
+                                Sizer(),
+                                Visibility(
+                                    visible: (state.isResturant?.isRestaurant ??
+                                            false) &&
+                                        (state.isResturant?.approved ?? false),
+                                    child: const ResturantDashboardButton()),
+                                Sizer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (context.read<UserCubit>().isLoggedIn) {
+                                      context.push(Routes.SEARCHMEALS);
+                                    } else {
+                                      context.push(Routes.REGISTER);
+                                    }
+                                  },
+                                  child: Container(
+                                      alignment: Alignment.centerLeft,
+                                      padding:  EdgeInsets.symmetric(
+                                          horizontal: 10.w),
+                                      height: 36.h,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            width: .5, color: Colors.grey),
                                       ),
-                                    ))
-                              ],
-                              if ((state.subCategories?.isNotEmpty ?? false) &&
-                                  state.isSuccess) ...[
-                                Label(
-                                  text: LocaleKeys.restaurantsForSelectedMeal
-                                      .tr(),
-                                  style: Styles.headerText(),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(LocaleKeys.search.tr()),
+                                          const Icon(Icons.search,
+                                              color: Colors.grey),
+                                        ],
+                                      )),
                                 ),
-                                const Sizer(),
-                                _buildSubCatigoriesRestaurants(),
+                                Sizer(),
+                                if (state.mealCategories?.isNotEmpty ?? false)
+                                  const MealCategories(),
+                                if (state.loadingSubCategories) ...[
+                                  Shimmer.fromColors(
+                                      baseColor: Colors.grey[100]!,
+                                      highlightColor: Colors.white,
+                                      child: Row(
+                                        children: List.generate(
+                                          2,
+                                          (index) => Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.2,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.2,
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                          ),
+                                        ),
+                                      ))
+                                ],
+                                if ((state.subCategories?.isNotEmpty ??
+                                        false) &&
+                                    state.isSuccess) ...[
+                                  Label(
+                                    text: LocaleKeys.restaurantsForSelectedMeal
+                                        .tr(),
+                                    style: Styles.headerText(),
+                                  ),
+                                  Sizer(),
+                                  _buildSubCatigoriesRestaurants(),
+                                ],
+                                Sizer(),
+                                Sizer(),
+                                if ((state.allRestaurant?.isNotEmpty ??
+                                    false)) ...[
+                                  Label(
+                                      text: LocaleKeys.allRestaurants.tr(),
+                                      style: Styles.headerText()),
+                                  Sizer(),
+                                  _buildAllRestaurants(),
+                                ],
                               ],
-                              const Sizer(),
-                              const Sizer(),
-                              if ((state.allRestaurant?.isNotEmpty ??
-                                  false)) ...[
-                                Label(
-                                    text: LocaleKeys.allRestaurants.tr(),
-                                    style: Styles.headerText()),
-                                const Sizer(),
-                                _buildAllRestaurants(),
-                              ],
-                            ],
-                          ),
+                            ),
 
-                          /// numOfRestaurants
-                          if (state.numOfRestaurants != null)
-                            Positioned(
-                              bottom: 10,
-                              right: 10,
-                              child: FloatingActionButton(
-                                tooltip: LocaleKeys.restaurants.tr(),
-                                backgroundColor: AppColors.PRIMARY_COLOR,
-                                onPressed: () {},
-                                child: Text(
-                                  "${state.numOfRestaurants}",
-                                  style: Styles.mediumText(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                            /// numOfRestaurants
+                            if (state.numOfRestaurants != null)
+                              Positioned(
+                                bottom: 10,
+                                right: 10,
+                                child: FloatingActionButton(
+                                  tooltip: LocaleKeys.restaurants.tr(),
+                                  backgroundColor: AppColors.PRIMARY_COLOR,
+                                  onPressed: () {},
+                                  child: Text(
+                                    "${state.numOfRestaurants}",
+                                    style: Styles.mediumText(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                              ),
-                            )
-                        ],
-                      );
-              },
+                              )
+                          ],
+                        );
+                },
+              ),
             ),
           ),
         ),
       ),
-),
     );
   }
 
@@ -203,7 +207,7 @@ class RestaurantsListsView extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) => SubCatigoriesRestaurantCard(
                   item: state.subCategories?[index]),
-              separatorBuilder: (context, index) => const Sizer(),
+              separatorBuilder: (context, index) => Sizer(),
               itemCount: state.subCategories?.length ?? 0));
     });
   }
@@ -218,7 +222,7 @@ class RestaurantsListsView extends StatelessWidget {
                 isVert: false,
                 item: state.allRestaurant![index],
               ),
-          separatorBuilder: (context, index) => const Sizer(),
+          separatorBuilder: (context, index) => Sizer(),
           itemCount: state.allRestaurant?.length ?? 0);
     });
   }

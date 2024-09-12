@@ -28,6 +28,7 @@ import '../features/account_taps/account/presentation/cubit/managers/favourite_a
 import '../features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import '../features/account_taps/lists/presentation/cubit/lists_cubit.dart';
 import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
+import '../features/account_taps/wallet/domain/usecases/add_subscribe_use_case.dart';
 import '../features/account_taps/wallet/domain/usecases/get_subscription_use_case.dart';
 import '../features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import '../features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
@@ -84,6 +85,8 @@ class AccountServiceLocator {
             () => SubCategoryUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<DeleteSubscriptionUseCase>(
             () => DeleteSubscriptionUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<AddSubscriptionUseCase>(
+            () => AddSubscriptionUseCase(serviceLocator()));
 
     serviceLocator.registerFactory<FavouriteAdsCubit>(
             () =>
@@ -92,11 +95,11 @@ class AccountServiceLocator {
 
     serviceLocator.registerFactory<FavouriteSubCategoryCubit>(
             () =>
-        FavouriteSubCategoryCubit(serviceLocator())
+            FavouriteSubCategoryCubit(serviceLocator(),serviceLocator())
           ..loadData());
     serviceLocator.registerFactory<FavouriteCategoryCubit>(
             () =>
-        FavouriteCategoryCubit(serviceLocator())
+        FavouriteCategoryCubit(serviceLocator(),serviceLocator())
           ..loadData());
     serviceLocator.registerFactory<ShareAppCubit>(() => ShareAppCubit());
 
@@ -119,16 +122,9 @@ class AccountServiceLocator {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
     )
       ..loadData());
-    serviceLocator.registerFactory<WalletCubit>(() => WalletCubit(
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-        )..loadData());
 
     serviceLocator.registerFactory<GiftCubit>(() => GiftCubit(
           serviceLocator(),

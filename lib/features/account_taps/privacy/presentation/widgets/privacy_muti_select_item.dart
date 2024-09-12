@@ -64,7 +64,7 @@ class PrivacyMultiSelectItem extends StatelessWidget {
           }
         },
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0),
           child: Row(
             children: [
               Expanded(
@@ -73,7 +73,7 @@ class PrivacyMultiSelectItem extends StatelessWidget {
               Row(
                 children: [
                   Label(text: getPrivacyName()),
-                  const SizedBox(
+                  SizedBox(
                     width: 10,
                   ),
                   Icon(
@@ -82,7 +82,7 @@ class PrivacyMultiSelectItem extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(
+              SizedBox(
                 width: 15,
               ),
             ],

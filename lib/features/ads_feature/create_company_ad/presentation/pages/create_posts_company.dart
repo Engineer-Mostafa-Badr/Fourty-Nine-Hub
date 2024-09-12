@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/functions/global/upload_file.dart';
@@ -12,8 +11,10 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import '../../../../social_media/create_post/presentation/widgets/image_details.dart';
@@ -33,7 +34,7 @@ class CreatePostCompany extends StatefulWidget {
   final bool picture;
   final String title;
   final String type;
-  final int totalPrice;
+  final num totalPrice;
 
   @override
   State<CreatePostCompany> createState() => _CreatePostViewState();
@@ -70,7 +71,10 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                   showSuccessMessage(
                       context, LocaleKeys.postSuccessfully.localize);
 
-                  Navigator.of(context).pop();
+                  context.pop();
+                  context.pop();
+
+                  context.push(Routes.CREATECOMPANYAD);
                 }
               },
               builder: (BuildContext context, Object? state) {
@@ -89,18 +93,22 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                               context
                                   .read<CreateCompanyAdCubit>()
                                   .addPostCompanyAdvertise(
-                                  mediaIds: widget.picture ? controller
-                                      .selectedImages!.isNotEmpty ?
-                                  controller.selectedImages : showSuccessMessage(
-                                    context, 'Image not selected',
-                                    color: AppColors.SECONDARY_COLOR,
-                                    icon: Icons.error,)
-                                      :null,
-                                type: widget.type,
-                                post: widget.text
-                                ? postContentTextController.text
-                                    : null,
-                                  totalPrice: 10,
+                                    mediaIds: widget.picture
+                                        ? controller.selectedImages!.isNotEmpty
+                                            ? controller.selectedImages
+                                            : showSuccessMessage(
+                                                context,
+                                                'Image not selected',
+                                                color:
+                                                    AppColors.SECONDARY_COLOR,
+                                                icon: Icons.error,
+                                              )
+                                        : null,
+                                    type: widget.type,
+                                    post: widget.text
+                                        ? postContentTextController.text
+                                        : null,
+                                    totalPrice: 10,
                                   );
                               // CompanyAdvertiseCubit.get(context)
                               //     .addPostCompanyAdvertise(
@@ -175,8 +183,8 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                     );
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.all(10),
-                                    margin: const EdgeInsets.all(10),
+                                    padding: EdgeInsets.all(10),
+                                    margin: EdgeInsets.all(10),
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                       color: Theme.of(context).primaryColor,
@@ -209,7 +217,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
 
   Widget _buildCreatePost() {
     return Container(
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.all(10),
         // color: Colors.white,
         child: TextFormField(
           maxLines: 4,
@@ -241,7 +249,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
       return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(10),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: state.images!.length == 1 ? 1 : 2),
           itemCount: state.images!.length < 4 ? state.images!.length : 4,
@@ -274,9 +282,9 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                     Stack(
                       children: [
                         Container(
-                          margin: const EdgeInsetsDirectional.only(
-                              end: 10, bottom: 10),
-                          padding: const EdgeInsets.all(10),
+                          margin:
+                              EdgeInsetsDirectional.only(end: 10, bottom: 10),
+                          padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             image: DecorationImage(
@@ -289,9 +297,9 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                         ),
                         if (index == 3 && state.images!.length > 4)
                           Container(
-                            margin: const EdgeInsetsDirectional.only(
-                                end: 10, bottom: 10),
-                            // padding: const EdgeInsets.all(10),
+                            margin:
+                                EdgeInsetsDirectional.only(end: 10, bottom: 10),
+                            // padding: EdgeInsets.all(10),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),

@@ -7,9 +7,10 @@ import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/localization/locales.dart';
 import '../../../../../res/style/styles.dart';
 import 'donut_chart_painter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BuildItemListView extends StatelessWidget {
-  const BuildItemListView({super.key, required this.model, required this.icon});
+  BuildItemListView({super.key, required this.model, required this.icon});
 
   final CompetitionData model;
   final IconData icon;
@@ -17,7 +18,8 @@ class BuildItemListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int count = model.countOfRequest!; // Replace with dynamic value if needed
-    int max = model.competitionId!.maxRequests!; // Replace with dynamic value if needed
+    int max = model
+        .competitionId!.maxRequests!; // Replace with dynamic value if needed
 
     // List of different icons to be displayed
 
@@ -34,19 +36,19 @@ class BuildItemListView extends StatelessWidget {
             ),
             const Spacer(),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(icon, color: Colors.grey, size: 30),
+              padding: EdgeInsets.all(8.0),
+              child: Icon(icon, color: Colors.grey, size: 26),
             ),
           ],
         ),
-        const SizedBox(
-          height: 10, // Space between the text and the row
+        SizedBox(
+          height: 10.h, // Space between the text and the row
         ),
         Row(
           children: [
             Expanded(
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+                padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 20),
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(12),
@@ -60,10 +62,10 @@ class BuildItemListView extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 5), // Adjust spacing between containers
+            SizedBox(width: 5), // Adjust spacing between containers
             Expanded(
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+                padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 20),
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(12),
@@ -77,7 +79,7 @@ class BuildItemListView extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 20), // Adjust spacing between containers
+            SizedBox(width: 20), // Adjust spacing between containers
             CustomPaint(
               size: const Size(20, 20), // Adjust the size as needed
               painter: DonutChartPainter(
@@ -86,14 +88,14 @@ class BuildItemListView extends StatelessWidget {
                 max: max,
               ),
             ),
-            const SizedBox(width: 20),
+            SizedBox(width: 20),
           ],
         ),
-        const SizedBox(
-          height: 10, // Space between the text and the row
+        SizedBox(
+          height: 10.h, // Space between the text and the row
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 5),
+          padding: EdgeInsets.only(left: 5),
           child: Text(
             context.locale == Locales.english
                 ? model.competitionId!.descriptionEn!
@@ -120,7 +122,7 @@ class BuildItemListView extends StatelessWidget {
 // import 'donut_chart_painter.dart';
 //
 // class BuildItemListView extends StatelessWidget {
-//   const BuildItemListView({super.key, required this.model});
+//    BuildItemListView({super.key, required this.model});
 //
 //   final CompetitionData model;
 //
@@ -141,18 +143,18 @@ class BuildItemListView extends StatelessWidget {
 //               style: Styles.headerText(),
 //             ),
 //
-//             const Icon(Icons.ac_unit_sharp)
+//              Icon(Icons.ac_unit_sharp)
 //           ],
 //         ),
-//         const SizedBox(
-//           height: 10, // Space between the text and the row
+//          SizedBox(
+//           height: 10.h, // Space between the text and the row
 //         ),
 //         Row(
 //           children: [
 //             Expanded(
 //               child: Container(
 //                 padding:
-//                     const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+//                      EdgeInsets.symmetric(vertical: 6.h, horizontal: 20),
 //                 decoration: BoxDecoration(
 //                   color: Theme.of(context).primaryColor,
 //                   borderRadius: BorderRadius.circular(12),
@@ -166,11 +168,11 @@ class BuildItemListView extends StatelessWidget {
 //                 ),
 //               ),
 //             ),
-//             const SizedBox(width: 5), // Adjust spacing between containers
+//              SizedBox(width: 5), // Adjust spacing between containers
 //             Expanded(
 //               child: Container(
 //                 padding:
-//                     const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+//                      EdgeInsets.symmetric(vertical: 6.h, horizontal: 20),
 //                 decoration: BoxDecoration(
 //                   color: Theme.of(context).primaryColor,
 //                   borderRadius: BorderRadius.circular(12),
@@ -184,23 +186,23 @@ class BuildItemListView extends StatelessWidget {
 //                 ),
 //               ),
 //             ),
-//             const SizedBox(width: 20), // Adjust spacing between containers
+//              SizedBox(width: 20), // Adjust spacing between containers
 //             CustomPaint(
-//               size: const Size(20, 20), // Adjust the size as needed
+//               size:  Size(20, 20), // Adjust the size as needed
 //               painter: DonutChartPainter(
 //                 context: context,
 //                 count: count,
 //                 max: max,
 //               ),
 //             ),
-//             const SizedBox(width: 20),
+//              SizedBox(width: 20),
 //           ],
 //         ),
-//         const SizedBox(
-//           height: 10, // Space between the text and the row
+//          SizedBox(
+//           height: 10.h, // Space between the text and the row
 //         ),
 //         Padding(
-//           padding: const EdgeInsets.only(left: 5),
+//           padding:  EdgeInsets.only(left: 5),
 //           child: Text(
 //             context.locale == Locales.english
 //                 ? model.competitionId!.descriptionEn!

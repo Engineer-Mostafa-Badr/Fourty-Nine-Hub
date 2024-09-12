@@ -11,7 +11,6 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/styles.dart';
 import '../widgets/competition_card.dart';
 import '../widgets/wallet_card_widget.dart';
@@ -26,7 +25,7 @@ class GiftWalletView extends StatelessWidget {
           label: LocaleKeys.gift.localize,
         ),
         body: BlocProvider<GiftCubit>(
-          create:(_)=>serviceLocator()..loadData(),
+          create:(_)=>serviceLocator(),
           child: BlocBuilder<GiftCubit, GiftState>(builder: (context, state) {
             return SingleChildScrollView(
               child: Padding(
@@ -38,7 +37,7 @@ class GiftWalletView extends StatelessWidget {
                       balance: '${state.gift?.giftWallet.amount ??''}',
                       type: WalletTypes.giftWallet,
                     ),
-                    const Sizer(),
+                    Sizer(),
                     Label(
                       text: LocaleKeys.competition.localize,
                       style: Styles.headerText(),

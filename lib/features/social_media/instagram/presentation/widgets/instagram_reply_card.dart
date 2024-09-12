@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -64,7 +65,7 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                       ? widget.reply.user.image
                       : null,
                 ),
-                const Sizer(),
+                Sizer(),
                 Expanded(
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +98,7 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                 ),
               ],
             ),
-            const Sizer(),
+            Sizer(),
             Label(
               textAlign: TextAlign.start,
               text: widget.reply.content,
@@ -113,15 +114,15 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                     onChanged: (v) {
                       setState(() {});
                     },
-                    style: Styles.headerText(fontSize: 26),
+                    style: Styles.headerText(fontSize: 26.sp),
                     decoration: InputDecoration(
                       fillColor: Colors.white,
-                      contentPadding: const EdgeInsets.all(5),
+                      contentPadding: EdgeInsets.all(5),
                       hintText: 'Type your reply ....',
                       hintStyle: Styles.mediumText(),
                     ),
                   )),
-                  const Sizer(),
+                  Sizer(),
                   if (editTextController.text.isNotEmpty)
                     IconAppButton(
                         icon: Icons.send,
@@ -140,7 +141,7 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                         })
                 ],
               ),
-            const Sizer(),
+            Sizer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -193,7 +194,7 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                 Label(text: '${widget.reply.loveCount}'),
               ],
             ),
-            const Sizer(),
+            Sizer(),
           ],
         );
       }),
@@ -227,7 +228,7 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                 icon: Icons.delete,
                 title: 'Delete Reply',
                 subTitle:
-                'Your comment will be deleted, and you cannot get it again',
+                    'Your comment will be deleted, and you cannot get it again',
                 onTap: () {
                   widget.onDeleteReply(widget.reply.id);
                 }),
@@ -248,10 +249,10 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
 
   Widget listTile(
       {required IconData icon,
-        Color? iconColor,
-        required String title,
-        required String subTitle,
-        required Function onTap}) {
+      Color? iconColor,
+      required String title,
+      required String subTitle,
+      required Function onTap}) {
     return ListTile(
       title: Label(text: title),
       onTap: () {

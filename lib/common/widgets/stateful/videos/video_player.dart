@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:video_player/video_player.dart';
 
@@ -113,7 +114,7 @@ class _ControlsOverlay extends StatelessWidget {
           duration: const Duration(milliseconds: 50),
           reverseDuration: const Duration(milliseconds: 200),
           child: controller.value.isPlaying
-              ? const SizedBox.shrink()
+              ? SizedBox.shrink()
               : const ColoredBox(
                   color: Colors.black26,
                   child: Center(
@@ -148,15 +149,15 @@ class _ControlsOverlay extends StatelessWidget {
                   )
               ];
             },
-            child: const Padding(
+            child: Padding(
               padding: EdgeInsets.symmetric(
                 // Using less vertical padding as the text is also longer
                 // horizontally, so it feels like it would need more spacing
                 // horizontally (matching the aspect ratio of the video).
-                vertical: 12,
+                vertical: 12.h,
                 horizontal: 16,
               ),
-              child: Text(''),
+              child: const Text(''),
             ),
           ),
         ),
@@ -177,15 +178,15 @@ class _ControlsOverlay extends StatelessWidget {
                   )
               ];
             },
-            child: const Padding(
+            child: Padding(
               padding: EdgeInsets.symmetric(
                 // Using less vertical padding as the text is also longer
                 // horizontally, so it feels like it would need more spacing
                 // horizontally (matching the aspect ratio of the video).
-                vertical: 12,
+                vertical: 12.h,
                 horizontal: 16,
               ),
-              child: Text(''),
+              child: const Text(''),
             ),
           ),
         ),

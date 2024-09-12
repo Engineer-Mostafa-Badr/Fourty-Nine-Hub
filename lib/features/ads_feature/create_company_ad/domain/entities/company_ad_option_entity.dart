@@ -1,13 +1,13 @@
 class CompanyAdOptionEntity {
-  final String userId;
-  final String advertisementType;
-  final String post;
-  final num totalPrice;
-  final bool isApproved;
-  final String endAt;
-  final String type;
-  final String id;
-  final String createdAt;
+  final String? userId;
+  final String? advertisementType;
+  final String? post;
+  final num? totalPrice;
+  final bool? isApproved;
+  final String? endAt;
+  final String? type;
+  final String? id;
+  final String? createdAt;
 
   CompanyAdOptionEntity(
       {required this.userId,

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -22,59 +23,59 @@ class SavedReelsView extends StatelessWidget {
       create: (_) => serviceLocator()..loadSaverReels(userData.id),
       child: BlocConsumer<InstagramCubit, InstagramState>(
           listener: (context, state) {
-            if (state.status == StateStatus.error) {
-              showErrorMessage(
-                context,
-                getFailureMessage(
-                  state.failure ??  UnknownFailure(''),
-                  context,
-                ),
-              );
-            }
-          }, builder: (context, state) {
+        if (state.status == StateStatus.error) {
+          showErrorMessage(
+            context,
+            getFailureMessage(
+              state.failure ?? UnknownFailure(''),
+              context,
+            ),
+          );
+        }
+      }, builder: (context, state) {
         final controller = context.read<InstagramCubit>();
         return PagedSliverList<int, PostEntity>(
           pagingController: controller.savedReelsPagingController,
           builderDelegate: PagedChildBuilderDelegate<PostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.savedReelsPagingController.itemList?.length);
-                return const Center(
+                return  Center(
                   child: Text(
                     "No Reels",
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 18,
+                      fontSize: 18.sp,
                     ),
                   ),
                 );
               },
               itemBuilder: (context, item, index) {
                 final post =
-                controller.savedReelsPagingController.itemList![index];
+                    controller.savedReelsPagingController.itemList![index];
                 print(post.videoMedia);
                 return state.status == StateStatus.success
                     ? Container(
-                    color: Colors.black,
-                    width: double.infinity,
-                    height: 400,
-                    child: InstagramReelCard(
-                      item: post,
-                      playVideo: false,
-                    ))
+                        color: Colors.black,
+                        width: double.infinity,
+                        height: 400.h,
+                        child: InstagramReelCard(
+                          item: post,
+                          playVideo: false,
+                        ))
                     : Center(
-                  child: Label(
-                      text: getFailureMessage(
-                        state.failure ??  UnknownFailure(''),
-                        context,
-                      )),
-                );
+                        child: Label(
+                            text: getFailureMessage(
+                          state.failure ?? UnknownFailure(''),
+                          context,
+                        )),
+                      );
               },
               noMoreItemsIndicatorBuilder: (context) => Container(),
               firstPageProgressIndicatorBuilder: (context) => Container(
-                  margin: const EdgeInsets.only(top: 150),
+                  margin: EdgeInsets.only(top: 150),
                   child: const CupertinoActivityIndicator()),
               newPageProgressIndicatorBuilder: (context) =>
-              const CupertinoActivityIndicator()),
+                  const CupertinoActivityIndicator()),
         );
       }),
     );

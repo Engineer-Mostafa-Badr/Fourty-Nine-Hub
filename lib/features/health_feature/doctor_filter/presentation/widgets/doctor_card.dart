@@ -15,6 +15,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateless/dynamic/rating_stars.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorCard extends StatelessWidget {
   final DoctorEntity doctor;
@@ -27,82 +28,89 @@ class DoctorCard extends StatelessWidget {
         context.push(Routes.VISITADOCTORDETAILS, extra: doctor.id);
       },
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
             color: AppColors.LIGHT_COLOR,
             border: Border.all(color: AppColors.LIGHT_GRAY_COLOR),
             borderRadius: BorderRadius.circular(10)),
         child: Column(
           children: [
-          Row(
-            children: [
-            Expanded(child:   Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            Row(
               children: [
-                ProfileImage(
-                  userId: '',
-                  accountId: 0,
-                  size: 25,
-                  imageURL: doctor.image,
-                ),
-                const Sizer(),
                 Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(toBeginningOfSentenceCase(doctor.fullName)??'', style: Styles.mediumText()),
-
-                            RatingStars(
-                              rating: doctor.rating.toDouble(),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )),
-              ],
-            ),),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-                decoration: BoxDecoration(
-                  color: doctor.isPremium ? Colors.black : Colors.white,
-                  borderRadius: BorderRadius.circular(20.0),
-                  border: Border.all(
-                    color: doctor.isPremium ? Colors.amber : Colors.grey,
-                    width: 2.0,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ProfileImage(
+                        userId: '',
+                        accountId: 0,
+                        size: 25,
+                        imageURL: doctor.image,
+                      ),
+                      Sizer(),
+                      Expanded(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  toBeginningOfSentenceCase(doctor.fullName) ??
+                                      '',
+                                  style: Styles.mediumText()),
+                              RatingStars(
+                                rating: doctor.rating.toDouble(),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
+                    ],
                   ),
-                  boxShadow: doctor.isPremium
-                      ? [
-                    BoxShadow(
-                      color: Colors.amber.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 8,
-                      offset: Offset(0, 3), // changes position of shadow
+                ),
+                Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.h),
+                  decoration: BoxDecoration(
+                    color: doctor.isPremium ? Colors.black : Colors.white,
+                    borderRadius: BorderRadius.circular(20.0),
+                    border: Border.all(
+                      color: doctor.isPremium ? Colors.amber : Colors.grey,
+                      width: 2.0,
                     ),
-                  ]
-                      : null,
-                ),
-                child: Text(
-                  doctor.isPremium ? "Premium" : "Regular",
-                  style: TextStyle(
-                    color: doctor.isPremium ? Colors.amber : Colors.grey,
-                    fontWeight: doctor.isPremium ? FontWeight.bold : FontWeight.normal,
-                    fontSize: 16.0,
+                    boxShadow: doctor.isPremium
+                        ? [
+                            BoxShadow(
+                              color: Colors.amber.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 8,
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
+                            ),
+                          ]
+                        : null,
+                  ),
+                  child: Text(
+                    doctor.isPremium ? "Premium" : "Regular",
+                    style: TextStyle(
+                      color: doctor.isPremium ? Colors.amber : Colors.grey,
+                      fontWeight: doctor.isPremium
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      fontSize: 16.sp,
+                    ),
                   ),
                 ),
-              ),
-
-            ],
-          ),
+              ],
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Icon(
                   FontAwesomeIcons.userDoctor,
                 ),
-                const Sizer(),
+                Sizer(),
                 Expanded(
                     child: ReadMoreLabel(
                   text: doctor.description,
@@ -115,7 +123,7 @@ class DoctorCard extends StatelessWidget {
                 const Icon(
                   Icons.attach_money_sharp,
                 ),
-                const Sizer(),
+                Sizer(),
                 Expanded(
                   child: Label(
                     text: '${Labels.fees}: ${doctor.priceToShow}',
@@ -125,7 +133,7 @@ class DoctorCard extends StatelessWidget {
               ],
             ),
             _buildWaitingTime,
-            const Sizer(),
+            Sizer(),
           ],
         ),
       ),
@@ -140,7 +148,7 @@ class DoctorCard extends StatelessWidget {
           const Icon(
             Icons.timer,
           ),
-          const Sizer(),
+          Sizer(),
           Expanded(
             child: Label(
               text:
@@ -151,7 +159,7 @@ class DoctorCard extends StatelessWidget {
         ],
       );
     } else {
-      return const SizedBox.shrink();
+      return SizedBox.shrink();
     }
   }
 }

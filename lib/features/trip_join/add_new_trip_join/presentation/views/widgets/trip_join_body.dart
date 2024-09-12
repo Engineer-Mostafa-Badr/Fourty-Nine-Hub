@@ -8,7 +8,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/trip_and_car_information_v2.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/trip_join_google_map.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/welcome_text.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TripJoinBody extends StatefulWidget {
   const TripJoinBody({
     super.key,
@@ -32,22 +32,22 @@ class _TripJoinBodyState extends State<TripJoinBody> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20.h),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ...welcomeText(),
-              // const Sizer(),
-              const Sizer(),
+              // Sizer(),
+              Sizer(),
               const TripJoinGoogleMap(),
-              const Sizer(height: 20),
+              Sizer(height: 20.h),
               // Text('Starting Point', style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
               const StartTextFieldAndFindButon(),
-              const Sizer(height: 20),
+              Sizer(height: 20.h),
               // Text('Destination Point', style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
               const DestinationTextFieldAndFindButon(),
-              const Sizer(height: 20),
+              Sizer(height: 20.h),
               Builder(builder: (context) {
                 context.watch<StartingLocationCubit>();
                 context.watch<DestinationLocationCubit>();

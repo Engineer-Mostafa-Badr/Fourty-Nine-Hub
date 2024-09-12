@@ -8,7 +8,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TripJoinGoogleMap extends StatefulWidget {
   const TripJoinGoogleMap({super.key});
 
@@ -73,7 +73,7 @@ class _TripJoinGoogleMapState extends State<TripJoinGoogleMap> {
       ],
       child: SizedBox(
         width: double.infinity,
-        height: 300,
+        height: 300.h,
         child: Builder(builder: (context) {
           final startingCubit = context.watch<StartingLocationCubit>();
           final destinationCubit = context.watch<DestinationLocationCubit>();

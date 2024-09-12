@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -16,7 +17,7 @@ class AdvertiseYourCompany extends StatelessWidget {
     return InkWell(
       onTap: () => context.push(Routes.CREATECOMPANYAD),
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        margin:  EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
@@ -27,7 +28,7 @@ class AdvertiseYourCompany extends StatelessWidget {
               FontAwesomeIcons.bullhorn,
               color: Colors.white,
             ),
-            const Sizer(),
+            Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,8 +38,8 @@ class AdvertiseYourCompany extends StatelessWidget {
                   style: Styles.mediumText(
                       color: Colors.white, fontWeight: FontWeight.bold),
                 ),
-                const Sizer(
-                  height: 5,
+                 Sizer(
+                  height: 5.h,
                 ),
                 Label(
                   text:

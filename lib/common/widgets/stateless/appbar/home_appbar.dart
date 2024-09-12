@@ -1,22 +1,17 @@
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/widgets/unread_notifications_builder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubit/notifications_cubit.dart';
-
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../core/utils/api_service.dart';
-import '../../../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../../features/notifications/data/repository/notification_repo_impl.dart';
-import '../../../../features/notifications/presentation/cubit/notifications_state.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -58,10 +53,10 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             InkWell(
               onTap: () {},
               child: SizedBox(
-                height: 50.zH,
-                width: 50.zW,
+                height: 50.h,
+                width: 50.h,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(5.zR),
+                  borderRadius: BorderRadius.circular(5.r),
                   child: Image(
                     image: AssetImage(Assets.icon),
                     fit: BoxFit.cover,
@@ -71,7 +66,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             ),
           // if (showLanguage)
 
-          if (isWithBackArrow) SizedBox(width: 20.zW),
+          if (isWithBackArrow) SizedBox(width: 20.w),
           if (isWithBackArrow)
             IconAppButton(
               onPressed: () => context.pop(),
@@ -80,24 +75,25 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             ),
           Expanded(
             child: Container(
-              height: 55.zH,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              height: 55.h,
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40.zR),
+                  borderRadius: BorderRadius.circular(40.r),
                   color: AppColors.AUTH_CONTAINER_COLOR),
               child: InkWell(
-                borderRadius: BorderRadius.circular(40.zR),
+                borderRadius: BorderRadius.circular(40.r),
                 onTap: () {
-                  showDialog(context: context, builder: (_)=>const SearchAppUsers());
+                  showDialog(
+                      context: context, builder: (_) => const SearchAppUsers());
                 },
                 child: Row(
                   children: [
                     Icon(
                       Icons.search,
-                      size: 30.zH,
+                      size: 30.h,
                       color: AppColors.QUANTITY_COLOR,
                     ),
-                    SizedBox(width: 10.zW),
+                    SizedBox(width: 10.h),
                     Expanded(
                       child: Label(
                           text: LocaleKeys.search.localize,
@@ -115,7 +111,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 child: Label(text: 'Register', style: Styles.mediumText())),
           if (language)
             Container(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
                 child: TextAppButton(
                     label: LocaleKeys.lang.tr(),
                     style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
@@ -130,53 +126,10 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             onTap: () {
               context.push(Routes.NOTIFICATIONS);
             },
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(
-                    Assets.notification,
-                    width: 30.zW,
-                    height: 35.zH,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                BlocProvider(
-                  create: (BuildContext context) => NotificationsCubit(
-                      NotificationRepoImpl(ApiService(Dio())))
-                    ..fetchNotification('app'),
-                  child: BlocBuilder<NotificationsCubit, NotificationsState>(
-                    builder: (BuildContext context, state) {
-                      if (state is NotificationsSuccessState) {
-                        return Positioned(
-                          top: 15.zH,
-                          right: 10.zW,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 3.zH,
-                              horizontal: 5.zW,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(20.zR),
-                            ),
-                            child: Label(
-                                text: context.read<UserCubit>().isLoggedIn
-                                    ? '${state.notificationModel.data!.docs!.length}'
-                                    : '0',
-                                style: Styles.smallText(color: Colors.white)),
-                          ),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                ),
-              ],
-            ),
+            child: const UnreadNotificationsBuilder(),
           ),
           SizedBox(
-            width: 10.zW,
+            width: 10.h,
           ),
         ],
       ),
@@ -188,5 +141,5 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kTextTabBarHeight * 2.zH);
+  Size get preferredSize => Size.fromHeight(kTextTabBarHeight * 2.h);
 }

@@ -128,7 +128,7 @@
 //                             ),
 //                       ),
 //                     )
-//                   : const SizedBox.shrink();
+//                   : SizedBox.shrink();
 
 //               if (displaySize.width < MediaQuery.of(context).size.width) {
 //                 ///  width < 1/2

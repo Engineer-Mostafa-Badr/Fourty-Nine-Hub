@@ -1,46 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
+import 'package:shimmer/shimmer.dart';
+import '../../../../../../common/models/public/pagination_params.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
-import '../../../../../../service_locator/service_locator.dart';
-import '../../cubit/create_company_ad_cubit.dart';
+import '../../../domain/entities/company_ad_entity.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomContainerAdvertise extends StatelessWidget {
-  const CustomContainerAdvertise(
-      {super.key,
-      required this.title,
-      required this.price,
-      required this.function,
-      required this.filter,
-      this.context, required this.numberOfAdvertises});
+  const CustomContainerAdvertise({
+    super.key,
+    required this.title,
+    required this.price,
+    required this.function,
+    required this.filter,
+    this.context,
+    required this.onTotalPriceUpdated, // New callback
+  });
 
   final String title;
-  final int price;
+  final num price;
   final Function function;
   final String filter;
-  final num numberOfAdvertises;
-  final context;
+  final BuildContext? context;
+  final ValueChanged<num> onTotalPriceUpdated; // New callback
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CreateCompanyAdCubit>(
-      create: (context) => serviceLocator()..getCompanyAdPosts(filter),
-      child: BlocBuilder<CreateCompanyAdCubit, CreateCompanyAdState>(
-          builder: (BuildContext context, CreateCompanyAdState state) {
-        // final numberOfAdvertises =
-        //     state.posts?.length ??0;
+    return PaginationView<CompanyAdEntity>(
+      loadingWidget: Shimmer.fromColors(
+        baseColor: Colors.grey[100]!,
+        highlightColor: Colors.white24,
+        child: Column(
+          children: List.generate(
+              1,
+              (index) => Padding(
+                    padding: EdgeInsets.only(bottom: 15.h),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * .15.h,
+                      width: double.infinity,
+                      margin: EdgeInsets.symmetric(horizontal: 10.w),
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      decoration: BoxDecoration(
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        borderRadius: BorderRadius.circular(20.r),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                    ),
+                  )),
+        ),
+      ),
+      build: (ScrollController scrollController, List<CompanyAdEntity> data) {
+        final numberOfAdvertises = data.length;
+        final totalPrice = price * numberOfAdvertises;
 
-       // final totalPrice = price * numberOfAdvertises;
+        // Notify the parent widget about the total price for this container
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          onTotalPriceUpdated(totalPrice);
+        });
 
         return GestureDetector(
           onTap: () {
             function();
           },
           child: Container(
-            margin: const EdgeInsetsDirectional.only(bottom: 20),
-            padding: const EdgeInsetsDirectional.symmetric(
-                vertical: 7, horizontal: 10),
+            margin: EdgeInsetsDirectional.only(bottom: 20),
+            padding: EdgeInsetsDirectional.symmetric(
+                vertical: 7.h, horizontal: 10.w),
             width: double.infinity,
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
@@ -53,127 +81,40 @@ class CustomContainerAdvertise extends StatelessWidget {
                   style: Styles.headerText(
                       color: Theme.of(context).scaffoldBackgroundColor),
                 ),
-                const SizedBox(width: 6),
-                //if (numberOfAdvertises > 0)
+                SizedBox(width: 6),
+                if (numberOfAdvertises > 0)
                   Text(
                     '($numberOfAdvertises)',
-                    //'(1)',
                     style: Styles.mediumText(
                         color: Theme.of(context).scaffoldBackgroundColor),
                   ),
                 const Spacer(),
-               // if (numberOfAdvertises > 0)
+                if (numberOfAdvertises > 0)
                   Text(
-                    '$price',
-                    //'2',
+                    '$totalPrice',
                     style: Styles.mediumText(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                    ),
+                        color: Theme.of(context).scaffoldBackgroundColor),
                   ),
                 IconButton(
                   onPressed: () {},
                   icon: Icon(
                     Icons.check_circle,
-                    color:  AppColors.SECONDARY_COLOR
-
-                    // color: numberOfAdvertises > 0
-                    //     ? AppColors.SECONDARY_COLOR
-                    //     : Colors.transparent,
+                    color: numberOfAdvertises > 0
+                        ? AppColors.SECONDARY_COLOR
+                        : Colors.transparent,
                   ),
                 ),
               ],
             ),
           ),
         );
-      }),
+      },
+      fetchData: (PaginationParams paginationParams) {
+        return context.read<CreateCompanyAdCubit>().getCompanyAdPosts(
+              filter,
+              params: paginationParams,
+            );
+      },
     );
   }
 }
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-//
-// import '../../../../../../res/style/app_colors.dart';
-// import '../../../../../../res/style/styles.dart';
-// import '../../../../../../service_locator/service_locator.dart';
-// import '../../../data/repositories/company_advertise_repo/company_advertise_repo_impl.dart';
-// import '../../cubit/company_advertise/company_advertise_cubit.dart';
-// import '../../cubit/company_advertise/company_advertise_state.dart';
-//
-// class CustomContainerAdvertise extends StatelessWidget {
-//   const CustomContainerAdvertise({super.key, required this.title, required this.price, required this.function, required this.filter, this.context});
-//
-//   final String title;
-//   final int price;
-//   final Function function;
-//   final String filter;
-//   final context;
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocProvider(
-//       create: (context) => CompanyAdvertiseCubit(
-//           serviceLocator.get<CompanyAdvertiseRepoImpl>())
-//         ..fetchAdvertiseCompany(context, filter),
-//       child: BlocBuilder<CompanyAdvertiseCubit, CompanyAdvertiseState>(
-//         builder: (BuildContext context, CompanyAdvertiseState state) {
-//           if (state is FetchAllCompanyAdvertiseSuccess) {
-//             final numberOfAdvertises =
-//                 state.dataLength;
-//
-//             final totalPrice = price * numberOfAdvertises;
-//
-//             return GestureDetector(
-//               onTap: () {
-//                 function();
-//               },
-//               child: Container(
-//                 margin: const EdgeInsetsDirectional.only(bottom: 20),
-//                 padding: const EdgeInsetsDirectional.symmetric(
-//                     vertical: 7, horizontal: 10),
-//                 width: double.infinity,
-//                 decoration: BoxDecoration(
-//                   color: Theme.of(context).primaryColor,
-//                   borderRadius: BorderRadius.circular(20),
-//                 ),
-//                 child: Row(
-//                   children: [
-//                     Text(
-//                       title,
-//                       style: Styles.headerText(
-//                           color: Theme.of(context).scaffoldBackgroundColor),
-//                     ),
-//                     const SizedBox(width: 6),
-//                     if (numberOfAdvertises > 0)
-//                       Text(
-//                         '($numberOfAdvertises)',
-//                         style: Styles.mediumText(
-//                             color: Theme.of(context).scaffoldBackgroundColor),
-//                       ),
-//                     const Spacer(),
-//                     if (numberOfAdvertises > 0)
-//                       Text(
-//                         '$totalPrice',
-//                         style: Styles.mediumText(
-//                           color: Theme.of(context).scaffoldBackgroundColor,
-//                         ),
-//                       ),
-//                     IconButton(
-//                       onPressed: () {},
-//                       icon: Icon(
-//                         Icons.check_circle,
-//                         color: numberOfAdvertises > 0
-//                             ? AppColors.SECONDARY_COLOR
-//                             : Colors.transparent,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             );
-//           }
-//           return const SizedBox.shrink();
-//         },
-//       ),
-//     );
-//   }
-// }

@@ -14,10 +14,9 @@ class NestedAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
-      controller: scrollController,
+        controller: scrollController,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return appBars;
-
         },
         body: body);
   }

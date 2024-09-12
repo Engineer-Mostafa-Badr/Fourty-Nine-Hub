@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'mix_voices.dart';
 import 'my_voice.dart';
 import 'other_voice.dart';
@@ -72,8 +72,8 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
               },
             ),
           ),
-          const SizedBox(
-            height: 20,
+          SizedBox(
+            height: 20.h,
           ),
         ],
       ),
@@ -97,7 +97,7 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
                 child: Text(
                   options[index],
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 18.sp,
                     color: isSelected ? Colors.white : Colors.grey,
                     fontWeight:
                         isSelected ? FontWeight.bold : FontWeight.normal,
@@ -214,7 +214,7 @@ class HorizontalTextWheelPickerState extends State<HorizontalTextWheelPicker> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 50,
+      height: 50.h,
       child: RotatedBox(
         quarterTurns: 3,
         child: ListWheelScrollView.useDelegate(
@@ -239,7 +239,7 @@ class HorizontalTextWheelPickerState extends State<HorizontalTextWheelPicker> {
                     child: Text(
                       widget.options[index],
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 20.sp,
                         color: isSelected ? Colors.white : Colors.white38,
                       ),
                     ),

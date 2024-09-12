@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -65,7 +66,7 @@ class FacebookBody extends StatelessWidget {
                   children: [
                     Container(
                       width: double.infinity,
-                      height: 5,
+                      height: 5.h,
                       color: AppColors.LIGHT_GRAY_COLOR,
                     ),
                     const Stories(),
@@ -82,12 +83,12 @@ class FacebookBody extends StatelessWidget {
                     pagingController: controller.feedPagingController,
                     builderDelegate: PagedChildBuilderDelegate<PostEntity>(
                       noItemsFoundIndicatorBuilder: (context) {
-                        return const Center(
+                        return  Center(
                           child: Text(
                             "No Posts",
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 18,
+                              fontSize: 18.sp,
                             ),
                           ),
                         );
@@ -255,7 +256,7 @@ class FacebookBody extends StatelessWidget {
                             ),
                             Container(
                               width: double.infinity,
-                              height: 5,
+                              height: 5.h,
                               color: AppColors.TXTFIELD_GRAY_COLOR2,
                             ),
                           ],

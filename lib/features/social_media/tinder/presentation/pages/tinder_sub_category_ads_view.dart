@@ -62,7 +62,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
           return tinderCubit.state.mainCategoryResponse?.data != null
               ? Column(
                   children: [
-                    const Sizer(),
+                    Sizer(),
                     Container(
                       padding: EdgeInsets.symmetric(
                           vertical: padding, horizontal: padding),
@@ -88,12 +88,14 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                                   child: Icon(
                                     Icons.favorite,
                                     size: iconSize,
-                                    color: widget.params.subCategory.isFavorite
-                                        ? AppColors.SECONDARY_COLOR
-                                        : AppColors.GREY_DARK_COLOR,
+                                    color:
+                                        widget.params.subCategory.isFavorite ==
+                                                true
+                                            ? AppColors.SECONDARY_COLOR
+                                            : AppColors.GREY_DARK_COLOR,
                                   ),
                                 ),
-                                const Sizer(),
+                                Sizer(),
                                 Text(
                                   '${tinderCubit.state.mainCategoryResponse!.data.mainCategory.numberOfAds} ${Labels.ads}',
                                   style: Styles.mediumText(
@@ -120,13 +122,13 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                         ],
                       ),
                     ),
-                    const Sizer(),
+                    Sizer(),
                     Label(
                       text: widget.params.subCategory.name,
                       style: Styles.headerText(
                           fontSize: textSize, color: AppColors.SECONDARY_COLOR),
                     ),
-                    const Sizer(),
+                    Sizer(),
                     Builder(builder: (context) {
                       String provider =
                           getServiceName(widget.params.subCategory.name);

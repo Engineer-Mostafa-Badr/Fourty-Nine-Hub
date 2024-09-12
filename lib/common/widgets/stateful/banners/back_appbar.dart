@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/style/styles.dart';
 import '../../stateless/labels/label.dart';
@@ -11,14 +11,18 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? iconColor;
   final bool? centerTitle;
   final List<Widget>? actions;
+  final Widget? leading;
 
-  const BackAppBar(
-      {super.key,
-      this.automaticallyImplyLeading = true,
-      this.label,
-      this.backColor,
-      this.iconColor,
-      this.actions, this.centerTitle=false});
+  const BackAppBar({
+    super.key,
+    this.automaticallyImplyLeading = true,
+    this.label,
+    this.backColor,
+    this.iconColor,
+    this.actions,
+    this.centerTitle = false,
+    this.leading,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +30,15 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: centerTitle,
       automaticallyImplyLeading: automaticallyImplyLeading,
-      leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            size: 40.zW,
-          )),
+      leading: leading ??
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(
+                Icons.arrow_back,
+                size: 40.w,
+              )),
       title: label != null
           ? Label(text: label ?? '', style: Styles.headerText())
           : null,

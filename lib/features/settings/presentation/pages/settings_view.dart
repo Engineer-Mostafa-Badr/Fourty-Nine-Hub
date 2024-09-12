@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -48,20 +48,20 @@ class SettingsView extends StatelessWidget {
                 return SwitchListTile(
                   secondary: Image.asset(
                     Assets.theme,
-                    width: 50.zW,
-                    height: 50.zH,
+                    width: 50.h,
+                    height: 50.h,
                     fit: BoxFit.cover,
                   ),
                   title: theme is DarkThemeModeStates
                       ? Text(
                           LocaleKeys.lightMode.localize,
                           style: Styles.mediumText(
-                              fontSize: 32, fontWeight: FontWeight.w400),
+                              fontSize: 32.sp, fontWeight: FontWeight.w400),
                         )
                       : Text(
                           LocaleKeys.darkMode.localize,
                           style: Styles.mediumText(
-                              fontSize: 32, fontWeight: FontWeight.w400),
+                              fontSize: 32.sp, fontWeight: FontWeight.w400),
                         ),
                   value: ThemeCubit.get(context).isDarkTheme,
                   activeColor: AppColors.SECONDARY_COLOR,
@@ -79,12 +79,12 @@ class SettingsView extends StatelessWidget {
             ),
             listTileWidget(
                 image: Assets.password,
-                trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.zH),
+                trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
                 label: LocaleKeys.changePassword.localize,
                 onTap: () => context.push(Routes.FORGOTPASSWORD)),
             listTileWidget(
                 image: Assets.noPerson,
-                trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.zH),
+                trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
                 label: LocaleKeys.disableAccount.localize,
                 onTap: () => showAreYouSure(
                     title: LocaleKeys.alert.localize,
@@ -95,7 +95,7 @@ class SettingsView extends StatelessWidget {
                 image: Assets.person,
                 trailing: Icon(
                   Icons.arrow_forward_ios_outlined,
-                  size: 40.zH,
+                  size: 40.h,
                 ),
                 label: LocaleKeys.deleteAccount.localize,
                 onTap: () => showAreYouSure(
@@ -115,12 +115,13 @@ class SettingsView extends StatelessWidget {
     return ListTile(
       leading: Image.asset(
         image,
-        width: 50.zW,
-        height: 50.zH,
+        width: 50.h,
+        height: 50.h,
       ),
       title: Label(
           text: label,
-          style: Styles.mediumText(fontSize: 32, fontWeight: FontWeight.w400)),
+          style:
+              Styles.mediumText(fontSize: 32.sp, fontWeight: FontWeight.w400)),
       onTap: () => onTap(),
       trailing: trailing,
     );

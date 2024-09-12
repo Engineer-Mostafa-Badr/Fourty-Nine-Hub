@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -10,6 +11,7 @@ import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MainCategoryBanner extends StatefulWidget {
   final MainCategoryEntity category;
@@ -41,71 +43,148 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CachedNetworkImage(
+      imageUrl: widget.category.banner,
       height: MediaQuery.sizeOf(context).height * 0.08,
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: Colors.transparent,
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: CachedNetworkImageProvider(
-            widget.category.banner,
+      imageBuilder: (context, i) => Container(
+        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: widget.category.banner.isNotEmpty
+              ? Colors.transparent
+              : AppColors.PRIMARY_COLOR,
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: CachedNetworkImageProvider(
+              widget.category.banner,
+            ),
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.3),
+              BlendMode.darken,
+            ),
           ),
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.3),
-            BlendMode.darken,
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            PositionedDirectional(end: 0, child: _buildRegisterButton()),
+            Label(
+              text: widget.category.name,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 45.sp),
+            ),
+            PositionedDirectional(
+              start: 0,
+              child: Column(
+                children: [
+                  context.read<UserCubit>().isLoggedIn
+                      ? InkWell(
+                          onTap: () async {
+                            final result = await widget.onFavorite();
+                            if (result == true) {
+                              print(result);
+                              setState(() {
+                                widget.category.isFavorite =
+                                    !widget.category.isFavorite!;
+                                print(widget.category.isFavorite);
+                                widget.isFavorite = result;
+                                print("===================$result");
+                              });
+                            }
+                          },
+                          child: Icon(
+                            widget.category.isFavorite == true
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: AppColors.SECONDARY_COLOR,
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                  Sizer(
+                    height: 15.h,
+                  ),
+                  Label(
+                    text: '${widget.category.total.toShortScale} ${Labels.ads}',
+                    style: Styles.mediumText(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      placeholder: (context, u) => Shimmer.fromColors(
+        baseColor: Colors.grey[100]!,
+        highlightColor: Colors.white24,
+        child: Container(
+          height: MediaQuery.sizeOf(context).height * 0.08,
+          decoration: BoxDecoration(
+            color: AppColors.AUTH_CONTAINER_COLOR,
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(color: Colors.grey),
           ),
         ),
       ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          PositionedDirectional(end: 0, child: _buildRegisterButton()),
-          Label(
-            text: widget.category.name,
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 45.zSP),
-          ),
-          PositionedDirectional(
-            start: 0,
-            child: Column(
-              children: [
-                context.read<UserCubit>().isLoggedIn
-                    ? InkWell(
-                        onTap: () async {
-                          final result = await widget.onFavorite();
-                          if (result != null && result != widget.isFavorite) {
-                            setState(() {
-                              widget.isFavorite = result;
-                              print("===================$result");
-                            });
-                          }
-                        },
-                        child: Icon(
-                          widget.isFavorite == true
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: AppColors.SECONDARY_COLOR,
-                        ),
-                      )
-                    : SizedBox.shrink(),
-                Sizer(
-                  height: 15.zH,
-                ),
-                Label(
-                  text: '${widget.category.total.toShortScale} ${Labels.ads}',
-                  style: Styles.mediumText(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                )
-              ],
+      errorWidget: (context, url, error) => Container(
+        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: AppColors.PRIMARY_COLOR,
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            PositionedDirectional(end: 0, child: _buildRegisterButton()),
+            Label(
+              text: widget.category.name,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 45.sp),
             ),
-          ),
-        ],
+            PositionedDirectional(
+              start: 0,
+              child: Column(
+                children: [
+                  context.read<UserCubit>().isLoggedIn
+                      ? InkWell(
+                          onTap: () async {
+                            final result = await widget.onFavorite();
+                            if (result != null && result != widget.isFavorite) {
+                              setState(() {
+                                widget.isFavorite = result;
+                                print("===================$result");
+                              });
+                            }
+                          },
+                          child: Icon(
+                            widget.isFavorite == true
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: AppColors.SECONDARY_COLOR,
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                  Sizer(
+                    height: 15.h,
+                  ),
+                  Label(
+                    text: '${widget.category.total.toShortScale} ${Labels.ads}',
+                    style: Styles.mediumText(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -119,7 +198,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 color: Colors.white, fontWeight: FontWeight.bold)),
       );
     } else {
-      return const SizedBox.shrink();
+      return SizedBox.shrink();
     }
   }
 }

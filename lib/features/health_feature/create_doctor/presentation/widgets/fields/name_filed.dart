@@ -21,7 +21,7 @@ class CreateDoctorNameField extends StatelessWidget {
             nextFocusNode: doctorLoginCubit.lastNameFocusNode,
           ),
         ),
-        const Sizer(),
+        Sizer(),
         Expanded(
           child: LastNameTextFormField(
             currentFocusNode: doctorLoginCubit.lastNameFocusNode,

@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -21,14 +21,15 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_tweets.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../../res/style/app_colors.dart';
 
 class OtherAccountView extends StatefulWidget {
   const OtherAccountView({super.key, required this.userId});
@@ -65,7 +66,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         SliverToBoxAdapter(
                             child: Container(
                                 width: double.infinity,
-                                padding: const EdgeInsetsDirectional.only(
+                                padding: EdgeInsetsDirectional.only(
                                     top: 35, end: 10, start: 10),
                                 child: Row(
                                     mainAxisAlignment:
@@ -353,8 +354,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   }),
                               if (loginUser?.id == widget.userId)
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0, vertical: 6),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 6.h),
                                   child: AppButton(
                                     label: 'Edit Profile',
                                     onPressed: () async {
@@ -459,7 +460,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 250,
+            height: 250.h,
             child: Stack(
               children: [
                 Positioned.fill(
@@ -472,54 +473,58 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         children: [
                           state.newCover != null
                               ? InkWell(
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => ImageDetailsScreen(
-                                    image: state.newCover?.file.path??'',
-                                    fromPost: false,
-                                    onRemoveImage: () {
-                                      // controller
-                                      //     .removePhoto(images![index]);
-                                      context.pop();
-                                    },
-                                  ));
-                            },
-                            child: Image.file(
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) =>
+                                            ImageDetailsScreen(
+                                              image:
+                                                  state.newCover?.file.path ??
+                                                      '',
+                                              fromPost: false,
+                                              onRemoveImage: () {
+                                                // controller
+                                                //     .removePhoto(images![index]);
+                                                context.pop();
+                                              },
+                                            ));
+                                  },
+                                  child: Image.file(
                                     File(state.newCover!.file.path),
                                     fit: BoxFit.fill,
                                     width: double.infinity,
                                   ),
-                              )
+                                )
                               : InkWell(
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => ImageDetailsScreen(
-                                    image: user.profileCover??'',
-                                    fromPost: true,
-                                    onRemoveImage: () {
-                                      // controller
-                                      //     .removePhoto(images![index]);
-                                      context.pop();
-                                    },
-                                  ));
-                            },
-                            child: Image.network(
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) =>
+                                            ImageDetailsScreen(
+                                              image: user.profileCover ?? '',
+                                              fromPost: true,
+                                              onRemoveImage: () {
+                                                // controller
+                                                //     .removePhoto(images![index]);
+                                                context.pop();
+                                              },
+                                            ));
+                                  },
+                                  child: Image.network(
                                     user.profileCover!.isNotEmpty
                                         ? user.profileCover!
                                         : UIConst.socialImagePlaceHolder,
                                     fit: BoxFit.fill,
                                     width: double.infinity,
                                   ),
-                              ),
+                                ),
                           if (loginUser?.id == user.id)
                             InkWell(
                               onTap: () {
                                 selectCoverImage();
                               },
                               child: Container(
-                                  padding: const EdgeInsets.all(5),
+                                  padding: EdgeInsets.all(5),
                                   decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: AppColors.PRIMARY_COLOR),
@@ -534,7 +539,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     Expanded(
                         child: Padding(
                       padding:
-                          const EdgeInsetsDirectional.only(top: 3.0, end: 10),
+                          EdgeInsetsDirectional.only(top: 3.0, end: 10),
                       child: loginUser?.id == user.id
                           ? Container()
                           : Row(
@@ -544,7 +549,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 SizedBox(
                                   width: 110,
                                   child: AppButton(
-                                      // height: 120,
+                                      // height: 120.h,
                                       width: kToolbarHeight * 1.5,
                                       backColor: user.isFollowed == true
                                           ? AppColors.PRIMARY_COLOR
@@ -553,12 +558,12 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           ? 'unFollow'
                                           : 'Follow',
                                       style: Styles.mediumText(
-                                          color: Colors.white, fontSize: 24),
+                                          color: Colors.white, fontSize: 24.sp),
                                       onPressed: () {
                                         onFollow();
                                       }),
                                 ),
-                                const Sizer(),
+                                Sizer(),
                                 (user.areFriends == true ||
                                         user.isSenTRequest == true)
                                     ? PopupMenuButton(
@@ -588,7 +593,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                         },
                                         child: Container(
                                             alignment: Alignment.center,
-                                            padding: const EdgeInsets.symmetric(
+                                            padding: EdgeInsets.symmetric(
                                                 horizontal: 10),
                                             decoration: BoxDecoration(
                                               borderRadius:
@@ -607,7 +612,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                     : SizedBox(
                                         width: 110,
                                         child: AppButton(
-                                            // height: 80,
+                                            // height: 80.h,
                                             padding: 5,
                                             backColor:
                                                 user.sentFriendRequest == true
@@ -615,7 +620,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                                     : null,
                                             style: Styles.mediumText(
                                                 color: Colors.white,
-                                                fontSize: 24),
+                                                fontSize: 24.sp),
                                             label: user.isSenTRequest == true
                                                 ? 'Accept Request'
                                                 : user.areFriends == true
@@ -641,21 +646,21 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                       children: [
                         state.newImage != null
                             ? InkWell(
-
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) => ImageDetailsScreen(
-                                  image: state.newImage?.file.path??'',
-                                  fromPost: false,
-                                  onRemoveImage: () {
-                                    // controller
-                                    //     .removePhoto(images![index]);
-                                    context.pop();
-                                  },
-                                ));
-                          },
-                          child: CircleAvatar(
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => ImageDetailsScreen(
+                                            image:
+                                                state.newImage?.file.path ?? '',
+                                            fromPost: false,
+                                            onRemoveImage: () {
+                                              // controller
+                                              //     .removePhoto(images![index]);
+                                              context.pop();
+                                            },
+                                          ));
+                                },
+                                child: CircleAvatar(
                                   radius: 60,
                                   child: CircleAvatar(
                                     radius: 60,
@@ -664,25 +669,25 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                         File(state.newImage!.file.path)),
                                   ),
                                 ),
-                            )
+                              )
                             : InkWell(
                                 onTap: () {
                                   showDialog(
                                       context: context,
                                       builder: (context) => ImageDetailsScreen(
-                                        image: user.profilePicture??'',
-                                        fromPost: true,
-                                        onRemoveImage: () {
-                                          // controller
-                                          //     .removePhoto(images![index]);
-                                          context.pop();
-                                        },
-                                      ));
+                                            image: user.profilePicture ?? '',
+                                            fromPost: true,
+                                            onRemoveImage: () {
+                                              // controller
+                                              //     .removePhoto(images![index]);
+                                              context.pop();
+                                            },
+                                          ));
                                 },
                                 child: ImageFromInternet(
                                   image: user.profilePicture ??
                                       UIConst.profilePlaceHolder,
-                                  height: 140,
+                                  height: 140.h,
                                   width: 140,
                                   isCircle: true,
                                 ),
@@ -693,7 +698,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               selectImageGallary();
                             },
                             child: Container(
-                                padding: const EdgeInsets.all(5),
+                                padding: EdgeInsets.all(5),
                                 decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: AppColors.PRIMARY_COLOR),
@@ -708,11 +713,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Sizer(),
+                Sizer(),
                 Row(
                   children: [
                     Expanded(
@@ -724,7 +729,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                     style: Styles.headerText(
                                         fontWeight: FontWeight.w600,
                                         color: Colors.black)),
-                                const Sizer(
+                                Sizer(
                                   width: 5,
                                 ),
                                 const Icon(
@@ -747,7 +752,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   TextSpan(
                                       text: '\t(${user.job})',
                                       style: Styles.headerText(
-                                          color: Colors.black, fontSize: 26)),
+                                          color: Colors.black,
+                                          fontSize: 26.sp)),
                               ])),
                     ),
                     if (loginUser?.id != widget.userId)
@@ -755,8 +761,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           child: Container(
                               width: 110,
                               alignment: Alignment.center,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5.h),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
                                   color: AppColors.SECONDARY_COLOR),
@@ -783,14 +789,14 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           }),
                   ],
                 ),
-                const Sizer(
-                  height: 4,
+                Sizer(
+                  height: 4.h,
                 ),
                 Label(
                     text: '@${user.email.split('@')[0]}',
                     style: Styles.mediumText(color: Colors.grey)),
-                const Sizer(
-                  height: 4,
+                Sizer(
+                  height: 4.h,
                 ),
                 Row(
                   children: [
@@ -798,23 +804,23 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                       value: '${user.friendsCount} ',
                       label: 'Friends',
                     ),
-                    const Sizer(),
+                    Sizer(),
                     _buildCounter(
                       value: '${user.followersCount} ',
                       label: 'Follower',
                     ),
-                    const Sizer(),
+                    Sizer(),
                     _buildCounter(
                       value: '${user.followingCount} ',
                       label: 'Following',
                     ),
                   ],
                 ),
-                const Sizer(height: 5),
+                Sizer(height: 5.h),
                 Label(
                     text: user.bio,
                     style: Styles.mediumText(color: Colors.black)),
-                const Sizer(height: 5),
+                Sizer(height: 5.h),
                 if (user.city.isNotEmpty ||
                     user.job.isNotEmpty ||
                     user.country.isNotEmpty ||
@@ -829,28 +835,28 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               Icons.home_rounded,
                               size: 24,
                             ),
-                            const Sizer(
+                            Sizer(
                               width: 5,
                             ),
                             Label(
                                 text: 'Lives in',
                                 style: Styles.headerText(
-                                    color: Colors.grey, fontSize: 30)),
-                            const Sizer(
-                              height: 5,
+                                    color: Colors.grey, fontSize: 30.sp)),
+                            Sizer(
+                              height: 5.h,
                             ),
                             Expanded(
                               child: Label(
                                 text: user.city,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30),
+                                    color: Colors.black, fontSize: 30.sp),
                                 maxLines: 1,
                               ),
                             ),
                           ],
                         ),
-                        const Sizer(
-                          height: 5,
+                        Sizer(
+                          height: 5.h,
                         ),
                       ],
                       if (user.country.isNotEmpty) ...[
@@ -860,28 +866,28 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               Icons.location_on,
                               size: 24,
                             ),
-                            const Sizer(
+                            Sizer(
                               width: 5,
                             ),
                             Label(
                                 text: 'From',
                                 style: Styles.headerText(
-                                    color: Colors.grey, fontSize: 30)),
-                            const Sizer(
-                              height: 5,
+                                    color: Colors.grey, fontSize: 30.sp)),
+                            Sizer(
+                              height: 5.h,
                             ),
                             Expanded(
                               child: Label(
                                 text: user.country,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30),
+                                    color: Colors.black, fontSize: 30.sp),
                                 maxLines: 1,
                               ),
                             ),
                           ],
                         ),
-                        const Sizer(
-                          height: 5,
+                        Sizer(
+                          height: 5.h,
                         ),
                       ],
                       if (user.job.isNotEmpty && user.isDocument == true) ...[
@@ -891,28 +897,28 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               Icons.home_repair_service,
                               size: 24,
                             ),
-                            const Sizer(
+                            Sizer(
                               width: 5,
                             ),
                             Label(
                                 text: 'Work',
                                 style: Styles.headerText(
-                                    color: Colors.grey, fontSize: 30)),
-                            const Sizer(
-                              height: 5,
+                                    color: Colors.grey, fontSize: 30.sp)),
+                            Sizer(
+                              height: 5.h,
                             ),
                             Expanded(
                               child: Label(
                                 text: user.job,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30),
+                                    color: Colors.black, fontSize: 30.sp),
                                 maxLines: 1,
                               ),
                             ),
                           ],
                         ),
-                        const Sizer(
-                          height: 5,
+                        Sizer(
+                          height: 5.h,
                         ),
                       ],
                       if (user.phone.isNotEmpty) ...[
@@ -922,26 +928,26 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               Icons.phone_android,
                               size: 24,
                             ),
-                            const Sizer(
+                            Sizer(
                               width: 5,
                             ),
                             Label(
                                 text: 'Phone',
                                 style: Styles.headerText(
-                                    color: Colors.grey, fontSize: 30)),
-                            const Sizer(),
+                                    color: Colors.grey, fontSize: 30.sp)),
+                            Sizer(),
                             Expanded(
                               child: Label(
                                 text: user.phone,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30),
+                                    color: Colors.black, fontSize: 30.sp),
                                 maxLines: 1,
                               ),
                             ),
                           ],
                         ),
-                        const Sizer(
-                          height: 5,
+                        Sizer(
+                          height: 5.h,
                         ),
                       ],
                       if (user.maritalStatus.isNotEmpty) ...[
@@ -951,21 +957,21 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               Icons.favorite,
                               size: 24,
                             ),
-                            const Sizer(
+                            Sizer(
                               width: 5,
                             ),
                             Expanded(
                               child: Label(
                                 text: user.maritalStatus,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30),
+                                    color: Colors.black, fontSize: 30.sp),
                                 maxLines: 1,
                               ),
                             ),
                           ],
                         ),
-                        const Sizer(
-                          height: 5,
+                        Sizer(
+                          height: 5.h,
                         ),
                       ],
                     ],

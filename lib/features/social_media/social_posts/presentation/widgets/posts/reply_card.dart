@@ -14,7 +14,7 @@ import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ReplyCard extends StatefulWidget {
   final Color textColor;
   final CommentEntity reply;
@@ -56,7 +56,7 @@ class _ReplyCardState extends State<ReplyCard> {
                   : null,
               userId: widget.reply.user.id,
             ),
-            const Sizer(),
+            Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +87,7 @@ class _ReplyCardState extends State<ReplyCard> {
                 )),
           ],
         ),
-        const Sizer(),
+        Sizer(),
         Text(
           widget.reply.content,
           style: Styles.mediumText(color: widget.textColor),
@@ -104,7 +104,7 @@ class _ReplyCardState extends State<ReplyCard> {
                   onChanged: (v) {
                     setState(() {});
                   },
-                  style: Styles.headerText(fontSize: 26),
+                  style: Styles.headerText(fontSize: 26.sp),
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     contentPadding: EdgeInsets.all(5),
@@ -112,16 +112,17 @@ class _ReplyCardState extends State<ReplyCard> {
                     hintStyle: Styles.mediumText(),
                   ),
                 )),
-                const Sizer(),
+                Sizer(),
                 if (editTextController.text.isNotEmpty)
                   IconAppButton(
                       icon: Icons.send,
                       size: 20,
                       isCircle: true,
                       onPressed: () async {
-                        var result = await widget.onEditComment(PostCommentParams(
-                            postId: widget.reply.id,
-                            content: editTextController.text));
+                        var result = await widget.onEditComment(
+                            PostCommentParams(
+                                postId: widget.reply.id,
+                                content: editTextController.text));
                         if (result == true) {
                           widget.reply.content = editTextController.text;
                           widget.reply.edit = false;
@@ -132,7 +133,7 @@ class _ReplyCardState extends State<ReplyCard> {
             ),
           ),
         Sizer(
-          height: 5,
+          height: 5.h,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -151,7 +152,7 @@ class _ReplyCardState extends State<ReplyCard> {
   Widget _buildPostOptions(
       {required bool isMyComment, required CommentEntity post}) {
     return SizedBox(
-      height: isMyComment ? 150 : 80,
+      height: isMyComment ? 160 : 80,
       child: Column(
         children: [
           if (!isMyComment)

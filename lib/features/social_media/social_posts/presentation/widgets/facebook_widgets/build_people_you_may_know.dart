@@ -13,7 +13,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class BuildPeopleYouMayKnow extends StatefulWidget {
   const BuildPeopleYouMayKnow({super.key});
 
@@ -32,7 +32,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ??  UnknownFailure(''),
+            state.failure ?? UnknownFailure(''),
             context,
           ),
         );
@@ -41,17 +41,17 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
       final controller = context.read<SocialPostsCubit>();
       return state.suggestedFriends == null ||
               controller.suggestUserPagingController.itemList == []
-          ? const SizedBox.shrink()
+          ? SizedBox.shrink()
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   width: double.infinity,
-                  height: 5,
+                  height: 5.h,
                   color: AppColors.LIGHT_GRAY_COLOR,
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -61,11 +61,11 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                       ),
                       Container(
                         alignment: AlignmentDirectional.topStart,
-                        height: 250,
+                        height: 250.h,
                         child: PagedListView<int, SuggestUserEntity>(
                           scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 5),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 8.h, horizontal: 5),
                           pagingController:
                               controller.suggestUserPagingController,
                           shrinkWrap: true,
@@ -76,14 +76,14 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                   noItemsFoundIndicatorBuilder: (context) {
                                     print(controller.suggestUserPagingController
                                         .itemList?.length);
-                                    return const Padding(
-                                        padding: EdgeInsets.only(top: 200),
+                                    return  Padding(
+                                        padding:const EdgeInsets.only(top: 200),
                                         child: Center(
                                           child: Label(
                                             text: "No friends suggested",
                                             style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 18,
+                                              fontSize: 18.sp,
                                             ),
                                           ),
                                         ));
@@ -102,16 +102,15 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                       },
                                       child: Container(
                                         width: 200,
-                                        padding:
-                                            const EdgeInsets.only(bottom: 10),
+                                        padding: EdgeInsets.only(bottom: 10),
                                         margin:
-                                            const EdgeInsetsDirectional.only(
-                                                end: 10),
+                                            EdgeInsetsDirectional.only(end: 10),
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(5),
                                           border: Border.all(
-                                              color: AppColors.DIVIDER_GRAY_COLOR),
+                                              color:
+                                                  AppColors.DIVIDER_GRAY_COLOR),
                                         ),
                                         child: Column(
                                           crossAxisAlignment:
@@ -120,7 +119,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                             Expanded(
                                               child: ImageFromInternet(
                                                 image: item.profilePicture,
-                                                // height: 220,
+                                                // height: 220.h,
                                                 width: 300,
                                                 borderRadius:
                                                     const BorderRadius.only(
@@ -130,15 +129,14 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                               ),
                                             ),
                                             Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 8.0),
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  const SizedBox(
-                                                    height: 10,
+                                                  SizedBox(
+                                                    height: 10.h,
                                                   ),
                                                   Label(
                                                     text:
@@ -169,7 +167,8 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
-                                                                  fontSize: 14),
+                                                                  fontSize:
+                                                                      14.sp),
                                                         )
                                                       : Row(
                                                           children: [
@@ -237,13 +236,20 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                                 Styles.headerText(),
                                                                           ),
                                                                           content:
-                                                                          TextField(
+                                                                              TextField(
                                                                             // focusNode: focusNode,
-                                                                            maxLines: null,
-                                                                            maxLength: 150,
-                                                                            onChanged: (c) {},
-                                                                            controller: messageController,
-                                                                            decoration: InputDecoration(hintText: "Greet Message", fillColor: Colors.white, hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
+                                                                            maxLines:
+                                                                                null,
+                                                                            maxLength:
+                                                                                150,
+                                                                            onChanged:
+                                                                                (c) {},
+                                                                            controller:
+                                                                                messageController,
+                                                                            decoration: InputDecoration(
+                                                                                hintText: "Greet Message",
+                                                                                fillColor: Colors.white,
+                                                                                hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
                                                                           ),
                                                                           actions: <Widget>[
                                                                             TextButton(
@@ -252,8 +258,8 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                               },
                                                                               child: Container(
                                                                                 width: 100,
-                                                                                padding: const EdgeInsets.all(2),
-                                                                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4),border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                                                                                padding: EdgeInsets.all(2),
+                                                                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4), border: Border.all(color: AppColors.PRIMARY_COLOR)),
                                                                                 alignment: Alignment.center,
                                                                                 child: Label(
                                                                                   text: 'Cancel',
@@ -273,7 +279,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                               },
                                                                               child: Container(
                                                                                 width: 100,
-                                                                                padding: const EdgeInsets.all(2),
+                                                                                padding: EdgeInsets.all(2),
                                                                                 decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(4)),
                                                                                 alignment: Alignment.center,
                                                                                 child: Label(
@@ -323,13 +329,13 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                                   : "Send Greet Message",
                                                                           style: Styles.mediumText(
                                                                               color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
-                                                                              fontSize: 24,
+                                                                              fontSize: 24.sp,
                                                                               fontWeight: FontWeight.bold),
                                                                         ),
                                                                       ),
                                                               ),
                                                             ),
-                                                            const SizedBox(
+                                                            SizedBox(
                                                               width: 10,
                                                             ),
                                                             if (item.addedSuccessfully ==
@@ -357,7 +363,8 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                   },
                                                                   child:
                                                                       Container(
-                                                                    height: 25,
+                                                                    height:
+                                                                        25.h,
                                                                     alignment:
                                                                         Alignment
                                                                             .center,
@@ -412,7 +419,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                 ),
                 Container(
                   width: double.infinity,
-                  height: 5,
+                  height: 5.h,
                   color: AppColors.LIGHT_GRAY_COLOR,
                 ),
               ],

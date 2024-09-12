@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_unhandled_appotinments/doctor_unhandled_appotinments_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_Unhandled_appointments.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorUnhandledAppointmentsView extends StatelessWidget {
   const DoctorUnhandledAppointmentsView({super.key});
@@ -34,8 +35,8 @@ class DoctorUnhandledAppointmentsView extends StatelessWidget {
               if (state.appointments.isNotEmpty) {
                 return ListView.separated(
                   shrinkWrap: true,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  padding:  EdgeInsets.symmetric(
+                      horizontal: 15, vertical: 20.h),
                   controller: context
                       .read<DoctorUnhandledAppointmentsCubit>()
                       .scrollController,
@@ -53,8 +54,8 @@ class DoctorUnhandledAppointmentsView extends StatelessWidget {
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) =>
-                      const Divider(
-                    height: 60,
+                       Divider(
+                    height: 60.h,
                   ),
                 );
               } else {

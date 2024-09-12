@@ -30,7 +30,7 @@ class ShippingRequestCard extends StatelessWidget {
               children: [
                 const Icon(FontAwesomeIcons.car,
                     color: AppColors.PRIMARY_COLOR),
-                const Sizer(),
+                Sizer(),
                 Label(
                   text: trip.category.name,
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
@@ -43,7 +43,7 @@ class ShippingRequestCard extends StatelessWidget {
                   Icons.location_searching,
                   color: AppColors.PRIMARY_COLOR,
                 ),
-                const Sizer(),
+                Sizer(),
                 Expanded(child: Label(text: trip.fromAddress)),
               ],
             ),
@@ -53,7 +53,7 @@ class ShippingRequestCard extends StatelessWidget {
                   Icons.location_on,
                   color: AppColors.SECONDARY_COLOR,
                 ),
-                const Sizer(),
+                Sizer(),
                 Expanded(child: Label(text: trip.toAddress)),
               ],
             ),
@@ -61,7 +61,7 @@ class ShippingRequestCard extends StatelessWidget {
               Row(
                 children: [
                   TextAppButton(label: 'Offers', onPressed: () {}),
-                  const Sizer(),
+                  Sizer(),
                   Expanded(
                     child: SizedBox(
                       height: kToolbarHeight * .5,
@@ -83,7 +83,7 @@ class ShippingRequestCard extends StatelessWidget {
                   ),
                 ],
               ),
-            const Sizer(),
+            Sizer(),
             StaticMapWidget(
               height: kToolbarHeight * 1.5,
               radius: 10,

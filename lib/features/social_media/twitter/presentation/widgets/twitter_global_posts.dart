@@ -37,7 +37,7 @@
 //       return RefreshIndicator(
 //         onRefresh: () async => controller.loadData(),
 //         child: PagedListView<int, TwitterPostEntity>(
-//           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+//           padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
 //           pagingController: controller.postsPagingController,
 //           shrinkWrap: true,
 //           physics: const BouncingScrollPhysics(
@@ -52,7 +52,7 @@
 //                         "لا يوجد بوستات",
 //                         style: TextStyle(
 //                           color: Colors.black,
-//                           fontSize: 18,
+//                           fontSize: 18.sp,
 //                         ),
 //                       ),
 //                     ));
@@ -113,7 +113,7 @@
 //               },
 //               noMoreItemsIndicatorBuilder: (context) => Container(),
 //               firstPageProgressIndicatorBuilder: (context) => Container(
-//                   margin: const EdgeInsets.only(top: 150),
+//                   margin: EdgeInsets.only(top: 150),
 //                   child: const CupertinoActivityIndicator()),
 //               newPageProgressIndicatorBuilder: (context) =>
 //                   const CupertinoActivityIndicator()),

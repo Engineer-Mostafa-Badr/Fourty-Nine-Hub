@@ -49,8 +49,8 @@
 // //                           children: <Widget>[
 // //                             Container(
 // //                               width: 50,
-// //                               height: 5,
-// //                               margin: const EdgeInsets.symmetric(vertical: 10),
+// //                               height: 5.h,
+// //                               margin: EdgeInsets.symmetric(vertical: 10.h),
 // //                               decoration: BoxDecoration(
 // //                                 color: Colors.grey[700],
 // //                                 borderRadius: BorderRadius.circular(10),
@@ -63,11 +63,11 @@
 // //                               ),
 // //                             ),
 // //                             const Divider(
-// //                               height: 1,
+// //                               height: 1.h,
 // //                               thickness: 0.2,
 // //                             ),
-// //                             const SizedBox(
-// //                               height: 4,
+// //                             SizedBox(
+// //                               height: 4.h,
 // //                             ),
 // //                             Expanded(
 // //                               child: Builder(builder: (context) {
@@ -156,7 +156,7 @@
 // //         children: [
 // //           // Uncomment and use if you want to display the user's avatar
 // //           // Padding(
-// //           //   padding: const EdgeInsets.all(8.0),
+// //           //   padding: EdgeInsets.all(8.0),
 // //           //   child: CircleAvatar(
 // //           //     backgroundImage: NetworkImage(
 // //           //       'https://example.com/your_avatar.png', // Replace with user's avatar URL
@@ -166,7 +166,7 @@
 // //           // ),
 // //           Expanded(
 // //             child: Padding(
-// //               padding: const EdgeInsets.all(8.0),
+// //               padding: EdgeInsets.all(8.0),
 // //               child: Stack(
 // //                 alignment: Alignment.centerRight,
 // //                 children: [
@@ -182,8 +182,8 @@
 // //                         borderRadius: BorderRadius.circular(30),
 // //                         borderSide: BorderSide.none,
 // //                       ),
-// //                       contentPadding: const EdgeInsets.symmetric(
-// //                           horizontal: 20, vertical: 10),
+// //                       contentPadding: EdgeInsets.symmetric(
+// //                           horizontal: 20, vertical: 10.h),
 // //                     ),
 // //                   ),
 // //                   Positioned(
@@ -230,7 +230,7 @@
 // //   @override
 // //   Widget build(BuildContext context) {
 // //     return Padding(
-// //       padding: const EdgeInsets.all(8.0),
+// //       padding: EdgeInsets.all(8.0),
 // //       child: Row(
 // //         crossAxisAlignment: CrossAxisAlignment.start,
 // //         children: [
@@ -238,7 +238,7 @@
 // //             backgroundImage:
 // //                 NetworkImage(commentData.user.profilePictureSignedUrl),
 // //           ),
-// //           const SizedBox(width: 10),
+// //           SizedBox(width: 10),
 // //           Expanded(
 // //             child: Column(
 // //               crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,7 +252,7 @@
 // //                     color: Colors.white,
 // //                   ),
 // //                 ),
-// //                 const SizedBox(height: 5),
+// //                 SizedBox(height: 5.h),
 // //                 Text(
 // //                   commentData.comment,
 // //                   textScaler: const TextScaler.linear(1.1),
@@ -276,7 +276,7 @@
 // //                       commentData.likeCount.toString(),
 // //                       style: const TextStyle(color: Colors.white),
 // //                     ),
-// //                     const SizedBox(width: 10),
+// //                     SizedBox(width: 10),
 // //                     const Spacer(),
 // //                     IconButton(
 // //                       icon: const FaIcon(FontAwesomeIcons.reply,
@@ -348,8 +348,8 @@
 // //                     children: <Widget>[
 // //                       Container(
 // //                         width: 50,
-// //                         height: 5,
-// //                         margin: const EdgeInsets.symmetric(vertical: 10),
+// //                         height: 5.h,
+// //                         margin: EdgeInsets.symmetric(vertical: 10.h),
 // //                         decoration: BoxDecoration(
 // //                           color: Colors.grey[700],
 // //                           borderRadius: BorderRadius.circular(10),
@@ -362,11 +362,11 @@
 // //                         ),
 // //                       ),
 // //                       const Divider(
-// //                         height: 1,
+// //                         height: 1.h,
 // //                         thickness: 0.2,
 // //                       ),
-// //                       const SizedBox(
-// //                         height: 4,
+// //                       SizedBox(
+// //                         height: 4.h,
 // //                       ),
 // //                       Expanded(
 // //                         child: Builder(builder: (context) {
@@ -459,8 +459,8 @@
 //                     children: <Widget>[
 //                       Container(
 //                         width: 50,
-//                         height: 5,
-//                         margin: const EdgeInsets.symmetric(vertical: 10),
+//                         height: 5.h,
+//                         margin: EdgeInsets.symmetric(vertical: 10.h),
 //                         decoration: BoxDecoration(
 //                           color: Colors.grey[700],
 //                           borderRadius: BorderRadius.circular(10),
@@ -473,11 +473,11 @@
 //                         ),
 //                       ),
 //                       const Divider(
-//                         height: 1,
+//                         height: 1.h,
 //                         thickness: 0.2,
 //                       ),
-//                       const SizedBox(
-//                         height: 4,
+//                       SizedBox(
+//                         height: 4.h,
 //                       ),
 //                       Expanded(
 //                         child: Builder(builder: (context) {
@@ -560,7 +560,7 @@
 //         children: [
 //           Expanded(
 //             child: Padding(
-//               padding: const EdgeInsets.all(8.0),
+//               padding: EdgeInsets.all(8.0),
 //               child: Stack(
 //                 alignment: Alignment.centerRight,
 //                 children: [
@@ -576,8 +576,8 @@
 //                         borderRadius: BorderRadius.circular(30),
 //                         borderSide: BorderSide.none,
 //                       ),
-//                       contentPadding: const EdgeInsets.symmetric(
-//                           horizontal: 20, vertical: 10),
+//                       contentPadding: EdgeInsets.symmetric(
+//                           horizontal: 20, vertical: 10.h),
 //                     ),
 //                   ),
 //                   Positioned(
@@ -635,12 +635,12 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return Padding(
-//       padding: const EdgeInsets.all(8.0),
+//       padding: EdgeInsets.all(8.0),
 //       child: Column(
 //         crossAxisAlignment: CrossAxisAlignment.start,
 //         children: [
 //           _buildCommentRow(),
-//           const SizedBox(height: 10),
+//           SizedBox(height: 10.h),
 //           _buildToggleRepliesButton(),
 //           if (_isRepliesVisible) ...[
 //             _buildRepliesList(),
@@ -658,13 +658,13 @@
 //         CircleAvatar(
 //           backgroundImage: NetworkImage(widget.commentData.user.profilePictureSignedUrl),
 //         ),
-//         const SizedBox(width: 10),
+//         SizedBox(width: 10),
 //         Expanded(
 //           child: Column(
 //             crossAxisAlignment: CrossAxisAlignment.start,
 //             children: [
 //               _buildUserName(),
-//               const SizedBox(height: 5),
+//               SizedBox(height: 5.h),
 //               _buildCommentText(),
 //               _buildLikeAndReplyButtons(),
 //             ],
@@ -721,7 +721,7 @@
 //   }
 //
 //   Widget _buildToggleRepliesButton() {
-//     if (widget.commentData.replies.isEmpty) return const SizedBox.shrink();
+//     if (widget.commentData.replies.isEmpty) return SizedBox.shrink();
 //
 //     return GestureDetector(
 //       onTap: () => setState(() => _isRepliesVisible = !_isRepliesVisible),
@@ -734,7 +734,7 @@
 //
 //   Widget _buildRepliesList() {
 //     return Padding(
-//       padding: const EdgeInsets.only(left: 40.0, bottom: 8, top: 8),
+//       padding: EdgeInsets.only(left: 40.0, bottom: 8, top: 8),
 //       child: Column(
 //         crossAxisAlignment: CrossAxisAlignment.start,
 //         children: widget.commentData.replies.map(_buildSingleReply).toList(),
@@ -744,7 +744,7 @@
 //
 //   Widget _buildSingleReply(CommentData replay) {
 //     return Padding(
-//       padding: const EdgeInsets.symmetric(vertical: 5.0),
+//       padding: EdgeInsets.symmetric(vertical: 5.h),
 //       child: Column(
 //         children: [
 //           Row(
@@ -754,7 +754,7 @@
 //                 backgroundImage: NetworkImage(replay.user.profilePictureSignedUrl),
 //                 radius: 16,
 //               ),
-//               const SizedBox(width: 10),
+//               SizedBox(width: 10),
 //               Expanded(
 //                 child: Column(
 //                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -763,7 +763,7 @@
 //                       '${replay.user.firstName} ${replay.user.lastName} @ ${replay.receiverComment?.firstName ?? ''} ${replay.receiverComment?.lastName ?? ''}',
 //                       style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
 //                     ),
-//                     const SizedBox(height: 5),
+//                     SizedBox(height: 5.h),
 //                     Text(
 //                       replay.comment,
 //                       style: const TextStyle(color: AppColors.UNSELECTED_GRAY_COLOR),
@@ -801,7 +801,7 @@
 //
 //   Widget _buildReplyInputField() {
 //     return Padding(
-//       padding: const EdgeInsets.only(left: 40.0, top: 10),
+//       padding: EdgeInsets.only(left: 40.0, top: 10),
 //       child: Row(
 //         children: [
 //           Expanded(
@@ -887,12 +887,12 @@
 // //   @override
 // //   Widget build(BuildContext context) {
 // //     return Padding(
-// //       padding: const EdgeInsets.all(8.0),
+// //       padding: EdgeInsets.all(8.0),
 // //       child: Column(
 // //         crossAxisAlignment: CrossAxisAlignment.start,
 // //         children: [
 // //           _buildCommentRow(context),
-// //           const SizedBox(height: 10),
+// //           SizedBox(height: 10.h),
 // //           _buildToggleRepliesButton(),
 // //           if (_isRepliesVisible) ...[
 // //             _buildRepliesList(),
@@ -911,7 +911,7 @@
 // //           backgroundImage:
 // //               NetworkImage(widget.commentData.user.profilePictureSignedUrl),
 // //         ),
-// //         const SizedBox(width: 10),
+// //         SizedBox(width: 10),
 // //         Expanded(
 // //           child: Column(
 // //             crossAxisAlignment: CrossAxisAlignment.start,
@@ -924,7 +924,7 @@
 // //                   color: Colors.white,
 // //                 ),
 // //               ),
-// //               const SizedBox(height: 5),
+// //               SizedBox(height: 5.h),
 // //               Text(
 // //                 widget.commentData.comment,
 // //                 style: const TextStyle(color: AppColors.UNSELECTED_GRAY_COLOR),
@@ -982,7 +982,7 @@
 // //   }
 // //
 // //   Widget _buildToggleRepliesButton() {
-// //     if (widget.commentData.replies.isEmpty) return const SizedBox.shrink();
+// //     if (widget.commentData.replies.isEmpty) return SizedBox.shrink();
 // //
 // //     return GestureDetector(
 // //       onTap: () {
@@ -999,12 +999,12 @@
 // //
 // //   Widget _buildRepliesList() {
 // //     return Padding(
-// //       padding: const EdgeInsets.only(left: 40.0, bottom: 8, top: 8),
+// //       padding: EdgeInsets.only(left: 40.0, bottom: 8, top: 8),
 // //       child: Column(
 // //         crossAxisAlignment: CrossAxisAlignment.start,
 // //         children: widget.commentData.replies.map((replay) {
 // //           return Padding(
-// //             padding: const EdgeInsets.symmetric(vertical: 5.0),
+// //             padding: EdgeInsets.symmetric(vertical: 5.h),
 // //             child: Column(
 // //               children: [
 // //                 Row(
@@ -1015,7 +1015,7 @@
 // //                           NetworkImage(replay.user.profilePictureSignedUrl),
 // //                       radius: 16,
 // //                     ),
-// //                     const SizedBox(width: 10),
+// //                     SizedBox(width: 10),
 // //                     Expanded(
 // //                       child: Column(
 // //                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1028,7 +1028,7 @@
 // //                               color: Colors.white,
 // //                             ),
 // //                           ),
-// //                           const SizedBox(height: 5),
+// //                           SizedBox(height: 5.h),
 // //                           Text(
 // //                             replay.comment,
 // //                             style: const TextStyle(
@@ -1093,7 +1093,7 @@
 // //
 // //   Widget _buildReplyInputField(BuildContext context) {
 // //     return Padding(
-// //       padding: const EdgeInsets.only(left: 40.0, top: 10),
+// //       padding: EdgeInsets.only(left: 40.0, top: 10),
 // //       child: Row(
 // //         children: [
 // //           Expanded(
@@ -1149,7 +1149,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return Padding(
-//       padding: const EdgeInsets.all(8.0),
+//       padding: EdgeInsets.all(8.0),
 //       child: Row(
 //         crossAxisAlignment: CrossAxisAlignment.start,
 //         children: [
@@ -1161,7 +1161,7 @@
 //               radius: 20,
 //             ),
 //           ),
-//           const SizedBox(width: 10),
+//           SizedBox(width: 10),
 //           Expanded(
 //             child: Column(
 //               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1171,21 +1171,21 @@
 //                   highlightColor: Colors.white12,
 //                   child: Container(
 //                     width: 100,
-//                     height: 16,
+//                     height: 16.h,
 //                     color: Colors.white12,
 //                   ),
 //                 ),
-//                 const SizedBox(height: 5),
+//                 SizedBox(height: 5.h),
 //                 Shimmer.fromColors(
 //                   baseColor: Colors.white12,
 //                   highlightColor: Colors.white12,
 //                   child: Container(
 //                     width: double.infinity,
-//                     height: 12,
+//                     height: 12.h,
 //                     color: Colors.white12,
 //                   ),
 //                 ),
-//                 const SizedBox(height: 5),
+//                 SizedBox(height: 5.h),
 //                 Row(
 //                   children: [
 //                     Shimmer.fromColors(
@@ -1193,13 +1193,13 @@
 //                       highlightColor: Colors.white12,
 //                       child: const Icon(Icons.favorite, color: Colors.white12),
 //                     ),
-//                     const SizedBox(width: 5),
+//                     SizedBox(width: 5),
 //                     Shimmer.fromColors(
 //                       baseColor: Colors.white12,
 //                       highlightColor: Colors.white12,
 //                       child: Container(
 //                         width: 20,
-//                         height: 12,
+//                         height: 12.h,
 //                         color: Colors.white12,
 //                       ),
 //                     ),
@@ -1221,7 +1221,6 @@
 //   }
 // }
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -1232,7 +1231,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/controlle
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:shimmer/shimmer.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../tinder/presentation/pages/user_profile.dart';
 
 // The main bottom sheet widget to display comments
@@ -1252,7 +1251,8 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   void initState() {
     super.initState();
     reelsCubit = serviceLocator<ReelsCubit>();
-    reelsCubit.getComments(widget.reel.id); // Fetch comments once when initialized
+    reelsCubit
+        .getComments(widget.reel.id); // Fetch comments once when initialized
   }
 
   @override
@@ -1265,7 +1265,9 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
         },
         child: Stack(
           children: [
-            Container(color: Colors.transparent), // Transparent background to detect taps
+            Container(
+                color: Colors
+                    .transparent), // Transparent background to detect taps
             DraggableScrollableSheet(
               initialChildSize: 0.6,
               minChildSize: 0.4,
@@ -1303,8 +1305,8 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   Widget _buildHandleIndicator() {
     return Container(
       width: 50,
-      height: 5,
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      height: 5.h,
+      margin: EdgeInsets.symmetric(vertical: 10.h),
       decoration: BoxDecoration(
         color: Colors.grey[700],
         borderRadius: BorderRadius.circular(10),
@@ -1378,7 +1380,7 @@ class CommentInputFieldState extends State<CommentInputField> {
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: Stack(
                 alignment: Alignment.centerRight,
                 children: [
@@ -1394,8 +1396,8 @@ class CommentInputFieldState extends State<CommentInputField> {
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
                       ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10.h),
                     ),
                   ),
                   Positioned(
@@ -1405,7 +1407,8 @@ class CommentInputFieldState extends State<CommentInputField> {
                       onPressed: () async {
                         // Send the comment
                         final reelsCubit = context.read<ReelsCubit>();
-                        await reelsCubit.addComment(widget.reel.id, _commentController.text);
+                        await reelsCubit.addComment(
+                            widget.reel.id, _commentController.text);
                         await reelsCubit.getComments(widget.reel.id);
 
                         widget.scrollController.animateTo(
@@ -1414,7 +1417,8 @@ class CommentInputFieldState extends State<CommentInputField> {
                           curve: Curves.easeOut,
                         );
 
-                        _commentController.clear(); // Clear input field after sending
+                        _commentController
+                            .clear(); // Clear input field after sending
                       },
                     ),
                   ),
@@ -1453,12 +1457,12 @@ class _CommentWidgetState extends State<CommentWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCommentRow(),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
           _buildToggleRepliesButton(),
           if (_isRepliesVisible) ...[
             _buildRepliesList(),
@@ -1474,15 +1478,16 @@ class _CommentWidgetState extends State<CommentWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CircleAvatar(
-          backgroundImage: NetworkImage(widget.commentData.user.profilePictureSignedUrl),
+          backgroundImage:
+              NetworkImage(widget.commentData.user.profilePictureSignedUrl),
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: 10),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildUserName(),
-              const SizedBox(height: 5),
+              SizedBox(height: 5.h),
               _buildCommentText(),
               _buildLikeAndReplyButtons(),
             ],
@@ -1494,7 +1499,8 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   Widget _buildUserName() {
     return Text(
-      capitalizeAndSplit('${widget.commentData.user.firstName} ${widget.commentData.user.lastName}'),
+      capitalizeAndSplit(
+          '${widget.commentData.user.firstName} ${widget.commentData.user.lastName}'),
       style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
     );
   }
@@ -1512,7 +1518,9 @@ class _CommentWidgetState extends State<CommentWidget> {
         IconButton(
           icon: Icon(
             Icons.favorite,
-            color: widget.commentData.isLiked ? AppColors.PRIMARY_COLOR_DARK : AppColors.UNSELECTED_DARK_GRAY_COLOR,
+            color: widget.commentData.isLiked
+                ? AppColors.PRIMARY_COLOR_DARK
+                : AppColors.UNSELECTED_DARK_GRAY_COLOR,
           ),
           onPressed: () => _handleLikeComment(widget.commentData.id),
         ),
@@ -1533,14 +1541,15 @@ class _CommentWidgetState extends State<CommentWidget> {
     // Handle like functionality for the comment
     context.read<ReelsCubit>().toggleCommentLike(commentId).then((_) {
       FocusScope.of(context).unfocus(); // Remove focus from the text field
-      context.read<ReelsCubit>().getComments(widget.commentData.reelId); // Refresh comments after liking
+      context.read<ReelsCubit>().getComments(
+          widget.commentData.reelId); // Refresh comments after liking
     }).catchError((error) {
       _showErrorSnackBar('Failed to send like. Please try again.');
     });
   }
 
   Widget _buildToggleRepliesButton() {
-    if (widget.commentData.replies.isEmpty) return const SizedBox.shrink();
+    if (widget.commentData.replies.isEmpty) return SizedBox.shrink();
 
     return GestureDetector(
       onTap: () => setState(() => _isRepliesVisible = !_isRepliesVisible),
@@ -1553,7 +1562,7 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   Widget _buildRepliesList() {
     return Padding(
-      padding: const EdgeInsets.only(left: 40.0, bottom: 8, top: 8),
+      padding: EdgeInsets.only(left: 40.0, bottom: 8, top: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: widget.commentData.replies.map(_buildSingleReply).toList(),
@@ -1563,29 +1572,33 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   Widget _buildSingleReply(CommentData replay) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      padding: EdgeInsets.symmetric(vertical: 5.h),
       child: Column(
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(replay.user.profilePictureSignedUrl),
+                backgroundImage:
+                    NetworkImage(replay.user.profilePictureSignedUrl),
                 radius: 16,
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      capitalizeAndSplit('${replay.user.firstName} ${replay.user.lastName?? ''}'),
-                      style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                      capitalizeAndSplit(
+                          '${replay.user.firstName} ${replay.user.lastName ?? ''}'),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
                     ),
-                    const SizedBox(height: 5),
+                    SizedBox(height: 5.h),
                     Text(
                       replay.comment,
-                      style: const TextStyle(color: AppColors.UNSELECTED_GRAY_COLOR),
+                      style: const TextStyle(
+                          color: AppColors.UNSELECTED_GRAY_COLOR),
                     ),
                   ],
                 ),
@@ -1597,7 +1610,9 @@ class _CommentWidgetState extends State<CommentWidget> {
               IconButton(
                 icon: Icon(
                   Icons.favorite,
-                  color: replay.isLiked ? AppColors.PRIMARY_COLOR_DARK : AppColors.UNSELECTED_DARK_GRAY_COLOR,
+                  color: replay.isLiked
+                      ? AppColors.PRIMARY_COLOR_DARK
+                      : AppColors.UNSELECTED_DARK_GRAY_COLOR,
                 ),
                 onPressed: () => _handleLikeComment(replay.id),
               ),
@@ -1608,7 +1623,8 @@ class _CommentWidgetState extends State<CommentWidget> {
               const Spacer(),
               IconButton(
                 icon: const FaIcon(FontAwesomeIcons.reply, color: Colors.white),
-                onPressed: () => _showReplyInput(replay.reelId, replay.id, replay.user.id),
+                onPressed: () =>
+                    _showReplyInput(replay.reelId, replay.id, replay.user.id),
               ),
             ],
           ),
@@ -1620,7 +1636,7 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   Widget _buildReplyInputField() {
     return Padding(
-      padding: const EdgeInsets.only(left: 40.0, top: 10),
+      padding: EdgeInsets.only(left: 40.0, top: 10),
       child: Row(
         children: [
           Expanded(
@@ -1649,7 +1665,8 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 
-  void _showReplyInput([String? reelId, String? parentCommentId, String? receiverCommentId]) {
+  void _showReplyInput(
+      [String? reelId, String? parentCommentId, String? receiverCommentId]) {
     setState(() {
       _isRepliesVisible = true;
       _replyFocusNode.requestFocus(); // Focus on the reply input field
@@ -1662,15 +1679,16 @@ class _CommentWidgetState extends State<CommentWidget> {
       context
           .read<ReelsCubit>()
           .addReplayComment(
-        widget.commentData.reelId,
-        replyText,
-        parentCommentId: widget.commentData.id,
-        receiverComment: widget.commentData.user.id,
-      )
+            widget.commentData.reelId,
+            replyText,
+            parentCommentId: widget.commentData.id,
+            receiverComment: widget.commentData.user.id,
+          )
           .then((_) {
         _replyController.clear();
         FocusScope.of(context).unfocus();
-        context.read<ReelsCubit>().getComments(widget.commentData.reelId); // Refresh comments after replying
+        context.read<ReelsCubit>().getComments(
+            widget.commentData.reelId); // Refresh comments after replying
       }).catchError((error) {
         _showErrorSnackBar('Failed to send reply. Please try again.');
       });
@@ -1689,7 +1707,7 @@ class ShimmerCommentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1701,7 +1719,7 @@ class ShimmerCommentWidget extends StatelessWidget {
               radius: 20,
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1711,21 +1729,21 @@ class ShimmerCommentWidget extends StatelessWidget {
                   highlightColor: Colors.white12,
                   child: Container(
                     width: 100,
-                    height: 16,
+                    height: 16.h,
                     color: Colors.white12,
                   ),
                 ),
-                const SizedBox(height: 5),
+                SizedBox(height: 5.h),
                 Shimmer.fromColors(
                   baseColor: Colors.white12,
                   highlightColor: Colors.white12,
                   child: Container(
                     width: double.infinity,
-                    height: 12,
+                    height: 12.h,
                     color: Colors.white12,
                   ),
                 ),
-                const SizedBox(height: 5),
+                SizedBox(height: 5.h),
                 Row(
                   children: [
                     Shimmer.fromColors(
@@ -1733,13 +1751,13 @@ class ShimmerCommentWidget extends StatelessWidget {
                       highlightColor: Colors.white12,
                       child: const Icon(Icons.favorite, color: Colors.white12),
                     ),
-                    const SizedBox(width: 5),
+                    SizedBox(width: 5),
                     Shimmer.fromColors(
                       baseColor: Colors.white12,
                       highlightColor: Colors.white12,
                       child: Container(
                         width: 20,
-                        height: 12,
+                        height: 12.h,
                         color: Colors.white12,
                       ),
                     ),
@@ -1768,7 +1786,8 @@ void showCommentsBottomSheet(BuildContext context, {required Reel reel}) {
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (context) {
-      return CommentsBottomSheet(reel: reel); // Use the new CommentsBottomSheet widget
+      return CommentsBottomSheet(
+          reel: reel); // Use the new CommentsBottomSheet widget
     },
   );
 }

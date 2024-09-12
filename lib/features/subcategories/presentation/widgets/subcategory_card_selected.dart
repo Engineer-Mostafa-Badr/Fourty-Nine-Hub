@@ -29,7 +29,7 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
     return Container(
       width: kToolbarHeight * 2.5,
       height: kToolbarHeight * 3,
-      margin: const EdgeInsets.all(5),
+      margin: EdgeInsets.all(5),
       decoration: BoxDecoration(
           border: Border.all(
               color: widget.selected ? Colors.red : Colors.transparent,
@@ -64,9 +64,9 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
               ],
             ),
           ),
-          const Sizer(),
+          Sizer(),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
             child: Row(
               children: [
                 Expanded(

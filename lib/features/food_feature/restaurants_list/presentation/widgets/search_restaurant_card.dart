@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchRestaurantCard extends StatefulWidget {
   const SearchRestaurantCard({
@@ -44,9 +45,10 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
+              padding:
+                   EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
+              decoration:  const BoxDecoration(
+                gradient: const LinearGradient(
                   colors: [
                     AppColors.YELLOW_COLOR,
                     AppColors.ACCENT_COLOR,
@@ -55,17 +57,17 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
               ),
               child: Row(
                 children: <Widget>[
-                  const Icon(
+                   const Icon(
                     Icons.workspace_premium_outlined,
                     color: Colors.black,
                     size: 25,
                   ),
-                  const Sizer(),
+                   Sizer(),
                   Text(
                     LocaleKeys.premium.tr(),
-                    style: const TextStyle(
+                    style:  TextStyle(
                         color: Colors.black,
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold),
                   )
                 ],
@@ -79,7 +81,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
             Container(
               color: Colors.white,
               padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+                   EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +94,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
                       Label(
                           text: widget.restaurant?.name ?? "",
                           style: Styles.mediumText(
-                              fontSize: 18, fontWeight: FontWeight.w500)),
+                              fontSize: 18.sp, fontWeight: FontWeight.w500)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,14 +105,14 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
                               text: widget.restaurant?.subcategoryId?.name ??
                                   "${getLang() == "ar" ? state.selectedMealCategory?.nameAr : state.selectedMealCategory?.nameEn}",
                               style: Styles.mediumText(
-                                  fontSize: 15,
+                                  fontSize: 15.sp,
                                   color: AppColors.PRIMARY_COLOR_DARK),
                             );
                           }),
                           Label(
                             text: "${LocaleKeys.comma.tr()} ",
                             style: Styles.mediumText(
-                                fontSize: 15,
+                                fontSize: 15.sp,
                                 color: AppColors.PRIMARY_COLOR_DARK),
                           ),
                           Label(
@@ -120,7 +122,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
                                         .restaurant?.mainCategoryId?.nameEn) ??
                                 LocaleKeys.meal.tr(),
                             style: Styles.mediumText(
-                                fontSize: 15,
+                                fontSize: 15.sp,
                                 color: AppColors.PRIMARY_COLOR_DARK),
                           ),
                         ],
@@ -138,7 +140,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
                             Icons.star_rounded,
                             color: AppColors.ACCENT_COLOR,
                           ),
-                          const Sizer(),
+                          Sizer(),
                           Label(
                               text: '${widget.restaurant?.totalRating}',
                               style: Styles.mediumText(
@@ -152,7 +154,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
                         text:
                             "${widget.restaurant?.menu?.length ?? 0} ${LocaleKeys.meals.tr()}",
                         style: Styles.mediumText(
-                          fontSize: 15,
+                          fontSize: 15.sp,
                           color: AppColors.PRIMARY_COLOR,
                         ),
                       ),

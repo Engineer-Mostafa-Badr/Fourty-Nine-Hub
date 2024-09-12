@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreateResturantSubcategoryDropdown extends StatelessWidget {
   const CreateResturantSubcategoryDropdown({super.key});
@@ -53,9 +54,9 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
                                 ? Colors.red
                                 : Colors.black),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: 10,
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 5.h,
+                        horizontal: 10.w,
                       ),
                     ),
                     menuHeight: MediaQuery.of(context).size.height / 1.5,
@@ -92,7 +93,7 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
             ],
           );
         } else {
-          return const SizedBox.shrink();
+          return SizedBox.shrink();
         }
       },
     );

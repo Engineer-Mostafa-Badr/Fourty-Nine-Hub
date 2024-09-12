@@ -1,10 +1,10 @@
 // Dart imports:
 import 'dart:core';
-import 'dart:math' as math;
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/components.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/effects/beauty_effect_button.dart';
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/utils/permissions.dart';
@@ -17,6 +17,10 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
+import '../../../../../../../../../res/style/const.dart';
+import '../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../liveview/gifts/simple_gifts_sheet.dart';
 import '../config.dart';
 
 /// @nodoc
@@ -104,16 +108,7 @@ class _ZegoLiveStreamingPreviewPageState
                 children: [
                   background(constraints.maxHeight),
                   ZegoAudioVideoContainer(
-                    layout: ZegoLayout.pictureInPicture(
-                      smallViewPosition: ZegoViewPosition.bottomRight,
-                      smallViewSize: Size(139.5.zW, 248.0.zH),
-                      smallViewMargin: EdgeInsets.only(
-                        left: 24.zR,
-                        top: 144.zR,
-                        right: 24.zR,
-                        bottom: 144.zR,
-                      ),
-                    ),
+                    layout: ZegoLayout.gallery(),
                     foregroundBuilder: audioVideoViewForeground,
                     backgroundBuilder: audioVideoViewBackground,
                     avatarConfig: ZegoAvatarConfig(
@@ -124,8 +119,9 @@ class _ZegoLiveStreamingPreviewPageState
                       builder: widget.config.avatarBuilder,
                     ),
                   ),
+                  _liveInfo(constraints),
                   liveTopBar(),
-                  bottomBar(),
+                  liveBottomBar(),
                   foreground(
                     constraints.maxWidth,
                     constraints.maxHeight,
@@ -137,6 +133,125 @@ class _ZegoLiveStreamingPreviewPageState
         },
       ),
     );
+  }
+
+  Positioned _liveInfo(BoxConstraints constraints) {
+    return Positioned(
+        top: 90,
+        right: constraints.maxWidth / 8,
+        left: constraints.maxWidth / 8,
+        child: Column(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              width: constraints.maxWidth / 1.3,
+              padding: const EdgeInsets.all(15),
+              // height: 50,
+              color: Colors.grey.withOpacity(0.7),
+              child: Row(
+                children: [
+                  ImageFromInternet(
+                    image:
+                        context.read<UserCubit>().state.data?.profilePicture ??
+                            UIConst.profilePlaceHolder,
+                    height: 70,
+                    width: 70,
+                    borderRadius: BorderRadius.circular(15),
+                    isCircle: false,
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      // controller: _meetingIdController,
+                      keyboardType: TextInputType.text,
+                      textAlign: TextAlign.center,
+                      // validator: validateInput,
+                      maxLength: 50,
+                      maxLines: null,
+                      // onChanged: onTextChanged,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.edit),
+                        
+                        // errorText: _errorMessage,
+                        counterText: '',
+                        labelStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
+                        hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Colors.transparent,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(right: constraints.maxWidth / 20),
+                    padding: const EdgeInsets.all(4),
+                    width: constraints.maxWidth / 3,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.7),
+                    ),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/49-New-icons/hash.png',
+                          width: 25,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        const Text('Add topic',
+                            style: TextStyle(color: Colors.white)),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      showSimpleGiftBottomSheet(
+                          context, context.read<UserCubit>().state.data!.id);
+                    },
+                    child: Container(
+                      // margin: EdgeInsets.only(left: constraints.maxWidth / 20),
+                      padding: const EdgeInsets.all(4),
+                      width: constraints.maxWidth / 2,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.7),
+                      ),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/49-New-icons/goal.png',
+                            width: 25,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          const Text(
+                            'Add a LIVE goal',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
+        ));
   }
 
   Scaffold zoomPreviewScreen(BuildContext context) {
@@ -255,9 +370,6 @@ class _ZegoLiveStreamingPreviewPageState
           children: [
             Container(
               margin: const EdgeInsets.only(left: 20),
-              decoration: BoxDecoration(
-                  color: const Color(0xFFED1C24),
-                  borderRadius: BorderRadius.circular(15)),
               child: ZegoTextIconButton(
                 onPressed: () {
                   Navigator.of(
@@ -266,18 +378,10 @@ class _ZegoLiveStreamingPreviewPageState
                   ).pop();
                 },
                 icon: ButtonIcon(
-                  icon: widget.config.preview.pageBackIcon ??
-                      (isRTL(context)
-                          ? Transform(
-                              alignment: Alignment.center,
-                              transform: Matrix4.rotationY(math.pi),
-                              child: ZegoLiveStreamingImage.asset(
-                                ZegoLiveStreamingIconUrls.pageBack,
-                              ),
-                            )
-                          : ZegoLiveStreamingImage.asset(
-                              ZegoLiveStreamingIconUrls.pageBack,
-                            )),
+                  icon: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                  ),
                 ),
                 iconSize: iconSize,
                 buttonSize: buttonSize,
@@ -285,26 +389,44 @@ class _ZegoLiveStreamingPreviewPageState
             ),
             const Expanded(child: SizedBox()),
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              // padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               margin: const EdgeInsets.all(25),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: const Color(0xFFED1C24),
+                color: Colors.grey.withOpacity(0.7),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ZegoSwitchCameraButton(
+                  // ZegoSwitchCameraButton(
+                  //   buttonSize: buttonSize,
+                  //   iconSize: iconSize,
+                  //   icon: ButtonIcon(
+                  //     icon: const Icon(Icons.switch_camera, size: 20),
+                  //     backgroundColor: Colors.transparent,
+                  //   ),
+                  //   defaultUseFrontFacingCamera: ZegoUIKit()
+                  //       .getUseFrontFacingCameraStateNotifier(
+                  //           ZegoUIKit().getLocalUser().id)
+                  //       .value,
+                  // ),
+                  ZegoToggleMicrophoneButton(
                     buttonSize: buttonSize,
                     iconSize: iconSize,
-                    icon: ButtonIcon(
-                      icon: const Icon(Icons.switch_camera, size: 20),
+                    normalIcon: ButtonIcon(
+                      icon: const Icon(
+                        Icons.mic,
+                        // size: 20,
+                      ),
                       backgroundColor: Colors.transparent,
                     ),
-                    defaultUseFrontFacingCamera: ZegoUIKit()
-                        .getUseFrontFacingCameraStateNotifier(
-                            ZegoUIKit().getLocalUser().id)
-                        .value,
+                    offIcon: ButtonIcon(
+                      icon: const Icon(
+                        Icons.mic_off_outlined,
+                        // size: 20,
+                      ),
+                      backgroundColor: Colors.transparent,
+                    ),
                   ),
                   ZegoToggleCameraButton(
                     buttonSize: buttonSize,
@@ -312,13 +434,13 @@ class _ZegoLiveStreamingPreviewPageState
                     normalIcon: ButtonIcon(
                         icon: const Icon(
                           Icons.videocam_outlined,
-                          size: 20,
+                          // size: 20,
                         ),
                         backgroundColor: Colors.transparent),
                     offIcon: ButtonIcon(
                       icon: const Icon(
                         Icons.videocam_off_outlined,
-                        size: 20,
+                        // size: 20,
                       ),
                       backgroundColor: Colors.transparent,
                     ),
@@ -329,32 +451,14 @@ class _ZegoLiveStreamingPreviewPageState
                     iconStartSharing: ButtonIcon(
                       icon: const Icon(
                         Icons.screen_share_rounded,
-                        size: 20,
+                        // size: 20,
                       ),
                       backgroundColor: Colors.transparent,
                     ),
                     iconStopSharing: ButtonIcon(
                       icon: const Icon(
                         Icons.stop_screen_share_outlined,
-                        size: 20,
-                      ),
-                      backgroundColor: Colors.transparent,
-                    ),
-                  ),
-                  ZegoToggleMicrophoneButton(
-                    buttonSize: buttonSize,
-                    iconSize: iconSize,
-                    normalIcon: ButtonIcon(
-                      icon: const Icon(
-                        Icons.mic,
-                        size: 20,
-                      ),
-                      backgroundColor: Colors.transparent,
-                    ),
-                    offIcon: ButtonIcon(
-                      icon: const Icon(
-                        Icons.mic_off_outlined,
-                        size: 20,
+                        // size: 20,
                       ),
                       backgroundColor: Colors.transparent,
                     ),
@@ -368,7 +472,7 @@ class _ZegoLiveStreamingPreviewPageState
     );
   }
 
-  Widget bottomBar() {
+  Widget liveBottomBar() {
     if (!widget.config.preview.bottomBar.isVisible) {
       return Container();
     }
@@ -379,37 +483,42 @@ class _ZegoLiveStreamingPreviewPageState
     final beautyButtonPlaceHolder =
         SizedBox(width: buttonSize.width, height: buttonSize.height);
 
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: 89.zR,
-          top: 0,
-          right: 89.zR,
-          bottom: 97.zR,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            widget.config.preview.bottomBar.showBeautyEffectButton
-                ? ZegoLiveStreamingBeautyEffectButton(
-                    translationText: widget.config.innerText,
-                    rootNavigator: widget.config.rootNavigator,
-                    effectConfig: widget.config.effect,
-                    buttonSize: buttonSize,
-                    iconSize: iconSize,
-                    icon: widget.config.preview.beautyEffectIcon != null
-                        ? ButtonIcon(
-                            icon: widget.config.preview.beautyEffectIcon,
-                          )
-                        : null,
-                  )
-                : beautyButtonPlaceHolder,
-            SizedBox(width: 48.zR),
-            startButton(),
-            SizedBox(width: 48.zR),
-            beautyButtonPlaceHolder,
-          ],
+    return Positioned(
+      bottom: 50,
+      left: 0,
+      right: 0,
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: 89.zR,
+            top: 0,
+            right: 89.zR,
+            bottom: 0.zR,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              widget.config.preview.bottomBar.showBeautyEffectButton
+                  ? ZegoLiveStreamingBeautyEffectButton(
+                      translationText: widget.config.innerText,
+                      rootNavigator: widget.config.rootNavigator,
+                      effectConfig: widget.config.effect,
+                      buttonSize: buttonSize,
+                      iconSize: iconSize,
+                      icon: widget.config.preview.beautyEffectIcon != null
+                          ? ButtonIcon(
+                              icon: widget.config.preview.beautyEffectIcon,
+                            )
+                          : null,
+                    )
+                  : beautyButtonPlaceHolder,
+              SizedBox(width: 48.zR),
+              startButton(),
+              SizedBox(width: 48.zR),
+              // beautyButtonPlaceHolder,
+            ],
+          ),
         ),
       ),
     );
@@ -457,8 +566,8 @@ class _ZegoLiveStreamingPreviewPageState
         GestureDetector(
           onTap: defaultAction,
           child: Container(
-            width: 300.zR,
-            height: 88.zR,
+            width: context.screenWidth / 1.5,
+            height: 50,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(44.zR),
               color: const Color(0xFFED1C24),
@@ -466,9 +575,11 @@ class _ZegoLiveStreamingPreviewPageState
             child: Align(
               alignment: Alignment.center,
               child: Text(
-                widget.config.innerText.startLiveStreamingButton,
+                'Go LIVE',
                 style: TextStyle(
                   fontSize: 32.zR,
+                  decoration: TextDecoration.underline,
+                  decorationColor: Colors.white,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
@@ -687,7 +798,6 @@ class _ZegoLiveStreamingPreviewPageState
         );
   }
 
- 
   void _toggleCamera(bool v) {
     final valueNotifier = v;
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/style/styles.dart';
 import '../labels/label.dart';
@@ -55,7 +56,7 @@ class SocialImageViewer extends StatelessWidget {
                     top: 10,
                     right: 10,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: EdgeInsets.symmetric(horizontal: 10.w.w),
                       // height: kToolbarHeight * .5,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),

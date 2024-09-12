@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreateDoctorIDExpiryDatePicker extends StatelessWidget {
   const CreateDoctorIDExpiryDatePicker(
@@ -33,7 +34,7 @@ class CreateDoctorIDExpiryDatePicker extends StatelessWidget {
             if (field.hasError)
               Column(
                 children: [
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8.h),
                   Text(
                     field.errorText ?? "",
                     style: Styles.mediumText(color: Colors.red),

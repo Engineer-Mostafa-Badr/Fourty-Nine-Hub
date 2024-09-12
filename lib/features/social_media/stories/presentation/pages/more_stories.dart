@@ -149,7 +149,7 @@
 // // // //                       left: 0,
 // // // //                       right: 0,
 // // // //                       child: Padding(
-// // // //                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
+// // // //                         padding: EdgeInsets.symmetric(horizontal: 8.0),
 // // // //                         child: Row(
 // // // //                           crossAxisAlignment: CrossAxisAlignment.center,
 // // // //                           children: [
@@ -181,7 +181,7 @@
 // // // //                                 userStory.user?.profilePictureUrl ?? '',
 // // // //                               ),
 // // // //                             ),
-// // // //                             const SizedBox(
+// // // //                             SizedBox(
 // // // //                               width: 8,
 // // // //                             ),
 // // // //                             Column(
@@ -192,12 +192,12 @@
 // // // //                                   capitalizeAndSplit2Only(
 // // // //                                       '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
 // // // //                                   style: const TextStyle(
-// // // //                                     fontSize: 18,
+// // // //                                     fontSize: 18.sp,
 // // // //                                     color: Colors.white,
 // // // //                                   ),
 // // // //                                 ),
-// // // //                                 const SizedBox(
-// // // //                                   height: 4,
+// // // //                                 SizedBox(
+// // // //                                   height: 4.h,
 // // // //                                 ),
 // // // //                                 BlocConsumer<StoryCubit, StoryState>(
 // // // //                                   listener: (context, state) {
@@ -208,12 +208,12 @@
 // // // //                                       return Text(
 // // // //                                         'Last Seen: ${DateFormat('hh:mm a').format(state.currentStoryCreatedAt!)}',
 // // // //                                         style: const TextStyle(
-// // // //                                           fontSize: 12,
+// // // //                                           fontSize: 12.sp,
 // // // //                                           color: Colors.white70,
 // // // //                                         ),
 // // // //                                       );
 // // // //                                     }
-// // // //                                     return const Sizer();
+// // // //                                     return Sizer();
 // // // //                                   },
 // // // //                                 ),
 // // // //                               ],
@@ -268,7 +268,7 @@
 // // // // //                   crossAxisAlignment: CrossAxisAlignment.stretch,
 // // // // //                   children: [
 // // // // //                     Padding(
-// // // // //                       padding: const EdgeInsets.only(top: 25,bottom: 4),
+// // // // //                       padding: EdgeInsets.only(top: 25,bottom: 4),
 // // // // //                       child: Row(
 // // // // //                         crossAxisAlignment: CrossAxisAlignment.center,
 // // // // //                         children: [
@@ -301,7 +301,7 @@
 // // // // //                               userStory.user?.profilePictureUrl ?? '',
 // // // // //                             ),
 // // // // //                           ),
-// // // // //                           const SizedBox(
+// // // // //                           SizedBox(
 // // // // //                             width: 8,
 // // // // //                           ),
 // // // // //                           Column(
@@ -311,15 +311,15 @@
 // // // // //                               Text(
 // // // // //                                 capitalizeAndSplit2Only('${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
 // // // // //                                 style: const TextStyle(
-// // // // //                                   fontSize: 18,
+// // // // //                                   fontSize: 18.sp,
 // // // // //                                   color: Colors.white,
 // // // // //                                 ),
 // // // // //                               ),
-// // // // //                               const SizedBox(height: 4,),
+// // // // //                               SizedBox(height: 4.h,),
 // // // // //                               const Text(
 // // // // //                                 'Last Seen: 8 minute ago',
 // // // // //                                 style: TextStyle(
-// // // // //                                   fontSize: 12,
+// // // // //                                   fontSize: 12.sp,
 // // // // //                                   color: Colors.white70,
 // // // // //                                 ),
 // // // // //                               )
@@ -440,7 +440,7 @@
 // // // //               left: 0,
 // // // //               right: 0,
 // // // //               child: Padding(
-// // // //                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
+// // // //                 padding: EdgeInsets.symmetric(horizontal: 8.0),
 // // // //                 child: Row(
 // // // //                   crossAxisAlignment: CrossAxisAlignment.center,
 // // // //                   children: [
@@ -472,7 +472,7 @@
 // // // //                         userStory.user?.profilePictureUrl ?? '',
 // // // //                       ),
 // // // //                     ),
-// // // //                     const SizedBox(
+// // // //                     SizedBox(
 // // // //                       width: 8,
 // // // //                     ),
 // // // //                     Column(
@@ -483,12 +483,12 @@
 // // // //                           capitalizeAndSplit2Only(
 // // // //                               '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
 // // // //                           style: const TextStyle(
-// // // //                             fontSize: 18,
+// // // //                             fontSize: 18.sp,
 // // // //                             color: Colors.white,
 // // // //                           ),
 // // // //                         ),
-// // // //                         const SizedBox(
-// // // //                           height: 4,
+// // // //                         SizedBox(
+// // // //                           height: 4.h,
 // // // //                         ),
 // // // //                         BlocConsumer<StoryCubit, StoryState>(
 // // // //                           listener: (context, state) {
@@ -499,12 +499,12 @@
 // // // //                               return Text(
 // // // //                                 'Last Seen: ${DateFormat('hh:mm a').format(state.currentStoryCreatedAt!)}',
 // // // //                                 style: const TextStyle(
-// // // //                                   fontSize: 12,
+// // // //                                   fontSize: 12.sp,
 // // // //                                   color: Colors.white70,
 // // // //                                 ),
 // // // //                               );
 // // // //                             }
-// // // //                             return const Sizer();
+// // // //                             return Sizer();
 // // // //                           },
 // // // //                         ),
 // // // //                       ],
@@ -630,7 +630,7 @@
 // // //                 );
 // // //               },
 // // //             )
-// // //           : const Sizer(),
+// // //           : Sizer(),
 // // //     );
 // // //   }
 // // // }
@@ -743,13 +743,13 @@
 // // //   @override
 // // //   Widget build(BuildContext context) {
 // // //     return Padding(
-// // //       padding: const EdgeInsets.symmetric(horizontal: 8.0),
+// // //       padding: EdgeInsets.symmetric(horizontal: 8.0),
 // // //       child: Row(
 // // //         crossAxisAlignment: CrossAxisAlignment.center,
 // // //         children: [
 // // //           _buildBackButton(context),
 // // //           _buildUserAvatar(),
-// // //           const SizedBox(width: 8),
+// // //           SizedBox(width: 8),
 // // //           _buildUserInfo(context),
 // // //           const Spacer(),
 // // //           _buildMoreOptionsButton(),
@@ -788,19 +788,19 @@
 // // //         Text(
 // // //           capitalizeAndSplit2Only(
 // // //               '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
-// // //           style: const TextStyle(fontSize: 18, color: Colors.white),
+// // //           style: const TextStyle(fontSize: 18.sp, color: Colors.white),
 // // //         ),
-// // //         const SizedBox(height: 4),
+// // //         SizedBox(height: 4.h),
 // // //         // BlocBuilder<StoryCubit, StoryState>(
 // // //         //   builder: (context, state) {
 // // //         //     if (state.currentStoryCreatedAt != null) {
 // // //         //       return Text(
 // // //         //         'Last Seen: ${DateFormat('hh:mm a').format(
 // // //         //             state.currentStoryCreatedAt!)}',
-// // //         //         style: const TextStyle(fontSize: 12, color: Colors.white70),
+// // //         //         style: const TextStyle(fontSize: 12.sp, color: Colors.white70),
 // // //         //       );
 // // //         //     }
-// // //         //     return const SizedBox.shrink();
+// // //         //     return SizedBox.shrink();
 // // //         //   },
 // // //         // ),
 // // //       ],
@@ -960,7 +960,7 @@
 // //                 );
 // //               },
 // //             )
-// //           : const Sizer(),
+// //           : Sizer(),
 // //     );
 // //   }
 // // }
@@ -1103,13 +1103,13 @@
 // //     print(
 // //         "$createdAt-----------------------------------------------------------");
 // //     return Padding(
-// //       padding: const EdgeInsets.symmetric(horizontal: 8.0),
+// //       padding: EdgeInsets.symmetric(horizontal: 8.0),
 // //       child: Row(
 // //         crossAxisAlignment: CrossAxisAlignment.center,
 // //         children: [
 // //           _buildBackButton(context),
 // //           _buildUserAvatar(),
-// //           const SizedBox(width: 8),
+// //           SizedBox(width: 8),
 // //           _buildUserInfo(),
 // //           const Spacer(),
 // //           _buildMoreOptionsButton(),
@@ -1148,12 +1148,12 @@
 // //         Text(
 // //           capitalizeAndSplit2Only(
 // //               '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
-// //           style: const TextStyle(fontSize: 18, color: Colors.white),
+// //           style: const TextStyle(fontSize: 18.sp, color: Colors.white),
 // //         ),
-// //         const SizedBox(height: 4),
+// //         SizedBox(height: 4.h),
 // //         Text(
 // //           serviceLocator<StoryCubit>().state.currentStoryCreatedAt.toString(),
-// //           style: const TextStyle(fontSize: 18, color: Colors.white),
+// //           style: const TextStyle(fontSize: 18.sp, color: Colors.white),
 // //         ),
 // //       ],
 // //     );
@@ -1311,7 +1311,7 @@
 //                 );
 //               },
 //             )
-//           : const Sizer(),
+//           : Sizer(),
 //     );
 //   }
 // }
@@ -1454,13 +1454,13 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: 8.0),
+//       padding: EdgeInsets.symmetric(horizontal: 8.0),
 //       child: Row(
 //         crossAxisAlignment: CrossAxisAlignment.center,
 //         children: [
 //           _buildBackButton(context),
 //           _buildUserAvatar(),
-//           const SizedBox(width: 8),
+//           SizedBox(width: 8),
 //           _buildUserInfo(),
 //           const Spacer(),
 //           _buildMoreOptionsButton(),
@@ -1499,12 +1499,12 @@
 //         Text(
 //           capitalizeAndSplit2Only(
 //               '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
-//           style: const TextStyle(fontSize: 18, color: Colors.white),
+//           style: const TextStyle(fontSize: 18.sp, color: Colors.white),
 //         ),
-//         const SizedBox(height: 4),
+//         SizedBox(height: 4.h),
 //         Text(
 //           DateFormat('hh:mm a').format(createdAt),
-//           style: const TextStyle(fontSize: 12, color: Colors.white70),
+//           style: const TextStyle(fontSize: 12.sp, color: Colors.white70),
 //         ),
 //       ],
 //     );
@@ -1573,7 +1573,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:story_view/story_view.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../res/style/const.dart';
 import '../../../tinder/presentation/pages/user_profile.dart';
@@ -1601,8 +1601,8 @@ class ReactionWidget extends StatelessWidget {
         Expanded(
           flex: 6,
           child: Container(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 16.0, vertical: 0.0), // Adjust padding as per need
+            padding: EdgeInsets.symmetric(
+                horizontal: 16.0, vertical: 0.h), // Adjust padding as per need
             decoration: BoxDecoration(
               color: Colors.grey[800],
               borderRadius: BorderRadius.circular(25.0),
@@ -1615,12 +1615,12 @@ class ReactionWidget extends StatelessWidget {
               },
               cursorColor: Colors.white,
               cursorErrorColor: Colors.red,
-              decoration: const InputDecoration(
+              decoration:  InputDecoration(
                 fillColor: Colors.transparent,
                 hintText: 'Send message...',
                 hintStyle: TextStyle(
                   color: Colors.white54,
-                  fontSize: 16.0,
+                  fontSize: 16.sp,
                 ),
                 border: InputBorder.none, // Remove default underline
               ),
@@ -1630,7 +1630,7 @@ class ReactionWidget extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: 10),
         Expanded(
           flex: 4,
           child: ListView.builder(
@@ -1640,7 +1640,7 @@ class ReactionWidget extends StatelessWidget {
             itemBuilder: (context, index) {
               final reaction = reactions[index];
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                padding: EdgeInsets.symmetric(horizontal: 4.0),
                 child: GestureDetector(
                   onTap: () {
                     // Action for reaction
@@ -1662,7 +1662,7 @@ class ReactionWidget extends StatelessWidget {
                       )
 
                       // Optionally add text below the icons
-                      // Text(reaction['label'], style: TextStyle(color: Colors.white, fontSize: 12)),
+                      // Text(reaction['label'], style: TextStyle(color: Colors.white, fontSize: 12.sp)),
                     ],
                   ),
                 ),
@@ -1769,7 +1769,7 @@ class StoryViewScreenState extends State<StoryViewScreen> {
                 );
               },
             )
-          : const Sizer(),
+          : Sizer(),
     );
   }
 }
@@ -1883,7 +1883,7 @@ class UserStoryViewState extends State<UserStoryView> {
 
   Widget _buildNavigationOverlay() {
     return Padding(
-      padding: const EdgeInsets.only(top: kToolbarHeight * 2),
+      padding: EdgeInsets.only(top: kToolbarHeight * 2),
       child: GestureDetector(
         // onTapDown: (details) {
         //   final screenWidth = MediaQuery.of(context).size.width;
@@ -1954,13 +1954,13 @@ class _UserInfoBarState extends State<UserInfoBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _buildBackButton(context),
           _buildUserAvatar(),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           _buildUserInfo(),
           const Spacer(),
           _buildMoreOptionsButton(context),
@@ -2000,12 +2000,12 @@ class _UserInfoBarState extends State<UserInfoBar> {
         Text(
           capitalizeAndSplit2Only(
               '${widget.userStory.user?.firstName ?? ''} ${widget.userStory.user?.lastName ?? ''}'),
-          style: const TextStyle(fontSize: 18, color: Colors.white),
+          style:  TextStyle(fontSize: 18.sp, color: Colors.white),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4.h),
         Text(
           DateFormat('hh:mm a').format(widget.createdAt),
-          style: const TextStyle(fontSize: 12, color: Colors.white70),
+          style:  TextStyle(fontSize: 12.sp, color: Colors.white70),
         ),
       ],
     );
@@ -2123,7 +2123,7 @@ StoryItem createStoryItem(context, Story storyData, StoryController controller,
             colorMap[getFirstSubstringBeforeTilde(storyData.content!)] ??
                 Colors.deepOrange,
         textStyle: textStyle ?? const TextStyle(),
-// textOuterPadding: const EdgeInsets.all(8),
+// textOuterPadding: EdgeInsets.all(8),
 // textStyle: TextStyle(
 //   // fontSize: MediaQuery.of(context).size.width*0.1,
 //   shadows: const [
