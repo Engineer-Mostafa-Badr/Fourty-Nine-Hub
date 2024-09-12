@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -72,7 +74,7 @@ class ChatProfileView extends StatelessWidget {
                         color: AppColors.LIGHT_GRAY_COLOR2, fontSize: 24),
                   ),
                   Text(
-                    'Ahmed Nasr',
+                    context.read<UserCubit>().state.data!.fullName,
                     style: Styles.mediumText(fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -97,6 +99,7 @@ class ChatProfileView extends StatelessWidget {
               ),
               subtitle: Text(
                 'لا حول ولا قوة الا بالله العلي العظيم❤',
+                // context.read<UserCubit>().state.data!.about,
                 style: Styles.mediumText(
                     color: AppColors.LIGHT_GRAY_COLOR2, fontSize: 24),
               ),
@@ -104,19 +107,19 @@ class ChatProfileView extends StatelessWidget {
             ),
             const Divider(),
             // Phone Number Section
-            ListTile(
-              leading:
-                  const Icon(Icons.phone, color: AppColors.DARK_GRAY_COLOR),
-              title: Text(
-                LocaleKeys.phone.tr(),
-                style: Styles.mediumText(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Text(
-                '+20 1211972375',
-                style: Styles.mediumText(
-                    color: AppColors.LIGHT_GRAY_COLOR2, fontSize: 24),
-              ),
-            ),
+            // ListTile(
+            //   leading:
+            //       const Icon(Icons.phone, color: AppColors.DARK_GRAY_COLOR),
+            //   title: Text(
+            //     LocaleKeys.phone.tr(),
+            //     style: Styles.mediumText(fontWeight: FontWeight.bold),
+            //   ),
+            //   subtitle: Text(
+            //     '+20 1211972375',
+            //     style: Styles.mediumText(
+            //         color: AppColors.LIGHT_GRAY_COLOR2, fontSize: 24),
+            //   ),
+            // ),
           ],
         ),
       ),
