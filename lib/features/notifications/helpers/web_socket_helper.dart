@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -12,15 +13,28 @@ class WebSocketHelper {
   final Socket socket;
 
   WebSocketHelper({required this.socket});
+
+  bool isCalled = true;
+
   Future<void> notificationListener(Function(Map<String, dynamic> data) notificationCallback) async {
     try {
-      socket.io.options?['extraHeaders']?['authorization'] = await getUserToken();
+      pr('notificationListener is called ');
+      socket.disconnect();
+      socket.io.close();
+      socket.io.cleanup();
+      // pr('token saved in the instance of the socket is ');
+      // pr(socket.io.options?['extraHeaders']?['authorization']);
+      // pr('saved token is ');
+      // pr(await TokenManager.getAccessToken());
+
+      socket.io.options?['extraHeaders']?['authorization'] = await TokenManager.getAccessToken();
       socket.connect();
       socket.onConnect((_) {
-        pr('Connect To Socket successfully');
+        pr('Connect To Socket successfully ');
       });
 
       socket.on('NotificationCreated', (data) {
+        pr('NotificationCreated Event is recieved and the data is: ');
         pr(data);
         notificationCallback(jsonDecode(data));
       });

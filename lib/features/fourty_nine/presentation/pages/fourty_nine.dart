@@ -66,6 +66,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       }
     });
     context.read<FirebaseNotficationsCubit>().setupInterceptedMessage(context: context);
+    context.read<NotificationSocketIoCubit>().notificationListener();
     super.initState();
   }
 
@@ -78,7 +79,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   @override
   Widget build(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
-    print('userId111111111${user?.id??''}');
+    print('userId111111111${user?.id ?? ''}');
     return BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
       listener: (context, state) {
         if (state is NotificationSocketIoNewNotification) {
