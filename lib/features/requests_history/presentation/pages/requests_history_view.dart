@@ -6,6 +6,7 @@ import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/cubit/request_history_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/widgets/trip_card.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/assets/assets.dart';
 import '../../../../res/strings/labels.dart';
@@ -29,7 +30,7 @@ class HistoryRequestsView extends StatelessWidget {
             label: Labels.requestsHistory,
           ),
           body: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: RefreshIndicator(
                 onRefresh: () async => controller.loadData(),
                 child: state.isLoading
@@ -41,27 +42,28 @@ class HistoryRequestsView extends StatelessWidget {
                           TabBar(tabs: [
                             Tab(
                               text: 'Ride',
-                              icon: SvgPicture.asset(height: 20, Assets.ride),
+                              icon: SvgPicture.asset(height: 20.h, Assets.ride),
                             ),
                             Tab(
                               text: 'Shipping',
-                              icon:
-                                  SvgPicture.asset(height: 20, Assets.shipping),
+                              icon: SvgPicture.asset(
+                                  height: 20.h, Assets.shipping),
                             ),
                             Tab(
                               text: 'Health',
-                              icon: SvgPicture.asset(height: 20, Assets.health),
+                              icon:
+                                  SvgPicture.asset(height: 20.h, Assets.health),
                             ),
                             Tab(
                               text: 'Food',
-                              icon: SvgPicture.asset(height: 20, Assets.food),
+                              icon: SvgPicture.asset(height: 20.h, Assets.food),
                             ),
                             Tab(
                               text: 'Requests',
-                              icon: Image.asset(height: 20, Assets.hand),
+                              icon: Image.asset(height: 20.h, Assets.hand),
                             )
                           ]),
-                          const Sizer(),
+                          Sizer(),
                           Expanded(
                               child: TabBarView(children: [
                             _buildRideRequests(),
@@ -91,7 +93,7 @@ class HistoryRequestsView extends StatelessWidget {
         builder: (context, state) {
       return ListView.separated(
           itemCount: state.shippingRequests?.length ?? 0,
-          separatorBuilder: (context, index) => const Sizer(),
+          separatorBuilder: (context, index) => Sizer(),
           itemBuilder: (context, index) {
             return ShippingRequestCard(trip: state.shippingRequests![index]);
           });
@@ -107,7 +109,7 @@ class HistoryRequestsView extends StatelessWidget {
           itemBuilder: (context, index) => HealthBookingCard(
                 appointment: state.healthBookings![index],
               ),
-          separatorBuilder: (context, index) => const Sizer(),
+          separatorBuilder: (context, index) => Sizer(),
           itemCount: state.healthBookings?.length ?? 0);
     });
   }
@@ -117,7 +119,7 @@ class HistoryRequestsView extends StatelessWidget {
         builder: (context, state) {
       return ListView.separated(
           itemCount: state.trips?.length ?? 0,
-          separatorBuilder: (context, index) => const Sizer(),
+          separatorBuilder: (context, index) => Sizer(),
           itemBuilder: (context, index) {
             return TripCard(trip: state.trips![index]);
           });
@@ -129,7 +131,7 @@ class HistoryRequestsView extends StatelessWidget {
         builder: (context, state) {
       return ListView.separated(
           itemCount: state.foodOrders?.length ?? 0,
-          separatorBuilder: (context, index) => const Sizer(),
+          separatorBuilder: (context, index) => Sizer(),
           itemBuilder: (context, index) {
             return FoodOrderCard(
               item: state.foodOrders![index],

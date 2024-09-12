@@ -11,14 +11,17 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FavouriteSubCategoryCard extends StatefulWidget {
-  const FavouriteSubCategoryCard({super.key, required this.item, required this.onFav});
+  const FavouriteSubCategoryCard(
+      {super.key, required this.item, required this.onFav});
   final FavouriteSubcategoryEntity item;
   final Function() onFav;
 
   @override
-  State<FavouriteSubCategoryCard> createState() => _FavouriteSubCategoryCardState();
+  State<FavouriteSubCategoryCard> createState() =>
+      _FavouriteSubCategoryCardState();
 }
 
 class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
@@ -56,13 +59,13 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
                       right: 10,
                       child: IconAppButton(
                         icon: Icons.favorite,
-                        onPressed: () =>widget.onFav(),
+                        onPressed: () => widget.onFav(),
                         color: AppColors.SECONDARY_COLOR,
                       ))
                 ],
               ),
             ),
-            const Sizer(),
+            Sizer(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
@@ -77,7 +80,7 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
                         ),
                         Label(
                           text: 'dd ${LocaleKeys.ads.localize}',
-                          style: Styles.smallText(fontSize: 25),
+                          style: Styles.smallText(fontSize: 25.sp),
                         )
                       ],
                     ),

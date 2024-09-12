@@ -45,8 +45,8 @@ class DoctorDashboardView extends StatelessWidget {
           ],
         ),
         body: ListView(
-          padding: const EdgeInsets.all(18),
-          children: const [
+          padding:  EdgeInsets.all(18),
+          children: [
             DoctorRenewDayCountWidget(),
             Sizer(),
             DoctorTodayAppointmentsWidget(),

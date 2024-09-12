@@ -106,7 +106,7 @@ class _ViewAllTripJoinCardBuilderState
             return state is ViewAllTripJoinLoading &&
                     !viewAllTripJoinCubit.noMoreDataInDatabase
                 ? const AvailableTripCardLoadingList()
-                : const SizedBox();
+                : SizedBox();
           },
         );
       },

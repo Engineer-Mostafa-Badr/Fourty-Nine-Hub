@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_id_usecase.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // ignore: must_be_immutable
 class EditDoctorDocsView extends StatelessWidget {
@@ -20,12 +21,12 @@ class EditDoctorDocsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(text: Labels.uploadPhotos, style: Styles.headerText()),
-          const Sizer(),
+          Sizer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -45,11 +46,11 @@ class EditDoctorDocsView extends StatelessWidget {
               ),
             ],
           ),
-          const Sizer(
-            height: 20,
+          Sizer(
+            height: 20.h,
           ),
           Label(text: Labels.expireDate, style: Styles.headerText()),
-          const Sizer(),
+          Sizer(),
           DatePickerField(
             title: Labels.expireDate,
             initialDate: now,
@@ -59,11 +60,11 @@ class EditDoctorDocsView extends StatelessWidget {
               _expireDate = date;
             },
           ),
-          const Sizer(
-            height: 50,
+          Sizer(
+            height: 50.h,
           ),
           AppButton(
-            height: 50,
+            height: 50.h,
             label: Labels.update,
             onPressed: () {
               if (_frontId.isEmpty || _backId.isEmpty) {

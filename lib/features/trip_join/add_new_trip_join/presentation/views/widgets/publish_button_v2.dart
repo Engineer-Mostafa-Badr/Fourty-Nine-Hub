@@ -12,7 +12,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class PublishButton extends StatefulWidget {
   const PublishButton({
     super.key,
@@ -60,7 +60,7 @@ class _PublishButtonState extends State<PublishButton> {
         child: Stack(
           children: [
             CustomButton(
-              height: 50,
+              height: 50.h,
               onTap: () async {
                 if (widget.formKey.currentState!.validate()) {
                   await fetchData();
@@ -75,7 +75,7 @@ class _PublishButtonState extends State<PublishButton> {
               top: 5,
               right: 20,
               child: SizedBox(
-                height: 40,
+                height: 40.h,
                 child: BlocBuilder<PublishTripJoinCubit, PublishTripJoinState>(
                   builder: (context, state) {
                     if (state is PublishTripJoinLoading) {
@@ -89,7 +89,7 @@ class _PublishButtonState extends State<PublishButton> {
                             color: Colors.green[400], size: 30),
                       );
                     }
-                    return const SizedBox();
+                    return SizedBox();
                   },
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_reply_card.dart';
@@ -70,7 +71,7 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
               Expanded(
                 child: PagedListView<int, CommentEntity>(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                      EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
                   pagingController: controller.repliesPagingController,
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(
@@ -79,14 +80,14 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
                       noItemsFoundIndicatorBuilder: (context) {
                         print(controller
                             .repliesPagingController.itemList?.length);
-                        return const Padding(
-                            padding: EdgeInsets.only(top: 200),
+                        return  Padding(
+                            padding: const EdgeInsets.only(top: 200),
                             child: Center(
                               child: Text(
                                 "No Replies",
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 18,
+                                  fontSize: 18.sp,
                                 ),
                               ),
                             ));
@@ -128,8 +129,11 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
                   ),
                   child: Row(
                     children: [
-                      const ProfileImage(accountId: 0,userId: '',),
-                      const Sizer(),
+                      const ProfileImage(
+                        accountId: 0,
+                        userId: '',
+                      ),
+                      Sizer(),
                       Expanded(
                           child: TextFormField(
                         maxLines: null,
@@ -137,16 +141,15 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
                         onChanged: (v) {
                           setState(() {});
                         },
-                        style: Styles.headerText(fontSize: 26),
+                        style: Styles.headerText(fontSize: 26.sp),
                         decoration: InputDecoration(
                           fillColor: Colors.white,
                           contentPadding: const EdgeInsets.all(5),
                           hintText: 'Type your reply ....',
                           hintStyle: Styles.mediumText(),
                         ),
-                      )
-                      ),
-                      const Sizer(),
+                      )),
+                      Sizer(),
                       if (replyTextController.text.isNotEmpty)
                         IconAppButton(
                           icon: Icons.send,

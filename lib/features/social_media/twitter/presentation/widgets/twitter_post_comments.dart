@@ -16,7 +16,7 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -83,7 +83,8 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
           children: [
             Expanded(
               child: PagedListView<int, TwitterPostCommentEntity>(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                padding:
+                    EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
                 pagingController: controller.commentsPagingController,
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(
@@ -93,14 +94,14 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                     noItemsFoundIndicatorBuilder: (context) {
                       print(
                           controller.commentsPagingController.itemList?.length);
-                      return const Padding(
-                          padding: EdgeInsets.only(top: 200),
+                      return  Padding(
+                          padding: const EdgeInsets.only(top: 200),
                           child: Center(
                             child: Text(
                               "No Comments",
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 18,
+                                fontSize: 18.sp,
                               ),
                             ),
                           ));
@@ -153,7 +154,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
             //           // widget.comments[index].replies?.addAll(controller.replies);
             //           setState(() {});
             //       }),
-            //       separatorBuilder: (context, index) => const Sizer(),
+            //       separatorBuilder: (context, index) => Sizer(),
             //       itemCount: widget.comments.length),
             // ),
             Container(
@@ -163,26 +164,27 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                 ),
                 child: Row(
                   children: [
-                    const ProfileImage(accountId: 0,userId: '',),
-                    const Sizer(),
+                    const ProfileImage(
+                      accountId: 0,
+                      userId: '',
+                    ),
+                    Sizer(),
                     Expanded(
-                        child:
-                      TextFormField(
+                        child: TextFormField(
                       maxLines: null,
                       controller: commentTextController,
                       onChanged: (v) {
                         setState(() {});
                       },
-                      style: Styles.headerText(fontSize: 26),
+                      style: Styles.headerText(fontSize: 26.sp),
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         contentPadding: const EdgeInsets.all(5),
                         hintText: 'Type your comment ....',
                         hintStyle: Styles.mediumText(),
                       ),
-                    )
-                    ),
-                    const Sizer(),
+                    )),
+                    Sizer(),
                     if (commentTextController.text.isNotEmpty)
                       IconAppButton(
                           icon: Icons.send,

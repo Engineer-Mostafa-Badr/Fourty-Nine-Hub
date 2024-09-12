@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -43,7 +43,7 @@ class AppButton extends StatelessWidget {
         margin: EdgeInsets.all(margin ?? 0),
         padding: EdgeInsets.symmetric(horizontal: padding ?? 0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius ?? 10.zR),
+          borderRadius: BorderRadius.circular(radius ?? 10.r),
           color: backColor ?? AppColors.SECONDARY_COLOR,
         ),
         child: widget ??
@@ -58,7 +58,7 @@ class AppButton extends StatelessWidget {
                       color: textColor ?? Colors.white,
                     ),
                   if (icon != null)
-                    const Sizer(
+                     Sizer(
                       width: 3,
                     ),
                   Label(

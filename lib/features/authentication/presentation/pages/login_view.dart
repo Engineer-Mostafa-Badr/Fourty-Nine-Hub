@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -121,7 +123,7 @@ class _LoginViewState extends State<LoginView> {
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             controller: scrollController,
             child: Padding(
-              padding: EdgeInsets.all(16.0.zW),
+              padding: EdgeInsets.all(16.0.w),
               child: Form(
                   key: loginCubit.formKey,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -129,11 +131,11 @@ class _LoginViewState extends State<LoginView> {
                     children: [
                       Image.asset(
                         Assets.logo,
-                        width: 200.zW,
-                        height: 200.zH,
+                        width: 200.h,
+                        height: 200.h,
                       ),
                       SizedBox(
-                        height: 60.zH,
+                        height: 60.h,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -148,12 +150,12 @@ class _LoginViewState extends State<LoginView> {
                             text: LocaleKeys.login.localize,
                             borderRadius: context.locale == Locales.english
                                 ? BorderRadius.only(
-                                    topLeft: Radius.circular(100.zR),
-                                    bottomLeft: Radius.circular(100.zR),
+                                    topLeft: Radius.circular(100.r),
+                                    bottomLeft: Radius.circular(100.r),
                                   )
                                 : BorderRadius.only(
-                                    topRight: Radius.circular(100.zR),
-                                    bottomRight: Radius.circular(100.zR),
+                                    topRight: Radius.circular(100.r),
+                                    bottomRight: Radius.circular(100.r),
                                   ),
                           ),
                           chooseAuthWidget(
@@ -177,7 +179,7 @@ class _LoginViewState extends State<LoginView> {
                         ],
                       ),
                       SizedBox(
-                        height: 60.zH,
+                        height: 60.h,
                       ),
                       widget.authType == AuthType.LOGIN
                           ? LoginWidget(
@@ -188,12 +190,14 @@ class _LoginViewState extends State<LoginView> {
                         height: widget.authType == AuthType.LOGIN
                             ? MediaQuery.of(context).viewInsets.bottom != 0.0
                                 ? 20
-                                : 100.zH
+                                : 100.h
                             : 0,
                       ),
                       widget.authType == AuthType.REGISTER
                           ? DefaultButton(
-                              labelStyle: TextStyle(fontSize: 35.zH, color: AppColors.AUTH_CONTAINER_COLOR),
+                              labelStyle: TextStyle(
+                                  fontSize: 35.sp.h,
+                                  color: AppColors.AUTH_CONTAINER_COLOR),
                               label: LocaleKeys.register.localize,
                               width: double.infinity,
                               onPressed: () {
@@ -208,7 +212,9 @@ class _LoginViewState extends State<LoginView> {
                           : DefaultButton(
                               width: double.infinity,
                               label: LocaleKeys.login.localize,
-                              labelStyle: TextStyle(fontSize: 35.zH, color: AppColors.AUTH_CONTAINER_COLOR),
+                              labelStyle: TextStyle(
+                                  fontSize: 35.sp.h,
+                                  color: AppColors.AUTH_CONTAINER_COLOR),
                               onPressed: loginCubit.login,
                             ),
                     ],
@@ -225,8 +231,8 @@ class _LoginViewState extends State<LoginView> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 70.zH,
-        width: 200.zW,
+        height: 70.h,
+        width: 200.h,
         decoration: BoxDecoration(
           color: active ? AppColors.PRIMARY_COLOR : const Color(0xFFEEEEEE),
           borderRadius: borderRadius,
@@ -261,24 +267,24 @@ class _LoginWidgetState extends State<LoginWidget> {
         FormTextField(
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
-          borderRadius: BorderRadius.circular(20.zR),
-          style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+          borderRadius: BorderRadius.circular(20.r),
+          style: TextStyle(fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
           controller: widget.loginCubit.emailTextController,
           // label: 'E-mail or phone number',
           hint: LocaleKeys.emailOrPhone.localize,
           prefix: Icon(
             Icons.email,
             color: AppColors.GREY_DARK_COLOR,
-            size: 40.zW,
+            size: 40.w,
           ),
           action: (v) {},
         ),
-        const Sizer(),
+        Sizer(),
         FormTextField(
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
-          borderRadius: BorderRadius.circular(20.zR),
-          style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+          borderRadius: BorderRadius.circular(20.r),
+          style: TextStyle(fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
           controller: widget.loginCubit.passwordTextController,
           // label: 'Password',
           hint: LocaleKeys.password.localize,
@@ -292,12 +298,12 @@ class _LoginWidgetState extends State<LoginWidget> {
             child: Icon(
               obsecure ? Icons.visibility_off : Icons.visibility,
               color: AppColors.GREY_DARK_COLOR,
-              size: 40.zW,
+              size: 40.w,
             ),
           ),
           action: (v) {},
         ),
-        const Sizer(),
+        Sizer(),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -307,22 +313,22 @@ class _LoginWidgetState extends State<LoginWidget> {
                 onPressed: () => context.push(Routes.FORGOTPASSWORD)),
           ],
         ),
-        // const Sizer(height: ,),
+        // Sizer(height: ,),
         // Spacer(),
         // DefaultButton(
         //   width: double.infinity,
         //   label: 'Login',
         //   onPressed: widget.loginCubit.login,
         // ),
-        // const Sizer(),
+        // Sizer(),
         // Column(
         //   children: [
-        const Sizer(),
+        Sizer(),
         Label(
           text: 'Or Continue with',
           style: Styles.mediumText(color: Colors.grey),
         ),
-        const Sizer(),
+        Sizer(),
         Row(
           children: [
             Expanded(
@@ -334,7 +340,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 onPressed: widget.loginCubit.signInWithGoogle,
               ),
             ),
-            const Sizer(),
+            Sizer(),
             Expanded(
               child: AppButton(
                 label: 'Facebook',
@@ -344,7 +350,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 onPressed: widget.loginCubit.signInWithFacebook,
               ),
             ),
-            if (Platform.isIOS) const Sizer(),
+            if (Platform.isIOS) Sizer(),
             if (Platform.isIOS)
               Expanded(
                 child: AppButton(
@@ -357,7 +363,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               ),
           ],
         ),
-        //     const Sizer(),
+        //     Sizer(),
         //     RichText(
         //       text: TextSpan(
         //         children: [
@@ -405,7 +411,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
     return BlocListener<RegisterCubit, RegisterState>(
       listener: (context, state) {},
       child: Padding(
-        padding: EdgeInsets.all(8.0.zW),
+        padding: EdgeInsets.all(8.0.w),
         child: Form(
           key: registerCubit.formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -415,39 +421,41 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 FormTextField(
                   constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20.zR),
+                  borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
-                  style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+                  style: TextStyle(
+                      fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
                   hint: LocaleKeys.firstName.localize,
                   prefix: Icon(
                     Icons.person_2_rounded,
                     color: AppColors.GREY_DARK_COLOR,
-                    size: 40.zW,
+                    size: 40.w,
                   ),
                   action: (v) {},
                 ),
 
                 Sizer(
-                  height: 30.zH,
+                  height: 30.h,
                 ),
                 FormTextField(
                   constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20.zR),
+                  borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.lastNameController,
-                  style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+                  style: TextStyle(
+                      fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
                   // label: 'E-mail or phone number',
                   hint: LocaleKeys.lastName.localize,
                   prefix: Icon(
                     Icons.person_2_rounded,
                     color: AppColors.GREY_DARK_COLOR,
-                    size: 40.zW,
+                    size: 40.w,
                   ),
                   action: (v) {},
                 ),
                 Sizer(
-                  height: 30.zH,
+                  height: 30.h,
                 ),
                 FormTextField(
                   constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
@@ -455,17 +463,18 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   borderRadius: BorderRadius.circular(20),
                   controller: registerCubit.emailTextController,
                   // label: 'E-mail or phone number',
-                  style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+                  style: TextStyle(
+                      fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
                   hint: LocaleKeys.emailOrPhone.localize,
                   prefix: Icon(
                     Icons.email,
                     color: AppColors.GREY_DARK_COLOR,
-                    size: 40.zW,
+                    size: 40.w,
                   ),
                   action: (v) {},
                 ),
                 Sizer(
-                  height: 30.zH,
+                  height: 30.h,
                 ),
                 Row(
                   // crossAxisAlignment: CrossAxisAlignment.,
@@ -485,7 +494,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
                                     setState(() {});
                                   },
-                                  height: kToolbarHeight.zH,
+                                  height: kToolbarHeight.h,
                                   isCentered: true,
                                   close: false,
                                   isBordered: !registerCubit.isMale,
@@ -495,7 +504,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                       : Theme.of(context).primaryColor,
                                   label: 'male'.localize)),
                           SizedBox(
-                            width: 14.zW,
+                            width: 14.h,
                           ),
                           Expanded(
                             child: BadgedLabel(
@@ -504,7 +513,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
                                 setState(() {});
                               },
-                              height: kToolbarHeight.zH,
+                              height: kToolbarHeight.h,
                               isCentered: true,
                               isBordered: true,
                               close: false,
@@ -521,11 +530,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   ],
                 ),
                 Sizer(
-                  height: 30.zH,
+                  height: 30.h,
                 ),
                 FormTextField(
                   style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
-                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   controller: registerCubit.passwordTextController,
@@ -541,17 +551,19 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     child: Icon(
                       obsecure ? Icons.visibility_off : Icons.visibility,
                       color: AppColors.GREY_DARK_COLOR,
-                      size: 40.zW,
+                      size: 40.w,
                     ),
                   ),
                   action: (v) {},
                 ),
                 Sizer(
-                  height: 30.zH,
+                  height: 30.h,
                 ),
                 FormTextField(
-                  style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
-                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  style: TextStyle(
+                      fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
+                  constraints:
+                      const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   controller: registerCubit.confirmPasswordTextController,
@@ -567,13 +579,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     child: Icon(
                       obsecure ? Icons.visibility_off : Icons.visibility,
                       color: AppColors.GREY_DARK_COLOR,
-                      size: 40.zW,
+                      size: 40.w,
                     ),
                   ),
                   action: (v) {},
                 ),
                 Sizer(
-                  height: 30.zH,
+                  height: 30.h,
                 ),
                 FormTextField(
                   validator: (p0) {
@@ -584,12 +596,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   borderRadius: BorderRadius.circular(20),
                   // controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
-                  style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+                  style: TextStyle(
+                      fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
                   hint: LocaleKeys.code.localize,
                   prefix: Container(
                     margin: const EdgeInsets.all(9),
                     width: 20,
-                    height: 20,
+                    height: 20.h,
                     decoration: const BoxDecoration(
                       color: Colors.grey,
                       shape: BoxShape.circle,
@@ -597,13 +610,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     child: Icon(
                       Icons.person,
                       color: AppColors.GREY_DARK_COLOR,
-                      size: 40.zW,
+                      size: 40.w,
                     ),
                   ),
                   action: (v) {},
                 ),
                 Sizer(
-                  height: 60.zH,
+                  height: 60.h,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -631,7 +644,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 //   text: 'Or Continue with',
                 //   style: Styles.mediumText(color: Colors.grey),
                 // ),
-                // const Sizer(),
+                // Sizer(),
                 // Row(
                 //   children: [
                 //     Expanded(
@@ -643,7 +656,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 //         onPressed: () {},
                 //       ),
                 //     ),
-                //     const Sizer(),
+                //     Sizer(),
                 //     Expanded(
                 //       child: AppButton(
                 //         label: 'Facebook',
@@ -655,7 +668,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 //     ),
                 //   ],
                 // ),
-                // const Sizer(height: 20),
+                // Sizer(height: 20.h),
                 // RichText(
                 //   text: TextSpan(
                 //     children: [
@@ -676,8 +689,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 //     ],
                 //   ),
                 // ),
-                const SizedBox(
-                  height: 80,
+                 SizedBox(
+                  height: 80.h,
                 )
               ],
             ),

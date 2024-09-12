@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/enums/base_status_enum.dart';
@@ -19,12 +20,13 @@ class BuildItemPhotoPost extends StatelessWidget {
   bool? isPhoto;
   final Function(String) onDeleteItem;
 
-   BuildItemPhotoPost(
-      {super.key,
-      required this.length,
-      required this.advertises,
-        this.isPhoto=true, required this.onDeleteItem,
-      });
+  BuildItemPhotoPost({
+    super.key,
+    required this.length,
+    required this.advertises,
+    this.isPhoto = true,
+    required this.onDeleteItem,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,7 @@ class BuildItemPhotoPost extends StatelessWidget {
                 GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(10),
+                  padding: EdgeInsets.all(10),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: length == 1 ? 1 : 2),
                   itemCount: length < 4 ? length : 4,
@@ -58,11 +60,11 @@ class BuildItemPhotoPost extends StatelessWidget {
                         showDialog(
                             context: context,
                             builder: (context) => ImageDetails(
-                              image: advertises.media![index].photo!,
-                              function: () {
-                                onDeleteItem(advertises.sId!);
-                              },
-                            ));
+                                  image: advertises.media![index].photo!,
+                                  function: () {
+                                    onDeleteItem(advertises.sId!);
+                                  },
+                                ));
                       } else {
                         showDialog(
                             context: context,
@@ -73,20 +75,21 @@ class BuildItemPhotoPost extends StatelessWidget {
                       children: [
                         Container(
                           margin:
-                          const EdgeInsetsDirectional.only(end: 10, bottom: 10),
-                          padding: const EdgeInsets.all(10),
+                              EdgeInsetsDirectional.only(end: 10, bottom: 10),
+                          padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             image: DecorationImage(
                               fit: BoxFit.fill,
-                              image: NetworkImage(advertises.media![index].photo!),
+                              image:
+                                  NetworkImage(advertises.media![index].photo!),
                             ),
                           ),
                         ),
                         if (index == 3 && length > 4)
                           Container(
-                            margin: const EdgeInsetsDirectional.only(
-                                end: 10, bottom: 10),
+                            margin:
+                                EdgeInsetsDirectional.only(end: 10, bottom: 10),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
@@ -105,7 +108,7 @@ class BuildItemPhotoPost extends StatelessWidget {
                     ),
                   ),
                 ),
-                if(isPhoto!)
+                if (isPhoto!)
                   IconButton(
                     onPressed: () {
                       onDeleteItem(advertises.sId!);
@@ -118,8 +121,7 @@ class BuildItemPhotoPost extends StatelessWidget {
                   ),
               ],
             ),
-            if(isPhoto!)
-              Text(formattedDayTime),
+            if (isPhoto!) Text(formattedDayTime),
           ],
         );
       },
@@ -141,16 +143,16 @@ class BuildItemPhotoPost extends StatelessWidget {
                 print("object");
                 showDialog(
                   context: context,
-                  builder: (context) =>
-                      ImageDetails(image: advertises.media![index].photo!,
-                          function: function),
+                  builder: (context) => ImageDetails(
+                      image: advertises.media![index].photo!,
+                      function: function),
                 );
               },
               child: Stack(
                 children: [
                   Container(
-                    height: 400,
-                    margin: const EdgeInsets.only(bottom: 10),
+                    height: 400.h,
+                    margin: EdgeInsets.only(bottom: 10),
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: AppColors.DARK_BLUE_COLOR,

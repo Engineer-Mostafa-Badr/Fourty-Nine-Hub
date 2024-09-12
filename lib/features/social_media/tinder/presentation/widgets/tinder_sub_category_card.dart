@@ -42,7 +42,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
       onTap: () {},
       child: Container(
         width: 225,
-        padding: const EdgeInsets.all(0),
+        padding: EdgeInsets.all(0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -53,7 +53,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
           child: Column(
             children: [
               _buildImageSection(context),
-              const Sizer(),
+              Sizer(),
               _buildInfoSection(context),
             ],
           ),
@@ -117,7 +117,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
     final subCategoryPicture = widget.subCategoryCardData.picture ?? '';
 
     return Padding(
-      padding: const EdgeInsets.only(left: 8.0),
+      padding: EdgeInsets.only(left: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

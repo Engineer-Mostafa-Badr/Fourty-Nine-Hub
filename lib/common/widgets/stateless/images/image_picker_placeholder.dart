@@ -51,7 +51,7 @@ class ImagePickerPlaceholder extends StatelessWidget {
 
   Widget _buildTitle() {
     if (tilte == null || tilte!.isEmpty) {
-      return const SizedBox.shrink();
+      return SizedBox.shrink();
     }
     return Text(tilte!);
   }

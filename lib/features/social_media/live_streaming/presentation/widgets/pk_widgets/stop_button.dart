@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
@@ -25,7 +26,7 @@ class _PKStopButtonState extends State<PKStopButton> {
       valueListenable: widget.liveStateNotifier,
       builder: (context, state, _) {
         return SizedBox(
-          height: 30,
+          height: 30.h,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red, // background (button) color

@@ -31,7 +31,7 @@ class CreateAuctionView extends StatelessWidget {
             margin: 10,
             onPressed: () => controller.createAuction(adId: adId)),
         body: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0),
           child: Form(
             key: controller.formState,
             child: ListView(
@@ -40,13 +40,13 @@ class CreateAuctionView extends StatelessWidget {
                   label: 'Description',
                   action: (v) => controller.description = v,
                 ),
-                const Sizer(),
+                Sizer(),
                 FormTextField(
                   label: 'Starting Price',
                   type: TextInputType.number,
                   action: (v) => controller.startPrice = v,
                 ),
-                const Sizer(),
+                Sizer(),
                 FormTextField(
                   label: 'Minimum Increase',
                   type: TextInputType.number,

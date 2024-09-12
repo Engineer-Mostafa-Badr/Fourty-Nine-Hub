@@ -14,10 +14,10 @@ class InstallmentOrdersList extends StatelessWidget {
       appBar: HomeAppbar(),
       drawer: const DrawerWidget(),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(8.0),
         child: ListView.separated(
             itemBuilder: (context, index) => const InstallmentOrderCard(),
-            separatorBuilder: (context, index) => const Sizer(),
+            separatorBuilder: (context, index) => Sizer(),
             itemCount: 7),
       ),
     );

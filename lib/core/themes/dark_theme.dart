@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../res/style/app_colors.dart';
 
@@ -53,7 +54,7 @@ ThemeData darkTheme() {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
           backgroundColor: Colors.blue,
-          textStyle: const TextStyle(color: Colors.white, fontSize: 20)),
+          textStyle: TextStyle(color: Colors.white, fontSize: 20.sp)),
     ),
     textButtonTheme: const TextButtonThemeData(),
     listTileTheme: const ListTileThemeData(),

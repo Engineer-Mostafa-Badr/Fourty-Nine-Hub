@@ -10,6 +10,7 @@ import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorTodayAppointmentsWidget extends StatelessWidget {
   const DoctorTodayAppointmentsWidget({super.key});
@@ -23,9 +24,9 @@ class DoctorTodayAppointmentsWidget extends StatelessWidget {
           text: Labels.todayAppointments,
           style: Styles.headerText(),
         ),
-        const Sizer(),
+        Sizer(),
         Container(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+          padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Theme.of(context).primaryColor,

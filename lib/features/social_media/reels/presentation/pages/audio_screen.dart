@@ -115,7 +115,7 @@
 //         crossAxisAlignment: CrossAxisAlignment.start,
 //         children: [
 //           Padding(
-//             padding: const EdgeInsets.all(16.0),
+//             padding: EdgeInsets.all(16.0),
 //             child: Row(
 //               children: [
 //                 CircleAvatar(
@@ -124,7 +124,7 @@
 //                     widget.audio.audioPicture,
 //                   ),
 //                 ),
-//                 const SizedBox(width: 16),
+//                 SizedBox(width: 16),
 //                 Expanded(
 //                   child: Column(
 //                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +133,7 @@
 //                         capitalizeAndSplit(widget.audio.audioName),
 //                         softWrap: true,
 //                         style: const TextStyle(
-//                           fontSize: 18,
+//                           fontSize: 18.sp,
 //                           fontWeight: FontWeight.bold,
 //                           color: Colors.white,
 //                         ),
@@ -153,7 +153,7 @@
 //             child: SizedBox(
 //               width: double.infinity,
 //               child: Padding(
-//                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
+//                 padding: EdgeInsets.symmetric(horizontal: 32.0),
 //                 child: ElevatedButton(
 //                   style: const ButtonStyle(
 //                       backgroundColor: MaterialStatePropertyAll(
@@ -188,7 +188,7 @@
 //             ),
 //           )
 //               : Padding(
-//             padding: const EdgeInsets.all(16.0),
+//             padding: EdgeInsets.all(16.0),
 //             child: Row(
 //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //               children: [
@@ -219,7 +219,7 @@
 //                 ),
 //                 Expanded(
 //                   child: Padding(
-//                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
+//                     padding: EdgeInsets.symmetric(horizontal: 16.0),
 //                     child: StreamBuilder<Duration>(
 //                       stream: _player.positionStream,
 //                       builder: (context, snapshot) {
@@ -265,7 +265,7 @@
 //           reelCubit.state.reelsForAudio != null
 //               ? Expanded(
 //             child: GridView.builder(
-//               padding: const EdgeInsets.all(8.0),
+//               padding: EdgeInsets.all(8.0),
 //               gridDelegate:
 //               const SliverGridDelegateWithFixedCrossAxisCount(
 //                 crossAxisCount: 2,
@@ -276,7 +276,7 @@
 //               itemCount: reelCubit.state.reelsForAudio!.length,
 //               itemBuilder: (context, index) {
 //                 return Padding(
-//                   padding: const EdgeInsets.all(8.0),
+//                   padding: EdgeInsets.all(8.0),
 //                   child: GestureDetector(
 //                     onTap: () {
 //                       // Update the playing index in the cubit
@@ -300,7 +300,7 @@
 //                                 children: [
 //                                   const Icon(Icons.play_arrow,
 //                                       color: Colors.white, size: 16),
-//                                   const SizedBox(width: 4),
+//                                   SizedBox(width: 4),
 //                                   Text(
 //                                     reelCubit
 //                                         .state.reelsForAudio![index].name!,
@@ -366,7 +366,7 @@ import '../../../twitter/presentation/widgets/report_view.dart';
 import '../../data/models/new_reels_model.dart';
 import '../controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import '../widgets/comments.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class InstagramAudioScreen extends StatefulWidget {
   final Audio audio;
   final Reel reel;
@@ -506,14 +506,14 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
               );
             },
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
         ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.0),
             child: Row(
               children: [
                 Container(
@@ -534,7 +534,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                 //     widget.audio.audioPicture,
                 //   ),
                 // ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -542,8 +542,8 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                       Text(
                         capitalizeAndSplit(widget.audio.audioName),
                         softWrap: true,
-                        style: const TextStyle(
-                          fontSize: 18,
+                        style:  TextStyle(
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -551,8 +551,8 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                       ),
                       Text(capitalizeAndSplit(widget.audio.username),
                           style: const TextStyle(color: Colors.white)),
-                      const SizedBox(
-                        height: 16,
+                      SizedBox(
+                        height: 16.h,
                       ),
                       Text('${widget.audio.reelsCount} reels',
                           style: const TextStyle(color: Colors.white70)),
@@ -566,7 +566,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
             child: SizedBox(
               width: double.infinity,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: ElevatedButton(
                   style: const ButtonStyle(
                       backgroundColor:
@@ -601,7 +601,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                   ),
                 )
               : Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: EdgeInsets.all(16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -627,7 +627,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                       ),
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          padding: EdgeInsets.symmetric(horizontal: 16.0),
                           child: StreamBuilder<Duration>(
                             stream: _player.positionStream,
                             builder: (context, snapshot) {
@@ -677,7 +677,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                     },
                     builder: (context, state) {
                       return GridView.builder(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(8.0),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
@@ -688,7 +688,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                         itemCount: state.reelsForAudio!.length,
                         itemBuilder: (context, index) {
                           return Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: GestureDetector(
                               onTap: () {
                                 // reelCubit.updatePlayingIndex(index);
@@ -729,7 +729,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                                       children: [
                                         const Icon(Icons.play_arrow,
                                             color: Colors.white, size: 16),
-                                        const SizedBox(width: 4),
+                                        SizedBox(width: 4),
                                         Text(
                                           state.reelsForAudio![index].viewCount
                                               .toString(),
@@ -1036,7 +1036,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: kToolbarHeight + 20),
+        SizedBox(height: kToolbarHeight + 20),
         Expanded(
           child: GestureDetector(
             onTap: _togglePlayPause,
@@ -1051,7 +1051,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.all(0.0),
+      padding: EdgeInsets.all(0.0),
       child: SizedBox(
         height: height * 0.5,
         width: double.infinity,
@@ -1062,7 +1062,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
             //   top: 100,
             //   right: 100,
             //   child: Padding(
-            //     padding: const EdgeInsets.all(8.0),
+            //     padding: EdgeInsets.all(8.0),
             //     child: IconButton(
             //
             //       onPressed: () {
@@ -1092,7 +1092,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
                   Row(
                     children: [
                       _buildUserAvatar(),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12),
                       FittedBox(child: _buildUserInfo()),
                     ],
                   ),
@@ -1147,14 +1147,14 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
         Text(
           capitalizeAndSplit(
               '${widget.reel.user.firstName} ${widget.reel.user.lastName}'),
-          style: const TextStyle(
-            fontSize: 26,
+          style:  TextStyle(
+            fontSize: 26.sp,
             decoration: TextDecoration.none,
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         if (widget.reel.user.verified)
           const Icon(
             Icons.verified,
@@ -1176,25 +1176,25 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
               widget.reel.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
+              style:  TextStyle(
                 color: AppColors.DARK_GRAY_COLOR,
                 decoration: TextDecoration.none,
-                fontSize: 18,
+                fontSize: 18.sp,
               ),
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           FaIcon(
             FontAwesomeIcons.eye,
             size: 20,
             color: AppColors.PRIMARY_COLOR_DARK.withOpacity(0.6),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Text(
             widget.reel.viewCount.toString(),
-            style: const TextStyle(
+            style:  TextStyle(
               color: AppColors.DARK_GRAY_COLOR,
-              fontSize: 18,
+              fontSize: 18.sp,
               decoration: TextDecoration.none,
             ),
           ),
@@ -1206,7 +1206,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
   Widget _buildAudioAndButtons(double width) {
     return Row(
       children: [
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         // FaIcon(
         //   FontAwesomeIcons.music,
         //   color: AppColors.PRIMARY_COLOR_DARK.withOpacity(0.5),
@@ -1216,7 +1216,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
           width: width / 2,
           child: ScrollingText(text: widget.reel.audio.audioName),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         RoundedButtonWithImage(
           imagePath: widget.reel.audio.audioPicture,
           onPressed: () {
@@ -1362,14 +1362,14 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
             color: iconColor ?? Colors.white,
             size: 30,
           ),
-          const SizedBox(height: 2),
+          SizedBox(height: 2.h),
           if (count != 0)
             Text(
               '$count',
               style: const TextStyle(color: Colors.white),
             )
           else
-            const Sizer(),
+            Sizer(),
         ],
       ),
     );
@@ -1438,7 +1438,7 @@ class ProfileContent extends StatelessWidget {
             reel.user.coverPictureSignedUrl!.isEmpty ||
                     reel.user.coverPictureSignedUrl == null
                 ? reel.user.profilePictureSignedUrl!
-                : reel.user.coverPictureSignedUrl! ,
+                : reel.user.coverPictureSignedUrl!,
             errorBuilder: (context, error, stackTrace) => Image.network(
               UIConst.profilePlaceHolder,
             ),
@@ -1452,25 +1452,25 @@ class ProfileContent extends StatelessWidget {
           elevation: 2,
           margin: EdgeInsets.zero,
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.0),
             child: Column(
               children: [
                 ProfileHeader(reel: reel),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 ActionButton(reel: reel),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 LocationAndContact(reel: reel),
-                const SizedBox(height: 20),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
+                SizedBox(height: 20.h),
                 // SocialLink(reel: reel),
-                // const SizedBox(height: 20),
+                // SizedBox(height: 20.h),
                 Description(reel: reel),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
               ],
             ),
           ),
         ),
-        const Sizer(),
+        Sizer(),
         MediaHighlights(reel: reel),
       ],
     );
@@ -1501,7 +1501,7 @@ class ProfileHeader extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 16),
+        SizedBox(width: 16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1516,7 +1516,7 @@ class ProfileHeader extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   if (reel.user.verified)
                     const Icon(
                       Icons.verified,
@@ -1556,7 +1556,7 @@ class ActionButton extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.black,
                 backgroundColor: Colors.yellow,
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: EdgeInsets.symmetric(vertical: 16.h),
               ),
               child: const Text('Your Account'));
         } else if (reel.user.isFriend) {
@@ -1565,7 +1565,7 @@ class ActionButton extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.black,
                 backgroundColor: Colors.yellow,
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: EdgeInsets.symmetric(vertical: 16.h),
               ),
               child: const Text('Friend'));
         }
@@ -1574,7 +1574,7 @@ class ActionButton extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.black,
               backgroundColor: Colors.yellow,
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: EdgeInsets.symmetric(vertical: 16.h),
             ),
             child: const Text('+ Add'));
       }),
@@ -1605,7 +1605,7 @@ class LocationAndContact extends StatelessWidget {
     return Row(
       children: [
         Icon(icon),
-        const SizedBox(width: 5),
+        SizedBox(width: 5),
         Text(text),
       ],
     );
@@ -1622,7 +1622,7 @@ class SocialLink extends StatelessWidget {
     return Row(
       children: [
         const Icon(Icons.link),
-        const SizedBox(width: 5),
+        SizedBox(width: 5),
         Text(
           'instagram.com/...',
           style: TextStyle(color: Theme.of(context).primaryColor),
@@ -1646,8 +1646,8 @@ class Description extends StatelessWidget {
             FontAwesomeIcons.userPen,
             size: 20,
           ),
-        const Sizer(),
-        const Sizer(),
+        Sizer(),
+        Sizer(),
         Text(
           reel.user.bio ?? '',
           style: Theme.of(context).textTheme.bodyLarge,
@@ -1666,11 +1666,11 @@ class MediaHighlights extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0),
       child: (reel.user.birthday!.isEmpty &&
               reel.user.country!.isEmpty &&
               reel.user.job!.isEmpty)
-          ? const Sizer()
+          ? Sizer()
           : GridView.count(
               crossAxisCount: 3,
               shrinkWrap: true,
@@ -1722,7 +1722,7 @@ class MediaHighlightItem extends StatelessWidget {
             child: Icon(icon, size: 40),
           ),
         ),
-        const SizedBox(height: 5),
+        SizedBox(height: 5.h),
         Expanded(
           child: Text(label,
               textAlign: TextAlign.center, overflow: TextOverflow.ellipsis),

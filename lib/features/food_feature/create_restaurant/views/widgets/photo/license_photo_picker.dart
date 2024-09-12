@@ -25,7 +25,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
             text: LocaleKeys.theCommercialRegister.tr(),
             style: Styles.headerText(),
           ),
-          const Sizer(),
+          Sizer(),
           Row(
             children: [
               InkWell(
@@ -56,7 +56,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                   },
                 ),
               ),
-              const Sizer(),
+              Sizer(),
               InkWell(
                 onTap: () async {
                   await createRestaurantCubit.uploadLicenseSecondPageImage();
@@ -85,7 +85,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                   },
                 ),
               ),
-              const Sizer(),
+              Sizer(),
               InkWell(
                 onTap: () async {
                   await createRestaurantCubit.uploadLicenseThiredPageImage();

@@ -10,7 +10,7 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class MediaView extends StatefulWidget {
   const MediaView({super.key, required this.userId});
   final String userId;
@@ -44,12 +44,12 @@ class _MediaViewState extends State<MediaView> {
           builderDelegate: PagedChildBuilderDelegate<PostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.mediaPagingController.itemList?.length);
-                return const Center(
+                return  Center(
                   child: Text(
                     "No Media",
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 18,
+                      fontSize: 18.sp,
                     ),
                   ),
                 );
@@ -57,11 +57,11 @@ class _MediaViewState extends State<MediaView> {
               itemBuilder: (context, item, index) {
                 return state.status == StateStatus.success
                     ? Container(
-                        padding: const EdgeInsets.only(top: 2),
+                        padding: EdgeInsets.only(top: 2),
                         child: ClipRRect(
                           // borderRadius: BorderRadius.circular(15),
                           child: CachedNetworkImage(
-                            height: 300,
+                            height: 300.h,
                             imageUrl: item.images?[0] ?? '',
                             fit: BoxFit.fill,
                             placeholder: (context, url) => const Center(
@@ -82,7 +82,7 @@ class _MediaViewState extends State<MediaView> {
               },
               noMoreItemsIndicatorBuilder: (context) => Container(),
               firstPageProgressIndicatorBuilder: (context) => Container(
-                  margin: const EdgeInsets.only(top: 150),
+                  margin: EdgeInsets.only(top: 150),
                   child: const CupertinoActivityIndicator()),
               newPageProgressIndicatorBuilder: (context) =>
                   const CupertinoActivityIndicator()),

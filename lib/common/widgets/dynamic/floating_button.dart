@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../res/assets/assets.dart';
@@ -22,22 +23,23 @@ class FloatingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 90.zH, // Set the desired height
-      width: 90.zW,
+      height: 90.h, // Set the desired height
+      width: 90.h,
       child: FloatingActionButton(
         shape: CircleBorder(),
         onPressed: onTap != null
             ? () => onTap!()
             : () {
-          if (changeView == 1) {
-            context.push(Routes.SOCIAL);
-          } else if (changeView == 2) {
-            context.push(Routes.INSTAGRAM);
-          }else{
-            context.push(Routes.HOME);
-          }
-        },
-        backgroundColor: changeView == 2 ? AppColors.PRIMARY_COLOR : Colors.white,
+                if (changeView == 1) {
+                  context.push(Routes.SOCIAL);
+                } else if (changeView == 2) {
+                  context.push(Routes.INSTAGRAM);
+                } else {
+                  context.push(Routes.HOME);
+                }
+              },
+        backgroundColor:
+            changeView == 2 ? AppColors.PRIMARY_COLOR : Colors.white,
         child: icon != null
             ? Icon(
                 icon,
@@ -45,8 +47,8 @@ class FloatingButton extends StatelessWidget {
               )
             : Image.asset(
                 Assets.logo,
-                height: 50.zH, // Adjust size as needed
-                width: 50.zH, // Adjust size as needed
+                height: 50.h, // Adjust size as needed
+                width: 50.w, // Adjust size as needed
               ),
       ),
     );

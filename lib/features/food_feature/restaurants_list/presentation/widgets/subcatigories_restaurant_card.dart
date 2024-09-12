@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 import '../../domain/entities/restaurant_entity.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SubCatigoriesRestaurantCard extends StatelessWidget {
   final RestaurantEntity? item;
@@ -41,8 +42,8 @@ class SubCatigoriesRestaurantCard extends StatelessWidget {
                       top: 10,
                       left: 10,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 2),
+                        padding:  EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 2.h),
                         decoration: BoxDecoration(
                             color: AppColors.SECONDARY_COLOR,
                             borderRadius: BorderRadius.circular(5)),
@@ -73,7 +74,7 @@ class SubCatigoriesRestaurantCard extends StatelessWidget {
                       Icons.star_rounded,
                       color: AppColors.ACCENT_COLOR,
                     ),
-                    const Sizer(),
+                    Sizer(),
                     Label(
                         text: '${item?.rate}',
                         style: Styles.mediumText(fontWeight: FontWeight.w500)),
@@ -102,7 +103,7 @@ class SubCatigoriesRestaurantCard extends StatelessWidget {
             url: item?.image.first,
           ),
         ),
-        const Sizer(),
+        Sizer(),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,7 +121,7 @@ class SubCatigoriesRestaurantCard extends StatelessWidget {
                   Icons.star_rounded,
                   color: AppColors.ACCENT_COLOR,
                 ),
-                const Sizer(),
+                Sizer(),
                 Label(
                     text: '${item?.rate} ',
                     style: Styles.mediumText(fontWeight: FontWeight.w500)),

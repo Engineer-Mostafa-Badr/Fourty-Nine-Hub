@@ -162,7 +162,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                           ),
                         ],
                       ),
-                      const Sizer(
+                       Sizer(
                         height: 15,
                       ),
                       if (widget.config.role == ZegoLiveStreamingRole.host)
@@ -199,7 +199,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                             ),
                           ),
                         ),
-                      const Sizer(
+                       Sizer(
                         height: 15,
                       ),
                       InkWell(

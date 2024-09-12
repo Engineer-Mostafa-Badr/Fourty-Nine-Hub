@@ -14,7 +14,7 @@ class DoctorDetailsAddressCard extends StatelessWidget {
     final doctorDetailsCubit = context.read<DoctorDetailsCubit>();
     final doctor = doctorDetailsCubit.doctor;
     if (doctor.address.address.isEmpty) {
-      return const SizedBox.shrink();
+      return SizedBox.shrink();
     } else {
       return Column(
         children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
@@ -28,7 +29,7 @@ class MazadatView extends StatelessWidget {
                   _buildViewType(context: context),
                   Expanded(
                       child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(8.0),
                     child: state.isLoading
                         ? const Center(
                             child: CircularProgressIndicator.adaptive())
@@ -50,7 +51,7 @@ class MazadatView extends StatelessWidget {
                                       isVertical: false,
                                     ),
                                 separatorBuilder: (context, index) =>
-                                    const Sizer(),
+                                    Sizer(),
                                 itemCount: state.auctionList?.length ?? 0),
                   )),
                 ],
@@ -64,7 +65,7 @@ class MazadatView extends StatelessWidget {
     return BlocBuilder<AuctionListCubit, AuctionListState>(
         builder: (context, state) {
       return Container(
-        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        margin:  EdgeInsets.symmetric(vertical: 10.h, horizontal: 10),
         width: kToolbarHeight * 2,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
@@ -96,7 +97,7 @@ class MazadatView extends StatelessWidget {
       required BuildContext context}) {
     final controller = context.read<AuctionListCubit>();
     return Container(
-      padding: const EdgeInsets.all(3),
+      padding: EdgeInsets.all(3),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color: isSelected ? AppColors.PRIMARY_COLOR : Colors.white),
@@ -127,8 +128,8 @@ class MazadatView extends StatelessWidget {
             //   },
             //   child: Container(
             //     height: kToolbarHeight * .5,
-            //     margin: const EdgeInsets.only(left: 10),
-            //     padding: const EdgeInsets.symmetric(horizontal: 10),
+            //     margin: EdgeInsets.only(left: 10),
+            //     padding: EdgeInsets.symmetric(horizontal: 10),
             //     decoration: BoxDecoration(
             //         borderRadius: BorderRadius.circular(5),
             //         border: Border.all(color: AppColors.PRIMARY_COLOR),
@@ -148,8 +149,8 @@ class MazadatView extends StatelessWidget {
                   return InkWell(
                     onTap: () => controller.changeSubCategory(v: subCategory),
                     child: Container(
-                      margin: const EdgeInsets.only(left: 10),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      margin: EdgeInsets.only(left: 10),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: state.selectedSubCategory == subCategory
@@ -170,7 +171,7 @@ class MazadatView extends StatelessWidget {
                     ),
                   );
                 },
-                separatorBuilder: (context, index) => const Sizer(
+                separatorBuilder: (context, index) => Sizer(
                   width: 0,
                 ),
               ),

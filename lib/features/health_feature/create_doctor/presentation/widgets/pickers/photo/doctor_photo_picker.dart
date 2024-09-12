@@ -28,7 +28,7 @@ class _CreateDoctorProfilePhotoPickerState
           text: "Photo",
           style: Styles.headerText(),
         ),
-        const Sizer(),
+        Sizer(),
         InkWell(
           onTap: () async {
             await createDoctorCubit.uploadProfileImage();

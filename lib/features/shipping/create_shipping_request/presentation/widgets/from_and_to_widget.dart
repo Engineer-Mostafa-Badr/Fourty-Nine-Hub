@@ -11,6 +11,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import 'select_shipping_destination.dart';
 import 'shipping_details_widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FromAndToWidget extends StatelessWidget {
   const FromAndToWidget({super.key});
@@ -30,11 +31,11 @@ class FromAndToWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildSubcategoriesWidget(context: context),
-          const Sizer(),
+          Sizer(),
           _buildFromWidget(context: context),
-          const Sizer(),
+          Sizer(),
           _buildToWidget(context: context),
-          const Sizer(),
+          Sizer(),
           AppButton(
               label: 'Continue',
               onPressed: () {
@@ -43,8 +44,8 @@ class FromAndToWidget extends StatelessWidget {
                     context: context,
                     widget: const ShippingDetailsWidget());
               }),
-          const Sizer(
-            height: 20,
+          Sizer(
+            height: 20.h,
           ),
         ],
       ),
@@ -72,7 +73,7 @@ class FromAndToWidget extends StatelessWidget {
                 Icons.search,
                 color: Colors.grey,
               ),
-              const Sizer(),
+              Sizer(),
               Expanded(
                   child: Label(
                 text: state.toAddress?.address ?? 'Select drop off location',
@@ -109,7 +110,7 @@ class FromAndToWidget extends StatelessWidget {
                         radius: 4,
                       ),
                     ),
-                    const Sizer(),
+                    Sizer(),
                     Expanded(
                         child: Text(
                       state.fromAddress?.address ?? 'Select Pickup location',
@@ -119,7 +120,7 @@ class FromAndToWidget extends StatelessWidget {
                 ),
               ),
             )
-          : const Sizer();
+          : Sizer();
     });
   }
 
@@ -171,7 +172,7 @@ class FromAndToWidget extends StatelessWidget {
                         ),
                       );
                     },
-                    separatorBuilder: (context, index) => const Sizer(),
+                    separatorBuilder: (context, index) => Sizer(),
                     itemCount: state.subCategories?.length ?? 0),
               )
             : const SizedBox();

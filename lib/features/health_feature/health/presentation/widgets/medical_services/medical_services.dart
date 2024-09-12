@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/medical_services/medical_service_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HealthMedicalServices extends StatelessWidget {
   const HealthMedicalServices({
@@ -19,7 +20,7 @@ class HealthMedicalServices extends StatelessWidget {
     return BlocBuilder<HealthCubit, HealthState>(builder: (context, state) {
       if (state.medicalServices != null && state.medicalServices!.isNotEmpty) {
         return SizedBox(
-          height: 200,
+          height: 200.h,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -27,10 +28,10 @@ class HealthMedicalServices extends StatelessWidget {
                 text: LocaleKeys.medicalService.localize,
                 style: Styles.headerText(),
               ),
-              const Sizer(),
+              Sizer(),
               Expanded(
                 child: ListView.separated(
-                  separatorBuilder: (context, index) => const Sizer(),
+                  separatorBuilder: (context, index) => Sizer(),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) => HealthMedicalServiceCard(
                     subCategory: state.medicalServices![index],
@@ -42,7 +43,7 @@ class HealthMedicalServices extends StatelessWidget {
           ),
         );
       } else {
-        return const SizedBox.shrink();
+        return SizedBox.shrink();
       }
     });
   }

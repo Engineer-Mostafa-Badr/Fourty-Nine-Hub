@@ -4,7 +4,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/view_all_trip_join_builder.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AvailableTripsBody extends StatefulWidget {
   const AvailableTripsBody({super.key});
 
@@ -31,7 +31,7 @@ class _AvailableTripsBodyState extends State<AvailableTripsBody> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5.h),
       child: SingleChildScrollView(
         controller: scrollController,
         child: Column(
@@ -41,7 +41,7 @@ class _AvailableTripsBodyState extends State<AvailableTripsBody> {
               child: Text(
                 'Users own cars/share the trip with them! ',
                 style: Styles.headerText(
-                    color: AppColors.SECONDARY_COLOR, fontSize: 35),
+                    color: AppColors.SECONDARY_COLOR, fontSize: 35.sp),
                 textAlign: TextAlign.start,
               ),
             ),

@@ -8,11 +8,12 @@ import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/widgets/city_list_title.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 
 class DoctorCityFilterView extends StatefulWidget {
-  const DoctorCityFilterView({
+   const DoctorCityFilterView({
     super.key,
   });
 
@@ -39,9 +40,9 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
         label: LocaleKeys.city.localize,
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(
+        padding:  EdgeInsets.symmetric(
           horizontal: 20,
-          vertical: 10,
+          vertical: 10.h,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,11 +51,11 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
               currentFocusNode: doctorCityFilter.searchFocusNode,
               currentController: doctorCityFilter.searchController,
               hint: LocaleKeys.search.localize,
-              prefixIcon: const Icon(Icons.search),
+              prefixIcon:  Icon(Icons.search),
               onChanged: (value) => doctorCityFilter.search(value),
             ),
-            const Sizer(
-              height: 30,
+             Sizer(
+              height: 30.h,
             ),
             BlocBuilder<DoctorCityFilterCubit, DoctorCityFilterState>(
               builder: (context, state) {
@@ -63,14 +64,14 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
                     return Expanded(
                         child: ListView.separated(
                       itemCount: state.cities.length,
-                      separatorBuilder: (context, index) => const Divider(),
+                      separatorBuilder: (context, index) =>  Divider(),
                       itemBuilder: (context, index) =>
                           CityListTitle(city: state.cities[index]),
                     ));
                   case DoctorCityFilterError _:
                     return Center(child: Text(state.message));
                   default:
-                    return const Center(child: CircularProgressIndicator());
+                    return  Center(child: CircularProgressIndicator());
                 }
               },
             ),

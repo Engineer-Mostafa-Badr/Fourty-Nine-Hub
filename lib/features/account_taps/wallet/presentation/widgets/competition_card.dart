@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
+// import '../../../../../common/widgets/dynamic/sizer,.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/localization/locales.dart';
@@ -24,8 +25,8 @@ class CompetitionCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap(context),
       child: Container(
-        margin: const EdgeInsets.all(5),
-        padding: const EdgeInsets.all(10),
+        margin: EdgeInsets.all(5),
+        padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Colors.grey, width: .5),
@@ -75,7 +76,7 @@ class CompetitionCard extends StatelessWidget {
                 )
               ],
             ),
-            const Sizer(),
+            Sizer(),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -83,7 +84,7 @@ class CompetitionCard extends StatelessWidget {
                   Icons.info_outline,
                   color: Colors.grey,
                 ),
-                const Sizer(),
+                Sizer(),
                 Expanded(
                     child: Label(
                   text:
@@ -92,7 +93,7 @@ class CompetitionCard extends StatelessWidget {
                 )),
               ],
             ),
-            const Sizer(),
+            Sizer(),
             AppButton(
               label: LocaleKeys.requestWithdraw.localize,
               color: AppColors.AUTH_CONTAINER_COLOR,

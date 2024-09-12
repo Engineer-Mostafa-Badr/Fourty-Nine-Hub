@@ -51,11 +51,11 @@ class YoutubeVideoCard extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0),
           child: Row(
             children: [
               const ProfileImage(accountId: 0, userId: '',),
-              const Sizer(),
+              Sizer(),
               Expanded(
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

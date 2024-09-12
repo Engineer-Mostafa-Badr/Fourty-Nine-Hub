@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TinderSharedUtils {
   static String _token = '';
   static List<String>? favListIds;
@@ -38,7 +38,7 @@ class TinderSharedUtils {
         'You do not have enough money in your wallet.';
     const successMessage = 'has been sent successfully!';
 
-    log(response.toString()+"111111111111111111111111111111111111");
+    log(response.toString() + "111111111111111111111111111111111111");
     switch (response) {
       case '{"success":false,"error":{"name":"Bad Request","httpCode":400,"message":"You does not have enough money in the wallet","data":{},"isOperational":true,"stack":"","domain":"49dev.com"}}':
         _showDialog(
@@ -91,7 +91,7 @@ class TinderSharedUtils {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
           title: title == 'Gift Sent'
-              ? const SizedBox.shrink()
+              ? SizedBox.shrink()
               : _buildDialogTitle(icon, title, primaryColor),
           content: title == 'Gift Sent'
               ? _buildGiftContent(gift!, message)
@@ -108,7 +108,7 @@ class TinderSharedUtils {
     return Row(
       children: [
         Icon(icon, color: primaryColor, size: 30),
-        const SizedBox(width: 10),
+        SizedBox(width: 10),
         Text(title),
       ],
     );
@@ -121,13 +121,13 @@ class TinderSharedUtils {
           gift.picture ?? '',
           fit: BoxFit.scaleDown,
           placeholderBuilder: (BuildContext context) =>
-              Image.asset('assets/images/icon.png', width: 50, height: 50),
+              Image.asset('assets/images/icon.png', width: 50, height: 50.h),
           width: 50,
-          height: 50,
+          height: 50.h,
         ),
         Text(
           "${gift.nameEn} gift $message",
-          style: const TextStyle(fontSize: 16, color: Colors.black87),
+          style:  TextStyle(fontSize: 16.sp, color: Colors.black87),
           textAlign: TextAlign.left,
         ),
       ],
@@ -137,7 +137,7 @@ class TinderSharedUtils {
   static Widget _buildMessageContent(String message) {
     return Text(
       message,
-      style: const TextStyle(fontSize: 16, color: Colors.black87),
+      style:  TextStyle(fontSize: 16.sp, color: Colors.black87),
       textAlign: TextAlign.left,
     );
   }
@@ -153,7 +153,7 @@ class TinderSharedUtils {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         ),
-        child: const Text('OK', style: TextStyle(fontSize: 16)),
+        child:  Text('OK', style: TextStyle(fontSize: 16.sp)),
       ),
       if (isError)
         TextButton(

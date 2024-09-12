@@ -16,6 +16,7 @@ import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorDetailsAccountHeader extends StatelessWidget {
   const DoctorDetailsAccountHeader({super.key});
@@ -36,13 +37,14 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
               height: kToolbarHeight * 1.5,
               width: kToolbarHeight * 1.5,
             ),
-            const Sizer(),
+            Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                  text: '${toBeginningOfSentenceCase(doctor.firstName)} ${toBeginningOfSentenceCase(doctor.lastName)}',
+                  text:
+                      '${toBeginningOfSentenceCase(doctor.firstName)} ${toBeginningOfSentenceCase(doctor.lastName)}',
                   style: Styles.mediumText(fontWeight: FontWeight.w500),
                 ),
                 RatingStars(
@@ -54,8 +56,8 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                     text: doctor.description,
                     maxLines: 1,
                     style: Styles.mediumText()),
-                const Sizer(
-                  height: 30,
+                Sizer(
+                  height: 30.h,
                 ),
                 BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
                   buildWhen: (previous, current) =>
@@ -74,7 +76,7 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                               onPressed: () {},
                             ),
                           ),
-                          const Sizer(),
+                          Sizer(),
                           Expanded(
                             child: AppButton(
                               label: Labels.message,
@@ -96,7 +98,7 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                               onPressed: () {},
                             ),
                           ),
-                          const Sizer(),
+                          Sizer(),
                           Expanded(
                             child: AppButton(
                               label: Labels.message,
@@ -110,8 +112,8 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                     }
                   },
                 ),
-                const Sizer(
-                  height: 15,
+                Sizer(
+                  height: 15.h,
                 ),
                 Row(
                   children: [
@@ -127,20 +129,19 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                             ),
                           )
                         : const Spacer(flex: 4),
-                    const Sizer(),
+                    Sizer(),
                     Expanded(
                       child: InkWell(
                         onTap: () {
                           bottomSheet(
                               context: context,
                               widget: ReportView(
-                                  id: doctor.id,
-                                  categoryId: serviceLocator<HealthSharedData>()
-                                      .doctorSearchParams
-                                      .subCategory
-                                      .id,
-                                 ));
-
+                                id: doctor.id,
+                                categoryId: serviceLocator<HealthSharedData>()
+                                    .doctorSearchParams
+                                    .subCategory
+                                    .id,
+                              ));
                         },
                         child: const Icon(
                           Icons.report_gmailerrorred_rounded,
@@ -151,7 +152,7 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                     ),
                   ],
                 ),
-                const Sizer(),
+                Sizer(),
               ],
             ))
           ],

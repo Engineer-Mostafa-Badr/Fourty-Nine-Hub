@@ -28,7 +28,7 @@ import '../../../../../../res/style/const.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 import '../../../domain/usecases/post_react_usecase.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class FacebookGlobalPostCard extends StatefulWidget {
   final PostEntity post;
   final int index;
@@ -83,7 +83,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ??  UnknownFailure(''),
+            state.failure ?? UnknownFailure(''),
             context,
           ),
         );
@@ -91,7 +91,8 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
     }, builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
       if (widget.from == 'posts') {
-        if (controller.globalFeedPagingController.itemList?[widget.index].type ==
+        if (controller
+                .globalFeedPagingController.itemList?[widget.index].type ==
             'advertisement') {
           return FacebookAdvertisementCard(
             post: controller.globalFeedPagingController.itemList![widget.index],
@@ -108,8 +109,8 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
               : controller.globalFeedPagingController.itemList![widget.index];
           return InkWell(
             onTap: (widget.from == 'posts' && widget.post.isShared == true)
-                ? () => widget.showPostDetails(
-                    controller.globalFeedPagingController.itemList![widget.index])
+                ? () => widget.showPostDetails(controller
+                    .globalFeedPagingController.itemList![widget.index])
                 : null,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,16 +149,16 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                           myPost.mainPost == null)
                         SizedBox(
                           width: double.infinity,
-                          height: 100,
+                          height: 100.h,
                           child: Center(
                             child: Row(
                               children: [
-                                const Sizer(),
+                                Sizer(),
                                 const Icon(
                                   Icons.lock,
                                   color: Colors.black,
                                 ),
-                                const Sizer(),
+                                Sizer(),
                                 Label(
                                   text: "This content is not available now.",
                                   style: Styles.headerText(
@@ -195,7 +196,6 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                     InkWell(
                       onTap: () {
                         context.push(Routes.LOGIN);
-
                       },
                       child: Row(
                         children: [
@@ -203,7 +203,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                             text: myPost.commentsCount.toString(),
                             style: Styles.mediumText(),
                           ),
-                          const Sizer(
+                          Sizer(
                             width: 5,
                           ),
                           Label(
@@ -223,8 +223,8 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                   child: Row(
                     children: [
                       Expanded(
-                        child:  InkWell(
-                          onTap: (){
+                        child: InkWell(
+                          onTap: () {
                             context.push(Routes.LOGIN);
                           },
                           child: Column(
@@ -236,20 +236,23 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                                 size: 18,
                               ),
                               if (widget.from == 'posts') ...[
-                                Label(text: 'Like', style: Styles.mediumText(color: Colors.grey)),
+                                Label(
+                                    text: 'Like',
+                                    style:
+                                        Styles.mediumText(color: Colors.grey)),
                               ],
                             ],
                           ),
                         ),
                       ),
-                        Expanded(
-                          child: _buildReactionPlaceHolder(
-                              icon: FontAwesomeIcons.message,
-                              label: 'Comment',
-                              onTap: (){
-                                context.push(Routes.LOGIN);
-                              }),
-                        ),
+                      Expanded(
+                        child: _buildReactionPlaceHolder(
+                            icon: FontAwesomeIcons.message,
+                            label: 'Comment',
+                            onTap: () {
+                              context.push(Routes.LOGIN);
+                            }),
+                      ),
                       Expanded(
                         child: _buildReactionPlaceHolder(
                             icon: FontAwesomeIcons.share,
@@ -307,7 +310,6 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                   InkWell(
                     onTap: () {
                       context.push(Routes.LOGIN);
-
                     },
                     child: Row(
                       children: [
@@ -315,7 +317,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                           text: myPost.commentsCount.toString(),
                           style: Styles.mediumText(),
                         ),
-                        const Sizer(
+                        Sizer(
                           width: 5,
                         ),
                         Label(
@@ -374,9 +376,9 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       children: [
         Image.asset(
           image,
-          height: 20,
+          height: 20.h,
         ),
-        const Sizer(
+        Sizer(
           width: 5,
         ),
         Label(
@@ -386,7 +388,6 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       ],
     );
   }
-
 
   Widget listTile(
       {required IconData icon,
@@ -422,9 +423,10 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
           children: [
             InkWell(
               onTap: () {
-                if (widget.fromProfile == false&&context.read<UserCubit>().isLoggedIn) {
+                if (widget.fromProfile == false &&
+                    context.read<UserCubit>().isLoggedIn) {
                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-                }else{
+                } else {
                   context.push(Routes.LOGIN);
                 }
               },
@@ -442,16 +444,17 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
               //       : UIConst.profilePlaceHolder),
               // ),
             ),
-            const Sizer(),
+            Sizer(),
             Expanded(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InkWell(
                     onTap: () {
-                      if (widget.fromProfile == false&&context.read<UserCubit>().isLoggedIn) {
+                      if (widget.fromProfile == false &&
+                          context.read<UserCubit>().isLoggedIn) {
                         context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-                      }else{
+                      } else {
                         context.push(Routes.LOGIN);
                       }
                     },
@@ -461,10 +464,11 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                         TextAppButton(
                             label: post.user.firstName,
                             onPressed: () {
-                              if (widget.fromProfile == false&&context.read<UserCubit>().isLoggedIn) {
+                              if (widget.fromProfile == false &&
+                                  context.read<UserCubit>().isLoggedIn) {
                                 context.push(Routes.OTHERSACCOUNT,
                                     extra: post.user.id);
-                              }else{
+                              } else {
                                 context.push(Routes.LOGIN);
                               }
                             }),
@@ -491,7 +495,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
         ),
         if (post.location != null)
           Padding(
-            padding: const EdgeInsetsDirectional.only(start: 40.0),
+            padding: EdgeInsetsDirectional.only(start: 40.0),
             child: InkWell(
               onTap: () {
                 showDialog(
@@ -511,7 +515,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                   Expanded(
                       child: Label(
                     text: post.location?.place ?? '',
-                    style: Styles.mediumText(fontSize: 14),
+                    style: Styles.mediumText(fontSize: 14.sp),
                   ))
                 ],
               ),
@@ -540,7 +544,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                 : UIConst.profilePlaceHolder),
           ),
         ),
-        const Sizer(),
+        Sizer(),
         Expanded(
             child: Row(
           children: [
@@ -592,10 +596,10 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
             images!.isEmpty
         ? Container(
             width: double.infinity,
-            height: 220,
+            height: 220.h,
             alignment: Alignment.center,
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+            margin: EdgeInsets.symmetric(vertical: 10.h),
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
             color: images.isEmpty
                 ? Color(int.parse(backgroundColor.substring(1), radix: 16))
                 : Colors.white,
@@ -603,25 +607,25 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
               text: content,
               style: Styles.headerText(
                   color: Colors.black,
-                  fontSize: 24,
+                  fontSize: 24.sp,
                   fontWeight: FontWeight.bold),
             ),
           )
         : Container(
             width: double.infinity,
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+            margin: EdgeInsets.symmetric(vertical: 10.h),
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ReadMoreLabel(text: content),
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: 10.h,
                 ),
                 if ((images?.isNotEmpty ?? false))
                   SizedBox(
                     child: GridView.builder(
-                        padding: const EdgeInsets.all(10),
+                        padding: EdgeInsets.all(10),
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -722,7 +726,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
               color: AppColors.GREY_DARK_COLOR,
               size: 20,
             ),
-            // const Sizer(),
+            // Sizer(),
             Label(text: label, style: Styles.mediumText(color: Colors.grey))
           ],
         ),
@@ -732,16 +736,16 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
 
   Widget _buildActivityFeelingWidget(PostEntity post) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: EdgeInsets.symmetric(horizontal: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (post.feeling != null || post.activity != null) ...[
             Text(
-              'feeling ${post.feeling!=null?post.feeling?.name??'':''}${post.activity!=null?', ${post.activity?.name}':''}',
+              'feeling ${post.feeling != null ? post.feeling?.name ?? '' : ''}${post.activity != null ? ', ${post.activity?.name}' : ''}',
               style: Styles.mediumText(),
             ),
-            const SizedBox(
+            SizedBox(
               width: 10,
             ),
           ],

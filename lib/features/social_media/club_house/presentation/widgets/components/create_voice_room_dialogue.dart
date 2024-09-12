@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
@@ -18,8 +19,8 @@ void showVoiceLiveBottomSheet({
       isDismissible: true,
       isScrollControlled: true,
       useSafeArea: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      shape:  const RoundedRectangleBorder(
+        borderRadius:  BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (BuildContext context) {
         return BlocProvider(
@@ -34,35 +35,35 @@ void showVoiceLiveBottomSheet({
             child: Column(
               // mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                const Text(
+                 Text(
                   'Room Subject',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 10),
-                const Align(
+                SizedBox(height: 10.h),
+                 Align(
                   alignment: Alignment.topLeft,
                   child: Text(
                     'Please enter a simple description',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  padding: EdgeInsets.symmetric(vertical: 15.h),
                   child: TextField(
                     controller: roomSubjectController,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       // labelText: 'Room Subject',
                       hintText: 'Enter room subject',
-                      prefixIcon: const Icon(Icons.headset_mic_rounded),
-                      border: const OutlineInputBorder(
+                      prefixIcon:  const Icon(Icons.headset_mic_rounded),
+                      border:  const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       ),
                       filled: true,
@@ -84,7 +85,7 @@ void showVoiceLiveBottomSheet({
                           String roomSub = roomSubjectController.text.trim();
                           if (roomSub.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                               const SnackBar(
                                 content: Text('Room subject cannot be empty'),
                               ),
                             );
@@ -110,7 +111,7 @@ void showVoiceLiveBottomSheet({
                             }
                           }
                         },
-                        child: const Label(
+                        child:  const Label(
                           text: 'Create Room',
                           color: Colors.white,
                         ),
@@ -119,7 +120,7 @@ void showVoiceLiveBottomSheet({
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Text(
+                        child:  const Text(
                           'Cancel',
                           style: TextStyle(color: AppColors.SECONDARY_COLOR),
                         ),

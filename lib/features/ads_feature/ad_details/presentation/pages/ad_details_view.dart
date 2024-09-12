@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
 import 'package:fourtyninehub/common/functions/helper/launch_url.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -74,14 +75,14 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                   child: ListView(
                     children: [
                       _buildAdInfoWidget(ad: state.ad!),
-                      const Sizer(),
+                      Sizer(),
                       // const GoogleAddsBanner(
                       //   margin: 0,
                       // ),
-                      const Sizer(),
+                      Sizer(),
                       _buildDetailsWidget(ad: state.ad!),
                       _buildLocationWidget(address: state.ad!.address!),
-                      const Sizer(),
+                      Sizer(),
                       _buildRelevantAdsWidget(),
                     ],
                   ),
@@ -112,7 +113,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) =>
                     AdCard(item: state.relevantAds![index]),
-                separatorBuilder: (context, index) => const Sizer(),
+                separatorBuilder: (context, index) => Sizer(),
                 itemCount: state.relevantAds?.length ?? 0),
           ),
         ],
@@ -142,7 +143,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                                 icon: Icons.chat_bubble_outline,
                                 onPressed: () =>
                                     context.push(Routes.CHATROOM))),
-                        const Sizer(
+                        Sizer(
                           width: 5,
                         ),
                         Expanded(
@@ -156,7 +157,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                   }
                   return const SizedBox();
                 }),
-            const Sizer(),
+            Sizer(),
             Row(
               children: [
                 Expanded(
@@ -183,7 +184,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                                   subCategoryId: state.ad?.subCategoryId ??
                                       '62c8ba9f8e28a58a3edf57eb');
                         })),
-                const Sizer(
+                Sizer(
                   width: 5,
                 ),
                 Expanded(
@@ -227,12 +228,12 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Icon(Icons.location_on_outlined),
-              const Sizer(),
+              Sizer(),
               Expanded(child: Label(text: address.address)),
             ],
           ),
         ),
-        const Sizer(),
+        Sizer(),
         SizedBox(
             height: kToolbarHeight * 2,
             width: double.infinity,
@@ -283,14 +284,14 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Icon(Icons.location_on_outlined),
-              const Sizer(),
+              Sizer(),
               Expanded(child: Label(text: ad.address?.address ?? "")),
-              const Sizer(),
+              Sizer(),
               Label(text: ad.formatedDate)
             ],
           ),
         ),
-        const Sizer(),
+        Sizer(),
         Label(
           text: 'Description',
           style: Styles.mediumText(fontWeight: FontWeight.bold),
@@ -315,7 +316,8 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             itemBuilder: (context, index) {
               final detail = ad.details[index];
               return Container(
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                padding:
+                     EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
                 decoration: BoxDecoration(
                     color: index.isEven
                         ? AppColors.LIGHT_GRAY_COLOR

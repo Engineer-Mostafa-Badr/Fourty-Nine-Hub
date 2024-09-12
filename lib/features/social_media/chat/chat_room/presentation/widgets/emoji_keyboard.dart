@@ -1,6 +1,7 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmojiKeyboard extends StatelessWidget {
   final TextEditingController? textController;
@@ -19,7 +20,7 @@ class EmojiKeyboard extends StatelessWidget {
       scrollController: scrollController,
       onEmojiSelected: onEmojiSelected,
       config: Config(
-        height: 256,
+        height: 256.h,
         checkPlatformCompatibility: true,
         emojiViewConfig: const EmojiViewConfig(
           backgroundColor: Colors.white,
@@ -119,7 +120,7 @@ class WhatsAppCategoryViewState extends State<_WhatsAppCategoryView>
         widget.config.categoryViewConfig.backspaceColor,
       );
     }
-    return const SizedBox.shrink();
+    return SizedBox.shrink();
   }
 }
 
@@ -147,7 +148,7 @@ class _WhatsAppTabBar extends StatelessWidget {
         unselectedLabelColor: config.categoryViewConfig.iconColor,
         dividerColor: config.categoryViewConfig.dividerColor,
         controller: tabController,
-        labelPadding: const EdgeInsets.only(top: 1.0),
+        labelPadding: EdgeInsets.only(top: 1.0),
         indicatorSize: TabBarIndicatorSize.label,
         indicator: const BoxDecoration(
           shape: BoxShape.circle,
@@ -170,7 +171,7 @@ class _WhatsAppTabBar extends StatelessWidget {
   Widget _buildCategory(int index, Category category) {
     return Tab(
       child: Padding(
-        padding: const EdgeInsets.all(6.0),
+        padding: EdgeInsets.all(6.0),
         child: Icon(
           getIconForCategory(
             config.categoryViewConfig.categoryIcons,
@@ -207,7 +208,7 @@ class WhatsAppSearchViewState extends SearchViewState {
             SizedBox(
               height: emojiBoxSize + 8.0,
               child: ListView.builder(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                padding: EdgeInsets.symmetric(vertical: 4.h),
                 scrollDirection: Axis.horizontal,
                 itemCount: results.length,
                 itemBuilder: (context, index) {

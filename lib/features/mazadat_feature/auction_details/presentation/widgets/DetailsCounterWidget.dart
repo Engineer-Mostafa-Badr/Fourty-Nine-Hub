@@ -19,8 +19,8 @@ class DetailsCounterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: kToolbarHeight * 2,
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.all(20),
       decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: const BorderRadius.only(
@@ -66,7 +66,7 @@ class DetailsCounterWidget extends StatelessWidget {
                             );
                           }).toList() ??
                           [],
-                      const Sizer(),
+                      Sizer(),
                       TextAppButton(
                           style:
                               TextStyle(color: Theme.of(context).primaryColor),

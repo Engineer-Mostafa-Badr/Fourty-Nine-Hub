@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -47,14 +47,14 @@ class BadgedLabel extends StatelessWidget {
             height: height,
             width: width,
             margin: EdgeInsets.all(margin ?? 0),
-            padding: EdgeInsets.symmetric(horizontal: 20.zW, vertical: 6.zH),
-            //padding: const EdgeInsetsDirectional.only(end: 8,top: 5),
+            padding: EdgeInsets.symmetric(horizontal: 20.w.w, vertical: 6.h.h),
+            //padding: EdgeInsetsDirectional.only(end: 8,top: 5),
             decoration: BoxDecoration(
                 color: isBordered ? color : color,
                 border: isBordered
-                    ? Border.all(color: borderColor, width: .5.zW)
+                    ? Border.all(color: borderColor, width: .5.w)
                     : null,
-                borderRadius: BorderRadius.circular(radius.zR)),
+                borderRadius: BorderRadius.circular(radius.r)),
             // child: isCentered
             //     ? Center(
             //         child: _buildLabelWidget(),
@@ -79,7 +79,7 @@ class BadgedLabel extends StatelessWidget {
                   ),
                 Padding(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 10.zW, vertical: 3.zW),
+                      EdgeInsets.symmetric(horizontal: 10.w.w, vertical: 3.h.w),
                   child: isCentered
                       ? Center(
                           child: _buildLabelWidget(),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DeleteMessageBody extends StatelessWidget {
   final VoidCallback? deleteMessageFunction;
@@ -22,9 +23,9 @@ class DeleteMessageBody extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: AppColors.GREY_LIGHT_COLOR),
-          margin: const EdgeInsets.symmetric(vertical: 15),
+          margin: EdgeInsets.symmetric(vertical: 15.h),
           child: Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: EdgeInsets.all(15.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -37,26 +38,26 @@ class DeleteMessageBody extends StatelessWidget {
                         style: Styles.mediumText(
                             fontWeight: FontWeight.w600,
                             color: Colors.red,
-                            fontSize: 15),
+                            fontSize: 15.sp),
                       ),
                     ),
                   ],
                 ),
                 // const Padding(
-                //   padding: EdgeInsets.symmetric(vertical: 5),
+                //   padding: EdgeInsets.symmetric(vertical: 5.h),
                 //   child: Divider(),
                 // ),
                 // Label(
                 //   text: 'Delete for me',
                 //   style: Styles.mediumText(
-                //       fontWeight: FontWeight.w600, color: Colors.red,fontSize: 15),
+                //       fontWeight: FontWeight.w600, color: Colors.red,fontSize: 15.sp),
                 // ),
               ],
             ),
           ),
         ),
-        const SizedBox(
-          height: 10,
+        SizedBox(
+          height: 10.h,
         ),
       ],
     );

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -45,11 +46,13 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
     return CachedNetworkImage(
       imageUrl: widget.category.banner,
       height: MediaQuery.sizeOf(context).height * 0.08,
-      imageBuilder: (context,i)=>Container(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      imageBuilder: (context, i) => Container(
+        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: widget.category.banner.isNotEmpty?Colors.transparent:AppColors.PRIMARY_COLOR,
+          color: widget.category.banner.isNotEmpty
+              ? Colors.transparent
+              : AppColors.PRIMARY_COLOR,
           image: DecorationImage(
             fit: BoxFit.cover,
             image: CachedNetworkImageProvider(
@@ -61,7 +64,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
             ),
           ),
         ),
-        child:Stack(
+        child: Stack(
           alignment: Alignment.center,
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
@@ -70,7 +73,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 45.zSP),
+                  fontSize: 45.sp),
             ),
             PositionedDirectional(
               start: 0,
@@ -78,28 +81,29 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 children: [
                   context.read<UserCubit>().isLoggedIn
                       ? InkWell(
-                    onTap: () async {
-                      final result = await widget.onFavorite();
-                      if (result==true) {
-                        print(result);
-                        setState(() {
-                          widget.category.isFavorite=!widget.category.isFavorite!;
-                          print(widget.category.isFavorite);
-                          widget.isFavorite = result;
-                          print("===================$result");
-                        });
-                      }
-                    },
-                    child: Icon(
-                      widget.category.isFavorite == true
-                          ? Icons.favorite
-                          : Icons.favorite_border,
-                      color: AppColors.SECONDARY_COLOR,
-                    ),
-                  )
-                      : const SizedBox.shrink(),
+                          onTap: () async {
+                            final result = await widget.onFavorite();
+                            if (result == true) {
+                              print(result);
+                              setState(() {
+                                widget.category.isFavorite =
+                                    !widget.category.isFavorite!;
+                                print(widget.category.isFavorite);
+                                widget.isFavorite = result;
+                                print("===================$result");
+                              });
+                            }
+                          },
+                          child: Icon(
+                            widget.category.isFavorite == true
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: AppColors.SECONDARY_COLOR,
+                          ),
+                        )
+                      : SizedBox.shrink(),
                   Sizer(
-                    height: 15.zH,
+                    height: 15.h,
                   ),
                   Label(
                     text: '${widget.category.total.toShortScale} ${Labels.ads}',
@@ -114,7 +118,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
           ],
         ),
       ),
-      placeholder: (context,u)=>Shimmer.fromColors(
+      placeholder: (context, u) => Shimmer.fromColors(
         baseColor: Colors.grey[100]!,
         highlightColor: Colors.white24,
         child: Container(
@@ -126,13 +130,13 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
           ),
         ),
       ),
-      errorWidget: (context,url, error)=>Container(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      errorWidget: (context, url, error) => Container(
+        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color:AppColors.PRIMARY_COLOR,
+          color: AppColors.PRIMARY_COLOR,
         ),
-        child:Stack(
+        child: Stack(
           alignment: Alignment.center,
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
@@ -141,7 +145,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 45.zSP),
+                  fontSize: 45.sp),
             ),
             PositionedDirectional(
               start: 0,
@@ -149,25 +153,25 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 children: [
                   context.read<UserCubit>().isLoggedIn
                       ? InkWell(
-                    onTap: () async {
-                      final result = await widget.onFavorite();
-                      if (result != null && result != widget.isFavorite) {
-                        setState(() {
-                          widget.isFavorite = result;
-                          print("===================$result");
-                        });
-                      }
-                    },
-                    child: Icon(
-                      widget.isFavorite == true
-                          ? Icons.favorite
-                          : Icons.favorite_border,
-                      color: AppColors.SECONDARY_COLOR,
-                    ),
-                  )
-                      : const SizedBox.shrink(),
+                          onTap: () async {
+                            final result = await widget.onFavorite();
+                            if (result != null && result != widget.isFavorite) {
+                              setState(() {
+                                widget.isFavorite = result;
+                                print("===================$result");
+                              });
+                            }
+                          },
+                          child: Icon(
+                            widget.isFavorite == true
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: AppColors.SECONDARY_COLOR,
+                          ),
+                        )
+                      : SizedBox.shrink(),
                   Sizer(
-                    height: 15.zH,
+                    height: 15.h,
                   ),
                   Label(
                     text: '${widget.category.total.toShortScale} ${Labels.ads}',
@@ -194,7 +198,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 color: Colors.white, fontWeight: FontWeight.bold)),
       );
     } else {
-      return const SizedBox.shrink();
+      return SizedBox.shrink();
     }
   }
 }

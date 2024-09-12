@@ -64,11 +64,11 @@ class MealCategoryCard extends StatelessWidget {
                 ],
               ),
             )),
-            const Sizer(),
+            Sizer(),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
+                 Row(
                   children: [
                     Expanded(
                       child: Sizer(

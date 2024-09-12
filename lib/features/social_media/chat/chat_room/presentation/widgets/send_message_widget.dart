@@ -74,7 +74,7 @@
 //             children: [
 //               if (isReplaying) buildReplay(),
 //               Container(
-//                 // height: 50,
+//                 // height: 50.h,
 //                 decoration: BoxDecoration(
 //                   color: Colors.white,
 //                   borderRadius: BorderRadius.only(
@@ -158,7 +158,7 @@
 //                                           widget: AttachmentTypes());
 //                                     },
 //                                     color: Colors.grey),
-//                                 const Sizer(),
+//                                 Sizer(),
 //                                 const Icon(Icons.camera_alt_rounded,
 //                                     color: Colors.grey),
 //                               ],
@@ -169,7 +169,7 @@
 //               ),
 //             ],
 //           )),
-//           const Sizer(),
+//           Sizer(),
 //           _messageTextController.text.trim().length > 0
 //               ? AppButton(
 //                   backColor: Colors.green,
@@ -362,7 +362,7 @@
 //             SizedBox(
 //               height: emojiBoxSize + 8.0,
 //               child: ListView.builder(
-//                 padding: const EdgeInsets.symmetric(vertical: 4.0),
+//                 padding: const EdgeInsets.symmetric(vertical: 4.h.0),
 //                 scrollDirection: Axis.horizontal,
 //                 itemCount: results.length,
 //                 itemBuilder: (context, index) {
@@ -424,8 +424,8 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/Attachment_types.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/emoji_keyboard.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:social_media_recorder/screen/social_media_recorder.dart';
 
@@ -469,7 +469,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+          padding:  EdgeInsets.symmetric(horizontal: 8, vertical: 5.h),
           child: Row(
             children: [
               Expanded(
@@ -481,7 +481,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                   ],
                 ),
               ),
-              const Sizer(),
+              Sizer(),
               Expanded(
                 flex: 1,
                 child: _showMicButton ? _micButton() : _sendButton(),
@@ -510,7 +510,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
             filled: true,
             hintText: LocaleKeys.message.tr(),
             hintStyle: const TextStyle(color: Colors.grey),
-            contentPadding: const EdgeInsets.symmetric(vertical: 10),
+            contentPadding:  EdgeInsets.symmetric(vertical: 10.h),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.vertical(
                 top: topRadius,
@@ -616,7 +616,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
           recordIconWhenLockBackGroundColor: AppColors.PRIMARY_COLOR,
           backGroundColor: AppColors.PRIMARY_COLOR,
           radius: BorderRadius.circular(50),
-          recordIcon: Icon(Icons.mic, color: Colors.white, size: 50.zH),
+          recordIcon: Icon(Icons.mic, color: Colors.white, size: 50.h),
         );
         // return InkWell(
         //   onTap: () {},

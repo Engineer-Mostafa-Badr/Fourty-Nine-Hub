@@ -4,7 +4,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class SeatsNumberWidget extends StatefulWidget {
   const SeatsNumberWidget({
     super.key,
@@ -21,7 +21,7 @@ class _SeatsNumberWidgetState extends State<SeatsNumberWidget> {
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
             color: AppColors.PRIMARY_COLOR.withOpacity(0.8),
             borderRadius: BorderRadius.circular(10),
@@ -36,7 +36,7 @@ class _SeatsNumberWidgetState extends State<SeatsNumberWidget> {
               elevation: 16,
               style: const TextStyle(color: Colors.white),
               underline: Container(
-                height: 2,
+                height: 2.h,
                 color: Colors.white,
               ),
               onChanged: (int? value) {
@@ -53,7 +53,7 @@ class _SeatsNumberWidgetState extends State<SeatsNumberWidget> {
                       ))
                   .toList()),
         ),
-        const Sizer(),
+        Sizer(),
         Text('Number of seats available',
             style: Styles.headerText(color: AppColors.SECONDARY_COLOR))
       ],

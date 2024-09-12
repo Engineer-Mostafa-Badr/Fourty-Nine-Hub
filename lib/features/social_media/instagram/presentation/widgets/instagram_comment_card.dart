@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -59,7 +60,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                   ? widget.comment.user.image
                   : null,
             ),
-            const Sizer(),
+            Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +92,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
             ),
           ],
         ),
-        const Sizer(),
+        Sizer(),
         Label(
           textAlign: TextAlign.start,
           text: widget.comment.content,
@@ -104,20 +105,20 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
               children: [
                 Expanded(
                     child: TextFormField(
-                      maxLines: null,
-                      controller: editTextController,
-                      onChanged: (v) {
-                        setState(() {});
-                      },
-                      style: Styles.headerText(fontSize: 26),
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        contentPadding: EdgeInsets.all(5),
-                        hintText: 'Type your comment ....',
-                        hintStyle: Styles.mediumText(),
-                      ),
-                    )),
-                const Sizer(),
+                  maxLines: null,
+                  controller: editTextController,
+                  onChanged: (v) {
+                    setState(() {});
+                  },
+                  style: Styles.headerText(fontSize: 26.sp),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.all(5),
+                    hintText: 'Type your comment ....',
+                    hintStyle: Styles.mediumText(),
+                  ),
+                )),
+                Sizer(),
                 if (editTextController.text.isNotEmpty)
                   IconAppButton(
                     icon: Icons.send,
@@ -137,7 +138,9 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
               ],
             ),
           ),
-        Sizer(height: 4,),
+        Sizer(
+          height: 4.h,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -165,7 +168,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
               ),
             ),
             Label(text: '${widget.comment.loveCount}'),
-            const Sizer(),
+            Sizer(),
             TextAppButton(
                 style: Styles.mediumText(),
                 label: 'Reply',
@@ -185,7 +188,9 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                 })
           ],
         ),
-        Sizer(height: 4,),
+        Sizer(
+          height: 4.h,
+        ),
       ],
     );
   }
@@ -217,7 +222,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                 icon: Icons.delete,
                 title: 'Delete Comment',
                 subTitle:
-                'Your comment will be deleted, and you cannot get it again',
+                    'Your comment will be deleted, and you cannot get it again',
                 onTap: () {
                   widget.onDeleteComment(widget.comment.id);
                 }),
@@ -238,10 +243,10 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
 
   Widget listTile(
       {required IconData icon,
-        Color? iconColor,
-        required String title,
-        required String subTitle,
-        required Function onTap}) {
+      Color? iconColor,
+      required String title,
+      required String subTitle,
+      required Function onTap}) {
     return ListTile(
       title: Label(text: title),
       onTap: () {
@@ -258,5 +263,4 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
       ),
     );
   }
-
 }

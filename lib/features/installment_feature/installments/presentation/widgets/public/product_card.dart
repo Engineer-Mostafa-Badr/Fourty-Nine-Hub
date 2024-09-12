@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -40,8 +41,8 @@ class ProductCard extends StatelessWidget {
           Label(text: 'Nike', style: Styles.mediumText(color: Colors.grey)),
           Label(
               text: '1,500',
-              style:
-                  Styles.mediumText(fontSize: 20, fontWeight: FontWeight.w500)),
+              style: Styles.mediumText(
+                  fontSize: 20.sp, fontWeight: FontWeight.w500)),
         ],
       ),
     );

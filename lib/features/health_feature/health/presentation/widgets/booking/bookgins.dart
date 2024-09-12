@@ -18,10 +18,10 @@ class HealthBookings extends StatelessWidget {
               itemBuilder: (context, index) => HealthBookingCard(
                     appointment: state.myBookings![index],
                   ),
-              separatorBuilder: (context, index) => const Sizer(),
+              separatorBuilder: (context, index) => Sizer(),
               itemCount: state.myBookings?.length ?? 0);
         } else {
-          return const SizedBox.shrink();
+          return SizedBox.shrink();
         }
       },
     );

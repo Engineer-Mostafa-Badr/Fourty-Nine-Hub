@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WalletHistoryCard extends StatelessWidget {
   final String title, subTitle;
@@ -22,13 +23,13 @@ class WalletHistoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Label(
-        text: amount! ? title:'- $title',
+        text: amount! ? title : '- $title',
         style: Styles.mediumText(),
       ),
       subtitle: Label(
         text: subTitle,
-        style:
-            Styles.mediumText(fontSize: 24, color: AppColors.GREY_NORMAL_COLOR),
+        style: Styles.mediumText(
+            fontSize: 24.sp, color: AppColors.GREY_NORMAL_COLOR),
       ),
       trailing: Icon(
         Icons.line_axis,

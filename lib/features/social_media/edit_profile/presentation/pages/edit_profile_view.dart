@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
@@ -37,14 +38,20 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   @override
   void initState() {
-    firstNameTextController.text = context.read<UserCubit>().state.data?.firstName ?? '';
-    lastNameTextController.text = context.read<UserCubit>().state.data?.lastName ?? '';
-    phoneTextController.text = context.read<UserCubit>().state.data?.phone ?? '';
+    firstNameTextController.text =
+        context.read<UserCubit>().state.data?.firstName ?? '';
+    lastNameTextController.text =
+        context.read<UserCubit>().state.data?.lastName ?? '';
+    phoneTextController.text =
+        context.read<UserCubit>().state.data?.phone ?? '';
     cityTextController.text = context.read<UserCubit>().state.data?.city ?? '';
-    countryTextController.text = context.read<UserCubit>().state.data?.country ?? '';
+    countryTextController.text =
+        context.read<UserCubit>().state.data?.country ?? '';
     jobTextController.text = context.read<UserCubit>().state.data?.job ?? '';
     bioTextController.text = context.read<UserCubit>().state.data?.bio ?? '';
-    context.read<EditProfileCubit>().initGender(context.read<UserCubit>().state.data?.gender ?? '');
+    context
+        .read<EditProfileCubit>()
+        .initGender(context.read<UserCubit>().state.data?.gender ?? '');
     super.initState();
   }
 
@@ -70,9 +77,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                 children: [
                   Text(
                     'First Name',
-                    style: Styles.headerText(fontSize: 30),
+                    style: Styles.headerText(fontSize: 30.sp),
                   ),
-                  const Sizer(),
+                  Sizer(),
                   FormTextField(
                       hint: 'First Name....',
                       action: (v) {
@@ -80,12 +87,12 @@ class _EditProfileViewState extends State<EditProfileView> {
                       },
                       prefix: const Icon(Icons.edit),
                       controller: firstNameTextController),
-                  const Sizer(),
+                  Sizer(),
                   Text(
                     'Last Name',
-                    style: Styles.headerText(fontSize: 30),
+                    style: Styles.headerText(fontSize: 30.sp),
                   ),
-                  const Sizer(),
+                  Sizer(),
                   FormTextField(
                       hint: 'Last Name ....',
                       action: (v) {
@@ -93,28 +100,28 @@ class _EditProfileViewState extends State<EditProfileView> {
                       },
                       prefix: const Icon(Icons.edit),
                       controller: lastNameTextController),
-                  const Sizer(),
+                  Sizer(),
                   Row(
                     children: [
                       Text(
                         'Bio',
-                        style: Styles.headerText(fontSize: 30),
+                        style: Styles.headerText(fontSize: 30.sp),
                       ),
-                      const Sizer(),
+                      Sizer(),
                       if (state.selectedBioPrivacy != null)
                         Text(
-                          '(${state.selectedBioPrivacy=='public'?'Public':state.selectedBioPrivacy=='friends'?'Friends':state.selectedBioPrivacy=='followers'?'Followers':state.selectedBioPrivacy=='friendsAndFollowers'?'Friends / Followers':state.selectedBioPrivacy=='onlyMe'?'Only Me':''})',
-                          style: Styles.headerText(fontSize: 22),
+                          '(${state.selectedBioPrivacy == 'public' ? 'Public' : state.selectedBioPrivacy == 'friends' ? 'Friends' : state.selectedBioPrivacy == 'followers' ? 'Followers' : state.selectedBioPrivacy == 'friendsAndFollowers' ? 'Friends / Followers' : state.selectedBioPrivacy == 'onlyMe' ? 'Only Me' : ''})',
+                          style: Styles.headerText(fontSize: 22.sp),
                         ),
                     ],
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Row(
                     children: [
                       Expanded(
                         child: FormTextField(
                             hint: 'Bio ....',
-                            height: 80,
+                            height: 80.h,
                             maxLength: 100,
                             action: (v) {
                               setState(() {});
@@ -129,22 +136,22 @@ class _EditProfileViewState extends State<EditProfileView> {
                       ),
                     ],
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Row(
                     children: [
                       Text(
                         'Phone Number',
-                        style: Styles.headerText(fontSize: 30),
+                        style: Styles.headerText(fontSize: 30.sp),
                       ),
-                      const Sizer(),
+                      Sizer(),
                       if (state.selectedPhonePrivacy != null)
                         Text(
-                          '(${state.selectedPhonePrivacy=='public'?'Public':state.selectedPhonePrivacy=='friends'?'Friends':state.selectedPhonePrivacy=='followers'?'Followers':state.selectedPhonePrivacy=='friendsAndFollowers'?'Friends / Followers':state.selectedPhonePrivacy=='onlyMe'?'Only Me':''})',
-                          style: Styles.headerText(fontSize: 22),
+                          '(${state.selectedPhonePrivacy == 'public' ? 'Public' : state.selectedPhonePrivacy == 'friends' ? 'Friends' : state.selectedPhonePrivacy == 'followers' ? 'Followers' : state.selectedPhonePrivacy == 'friendsAndFollowers' ? 'Friends / Followers' : state.selectedPhonePrivacy == 'onlyMe' ? 'Only Me' : ''})',
+                          style: Styles.headerText(fontSize: 22.sp),
                         ),
                     ],
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Row(
                     children: [
                       Expanded(
@@ -161,22 +168,22 @@ class _EditProfileViewState extends State<EditProfileView> {
                       })
                     ],
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Row(
                     children: [
                       Text(
                         'Job',
-                        style: Styles.headerText(fontSize: 30),
+                        style: Styles.headerText(fontSize: 30.sp),
                       ),
-                      const Sizer(),
+                      Sizer(),
                       if (state.selectedJobPrivacy != null)
                         Text(
-                          '(${state.selectedJobPrivacy=='public'?'Public':state.selectedJobPrivacy=='friends'?'Friends':state.selectedJobPrivacy=='followers'?'Followers':state.selectedJobPrivacy=='friendsAndFollowers'?'Friends / Followers':state.selectedJobPrivacy=='onlyMe'?'Only Me':''})',
-                          style: Styles.headerText(fontSize: 22),
+                          '(${state.selectedJobPrivacy == 'public' ? 'Public' : state.selectedJobPrivacy == 'friends' ? 'Friends' : state.selectedJobPrivacy == 'followers' ? 'Followers' : state.selectedJobPrivacy == 'friendsAndFollowers' ? 'Friends / Followers' : state.selectedJobPrivacy == 'onlyMe' ? 'Only Me' : ''})',
+                          style: Styles.headerText(fontSize: 22.sp),
                         ),
                     ],
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Row(
                     children: [
                       Expanded(
@@ -193,22 +200,22 @@ class _EditProfileViewState extends State<EditProfileView> {
                       })
                     ],
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Row(
                     children: [
                       Text(
                         'Country',
-                        style: Styles.headerText(fontSize: 30),
+                        style: Styles.headerText(fontSize: 30.sp),
                       ),
-                      const Sizer(),
+                      Sizer(),
                       if (state.selectedCountryPrivacy != null)
                         Text(
-                          '(${state.selectedCountryPrivacy=='public'?'Public':state.selectedCountryPrivacy=='friends'?'Friends':state.selectedCountryPrivacy=='followers'?'Followers':state.selectedCountryPrivacy=='friendsAndFollowers'?'Friends / Followers':state.selectedCountryPrivacy=='onlyMe'?'Only Me':''})',
-                          style: Styles.headerText(fontSize: 22),
+                          '(${state.selectedCountryPrivacy == 'public' ? 'Public' : state.selectedCountryPrivacy == 'friends' ? 'Friends' : state.selectedCountryPrivacy == 'followers' ? 'Followers' : state.selectedCountryPrivacy == 'friendsAndFollowers' ? 'Friends / Followers' : state.selectedCountryPrivacy == 'onlyMe' ? 'Only Me' : ''})',
+                          style: Styles.headerText(fontSize: 22.sp),
                         ),
                     ],
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Row(
                     children: [
                       Expanded(
@@ -225,22 +232,22 @@ class _EditProfileViewState extends State<EditProfileView> {
                       })
                     ],
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Row(
                     children: [
                       Text(
                         'City',
-                        style: Styles.headerText(fontSize: 30),
+                        style: Styles.headerText(fontSize: 30.sp),
                       ),
-                      const Sizer(),
+                      Sizer(),
                       if (state.selectedCityPrivacy != null)
                         Text(
-                          '(${state.selectedCityPrivacy=='public'?'Public':state.selectedCityPrivacy=='friends'?'Friends':state.selectedCityPrivacy=='followers'?'Followers':state.selectedCityPrivacy=='friendsAndFollowers'?'Friends / Followers':state.selectedCityPrivacy=='onlyMe'?'Only Me':''})',
-                          style: Styles.headerText(fontSize: 22),
+                          '(${state.selectedCityPrivacy == 'public' ? 'Public' : state.selectedCityPrivacy == 'friends' ? 'Friends' : state.selectedCityPrivacy == 'followers' ? 'Followers' : state.selectedCityPrivacy == 'friendsAndFollowers' ? 'Friends / Followers' : state.selectedCityPrivacy == 'onlyMe' ? 'Only Me' : ''})',
+                          style: Styles.headerText(fontSize: 22.sp),
                         ),
                     ],
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Row(
                     children: [
                       Expanded(
@@ -259,65 +266,69 @@ class _EditProfileViewState extends State<EditProfileView> {
                       ),
                     ],
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Row(
                     children: [
                       Text(
                         'Marital Status',
-                        style: Styles.headerText(fontSize: 30),
+                        style: Styles.headerText(fontSize: 30.sp),
                       ),
-                      if (state.selectedStatusPrivacy != null)
-                        ...[
-                          const Sizer(),
-                          Text(
-                          '(${state.selectedStatusPrivacy=='public'?'Public':state.selectedStatusPrivacy=='friends'?'Friends':state.selectedStatusPrivacy=='followers'?'Followers':state.selectedStatusPrivacy=='friendsAndFollowers'?'Friends / Followers':state.selectedStatusPrivacy=='onlyMe'?'Only Me':''})',
-                          style: Styles.headerText(fontSize: 22),
-                        )],
+                      if (state.selectedStatusPrivacy != null) ...[
+                        Sizer(),
+                        Text(
+                          '(${state.selectedStatusPrivacy == 'public' ? 'Public' : state.selectedStatusPrivacy == 'friends' ? 'Friends' : state.selectedStatusPrivacy == 'followers' ? 'Followers' : state.selectedStatusPrivacy == 'friendsAndFollowers' ? 'Friends / Followers' : state.selectedStatusPrivacy == 'onlyMe' ? 'Only Me' : ''})',
+                          style: Styles.headerText(fontSize: 22.sp),
+                        )
+                      ],
                     ],
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Row(
                     children: [
                       Expanded(
                         child: InkWell(
-                          onTap: ()async{
-                            final res =
-                            await CustomVerticalSheetItem.normal<MaritalStatus>(context, [
+                          onTap: () async {
+                            final res = await CustomVerticalSheetItem.normal<
+                                MaritalStatus>(context, [
                               CustomSheetModel(
-                                text: "Single",
-                                value: MaritalStatus.single,
-                                image: Assets.single
-                              ),
+                                  text: "Single",
+                                  value: MaritalStatus.single,
+                                  image: Assets.single),
                               CustomSheetModel(
-                                text: "Married",
-                                value: MaritalStatus.married,
-                                  image: Assets.married
-                              ),
+                                  text: "Married",
+                                  value: MaritalStatus.married,
+                                  image: Assets.married),
                               CustomSheetModel(
-                                text: "Divorced",
-                                value: MaritalStatus.divorced,
-                                  image: Assets.divorced
-                              ),
+                                  text: "Divorced",
+                                  value: MaritalStatus.divorced,
+                                  image: Assets.divorced),
                               CustomSheetModel(
-                                text: "Widowed",
-                                value: MaritalStatus.widowed,
-                                  image: Assets.widowed
-                              ),
+                                  text: "Widowed",
+                                  value: MaritalStatus.widowed,
+                                  image: Assets.widowed),
                             ]);
                             print(res?.name);
                             print("============>");
-                            statusController.text=res?.name=='single'?'Single':res?.name=='married'?'Married':res?.name=='divorced'?'Divorced':res?.name=='widowed'?'Widowed':'';
-                            controller.selectMaritalStatus(status:res?.name ?? 'single');
+                            statusController.text = res?.name == 'single'
+                                ? 'Single'
+                                : res?.name == 'married'
+                                    ? 'Married'
+                                    : res?.name == 'divorced'
+                                        ? 'Divorced'
+                                        : res?.name == 'widowed'
+                                            ? 'Widowed'
+                                            : '';
+                            controller.selectMaritalStatus(
+                                status: res?.name ?? 'single');
                           },
                           child: FormTextField(
-                              hint: 'Marital Status....',
+                            hint: 'Marital Status....',
                             controller: statusController,
-                            onTap: ()async{
-
-                            },
+                            onTap: () async {},
                             enabled: false,
-                              prefix: const Icon(Icons.family_restroom),
-                              suffix: const Icon(Icons.keyboard_arrow_down_outlined),
+                            prefix: const Icon(Icons.family_restroom),
+                            suffix:
+                                const Icon(Icons.keyboard_arrow_down_outlined),
                           ),
                         ),
                       ),
@@ -326,7 +337,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                       })
                     ],
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Row(
                     children: [
                       Expanded(
@@ -339,18 +350,23 @@ class _EditProfileViewState extends State<EditProfileView> {
                         child: Container(
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                              color: state.isMale == true ? AppColors.PRIMARY_COLOR : Colors.white,
+                              color: state.isMale == true
+                                  ? AppColors.PRIMARY_COLOR
+                                  : Colors.white,
                               borderRadius: BorderRadius.circular(15),
-                              border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                              border:
+                                  Border.all(color: AppColors.PRIMARY_COLOR)),
                           alignment: AlignmentDirectional.center,
                           child: Text(
                             'Male',
                             style: Styles.mediumText(
-                                color: state.isMale == false ? AppColors.PRIMARY_COLOR : Colors.white),
+                                color: state.isMale == false
+                                    ? AppColors.PRIMARY_COLOR
+                                    : Colors.white),
                           ),
                         ),
                       )),
-                      const Sizer(),
+                      Sizer(),
                       Expanded(
                         child: InkWell(
                           onTap: () {
@@ -361,21 +377,26 @@ class _EditProfileViewState extends State<EditProfileView> {
                           child: Container(
                             padding: EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: state.isMale == false ? AppColors.PRIMARY_COLOR : Colors.white,
+                                color: state.isMale == false
+                                    ? AppColors.PRIMARY_COLOR
+                                    : Colors.white,
                                 borderRadius: BorderRadius.circular(15),
-                                border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                                border:
+                                    Border.all(color: AppColors.PRIMARY_COLOR)),
                             alignment: AlignmentDirectional.center,
                             child: Text(
                               'Female',
                               style: Styles.mediumText(
-                                  color: state.isMale == true ? AppColors.PRIMARY_COLOR : Colors.white),
+                                  color: state.isMale == true
+                                      ? AppColors.PRIMARY_COLOR
+                                      : Colors.white),
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const Sizer(),
+                  Sizer(),
                   state.status == EditProfileStates.loading
                       ? const Center(
                           child: CircularProgressIndicator(),
@@ -396,17 +417,21 @@ class _EditProfileViewState extends State<EditProfileView> {
                                   job: jobTextController.text,
                                   country: countryTextController.text,
                                   city: cityTextController.text,
-                                  maritalPrivacy: state.selectedStatusPrivacy??'public',
-                                  maritalStatus: state.selectedStatus??'single',
+                                  maritalPrivacy:
+                                      state.selectedStatusPrivacy ?? 'public',
+                                  maritalStatus:
+                                      state.selectedStatus ?? 'single',
                                   isMale: state.isMale),
                             );
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 20.h),
                             decoration: BoxDecoration(
                                 color: AppColors.PRIMARY_COLOR,
                                 borderRadius: BorderRadius.circular(15),
-                                border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                                border:
+                                    Border.all(color: AppColors.PRIMARY_COLOR)),
                             alignment: AlignmentDirectional.center,
                             child: Text(
                               'Edit',

@@ -31,13 +31,15 @@ class _InstagramViewState extends State<InstagramView> {
     super.initState();
 
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
         if (!_isScrollingDown) {
           setState(() {
             _isScrollingDown = true;
           });
         }
-      } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      } else if (scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
         if (_isScrollingDown) {
           setState(() {
             _isScrollingDown = false;
@@ -81,14 +83,17 @@ class _InstagramViewState extends State<InstagramView> {
                     children: [
                       _buildTabBar(context),
                       Expanded(
-                        child: InstagramPosts(scrollController: scrollController),
+                        child:
+                            InstagramPosts(scrollController: scrollController),
                       ),
                     ],
                   )
                 : Column(
                     children: [
                       _buildTabBar(context),
-                      Expanded(child: InstagramGlobalPosts(scrollController: scrollController)),
+                      Expanded(
+                          child: InstagramGlobalPosts(
+                              scrollController: scrollController)),
                     ],
                   );
           },
@@ -100,7 +105,7 @@ class _InstagramViewState extends State<InstagramView> {
   Widget _buildTabBar(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: List.generate(
@@ -118,7 +123,8 @@ class _InstagramViewState extends State<InstagramView> {
               decoration: i == 0
                   ? const BoxDecoration(
                       border: Border(
-                        bottom: BorderSide(color: AppColors.PRIMARY_COLOR, width: 2),
+                        bottom: BorderSide(
+                            color: AppColors.PRIMARY_COLOR, width: 2),
                       ),
                     )
                   : null,

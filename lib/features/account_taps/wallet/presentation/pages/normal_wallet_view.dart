@@ -68,7 +68,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(Icons.send_to_mobile_rounded),
-              const Sizer(),
+              Sizer(),
               Label(
                 text: LocaleKeys.transferMoney.localize,
                 style: Styles.mediumText(color: Colors.white),
@@ -99,14 +99,14 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                     balance: '${state.wallet?.realAmount ?? ''}',
                     type: WalletTypes.mainWallet,
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Row(
                     children: [
                       const Icon(
                         Icons.info_outline,
                         color: Colors.grey,
                       ),
-                      const Sizer(),
+                      Sizer(),
                       Expanded(
                         child: Row(
                           children: [
@@ -127,7 +127,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                       ),
                     ],
                   ),
-                  const Sizer(),
+                  Sizer(),
                   state.wallet?.realAmount != null &&
                       state.wallet!.realAmount! >= 500
                       ? AppButton(
@@ -155,7 +155,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                     backColor: AppColors.SECONDARY_COLOR.withOpacity(.5),
                     onPressed: () {},
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Label(
                     text: LocaleKeys.subscriptions.localize,
                     style: Styles.headerText(),
@@ -187,9 +187,9 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                       ],
                     ),
                   ),
-                  const Sizer(),
+                  Sizer(),
                   DropDownSubscription(),
-                  const Sizer(),
+                  Sizer(),
                   Label(
                     text: LocaleKeys.history.localize,
                     style: Styles.headerText(),

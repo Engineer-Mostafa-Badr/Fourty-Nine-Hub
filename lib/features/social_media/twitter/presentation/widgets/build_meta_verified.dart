@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
@@ -34,7 +35,8 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
       appBar: AppBar(
         title: Label(
           text: "Documentation",
-          style: Styles.headerText(fontSize: 34, fontWeight: FontWeight.bold),
+          style:
+              Styles.headerText(fontSize: 34.sp, fontWeight: FontWeight.bold),
         ),
         backgroundColor: AppColors.BACKGROUND_COLOR,
         centerTitle: true,
@@ -60,31 +62,29 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                     Label(
                       text: "User name",
                       style: Styles.headerText(
-                          fontSize: 28, color: AppColors.GREY_DARK_COLOR),
+                          fontSize: 28.sp, color: AppColors.GREY_DARK_COLOR),
                     ),
-                    const SizedBox(
-                      height: 15,
+                    SizedBox(
+                      height: 15.h,
                     ),
                     Form(
-                      key: formKey,
-                      child:TextFormField(
-                        maxLines: null,
-                        controller: nameTextController,
-                        onChanged: (v){
-                          setState(() {});
-                        },
-                        style: Styles.headerText(fontSize: 26),
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          contentPadding: const EdgeInsets.all(5),
-                          hintText: 'Type your name ....',
-                          hintStyle: Styles.mediumText(),
-
-                        ),
-                      )
-                    ),
-                    const SizedBox(
-                      height: 15,
+                        key: formKey,
+                        child: TextFormField(
+                          maxLines: null,
+                          controller: nameTextController,
+                          onChanged: (v) {
+                            setState(() {});
+                          },
+                          style: Styles.headerText(fontSize: 26.sp),
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            contentPadding: const EdgeInsets.all(5),
+                            hintText: 'Type your name ....',
+                            hintStyle: Styles.mediumText(),
+                          ),
+                        )),
+                    SizedBox(
+                      height: 15.h,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,10 +92,11 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                         Label(
                           text: "Personal Photo",
                           style: Styles.headerText(
-                              fontSize: 28, color: AppColors.GREY_DARK_COLOR),
+                              fontSize: 28.sp,
+                              color: AppColors.GREY_DARK_COLOR),
                         ),
-                        const SizedBox(
-                          height: 15,
+                        SizedBox(
+                          height: 15.h,
                         ),
                         _buildImageCard(
                           label: '',
@@ -107,16 +108,17 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                           },
                           fileData: state.personalPhoto,
                         ),
-                        const SizedBox(
-                          height: 15,
+                        SizedBox(
+                          height: 15.h,
                         ),
                         Label(
                           text: "ID",
                           style: Styles.headerText(
-                              fontSize: 28, color: AppColors.GREY_DARK_COLOR),
+                              fontSize: 28.sp,
+                              color: AppColors.GREY_DARK_COLOR),
                         ),
-                        const SizedBox(
-                          height: 15,
+                        SizedBox(
+                          height: 15.h,
                         ),
                         Row(
                           children: [
@@ -152,8 +154,8 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 20,
+                    SizedBox(
+                      height: 20.h,
                     ),
                     _buildButton(onTap: () async {
                       if (formKey.currentState!.validate()) {
@@ -206,13 +208,13 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
   Widget _buildButton({required Function onTap}) {
     return SizedBox(
       width: double.infinity,
-      height: 50,
+      height: 50.h,
       child: ElevatedAppButton(
         label: 'Request Verification',
         backColor: AppColors.Arrow_Icon_color,
         onPressed: onTap,
         textStyle: Styles.headerText(
-            fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+            fontSize: 28.sp, fontWeight: FontWeight.bold, color: Colors.white),
       ),
     );
   }
@@ -230,14 +232,14 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
             text: label,
             style: Styles.headerText(),
           ),
-          const Sizer(),
+          Sizer(),
         ],
         if (fileData == null)
           InkWell(
             onTap: onTap,
             child: Container(
               width: double.infinity,
-              height: 200,
+              height: 200.h,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black),
                 borderRadius: BorderRadius.circular(UIConst.radius),
@@ -252,7 +254,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                 onTap: onTap,
                 child: Container(
                   width: double.infinity,
-                  height: 200, // Set your desired height here
+                  height: 200.h, // Set your desired height here
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(UIConst.radius),
                     image: DecorationImage(
