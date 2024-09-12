@@ -165,11 +165,12 @@ class _ZegoLiveStreamingPreviewPageState
                       keyboardType: TextInputType.text,
                       textAlign: TextAlign.center,
                       // validator: validateInput,
-                      maxLength: 150,
+                      maxLength: 50,
                       maxLines: null,
                       // onChanged: onTextChanged,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.edit),
+                        
                         // errorText: _errorMessage,
                         counterText: '',
                         labelStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
@@ -218,8 +219,9 @@ class _ZegoLiveStreamingPreviewPageState
                 ),
                 Expanded(
                   child: InkWell(
-                    onTap: (){
-                      showSimpleGiftBottomSheet(context,context.read<UserCubit>().state.data!.id);
+                    onTap: () {
+                      showSimpleGiftBottomSheet(
+                          context, context.read<UserCubit>().state.data!.id);
                     },
                     child: Container(
                       // margin: EdgeInsets.only(left: constraints.maxWidth / 20),

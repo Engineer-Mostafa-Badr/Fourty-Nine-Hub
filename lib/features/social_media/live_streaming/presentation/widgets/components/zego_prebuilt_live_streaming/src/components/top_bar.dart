@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/animations/create_custom_transition.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/pages/meeting_view.dart';
 
@@ -23,6 +24,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 import '../../../../../../../../../res/assets/assets.dart';
 import '../../../../../../../../../res/style/app_colors.dart';
+import '../../../../../../../../../service_locator/service_locator.dart';
 
 /// @nodoc
 class ZegoLiveStreamingTopBar extends StatefulWidget {
@@ -176,7 +178,15 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                               await context
                                   .read<MeetingCubit>()
                                   .endRoom(ZegoUIKit().getRoom().id);
-                              Navigator.of(context).pop(true);
+                              Navigator.pushReplacement(
+                                  context,
+                                  createCustomTransitionRoute(
+                                      BlocProvider<MeetingCubit>(
+                    create: (context) =>
+                        serviceLocator<MeetingCubit>()..getScheduledMeetings(),
+                    child: const MeetingView(),
+                  ),
+                                      TransitionType.leftToRight));
                             }
                           },
                           child: Container(
@@ -204,8 +214,14 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                       ),
                       InkWell(
                         onTap: () async {
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
+                          Navigator.pushReplacement(
+                              context,
+                              createCustomTransitionRoute(BlocProvider<MeetingCubit>(
+                    create: (context) =>
+                        serviceLocator<MeetingCubit>()..getScheduledMeetings(),
+                    child: const MeetingView(),
+                  ),
+                                  TransitionType.leftToRight));
                         },
                         child: Container(
                           width: MediaQuery.sizeOf(context).width / 1.3,
@@ -331,67 +347,14 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
     Future.delayed(const Duration(milliseconds: 300), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MeetingView()),
-      );
+        MaterialPageRoute(builder: (context) => BlocProvider<MeetingCubit>(
+                    create: (context) =>
+                        serviceLocator<MeetingCubit>()..getScheduledMeetings(),
+                    child: const MeetingView(),
+                  ),
+      ));
     });
   }
 }
-  // Positioned(
-  //                   top: 100,
-  //                   right: 50,
-  //                   left: 50,
-  //                   child: Column(
-  //                     crossAxisAlignment: CrossAxisAlignment.stretch,
-  //                     children: [
-  //                       Container(
-  //                         width: double.infinity,
-  //                         height: 100,
-  //                         decoration: BoxDecoration(
-  //                           color: Colors.grey.withOpacity(0.7),
-  //                           borderRadius: BorderRadius.all(
-  //                             Radius.circular(10.0.zR),
-  //                           ),
-  //                         ),
-  //                         child: Row(
-  //                           children: [
-  //                             ImageFromInternet(
-  //                               image:
-  //                                   UserCubit.to.state.data!.profilePicture ??
-  //                                       '',
-  //                               isCircle: false,
-  //                             ),
-  //                             Expanded(
-  //                               child: Container(),
-  //                             )
-  //                           ],
-  //                         ),
-  //                       ),
-  //                       const Sizer(),
-  //                       Container(
-  //                         width: double.infinity,
-  //                         height: 100,
-  //                         decoration: BoxDecoration(
-  //                           color: Colors.grey.withOpacity(0.7),
-  //                           borderRadius: BorderRadius.all(
-  //                             Radius.circular(10.0.zR),
-  //                           ),
-  //                         ),
-  //                         child: const Row(
-  //                           children: [
-  //                             Expanded(
-  //                               child: Text(
-  //                                 'Ali Mazen',
-  //                               ),
-  //                             ),
-  //                             Expanded(
-  //                               child: Text(
-  //                                 'Helwan University',
-  //                               ),
-  //                             )
-  //                           ],
-  //                         ),
-  //                       )
-  //                     ],
-  //                   ),
-  //                 ),
+  // Positioned(-  ),
                 

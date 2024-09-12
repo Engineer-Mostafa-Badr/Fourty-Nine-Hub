@@ -18,7 +18,6 @@ class UIKitImage {
   }) {
     return Image.asset(
       name,
-      package: 'zego_uikit',
       width: width,
       height: height,
       fit: fit,

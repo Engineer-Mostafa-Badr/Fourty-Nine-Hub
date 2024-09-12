@@ -60,6 +60,8 @@ class _ZegoLiveStreamingBeautyEffectButtonState
       child: Container(
         width: containerSize.width,
         height: containerSize.height,
+        padding: EdgeInsets.all(5),
+        margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
           color: widget.icon?.backgroundColor ?? Colors.transparent,
           shape: BoxShape.circle,
