@@ -20,7 +20,6 @@ import '../../../../social_media/create_post/presentation/cubit/create_post_cubi
 import '../../../../social_media/create_post/presentation/widgets/image_details.dart';
 import '../../../../social_media/create_post/presentation/widgets/show_all_images.dart';
 import '../cubit/create_company_ad_cubit.dart';
-import 'create_company_ad.dart';
 
 class CreatePostCompany extends StatefulWidget {
   CreatePostCompany(

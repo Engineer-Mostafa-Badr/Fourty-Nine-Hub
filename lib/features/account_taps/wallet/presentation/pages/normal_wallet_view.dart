@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/payment_view.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -18,10 +17,8 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
-import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
 import '../../domain/entities/wallet/wallet_history_entity.dart';
 import '../cubit/wallet_cubit.dart';
 import '../widgets/drop_down_subscription.dart';
