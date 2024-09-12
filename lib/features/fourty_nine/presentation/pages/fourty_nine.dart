@@ -22,7 +22,6 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../common/widgets/dynamic/floating_button.dart';
-import '../../../../common/widgets/dynamic/google_ads_banner.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/dynamic/wallet_widget.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
@@ -153,6 +152,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 return ListView.separated(
                   itemCount: state.data?.length ?? 0,
                   physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsetsDirectional.symmetric(vertical: 8),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return InkWell(
@@ -160,11 +160,14 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         context.push(Routes.SUBCATEGORIES,
                             extra: state.data![index]);
                       },
-                      child: MainCategoryBanner(
-                        category: state.data![index],
-                        onFavorite: () {
-                          return controller.toggleFavoriteMedicalService(state.data![index].id);
-                        },
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: MainCategoryBanner(
+                          category: state.data![index],
+                          onFavorite: () {
+                            return controller.toggleFavoriteMedicalService(state.data![index].id);
+                          },
+                        ),
                       ),
                     );
                   },
