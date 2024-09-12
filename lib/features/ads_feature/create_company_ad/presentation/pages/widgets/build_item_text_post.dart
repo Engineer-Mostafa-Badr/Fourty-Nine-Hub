@@ -13,9 +13,10 @@ import '../../cubit/create_company_ad_cubit.dart';
 
 class BuildItemTextPost extends StatelessWidget {
   BuildItemTextPost(
-      {super.key, required this.advertises, this.isScalable = true});
+      {super.key, required this.advertises, this.isScalable = true, required this.onDeleteItem});
 
   final CompanyAdEntity advertises;
+  final Function(String) onDeleteItem;
   bool? isScalable;
 
   @override
@@ -50,7 +51,7 @@ class BuildItemTextPost extends StatelessWidget {
                     const SizedBox(width: 5),
                     GestureDetector(
                       onTap: (){
-                        context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!,);
+                         onDeleteItem(advertises.sId!);
                       },
                       child: Container(
                         constraints: const BoxConstraints(minHeight: 80),

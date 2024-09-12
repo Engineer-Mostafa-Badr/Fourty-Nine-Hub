@@ -10,36 +10,53 @@ import '../../../../../../common/widgets/stateful/dynamic/pagination_view.dart';
 import '../../../domain/entities/company_ad_entity.dart';
 import '../../cubit/create_company_ad_cubit.dart';
 
-class TextPostContent extends StatelessWidget {
+class TextPostContent extends StatefulWidget {
   const TextPostContent({super.key});
 
+  @override
+  State<TextPostContent> createState() => _TextPostContentState();
+}
+
+class _TextPostContentState extends State<TextPostContent> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: PaginationView<CompanyAdEntity>(
-        loadingWidget:const SizedBox.shrink(),
-        build: (scrollController, data) {
-          return data.isNotEmpty
-              ? ListView.separated(
-                  controller: scrollController,
-                  itemBuilder: (context, index) => BuildItemTextPost(
-                    advertises: data[index],
-                  ),
-                  separatorBuilder: (context, index) => const Divider(
-                    color: AppColors.GREY_LIGHT_COLOR,
-                    height: 30,
-                    endIndent: 30,
-                  ),
-                  itemCount: data.length,
-                )
-              : Center(child: Label(text: LocaleKeys.noTextPosts.localize));
-        },
-        fetchData: (PaginationParams paginationParams) {
-          return context.read<CreateCompanyAdCubit>().getCompanyAdPosts(
+      child: BlocBuilder<CreateCompanyAdCubit,CreateCompanyAdState>(
+        builder: (BuildContext context, state) {
+          return PaginationView<CompanyAdEntity>(
+            loadingWidget:const SizedBox.shrink(),
+            build: (scrollController, data) {
+              return data.isNotEmpty
+                  ? ListView.separated(
+                controller: scrollController,
+                itemBuilder: (context, index) => BuildItemTextPost(
+                  advertises: data[index], onDeleteItem: (id) async{
+                    var result=await context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: id,);
+                    if(result ==true){
+                      data.removeWhere((e)=>e.sId ==id);
+                      setState(() {
+
+                      });
+                    }
+                },
+                ),
+                separatorBuilder: (context, index) => const Divider(
+                  color: AppColors.GREY_LIGHT_COLOR,
+                  height: 30,
+                  endIndent: 30,
+                ),
+                itemCount: data.length,
+              )
+                  : Center(child: Label(text: LocaleKeys.noTextPosts.localize));
+            },
+            fetchData: (PaginationParams paginationParams) {
+              return context.read<CreateCompanyAdCubit>().getCompanyAdPosts(
                 'written',
                 params: paginationParams,
               );
+            },
+          );
         },
       ),
     );

@@ -84,16 +84,21 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
     );
   }
 
-  Future<void> deleteCompanyAd({required String id}) async {
+  Future<bool> deleteCompanyAd({required String id}) async {
     emit(state.copyWith(status: StateStatus.loading)); // Start loading state
     final response = await _deleteCompanyAddUseCases(
       DeleteCompanyAdParams(id: id),
     );
+    bool result=false;
 
     response.fold(
           (failure) =>
           emit(state.copyWith(failure: failure, status: StateStatus.error)),
-          (success) => emit(state.copyWith(status: StateStatus.success)),
+          (success) {
+            result=success;
+            emit(state.copyWith(status: StateStatus.success));
+          },
     );
+    return result;
   }
 }
