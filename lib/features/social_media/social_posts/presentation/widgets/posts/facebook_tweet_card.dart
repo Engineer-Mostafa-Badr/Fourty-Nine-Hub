@@ -204,6 +204,7 @@ class FacebookTweetCard extends StatelessWidget {
                             children: [
                               ImageFromInternet(
                                 image: post.images?[index] ?? '',
+                                defaultLogo: true,
                               ),
                               if (index == 3 && post.images!.length > 4)
                                 Container(

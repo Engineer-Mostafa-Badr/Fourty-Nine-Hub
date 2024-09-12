@@ -1,8 +1,12 @@
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 
 class FavouriteCategoryEntity {
-  final int id;
+  final String id;
+  final String banner;
+  final String cover;
+  final String name;
+  final num numberOfAds;
+  bool? isFavorite;
 
-  final MainCategoryEntity item;
-  FavouriteCategoryEntity({required this.id, required this.item});
+  FavouriteCategoryEntity({required this.id, required this.banner, required this.cover, required this.name, required this.numberOfAds,this.isFavorite=false});
+
 }

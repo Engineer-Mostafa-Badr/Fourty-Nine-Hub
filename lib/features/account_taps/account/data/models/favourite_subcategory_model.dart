@@ -1,14 +1,13 @@
-import '../../../../subcategories/data/models/sub_category_model.dart';
 import '../../domain/entities/favourite_subcategory_entity.dart';
 
 class FavouriteSubcategoryModel extends FavouriteSubcategoryEntity {
-  FavouriteSubcategoryModel({required super.id, required super.item});
+  FavouriteSubcategoryModel({required super.id, required super.picture, required super.name});
 
   factory FavouriteSubcategoryModel.fromJson(Map<String, dynamic> json) {
     return FavouriteSubcategoryModel(
-      id: json['id'],
-      item: SubCategoryModel.fromJson(json['item']),
-      // id: json['id'],
+      id: json['subCategoryId']['_id'],
+      name: json['subCategoryId']['nameEn'],
+      picture: json['subCategoryId']['picture'],
     );
   }
 }

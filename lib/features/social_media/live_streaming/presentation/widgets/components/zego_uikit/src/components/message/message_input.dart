@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
+import '../../../../../../../../../../res/style/app_colors.dart';
 
 class ZegoInRoomMessageInput extends StatefulWidget {
   const ZegoInRoomMessageInput({
@@ -101,7 +102,7 @@ class _ZegoInRoomMessageInputState extends State<ZegoInRoomMessageInput> {
   Widget messageInput() {
     final messageSendBgColor = widget.buttonColor ?? const Color(0xff3e3e3d);
     final messageSendCursorColor =
-        widget.cursorColor ?? const Color(0xffA653ff);
+        widget.cursorColor ?? AppColors.SECONDARY_COLOR;
     final messageSendHintStyle = TextStyle(
       color: widget.textHintColor ?? const Color(0xffa4a4a4),
       fontSize: 28.zR,

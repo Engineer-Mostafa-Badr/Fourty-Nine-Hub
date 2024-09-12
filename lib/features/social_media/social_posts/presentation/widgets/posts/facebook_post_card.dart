@@ -479,11 +479,11 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                   }
                 },
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  backgroundImage: NetworkImage((post.user.image.isNotEmpty)
-                      ? post.user.image
-                      : UIConst.profilePlaceHolder),
+                child: ImageFromInternet(
+                  image: post.user.image,
+                  isCircle: true,
+                  width: 40,
+                  height: 40,
                 ),
               ),
               const Sizer(),
@@ -589,11 +589,12 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
               }
             },
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              backgroundImage: NetworkImage((post.user.image.isNotEmpty)
-                  ? post.user.image
-                  : UIConst.profilePlaceHolder),
+            child: ImageFromInternet(
+              image: post.user.image,
+              isCircle: true,
+              defaultLogo: false,
+              width: 40,
+              height: 40,
             ),
           ),
           const Sizer(),
@@ -660,7 +661,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               text: content,
               style: Styles.headerText(
                   color: Colors.black,
-                  fontSize: 24,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold),
             ),
           )
@@ -722,6 +723,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                     children: [
                                       ImageFromInternet(
                                         image: images[index],
+                                        defaultLogo: true,
                                       ),
                                       if (index == 3 && images.length > 4)
                                         Container(

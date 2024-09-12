@@ -24,9 +24,9 @@ class CreatePostBanner extends StatelessWidget {
         children: [
           context.read<UserCubit>().isLoggedIn
               ? UserProfileImage(
-                  userId: context.read<UserCubit>().state.data!.id,
+                  userId: context.read<UserCubit>().state.data?.id??'',
                   imageURL:
-                      context.read<UserCubit>().state.data!.profilePicture,
+                      context.read<UserCubit>().state.data?.profilePicture,
                   accountId: 0,
                 )
               : const ProfileImage(

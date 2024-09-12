@@ -336,3 +336,62 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
     });
   }
 }
+  // Positioned(
+  //                   top: 100,
+  //                   right: 50,
+  //                   left: 50,
+  //                   child: Column(
+  //                     crossAxisAlignment: CrossAxisAlignment.stretch,
+  //                     children: [
+  //                       Container(
+  //                         width: double.infinity,
+  //                         height: 100,
+  //                         decoration: BoxDecoration(
+  //                           color: Colors.grey.withOpacity(0.7),
+  //                           borderRadius: BorderRadius.all(
+  //                             Radius.circular(10.0.zR),
+  //                           ),
+  //                         ),
+  //                         child: Row(
+  //                           children: [
+  //                             ImageFromInternet(
+  //                               image:
+  //                                   UserCubit.to.state.data!.profilePicture ??
+  //                                       '',
+  //                               isCircle: false,
+  //                             ),
+  //                             Expanded(
+  //                               child: Container(),
+  //                             )
+  //                           ],
+  //                         ),
+  //                       ),
+  //                       const Sizer(),
+  //                       Container(
+  //                         width: double.infinity,
+  //                         height: 100,
+  //                         decoration: BoxDecoration(
+  //                           color: Colors.grey.withOpacity(0.7),
+  //                           borderRadius: BorderRadius.all(
+  //                             Radius.circular(10.0.zR),
+  //                           ),
+  //                         ),
+  //                         child: const Row(
+  //                           children: [
+  //                             Expanded(
+  //                               child: Text(
+  //                                 'Ali Mazen',
+  //                               ),
+  //                             ),
+  //                             Expanded(
+  //                               child: Text(
+  //                                 'Helwan University',
+  //                               ),
+  //                             )
+  //                           ],
+  //                         ),
+  //                       )
+  //                     ],
+  //                   ),
+  //                 ),
+                

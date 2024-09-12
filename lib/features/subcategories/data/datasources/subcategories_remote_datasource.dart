@@ -25,7 +25,7 @@ class SubcategoriesRemoteDataSourceImpl
   Future<Either<Failure, List<SubCategoryEntity>>> getSubcategories(
       GetSubCategoriesParams params) async {
     final response = await _apiConsumer.get(
-      EndPoints.subCategories(mainCategoryId: params.mainCategoryId),
+      EndPoints.mainSubCategories(params: params),
       queryParameters: params.paginationParams.toJson(),
     );
 
