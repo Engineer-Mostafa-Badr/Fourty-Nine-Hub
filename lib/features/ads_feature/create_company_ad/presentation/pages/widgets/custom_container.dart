@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../../../common/models/public/pagination_params.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
@@ -28,7 +30,28 @@ class CustomContainerAdvertise extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PaginationView<CompanyAdEntity>(
-      loadingWidget: const SizedBox.shrink(),
+      loadingWidget: Shimmer.fromColors(
+        baseColor: Colors.grey[100]!,
+        highlightColor: Colors.white24,
+        child: Column(
+          children: List.generate(
+              1,
+                  (index) => Padding(
+                padding: EdgeInsets.only(bottom: 15.zH),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * .15.zH,
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(horizontal: 10.zW),
+                  padding: EdgeInsets.symmetric(horizontal: 10.zW),
+                  decoration: BoxDecoration(
+                    color: AppColors.AUTH_CONTAINER_COLOR,
+                    borderRadius: BorderRadius.circular(20.zR),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                ),
+              )),
+        ),
+      ),
       build: (ScrollController scrollController, List<CompanyAdEntity> data) {
         final numberOfAdvertises = data.length;
         final totalPrice = price * numberOfAdvertises;

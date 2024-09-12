@@ -53,8 +53,9 @@ class BuildItemTextPost extends StatelessWidget {
                         context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!,);
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 20),
+                        constraints: const BoxConstraints(minHeight: 80),
+                        padding: const EdgeInsets.symmetric(vertical: 5,
+                            horizontal: 20),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Theme.of(context).primaryColor),
@@ -80,23 +81,19 @@ class BuildItemTextPost extends StatelessWidget {
 
   Widget buildItem(context) {
     return Container(
+      constraints: const BoxConstraints(minHeight: 80),
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      padding: const EdgeInsets.symmetric( vertical: 5,horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Theme.of(context).primaryColor,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            advertises.post!,
-            style: Styles.mediumText(
-              fontSize: 34,
-              color: Theme.of(context).scaffoldBackgroundColor,
-            ),
-          ),
-        ],
+      child: Text(
+        advertises.post!,
+        style: Styles.mediumText(
+          fontSize: 34,
+          color: Theme.of(context).scaffoldBackgroundColor,
+        ),
       ),
     );
   }

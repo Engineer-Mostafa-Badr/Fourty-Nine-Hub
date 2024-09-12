@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
@@ -20,17 +21,17 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
   final DeleteCompanyAddUseCases _deleteCompanyAddUseCases;
   final GetPostsCompanyAdUseCase _getPostsCompanyAdUseCase;
 
-  CreateCompanyAdCubit(
-      this._getPriceUseCases,
+  CreateCompanyAdCubit(this._getPriceUseCases,
       this._companyAddUseCases,
       this._deleteCompanyAddUseCases,
-      this._getPostsCompanyAdUseCase,
-      ) : super(const CreateCompanyAdState());
+      this._getPostsCompanyAdUseCase,) : super(const CreateCompanyAdState());
 
 
   void loadData() async {
     await getCompanyAdPrice();
   }
+
+
 
   Future<void> getCompanyAdPrice() async {
     emit(state.copyWith(status: StateStatus.loading));
@@ -41,7 +42,8 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
     );
   }
 
-  Future<List<CompanyAdEntity>> getCompanyAdPosts(String filter, {required PaginationParams params}) async {
+  Future<List<CompanyAdEntity>> getCompanyAdPosts(String filter,
+      {required PaginationParams params}) async {
     List<CompanyAdEntity> company = [];
     final response = await _getPostsCompanyAdUseCase(
       FetchPostCompanyAdvertiseParams(filter: filter, paginationParams: params),
@@ -76,7 +78,6 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
     return response.fold(
           (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
           (data) {
-
         emit(state.copyWith(advertise: data, status: StateStatus.success));
         mediaIds?.clear();
         print('Media IDs cleared after successful post.');
@@ -91,7 +92,8 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
     );
 
     response.fold(
-          (failure) => emit(state.copyWith(failure: failure, status: StateStatus.error)),
+          (failure) =>
+          emit(state.copyWith(failure: failure, status: StateStatus.error)),
           (success) => emit(state.copyWith(status: StateStatus.success)),
     );
   }

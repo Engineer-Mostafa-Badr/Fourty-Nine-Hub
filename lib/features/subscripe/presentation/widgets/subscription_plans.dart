@@ -161,6 +161,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                       );
                     }
                   }
+                  setState(() {
+
+                  });
                 },
               ),
             ],

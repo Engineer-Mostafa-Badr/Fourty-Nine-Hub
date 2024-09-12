@@ -15,41 +15,33 @@ class PhotoAndTextPostContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CreateCompanyAdCubit, CreateCompanyAdState>(
-      listener: (BuildContext context, CreateCompanyAdState state) {
-        // if (state is DeletePostSuccess) {
-        //   showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
-        // }
-      },
-      builder: (BuildContext context, state) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: PaginationView<CompanyAdEntity>(
-            build: (scrollController, data) {
-              return data.isNotEmpty
-                  ? ListView.separated(
-                      itemBuilder: (context, index) => BuildItemPhotoTextPost(
-                        length: data[index].media!.length,
-                        advertises: data[index],
-                      ),
-                      separatorBuilder: (context, index) => const Divider(
-                        color: AppColors.GREY_LIGHT_COLOR,
-                        height: 30,
-                        endIndent: 30,
-                      ),
-                      itemCount: data.length,
-                    )
-                  : Center(child: Label(text: LocaleKeys.noPosts.localize));
-            },
-            fetchData: (PaginationParams paginationParams) {
-              return context.read<CreateCompanyAdCubit>().getCompanyAdPosts(
-                    'photo_written',
-                    params: paginationParams,
-                  );
-            },
-          ),
-        );
-      },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: PaginationView<CompanyAdEntity>(
+        loadingWidget: const SizedBox.shrink(),
+        build: (scrollController, data) {
+          return data.isNotEmpty
+              ? ListView.separated(
+            itemBuilder: (context, index) => BuildItemPhotoTextPost(
+              length: data[index].media!.length,
+              advertises: data[index],
+            ),
+            separatorBuilder: (context, index) => const Divider(
+              color: AppColors.GREY_LIGHT_COLOR,
+              height: 30,
+              endIndent: 30,
+            ),
+            itemCount: data.length,
+          )
+              : Center(child: Label(text: LocaleKeys.noPosts.localize));
+        },
+        fetchData: (PaginationParams paginationParams) {
+          return context.read<CreateCompanyAdCubit>().getCompanyAdPosts(
+            'photo_written',
+            params: paginationParams,
+          );
+        },
+      ),
     );
   }
 }

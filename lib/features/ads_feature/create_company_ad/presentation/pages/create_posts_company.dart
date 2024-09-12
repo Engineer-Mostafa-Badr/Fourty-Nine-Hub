@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/functions/global/upload_file.dart';
@@ -15,11 +14,13 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import '../../../../social_media/create_post/presentation/widgets/image_details.dart';
 import '../../../../social_media/create_post/presentation/widgets/show_all_images.dart';
 import '../cubit/create_company_ad_cubit.dart';
+import 'create_company_ad.dart';
 
 class CreatePostCompany extends StatefulWidget {
   CreatePostCompany(
@@ -70,15 +71,11 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                 if (state.status == StateStatus.success) {
                   showSuccessMessage(
                       context, LocaleKeys.postSuccessfully.localize);
-                  context
-                      .read<CreateCompanyAdCubit>()
-                      .getCompanyAdPosts(widget.type,
-                      params: PaginationParams(
-                        page: 1,
-                        limit: 20,
-                      ));
-                  Navigator.of(context).pop();
 
+                  context.pop();
+                  context.pop();
+
+                  context.push(Routes.CREATECOMPANYAD);
                 }
               },
               builder: (BuildContext context, Object? state) {

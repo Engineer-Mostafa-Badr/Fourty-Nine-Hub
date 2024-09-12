@@ -30,19 +30,22 @@ class WalletCubit extends Cubit<WalletState> {
       this._subscriptionWalletUseCase, this._mainCategoryUseCase, this._subCategoryUseCase, this._deleteSubscriptionUseCase, this._addSubscriptionUseCase)
       : super(const WalletState());
 
-  void loadData() async {
+   loadData() async {
     await getWallet();
    // await fetchWalletHistory();
     await fetchWalletSubscription();
   }
 
-  Future<void> getWallet() async {
+  WalletEntity? da;
+  Future<WalletEntity> getWallet() async {
     final response = await _getWalletUseCase.call(const NoParams());
     response.fold((l) {
       emit(state.copyWith(failure: l, status: WalletStates.error));
     }, (data) {
+      da=data;
       emit(state.copyWith(wallet: data));
     });
+    return da!;
   }
 
   Future<List<WalletHistoryEntity>> fetchWalletHistory({required PaginationParams paginationParams}) async {
@@ -119,8 +122,9 @@ class WalletCubit extends Cubit<WalletState> {
     return response.fold(
             (l) => emit(state.copyWith(failure: l, status: WalletStates.error)),
             (data) {
+              fetchWalletSubscription();
           emit(state.copyWith(status: WalletStates.initial));
-          fetchWalletSubscription();
+
         }
     );
 

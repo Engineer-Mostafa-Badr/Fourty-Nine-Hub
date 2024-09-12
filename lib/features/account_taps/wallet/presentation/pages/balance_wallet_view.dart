@@ -19,6 +19,8 @@ import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../payment/presentation/cubit/payment_cubit.dart';
+import '../../../../payment/presentation/pages/payment_view.dart';
 import '../../domain/entities/balance/balance_history_entity.dart';
 import '../widgets/wallet_history_card.dart';
 
@@ -112,19 +114,25 @@ class BalanceWalletView extends StatelessWidget {
                       if(state.balance?.openBalance == true &&
                           state.withdraw?.data == false)
                          Label(text: LocaleKeys.checkRequest.localize),
-                      state.withdraw?.data == true
-                          ? AppButton(
+                      if (state.withdraw?.data == true) AppButton(
                         backColor: AppColors.SECONDARY_COLOR,
                         color: AppColors.AUTH_CONTAINER_COLOR,
                         label: LocaleKeys.withdraw.localize,
                         onPressed: () {
-                          context
-                              .read<BalanceCubit>()
-                              .requestWithdrawBalance();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BlocProvider<PaymentCubit>(
+                                  create: (BuildContext context) =>serviceLocator(),
+                                  child: PaymentView(
+                                    amountId: '',
+                                    amount: state.balance?.balance ??0,
+                                  ),
+                                ),
+                              ));
                         },
                         margin: 10,
-                      )
-                          : AppButton(
+                      ) else AppButton(
                         backColor: Colors.red.withOpacity(.5),
                         label: LocaleKeys.withdraw.localize,
                         onPressed: () {},
