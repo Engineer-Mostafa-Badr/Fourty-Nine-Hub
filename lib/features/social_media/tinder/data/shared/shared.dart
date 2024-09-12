@@ -13,6 +13,8 @@ import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscr
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../../../res/style/styles.dart';
+
 class BottomSheetContent extends StatefulWidget {
   final String? receiverId;
 
@@ -98,19 +100,18 @@ class BottomSheetContentState extends State<BottomSheetContent> {
           children: [
             _buildGiftImage(gift),
             SizedBox(height: 8.h),
-            FittedBox(
-              child: Text(
-                gift.nameEn ?? 'No Name',
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                style:  TextStyle(fontSize: 16.sp, color: Colors.white),
-              ),
+            Text(
+              gift.nameEn ?? 'No Name',
+              textAlign: TextAlign.center,
+              softWrap: true,
+              maxLines: null,
+              style: Styles.headerText(color: Colors.white),
             ),
             SizedBox(height: 4.h),
             FittedBox(
               child: Text(
                 '${gift.value ?? 0} 💰',
-                style: const TextStyle(color: Colors.white),
+                style:  Styles.mediumText(color: Colors.white),
               ),
             ),
           ],
@@ -125,11 +126,11 @@ class BottomSheetContentState extends State<BottomSheetContent> {
       fit: BoxFit.scaleDown,
       placeholderBuilder: (BuildContext context) => Image.asset(
         'assets/images/icon.png',
-        width: 50,
-        height: 50.h,
+        width: 80.w,
+        height: 80.h,
       ),
-      width: 50,
-      height: 50.h,
+      width: 80.w,
+      height: 80.h,
     );
   }
 

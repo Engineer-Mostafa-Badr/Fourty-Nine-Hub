@@ -300,7 +300,7 @@ class _TinderScreenState extends State<TinderScreen> {
 
   Widget _buildSubCategoryList(TinderViewState state) {
     return SizedBox(
-      height: 225.h,
+      height: 225,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 4),
         scrollDirection: Axis.horizontal,

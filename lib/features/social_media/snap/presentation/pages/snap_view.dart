@@ -2638,7 +2638,7 @@ class _MediaPreviewState extends State<MediaPreview> {
                         : Icons.play_arrow,
                   ),
                 )
-              : const Sizer(),
+              : Sizer(),
           Positioned(
             bottom: 10,
             left: 0,

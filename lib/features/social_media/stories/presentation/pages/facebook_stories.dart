@@ -28,9 +28,9 @@ class Stories extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         children: [
-          const Sizer(),
+          Sizer(),
           _buildYourStory(context),
-          const Sizer(width: 8,),
+          Sizer(width: 8,),
           SizedBox(
             height: kToolbarHeight * 2.5,
             child: BlocBuilder<StoryCubit, StoryState>(
@@ -42,7 +42,7 @@ class Stories extends StatelessWidget {
                         shrinkWrap: true,
                         itemBuilder: (context, index) =>
                             _buildOthersStories(context, state, index),
-                        separatorBuilder: (context, index) => const Sizer(
+                        separatorBuilder: (context, index) => Sizer(
                               width: 8,
                             ),
                         itemCount: state.users.length)
