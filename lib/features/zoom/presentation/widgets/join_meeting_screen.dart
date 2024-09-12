@@ -164,7 +164,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                   if (state.isSuccess) {
                     // context.pop();
                     CliLogger.success('Success');
-                    context.push(
+                    context.pushReplacement(
                       Routes.MEETINGROOM,
                       extra: ZegoArgs(
                         meetingId,

@@ -27,15 +27,19 @@ class EndPoints {
   static const socialLogin = '/auth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
   static const refreshToken = '/auth/refresh/token';
-  static String friendsList (TwitterFeedParams params) => '/friends/allFriends?search=${params.search}&page=${params.page}&limit=${params.limit}';
-  static String searchUsers (TwitterFeedParams params) => '/search/users/${params.search}?page=${params.page}&limit=${params.limit}&subCategory=${Constants.facebookSubCategory}';
-  static String friendRequestsList (TwitterFeedParams params) => '/friends/FriendRequests?search=${params.search}&page=${params.page}&limit=${params.limit}';
-  static String blockedUsersList (TwitterFeedParams params) => '/users/blocked?search=${params.search}&page=${params.page}&limit=${params.limit}';
-  static String followersList (TwitterFeedParams params) => '/follow/followers?search=${params.search}&page=${params.page}&limit=${params.limit}';
+  static String friendsList(TwitterFeedParams params) =>
+      '/friends/allFriends?search=${params.search}&page=${params.page}&limit=${params.limit}';
+  static String searchUsers(TwitterFeedParams params) =>
+      '/search/users/${params.search}?page=${params.page}&limit=${params.limit}&subCategory=${Constants.facebookSubCategory}';
+  static String friendRequestsList(TwitterFeedParams params) =>
+      '/friends/FriendRequests?search=${params.search}&page=${params.page}&limit=${params.limit}';
+  static String blockedUsersList(TwitterFeedParams params) =>
+      '/users/blocked?search=${params.search}&page=${params.page}&limit=${params.limit}';
+  static String followersList(TwitterFeedParams params) =>
+      '/follow/followers?search=${params.search}&page=${params.page}&limit=${params.limit}';
   static const getParentMainCategories = '/category/parent';
   static const getMainCategories = '/category/parent/get-all-main';
-  static String favouriteCategories =
-      '/favorite-category';
+  static String favouriteCategories = '/favorite-category';
   static String getBannerByID({required String id}) => '/categories/main/$id';
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
 
@@ -44,8 +48,7 @@ class EndPoints {
   static String addMainCategoryToFavorite(String id) => '/favorite-category/$id';
 
   static String deleteMainCategoryFromFavorite(String id) => '/favorite-category/$id';
-  static String toggleSubCategoryToFavorites(String id) =>
-      '/favorite-sub-category/$id';
+  static String toggleSubCategoryToFavorites(String id) => '/favorite-sub-category/$id';
 
   static const getGift = '/subscriber/competitions';
   static const getBalance = '/main-wallet/user-balance';
@@ -73,7 +76,6 @@ class EndPoints {
   static String addSubscription() {
     return '/subscription/subscribe';
   }
-
 
   static String deleteCompanyAd(String id) {
     return '/advertisementCompany/$id';
@@ -105,8 +107,7 @@ class EndPoints {
   static const deleteAllNotification = '/notifications/all';
   // static const report = '/report?subCategory=66a3583454e6e337915514db';
   static String report({required String subCategoryId}) => '/report?subCategory=$subCategoryId';
-  static String documentRequest =
-      '/twitter/document-request?subCategory=${Constants.documentSubCategory}';
+  static String documentRequest = '/twitter/document-request?subCategory=${Constants.documentSubCategory}';
 
   // ride
   //shipping
@@ -383,10 +384,8 @@ class EndPoints {
     return '/facebook/comment/update-comment/${params.postId}?subCategory=${Constants.facebookSubCategory}';
   }
 
-  static String acceptRejectFriendRequest(
-      AcceptRejectFriendRequestParams params) {
-    return '/friends/acceptOrRejectrequest/${params
-        .userId}?subCategory=${Constants.facebookSubCategory}';
+  static String acceptRejectFriendRequest(AcceptRejectFriendRequestParams params) {
+    return '/friends/acceptOrRejectrequest/${params.userId}?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String deleteFriend(String userId) {

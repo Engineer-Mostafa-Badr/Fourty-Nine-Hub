@@ -176,7 +176,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                               await context
                                   .read<MeetingCubit>()
                                   .endRoom(ZegoUIKit().getRoom().id);
-                              Navigator.of(context).pop(true);
+                              Navigator.of(context).pop();
                             }
                           },
                           child: Container(
@@ -205,7 +205,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                       InkWell(
                         onTap: () async {
                           Navigator.of(context).pop();
-                          Navigator.of(context).pop();
+                          // Navigator.of(context).pop();
                         },
                         child: Container(
                           width: MediaQuery.sizeOf(context).width / 1.3,

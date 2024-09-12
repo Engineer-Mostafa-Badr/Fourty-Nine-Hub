@@ -31,7 +31,7 @@ class ZegoLiveStreamingIconUrls {
   static const String previewFlipCamera =
       'assets/icons/preview_flip_camera.png';
   static const String toolbarSoundEffect = 'assets/icons/toolbar_sound.png';
-  static const String toolbarBeautyEffect = 'assets/icons/toolbar_beauty.png';
+  static const String toolbarBeautyEffect = 'assets/icons/effect.png';
   static const String toolbarCameraNormal =
       'assets/icons/toolbar_camera_normal.png';
   static const String toolbarCameraOff = 'assets/icons/toolbar_camera_off.png';
