@@ -428,12 +428,19 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                   context.push(Routes.LOGIN);
                 }
               },
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                backgroundImage: NetworkImage((post.user.image!=null)
-                    ? post.user.image??''
-                    : UIConst.profilePlaceHolder),
-              ),
+              child: ImageFromInternet(
+              image: (post.user.image!=null)?post.user.image:'',
+                height: 45,
+                width: 45,
+                isCircle: true,
+              )
+
+              // CircleAvatar(
+              //   backgroundColor: Colors.white,
+              //   backgroundImage: NetworkImage((post.user.image!=null)
+              //       ? post.user.image??''
+              //       : UIConst.profilePlaceHolder),
+              // ),
             ),
             const Sizer(),
             Expanded(

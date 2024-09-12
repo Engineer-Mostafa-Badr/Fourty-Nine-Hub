@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wa
 import 'package:fourtyninehub/features/subscripe/domain/usecases/subscribe_usecase.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -147,9 +148,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                             ),
                           );
                       if (context.mounted) {
-                        context.pop();
+                        context.go(Routes.HOME);
                       }
-                      context.pop();
+                      // context.pop();
                     } else {
                       await serviceLocator<SubscriptionController>().subscribe(
                         subscribeParams: SubscribeParams(
