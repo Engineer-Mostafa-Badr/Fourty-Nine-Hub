@@ -732,7 +732,7 @@ class TinderCardStack extends StatelessWidget {
       top: 25,
       child: Container(
         width: 40,
-        height: 40.h,
+        height: 40,
         decoration: BoxDecoration(
           color: Colors.grey.withOpacity(0.5),
           shape: BoxShape.circle,

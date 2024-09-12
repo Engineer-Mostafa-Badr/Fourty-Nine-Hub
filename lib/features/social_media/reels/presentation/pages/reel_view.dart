@@ -3719,7 +3719,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
             color: iconColor ?? Colors.white,
             size: 30,
           ),
-          SizedBox(height: 2.h),
+          SizedBox(height: 2),
           if (count != 0)
             Text(
               '$count',
@@ -3826,7 +3826,7 @@ class RoundedButtonWithImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
         width: 100,
-        height: 50.h,
+        height: 50,
         child: FittedBox(
           child: ElevatedButton.icon(
               onPressed: onPressed,

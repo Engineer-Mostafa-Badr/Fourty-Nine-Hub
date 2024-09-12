@@ -1,12 +1,9 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/pages/privacy_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
@@ -52,6 +49,11 @@ class _CameraScreenState extends State<CameraScreen> {
     _disposeVideoControllers();
 
     _videoPlayerController = VideoPlayerController.file(videoFile);
+
+
+
+
+
     await _videoPlayerController!.initialize();
 
     _chewieController = ChewieController(
@@ -269,8 +271,8 @@ class _CameraScreenState extends State<CameraScreen> {
         child: TextField(
           cursorColor: Colors.white,
           maxLines: null,
-          style:  TextStyle(
-            fontSize: 28.sp,
+          style: TextStyle(
+            fontSize: 28,
             color: Colors.white,
             shadows: const [
               Shadow(
@@ -379,8 +381,8 @@ class _CameraScreenState extends State<CameraScreen> {
                     cursorColor: Colors.white,
                     cursorErrorColor: Colors.red,
                     maxLines: 1,
-                    style:  TextStyle(
-                      fontSize: 18.sp,
+                    style: TextStyle(
+                      fontSize: 18,
                       color: Colors.white, // White text color
                     ),
                     decoration: InputDecoration(
