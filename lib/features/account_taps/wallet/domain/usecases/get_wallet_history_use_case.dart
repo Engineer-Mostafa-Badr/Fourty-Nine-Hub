@@ -1,11 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balance/balance_history_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/wallet_repo.dart';
 
+import '../../../../../common/models/public/pagination_params.dart';
 import '../entities/wallet/wallet_history_entity.dart';
-import '../repositories/balance_repository.dart';
 
 class GetWalletHistoryUseCase extends UseCase<List<WalletHistoryEntity>, WalletHistoryParams>{
   final WalletRepo _walletRepo;
@@ -20,14 +19,7 @@ class GetWalletHistoryUseCase extends UseCase<List<WalletHistoryEntity>, WalletH
 
 
 class WalletHistoryParams {
-  final int page;
-  final int limit;
-  WalletHistoryParams({
-    required this.page,
-    required this.limit,
-  });
-  Map<String, dynamic> toJson() => {
-    'page': page,
-    'limit': limit,
-  };
+ final PaginationParams paginationParams;
+
+  WalletHistoryParams({required this.paginationParams});
 }

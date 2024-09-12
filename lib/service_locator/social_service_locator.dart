@@ -24,72 +24,60 @@ import 'package:get_it/get_it.dart';
 class SocialServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     // ---------------------------------- data sources ----------------------------------
-    serviceLocator.registerLazySingleton<ChatsRemoteDataSource>(
-        () => ChatsRemoteDataSourceImplementation(serviceLocator()));
-    serviceLocator.registerLazySingleton<MessagesRemoteDataSource>(() =>
-        MessagesRemoteDataSourceImplementation(
-            serviceLocator(), serviceLocator()));
+    serviceLocator
+        .registerLazySingleton<ChatsRemoteDataSource>(() => ChatsRemoteDataSourceImplementation(serviceLocator()));
+    serviceLocator.registerLazySingleton<MessagesRemoteDataSource>(
+        () => MessagesRemoteDataSourceImplementation(serviceLocator(), serviceLocator()));
     serviceLocator.registerLazySingleton<MessagesLocalDataSource>(
         () => SQFLiteMessagesLocalDataSourceImplementation(serviceLocator()));
     // ---------------------------------- repositories ----------------------------------
-    serviceLocator.registerLazySingleton<ChatRoomRepository>(() =>
-        ChatRoomRepositoryImplementation(serviceLocator(), serviceLocator()));
-    serviceLocator.registerLazySingleton<ChatsRepository>(
-        () => ChatsRepositoryImplementation(serviceLocator()));
+    serviceLocator.registerLazySingleton<ChatRoomRepository>(
+        () => ChatRoomRepositoryImplementation(serviceLocator(), serviceLocator()));
+    serviceLocator.registerLazySingleton<ChatsRepository>(() => ChatsRepositoryImplementation(serviceLocator()));
     // ---------------------------------- use cases ----------------------------------
     serviceLocator.registerLazySingleton<GetChatsUseCase>(() => GetChatsUseCase(
           serviceLocator(),
         ));
 
-    serviceLocator
-        .registerLazySingleton<GroupsChatsUseCase>(() => GroupsChatsUseCase(
-              serviceLocator(),
-            ));
+    serviceLocator.registerLazySingleton<GroupsChatsUseCase>(() => GroupsChatsUseCase(
+          serviceLocator(),
+        ));
 
-    serviceLocator.registerLazySingleton<GetSeenHistoryUseCase>(
-        () => GetSeenHistoryUseCase(
-              serviceLocator(),
-            ));
+    serviceLocator.registerLazySingleton<GetSeenHistoryUseCase>(() => GetSeenHistoryUseCase(
+          serviceLocator(),
+        ));
 
-    serviceLocator.registerLazySingleton<ChangeChatMuteStateUseCase>(
-        () => ChangeChatMuteStateUseCase(
-              serviceLocator(),
-            ));
+    serviceLocator.registerLazySingleton<ChangeChatMuteStateUseCase>(() => ChangeChatMuteStateUseCase(
+          serviceLocator(),
+        ));
 
-    serviceLocator.registerLazySingleton<ChangeChatToArchiveOrNormalUseCase>(
-        () => ChangeChatToArchiveOrNormalUseCase(
-              serviceLocator(),
-            ));
+    serviceLocator.registerLazySingleton<ChangeChatToArchiveOrNormalUseCase>(() => ChangeChatToArchiveOrNormalUseCase(
+          serviceLocator(),
+        ));
 
-    serviceLocator
-        .registerLazySingleton<UnLockChatUseCase>(() => UnLockChatUseCase(
-              serviceLocator(),
-            ));
+    serviceLocator.registerLazySingleton<UnLockChatUseCase>(() => UnLockChatUseCase(
+          serviceLocator(),
+        ));
 
     serviceLocator.registerLazySingleton<LockChatUseCase>(() => LockChatUseCase(
           serviceLocator(),
         ));
 
-    serviceLocator.registerLazySingleton<GetChatMessagesUseCase>(
-        () => GetChatMessagesUseCase(
-              serviceLocator(),
-            ));
-
-    serviceLocator.registerLazySingleton<DeleteChatMessageUseCase>(
-        () => DeleteChatMessageUseCase(
-              serviceLocator(),
-            ));
-
-    serviceLocator.registerLazySingleton<ListenToNewMessageUseCase>(
-        () => ListenToNewMessageUseCase(
-              serviceLocator(),
-            ));
-    serviceLocator.registerLazySingleton<SendMessageUseCase>(
-            () => SendMessageUseCase(
+    serviceLocator.registerLazySingleton<GetChatMessagesUseCase>(() => GetChatMessagesUseCase(
           serviceLocator(),
         ));
-    serviceLocator.registerLazySingleton<GetMessagesUseCase>(
-            () => GetMessagesUseCase(
+
+    serviceLocator.registerLazySingleton<DeleteChatMessageUseCase>(() => DeleteChatMessageUseCase(
+          serviceLocator(),
+        ));
+
+    serviceLocator.registerLazySingleton<ListenToNewMessageUseCase>(() => ListenToNewMessageUseCase(
+          serviceLocator(),
+        ));
+    serviceLocator.registerLazySingleton<SendMessageUseCase>(() => SendMessageUseCase(
+          serviceLocator(),
+        ));
+    serviceLocator.registerLazySingleton<GetMessagesUseCase>(() => GetMessagesUseCase(
           serviceLocator(),
         ));
     // ---------------------------------- cubits ----------------------------------

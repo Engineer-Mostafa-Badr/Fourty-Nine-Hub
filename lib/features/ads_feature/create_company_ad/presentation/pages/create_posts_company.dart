@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/functions/global/upload_file.dart';
@@ -12,8 +11,10 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import '../../../../social_media/create_post/presentation/widgets/image_details.dart';
@@ -33,7 +34,7 @@ class CreatePostCompany extends StatefulWidget {
   final bool picture;
   final String title;
   final String type;
-  final int totalPrice;
+  final num totalPrice;
 
   @override
   State<CreatePostCompany> createState() => _CreatePostViewState();
@@ -70,7 +71,10 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                   showSuccessMessage(
                       context, LocaleKeys.postSuccessfully.localize);
 
-                  Navigator.of(context).pop();
+                  context.pop();
+                  context.pop();
+
+                  context.push(Routes.CREATECOMPANYAD);
                 }
               },
               builder: (BuildContext context, Object? state) {
@@ -89,18 +93,22 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                               context
                                   .read<CreateCompanyAdCubit>()
                                   .addPostCompanyAdvertise(
-                                  mediaIds: widget.picture ? controller
-                                      .selectedImages!.isNotEmpty ?
-                                  controller.selectedImages : showSuccessMessage(
-                                    context, 'Image not selected',
-                                    color: AppColors.SECONDARY_COLOR,
-                                    icon: Icons.error,)
-                                      :null,
-                                type: widget.type,
-                                post: widget.text
-                                ? postContentTextController.text
-                                    : null,
-                                  totalPrice: 10,
+                                    mediaIds: widget.picture
+                                        ? controller.selectedImages!.isNotEmpty
+                                            ? controller.selectedImages
+                                            : showSuccessMessage(
+                                                context,
+                                                'Image not selected',
+                                                color:
+                                                    AppColors.SECONDARY_COLOR,
+                                                icon: Icons.error,
+                                              )
+                                        : null,
+                                    type: widget.type,
+                                    post: widget.text
+                                        ? postContentTextController.text
+                                        : null,
+                                    totalPrice: 10,
                                   );
                               // CompanyAdvertiseCubit.get(context)
                               //     .addPostCompanyAdvertise(

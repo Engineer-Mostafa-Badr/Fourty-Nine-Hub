@@ -355,10 +355,14 @@ class ReelsRepository {
       throw Exception('Failed to like/unlike the comment');
     }
   }
-  Future<ReelsForAudioResponse> fetchReelsWithSameAudio(String audioId, {int page = 1, int limit = 10}) async {
-    final url = 'https://49dev.com/api/v1/reels/audio/$audioId?page=$page&limit=$limit';
 
-    final response = await _makeGetRequest(url: url, fromMethod: 'fetchReelsWithSameAudio');
+  Future<ReelsForAudioResponse> fetchReelsWithSameAudio(String audioId,
+      {int page = 1, int limit = 10}) async {
+    final url =
+        'https://49dev.com/api/v1/reels/audio/$audioId?page=$page&limit=$limit';
+
+    final response =
+        await _makeGetRequest(url: url, fromMethod: 'fetchReelsWithSameAudio');
     if (response != null) {
       log("Fetched reels with the same audio successfully.");
       return ReelsForAudioResponse.fromJson(json.decode(response.body));
@@ -367,5 +371,4 @@ class ReelsRepository {
       throw Exception('Failed to fetch reels with the same audio');
     }
   }
-
 }

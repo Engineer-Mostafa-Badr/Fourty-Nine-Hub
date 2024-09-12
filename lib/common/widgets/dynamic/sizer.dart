@@ -7,15 +7,15 @@ class Sizer extends StatelessWidget {
 
   const Sizer({
     super.key,
-    this.height,
-    this.width,
+    this.height = 10,
+    this.width = 10,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height ,
-      width: width ,
+      height: height,
+      width: width,
     );
   }
 }

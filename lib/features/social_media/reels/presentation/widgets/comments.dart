@@ -1221,7 +1221,6 @@
 //   }
 // }
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -1252,7 +1251,8 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   void initState() {
     super.initState();
     reelsCubit = serviceLocator<ReelsCubit>();
-    reelsCubit.getComments(widget.reel.id); // Fetch comments once when initialized
+    reelsCubit
+        .getComments(widget.reel.id); // Fetch comments once when initialized
   }
 
   @override
@@ -1265,7 +1265,9 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
         },
         child: Stack(
           children: [
-            Container(color: Colors.transparent), // Transparent background to detect taps
+            Container(
+                color: Colors
+                    .transparent), // Transparent background to detect taps
             DraggableScrollableSheet(
               initialChildSize: 0.6,
               minChildSize: 0.4,
@@ -1405,7 +1407,8 @@ class CommentInputFieldState extends State<CommentInputField> {
                       onPressed: () async {
                         // Send the comment
                         final reelsCubit = context.read<ReelsCubit>();
-                        await reelsCubit.addComment(widget.reel.id, _commentController.text);
+                        await reelsCubit.addComment(
+                            widget.reel.id, _commentController.text);
                         await reelsCubit.getComments(widget.reel.id);
 
                         widget.scrollController.animateTo(
@@ -1414,7 +1417,8 @@ class CommentInputFieldState extends State<CommentInputField> {
                           curve: Curves.easeOut,
                         );
 
-                        _commentController.clear(); // Clear input field after sending
+                        _commentController
+                            .clear(); // Clear input field after sending
                       },
                     ),
                   ),
@@ -1474,7 +1478,8 @@ class _CommentWidgetState extends State<CommentWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CircleAvatar(
-          backgroundImage: NetworkImage(widget.commentData.user.profilePictureSignedUrl),
+          backgroundImage:
+              NetworkImage(widget.commentData.user.profilePictureSignedUrl),
         ),
         const SizedBox(width: 10),
         Expanded(
@@ -1494,7 +1499,8 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   Widget _buildUserName() {
     return Text(
-      capitalizeAndSplit('${widget.commentData.user.firstName} ${widget.commentData.user.lastName}'),
+      capitalizeAndSplit(
+          '${widget.commentData.user.firstName} ${widget.commentData.user.lastName}'),
       style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
     );
   }
@@ -1512,7 +1518,9 @@ class _CommentWidgetState extends State<CommentWidget> {
         IconButton(
           icon: Icon(
             Icons.favorite,
-            color: widget.commentData.isLiked ? AppColors.PRIMARY_COLOR_DARK : AppColors.UNSELECTED_DARK_GRAY_COLOR,
+            color: widget.commentData.isLiked
+                ? AppColors.PRIMARY_COLOR_DARK
+                : AppColors.UNSELECTED_DARK_GRAY_COLOR,
           ),
           onPressed: () => _handleLikeComment(widget.commentData.id),
         ),
@@ -1533,7 +1541,8 @@ class _CommentWidgetState extends State<CommentWidget> {
     // Handle like functionality for the comment
     context.read<ReelsCubit>().toggleCommentLike(commentId).then((_) {
       FocusScope.of(context).unfocus(); // Remove focus from the text field
-      context.read<ReelsCubit>().getComments(widget.commentData.reelId); // Refresh comments after liking
+      context.read<ReelsCubit>().getComments(
+          widget.commentData.reelId); // Refresh comments after liking
     }).catchError((error) {
       _showErrorSnackBar('Failed to send like. Please try again.');
     });
@@ -1570,7 +1579,8 @@ class _CommentWidgetState extends State<CommentWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(replay.user.profilePictureSignedUrl),
+                backgroundImage:
+                    NetworkImage(replay.user.profilePictureSignedUrl),
                 radius: 16,
               ),
               const SizedBox(width: 10),
@@ -1579,13 +1589,16 @@ class _CommentWidgetState extends State<CommentWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      capitalizeAndSplit('${replay.user.firstName} ${replay.user.lastName?? ''}'),
-                      style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                      capitalizeAndSplit(
+                          '${replay.user.firstName} ${replay.user.lastName ?? ''}'),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                     const SizedBox(height: 5),
                     Text(
                       replay.comment,
-                      style: const TextStyle(color: AppColors.UNSELECTED_GRAY_COLOR),
+                      style: const TextStyle(
+                          color: AppColors.UNSELECTED_GRAY_COLOR),
                     ),
                   ],
                 ),
@@ -1597,7 +1610,9 @@ class _CommentWidgetState extends State<CommentWidget> {
               IconButton(
                 icon: Icon(
                   Icons.favorite,
-                  color: replay.isLiked ? AppColors.PRIMARY_COLOR_DARK : AppColors.UNSELECTED_DARK_GRAY_COLOR,
+                  color: replay.isLiked
+                      ? AppColors.PRIMARY_COLOR_DARK
+                      : AppColors.UNSELECTED_DARK_GRAY_COLOR,
                 ),
                 onPressed: () => _handleLikeComment(replay.id),
               ),
@@ -1608,7 +1623,8 @@ class _CommentWidgetState extends State<CommentWidget> {
               const Spacer(),
               IconButton(
                 icon: const FaIcon(FontAwesomeIcons.reply, color: Colors.white),
-                onPressed: () => _showReplyInput(replay.reelId, replay.id, replay.user.id),
+                onPressed: () =>
+                    _showReplyInput(replay.reelId, replay.id, replay.user.id),
               ),
             ],
           ),
@@ -1649,7 +1665,8 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 
-  void _showReplyInput([String? reelId, String? parentCommentId, String? receiverCommentId]) {
+  void _showReplyInput(
+      [String? reelId, String? parentCommentId, String? receiverCommentId]) {
     setState(() {
       _isRepliesVisible = true;
       _replyFocusNode.requestFocus(); // Focus on the reply input field
@@ -1662,15 +1679,16 @@ class _CommentWidgetState extends State<CommentWidget> {
       context
           .read<ReelsCubit>()
           .addReplayComment(
-        widget.commentData.reelId,
-        replyText,
-        parentCommentId: widget.commentData.id,
-        receiverComment: widget.commentData.user.id,
-      )
+            widget.commentData.reelId,
+            replyText,
+            parentCommentId: widget.commentData.id,
+            receiverComment: widget.commentData.user.id,
+          )
           .then((_) {
         _replyController.clear();
         FocusScope.of(context).unfocus();
-        context.read<ReelsCubit>().getComments(widget.commentData.reelId); // Refresh comments after replying
+        context.read<ReelsCubit>().getComments(
+            widget.commentData.reelId); // Refresh comments after replying
       }).catchError((error) {
         _showErrorSnackBar('Failed to send reply. Please try again.');
       });
@@ -1768,7 +1786,8 @@ void showCommentsBottomSheet(BuildContext context, {required Reel reel}) {
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (context) {
-      return CommentsBottomSheet(reel: reel); // Use the new CommentsBottomSheet widget
+      return CommentsBottomSheet(
+          reel: reel); // Use the new CommentsBottomSheet widget
     },
   );
 }

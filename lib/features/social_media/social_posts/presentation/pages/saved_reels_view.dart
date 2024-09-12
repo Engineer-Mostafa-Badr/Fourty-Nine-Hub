@@ -20,18 +20,17 @@ class SavedReelsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<InstagramCubit>(
       create: (_) => serviceLocator()..loadSaverReels(userData.id),
-      child: BlocConsumer<InstagramCubit, InstagramState>(
-          listener: (context, state) {
-            if (state.status == StateStatus.error) {
-              showErrorMessage(
-                context,
-                getFailureMessage(
-                  state.failure ??  UnknownFailure(''),
-                  context,
-                ),
-              );
-            }
-          }, builder: (context, state) {
+      child: BlocConsumer<InstagramCubit, InstagramState>(listener: (context, state) {
+        if (state.status == StateStatus.error) {
+          showErrorMessage(
+            context,
+            getFailureMessage(
+              state.failure ?? UnknownFailure(''),
+              context,
+            ),
+          );
+        }
+      }, builder: (context, state) {
         final controller = context.read<InstagramCubit>();
         return PagedSliverList<int, PostEntity>(
           pagingController: controller.savedReelsPagingController,
@@ -49,32 +48,29 @@ class SavedReelsView extends StatelessWidget {
                 );
               },
               itemBuilder: (context, item, index) {
-                final post =
-                controller.savedReelsPagingController.itemList![index];
+                final post = controller.savedReelsPagingController.itemList![index];
                 print(post.videoMedia);
                 return state.status == StateStatus.success
                     ? Container(
-                    color: Colors.black,
-                    width: double.infinity,
-                    height: 400,
-                    child: InstagramReelCard(
-                      item: post,
-                      playVideo: false,
-                    ))
+                        color: Colors.black,
+                        width: double.infinity,
+                        height: 400,
+                        child: InstagramReelCard(
+                          item: post,
+                          playVideo: false,
+                        ))
                     : Center(
-                  child: Label(
-                      text: getFailureMessage(
-                        state.failure ??  UnknownFailure(''),
-                        context,
-                      )),
-                );
+                        child: Label(
+                            text: getFailureMessage(
+                          state.failure ?? UnknownFailure(''),
+                          context,
+                        )),
+                      );
               },
               noMoreItemsIndicatorBuilder: (context) => Container(),
-              firstPageProgressIndicatorBuilder: (context) => Container(
-                  margin: const EdgeInsets.only(top: 150),
-                  child: const CupertinoActivityIndicator()),
-              newPageProgressIndicatorBuilder: (context) =>
-              const CupertinoActivityIndicator()),
+              firstPageProgressIndicatorBuilder: (context) =>
+                  Container(margin: const EdgeInsets.only(top: 150), child: const CupertinoActivityIndicator()),
+              newPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator()),
         );
       }),
     );

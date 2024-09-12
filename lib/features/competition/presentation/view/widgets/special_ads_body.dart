@@ -4,6 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/competition/presentation/view/widgets/build_item_list_view.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../service_locator/service_locator.dart';
+import '../../../data/repository/competition_repo_impl.dart';
 import '../../cubit/competition_cubit/competition_cubit.dart';
 import '../../cubit/competition_cubit/competition_state.dart';
 
@@ -29,34 +31,39 @@ class SpecialAdsBody extends StatelessWidget {
       Icons.live_tv,
     ];
 
-    return BlocBuilder<CompetitionCubit, CompetitionState>(
-      builder: (BuildContext context, state) {
-        if (state is CompetitionSuccessState) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-            child: ListView.separated(
-              itemBuilder: (context, index) => BuildItemListView(
-                model: state.competitionModel.data![index],
-                icon: icons[index % icons.length], // Pass the corresponding icon
+    return BlocProvider(
+      create: (context) =>
+      CompetitionCubit(serviceLocator.get<CompetitionRepoImpl>())
+        ..fetchCompetition(context),
+      child: BlocBuilder<CompetitionCubit, CompetitionState>(
+        builder: (BuildContext context, state) {
+          if (state is CompetitionSuccessState) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+              child: ListView.separated(
+                itemBuilder: (context, index) => BuildItemListView(
+                  model: state.competitionModel.data![index],
+                  icon: icons[index % icons.length], // Pass the corresponding icon
+                ),
+                separatorBuilder: (context, index) => const Padding(
+                  padding: EdgeInsets.only(top: 20, bottom: 10),
+                  child: Divider(endIndent: 15, color: Colors.grey),
+                ),
+                itemCount: state.competitionModel.data!.length,
               ),
-              separatorBuilder: (context, index) => const Padding(
-                padding: EdgeInsets.only(top: 20, bottom: 10),
-                child: Divider(endIndent: 15, color: Colors.grey),
+            );
+          } else if (state is CompetitionErrorState) {
+            return Center(
+              child: Text(
+                state.errMessage,
+                textAlign: TextAlign.center,
+                style: Styles.mediumText(),
               ),
-              itemCount: state.competitionModel.data!.length,
-            ),
-          );
-        } else if (state is CompetitionErrorState) {
-          return Center(
-            child: Text(
-              state.errMessage,
-              textAlign: TextAlign.center,
-              style: Styles.mediumText(),
-            ),
-          );
-        }
-        return const Center(child: CircularProgressIndicator());
-      },
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
     );
   }
 }

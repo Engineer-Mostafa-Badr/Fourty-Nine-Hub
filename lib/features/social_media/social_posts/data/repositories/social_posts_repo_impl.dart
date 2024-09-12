@@ -53,7 +53,8 @@ class SocialPostsRepoImpl implements SocialPostsRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> acceptRejectFriendRequest({required AcceptRejectFriendRequestParams params}) {
+  Future<Either<Failure, bool>> acceptRejectFriendRequest(
+      {required AcceptRejectFriendRequestParams params}) {
     return _remoteDataSource.acceptRejectFriendRequest(params: params);
   }
 

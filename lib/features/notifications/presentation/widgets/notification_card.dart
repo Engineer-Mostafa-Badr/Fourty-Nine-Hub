@@ -1,99 +1,167 @@
-import 'package:dio/dio.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubit/notifications_state.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
-import 'package:intl/intl.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/all_notifications_seen/all_notfications_seen_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:intl/intl.dart';
 
-import '../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
-import '../../../../core/data/models/notification_model.dart';
-import '../../../../core/localization/locale_keys.g.dart';
-import '../../../../core/utils/api_service.dart';
 import '../../../../res/assets/assets.dart';
-import '../../data/repository/notification_repo_impl.dart';
-import '../cubit/notifications_cubit.dart';
 
-class NotificationCard extends StatelessWidget {
-  final NotificationDoc notificationDoc;
-
-  const NotificationCard({super.key, required this.notificationDoc});
+class NotificationCard extends StatefulWidget {
+  final NotificationEntity notificationEntity;
+  final int index;
+  final Function() notificationSeenCallback;
+  final Function() notificationDeleteCallback;
+  const NotificationCard({
+    super.key,
+    required this.notificationEntity,
+    required this.index,
+    required this.notificationSeenCallback,
+    required this.notificationDeleteCallback,
+  });
 
   @override
+  State<NotificationCard> createState() => _NotificationCardState();
+}
+
+class _NotificationCardState extends State<NotificationCard> {
+  @override
   Widget build(BuildContext context) {
-    final DateTime createdAt = DateTime.parse('${notificationDoc.createdAt!}');
-
-    // Convert the time to Egypt timezone (EET or EEST)
-    final DateTime egyptTime = createdAt.toUtc().add(
-        const Duration(hours: 3)); // EET is UTC+2, adjust for DST if necessary
-
-    // Format the time for display
-    final String formattedTime = DateFormat('h:mm a').format(egyptTime);
-    return Container(
-      padding: const EdgeInsets.all(5),
-      child: Row(
-        children: [
-          SizedBox(
-            height: kToolbarHeight,
-            width: kToolbarHeight,
-            child: Image.asset(
-              Assets.icon,
-            ),
-          ),
-          // const Sizer(),
-          Expanded(
-            child: Text(
-              notificationDoc.bodyTranslationCode!,
-              style: Styles.mediumText(),
-            ),
-          ),
-          BlocProvider(
-            create: (BuildContext context) =>
-                NotificationsCubit(NotificationRepoImpl(ApiService(Dio()))),
-            child: BlocConsumer<NotificationsCubit, NotificationsState>(
-              listener: (BuildContext context, NotificationsState state) {
-                if (state is DeleteNotificationsSuccessState) {
-                  var snackBar = SnackBar(
-                    content: const Text('Delete Successfully'),
-                    backgroundColor: Theme.of(context).primaryColor,
-                  );
-
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    return BlocBuilder<AllNotficationsSeenCubit, AllNotficationsSeenState>(
+      builder: (context, state) {
+        return InkWell(
+          onTap: () {
+            widget.notificationSeenCallback();
+            setState(() {});
+          },
+          child: Container(
+            padding: const EdgeInsets.all(5),
+            child: Dismissible(
+              key: UniqueKey(),
+              direction: DismissDirection.startToEnd,
+              behavior: HitTestBehavior.translucent,
+              confirmDismiss: (direction) async {
+                bool confirmDelete = false;
+                await showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Container(
+                      padding: const EdgeInsets.only(top: 20, right: 10, left: 10, bottom: 20),
+                      child: AreYouSure(
+                        title: LocaleKeys.alert.localize,
+                        subTitle: LocaleKeys.clearNoti.localize,
+                        action: () {
+                          confirmDelete = true;
+                        },
+                      ),
+                    );
+                  },
+                );
+                if (confirmDelete) {
+                  widget.notificationDeleteCallback();
                 }
+                return confirmDelete;
               },
-              builder: (BuildContext context, state) {
-                return Column(
+              background: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                color: Colors.red,
+                alignment: Alignment.centerLeft,
+                child: const Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                ),
+              ),
+              child: NotificationCustomContainer(
+                color: widget.notificationEntity.read! ? Colors.transparent : AppColors.PRIMARY_COLOR.withOpacity(0.1),
+                child: Row(
                   children: [
-                    state is! DeleteNotificationsLoadingState
-                        ? IconAppButton(
-                            icon: Icons.clear,
-                            onPressed: () {
-                              showAreYouSure(
-                                  title: LocaleKeys.alert.localize,
-                                  subTitle: LocaleKeys.clearNoti.localize,
-                                  action: () {
-                                    NotificationsCubit.get(context)
-                                        .deleteNotification(
-                                            id: notificationDoc.id!);
-                                  },
-                                  context: context);
-                            })
-                        : IconAppButton(icon: Icons.clear, onPressed: () {}),
-                    Label(
-                      text: formattedTime,
-                      style: Styles.mediumText(color: Colors.grey),
+                    SizedBox(
+                      height: kToolbarHeight,
+                      width: kToolbarHeight,
+                      child: widget.notificationEntity.userImageUrl == null
+                          ? Image.asset(
+                              Assets.icon,
+                            )
+                          : _networkImage(),
+                    ),
+                    // const Sizer(),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.notificationEntity.title ?? '',
+                            style: Styles.headerText(),
+                          ),
+                          const Sizer(height: 5),
+                          Text(
+                            widget.notificationEntity.body ?? '',
+                            style: Styles.mediumText(),
+                          ),
+                          const Sizer(height: 5),
+                          Label(
+                            text: _formatDate(),
+                            style: Styles.mediumText(color: Colors.grey),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
-                );
-              },
+                ),
+              ),
             ),
-          )
-        ],
+          ),
+        );
+      },
+    );
+  }
+
+  Container _networkImage() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 5),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+      clipBehavior: Clip.hardEdge,
+      child: CachedNetworkImage(
+        imageUrl: widget.notificationEntity.userImageUrl ?? '',
+        placeholder: (context, url) => Image.asset(
+          Assets.icon,
+        ),
+        errorWidget: (context, url, error) => Image.asset(
+          Assets.icon,
+        ),
+        fit: BoxFit.cover,
       ),
+    );
+  }
+
+  String _formatDate() {
+    if (widget.notificationEntity.createdAt == null) {
+      return '';
+    }
+    return DateFormat('dd MMM, hh:mm aaa').format(widget.notificationEntity.createdAt!);
+  }
+}
+
+class NotificationCustomContainer extends StatelessWidget {
+  const NotificationCustomContainer({super.key, required this.color, required this.child});
+  final Color color;
+  final Widget child;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      child: child,
     );
   }
 }

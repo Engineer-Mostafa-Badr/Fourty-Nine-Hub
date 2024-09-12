@@ -3,8 +3,11 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entit
 import 'vehicle_id.dart';
 
 class TripJoinCardModel extends TripJoinCardEntity {
+  @override
   String? id;
+  @override
   String? userId;
+  @override
   String? categoryId;
   VehicleId? vehicleId;
   String? fromAr;
@@ -15,7 +18,8 @@ class TripJoinCardModel extends TripJoinCardEntity {
   int? duration;
   int? passengers;
   double? price;
-  int? phone;
+  @override
+  String? phone;
   int? time;
   String? countryCode;
   @override
@@ -48,6 +52,9 @@ class TripJoinCardModel extends TripJoinCardEntity {
     this.updatedAt,
     this.status,
   }) : super(
+          id: id,
+          userId: userId,
+          categoryId: categoryId,
           brand: vehicleId?.brand,
           model: vehicleId?.model,
           journeyPrice: price,
@@ -72,7 +79,9 @@ class TripJoinCardModel extends TripJoinCardEntity {
       id: json['_id'] as String?,
       userId: json['userId'] as String?,
       categoryId: json['categoryId'] as String?,
-      vehicleId: json['vehicleId'] == null ? null : VehicleId.fromJson(json['vehicleId'] as Map<String, dynamic>),
+      vehicleId: json['vehicleId'] == null
+          ? null
+          : VehicleId.fromJson(json['vehicleId'] as Map<String, dynamic>),
       fromAr: json['fromAr'] as String?,
       toAr: json['toAr'] as String?,
       fromEn: json['fromEn'] as String?,
@@ -82,13 +91,17 @@ class TripJoinCardModel extends TripJoinCardEntity {
       duration: json['duration'] as int?,
       passengers: json['passengers'] as int?,
       price: (json['price'] as num?)?.toDouble(),
-      phone: json['phone'] as int?,
+      phone: json['phone'].toString(),
       time: json['time'] as int?,
       countryCode: json['countryCode'] as String?,
       isApproved: json['isApproved'] as bool?,
       isRepeat: json['isRepeat'] as bool?,
-      createdAt: json['createdAt'] == null ? null : DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null ? null : DateTime.parse(json['updatedAt'] as String),
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt'] as String),
     );
   }
 

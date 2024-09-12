@@ -28,7 +28,6 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/data/datasources/cr
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/repositories/create_ad_repo_impl.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/create_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/get_ad_properties_usecase.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/data_sources/remote_data_source/fourty_nine_remote_data_source.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/repositories/fourty_nine_repository_impl.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/repositories/fourty_nine_repository.dart';
@@ -315,14 +314,14 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       )..loadData(),
     );
-    serviceLocator.registerFactory<CreateCompanyAdCubit>(
-      () => CreateCompanyAdCubit(
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-      )..loadData(),
-    );
+    // serviceLocator.registerFactory<CreateCompanyAdCubit>(
+    //   () => CreateCompanyAdCubit(
+    //     serviceLocator(),
+    //     serviceLocator(),
+    //     serviceLocator(),
+    //     serviceLocator(),
+    //   )..loadData(),
+    // );
 
     serviceLocator.registerFactory<MyAddsCubit>(
       () => MyAddsCubit(
