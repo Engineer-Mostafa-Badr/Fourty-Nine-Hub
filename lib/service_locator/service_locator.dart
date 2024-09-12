@@ -159,6 +159,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/data/datasources/local/database/local_database_data_source.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_client_helper.dart';
@@ -169,7 +170,7 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/subs
 import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/core/utils/api_service.dart';
-import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/competition/data/repository/competition_repo_impl.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/repositories/reels_repository_impl.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
@@ -232,15 +233,7 @@ class DI {
 
     await LocalizationService.init();
     await SQFLiteDataSource.instance.initDatabase();
-    final token = await TokenManager.getAccessToken();
-    // socket
-    serviceLocator.registerLazySingleton<Socket>(() => io(
-        'https://49dev.com',
-        OptionBuilder()
-            .setTransports(['websocket'])
-            .disableAutoConnect()
-            .setExtraHeaders({'authorization': token}) // optional
-            .build()));
+
     // database
     serviceLocator.registerLazySingleton<Database>(() => SQFLiteDataSource.instance.database);
 
@@ -338,7 +331,20 @@ class DI {
 
     // auth service locator
     await AuthServiceLocator.execute(serviceLocator: serviceLocator);
-
+    //  final token = await TokenManager.getAccessToken();
+    final String? token = await serviceLocator<GetTokensUseCase>()
+        . //
+        call(const NoParams())
+        . //
+        then((value) => value.fold((l) => null, (r) => r?.accessToken));
+    // socket
+    serviceLocator.registerLazySingleton<Socket>(() => io(
+        'https://49dev.com',
+        OptionBuilder()
+            .setTransports(['websocket'])
+            .disableAutoConnect()
+            .setExtraHeaders({'authorization': token}) // optional
+            .build()));
     // Ride Customer
     await RideServiceLocator.execute(serviceLocator: serviceLocator);
     // Subcategories

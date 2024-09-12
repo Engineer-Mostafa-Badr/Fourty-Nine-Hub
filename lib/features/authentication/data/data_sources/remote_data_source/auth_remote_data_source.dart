@@ -17,8 +17,7 @@ abstract class AuthRemoteDataSource {
 
   Future<Either<Failure, UserTokensModel>> login(LoginParams loginParams);
 
-  Future<Either<Failure, UserTokensModel>> socialLogin(
-      SocialLoginParams params);
+  Future<Either<Failure, UserTokensModel>> socialLogin(SocialLoginParams params);
 
   Future<Either<Failure, void>> register(RegisterParams registerParams);
 
@@ -95,11 +94,11 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     );
     return result.fold(
       (failure) => Left(failure),
-      (response) => Right(
-        UserTokensModel.fromJson(
+      (response) {
+        return Right(UserTokensModel.fromJson(
           response['data'],
-        ),
-      ),
+        ));
+      },
     );
   }
 
@@ -122,8 +121,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, UserTokensModel>> socialLogin(
-      SocialLoginParams params) async {
+  Future<Either<Failure, UserTokensModel>> socialLogin(SocialLoginParams params) async {
     final result = await _apiConsumer.post(
       EndPoints.socialLogin,
       data: await params.toJson(),
