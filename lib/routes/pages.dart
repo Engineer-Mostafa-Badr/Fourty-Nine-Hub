@@ -67,6 +67,7 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
 import 'package:fourtyninehub/features/social_media/chat/attachments/presentation/pages/attachments_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_profile/presentation/pages/chat_profile_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_sender_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/select_contacts_to_share_view.dart';
@@ -791,7 +792,7 @@ class AppPages {
                 GoRoute(
                   path: Paths.VIEWCONTACT,
                   name: Routes.VIEWCONTACT,
-                  builder: (context, state) => const ViewContactView(),
+                  builder: (context, state) =>  ViewContactView(sender: state.extra as String,),
                 ),
                 GoRoute(
                   path: Paths.ATTACHMENTSVIEW,
