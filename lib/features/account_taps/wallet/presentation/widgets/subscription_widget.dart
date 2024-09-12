@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_subscription_entity.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/localization/locales.dart';
@@ -22,10 +24,20 @@ class SubscriptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime createdAt = subscription.isActive == true ||
-            subscription.isActive == false && subscription.isPremium == false
-        ? DateTime.parse(subscription.expireSubscription ?? '')
-        : DateTime.parse(subscription.expirePremium ?? '');
+    final DateTime createdAt =
+        subscription.isActive == true && subscription.isPremium == true
+            ? DateTime.parse(subscription.expirePremium ?? '')
+            : subscription.isActive == true ||
+                    subscription.isActive == false &&
+                        subscription.isPremium == false
+                ? DateTime.parse(subscription.expireSubscription ?? '')
+                : DateTime.parse(
+                    subscription.expirePremium ?? '',
+                  );
+    // final DateTime createdAt = subscription.isActive == true ||
+    //         subscription.isActive == false && subscription.isPremium == false
+    //     ? DateTime.parse(subscription.expireSubscription ?? '')
+    //     : DateTime.parse(subscription.expirePremium ?? '');
     final DateTime egyptTime = createdAt.toUtc().add(const Duration(hours: 3));
     final String formattedDateTime = DateFormat('dd/MM/yyyy').format(egyptTime);
     return Column(
@@ -48,24 +60,48 @@ class SubscriptionWidget extends StatelessWidget {
                   width: 5,
                 ),
                 Label(
-                  text: subscription.isActive == false &&
-                          subscription.isPremium == false
-                      ? '(Not Subscription)'
-                      : subscription.isActive == true
-                          ? '(Regular)'
-                          : '(Premium)',
+                  text: subscription.isActive == true &&
+                          subscription.isPremium == true
+                      ? '(${LocaleKeys.premium.localize})'
+                      : subscription.isActive == false &&
+                              subscription.isPremium == false
+                          ? '(${LocaleKeys.notSubscription.localize})'
+                          : subscription.isActive == true
+                              ? '(${LocaleKeys.regular.localize})'
+                              : '(${LocaleKeys.premium.localize})',
                   color: AppColors.GREY_NORMAL_COLOR,
                 )
+                // Label(
+                //   text: subscription.isActive == false &&
+                //           subscription.isPremium == false
+                //       ? '(${LocaleKeys.notSubscription.localize})'
+                //       : subscription.isActive == true
+                //           ? '(${LocaleKeys.regular.localize})'
+                //           : '(${LocaleKeys.premium.localize})',
+                //   color: AppColors.GREY_NORMAL_COLOR,
+                // )
               ],
             )),
             Label(
               text: formattedDateTime,
               style: Styles.mediumText(
-                  color: subscription.isActive == false &&
-                          subscription.isPremium == false
-                      ? AppColors.SECONDARY_COLOR
-                      : AppColors.WHATS_APP_COLOR),
+                color: subscription.isActive == true &&
+                        subscription.isPremium == true
+                    ? AppColors.WHATS_APP_COLOR
+                    : subscription.isActive == false &&
+                            subscription.isPremium == false
+                        ? AppColors.SECONDARY_COLOR
+                        : AppColors.WHATS_APP_COLOR,
+              ),
             )
+            // Label(
+            //   text: formattedDateTime,
+            //   style: Styles.mediumText(
+            //       color: subscription.isActive == false &&
+            //               subscription.isPremium == false
+            //           ? AppColors.SECONDARY_COLOR
+            //           : AppColors.WHATS_APP_COLOR),
+            // )
           ],
         ),
         const Sizer(
@@ -75,13 +111,13 @@ class SubscriptionWidget extends StatelessWidget {
           children: [
             Expanded(
               child: buildContainer(
-                text: 'Cancel',
                 color: AppColors.SECONDARY_COLOR,
+                text: LocaleKeys.cancel.localize,
                 textColor: AppColors.AUTH_CONTAINER_COLOR,
                 function: () {
                   showAreYouSure(
-                    title: 'Are you sure?',
-                    subTitle: 'Are you sure you want to unsubscribe?',
+                    title: LocaleKeys.areYouSure.localize,
+                    subTitle: LocaleKeys.sureUnsubscribe.localize,
                     action: () {
                       context.read<WalletCubit>().deleteSubscription(
                             subscriptionId: subscription.subCategoryId!,
@@ -89,7 +125,6 @@ class SubscriptionWidget extends StatelessWidget {
                     },
                     context: context,
                   );
-
                 },
               ),
             ),
@@ -98,13 +133,13 @@ class SubscriptionWidget extends StatelessWidget {
             ),
             Expanded(
               child: buildContainer(
-                text: 'renewal',
+                text: LocaleKeys.renewal.localize,
                 color: Theme.of(context).primaryColor,
                 textColor: Theme.of(context).scaffoldBackgroundColor,
                 function: () {
                   serviceLocator<SubscriptionController>()
                       .showSubscriptionPlans(
-                    subCategoryId: '66adecd7aa2ff24015872e9f',
+                    subCategoryId: subscription.subCategoryId!,
                     wallets: [],
                   );
                 },

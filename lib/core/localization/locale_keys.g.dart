@@ -223,7 +223,6 @@ abstract class  LocaleKeys {
   static const save = 'save';
   static const suscessfullySaved = 'suscessfullySaved';
   static const anonymous = 'anonymous';
-  static const noData = 'noData';
   static const viewContact = 'viewContact';
   static const mediaLinksAndDocs = 'mediaLinksAndDocs';
   static const search = 'search';
@@ -284,5 +283,27 @@ abstract class  LocaleKeys {
   static const markAsUnread = 'markAsUnread';
   static const selectAll = 'selectAll';
   static const selected = 'selected';
+  static const noData = 'noData';
+  static const notSubscription = 'notSubscription';
+  static const regular = 'regular';
+  static const areYouSure = 'areYouSure';
+  static const sureUnsubscribe = 'sureUnsubscribe';
+  static const renewal = 'renewal';
+  static const showLess = 'showLess';
+  static const noHistoryAvailable = 'noHistoryAvailable';
+  static const addSubcategoryToSubscribe = 'addSubcategoryToSubscribe';
+  static const selectCategory = 'selectCategory';
+  static const noCategoriesAvailable = 'noCategoriesAvailable';
+  static const selectSubCategory = 'selectSubCategory';
+  static const daily = 'daily';
+  static const weekly = 'weekly';
+  static const monthly = 'monthly';
+  static const yearly = 'yearly';
+  static const noSubscriptionPlans = 'noSubscriptionPlans';
+  static const premiumPackage = 'premiumPackage';
+  static const requestWithdrawal = 'requestWithdrawal';
+  static const complete = 'complete';
+  static const yearsLast = 'yearsLast';
+  static const checkRequest = 'checkRequest';
 
 }

@@ -42,10 +42,6 @@ abstract class Styles {
       Color? color,
       FontWeight fontWeight = FontWeight.w600}) {
     return TextStyle(
-        fontSize: fontSize.zSP,
-        fontWeight: fontWeight,
-        shadows: shadows,
-        decorationColor: color,
-        color: color);
+        fontSize: fontSize.zSP, fontWeight: fontWeight, shadows: shadows, decorationColor: color, color: color);
   }
 }

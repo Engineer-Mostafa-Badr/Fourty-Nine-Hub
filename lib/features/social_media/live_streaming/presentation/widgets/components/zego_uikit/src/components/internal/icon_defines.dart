@@ -18,7 +18,6 @@ class UIKitImage {
   }) {
     return Image.asset(
       name,
-      package: 'zego_uikit',
       width: width,
       height: height,
       fit: fit,
@@ -92,7 +91,7 @@ class StyleIconUrls {
       'assets/icons/share_screen_stop.png';
 
   static const String iconVideoViewFullScreenClose =
-      'assets/icons/video_view_full_screen_close.png';
+      'assets/icons/resize.png';
   static const String iconVideoViewFullScreenOpen =
-      'assets/icons/video_view_full_screen_open.png';
+      'assets/icons/resize.png';
 }

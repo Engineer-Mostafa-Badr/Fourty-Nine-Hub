@@ -51,7 +51,8 @@ abstract class SocialPostsRepo {
   Future<Either<Failure, PostEntity>> getPost({required String postId});
   Future<Either<Failure, bool>> deletePost({required String postId});
   Future<Either<Failure, bool>> deleteFriend({required String userId});
-  Future<Either<Failure, bool>> acceptRejectFriendRequest({required AcceptRejectFriendRequestParams params});
+  Future<Either<Failure, bool>> acceptRejectFriendRequest(
+      {required AcceptRejectFriendRequestParams params});
   Future<Either<Failure, bool>> deleteComment({required String commentId});
   Future<Either<Failure, bool>> friendRequest({required String userId});
   Future<Either<Failure, bool>> removeFriendRequest({required String userId});

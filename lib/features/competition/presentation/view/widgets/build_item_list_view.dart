@@ -35,7 +35,7 @@ class BuildItemListView extends StatelessWidget {
             const Spacer(),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Icon(icon, color: Colors.grey, size: 30),
+              child: Icon(icon, color: Colors.grey, size: 26),
             ),
           ],
         ),

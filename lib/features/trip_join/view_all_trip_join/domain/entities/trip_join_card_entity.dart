@@ -1,5 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class TripJoinCardEntity {
+  String? id;
+  String? userId;
+  String? categoryId;
   String? brand;
   String? model;
   num? journeyPrice;
@@ -12,7 +15,11 @@ class TripJoinCardEntity {
   String? destinationAddressEn;
   bool? isApproved;
   int? publishDate;
+  String? phone;
   TripJoinCardEntity({
+    this.id,
+    this.userId,
+    this.categoryId,
     this.brand,
     this.model,
     this.journeyPrice,
@@ -25,9 +32,13 @@ class TripJoinCardEntity {
     this.destinationAddressEn,
     this.isApproved,
     this.publishDate,
+    this.phone,
   });
 
   TripJoinCardEntity copyWith({
+    String? id,
+    String? userId,
+    String? categoryId,
     String? brand,
     String? model,
     num? journeyPrice,
@@ -40,8 +51,12 @@ class TripJoinCardEntity {
     String? destinationAddressEn,
     bool? isApproved,
     int? publishDate,
+    String? phone,
   }) {
     return TripJoinCardEntity(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      categoryId: categoryId ?? this.categoryId,
       brand: brand ?? this.brand,
       model: model ?? this.model,
       journeyPrice: journeyPrice ?? this.journeyPrice,
@@ -54,11 +69,12 @@ class TripJoinCardEntity {
       destinationAddressEn: destinationAddressEn ?? this.destinationAddressEn,
       isApproved: isApproved ?? this.isApproved,
       publishDate: publishDate ?? this.publishDate,
+      phone: phone ?? this.phone,
     );
   }
 
   @override
   String toString() {
-    return 'TripJoinCardEntity(brand: $brand, model: $model, journeyPrice: $journeyPrice, status: $status, seatNumber: $seatNumber, isRepeated: $isRepeated, startingAddressAr: $startingAddressAr, destinationAddressAr: $destinationAddressAr, startingAddressEn: $startingAddressEn, destinationAddressEn: $destinationAddressEn, isApproved: $isApproved, publishDate: $publishDate)';
+    return 'TripJoinCardEntity(id: $id, userId: $userId, categoryId: $categoryId, brand: $brand, model: $model, journeyPrice: $journeyPrice, status: $status, seatNumber: $seatNumber, isRepeated: $isRepeated, startingAddressAr: $startingAddressAr, destinationAddressAr: $destinationAddressAr, startingAddressEn: $startingAddressEn, destinationAddressEn: $destinationAddressEn, isApproved: $isApproved, publishDate: $publishDate, phone: $phone)';
   }
 }

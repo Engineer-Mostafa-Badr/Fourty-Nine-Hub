@@ -9,7 +9,6 @@ import 'package:native_device_orientation/native_device_orientation.dart';
 import '../../../../zego_uikit.dart';
 import '../../internal/type_transform.dart';
 
-
 const isScreenSharingExtraInfoKey = 'isScreenSharing';
 
 /// display user screensharing information,
@@ -244,7 +243,7 @@ class _ZegoScreenSharingViewState extends State<ZegoScreenSharingView> {
                     ),
                   ),
                   Padding(padding: EdgeInsets.only(top: 20.zR)),
-                  OutlinedButton(
+                  TextButton(
                     onPressed: () {
                       ZegoUIKit.instance.stopSharingScreen();
                     },
@@ -351,9 +350,11 @@ class _ZegoScreenSharingViewState extends State<ZegoScreenSharingView> {
   Image getFullScreenIcon() {
     if (widget.controller?.fullscreenUserNotifier.value?.id ==
         widget.user?.id) {
-      return UIKitImage.asset(StyleIconUrls.iconVideoViewFullScreenClose);
+      return UIKitImage.asset(StyleIconUrls.iconVideoViewFullScreenClose,
+          width: 35, height: 35);
     } else {
-      return UIKitImage.asset(StyleIconUrls.iconVideoViewFullScreenOpen);
+      return UIKitImage.asset(StyleIconUrls.iconVideoViewFullScreenOpen,
+          width: 35, height: 35);
     }
   }
 }

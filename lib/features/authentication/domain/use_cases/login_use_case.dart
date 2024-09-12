@@ -5,8 +5,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 
-import '../../../../core/utils/fcm.dart';
-
 class LoginUseCase extends UseCase<UserTokensEntity, LoginParams> {
   final AuthRepository _repository;
 
@@ -21,16 +19,18 @@ class LoginUseCase extends UseCase<UserTokensEntity, LoginParams> {
 class LoginParams extends Equatable {
   final String email;
   final String password;
+  final String token;
 
   const LoginParams({
     required this.email,
     required this.password,
+    required this.token,
   });
 
   Future<Map<String, dynamic>> toJson() async => {
         'email': email,
         'password': password,
-        'fcmToken': await getFcmToken(),
+        'fcmToken': token,
         // 'fcmToken': 'fcmToken',
       };
 
