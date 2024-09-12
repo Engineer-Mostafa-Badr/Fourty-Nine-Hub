@@ -26,8 +26,8 @@ class MessageModel extends MessageEntity {
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
     return MessageModel(
-      id: json['_id'],
-      text: json['text'],
+      id: json['_id'] ?? '',
+      text: json['text'] ?? '',
       media: [],
       sender: MessageSenderEntity(
         id: json['ownerUserId'] ?? '',

@@ -70,19 +70,20 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       _messages = _messages.reverse();
       emit(state.copyWith(messages: _messages.values.toList()));
       _scrollDown();
+      _markMessageAsSeen();
     });
   }
 
   void addMessage(MessageEntity message) {
     if (message.chatId == _chat.id) {
-      if (!message.byMe) {
-        _markMessageAsSeen(message);
-      }
       _messages[message.id] = message;
       emit(state.copyWith(
           messages: _messages.values.toList(), status: ChatRoomStates.success));
 
       _scrollDown();
+      if (!message.byMe) {
+        _markMessageAsSeen();
+      }
     }
   }
 
@@ -124,7 +125,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   // =========================================== seen ============================================
 
-  Future<void> _markMessageAsSeen(MessageEntity message) async {
+  Future<void> _markMessageAsSeen() async {
     await _markMessageAsSeenUseCase
         .call(MarkMessageAsSeenParams(chatId: _chat.id));
   }
@@ -133,7 +134,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     _listenToSeenMessagesUseCase.call((messages) {
       for (final message in messages) {
         if (message.chatId == _chat.id) {
-          _messages[message.id] = message;
+          _messages[message.id]?.markAsSeen();
           emit(state.copyWith(messages: _messages.values.toList()));
         }
       }

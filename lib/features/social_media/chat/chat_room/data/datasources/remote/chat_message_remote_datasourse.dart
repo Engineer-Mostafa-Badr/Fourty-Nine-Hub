@@ -151,15 +151,8 @@ class MessagesRemoteDataSourceImplementation
       _socket.connect();
       _socket.on(SocketIOListeners.messageDelivered, (data) {
         CliLogger.info("messageDelivered :  $data");
-        // final decodedData = jsonDecode(data);
-        // if (decodedData is List) {
-        //   data = decodedData[0];
-        // } else {
-        //   data = decodedData;
-        // }
-        // CliLogger.info("newMessageFromMe :  $data");
-        // MessageModel messageModel = MessageModel.fromJson(data);
-        // params(messageModel);
+        params((jsonDecode(data) as List).map((e) => MessageModel.fromJson(e)).toList());
+
       });
     } catch (e) {
       CliLogger.info("can't listen to delivered messages error $e");
@@ -169,18 +162,11 @@ class MessagesRemoteDataSourceImplementation
   @override
   void listenToSeenStatus(Function(List<MessageEntity> messages) params) {
     try {
+
       _socket.connect();
       _socket.on(SocketIOListeners.messageSeen, (data) {
         CliLogger.info("messageSeen :  $data");
-        // final decodedData = jsonDecode(data);
-        // if (decodedData is List) {
-        //   data = decodedData[0];
-        // } else {
-        //   data = decodedData;
-        // }
-        // CliLogger.info("newMessageFromMe :  $data");
-        // MessageModel messageModel = MessageModel.fromJson(data);
-        // params(messageModel);
+        params((jsonDecode(data) as List).map((e) => MessageModel.fromJson(e)).toList());
       });
     } catch (e) {
       CliLogger.info("can't listen to seen messages error $e");
