@@ -21,6 +21,7 @@ import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
+import '../../../../notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import '../../controllers/user_cubit/user_cubit.dart';
 
 class RegisterVerifyOTP extends StatefulWidget {
