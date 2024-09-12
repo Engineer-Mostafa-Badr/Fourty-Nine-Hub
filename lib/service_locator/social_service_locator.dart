@@ -5,8 +5,11 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/reposi
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/deleteMessage_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_seen_messages.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_seen_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/datasources/chats_remote_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/repositories/chats_repository_implement.dart';
@@ -92,6 +95,19 @@ class SocialServiceLocator {
         .registerLazySingleton<GetMessagesUseCase>(() => GetMessagesUseCase(
               serviceLocator(),
             ));
+
+    serviceLocator
+        .registerLazySingleton<MarkMessageAsSeenUseCase>(() => MarkMessageAsSeenUseCase(
+      serviceLocator(),
+    ));
+    serviceLocator
+        .registerLazySingleton<ListenToSeenMessagesUseCase>(() => ListenToSeenMessagesUseCase(
+      serviceLocator(),
+    ));
+    serviceLocator
+        .registerLazySingleton<StopListenToSeenMessagesUseCase>(() => StopListenToSeenMessagesUseCase(
+      serviceLocator(),
+    ));
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerFactory<ChatsCubit>(() => ChatsCubit(
@@ -101,6 +117,9 @@ class SocialServiceLocator {
         ));
 
     serviceLocator.registerFactory<ChatRoomCubit>(() => ChatRoomCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

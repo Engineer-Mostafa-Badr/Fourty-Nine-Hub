@@ -28,7 +28,7 @@ class BuildWithUsers extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 30,
-                      backgroundImage: NetworkImage(users[index].image),
+                      backgroundImage: NetworkImage(users[index].image??''),
                     ),
                     const SizedBox(
                       width: 10,

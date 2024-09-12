@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -10,10 +11,10 @@ import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/j
 import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/search_club_voice_use_case.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
-
 abstract class ClubVoiceDataSource {
   Future<Either<Failure, ZegoResponseModel>> addRoom(AddRoomParams params);
-  Future<Either<Failure, List<ClubVoiceRoomEntity>>> getRooms();
+  Future<Either<Failure, List<ClubVoiceRoomEntity>>> getRooms(
+      PaginationParams params);
   Future<Either<Failure, void>> join(RoomMetaParams params);
   Future<Either<Failure, void>> leave(RoomMetaParams params);
 
@@ -44,10 +45,10 @@ class ClubVoiceDataSourceImpl extends ClubVoiceDataSource {
   }
 
   @override
-  Future<Either<Failure, List<ClubVoiceRoomModel>>> getRooms() async {
+  Future<Either<Failure, List<ClubVoiceRoomModel>>> getRooms(PaginationParams params) async {
     try {
       final result = await apiConsumer.get(
-        EndPoints.allClubVoiceRooms,
+        EndPoints.allClubVoiceRooms,queryParameters:params.toJson()
       );
       // print('list is  ${rooms.toString()}');
       return result.fold((l) => Left(l), (r) => Right(_returnListOfRooms(r)));
@@ -81,7 +82,7 @@ class ClubVoiceDataSourceImpl extends ClubVoiceDataSource {
   }
 
   List<ClubVoiceRoomModel> _returnListOfRooms(Map<String, dynamic> r) {
-    var list = List.from(r['data'] as List)
+    var list = List.from(r['data']['voice'] as List)
         .map((e) => ClubVoiceRoomModel.fromJson(e))
         .toList();
     return list;

@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -27,6 +28,17 @@ abstract class MessagesRemoteDataSource {
 
   Future<Either<Failure, List<MessageEntity>>> getMessages(
       GetMessagesParams params);
+
+  Future<Either<Failure, bool>> markMessageAsSeen(
+      MarkMessageAsSeenParams params);
+
+  void listenToSeenStatus(Function(List<MessageEntity> messages) params);
+
+  void stopListenToSeenStatus();
+
+  void listenToDeliveredStatus(Function(List<MessageEntity> messages) params);
+
+  void stopListenToDeliveredStatus();
 }
 
 class MessagesRemoteDataSourceImplementation
@@ -113,5 +125,75 @@ class MessagesRemoteDataSourceImplementation
       }
       return Right(messageModels);
     });
+  }
+
+  @override
+  Future<Either<Failure, bool>> markMessageAsSeen(
+      MarkMessageAsSeenParams params) async {
+    try {
+      _socket.connect();
+      CliLogger.info("you mark message as seen : chatId ${params.chatId}");
+      _socket.emit(
+          SocketIOEvents.markMessageAsSeen,
+          jsonEncode({
+            "chatId": params.chatId,
+          }));
+      return const Right(true);
+    } catch (e) {
+      CliLogger.info("can't mark message as seen error $e");
+      return const Left(ServerFailure(message: "can't mark message as seen"));
+    }
+  }
+
+  @override
+  void listenToDeliveredStatus(Function(List<MessageEntity> messages) params) {
+    try {
+      _socket.connect();
+      _socket.on(SocketIOListeners.messageDelivered, (data) {
+        CliLogger.info("messageDelivered :  $data");
+        // final decodedData = jsonDecode(data);
+        // if (decodedData is List) {
+        //   data = decodedData[0];
+        // } else {
+        //   data = decodedData;
+        // }
+        // CliLogger.info("newMessageFromMe :  $data");
+        // MessageModel messageModel = MessageModel.fromJson(data);
+        // params(messageModel);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to delivered messages error $e");
+    }
+  }
+
+  @override
+  void listenToSeenStatus(Function(List<MessageEntity> messages) params) {
+    try {
+      _socket.connect();
+      _socket.on(SocketIOListeners.messageSeen, (data) {
+        CliLogger.info("messageSeen :  $data");
+        // final decodedData = jsonDecode(data);
+        // if (decodedData is List) {
+        //   data = decodedData[0];
+        // } else {
+        //   data = decodedData;
+        // }
+        // CliLogger.info("newMessageFromMe :  $data");
+        // MessageModel messageModel = MessageModel.fromJson(data);
+        // params(messageModel);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to seen messages error $e");
+    }
+  }
+
+  @override
+  void stopListenToDeliveredStatus() {
+    _socket.off(SocketIOListeners.messageDelivered);
+  }
+
+  @override
+  void stopListenToSeenStatus() {
+    _socket.off(SocketIOListeners.messageSeen);
   }
 }

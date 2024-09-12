@@ -1,0 +1,197 @@
+// Flutter imports:
+import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+
+// Package imports:
+
+import '../../../../zego_uikit/src/components/defines.dart';
+import '../../../../zego_uikit/src/components/member/member_list.dart';
+import '../../config.dart';
+import '../../controller.dart';
+import '../../core/connect_manager.dart';
+import '../../core/host_manager.dart';
+import '../../events.dart';
+import '../../inner_text.dart';
+import '../../internal/pk_combine_notifier.dart';
+import '../utils/pop_up_manager.dart';
+import 'list_sheet.dart';
+
+// Project imports:
+
+/// @nodoc
+class ZegoLiveStreamingMemberButton extends StatefulWidget {
+  const ZegoLiveStreamingMemberButton({
+    super.key,
+    required this.isCoHostEnabled,
+    required this.hostManager,
+    required this.connectManager,
+    required this.popUpManager,
+    required this.translationText,
+    required this.config,
+    required this.events,
+    this.avatarBuilder,
+    this.itemBuilder,
+    this.icon,
+    this.builder,
+    this.backgroundColor,
+  });
+
+  /// If you want to redefine the entire button, you can return your own Widget through [builder].
+  final Widget Function(int)? builder;
+
+  /// Customize the icon through [icon], with Icons.person being the default if not set.
+  final Widget? icon;
+
+  /// Customize the background color through [backgroundColor]
+  final Color? backgroundColor;
+
+  final bool isCoHostEnabled;
+  final ZegoAvatarBuilder? avatarBuilder;
+  final ZegoMemberListItemBuilder? itemBuilder;
+  final ZegoLiveStreamingHostManager hostManager;
+  final ZegoLiveStreamingConnectManager connectManager;
+  final ZegoLiveStreamingPopUpManager popUpManager;
+  final ZegoUIKitPrebuiltLiveStreamingInnerText translationText;
+  final ZegoLiveStreamingMemberListConfig config;
+  final ZegoLiveStreamingMemberListEvents events;
+
+  @override
+  State<ZegoLiveStreamingMemberButton> createState() =>
+      _ZegoLiveStreamingMemberButtonState();
+}
+
+/// @nodoc
+class _ZegoLiveStreamingMemberButtonState
+    extends State<ZegoLiveStreamingMemberButton> {
+  var redPointNotifier = ValueNotifier<bool>(false);
+
+  @override
+  void initState() {
+    super.initState();
+
+    onRequestCoHostUsersUpdated();
+    widget.connectManager.requestCoHostUsersNotifier
+        .addListener(onRequestCoHostUsersUpdated);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    widget.connectManager.requestCoHostUsersNotifier
+        .removeListener(onRequestCoHostUsersUpdated);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showMemberListSheet(
+          context: context,
+          config: widget.config,
+          events: widget.events,
+          isCoHostEnabled: widget.isCoHostEnabled,
+          hostManager: widget.hostManager,
+          connectManager: widget.connectManager,
+          popUpManager: widget.popUpManager,
+          translationText: widget.translationText,
+          avatarBuilder: widget.avatarBuilder,
+          itemBuilder: widget.itemBuilder,
+        );
+      },
+      child: null == widget.builder
+          ? Stack(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    icon(),
+                    SizedBox(width: 6.zR),
+                    memberCount(),
+                  ],
+                ),
+                redPoint(),
+              ],
+            )
+          : ValueListenableBuilder<int>(
+              valueListenable:
+                  ZegoUIKitPrebuiltLiveStreamingController().user.countNotifier,
+              builder: (context, memberCount, _) {
+                return widget.builder!.call(memberCount);
+              },
+            ),
+    );
+  }
+
+  Widget redPoint() {
+    return ValueListenableBuilder<bool>(
+      valueListenable:
+          ZegoLiveStreamingPKBattleStateCombineNotifier.instance.state,
+      builder: (context, isInPK, _) {
+        final needHideCoHostWidget = isInPK;
+
+        if (needHideCoHostWidget) {
+          return Container();
+        } else {
+          return Positioned(
+            top: 0,
+            right: 0,
+            child: ValueListenableBuilder<bool>(
+              valueListenable: redPointNotifier,
+              builder: (context, visibility, _) {
+                if (!visibility) {
+                  return Container();
+                }
+
+                return Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.red,
+                  ),
+                  width: 20.zR,
+                  height: 20.zR,
+                );
+              },
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Widget icon() {
+    return Icon(
+      Icons.people_outline,
+      color: Colors.white,
+      size: 40.zH,
+    );
+  }
+
+  Widget memberCount() {
+    return SizedBox(
+      height: 25.zR,
+      child: Center(
+        child: ValueListenableBuilder<int>(
+          valueListenable:
+              ZegoUIKitPrebuiltLiveStreamingController().user.countNotifier,
+          builder: (context, memberCount, _) {
+            return Text(
+              memberCount.toString(),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18.zR,
+                fontWeight: FontWeight.w400,
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  void onRequestCoHostUsersUpdated() {
+    redPointNotifier.value =
+        widget.connectManager.requestCoHostUsersNotifier.value.isNotEmpty;
+  }
+}

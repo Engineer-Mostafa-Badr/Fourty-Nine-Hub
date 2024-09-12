@@ -4,14 +4,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
+import 'package:fourtyninehub/core/extensions/map_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/deleteMessage_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_seen_messages.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_seen_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
@@ -21,10 +27,14 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final DeleteChatMessageUseCase _deleteChatMessageUseCase;
   final SendMessageUseCase _sendMessageUseCase;
   final GetMessagesUseCase _getMessagesUseCase;
+  final MarkMessageAsSeenUseCase _markMessageAsSeenUseCase;
+  final ListenToSeenMessagesUseCase _listenToSeenMessagesUseCase;
+  final StopListenToSeenMessagesUseCase _stopListenToSeenMessagesUseCase;
   final ScrollController scrollController = ScrollController();
   final TextEditingController messageTextController = TextEditingController();
   final FilePicker _filePicker = FilePicker.platform;
-  List<MessageEntity> _messages = [];
+
+  Map<String, MessageEntity> _messages = {};
   MessageEntity? _replayMessage;
   late ChatEntity _chat;
 
@@ -32,7 +42,12 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     this._deleteChatMessageUseCase,
     this._sendMessageUseCase,
     this._getMessagesUseCase,
-  ) : super(const ChatRoomState());
+    this._markMessageAsSeenUseCase,
+    this._listenToSeenMessagesUseCase,
+    this._stopListenToSeenMessagesUseCase,
+  ) : super(const ChatRoomState()) {
+    _listenToSeenMessages();
+  }
 
   void init({required ChatEntity chat}) {
     _chat = chat;
@@ -49,16 +64,24 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         (failure) => emit(
             state.copyWith(failure: failure, status: ChatRoomStates.error)),
         (data) {
-      _messages = data.reversed.toList();
-      emit(state.copyWith(messages: _messages));
+      for (final message in data) {
+        _messages[message.id] = message;
+      }
+      _messages = _messages.reverse();
+      emit(state.copyWith(messages: _messages.values.toList()));
       _scrollDown();
     });
   }
 
   void addMessage(MessageEntity message) {
     if (message.chatId == _chat.id) {
-      _messages.add(message);
-      emit(state.copyWith(messages: _messages, status: ChatRoomStates.success));
+      if (!message.byMe) {
+        _markMessageAsSeen(message);
+      }
+      _messages[message.id] = message;
+      emit(state.copyWith(
+          messages: _messages.values.toList(), status: ChatRoomStates.success));
+
       _scrollDown();
     }
   }
@@ -97,6 +120,24 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         DeleteMessageParams(chatId: chatId, messageId: messageId);
     await _deleteChatMessageUseCase.call(deleteMessageParams);
     // getMessages();
+  }
+
+  // =========================================== seen ============================================
+
+  Future<void> _markMessageAsSeen(MessageEntity message) async {
+    await _markMessageAsSeenUseCase
+        .call(MarkMessageAsSeenParams(chatId: _chat.id));
+  }
+
+  void _listenToSeenMessages() async {
+    _listenToSeenMessagesUseCase.call((messages) {
+      for (final message in messages) {
+        if (message.chatId == _chat.id) {
+          _messages[message.id] = message;
+          emit(state.copyWith(messages: _messages.values.toList()));
+        }
+      }
+    });
   }
 
   // =========================================== pick attachments ===========================================
@@ -171,4 +212,10 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   void _scrollDown() => Timer(const Duration(milliseconds: 200),
       () => scrollController.jumpTo(scrollController.position.maxScrollExtent));
+
+  @override
+  Future<void> close() {
+    _stopListenToSeenMessagesUseCase(const NoParams());
+    return super.close();
+  }
 }

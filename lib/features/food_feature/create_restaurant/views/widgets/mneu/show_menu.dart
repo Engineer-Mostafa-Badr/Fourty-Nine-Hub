@@ -33,7 +33,7 @@ class ShowMneu extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Label(
-                text: LocaleKeys.menu.tr(),
+                text: 'Menu',
                 style: Styles.headerText(color: Colors.red),
               ),
               if (createRestaurantCubit.menu.isNotEmpty) ...[

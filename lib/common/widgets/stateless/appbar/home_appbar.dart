@@ -8,15 +8,15 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubit/notifications_cubit.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubit/notifications_state.dart';
-import 'package:fourtyninehub/features/notifications/presentation/pages/notification_view.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/utils/api_service.dart';
 import '../../../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../features/notifications/data/repository/notification_repo_impl.dart';
+import '../../../../features/notifications/presentation/cubit/notifications_state.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -76,6 +76,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             IconAppButton(
               onPressed: () => context.pop(),
               icon: Icons.arrow_back_ios,
+              size: 20,
             ),
           Expanded(
             child: Container(
@@ -86,7 +87,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   color: AppColors.AUTH_CONTAINER_COLOR),
               child: InkWell(
                 borderRadius: BorderRadius.circular(40.zR),
-                onTap: () {},
+                onTap: () {
+                  showDialog(context: context, builder: (_)=>const SearchAppUsers());
+                },
                 child: Row(
                   children: [
                     Icon(

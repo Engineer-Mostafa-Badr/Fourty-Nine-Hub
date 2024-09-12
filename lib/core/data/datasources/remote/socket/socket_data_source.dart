@@ -48,11 +48,15 @@ abstract class SocketIOListeners {
   static const String error = 'error';
   static const String newMessageFromOther = 'user:message';
   static const String newMessageFromMe = 'messageSent';
+  static const String messageSeen = 'messageSeen';
+  static const String messageDelivered = 'messageDelivered';
 }
 
 abstract class SocketIOEvents {
   static const String reactMessage = 'Message:React';
   static const String sendMessage = 'Message:Send';
+  static const String markMessageAsSeen = 'Message:Seen';
+  static const String markMessageAsDelivered = 'Message:Delivered';
 }
 
 //

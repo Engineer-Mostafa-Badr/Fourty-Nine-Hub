@@ -2,7 +2,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/liveview/gifts/simple_gifts_sheet.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/pk_widgets/configs.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/pk_widgets/surfuce.dart';
@@ -17,7 +19,7 @@ import '../widgets/liveview/super_gifts/mp4_player_widget.dart';
 import '../widgets/liveview/super_gifts/zego_gift_item.dart';
 import '../widgets/pk_widgets/events.dart';
 import '../widgets/pk_widgets/mute_widget.dart';
-import '../widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import '../widgets/components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
 class LiveStreamView extends StatefulWidget {
   final String liveID;
@@ -34,7 +36,6 @@ class LiveStreamView extends StatefulWidget {
 }
 
 class _LiveStreamViewState extends State<LiveStreamView> {
-  final userId = Random().nextInt(1000).toString();
   final liveStateNotifier = ValueNotifier<ZegoLiveStreamingState>(
     ZegoLiveStreamingState.idle,
   );
@@ -58,8 +59,8 @@ class _LiveStreamViewState extends State<LiveStreamView> {
       ZegoGiftManager().service.init(
             appID: UIConst.appId,
             liveID: widget.liveID,
-            localUserID: userId,
-            localUserName: 'user_$userId',
+            localUserID: context.read<UserCubit>().state.data!.id,
+            localUserName: context.read<UserCubit>().state.data!.fullName,
           );
     });
   }
@@ -114,12 +115,13 @@ class _LiveStreamViewState extends State<LiveStreamView> {
       ..audioVideoView.foregroundBuilder = foregroundBuilder
       ..pkBattle = pkConfig();
 
+  final userId = context.read<UserCubit>().state.data!.id;
     return SafeArea(
       child: ZegoUIKitPrebuiltLiveStreaming(
         appID: UIConst.appId /*input your AppID*/,
         appSign: UIConst.appSign /*input your AppSign*/,
         userID: userId,
-        userName: 'user_$userId',
+        userName: context.read<UserCubit>().state.data!.fullName,
         liveID: widget.liveID,
         isLiveStream: true,
         events: ZegoUIKitPrebuiltLiveStreamingEvents(
@@ -158,7 +160,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
 
     return Stack(
       children: [
-        ...((widget.isHost && user.id != userId)
+        ...((widget.isHost && user.id != context.read<UserCubit>().state.data!.id)
             ? hostWidgets
             : [
                 giftForeground(),
@@ -349,7 +351,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
         child: InkWell(
             onTap: () {
               //send a message and some interaction
-              showSimpleGiftBottomSheet(context, userId);
+              showSimpleGiftBottomSheet(context, context.read<UserCubit>().state.data!.id);
             },
             child: SvgPicture.asset(
               'assets/images/gift.svg',

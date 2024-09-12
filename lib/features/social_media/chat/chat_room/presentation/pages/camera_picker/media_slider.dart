@@ -234,7 +234,7 @@ class _TrimmerView extends StatefulWidget {
 }
 
 class _TrimmerViewState extends State<_TrimmerView> {
-  final Trimmer _trimmer = Trimmer();
+  // final Trimmer _trimmer = Trimmer();
 
   double _startValue = 0.0;
   double _endValue = 0.0;
@@ -249,21 +249,21 @@ class _TrimmerViewState extends State<_TrimmerView> {
 
     String? value;
 
-    await _trimmer.saveTrimmedVideo(
-        startValue: _startValue,
-        endValue: _endValue,
-        onSave: (path) {
-          setState(() {
-            value = path;
-            _progressVisibility = false;
-          });
-        });
+    // await _trimmer.saveTrimmedVideo(
+    //     startValue: _startValue,
+    //     endValue: _endValue,
+    //     onSave: (path) {
+    //       setState(() {
+    //         value = path;
+    //         _progressVisibility = false;
+    //       });
+    //     });
 
     return value;
   }
 
   void _loadVideo() {
-    _trimmer.loadVideo(videoFile: widget.file);
+    // _trimmer.loadVideo(videoFile: widget.file);
   }
 
   @override
@@ -292,31 +292,32 @@ class _TrimmerViewState extends State<_TrimmerView> {
           Expanded(
             child: InkWell(
                 onTap: () async {
-                  bool playbackState = await _trimmer.videoPlaybackControl(
-                    startValue: _startValue,
-                    endValue: _endValue,
-                  );
-                  setState(() {
-                    _isPlaying = playbackState;
-                  });
+                  // bool playbackState = await _trimmer.videoPlaybackControl(
+                  //   startValue: _startValue,
+                  //   endValue: _endValue,
+                  // );
+                  // setState(() {
+                  //   _isPlaying = playbackState;
+                  // });
                 },
-                child: VideoViewer(trimmer: _trimmer)),
+                // child: VideoViewer(trimmer: _trimmer)
+            ),
           ),
           Row(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(
-                child: TrimViewer(
-                  trimmer: _trimmer,
-                  viewerHeight: 50.0,
-                  // viewerWidth: MediaQuery.of(context).size.width,
-                  onChangeStart: (value) => _startValue = value,
-                  onChangeEnd: (value) => _endValue = value,
-                  onChangePlaybackState: (value) =>
-                      setState(() => _isPlaying = value),
-                ),
-              ),
+              // Expanded(
+              //   child: TrimViewer(
+              //     trimmer: _trimmer,
+              //     viewerHeight: 50.0,
+              //     // viewerWidth: MediaQuery.of(context).size.width,
+              //     onChangeStart: (value) => _startValue = value,
+              //     onChangeEnd: (value) => _endValue = value,
+              //     onChangePlaybackState: (value) =>
+              //         setState(() => _isPlaying = value),
+              //   ),
+              // ),
               SizedBox(width: 5.zW),
               Center(child: _BaseIcon(icon: Icons.check, onTap: _saveVideo)),
             ],

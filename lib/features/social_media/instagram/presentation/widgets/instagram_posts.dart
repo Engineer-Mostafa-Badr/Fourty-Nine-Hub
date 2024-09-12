@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
@@ -12,6 +13,7 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_comments.dart';
@@ -23,6 +25,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -74,7 +77,11 @@ class _InstagramPostsState extends State<InstagramPosts> {
 
     print(result); // This is the result.
   }
-
+@override
+  void dispose() {
+    widget.scrollController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<InstagramCubit, InstagramState>(
@@ -90,14 +97,19 @@ class _InstagramPostsState extends State<InstagramPosts> {
           }
         }, builder: (context, state) {
       final controller = context.read<InstagramCubit>();
+      // print(controller.feedPagingController
+      //         .itemList![5].comments);
       return RefreshIndicator(
         onRefresh: () async => controller.onRefresh(),
         child: CustomScrollView(
           controller: widget.scrollController,
           slivers: [
-            // const SliverToBoxAdapter(
-            //   child: ChatStories(),
-            // ),
+            SliverToBoxAdapter(
+              child: BlocProvider<StoryCubit>(
+                create: (_)=>serviceLocator()..fetchStories(),
+                child: const ChatStories(),
+              ),
+            ),
             SliverToBoxAdapter(
               child: BlocProvider<InstagramCubit>(
                   create: (_)=>serviceLocator()..loadInstaSuggestedPeople(),
@@ -412,7 +424,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                   .itemList?[index].content ??
                                   ''),
                           if(controller.feedPagingController
-                              .itemList![index].content!.isNotEmpty)...[
+                              .itemList![index].content!.isEmpty)...[
                                 InkWell(
                                     onTap:()=>showAsBottomSheet(
                                       child:BlocProvider.value(
@@ -595,7 +607,24 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                     ),
                                     child: const Label(text: 'Show Comments'))
                           ],
-
+                          if(controller.feedPagingController
+                              .itemList![index].content!.isEmpty&&(controller.feedPagingController
+                              .itemList![index].firstComment!=null))RichText(
+                              text: TextSpan(
+                                  children: [
+                                TextSpan(
+                                    text: '${controller.feedPagingController
+                                    .itemList?[index].firstComment?.firstName} ${controller.feedPagingController
+                                        .itemList?[index].firstComment?.lastName}\t\t',
+                                    recognizer: TapGestureRecognizer()..onTap = () => context.push(Routes.INSTAGRAMPROFILE,extra: controller.feedPagingController
+                                        .itemList?[index].user.id),
+                                    style: Styles.mediumText(color: Colors.black)),
+                                TextSpan(
+                                    text:controller.feedPagingController
+                                        .itemList![index].firstComment==null?'':controller.feedPagingController
+                                        .itemList?[index].firstComment?.content,
+                                    style: Styles.mediumText(color: Colors.grey)),
+                              ])),
                           RichText(
                               text: TextSpan(children: [
                                 TextSpan(

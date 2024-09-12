@@ -355,7 +355,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
           scrollController: ScrollController(),
           appBars: [
             SliverAppBar(
-              expandedHeight: kToolbarHeight * 1.9,
+              // expandedHeight: kToolbarHeight * 1.9,
               automaticallyImplyLeading: false,
               floating: true,
               flexibleSpace: BlocProvider.value(
@@ -367,7 +367,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       children: [
                         context.read<UserCubit>().isLoggedIn
                             ? SizedBox(
-                                height: 30,
+                                // height: 30,
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.end,
@@ -509,7 +509,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                 ),
                               )
                             : const SizedBox(),
-                        const ChatStories(),
+                        // const ChatStories(),
                       ],
                     );
                   },

@@ -387,38 +387,6 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
     );
   }
 
-  Widget _buildPostOptions(
-      {required bool fromDetails, required PostEntity post}) {
-    return SizedBox(
-      height: widget.isMyPost ? 150 : 80,
-      child: Column(
-        children: [
-          if (widget.isMyPost)
-            listTile(
-                icon: Icons.delete,
-                title: 'Delete Post',
-                subTitle:
-                    'Your post will be deleted, and you cannot get it again',
-                onTap: () {
-                  widget.deletePost(post.id);
-                  if (fromDetails == true) {
-                    context.pop();
-                  }
-                }),
-          listTile(
-              icon: Icons.visibility_off,
-              title: 'Hide Post',
-              subTitle: 'Your post will be hidden, you can get it again',
-              onTap: () {
-                widget.hidePost(post.id);
-                if (fromDetails == true) {
-                  context.pop();
-                }
-              }),
-        ],
-      ),
-    );
-  }
 
   Widget listTile(
       {required IconData icon,
@@ -446,7 +414,6 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
     required BuildContext context,
     required PostEntity post,
   }) {
-    final user = context.read<UserCubit>().state.data;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -463,8 +430,8 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
               },
               child: CircleAvatar(
                 backgroundColor: Colors.white,
-                backgroundImage: NetworkImage((post.user.image.isNotEmpty)
-                    ? post.user.image
+                backgroundImage: NetworkImage((post.user.image!=null)
+                    ? post.user.image??''
                     : UIConst.profilePlaceHolder),
               ),
             ),
@@ -691,6 +658,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                                     children: [
                                       ImageFromInternet(
                                         image: images[index],
+                                        defaultLogo: true,
                                       ),
                                       if (index == 3 && images.length > 4)
                                         Container(

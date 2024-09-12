@@ -102,7 +102,6 @@ class _UserPostCardState extends State<UserPostCard> {
         children: [
           _buildAccountHeader(context: context, post: myPost),
           // Label(text: myPost.mainPost?.content??''),
-          if (myPost.content!.isNotEmpty)
             _buildContentWidget(
                 content: myPost.content ?? '',
                 backgroundColor: myPost.backgroundColor,
@@ -405,15 +404,15 @@ class _UserPostCardState extends State<UserPostCard> {
           children: [
             InkWell(
               onTap: () {
-                if (widget.fromProfile == false) {
+                if (user?.id!=post.user.id) {
                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                 }
               },
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                backgroundImage: NetworkImage((post.user.image.isNotEmpty)
-                    ? post.user.image
-                    : UIConst.profilePlaceHolder),
+              child:ImageFromInternet(
+              image: post.user.image ?? UIConst.profilePlaceHolder,
+              height: 40,
+              width: 40,
+              isCircle: true,
               ),
             ),
             const Sizer(),
@@ -423,7 +422,7 @@ class _UserPostCardState extends State<UserPostCard> {
                 children: [
                   InkWell(
                     onTap: () {
-                      if (widget.fromProfile == false) {
+                      if (user?.id!=post.user.id) {
                         context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                       }
                     },
@@ -433,9 +432,8 @@ class _UserPostCardState extends State<UserPostCard> {
                         TextAppButton(
                             label: post.user.firstName,
                             onPressed: () {
-                              if (widget.fromProfile == false) {
-                                context.push(Routes.OTHERSACCOUNT,
-                                    extra: post.user.id);
+                              if (user?.id!=post.user.id) {
+                                context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                               }
                             }),
                         RichText(
@@ -508,19 +506,20 @@ class _UserPostCardState extends State<UserPostCard> {
     required BuildContext context,
     required MainPostEntity post,
   }) {
+    final user = context.read<UserCubit>().state.data;
     return Row(
       children: [
         InkWell(
           onTap: () {
-            if (widget.fromProfile == false) {
+            if (user?.id!=post.user.id) {
               context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
             }
           },
-          child: CircleAvatar(
-            backgroundColor: Colors.white,
-            backgroundImage: NetworkImage((post.user.image.isNotEmpty)
-                ? post.user.image
-                : UIConst.profilePlaceHolder),
+          child: ImageFromInternet(
+          image: post.user.image ?? UIConst.profilePlaceHolder,
+          height: 40,
+          width: 40,
+          isCircle: true,
           ),
         ),
         const Sizer(),
@@ -529,7 +528,7 @@ class _UserPostCardState extends State<UserPostCard> {
           children: [
             InkWell(
               onTap: () {
-                if (widget.fromProfile == false) {
+                if (user?.id!=post.user.id) {
                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                 }
               },
@@ -539,9 +538,8 @@ class _UserPostCardState extends State<UserPostCard> {
                   TextAppButton(
                       label: post.user.firstName,
                       onPressed: () {
-                        if (widget.fromProfile == false) {
-                          context.push(Routes.OTHERSACCOUNT,
-                              extra: post.user.id);
+                        if (user?.id!=post.user.id) {
+                          context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                         }
                       }),
                   RichText(
@@ -585,7 +583,7 @@ class _UserPostCardState extends State<UserPostCard> {
               text: content,
               style: Styles.headerText(
                   color: Colors.black,
-                  fontSize: 24,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold),
             ),
           )
@@ -596,7 +594,7 @@ class _UserPostCardState extends State<UserPostCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ReadMoreLabel(text: content),
+                if(content.isNotEmpty)ReadMoreLabel(text: content),
                 const SizedBox(
                   height: 10,
                 ),

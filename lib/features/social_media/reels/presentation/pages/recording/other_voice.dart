@@ -17,8 +17,16 @@ import 'recording_shared.dart';
 
 class OtherVoiceVideoRecordingScreen extends StatefulWidget {
   final String voiceUrl;
+  final String? comeFrom;
+  final String? totalPrice;
+  final String? advertisementType;
 
-  const OtherVoiceVideoRecordingScreen({super.key, required this.voiceUrl});
+  const OtherVoiceVideoRecordingScreen(
+      {super.key,
+      required this.voiceUrl,
+      this.comeFrom,
+      this.totalPrice,
+      this.advertisementType});
 
   @override
   OtherVoiceVideoRecordingScreenState createState() =>
@@ -244,7 +252,10 @@ class OtherVoiceVideoRecordingScreenState
         final savedSuccessfully =
             await GallerySaver.saveVideo(mergedVideoPath!);
         if (savedSuccessfully ?? false) {
-          serviceLocator<ReelsCubit>().uploadReel(File(mergedVideoPath!));
+          serviceLocator<ReelsCubit>().uploadReel(File(mergedVideoPath!),
+              advertisementType: widget.advertisementType,
+              comeFrom: widget.comeFrom,
+              totalPrice: widget.totalPrice);
 
           setState(() {
             showGalleryBtn = true;

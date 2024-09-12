@@ -12,12 +12,14 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
+import '../../../features/competition/presentation/view/special_ads_view.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/const.dart';
@@ -36,7 +38,7 @@ class DrawerWidget extends StatelessWidget {
       create: (context) => GetWalletCubit(serviceLocator()),
       child: BlocBuilder<UserCubit, BasicState<UserEntity>>(
         builder: (context, state) {
-          var walletCubit = context.read<GetWalletCubit>();
+          context.read<GetWalletCubit>();
           return Drawer(
             width: 600.zW,
             child: SafeArea(
@@ -71,7 +73,10 @@ class DrawerWidget extends StatelessWidget {
                         image: Assets.favorite_main_category_icon,
                         label: LocaleKeys.favouriteCategories.localize,
                         requireLogin: true,
-                        onTap: () => context.push(Routes.FAVOURITECATEGORIES)),
+                        onTap: () async{
+                          await context.push(Routes.FAVOURITECATEGORIES);
+                          context.read<MainCategoriesCubit>().loadData(context);
+                        }),
 
                     drawerListTile(
                         // icon: Icons.favorite,
@@ -214,8 +219,13 @@ class DrawerWidget extends StatelessWidget {
             counterItem(
                 icon: Icons.ads_click,
                 label: LocaleKeys.specialAds.localize,
-                value: '+8',
-                onTap: () {},
+                value: '13',
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SpecialAdsView()));
+                },
                 context: context),
             counterItem(
                 icon: Icons.person_add,
@@ -430,7 +440,7 @@ class DrawerWidget extends StatelessWidget {
     required BuildContext context,
     required UserEntity? user,
   }) {
-    var walletCubit = context.read<GetWalletCubit>();
+    context.read<GetWalletCubit>();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -443,7 +453,7 @@ class DrawerWidget extends StatelessWidget {
               children: [
                 Positioned.fill(
                   child: BlocConsumer<UserCubit, BasicState>(
-                    listener: (context, state) {
+                    listener: (context,state){
                       // if(state.isSuccess){
                       //   context.pop();
                       //   showSuccessMessage(context, 'Picture Uploaded Successfully');
@@ -459,7 +469,7 @@ class DrawerWidget extends StatelessWidget {
                         Shimmer.fromColors(
                           baseColor: Colors.amber,
                           highlightColor: Colors.black,
-                          child: CircleAvatar(
+                          child:  CircleAvatar(
                             child: Container(
                               color: Colors.red,
                             ),

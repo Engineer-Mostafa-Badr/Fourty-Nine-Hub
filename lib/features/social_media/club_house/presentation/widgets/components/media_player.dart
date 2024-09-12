@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
+
+import '../../../../live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/src/controller.dart';
+import '../../../../live_streaming/presentation/widgets/components/zego_uikit/src/components/audio_video/media/player.dart';
+import '../../../../live_streaming/presentation/widgets/components/zego_uikit/src/services/defines/media.dart';
 
 Widget advanceMediaPlayer({
   required BoxConstraints constraints,

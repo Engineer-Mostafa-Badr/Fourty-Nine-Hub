@@ -34,7 +34,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
       appBar: AppBar(
         title: Label(
           text: "Documentation",
-          style: Styles.headerText(fontSize: 20, fontWeight: FontWeight.bold),
+          style: Styles.headerText(fontSize: 34, fontWeight: FontWeight.bold),
         ),
         backgroundColor: AppColors.BACKGROUND_COLOR,
         centerTitle: true,
@@ -60,20 +60,28 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                     Label(
                       text: "User name",
                       style: Styles.headerText(
-                          fontSize: 20, color: AppColors.GREY_DARK_COLOR),
+                          fontSize: 28, color: AppColors.GREY_DARK_COLOR),
                     ),
                     const SizedBox(
                       height: 15,
                     ),
                     Form(
                       key: formKey,
-                      child: FormTextField(
-                          hint: 'Type your name ....',
-                          height: kToolbarHeight * .7,
-                          action: (v) {
-                            setState(() {});
-                          },
-                          controller: nameTextController),
+                      child:TextFormField(
+                        maxLines: null,
+                        controller: nameTextController,
+                        onChanged: (v){
+                          setState(() {});
+                        },
+                        style: Styles.headerText(fontSize: 26),
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.all(5),
+                          hintText: 'Type your name ....',
+                          hintStyle: Styles.mediumText(),
+
+                        ),
+                      )
                     ),
                     const SizedBox(
                       height: 15,
@@ -84,7 +92,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                         Label(
                           text: "Personal Photo",
                           style: Styles.headerText(
-                              fontSize: 20, color: AppColors.GREY_DARK_COLOR),
+                              fontSize: 28, color: AppColors.GREY_DARK_COLOR),
                         ),
                         const SizedBox(
                           height: 15,
@@ -105,7 +113,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                         Label(
                           text: "ID",
                           style: Styles.headerText(
-                              fontSize: 20, color: AppColors.GREY_DARK_COLOR),
+                              fontSize: 28, color: AppColors.GREY_DARK_COLOR),
                         ),
                         const SizedBox(
                           height: 15,
@@ -204,7 +212,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
         backColor: AppColors.Arrow_Icon_color,
         onPressed: onTap,
         textStyle: Styles.headerText(
-            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+            fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
       ),
     );
   }
@@ -240,14 +248,17 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
         else
           Stack(
             children: [
-              Container(
-                width: double.infinity,
-                height: 200, // Set your desired height here
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(UIConst.radius),
-                  image: DecorationImage(
-                    image: FileImage(File(fileData.file.path)),
-                    fit: BoxFit.fill,
+              InkWell(
+                onTap: onTap,
+                child: Container(
+                  width: double.infinity,
+                  height: 200, // Set your desired height here
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(UIConst.radius),
+                    image: DecorationImage(
+                      image: FileImage(File(fileData.file.path)),
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
               ),

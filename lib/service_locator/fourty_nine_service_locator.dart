@@ -28,10 +28,6 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/data/datasources/cr
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/repositories/create_ad_repo_impl.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/create_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/get_ad_properties_usecase.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/datasources/create_company_ad_remote_datasource.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/repositories/create_company_ad_repo_impl.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/repositories/create_company_ad_repo.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/usecases/get_company_ads_options_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/data_sources/remote_data_source/fourty_nine_remote_data_source.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/repositories/fourty_nine_repository_impl.dart';
@@ -41,6 +37,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/add_main_cat
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/remove_main_category_to_favorites_usecase.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:get_it/get_it.dart';
@@ -86,11 +83,7 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-    serviceLocator.registerLazySingleton<CreateCompanyAdRemoteDataSource>(
-      () => CreateCompanyAdRemoteDataSourceImpl(
-        serviceLocator(),
-      ),
-    );
+
     serviceLocator.registerLazySingleton<MyAdsRemoteDatasource>(
       () => MyAdsRemoteDatasourceImpl(
         serviceLocator(),
@@ -113,11 +106,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-    serviceLocator.registerLazySingleton<CreateCompanyAdRepo>(
-      () => CreateCompanyAdRepoImpl(
-        serviceLocator(),
-      ),
-    );
+    // serviceLocator.registerLazySingleton<CreateCompanyAdRepo>(
+    //   () => CreateCompanyAdRepoImpl(
+    //     serviceLocator(),
+    //   ),
+    // );
     serviceLocator.registerLazySingleton<ContactUsRepo>(
       () => ContactUsRepoImpl(
         serviceLocator(),
@@ -192,11 +185,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-    serviceLocator.registerLazySingleton<GetCompanyAdsOptionsUseCase>(
-      () => GetCompanyAdsOptionsUseCase(
-        serviceLocator(),
-      ),
-    );
+    // serviceLocator.registerLazySingleton<GetCompanyAdsOptionsUseCase>(
+    //   () => GetCompanyAdsOptionsUseCase(
+    //     serviceLocator(),
+    //   ),
+    // );
     serviceLocator.registerLazySingleton<GetAllPickMeUseCase>(
       () => GetAllPickMeUseCase(
         serviceLocator(),
@@ -293,6 +286,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<ToggleSubCategoryToFavoritesUseCase>(
+      () => ToggleSubCategoryToFavoritesUseCase(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<MakeAdRequestUsecase>(
       () => MakeAdRequestUsecase(
         serviceLocator(),
@@ -314,10 +312,14 @@ class FourtyNineServiceLocator {
     serviceLocator.registerFactory<MainCategoriesTapsCubit>(
       () => MainCategoriesTapsCubit(
         serviceLocator(),
+        serviceLocator(),
       )..loadData(),
     );
     serviceLocator.registerFactory<CreateCompanyAdCubit>(
       () => CreateCompanyAdCubit(
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
         serviceLocator(),
       )..loadData(),
     );
@@ -341,7 +343,8 @@ class FourtyNineServiceLocator {
     serviceLocator.registerFactory<MainCategoriesCubit>(
       () => MainCategoriesCubit(
         serviceLocator(),
-      )..loadData(),
+        serviceLocator(),
+      ),
     );
 
     serviceLocator.registerFactory<AdsCubit>(

@@ -16,6 +16,6 @@ void changeLang({required Locale locale, required BuildContext context}) {
   context.setLocale(locale);
 
   var categoryCubit = BlocProvider.of<MainCategoriesCubit>(context);
-  categoryCubit.loadData();
+  categoryCubit.loadData(context);
   //context.read<MainCategoriesCubit>().loadData();
 }

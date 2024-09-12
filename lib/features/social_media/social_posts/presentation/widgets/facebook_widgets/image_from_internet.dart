@@ -16,6 +16,7 @@ class ImageFromInternet extends StatelessWidget {
       this.borderRadius,
       this.fromFile = false,
       this.isCircle = false,
+      this.defaultLogo = false,
       });
   final String image;
   final double? width;
@@ -23,10 +24,11 @@ class ImageFromInternet extends StatelessWidget {
   final BorderRadius? borderRadius;
   final bool? fromFile;
   final bool? isCircle;
+  final bool? defaultLogo;
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl: image??UIConst.profilePlaceHolder,
+      imageUrl: image,
       imageBuilder: (context, imageProvider) => Container(
         height: height,
         width: width,
@@ -51,11 +53,14 @@ class ImageFromInternet extends StatelessWidget {
           image: fromFile == true
               ? DecorationImage(
                   image: FileImage(File(image)),
-                  fit: BoxFit.contain,
+                  fit: BoxFit.fill,
                 )
-              : const DecorationImage(
+              : defaultLogo==true?DecorationImage(
+              image:AssetImage(Assets.logo),
+          fit: BoxFit.fill,
+        ):const DecorationImage(
                   image: NetworkImage(UIConst.profilePlaceHolder),
-                  fit: BoxFit.contain,
+                  fit: BoxFit.fill,
                 ),
         ),
       ),

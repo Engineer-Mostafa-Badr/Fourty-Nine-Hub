@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entiti
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 
 class ChatRoomRepositoryImplementation extends ChatRoomRepository {
@@ -44,5 +45,30 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   @override
   void stopListenToMessages() {
     _chatRemoteDataSource.stopListenToMessages();
+  }
+
+  @override
+  Future<Either<Failure, bool>> markMessageAsSeen(MarkMessageAsSeenParams params) {
+ return _chatRemoteDataSource.markMessageAsSeen(params);
+  }
+
+  @override
+  void listenToSeenStatus(Function(List<MessageEntity> messages) params) {
+    _chatRemoteDataSource.listenToSeenStatus(params);
+  }
+
+  @override
+  void stopListenToSeenStatus() {
+    _chatRemoteDataSource.stopListenToSeenStatus();
+  }
+
+  @override
+  void listenToDeliveredStatus(Function(List<MessageEntity> messages) params) {
+    _chatRemoteDataSource.listenToDeliveredStatus(params);
+  }
+
+  @override
+  void stopListenToDeliveredStatus() {
+    _chatRemoteDataSource.stopListenToDeliveredStatus();
   }
 }

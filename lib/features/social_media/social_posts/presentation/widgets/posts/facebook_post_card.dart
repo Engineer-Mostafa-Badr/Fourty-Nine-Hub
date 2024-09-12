@@ -234,12 +234,14 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                           child: _buildReactionPlaceHolder(
                               icon: FontAwesomeIcons.message,
                               label: 'Comment',
+                              image: Assets.comment,
                               onTap: () => widget.showPostComments(myPost.id)),
                         ),
                       Expanded(
                         child: _buildReactionPlaceHolder(
-                            icon: FontAwesomeIcons.share,
                             label: 'Share',
+                            isImage: true,
+                            image: Assets.facebookShare,
                             onTap: () async {
                               var result = await controller.onShare(
                                   postId: myPost.isShared == true
@@ -336,6 +338,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                       Expanded(
                         child: _buildReactionPlaceHolder(
                             icon: FontAwesomeIcons.message,
+                            image: Assets.comment,
                             label: 'Comment',
                             onTap: () => widget.showPostComments(myPost.id)),
                       ),
@@ -343,6 +346,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                       child: _buildReactionPlaceHolder(
                           icon: FontAwesomeIcons.share,
                           label: 'Share',
+                          isImage: true,
+                          image: Assets.facebookShare,
                           onTap: () async {
                             var result = await controller.onShare(
                                 postId: myPost.isShared == true
@@ -474,11 +479,11 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
                   }
                 },
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  backgroundImage: NetworkImage((post.user.image.isNotEmpty)
-                      ? post.user.image
-                      : UIConst.profilePlaceHolder),
+                child: ImageFromInternet(
+                  image: post.user.image,
+                  isCircle: true,
+                  width: 40,
+                  height: 40,
                 ),
               ),
               const Sizer(),
@@ -584,11 +589,12 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
               }
             },
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              backgroundImage: NetworkImage((post.user.image.isNotEmpty)
-                  ? post.user.image
-                  : UIConst.profilePlaceHolder),
+            child: ImageFromInternet(
+              image: post.user.image,
+              isCircle: true,
+              defaultLogo: false,
+              width: 40,
+              height: 40,
             ),
           ),
           const Sizer(),
@@ -655,7 +661,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               text: content,
               style: Styles.headerText(
                   color: Colors.black,
-                  fontSize: 24,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold),
             ),
           )
@@ -717,6 +723,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                     children: [
                                       ImageFromInternet(
                                         image: images[index],
+                                        defaultLogo: true,
                                       ),
                                       if (index == 3 && images.length > 4)
                                         Container(
@@ -746,15 +753,18 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   }
 
   Widget _buildReactionPlaceHolder({
-    required IconData icon,
+    IconData? icon,
     required String label,
+    String? image,
+    bool? isImage=false,
     Function? onTap,
   }) {
     if (onTap == null) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          FaIcon(
+          if(image!=null)Image.asset(image,width: 24,height: 24,),
+          if(isImage==false)FaIcon(
             icon,
             color: AppColors.GREY_DARK_COLOR,
             size: 20,
@@ -768,7 +778,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FaIcon(
+            if(image!=null)Image.asset(image??'',width: 22,height: 22,),
+            if(image==null)FaIcon(
               icon,
               color: AppColors.GREY_DARK_COLOR,
               size: 20,

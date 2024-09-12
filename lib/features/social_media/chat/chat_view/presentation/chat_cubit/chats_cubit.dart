@@ -20,7 +20,6 @@ class ChatsCubit extends Cubit<ChatsState> {
   final GetChatsUseCase _getChatsUseCase;
   final Map<String, ChatEntity> _chats = {};
   ChatCategories _selectedChatCategory = ChatCategories.values.first;
-  late String lockChatPassword;
   late ChatEntity _selectedChat;
   List<ChatEntity> selectedChats = [];
 

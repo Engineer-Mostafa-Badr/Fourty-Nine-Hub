@@ -9,11 +9,12 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -74,6 +75,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.read<UserCubit>().state.data;
+    print('userId111111111${user?.id??''}');
+
     return Scaffold(
       appBar: const HomeAppbar(
         isWithBackArrow: false,
@@ -98,13 +102,13 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         children: [
           //carousel slider
           const AnnounceWidget(),
-          const Sizer(),
+         // const Sizer(),
           //wallet
           const WalletWidget(),
-          const Sizer(),
+      //    const Sizer(),
           //admob
-          const GoogleAddsBanner(),
-          const Sizer(),
+       //   const GoogleAddsBanner(),
+        //  const Sizer(),
           //pick me and come with U
           _pickMeAndComeWithUWidget(),
           const Sizer(),
@@ -118,6 +122,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           BlocBuilder<MainCategoriesCubit,
               BasicState<List<MainCategoryEntity>>>(
             builder: (context, state) {
+              final controller = context.read<MainCategoriesCubit>();
               if (state.isLoading) {
                 return Shimmer.fromColors(
                   baseColor: Colors.grey[100]!,
@@ -155,7 +160,12 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         context.push(Routes.SUBCATEGORIES,
                             extra: state.data![index]);
                       },
-                      child: MainCategoryBanner(category: state.data![index], onFavorite: () {  },),
+                      child: MainCategoryBanner(
+                        category: state.data![index],
+                        onFavorite: () {
+                          return controller.toggleFavoriteMedicalService(state.data![index].id);
+                        },
+                      ),
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) =>

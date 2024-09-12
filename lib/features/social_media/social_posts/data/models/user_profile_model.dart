@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/features/social_media/social_posts/data/models/user_profile_followers_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 
 class UserProfileModel extends UserProfileEntity {
@@ -5,6 +6,7 @@ class UserProfileModel extends UserProfileEntity {
     required super.id,
     required super.firstName,
     required super.lastName,
+    required super.maritalStatus,
     required super.email,
     super.profilePicture,
     super.profileCover,
@@ -36,6 +38,7 @@ class UserProfileModel extends UserProfileEntity {
       city: json['userId']['city']??'',
       phone: json['userId']['phone']??'',
       country: json['userId']['country']??'',
+      maritalStatus: json['userId']['maritalStatus']??'',
       job: json['userId']['job']??'',
       email: json['userId']['email'] ?? '',
       isDocument: json['userId']['twitter_documentation'] ?? false,
@@ -52,7 +55,11 @@ class UserProfileModel extends UserProfileEntity {
       sentFriendRequest: json['sentFriendRequest'] ?? false,
       isBlock: json['isBlock'] ?? false,
       isSenTRequest: json['isSenTRequest'] ?? false,
-      // followers: json['isSenTRequest'] ?? false,
+      followers: json['followedByUser'] == null
+          ? null
+          : (json['followedByUser'] as List)
+          .map((e) => UserProfileFollowersModel.fromJson(e))
+          .toList(),
     );
   }
 }
