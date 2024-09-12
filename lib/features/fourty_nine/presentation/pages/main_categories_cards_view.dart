@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MainCategoriesFlipCardsView extends StatelessWidget {
   const MainCategoriesFlipCardsView({super.key});
@@ -13,7 +14,7 @@ class MainCategoriesFlipCardsView extends StatelessWidget {
     return Scaffold(
       appBar: const BackAppBar(),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
         child: Column(
           children: [
             // const WalletWidget(),
@@ -59,29 +60,30 @@ class MainCategoriesFlipCardsView extends StatelessWidget {
                                   ],
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsetsDirectional.all(8),
+                                  padding: EdgeInsetsDirectional.all(8),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Align(
-                                        alignment: AlignmentDirectional.bottomStart,
+                                        alignment:
+                                            AlignmentDirectional.bottomStart,
                                         child: Text(
                                           mainCategories[index].name,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 25,
+                                            fontSize: 25.sp,
                                             color: Colors.white,
                                           ),
                                           textAlign: TextAlign.start,
                                         ),
                                       ),
-                                      const Text(
+                                      Text(
                                         ' count Ads',
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 12,
+                                          fontSize: 12.sp,
                                           fontWeight: FontWeight.bold,
                                         ),
                                         textAlign: TextAlign.end,

@@ -17,7 +17,7 @@ import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/comment_entity.dart';
 import '../../../domain/usecases/post_comment_usecase.dart';
 import 'comment_card.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class FacebookPostComments extends StatefulWidget {
   // final List<CommentEntity> comments;
   final String postId;
@@ -68,7 +68,8 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
           children: [
             Expanded(
               child: PagedListView<int, CommentEntity>(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                padding:
+                    EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
                 pagingController: controller.commentsPagingController,
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(
@@ -77,14 +78,14 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                     noItemsFoundIndicatorBuilder: (context) {
                       print(
                           controller.commentsPagingController.itemList?.length);
-                      return const Padding(
+                      return  Padding(
                           padding: EdgeInsets.only(top: 200),
                           child: Center(
                             child: Text(
                               "No Comments",
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 18,
+                                fontSize: 18.sp,
                               ),
                             ),
                           ));
@@ -106,7 +107,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                     },
                     noMoreItemsIndicatorBuilder: (context) => Container(),
                     firstPageProgressIndicatorBuilder: (context) => Container(
-                        margin: const EdgeInsets.only(top: 150),
+                        margin: EdgeInsets.only(top: 150),
                         child: const CupertinoActivityIndicator()),
                     newPageProgressIndicatorBuilder: (context) =>
                         const CupertinoActivityIndicator()),
@@ -119,27 +120,30 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                 ),
                 child: Row(
                   children: [
-                    ProfileImage(accountId: 0,fromProfile: true,imageURL: user?.profilePicture, userId: '',),
-                    const Sizer(),
+                    ProfileImage(
+                      accountId: 0,
+                      fromProfile: true,
+                      imageURL: user?.profilePicture,
+                      userId: '',
+                    ),
+                    Sizer(),
                     Expanded(
-                      child:TextFormField(
+                      child: TextFormField(
                         maxLines: null,
-                          controller: commentTextController,
-                        onChanged: (v){
-                            setState(() {
-
-                            });
+                        controller: commentTextController,
+                        onChanged: (v) {
+                          setState(() {});
                         },
-                        style: Styles.headerText(fontSize: 26),
+                        style: Styles.headerText(fontSize: 26.sp),
                         decoration: InputDecoration(
                           fillColor: Colors.white,
                           contentPadding: EdgeInsets.all(5),
                           hintText: 'Type your comment ....',
                           hintStyle: Styles.mediumText(),
-
                         ),
-                      ),),
-                    const Sizer(),
+                      ),
+                    ),
+                    Sizer(),
                     if (commentTextController.text.isNotEmpty)
                       IconAppButton(
                           icon: Icons.send,
@@ -211,7 +215,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
         ),
         if (comment.repliesCount != 0)
           Container(
-              margin: const EdgeInsets.only(left: 30),
+              margin: EdgeInsets.only(left: 30),
               child: TextAppButton(
                   label: 'show ${comment.repliesCount} replies',
                   onPressed: () {}))

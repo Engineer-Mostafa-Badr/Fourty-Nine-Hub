@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/icon_with_view_count.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/assets/assets.dart';
 
@@ -14,10 +15,14 @@ class SocialIconBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
-      final getUnreadNotificationsCountCubit = context.watch<GetUnreadNotificationsCountCubit>();
+      final getUnreadNotificationsCountCubit =
+          context.watch<GetUnreadNotificationsCountCubit>();
       return IconWithViewCount(
-        icon: SvgPicture.asset(Assets.social, height: 20, semanticsLabel: 'social'),
-        unreadCount: getUnreadNotificationsCountCubit.unreadNotificationsCountEntity?.socialCount ?? 0,
+        icon: SvgPicture.asset(Assets.social,
+            height: 20.h, semanticsLabel: 'social'),
+        unreadCount: getUnreadNotificationsCountCubit
+                .unreadNotificationsCountEntity?.socialCount ??
+            0,
       );
     });
   }

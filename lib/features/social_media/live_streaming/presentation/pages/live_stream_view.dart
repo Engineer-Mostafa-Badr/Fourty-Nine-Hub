@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/liveview/gifts/simple_gifts_sheet.dart';
@@ -115,7 +116,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
       ..audioVideoView.foregroundBuilder = foregroundBuilder
       ..pkBattle = pkConfig();
 
-  final userId = context.read<UserCubit>().state.data!.id;
+    final userId = context.read<UserCubit>().state.data!.id;
     return SafeArea(
       child: ZegoUIKitPrebuiltLiveStreaming(
         appID: UIConst.appId /*input your AppID*/,
@@ -152,7 +153,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
         left: 5,
         child: SizedBox(
           width: 40,
-          height: 40,
+          height: 40.h,
           child: PKMuteButton(userID: user.id),
         ),
       ),
@@ -160,7 +161,8 @@ class _LiveStreamViewState extends State<LiveStreamView> {
 
     return Stack(
       children: [
-        ...((widget.isHost && user.id != context.read<UserCubit>().state.data!.id)
+        ...((widget.isHost &&
+                user.id != context.read<UserCubit>().state.data!.id)
             ? hostWidgets
             : [
                 giftForeground(),
@@ -172,7 +174,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
           right: 35,
           child: SizedBox(
             width: 18,
-            height: 18,
+            height: 18.h,
             child: CircleAvatar(
               backgroundColor: Colors.purple.withOpacity(0.6),
               child: Icon(
@@ -190,7 +192,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
           right: 5,
           child: SizedBox(
             width: 18,
-            height: 18,
+            height: 18.h,
             child: CircleAvatar(
               backgroundColor: Colors.purple.withOpacity(0.6),
               child: Icon(
@@ -208,7 +210,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
           right: 5,
           child: Container(
             // width: 30,
-            height: 18,
+            height: 18.h,
             color: Colors.purple,
             child: Text(user.name),
           ),
@@ -222,7 +224,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
       valueListenable: ZegoGiftManager().playList.playingDataNotifier,
       builder: (context, playData, _) {
         if (null == playData) {
-          return const SizedBox.shrink();
+          return SizedBox.shrink();
         }
 
         if (playData.giftItem.type == ZegoGiftType.svga) {
@@ -237,7 +239,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
 
   // Widget svgaWidget(PlayData playData) {
   //   if (playData.giftItem.type != ZegoGiftType.svga) {
-  //     return const SizedBox.shrink();
+  //     return SizedBox.shrink();
   //   }
 
   //   /// you can define the area and size for displaying your own
@@ -292,7 +294,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
 
   Widget mp4Widget(PlayData playData) {
     if (playData.giftItem.type != ZegoGiftType.mp4) {
-      return const SizedBox.shrink();
+      return SizedBox.shrink();
     }
 
     /// you can define the area and size for displaying your own
@@ -351,11 +353,12 @@ class _LiveStreamViewState extends State<LiveStreamView> {
         child: InkWell(
             onTap: () {
               //send a message and some interaction
-              showSimpleGiftBottomSheet(context, context.read<UserCubit>().state.data!.id);
+              showSimpleGiftBottomSheet(
+                  context, context.read<UserCubit>().state.data!.id);
             },
             child: SvgPicture.asset(
               'assets/images/gift.svg',
-              height: 50,
+              height: 50.h,
             )),
       );
   ZegoLiveStreamingMenuBarExtendButton get superGiftButton =>
@@ -365,7 +368,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
             onTap: () => showGiftListSheet(context),
             child: SvgPicture.asset(
               'assets/images/super_gifts.svg',
-              height: 40,
+              height: 40.h,
             )),
       );
 

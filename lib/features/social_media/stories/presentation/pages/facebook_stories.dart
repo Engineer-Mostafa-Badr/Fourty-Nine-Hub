@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -23,14 +24,14 @@ class Stories extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: kToolbarHeight * 2.5,
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.symmetric(vertical: 10.h),
       child: ListView(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         children: [
-          const Sizer(),
+          Sizer(),
           _buildYourStory(context),
-          const Sizer(),
+          Sizer(),
           SizedBox(
             height: kToolbarHeight * 2.5,
             child: BlocBuilder<StoryCubit, StoryState>(
@@ -42,7 +43,7 @@ class Stories extends StatelessWidget {
                         shrinkWrap: true,
                         itemBuilder: (context, index) =>
                             _buildOthersStories(context, state, index),
-                        separatorBuilder: (context, index) => const Sizer(),
+                        separatorBuilder: (context, index) => Sizer(),
                         itemCount: state.users.length)
                     : const Center(
                         child: CupertinoActivityIndicator(
@@ -90,25 +91,28 @@ class Stories extends StatelessWidget {
                           indicatorColor: Colors.transparent,
                           indicatorForegroundColor: Colors.transparent,
                           storyItems: [
-                        state.users[index].userStories!.first.type != 'video'
-                            ? createStoryItem(
-                                context,
-                                state.users[index].userStories!.first,
-                                userController)
-                            : StoryItem.pageImage(
-                                loadingWidget: const CupertinoActivityIndicator(
-                                  color: Colors.white,
-                                ),
-                                url: state
-                                    .users[index].user!.profilePictureUrl!,
-                                errorWidget: Image.network(
-                                  UIConst.profilePlaceHolder,
-                                  fit: BoxFit.fitHeight,
-                                ),
-                                imageFit: BoxFit.fitHeight,
-                                controller: userController,
-                              )
-                      ], controller: userController),
+                            state.users[index].userStories!.first.type !=
+                                    'video'
+                                ? createStoryItem(
+                                    context,
+                                    state.users[index].userStories!.first,
+                                    userController)
+                                : StoryItem.pageImage(
+                                    loadingWidget:
+                                        const CupertinoActivityIndicator(
+                                      color: Colors.white,
+                                    ),
+                                    url: state
+                                        .users[index].user!.profilePictureUrl!,
+                                    errorWidget: Image.network(
+                                      UIConst.profilePlaceHolder,
+                                      fit: BoxFit.fitHeight,
+                                    ),
+                                    imageFit: BoxFit.fitHeight,
+                                    controller: userController,
+                                  )
+                          ],
+                          controller: userController),
                     ),
                     Positioned.fill(
                         child: Container(
@@ -116,7 +120,7 @@ class Stories extends StatelessWidget {
                     )),
                     Positioned.fill(
                         child: Padding(
-                      padding: const EdgeInsets.all(4.0),
+                      padding: EdgeInsets.all(4.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -132,8 +136,7 @@ class Stories extends StatelessWidget {
                                           null &&
                                       state.users[index].user!
                                           .profilePictureUrl!.isNotEmpty
-                                  ? state
-                                      .users[index].user!.profilePictureUrl!
+                                  ? state.users[index].user!.profilePictureUrl!
                                   : UIConst.profilePlaceHolder),
                               onBackgroundImageError: (exception, stackTrace) =>
                                   const NetworkImage(
@@ -221,7 +224,7 @@ class Stories extends StatelessWidget {
                   ),
                   Expanded(
                       child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(8.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [

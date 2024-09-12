@@ -6,7 +6,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -47,11 +47,11 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
           appBar: const BackAppBar(),
           bottomSheet: SizedBox(
             child: DefaultButton(
-              margin: EdgeInsets.all(30.zW),
+              margin: EdgeInsets.all(30.w),
               width: double.infinity,
               label: LocaleKeys.verify.localize,
               labelStyle: TextStyle(
-                  fontSize: 35.zW, color: AppColors.AUTH_CONTAINER_COLOR),
+                  fontSize: 35.sp.w, color: AppColors.AUTH_CONTAINER_COLOR),
               onPressed: () => cubit.verifyOtp(email),
             ),
           ),
@@ -66,7 +66,7 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
               Label(
                 text: '${LocaleKeys.checkVerification.localize} ($email)',
               ),
-              const Sizer(),
+              Sizer(),
               PinCodeTextField(
                 appContext: context,
                 pastedTextStyle: TextStyle(
@@ -81,8 +81,8 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
                 pinTheme: PinTheme(
                   shape: PinCodeFieldShape.box,
                   borderRadius: BorderRadius.circular(4),
-                  fieldHeight: 50.zH,
-                  fieldWidth: 50.zW,
+                  fieldHeight: 50.h,
+                  fieldWidth: 50.w,
                   activeFillColor: Colors.white,
                   selectedFillColor: Colors.white,
                   inactiveFillColor: Colors.white,
@@ -115,7 +115,7 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
                   return true;
                 },
               ),
-              const Sizer(),
+              Sizer(),
             ],
           ),
         );

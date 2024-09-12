@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/controller.dart';
 
@@ -28,14 +29,14 @@ class _PKRequestWidgetState extends State<PKRequestWidget> {
       children: [
         Container(
           decoration: const BoxDecoration(color: Colors.white),
-          child: const Text(
+          child:  Text(
             'Auto Accept:',
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(fontSize: 15.sp),
           ),
         ),
         SizedBox(
           width: 30,
-          height: 30,
+          height: 30.h,
           child: ValueListenableBuilder<bool>(
             valueListenable: isAutoAcceptedNotifier,
             builder: (context, isAutoAccepted, _) {
@@ -50,7 +51,7 @@ class _PKRequestWidgetState extends State<PKRequestWidget> {
         ),
         SizedBox(
           width: 100,
-          height: 30,
+          height: 30.h,
           child: TextFormField(
             controller: hostIDTextController,
             decoration: const InputDecoration(
@@ -63,7 +64,7 @@ class _PKRequestWidgetState extends State<PKRequestWidget> {
           ),
         ),
         SizedBox(
-          height: 30,
+          height: 30.h,
           child: ValueListenableBuilder<TextEditingValue>(
             valueListenable: hostIDTextController,
             builder: (context, value, _) {
@@ -79,9 +80,9 @@ class _PKRequestWidgetState extends State<PKRequestWidget> {
                             hostIDTextController.text.trim(),
                           );
                         },
-                  child: const Text(
+                  child:  Text(
                     'Request',
-                    style: TextStyle(fontSize: 15, color: Colors.white),
+                    style: TextStyle(fontSize: 15.sp, color: Colors.white),
                   ),
                 ),
               );

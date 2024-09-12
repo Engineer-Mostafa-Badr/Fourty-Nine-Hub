@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -61,7 +62,7 @@ class ShowMneu extends StatelessWidget {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              const Sizer(),
+                              Sizer(),
                               Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -71,12 +72,12 @@ class ShowMneu extends StatelessWidget {
                                     e.foodName ?? "",
                                     style: Styles.headerText(color: Colors.red),
                                   ),
-                                  const Sizer(height: 50),
+                                   Sizer(height: 50.h),
                                   Text(
                                     "${e.price ?? ""}",
                                     style: Styles.headerText(color: Colors.red),
                                   ),
-                                  const Sizer(),
+                                  Sizer(),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.red,
@@ -105,7 +106,7 @@ class ShowMneu extends StatelessWidget {
                   ),
                 ),
               ],
-              const Sizer(),
+              Sizer(),
               Container(
                 height: MediaQuery.of(context).size.width * .8,
                 width: MediaQuery.of(context).size.width,
@@ -139,7 +140,7 @@ class ShowMneu extends StatelessWidget {
                         },
                       ),
                     ),
-                    const Sizer(),
+                    Sizer(),
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -155,7 +156,7 @@ class ShowMneu extends StatelessWidget {
                         hintStyle: const TextStyle(color: Colors.red),
                       ),
                     ),
-                    const Sizer(),
+                    Sizer(),
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -176,8 +177,8 @@ class ShowMneu extends StatelessWidget {
                         hintStyle: const TextStyle(color: Colors.red),
                       ),
                     ),
-                    const Sizer(),
-                    const Sizer(),
+                    Sizer(),
+                    Sizer(),
                     GestureDetector(
                       onTap: () {
                         final foodName = foodNameController.text;

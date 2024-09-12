@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,25 +6,27 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/widgets/payment_fawry_widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class PaymobLink {
   final String amountId;
   final num amount;
 
-  PaymobLink(
-      {required this.amountId,
-        required this.amount});
+  PaymobLink({required this.amountId, required this.amount});
 }
+
 class PaymentView extends StatefulWidget {
-   PaymentView({
+  PaymentView({
     Key? key,
-     required this.amountId,
-     required this.amount,
+    required this.amountId,
+    required this.amount,
   }) : super(key: key);
 
   final String amountId;
@@ -48,7 +49,7 @@ class _PaymentViewState extends State<PaymentView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Payment Options'),
+        title:  Text('Payment Options'),
       ),
       body: BlocBuilder<PaymentCubit, PaymentState>(
         builder: (context, state) {
@@ -105,10 +106,10 @@ class _PaymentViewState extends State<PaymentView> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20.0),
+                SizedBox(height: 20.h),
                 _buildPaymentBody(context),
                 if (_selectedPaymentMethod == 'Credit Card') ...[
-                  const SizedBox(height: 20.0),
+                  SizedBox(height: 20.h),
                 ],
               ],
             ),
@@ -139,7 +140,8 @@ class _PaymentViewState extends State<PaymentView> {
         if (_selectedProviderId != null) {
           print('Provider ID for $title: $_selectedProviderId');
 
-          cubit.getPaymobData(amountId: widget.amountId, providerId: _selectedProviderId!);
+          cubit.getPaymobData(
+              amountId: widget.amountId, providerId: _selectedProviderId!);
         } else {
           print('Provider ID not found for $title');
         }
@@ -149,9 +151,9 @@ class _PaymentViewState extends State<PaymentView> {
         }
       },
       child: Container(
-        height: 130,
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        padding: const EdgeInsets.all(16.0),
+        height: 130.h,
+        margin: EdgeInsets.symmetric(horizontal: 8.0),
+        padding: EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15.0),
@@ -164,7 +166,7 @@ class _PaymentViewState extends State<PaymentView> {
               color: color.withOpacity(0.3),
               spreadRadius: 2,
               blurRadius: 8,
-              offset: const Offset(0, 4),
+              offset:  Offset(0, 4),
             ),
           ],
         ),
@@ -172,13 +174,13 @@ class _PaymentViewState extends State<PaymentView> {
           mainAxisSize: MainAxisSize.min,
           children: [
             icon,
-            const Spacer(),
+             Spacer(),
             Text(
               title,
               style: TextStyle(
                 color: color,
                 fontWeight: FontWeight.bold,
-                fontSize: 16.0,
+                fontSize: 16.sp,
               ),
               maxLines: 2,
               textAlign: TextAlign.center,
@@ -202,7 +204,7 @@ class _PaymentViewState extends State<PaymentView> {
       case 'InstaPay':
         return _bankTransferPayment();
       default:
-        return const Center(
+        return  Center(
           child: Text('Please select a payment method.'),
         );
     }
@@ -216,7 +218,7 @@ class _PaymentViewState extends State<PaymentView> {
     } else {
       print("Null $url");
     }
-    return const SizedBox.shrink();
+    return SizedBox.shrink();
   }
 
   Widget _bankTransferPayment() {
@@ -234,11 +236,11 @@ class _PaymentViewState extends State<PaymentView> {
       }
     }
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(16.0),
       child: Column(
         children: [
           DropdownButtonFormField<String>(
-            decoration: const InputDecoration(
+            decoration:  InputDecoration(
               fillColor: Colors.white,
               labelText: 'Select Phone Number',
             ),
@@ -255,7 +257,7 @@ class _PaymentViewState extends State<PaymentView> {
               }
             },
           ),
-          const SizedBox(height: 15),
+          SizedBox(height: 15.h),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.PRIMARY_COLOR,
@@ -263,35 +265,36 @@ class _PaymentViewState extends State<PaymentView> {
             onPressed: () {},
             child: Text(
               "${widget.amount}",
-              style: const TextStyle(color: AppColors.LIGHT_COLOR, fontSize: 20),
+              style:  TextStyle(
+                  color: AppColors.LIGHT_COLOR, fontSize: 20.sp),
             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               Label(
                 text: "Snap copy of bill payment",
                 style: Styles.headerText(),
               ),
-              const SizedBox(),
+              SizedBox(),
               InkWell(
                 onTap: () async {
                   await cubit.uploadProfileImage();
                 },
                 child: BlocBuilder<PaymentCubit, PaymentState>(
                   buildWhen: (previous, current) =>
-                  previous.uploadedImage != current.uploadedImage ||
+                      previous.uploadedImage != current.uploadedImage ||
                       previous.uploadStatus != current.uploadStatus,
                   builder: (context, state) {
                     if (state.uploadStatus == StateStatus.loading) {
-                      return const Center(child: CircularProgressIndicator());
+                      return  Center(child: CircularProgressIndicator());
                     } else if (state.uploadStatus == StateStatus.success &&
                         state.uploadedImage != null) {
                       return Image.file(state.uploadedImage!);
                     }
-                    return const ImagePickerPlaceholder();
+                    return  ImagePickerPlaceholder();
                   },
                 ),
               ),
@@ -302,14 +305,18 @@ class _PaymentViewState extends State<PaymentView> {
                       // Snackbar: "Your bill has been sent successfully, waiting for administration approval."
                       print("${state.imageMediaId}");
                       print(" the provider ${_selectedProviderId}");
-                      if(state.imageMediaId != null){
-                        cubit.postInstaPay(receiptId:state.imageMediaId!, amountId: widget.amountId, paymentProviderId: _selectedProviderId!);
+                      if (state.imageMediaId != null) {
+                        cubit.postInstaPay(
+                            receiptId: state.imageMediaId!,
+                            amountId: widget.amountId,
+                            paymentProviderId: _selectedProviderId!);
                       }
-                      if(state.status == StateStatus.success){
+                      if (state.status == StateStatus.success) {
                         print("99111");
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text(state.instaPayResponseData?.message ?? 'Payment successful'),
+                            content: Text(state.instaPayResponseData?.message ??
+                                'Payment successful'),
                             backgroundColor: Colors.green,
                           ),
                         );
@@ -317,8 +324,8 @@ class _PaymentViewState extends State<PaymentView> {
                     },
                     child: Text(
                       "Send for review and approval",
-                      style: const TextStyle(
-                          color: AppColors.LIGHT_COLOR, fontSize: 20),
+                      style:  TextStyle(
+                          color: AppColors.LIGHT_COLOR, fontSize: 20.sp),
                     ),
                   );
                 },
@@ -330,4 +337,3 @@ class _PaymentViewState extends State<PaymentView> {
     );
   }
 }
-

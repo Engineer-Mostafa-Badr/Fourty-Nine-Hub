@@ -33,7 +33,7 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsetsDirectional.only(top: 20.0, end: 8, start: 8),
+        padding: EdgeInsetsDirectional.only(top: 20.0, end: 8, start: 8),
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
@@ -42,7 +42,7 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
                   InkWell(
                       onTap: () => context.pop(),
                       child: const Icon(Icons.arrow_back)),
-                  const SizedBox(
+                  SizedBox(
                     width: 10,
                   ),
                   Expanded(
@@ -72,11 +72,11 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
                 pagingController: widget.controller.usersPagingController,
                 builderDelegate: PagedChildBuilderDelegate<PostUserEntity>(
                   noItemsFoundIndicatorBuilder: (context) {
-                    return const SizedBox.shrink();
+                    return SizedBox.shrink();
                   },
                   itemBuilder: (context, item, index) {
                     return Container(
-                      padding: const EdgeInsets.all(15),
+                      padding: EdgeInsets.all(15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -91,7 +91,7 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
                                         .profilePicture ??
                                     ''),
                               ),
-                              const SizedBox(
+                              SizedBox(
                                 width: 10,
                               ),
                               Label(

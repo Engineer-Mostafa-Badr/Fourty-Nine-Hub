@@ -21,7 +21,7 @@ class IconWithViewCount extends StatelessWidget {
         Tab(
           icon: icon,
         ),
-        const Sizer(width: 5),
+        Sizer(width: 5),
         Text(
           unreadCount == 0 ? '   ' : '($unreadCount)',
           style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),

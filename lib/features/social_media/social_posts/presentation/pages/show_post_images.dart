@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
@@ -52,8 +53,8 @@ class _ShowPostsImagesState extends State<ShowPostsImages> {
               // context.pop();
             },
             child: Container(
-              height: 400,
-              margin: const EdgeInsets.only(bottom: 10),
+              height: 400.h,
+              margin: EdgeInsets.only(bottom: 10),
               width: double.infinity,
               decoration: BoxDecoration(
                   color: AppColors.DARK_BLUE_COLOR,

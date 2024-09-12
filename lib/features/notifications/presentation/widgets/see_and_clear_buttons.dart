@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SeeAndClearButtons extends StatelessWidget {
   const SeeAndClearButtons({
@@ -17,7 +18,7 @@ class SeeAndClearButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -33,7 +34,7 @@ class SeeAndClearButtons extends StatelessWidget {
               );
             },
           ),
-          const Sizer(),
+          Sizer(),
           TextAppButton(
             style: const TextStyle(color: AppColors.SECONDARY_COLOR),
             label: LocaleKeys.clearAll.localize,

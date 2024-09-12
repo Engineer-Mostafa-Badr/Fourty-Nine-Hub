@@ -60,7 +60,7 @@
 //               crossAxisAlignment: CrossAxisAlignment.start,
 //               children: [
 //                 Padding(
-//                   padding: const EdgeInsets.all(8.0),
+//                   padding: EdgeInsets.all(8.0),
 //                   child: _buildAccountRow(context: context),
 //                 ),
 //                 _buildContent(
@@ -70,16 +70,16 @@
 //               ],
 //             )
 //           : Container(
-//               padding: const EdgeInsets.all(10),
+//               padding: EdgeInsets.all(10),
 //               decoration: const BoxDecoration(color: Colors.white),
 //               child: Column(
 //                 children: [
 //                   _buildAccountRow(context: context),
 //                   Container(
 //                     margin:
-//                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+//                         EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
 //                     padding:
-//                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+//                         EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
 //                     decoration: BoxDecoration(
 //                         border: Border.all(color: AppColors.LIGHT_GRAY_COLOR)),
 //                     child: Column(
@@ -106,7 +106,7 @@
 
 //   Widget _buildTwitterStaticsWidget() {
 //     return Container(
-//       margin: const EdgeInsets.symmetric(vertical: 5),
+//       margin: EdgeInsets.symmetric(vertical: 5.h),
 //       child: Row(
 //         children: [
 //           Expanded(
@@ -150,7 +150,7 @@
 //             size: 14,
 //             color: Colors.grey,
 //           ),
-//           const Sizer(),
+//           Sizer(),
 //           Label(text: label, style: Styles.mediumText(color: Colors.grey)),
 //         ],
 //       ),
@@ -161,7 +161,7 @@
 //     return Column(
 //       children: [
 //         Container(
-//           margin: const EdgeInsets.symmetric(vertical: 5),
+//           margin: EdgeInsets.symmetric(vertical: 5.h),
 //           child: Row(
 //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //             children: [
@@ -207,7 +207,7 @@
 
 //   Widget _buildInstagramCounter() {
 //     return Padding(
-//       padding: const EdgeInsets.all(8.0),
+//       padding: EdgeInsets.all(8.0),
 //       child: Column(
 //         crossAxisAlignment: CrossAxisAlignment.start,
 //         children: [
@@ -246,9 +246,9 @@
 //       children: [
 //         Image.asset(
 //           Assets.wow,
-//           height: 20,
+//           height: 20.h,
 //         ),
-//         const Sizer(),
+//         Sizer(),
 //         Label(text: '1k', style: Styles.mediumText())
 //       ],
 //     );
@@ -312,7 +312,7 @@
 //             icon,
 //             color: Colors.grey,
 //           ),
-//           const Sizer(),
+//           Sizer(),
 //           Label(text: label, style: Styles.mediumText(color: Colors.grey))
 //         ],
 //       );
@@ -326,7 +326,7 @@
 //               icon,
 //               color: Colors.grey,
 //             ),
-//             const Sizer(),
+//             Sizer(),
 //             Label(text: label, style: Styles.mediumText(color: Colors.grey))
 //           ],
 //         ),
@@ -339,7 +339,7 @@
 //   }) {
 //     return Image.asset(
 //       image,
-//       height: 20,
+//       height: 20.h,
 //     );
 //   }
 
@@ -361,7 +361,7 @@
 //     return Column(
 //       children: [
 //         if (label != null) ReadMoreLabel(text: label),
-//         const Sizer(),
+//         Sizer(),
 //         if (image != null)
 //           Image.network(
 //             image,
@@ -379,7 +379,7 @@
 //     return Column(
 //       children: [
 //         if (label != null) ReadMoreLabel(text: label),
-//         const Sizer(),
+//         Sizer(),
 //         if (image != null)
 //           Image.network(
 //             image,
@@ -396,7 +396,7 @@
 // }) {
 //   return Column(
 //     children: [
-//       const Sizer(),
+//       Sizer(),
 //       SizedBox(
 //         height: kToolbarHeight * 4,
 //         child: PageView.builder(
@@ -415,11 +415,11 @@
 //               );
 //             }),
 //       ),
-//       const Sizer(
-//         height: 5,
+//       Sizer(
+//         height: 5.h,
 //       ),
 //       Padding(
-//         padding: const EdgeInsets.symmetric(horizontal: 10.0),
+//         padding: EdgeInsets.symmetric(horizontal: 10.0),
 //         child: Row(
 //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //           children: [
@@ -438,7 +438,7 @@
 //                     color: widget.isLiked ? Colors.red : Colors.grey,
 //                     size: 25,
 //                   ),
-//                   const Sizer(),
+//                   Sizer(),
 //                   IconAppButton(
 //                     icon: Icons.chat_bubble_outline_rounded,
 //                     onPressed: () {
@@ -451,7 +451,7 @@
 //                     color: Colors.grey,
 //                     size: 25,
 //                   ),
-//                   const Sizer(),
+//                   Sizer(),
 //                   IconAppButton(
 //                     icon: Icons.send_rounded,
 //                     color: Colors.grey,
@@ -464,12 +464,12 @@
 //             Expanded(
 //               child: Center(
 //                 child: SizedBox(
-//                   height: 8,
+//                   height: 8.h,
 //                   child: ListView.separated(
 //                       shrinkWrap: true,
 //                       scrollDirection: Axis.horizontal,
 //                       itemCount: images.length,
-//                       separatorBuilder: (context, index) => const Sizer(
+//                       separatorBuilder: (context, index) => Sizer(
 //                             width: 3,
 //                           ),
 //                       itemBuilder: (context, index) {
@@ -512,16 +512,16 @@
 //         ? Row(
 //             children: [
 //               const ProfileImage(accountId: 0),
-//               const Sizer(),
+//               Sizer(),
 //               Label(
 //                   text: 'Poetry',
 //                   style: Styles.mediumText(fontWeight: FontWeight.w500)),
-//               const Sizer(),
+//               Sizer(),
 //               const Icon(
 //                 Icons.verified,
 //                 color: AppColors.PRIMARY_COLOR,
 //               ),
-//               const Sizer(),
+//               Sizer(),
 //               Label(
 //                   text: '@lastvibes . 18h',
 //                   style: Styles.mediumText(color: Colors.grey)),
@@ -543,7 +543,7 @@
 //                       ),
 //                     ),
 //                   ),
-//                   const Sizer(),
+//                   Sizer(),
 //                   Expanded(
 //                       child: InkWell(
 //                     onTap: () => context.push(Routes.OTHERSACCOUNT),
@@ -580,7 +580,7 @@
 //                       backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
 //                     ),
 //                   ),
-//                   const Sizer(),
+//                   Sizer(),
 //                   Expanded(
 //                       child: InkWell(
 //                     onTap: () => context.push(Routes.OTHERSACCOUNT),

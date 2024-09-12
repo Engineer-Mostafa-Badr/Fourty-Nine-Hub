@@ -48,7 +48,7 @@ class CreateRestaurantNameField extends StatelessWidget {
                         : Colors.grey),
               ),
               filled: false,
-              contentPadding: const EdgeInsets.all(10),
+              contentPadding: EdgeInsets.all(10),
               hintText: LocaleKeys.restaurantName.tr(),
             ),
           ),

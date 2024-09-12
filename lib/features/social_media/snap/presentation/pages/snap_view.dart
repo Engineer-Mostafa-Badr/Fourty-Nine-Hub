@@ -11,7 +11,7 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:video_player/video_player.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/rendering.dart';
 import 'package:image_filter_pro/photo_filter.dart';
@@ -101,11 +101,11 @@ class FilteredImageWidgetState extends State<FilteredImageWidget> {
               onPressed: _pickAndFilterImage,
               child: const Text('Pick and Filter Image'),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             if (_selectedImage != null)
               Image.file(
                 _selectedImage!,
-                height: 300,
+                height: 300.h,
                 fit: BoxFit.cover,
               ),
           ],
@@ -405,7 +405,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
     return Scaffold(
       floatingActionButton: filePath.isNotEmpty && mediaType.isNotEmpty
           ? Padding(
-              padding: const EdgeInsets.only(bottom: 50.0),
+              padding: EdgeInsets.only(bottom: 50.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -439,7 +439,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
         foregroundColor: Colors.white,
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: IconButton(
               icon: const Icon(
                 Icons.cameraswitch,
@@ -522,7 +522,7 @@ Future<void> saveMedia(
 
 Widget buildSaveButton(BuildContext context, filePath, mediaType) {
   return Container(
-    margin: const EdgeInsets.only(left: 20),
+    margin: EdgeInsets.only(left: 20),
     decoration: BoxDecoration(
       color: Colors.grey[800],
       shape: BoxShape.circle,
@@ -580,14 +580,14 @@ Widget buildStoryButton(context, {selectedFile}) {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10.h),
     ),
   );
 }
 
 Widget buildSendToButton() {
   return Container(
-    margin: const EdgeInsets.only(right: 20),
+    margin: EdgeInsets.only(right: 20),
     child: ElevatedButton.icon(
       onPressed: () {
         // Handle Send action
@@ -596,7 +596,7 @@ Widget buildSendToButton() {
       label: const Text('Send To', style: TextStyle(color: Colors.black)),
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.yellow[700],
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10.h),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
@@ -967,7 +967,7 @@ Widget buildSendToButton() {
 //               children: [
 //                 // Save button (download icon)
 //                 Container(
-//                   margin: const EdgeInsets.only(left: 20),
+//                   margin: EdgeInsets.only(left: 20),
 //                   decoration: BoxDecoration(
 //                     color: Colors.grey[800],
 //                     shape: BoxShape.circle,
@@ -995,13 +995,13 @@ Widget buildSendToButton() {
 //                     shape: RoundedRectangleBorder(
 //                       borderRadius: BorderRadius.circular(30),
 //                     ),
-//                     padding: const EdgeInsets.symmetric(
-//                         horizontal: 20, vertical: 10),
+//                     padding: EdgeInsets.symmetric(
+//                         horizontal: 20, vertical: 10.h),
 //                   ),
 //                 ),
 //                 // Send To button (right)
 //                 Container(
-//                   margin: const EdgeInsets.only(right: 20),
+//                   margin: EdgeInsets.only(right: 20),
 //                   child: ElevatedButton.icon(
 //                     onPressed: () {
 //                       // Handle Send action
@@ -1011,8 +1011,8 @@ Widget buildSendToButton() {
 //                         style: TextStyle(color: Colors.black)),
 //                     style: ElevatedButton.styleFrom(
 //                       backgroundColor: Colors.yellow[700],
-//                       padding: const EdgeInsets.symmetric(
-//                           horizontal: 20, vertical: 10),
+//                       padding: EdgeInsets.symmetric(
+//                           horizontal: 20, vertical: 10.h),
 //                       shape: RoundedRectangleBorder(
 //                         borderRadius: BorderRadius.circular(30),
 //                       ),
@@ -1080,7 +1080,7 @@ class _MediaPreviewState extends State<MediaPreview> {
             child: widget.mediaType == MediaType.image
                 ? Image.file(
                     File(widget.mediaPath),
-                    height: 500,
+                    height: 500.h,
                     width: 500,
                   )
                 : _videoController != null &&
@@ -1105,7 +1105,7 @@ class _MediaPreviewState extends State<MediaPreview> {
                         : Icons.play_arrow,
                   ),
                 )
-              : const Sizer(),
+              : Sizer(),
           Positioned(
             bottom: 10,
             left: 0,
@@ -1113,8 +1113,6 @@ class _MediaPreviewState extends State<MediaPreview> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-
-
                 // buildSaveButton(context, widget.mediaPath, widget.mediaType),
                 // buildStoryButton(context, selectedFile: File(widget.mediaPath)),
                 // buildSendToButton(),

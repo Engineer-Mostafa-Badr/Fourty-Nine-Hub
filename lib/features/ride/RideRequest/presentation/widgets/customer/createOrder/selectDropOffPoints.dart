@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -66,7 +67,7 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                   )
                 ],
               ),
-              const Sizer(),
+              Sizer(),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 height: kToolbarHeight * .7,
@@ -84,7 +85,7 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                         radius: 4,
                       ),
                     ),
-                    const Sizer(),
+                    Sizer(),
                     Expanded(
                         child: Text(
                       state.fromAddress?.address ?? 'Select Pickup location',
@@ -94,7 +95,7 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                   ],
                 ),
               ),
-              const Sizer(),
+              Sizer(),
               DefaultTextFormField(
                 maxLines: 1,
                 currentFocusNode: rideCubit.toAddressFocusNode,
@@ -108,7 +109,7 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                         label: LocaleKeys.search.localize,
                         color: AppColors.AUTH_CONTAINER_COLOR,
                         width: kToolbarHeight,
-                        height: 30,
+                        height: 30.h,
                         onPressed: () => rideCubit.loadNearByPlaces(
                             key: rideCubit.toAddressTextController.text)),
                   ],
@@ -116,7 +117,7 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                 hint: 'To',
                 hintColor: AppColors.QUANTITY_COLOR,
               ),
-              const Sizer(),
+              Sizer(),
               if (state.loading) const CircularProgressIndicator.adaptive(),
               if (state.nearByPlaces.isNotEmpty)
                 Expanded(
@@ -132,7 +133,7 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                                 Icons.location_on_outlined,
                                 color: Colors.grey,
                               ),
-                              const Sizer(),
+                              Sizer(),
                               Expanded(
                                   child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,7 +148,7 @@ class _selectDropOffPointsState extends State<SelectDropOffPoints> {
                           ),
                         );
                       },
-                      separatorBuilder: (context, index) => const Sizer(),
+                      separatorBuilder: (context, index) => Sizer(),
                       itemCount: state.nearByPlaces.length),
                 )
             ],

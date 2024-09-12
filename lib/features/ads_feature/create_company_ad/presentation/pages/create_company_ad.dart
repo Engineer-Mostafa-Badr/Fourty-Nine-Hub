@@ -16,6 +16,7 @@ import '../../../../payment/presentation/cubit/payment_cubit.dart';
 import '../../../../payment/presentation/pages/payment_view.dart';
 import '../cubit/create_company_ad_cubit.dart';
 import 'create_posts_company.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreateCompanyAdView extends StatefulWidget {
   const CreateCompanyAdView({super.key});
@@ -65,14 +66,14 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                     color: Theme.of(context).primaryColor,
                   ),
                 )
-              : const SizedBox.shrink(),
+              : SizedBox.shrink(),
         ],
       ),
       body: context.read<UserCubit>().isLoggedIn
           ? BlocBuilder<CreateCompanyAdCubit, CreateCompanyAdState>(
               builder: (context, state) {
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Column(
                     children: [
                       Expanded(
@@ -175,8 +176,8 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                         children: [
                           Expanded(
                             child: Container(
-                              padding: const EdgeInsetsDirectional.symmetric(
-                                  vertical: 10, horizontal: 14),
+                              padding: EdgeInsetsDirectional.symmetric(
+                                  vertical: 10.h, horizontal: 14.w),
                               width: double.infinity,
                               decoration: BoxDecoration(
                                 color: Theme.of(context).primaryColor,
@@ -201,32 +202,36 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 5),
+                          SizedBox(width: 5),
                           Expanded(
                             child: GestureDetector(
-                              onTap:totalPrice > 0? (){
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => BlocProvider<PaymentCubit>(
-                                      create: (BuildContext context) =>
-                                          serviceLocator(),
-                                      child: PaymentView(
-                                        amountId: '',
-                                        amount: totalPrice,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }:(){},
+                              onTap: totalPrice > 0
+                                  ? () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              BlocProvider<PaymentCubit>(
+                                            create: (BuildContext context) =>
+                                                serviceLocator(),
+                                            child: PaymentView(
+                                              amountId: '',
+                                              amount: totalPrice,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  : () {},
                               child: Container(
-                                padding: const EdgeInsetsDirectional.symmetric(
-                                    vertical: 10, horizontal: 10),
+                                padding: EdgeInsetsDirectional.symmetric(
+                                    vertical: 10.h, horizontal: 10.w),
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   color: totalPrice > 0
                                       ? AppColors.SECONDARY_COLOR
-                                      : AppColors.SECONDARY_COLOR.withOpacity(.5),
+                                      : AppColors.SECONDARY_COLOR
+                                          .withOpacity(.5),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Center(
@@ -252,9 +257,9 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                 child: GestureDetector(
                   onTap: () => context.push(Routes.LOGIN),
                   child: Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: EdgeInsets.all(12),
                     width: 300,
-                    height: 300,
+                    height: 300.h,
                     decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor,
                       shape: BoxShape.circle,

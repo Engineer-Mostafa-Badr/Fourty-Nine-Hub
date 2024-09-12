@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/balance_wallet_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/normal_wallet_view.dart';
@@ -19,8 +20,8 @@ class WalletView extends StatelessWidget {
     required BuildContext context,
   }) {
     return Container(
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.only(top: 20, bottom: 10),
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.only(top: 20, bottom: 10),
         decoration: BoxDecoration(
           color: AppColors.PRIMARY_COLOR.withAlpha(230),
           borderRadius: BorderRadius.circular(10),
@@ -100,7 +101,7 @@ class WalletView extends StatelessWidget {
                 text: label,
                 style: Styles.mediumText(
                     color: Colors.white,
-                    fontSize: 10,
+                    fontSize: 10.sp,
                     decoration: TextDecoration.underline)),
             Label(
                 text: value,
@@ -129,12 +130,12 @@ class WalletView extends StatelessWidget {
     //       body: SingleChildScrollView(
     //         physics: const BouncingScrollPhysics(),
     //         child: Padding(
-    //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
+    //           padding: EdgeInsets.symmetric(horizontal: 8.0),
     //           child: Column(
     //             crossAxisAlignment: CrossAxisAlignment.center,
     //             children: [
-    //               const Sizer(
-    //                 height: 20,
+    //               Sizer
+    //                 height: 20.h,
     //               ),
     //               SemicircularIndicator(
     //                 color: AppColors.SECONDARY_COLOR,
@@ -143,12 +144,12 @@ class WalletView extends StatelessWidget {
     //                 child: Text(
     //                   '${((900 / 1002) * 100).toStringAsFixed(0)} %',
     //                   style: const TextStyle(
-    //                       fontSize: 32,
+    //                       fontSize: 32.sp,
     //                       fontWeight: FontWeight.w600,
     //                       color: AppColors.PRIMARY_COLOR),
     //                 ),
     //               ),
-    //               const Sizer(),
+    //               Sizer
 
     //               // MaterialButton(
     //               //   onPressed: () async {
@@ -166,7 +167,7 @@ class WalletView extends StatelessWidget {
     //               //     mainAxisAlignment: MainAxisAlignment.center,
     //               //     children: [
     //               //       const Icon(Icons.send_to_mobile_rounded),
-    //               //       const Sizer(),
+    //               //       Sizer
     //               //       Label(
     //               //           text: Labels.transferMoney,
     //               //           style: Styles.mediumText(color: Colors.white)),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -53,7 +54,7 @@ class _InstagramReelCardState extends State<InstagramReelCard> {
         Positioned.fill(
           child: Center(
             child: _controller == null
-                ? const SizedBox.shrink()
+                ? SizedBox.shrink()
                 : AspectRatio(
                     aspectRatio: _controller!.value.aspectRatio,
                     child: VideoPlayer(
@@ -111,7 +112,7 @@ class _ControlsOverlay extends StatelessWidget {
           duration: const Duration(milliseconds: 50),
           reverseDuration: const Duration(milliseconds: 200),
           child: controller.value.isPlaying
-              ? const SizedBox.shrink()
+              ? SizedBox.shrink()
               : const ColoredBox(
                   color: Colors.black26,
                   child: Center(
@@ -152,11 +153,11 @@ class _ControlsOverlay extends StatelessWidget {
               ];
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 // Using less vertical padding as the text is also longer
                 // horizontally, so it feels like it would need more spacing
                 // horizontally (matching the aspect ratio of the video).
-                vertical: 12,
+                vertical: 12.h,
                 horizontal: 16,
               ),
               child: Text('${controller.value.captionOffset.inMilliseconds}ms'),
@@ -180,12 +181,12 @@ class _ControlsOverlay extends StatelessWidget {
                   )
               ];
             },
-            child: const Padding(
+            child:  Padding(
               padding: EdgeInsets.symmetric(
                 // Using less vertical padding as the text is also longer
                 // horizontally, so it feels like it would need more spacing
                 // horizontally (matching the aspect ratio of the video).
-                vertical: 12,
+                vertical: 12.h,
                 horizontal: 16,
               ),
               child: Text(''),

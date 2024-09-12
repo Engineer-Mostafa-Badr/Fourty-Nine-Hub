@@ -25,7 +25,7 @@ class PrivacySwitchItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
+        padding: EdgeInsets.symmetric(horizontal: 5),
         child: Row(
           children: [
             Expanded(

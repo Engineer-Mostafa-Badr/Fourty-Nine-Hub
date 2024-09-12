@@ -8,7 +8,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:intl/intl.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ScheduleMeetingScreen extends StatefulWidget {
   const ScheduleMeetingScreen({super.key});
 
@@ -115,8 +115,8 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8.0)
-              .add(const EdgeInsets.symmetric(vertical: 25)),
+          padding:
+              EdgeInsets.all(8.0).add(EdgeInsets.symmetric(vertical: 25.h)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -184,7 +184,7 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16.0),
+              SizedBox(height: 16.h),
               // Meeting Title
               TextField(
                 focusNode: _focusNode,
@@ -195,7 +195,7 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                   fillColor: Colors.white,
                 ),
               ),
-              const SizedBox(height: 16.0),
+              SizedBox(height: 16.h),
               // Date Picker
               _buildDateTimeSelection(
                 title: 'Date',
@@ -204,7 +204,7 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                     : 'Select date',
                 onTap: () => _selectDate(context),
               ),
-              const SizedBox(height: 16.0),
+              SizedBox(height: 16.h),
               // Start Time Picker
               _buildDateTimeSelection(
                 title: 'From',
@@ -213,7 +213,7 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                     : 'Select start time',
                 onTap: () => _selectTime(context, true),
               ),
-              const SizedBox(height: 16.0),
+              SizedBox(height: 16.h),
               // End Time Picker
               _buildDateTimeSelection(
                 title: 'To',
@@ -222,7 +222,7 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                     : 'Select end time',
                 onTap: () => _selectTime(context, false),
               ),
-              const SizedBox(height: 16.0),
+              SizedBox(height: 16.h),
             ],
           ),
         ),
@@ -240,8 +240,7 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
       child: Column(
         children: [
           Container(
-            padding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -255,8 +254,8 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                 ),
                 Text(
                   content,
-                  style: const TextStyle(
-                    fontSize: 16.0,
+                  style:  TextStyle(
+                    fontSize: 16.sp,
                     color: Colors.black54,
                   ),
                 ),

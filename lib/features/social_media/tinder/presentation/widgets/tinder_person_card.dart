@@ -70,7 +70,7 @@
 //                       Icons.location_on,
 //                       color: Colors.white,
 //                     ),
-//                     const Sizer(),
+//                     Sizer(),
 //                     Label(
 //                       text: '2 miles away',
 //                       style: Styles.mediumText(color: Colors.white),

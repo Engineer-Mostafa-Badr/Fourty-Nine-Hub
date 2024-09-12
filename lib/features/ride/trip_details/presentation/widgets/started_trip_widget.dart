@@ -44,7 +44,7 @@ class StartedTripWidget extends StatelessWidget {
           backgroundColor: Colors.white,
           backgroundImage: NetworkImage(driver.profileImage),
         ),
-        const Sizer(),
+        Sizer(),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,7 +78,7 @@ class StartedTripWidget extends StatelessWidget {
         Row(
           children: [
             const Icon(FontAwesomeIcons.car, color: AppColors.PRIMARY_COLOR),
-            const Sizer(),
+            Sizer(),
             Label(
               text: trip.category?.name ?? "",
               style: Styles.mediumText(fontWeight: FontWeight.bold),
@@ -94,7 +94,7 @@ class StartedTripWidget extends StatelessWidget {
                 Icons.location_searching,
                 color: AppColors.PRIMARY_COLOR,
               ),
-              const Sizer(),
+              Sizer(),
               Expanded(child: Label(text: trip.fromAddress)),
               IconAppButton(
                   icon: Icons.directions,
@@ -114,7 +114,7 @@ class StartedTripWidget extends StatelessWidget {
                 Icons.location_on,
                 color: AppColors.SECONDARY_COLOR,
               ),
-              const Sizer(),
+              Sizer(),
               Expanded(child: Label(text: trip.toAddress)),
               IconAppButton(
                   icon: Icons.directions,
@@ -131,7 +131,7 @@ class StartedTripWidget extends StatelessWidget {
                 child: Row(
               children: [
                 const Icon(Icons.monetization_on_rounded),
-                const Sizer(),
+                Sizer(),
                 Label(text: '${trip.price} L.E')
               ],
             )),
@@ -139,7 +139,7 @@ class StartedTripWidget extends StatelessWidget {
                 child: Row(
               children: [
                 const Icon(Icons.timer),
-                const Sizer(),
+                Sizer(),
                 Label(text: trip.time.toString())
               ],
             )),
@@ -147,7 +147,7 @@ class StartedTripWidget extends StatelessWidget {
                 child: Row(
               children: [
                 const Icon(Icons.add_road),
-                const Sizer(),
+                Sizer(),
                 Label(text: trip.distance.toString())
               ],
             )),

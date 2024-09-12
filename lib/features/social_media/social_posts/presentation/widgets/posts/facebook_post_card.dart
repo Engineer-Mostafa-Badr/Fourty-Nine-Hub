@@ -30,7 +30,7 @@ import '../../../../../../res/style/const.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 import '../../../domain/usecases/post_react_usecase.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class FacebookPostCard extends StatefulWidget {
   final PostEntity post;
   final int index;
@@ -85,7 +85,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ??  UnknownFailure(''),
+            state.failure ?? UnknownFailure(''),
             context,
           ),
         );
@@ -150,16 +150,16 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                           myPost.mainPost == null)
                         SizedBox(
                           width: double.infinity,
-                          height: 100,
+                          height: 100.h,
                           child: Center(
                             child: Row(
                               children: [
-                                const Sizer(),
+                                Sizer(),
                                 const Icon(
                                   Icons.lock,
                                   color: Colors.black,
                                 ),
-                                const Sizer(),
+                                Sizer(),
                                 Label(
                                   text: "This content is not available now.",
                                   style: Styles.headerText(
@@ -174,7 +174,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 8,right: 8),
+                  padding: EdgeInsets.only(left: 8, right: 8),
                   child: Row(
                     children: [
                       if (myPost.likesCount != 0)
@@ -204,7 +204,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                               text: myPost.commentsCount.toString(),
                               style: Styles.mediumText(),
                             ),
-                            const Sizer(
+                            Sizer(
                               width: 5,
                             ),
                             Label(
@@ -279,7 +279,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   backgroundColor: myPost.backgroundColor,
                   images: myPost.images),
               Padding(
-                padding: const EdgeInsets.only(left: 8,right: 8),
+                padding: EdgeInsets.only(left: 8, right: 8),
                 child: Row(
                   children: [
                     if (myPost.likesCount != 0)
@@ -309,7 +309,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                             text: myPost.commentsCount.toString(),
                             style: Styles.mediumText(),
                           ),
-                          const Sizer(
+                          Sizer(
                             width: 5,
                           ),
                           Label(
@@ -377,9 +377,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       children: [
         Image.asset(
           image,
-          height: 20,
+          height: 20.h,
         ),
-        const Sizer(
+        Sizer(
           width: 5,
         ),
         Label(
@@ -396,21 +396,22 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       height: widget.isMyPost ? 150 : 150,
       child: Column(
         children: [
-          if (!widget.isMyPost)listTile(
-              icon: Icons.report,
-              iconColor: Colors.red,
-              title: 'Report post',
-              subTitle: 'Your well reports this post.',
-              onTap: () async{
-                Future.delayed(const Duration(milliseconds: 200), () {
-                  bottomSheet(
-                    context: context,
-                    widget: ReportView(id: widget.post.id,
-                      categoryId: '66a3583454e6e337915514db',)
-                  );
-                });
-
-              }),
+          if (!widget.isMyPost)
+            listTile(
+                icon: Icons.report,
+                iconColor: Colors.red,
+                title: 'Report post',
+                subTitle: 'Your well reports this post.',
+                onTap: () async {
+                  Future.delayed(const Duration(milliseconds: 200), () {
+                    bottomSheet(
+                        context: context,
+                        widget: ReportView(
+                          id: widget.post.id,
+                          categoryId: '66a3583454e6e337915514db',
+                        ));
+                  });
+                }),
           if (widget.isMyPost)
             listTile(
                 icon: Icons.delete,
@@ -439,7 +440,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   }
 
   Widget listTile(
-      {required IconData icon, Color? iconColor,
+      {required IconData icon,
+      Color? iconColor,
       required String title,
       required String subTitle,
       required Function onTap}) {
@@ -451,7 +453,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       },
       leading: Icon(
         icon,
-        color: iconColor??Colors.black,
+        color: iconColor ?? Colors.black,
       ),
       subtitle: Label(
         text: subTitle,
@@ -464,9 +466,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
     required BuildContext context,
     required PostEntity post,
   }) {
-
     return Padding(
-      padding: const EdgeInsets.only(left: 8,right: 8,top: 8),
+      padding: EdgeInsets.only(left: 8, right: 8, top: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -483,10 +484,10 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   image: post.user.image,
                   isCircle: true,
                   width: 40,
-                  height: 40,
+                  height: 40.h,
                 ),
               ),
-              const Sizer(),
+              Sizer(),
               Expanded(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -494,7 +495,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     InkWell(
                       onTap: () {
                         if (widget.fromProfile == false) {
-                          context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                          context.push(Routes.OTHERSACCOUNT,
+                              extra: post.user.id);
                         }
                       },
                       child: Column(
@@ -527,24 +529,24 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   ],
                 ),
               ),
-              const Sizer(),
-                IconAppButton(
-                  icon: Icons.more_horiz_outlined,
-                  onPressed: () {
-                    bottomSheet(
-                        context: context,
-                        widget: _buildPostOptions(
-                            fromDetails: widget.from == 'details',
-                            post: post,
-                        ),
-                    );
-                  },
-                ),
+              Sizer(),
+              IconAppButton(
+                icon: Icons.more_horiz_outlined,
+                onPressed: () {
+                  bottomSheet(
+                    context: context,
+                    widget: _buildPostOptions(
+                      fromDetails: widget.from == 'details',
+                      post: post,
+                    ),
+                  );
+                },
+              ),
             ],
           ),
           if (post.location != null)
             Padding(
-              padding: const EdgeInsetsDirectional.only(start: 40.0),
+              padding: EdgeInsetsDirectional.only(start: 40.0),
               child: InkWell(
                 onTap: () {
                   showDialog(
@@ -564,7 +566,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     Expanded(
                         child: Label(
                       text: post.location?.place ?? '',
-                      style: Styles.mediumText(fontSize: 14),
+                      style: Styles.mediumText(fontSize: 14.sp),
                     ))
                   ],
                 ),
@@ -580,7 +582,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
     required MainPostEntity post,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: EdgeInsets.symmetric(horizontal: 8),
       child: Row(
         children: [
           InkWell(
@@ -594,10 +596,10 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               isCircle: true,
               defaultLogo: false,
               width: 40,
-              height: 40,
+              height: 40.h,
             ),
           ),
-          const Sizer(),
+          Sizer(),
           Expanded(
               child: Row(
             children: [
@@ -650,10 +652,10 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             images!.isEmpty
         ? Container(
             width: double.infinity,
-            height: 220,
+            height: 220.h,
             alignment: Alignment.center,
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+            margin: EdgeInsets.symmetric(vertical: 10.h),
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
             color: images.isEmpty
                 ? Color(int.parse(backgroundColor.substring(1), radix: 16))
                 : Colors.white,
@@ -661,25 +663,25 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               text: content,
               style: Styles.headerText(
                   color: Colors.black,
-                  fontSize: 30,
+                  fontSize: 30.sp,
                   fontWeight: FontWeight.bold),
             ),
           )
         : Container(
             width: double.infinity,
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+            margin: EdgeInsets.symmetric(vertical: 10.h),
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ReadMoreLabel(text: content),
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: 10.h,
                 ),
                 if ((images?.isNotEmpty ?? false))
                   SizedBox(
                     child: GridView.builder(
-                        padding: const EdgeInsets.all(10),
+                        padding: EdgeInsets.all(10),
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -756,19 +758,25 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
     IconData? icon,
     required String label,
     String? image,
-    bool? isImage=false,
+    bool? isImage = false,
     Function? onTap,
   }) {
     if (onTap == null) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if(image!=null)Image.asset(image,width: 24,height: 24,),
-          if(isImage==false)FaIcon(
-            icon,
-            color: AppColors.GREY_DARK_COLOR,
-            size: 20,
-          ),
+          if (image != null)
+            Image.asset(
+              image,
+              width: 24,
+              height: 24.h,
+            ),
+          if (isImage == false)
+            FaIcon(
+              icon,
+              color: AppColors.GREY_DARK_COLOR,
+              size: 20,
+            ),
           Label(text: label, style: Styles.mediumText(color: Colors.grey))
         ],
       );
@@ -778,13 +786,19 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if(image!=null)Image.asset(image??'',width: 22,height: 22,),
-            if(image==null)FaIcon(
-              icon,
-              color: AppColors.GREY_DARK_COLOR,
-              size: 20,
-            ),
-            // const Sizer(),
+            if (image != null)
+              Image.asset(
+                image ?? '',
+                width: 22,
+                height: 22.h,
+              ),
+            if (image == null)
+              FaIcon(
+                icon,
+                color: AppColors.GREY_DARK_COLOR,
+                size: 20,
+              ),
+            // Sizer(),
             Label(text: label, style: Styles.mediumText(color: Colors.grey))
           ],
         ),
@@ -794,16 +808,16 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
 
   Widget _buildActivityFeelingWidget(PostEntity post) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: EdgeInsets.symmetric(horizontal: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (post.feeling != null || post.activity != null) ...[
             Text(
-              'feeling ${post.feeling!=null?post.feeling?.name??'':''}${post.activity!=null?', ${post.activity?.name}':''}',
+              'feeling ${post.feeling != null ? post.feeling?.name ?? '' : ''}${post.activity != null ? ', ${post.activity?.name}' : ''}',
               style: Styles.mediumText(),
             ),
-            const SizedBox(
+            SizedBox(
               width: 10,
             ),
           ],

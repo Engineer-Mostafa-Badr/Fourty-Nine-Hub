@@ -22,7 +22,7 @@ class TripJoinNotes extends StatelessWidget {
           currentController: TextEditingController(),
           hint: 'Type trip notes',
         ),
-        const Sizer(),
+        Sizer(),
       ],
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreateDoctorGovernorateDropdown extends StatelessWidget {
   const CreateDoctorGovernorateDropdown(
@@ -50,7 +51,7 @@ class CreateDoctorGovernorateDropdown extends StatelessWidget {
                   if (field.hasError)
                     Column(
                       children: [
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
                         Text(
                           field.errorText ?? "",
                           style: Styles.mediumText(color: Colors.red),
@@ -62,7 +63,7 @@ class CreateDoctorGovernorateDropdown extends StatelessWidget {
             },
           );
         } else {
-          return const SizedBox.shrink();
+          return SizedBox.shrink();
         }
       },
     );

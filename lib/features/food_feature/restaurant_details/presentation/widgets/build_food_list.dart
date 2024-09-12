@@ -13,7 +13,7 @@ class BuildFoodList extends StatelessWidget {
         builder: (context, state) {
       return state.meals?.isNotEmpty ?? false
           ? Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(10.0),
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: state.meals?.length ?? 0,
@@ -24,7 +24,7 @@ class BuildFoodList extends StatelessWidget {
                 },
               ),
             )
-          : const SizedBox();
+          : SizedBox();
     });
   }
 }

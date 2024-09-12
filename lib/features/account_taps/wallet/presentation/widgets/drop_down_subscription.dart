@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/main_category_entity.dart';
 
@@ -30,7 +31,7 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
           _showCategoryDialog();
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding:  EdgeInsets.symmetric(vertical: 12.h),
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(8),
@@ -53,13 +54,13 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:  Text(LocaleKeys.selectCategory.localize),
+          title: Text(LocaleKeys.selectCategory.localize),
           content: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxHeight: 300.0, // Limits height to show only 4 items
+            constraints:  BoxConstraints(
+              maxHeight: 300.0.h, // Limits height to show only 4 items
             ),
             child: SizedBox(
-              height: 200,
+              height: 200.h,
               child: PaginationView<MainCategoryWalletEntity>(
                 build: (ScrollController scrollController,
                     List<MainCategoryWalletEntity> data) {
@@ -83,7 +84,7 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
                                 },
                               );
                             }).toList()
-                          : [ Text(LocaleKeys.noCategoriesAvailable.localize)],
+                          : [Text(LocaleKeys.noCategoriesAvailable.localize)],
                     ),
                   );
                 },
@@ -104,13 +105,13 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:  Text(LocaleKeys.selecteSubcategory.localize),
+          title: Text(LocaleKeys.selecteSubcategory.localize),
           content: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxHeight: 300.0, // Limits height to show only 4 items
+            constraints:  BoxConstraints(
+              maxHeight: 300.0.h, // Limits height to show only 4 items
             ),
             child: SizedBox(
-              height: 200,
+              height: 200.h,
               child: PaginationView<MainCategoryWalletEntity>(
                 build: (ScrollController scrollController,
                     List<MainCategoryWalletEntity> data) {
@@ -138,7 +139,7 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
                                 },
                               );
                             }).toList()
-                          : [ Text(LocaleKeys.noCategoriesAvailable.localize)],
+                          : [Text(LocaleKeys.noCategoriesAvailable.localize)],
                     ),
                   );
                 },
@@ -153,5 +154,4 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
       },
     );
   }
-
 }

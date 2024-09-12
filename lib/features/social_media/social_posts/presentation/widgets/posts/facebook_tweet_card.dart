@@ -17,7 +17,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class FacebookTweetCard extends StatelessWidget {
   const FacebookTweetCard({super.key, required this.post});
   final PostEntity post;
@@ -29,19 +29,19 @@ class FacebookTweetCard extends StatelessWidget {
           border: isShared == true
               ? Border.all(color: AppColors.LIGHT_GRAY_COLOR)
               : null),
-      padding: const EdgeInsets.all(10.0),
+      padding: EdgeInsets.all(10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(
             text: "@Tweet",
             style: Styles.headerText(
-              fontSize: 22,
+              fontSize: 22.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: 10.h,
           ),
           InkWell(
             onTap: () {
@@ -53,7 +53,7 @@ class FacebookTweetCard extends StatelessWidget {
                   ));
             },
             child: Container(
-              padding: const EdgeInsets.all(10),
+              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(15),
@@ -65,13 +65,13 @@ class FacebookTweetCard extends StatelessWidget {
                       context: context,
                       user: post.user,
                     ),
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: 10.h,
                     ),
                     if (post.content!.isNotEmpty || post.images!.isNotEmpty)
                       _buildContent(context: context, post: post),
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: 10.h,
                     )
                   ],
                   Container(
@@ -111,12 +111,12 @@ class FacebookTweetCard extends StatelessWidget {
           onTap: () => context.push(Routes.OTHERSACCOUNT),
           child: CircleAvatar(
             backgroundColor: Colors.white,
-            backgroundImage: NetworkImage((user.image!=null)
-                ? user.image??''
+            backgroundImage: NetworkImage((user.image != null)
+                ? user.image ?? ''
                 : UIConst.profilePlaceHolder),
           ),
         ),
-        const Sizer(),
+        Sizer(),
         Expanded(
             child: InkWell(
           onTap: () => context.push(Routes.OTHERSACCOUNT),
@@ -152,19 +152,19 @@ class FacebookTweetCard extends StatelessWidget {
   }) {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+      margin: EdgeInsets.symmetric(vertical: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
       decoration: const BoxDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ReadMoreLabel(text: post.content ?? ''),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: 10.h,
           ),
           if ((post.images?.isNotEmpty ?? false))
             GridView.builder(
-                padding: const EdgeInsets.all(10),
+                padding: EdgeInsets.all(10),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -208,9 +208,9 @@ class FacebookTweetCard extends StatelessWidget {
                               ),
                               if (index == 3 && post.images!.length > 4)
                                 Container(
-                                  margin: const EdgeInsetsDirectional.only(
+                                  margin: EdgeInsetsDirectional.only(
                                       end: 10, bottom: 10),
-                                  // padding: const EdgeInsets.all(10),
+                                  // padding: EdgeInsets.all(10),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     // borderRadius: BorderRadius.circular(15),
@@ -241,20 +241,20 @@ class FacebookTweetCard extends StatelessWidget {
   }) {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+      margin: EdgeInsets.symmetric(vertical: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
       decoration: const BoxDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ReadMoreLabel(text: post.content ?? ''),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: 10.h,
           ),
           if ((post.images?.isNotEmpty ?? false))
             SizedBox(
               child: GridView.builder(
-                  padding: const EdgeInsets.all(10),
+                  padding: EdgeInsets.all(10),
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -293,9 +293,9 @@ class FacebookTweetCard extends StatelessWidget {
                             Stack(
                               children: [
                                 Container(
-                                  margin: const EdgeInsetsDirectional.only(
+                                  margin: EdgeInsetsDirectional.only(
                                       end: 10, bottom: 10),
-                                  padding: const EdgeInsets.all(10),
+                                  padding: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
                                     image: DecorationImage(
@@ -308,9 +308,9 @@ class FacebookTweetCard extends StatelessWidget {
                                 ),
                                 if (index == 3 && post.images!.length > 4)
                                   Container(
-                                    margin: const EdgeInsetsDirectional.only(
+                                    margin: EdgeInsetsDirectional.only(
                                         end: 10, bottom: 10),
-                                    // padding: const EdgeInsets.all(10),
+                                    // padding: EdgeInsets.all(10),
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(15),

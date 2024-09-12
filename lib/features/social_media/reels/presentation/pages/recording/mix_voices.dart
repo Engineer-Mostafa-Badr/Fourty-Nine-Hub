@@ -217,14 +217,14 @@
 //       right: 0,
 //       child: Center(
 //         child: Container(
-//           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+//           padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16),
 //           decoration: BoxDecoration(
 //             color: Colors.black.withOpacity(0.7),
 //             borderRadius: BorderRadius.circular(20),
 //           ),
 //           child: Text(
 //             'Recording stops in $_secondsRemaining seconds',
-//             style: const TextStyle(color: Colors.white, fontSize: 18),
+//             style: const TextStyle(color: Colors.white, fontSize: 18.sp),
 //           ),
 //         ),
 //       ),
@@ -250,7 +250,7 @@
 //                         size: 50,
 //                       ),
 //                     )
-//                   : const SizedBox(
+//                   : SizedBox(
 //                       width: 50,
 //                     ),
 //               GestureDetector(
@@ -261,15 +261,15 @@
 //                   alignment: Alignment.center,
 //                   children: [
 //                     Container(
-//                       padding: const EdgeInsets.all(0),
-//                       margin: const EdgeInsets.all(0),
+//                       padding: EdgeInsets.all(0),
+//                       margin: EdgeInsets.all(0),
 //                       decoration: BoxDecoration(
 //                         shape: BoxShape.circle,
 //                         color: Colors.transparent,
 //                         border: Border.all(color: Colors.white70, width: 4),
 //                       ),
 //                       child: Padding(
-//                         padding: const EdgeInsets.all(4.0),
+//                         padding: EdgeInsets.all(4.0),
 //                         child: CustomPaint(
 //                           painter: ProgressPainter(
 //                             progress: _animationController.value,
@@ -336,6 +336,7 @@ import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
@@ -350,7 +351,12 @@ class MixVoiceVideoRecordingScreen extends StatefulWidget {
   final String? comeFrom;
   final String? totalPrice;
   final String? advertisementType;
-  const MixVoiceVideoRecordingScreen({super.key, required this.voiceUrl, this.comeFrom, this.totalPrice, this.advertisementType});
+  const MixVoiceVideoRecordingScreen(
+      {super.key,
+      required this.voiceUrl,
+      this.comeFrom,
+      this.totalPrice,
+      this.advertisementType});
 
   @override
   MixVoiceVideoRecordingScreenState createState() =>
@@ -581,7 +587,7 @@ class MixVoiceVideoRecordingScreenState
 
   Widget _buildFilterSelector() {
     return SizedBox(
-      height: 100,
+      height: 100.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: filters.length,
@@ -590,7 +596,7 @@ class MixVoiceVideoRecordingScreenState
             onTap: () => _applyFilter(filters[index]),
             child: Container(
               width: 80,
-              margin: const EdgeInsets.symmetric(horizontal: 5),
+              margin: EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
                 border: Border.all(
                     color: _selectedFilter == filters[index]
@@ -665,14 +671,14 @@ class MixVoiceVideoRecordingScreenState
       right: 0,
       child: Center(
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16),
           decoration: BoxDecoration(
             color: Colors.black.withOpacity(0.7),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
             'Recording stops in $_secondsRemaining seconds',
-            style: const TextStyle(color: Colors.white, fontSize: 18),
+            style:  TextStyle(color: Colors.white, fontSize: 18.sp),
           ),
         ),
       ),
@@ -709,15 +715,15 @@ class MixVoiceVideoRecordingScreenState
                   alignment: Alignment.center,
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(0),
-                      margin: const EdgeInsets.all(0),
+                      padding: EdgeInsets.all(0),
+                      margin: EdgeInsets.all(0),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.transparent,
                         border: Border.all(color: Colors.white70, width: 4),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(4.0),
+                        padding: EdgeInsets.all(4.0),
                         child: CustomPaint(
                           painter: ProgressPainter(
                             progress: _animationController.value,

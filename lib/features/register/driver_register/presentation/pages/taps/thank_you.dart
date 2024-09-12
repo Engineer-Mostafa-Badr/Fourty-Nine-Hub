@@ -30,7 +30,7 @@ class ThankYou extends StatelessWidget {
                 size: 40,
               ),
             ),
-            const Sizer(),
+            Sizer(),
             Label(
               text: title,
               style: Styles.headerText(),

@@ -37,7 +37,7 @@ class AuctionCard extends StatelessWidget {
               ? item.ad.images.first
               : UIConst.imagePlaceHolder,
         )),
-        const Sizer(),
+        Sizer(),
         Expanded(
           flex: 2,
           child: Column(
@@ -61,7 +61,7 @@ class AuctionCard extends StatelessWidget {
                       ),
                     ],
                   )),
-                  const Sizer(),
+                  Sizer(),
                   // IconAppButton(
                   //     size: 20, icon: Icons.favorite_border, onPressed: () {}),
                 ],
@@ -71,7 +71,7 @@ class AuctionCard extends StatelessWidget {
                 style: Styles.mediumText(),
                 maxLines: 1,
               ),
-              const Sizer(),
+              Sizer(),
               Row(
                 children: [
                   Expanded(
@@ -84,7 +84,7 @@ class AuctionCard extends StatelessWidget {
                       maxLines: 1,
                     ),
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Expanded(
                     child: item.isMine
                         ? AppButton(
@@ -130,7 +130,7 @@ class AuctionCard extends StatelessWidget {
                 maxLines: 1,
               ),
             ),
-            const Sizer(),
+            Sizer(),
             // IconAppButton(
             //     size: 20, icon: Icons.favorite_border, onPressed: () {}),
           ],

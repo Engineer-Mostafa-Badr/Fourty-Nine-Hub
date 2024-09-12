@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/address_search_params_entity.dart';
 import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -127,7 +128,7 @@ class _MapPickerState extends State<MapPicker> {
             widget.destLat != null &&
             widget.destLng != null)
           Positioned(
-              bottom: 0, right: 0, left: 0, height: 0, child: Container())
+              bottom: 0, right: 0, left: 0, height: 0.h, child: Container())
         else
           Positioned.fill(
               child: Center(
@@ -144,7 +145,7 @@ class _MapPickerState extends State<MapPicker> {
                         text: address,
                         style: Styles.mediumText(color: Colors.white)),
                   ),
-                const Sizer(),
+                Sizer(),
                 CircleAvatar(
                   radius: 15,
                   backgroundColor: AppColors.PRIMARY_COLOR,
@@ -154,7 +155,7 @@ class _MapPickerState extends State<MapPicker> {
                   ),
                 ),
                 Container(
-                  height: 15,
+                  height: 15.h,
                   width: 2,
                   color: AppColors.PRIMARY_COLOR,
                 ),
@@ -177,7 +178,7 @@ class _MapPickerState extends State<MapPicker> {
               child: AppButton(label: 'Done', onPressed: () => context.pop()))
         else
           Positioned(
-              bottom: 0, right: 0, left: 0, height: 0, child: Container()),
+              bottom: 0, right: 0, left: 0, height: 0.h, child: Container()),
       ],
     );
   }

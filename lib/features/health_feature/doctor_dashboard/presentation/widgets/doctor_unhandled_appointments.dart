@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
   const DoctorUnhandledAppointmentsWidget({super.key});
@@ -26,9 +27,9 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
           text: Labels.unhandledAppointments,
           style: Styles.headerText(),
         ),
-        const Sizer(),
+        Sizer(),
         Container(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+          padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Theme.of(context).primaryColor,
@@ -55,7 +56,7 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
                                 .rejectAppointment(appointment.id),
                           );
                         }),
-                    const Sizer(),
+                    Sizer(),
                     AppButton(
                         label: Labels.viewMore,
                         onPressed: () {
@@ -95,7 +96,7 @@ class DoctorUnhandledAppointmentCard extends StatelessWidget {
             child: SquareImage(
               url: appointment.image ?? UIConst.profilePlaceHolder,
             )),
-        const Sizer(),
+        Sizer(),
         Expanded(
           flex: 3,
           child: Column(
@@ -122,7 +123,7 @@ class DoctorUnhandledAppointmentCard extends StatelessWidget {
                 onPressed: () => onAccept?.call(),
                 backColor: AppColors.PRIMARY_COLOR,
               ),
-              const Sizer(),
+              Sizer(),
               AppButton(
                 label: Labels.reject,
                 onPressed: () => onReject?.call(),

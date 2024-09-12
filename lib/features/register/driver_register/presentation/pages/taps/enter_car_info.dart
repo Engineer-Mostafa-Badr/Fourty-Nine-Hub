@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/register/driver_register/presentation/widgets/upload_image.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../res/style/styles.dart';
 import '../../cubit/driver_register_cubit.dart';
@@ -19,17 +20,17 @@ class EnterCarInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Sizer(),
+        Sizer(),
         Row(
           children: [
             const Expanded(child: Label(text: 'Car Module')),
-            const Sizer(),
+            Sizer(),
             Expanded(
                 child: FormTextField(
               action: (v) {},
               label: 'Mark',
             )),
-            const Sizer(),
+            Sizer(),
             Expanded(
                 child: FormTextField(
               action: (v) {},
@@ -37,18 +38,18 @@ class EnterCarInfo extends StatelessWidget {
             )),
           ],
         ),
-        const Sizer(),
+        Sizer(),
         Row(
           children: [
             const Expanded(child: Label(text: 'Metal Plate')),
-            const Sizer(),
+            Sizer(),
             Expanded(
                 child: FormTextField(
               action: (v) {},
               label: 'Chars',
               type: TextInputType.text,
             )),
-            const Sizer(),
+            Sizer(),
             Expanded(
                 child: FormTextField(
               action: (v) {},
@@ -57,7 +58,7 @@ class EnterCarInfo extends StatelessWidget {
             )),
           ],
         ),
-        const Sizer(),
+        Sizer(),
         Row(
           children: [
             const Expanded(child: Label(text: 'Air Conditioner')),
@@ -68,11 +69,11 @@ class EnterCarInfo extends StatelessWidget {
         Row(
           children: [
             Expanded(child: UploadImageWidget(action: () {}, label: 'Front')),
-            // const Sizer(),
+            // Sizer(),
             Expanded(child: UploadImageWidget(action: () {}, label: 'Back')),
-            // const Sizer(),
+            // Sizer(),
             Expanded(child: UploadImageWidget(action: () {}, label: 'Right')),
-            // const Sizer(),
+            // Sizer(),
             Expanded(child: UploadImageWidget(action: () {}, label: 'Left')),
           ],
         )

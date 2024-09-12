@@ -5,10 +5,11 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.da
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 
@@ -84,10 +85,10 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                         backgroundColor:
                             Theme.of(context).scaffoldBackgroundColor,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24.0.zR),
+                          borderRadius: BorderRadius.circular(24.0.r),
                         ),
                         child: Container(
-                          padding: EdgeInsets.all(30.0.zW),
+                          padding: EdgeInsets.all(30.0.w),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
@@ -95,15 +96,15 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                                 LocaleKeys.congratulations.localize,
                                 style: Styles.headerText(
                                     color: AppColors.SECONDARY_COLOR,
-                                    fontSize: 45),
+                                    fontSize: 45.sp),
                               ),
-                              SizedBox(height: 16.0.zH),
+                              SizedBox(height: 16.h),
                               Text(
                                 LocaleKeys.giftApp.localize,
                                 textAlign: TextAlign.center,
                                 style: Styles.mediumText(),
                               ),
-                              SizedBox(height: 40.0.zH),
+                              SizedBox(height: 40.h),
                               ElevatedButton(
                                 onPressed: () {
                                   Navigator.of(context)
@@ -114,13 +115,13 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                                       Theme.of(context).primaryColor,
                                   shape: RoundedRectangleBorder(
                                     borderRadius:
-                                        BorderRadius.circular(16.0.zR),
+                                        BorderRadius.circular(16.0.r),
                                   ),
                                 ),
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
-                                    horizontal: 40.0.zW,
-                                    vertical: 24.0.zH,
+                                    horizontal: 40.0.w,
+                                    vertical: 24.h,
                                   ),
                                   child: Text(
                                     LocaleKeys.close.localize,
@@ -157,7 +158,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
             const Label(
               text: 'Please check your phone to see the verification\ncode',
             ),
-            const Sizer(),
+            Sizer(),
             PinCodeTextField(
               appContext: context,
               pastedTextStyle: TextStyle(
@@ -206,7 +207,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                 return true;
               },
             ),
-            const Sizer(),
+            Sizer(),
             const Label(
               text: 'Didn\'t receive an email?',
             ),

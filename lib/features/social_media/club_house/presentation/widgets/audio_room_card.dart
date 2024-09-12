@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/entities/club_voice_room_entity.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
@@ -43,7 +44,7 @@ class AudioRoomCard extends StatelessWidget {
       },
       child: Container(
         padding:
-            const EdgeInsets.only(right: 100, top: 10, left: 10, bottom: 10),
+            EdgeInsets.only(right: 100, top: 10, left: 10, bottom: 10),
         decoration: BoxDecoration(
           color: const Color(0xfff0f2ff),
           borderRadius: BorderRadius.circular(15),
@@ -61,7 +62,7 @@ class AudioRoomCard extends StatelessWidget {
               children: [
                 SizedBox(
                   width: 80,
-                  height: 80,
+                  height: 80.h,
                   child: Stack(
                     children: [
                       Positioned(
@@ -106,7 +107,7 @@ class AudioRoomCard extends StatelessWidget {
                                     text: '${user.firstName} ${user.lastName}',
                                     style: Styles.mediumText()),
                               ),
-                              // const Sizer(),
+                              // Sizer(),
                               const Icon(
                                 FontAwesomeIcons.comment,
                                 color: Colors.grey,
@@ -116,7 +117,7 @@ class AudioRoomCard extends StatelessWidget {
                           );
                         },
                         separatorBuilder: (context, index) {
-                          return const Sizer();
+                          return Sizer();
                         },
                       ),
                       Row(
@@ -126,7 +127,7 @@ class AudioRoomCard extends StatelessWidget {
                             color: Colors.grey,
                             size: 14,
                           ),
-                          const Sizer(),
+                          Sizer(),
                           Label(
                               text: room.users?.length.toString() ?? '0',
                               style: Styles.mediumText(color: Colors.grey))

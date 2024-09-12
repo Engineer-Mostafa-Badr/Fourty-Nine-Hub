@@ -12,6 +12,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../widgets/chat_room_app_bar.dart';
 import '../widgets/send_message_widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatRoomView extends StatefulWidget {
   final String? chatId;
@@ -38,7 +39,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.BACKGROUND_COLOR,
-      appBar: ChatRoomAppBar(),
+      appBar: const ChatRoomAppBar(),
       body: Stack(
         children: [
           // Background image
@@ -52,7 +53,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
             ),
           ),
           // Main content
-          Column(
+          const Column(
             children: [
               Expanded(child: MessagesListView()),
               SendMessageWidget(),
@@ -123,13 +124,13 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                       style: Styles.headerText(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 16.sp,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 12,
+                SizedBox(
+                  height: 12.h,
                 ),
                 Container(
                     margin: const EdgeInsets.only(right: 50),

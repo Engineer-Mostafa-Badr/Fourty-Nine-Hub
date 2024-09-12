@@ -37,7 +37,7 @@ class GiftWalletView extends StatelessWidget {
                       balance: '${state.gift?.giftWallet.amount ??''}',
                       type: WalletTypes.giftWallet,
                     ),
-                    const Sizer(),
+                    Sizer(),
                     Label(
                       text: LocaleKeys.competition.localize,
                       style: Styles.headerText(),

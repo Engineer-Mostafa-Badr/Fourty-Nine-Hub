@@ -32,7 +32,7 @@
 //         scrollDirection: Axis.horizontal,
 //         children: [
 //           _createMyStory(context),
-//           const Sizer(),
+//           Sizer(),
 //           BlocBuilder<StoryCubit, StoryState>(
 //             builder: (context, state) {
 //               return ListView.separated(
@@ -41,7 +41,7 @@
 //                 itemBuilder: (context, index) {
 //                   return _buildStoryItem(context, state, index);
 //                 },
-//                 separatorBuilder: (context, index) => const Sizer(),
+//                 separatorBuilder: (context, index) => Sizer(),
 //                 itemCount: state.stories.length,
 //               );
 //             },
@@ -167,6 +167,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -197,7 +198,7 @@ class ChatStories extends StatelessWidget {
         child: Row(
           children: [
             _createMyStory(context),
-            const Sizer(),
+            Sizer(),
             BlocBuilder<StoryCubit, StoryState>(
               builder: (context, state) {
                 if (state.users.isEmpty) {
@@ -211,7 +212,7 @@ class ChatStories extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return _buildStoryItem(context, state, index);
                   },
-                  separatorBuilder: (context, index) => const Sizer(),
+                  separatorBuilder: (context, index) => Sizer(),
                   itemCount: state.users.length,
                 );
               },
@@ -321,7 +322,7 @@ class ChatStories extends StatelessWidget {
                               context,
                               state.users[index].userStories!.first,
                               userController,
-                              textStyle: const TextStyle(fontSize: 12))
+                              textStyle:  TextStyle(fontSize: 12.sp))
                           : StoryItem.pageImage(
                               loadingWidget: const CupertinoActivityIndicator(
                                 color: Colors.white,
@@ -342,7 +343,7 @@ class ChatStories extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 8),
+           SizedBox(height: 8.h),
           // Add some space between the avatar and label
           Label(
             text: capitalizeAndSplit2Only(

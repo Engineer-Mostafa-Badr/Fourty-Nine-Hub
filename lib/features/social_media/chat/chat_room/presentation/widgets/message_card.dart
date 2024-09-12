@@ -114,7 +114,7 @@
 //                 ),
 //                 child: messageEntity.isDeleted!
 //                     ? const SizedBox(
-//                         height: 5,
+//                         height: 5.h,
 //                       )
 //                     : Padding(
 //                         padding: const EdgeInsets.only(bottom: 5),
@@ -124,7 +124,7 @@
 //                             Label(
 //                                 text: '${messageEntity.formattedCreatedAt}',
 //                                 style: Styles.smallText(color: Colors.black)),
-//                             const Sizer(),
+//                             Sizer(),
 //                             messageEntity.seen!
 //                                 ? const Icon(
 //                                     FontAwesomeIcons.checkDouble,
@@ -169,7 +169,7 @@
 //           backgroundColor: Colors.white,
 //           backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
 //         ),
-//         const Sizer(
+//         Sizer(
 //           width: 5,
 //         ),
 //         Container(
@@ -279,7 +279,8 @@ class MessageCard extends StatelessWidget {
                         : ReadMoreLabel(
                             trimLines: 5,
                             text: messageEntity.text!,
-                            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+                            style: Styles.mediumText(
+                                color: AppColors.PRIMARY_COLOR),
                             textAlign: TextAlign.left,
                           ),
                   ),
@@ -324,7 +325,7 @@ class MessageCard extends StatelessWidget {
           backgroundColor: Colors.white,
           backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
         ),
-        const Sizer(width: 5),
+        Sizer(width: 5),
         IntrinsicWidth(
           child: Container(
             padding: const EdgeInsets.all(12),

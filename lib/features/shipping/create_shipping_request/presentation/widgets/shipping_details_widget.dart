@@ -20,9 +20,9 @@ class ShippingDetailsWidget extends StatelessWidget {
       body: ListView(
         children: [
           _buildPickUpFromWidget(context: context),
-          const Sizer(),
+          Sizer(),
           _buildDropOffWidget(context: context),
-          const Sizer(),
+          Sizer(),
           _buildDescriptionWidget(context: context),
         ],
       ),
@@ -49,7 +49,7 @@ class ShippingDetailsWidget extends StatelessWidget {
                     hint: 'To Address',
                     prefix: const Icon(Icons.location_on),
                   )),
-              const Sizer(),
+              Sizer(),
               Expanded(
                   child: FormTextField(
                 hint: 'Entrance',
@@ -57,7 +57,7 @@ class ShippingDetailsWidget extends StatelessWidget {
               )),
             ],
           ),
-          const Sizer(),
+          Sizer(),
           FormTextField(
             hint: 'Phone Number',
             prefix: const Icon(Icons.phone),
@@ -84,13 +84,13 @@ class ShippingDetailsWidget extends StatelessWidget {
             maxLines: 3,
             controller: controller.toPhoneTextController,
           ),
-          const Sizer(),
+          Sizer(),
           FormTextField(
             hint: 'Offer Price',
             prefix: const Icon(Icons.monetization_on_outlined),
             controller: controller.offerTextController,
           ),
-          const Sizer(),
+          Sizer(),
           Row(
             children: [
               Expanded(
@@ -108,7 +108,7 @@ class ShippingDetailsWidget extends StatelessWidget {
                   )),
                 ),
               )),
-              const Sizer(),
+              Sizer(),
               Expanded(
                   child: InkWell(
                 onTap: () => controller.addNormalRequest(context: context),
@@ -150,7 +150,7 @@ class ShippingDetailsWidget extends StatelessWidget {
                     hint: 'From Address',
                     prefix: const Icon(Icons.location_on),
                   )),
-              const Sizer(),
+              Sizer(),
               Expanded(
                   child: FormTextField(
                 hint: 'Entrance',
@@ -158,7 +158,7 @@ class ShippingDetailsWidget extends StatelessWidget {
               )),
             ],
           ),
-          const Sizer(),
+          Sizer(),
           FormTextField(
             hint: 'Phone Number',
             prefix: const Icon(Icons.phone),

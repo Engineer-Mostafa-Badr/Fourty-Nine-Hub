@@ -18,11 +18,12 @@ import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widg
 import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/submit_button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
 
 class CreateResturantView extends StatelessWidget {
-  const CreateResturantView({super.key});
+  CreateResturantView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,7 @@ class CreateResturantView extends StatelessWidget {
       child: Scaffold(
         appBar: const HomeAppbar(),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(15.0),
+          padding: EdgeInsets.all(15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -56,15 +57,15 @@ class CreateResturantView extends StatelessWidget {
                 text: LocaleKeys.welcomeToResturantRegisteration.tr(),
                 style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
               ),
-              const Sizer(height: 20),
+              Sizer(height: 20.h),
               const CreateResturantSubcategoryDropdown(),
-              const Sizer(height: 20),
+              Sizer(height: 20.h),
               const CreateRestaurantNameField(),
-              const Sizer(height: 20),
+              Sizer(height: 20.h),
               const CreateRestaurantProfilePhotoPicker(),
-              const Sizer(height: 20),
+              Sizer(height: 20.h),
               const CreateRestaurantLicensePhotoPicker(),
-              const Sizer(height: 20),
+              Sizer(height: 20.h),
               CreateRestaurantGovernorateDropdown(
                 onSelected: (value) {
                   if (value != null) {
@@ -74,26 +75,26 @@ class CreateResturantView extends StatelessWidget {
                   }
                 },
               ),
-              const Sizer(height: 20),
+              Sizer(height: 20.h),
               const CreateRestaurantCitiesDropdowns(),
-              const Sizer(height: 20),
+              Sizer(height: 20.h),
 
               /// mneu
               BlocProvider(
                 create: (_) => RestaurantMenuCubit(),
                 child: ShowMneu(),
               ),
-              const Sizer(height: 20),
+              Sizer(height: 20.h),
 
               AppInfoText(
                   text: LocaleKeys
                       .theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider
                       .tr()),
-              const Sizer(height: 20),
+              Sizer(height: 20.h),
               AppInfoText(
                   text: LocaleKeys.youWillGetEGP3650PerYearIfYouSubscribeDaily
                       .tr()),
-              const Sizer(height: 20),
+              Sizer(height: 20.h),
               const CreateRestaurantSubmitButton(),
             ],
           ),

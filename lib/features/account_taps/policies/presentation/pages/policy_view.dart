@@ -14,7 +14,7 @@ class PolicyView extends StatelessWidget {
         label: Labels.policy,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(8.0),
         child: ListView(
           children: const [SelectableText(UIConst.placeholderText)],
         ),

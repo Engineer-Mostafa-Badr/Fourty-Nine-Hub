@@ -12,6 +12,8 @@ import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
   const BookDoctorAppointmentPatientInfoCard({super.key});
@@ -26,8 +28,7 @@ class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
           children: [
             Container(
               width: double.infinity,
-              padding:
-                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+              padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.0),
               decoration: BoxDecoration(
                 border: Border.all(color: AppColors.GREY_BORDER_COLOR),
                 borderRadius: BorderRadius.circular(8.0),
@@ -37,10 +38,10 @@ class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
                 style: Styles.mediumText(),
               ),
             ),
-            const Sizer(),
+            Sizer(),
             Text(Labels.gender, style: Styles.headerText()),
             const _GenderSelector(),
-            const Sizer(),
+            Sizer(),
             Form(
               key: controller.formKey,
               child: Column(
@@ -51,13 +52,13 @@ class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
                     onInputChanged: (value) {},
                     nextFocusNode: null,
                   ),
-                  const Sizer(),
+                  Sizer(),
                   DefaultTextFormField(
                       currentFocusNode: controller.ageFocusNode,
                       currentController: controller.ageController,
                       keyboardType: TextInputType.number,
                       hint: Labels.age),
-                  const Sizer(),
+                  Sizer(),
                   DefaultTextFormField(
                       currentFocusNode: controller.notesFocusNode,
                       currentController: controller.notesController,

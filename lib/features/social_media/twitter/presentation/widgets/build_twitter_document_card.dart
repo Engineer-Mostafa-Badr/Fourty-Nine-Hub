@@ -13,7 +13,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class BuildTwitterDocumentCard extends StatefulWidget {
   const BuildTwitterDocumentCard({super.key});
 
@@ -30,7 +30,7 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ??  UnknownFailure(''),
+            state.failure ?? UnknownFailure(''),
             context,
           ),
         );
@@ -42,20 +42,20 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
         hoverColor: Colors.transparent,
         highlightColor: Colors.transparent,
         onTap: () {
-          if(context.read<UserCubit>().isLoggedIn){
+          if (context.read<UserCubit>().isLoggedIn) {
             bottomSheet(
               context: context,
               isScrollControlled: true,
               widget: const BuildMetaVerified(),
             );
-          }else{
+          } else {
             context.push(Routes.LOGIN);
           }
         },
         child: Container(
-          height: 120,
+          height: 120.h,
           width: double.infinity,
-          margin: const EdgeInsets.all(10),
+          margin: EdgeInsets.all(10),
           alignment: Alignment.center,
           decoration: BoxDecoration(
               color: AppColors.PRIMARY_COLOR_LIGHT,
@@ -67,13 +67,14 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
                 Image.asset(
                   Assets.logo,
                   width: 60,
-                  height: 60,
+                  height: 60.h,
                 ),
                 Label(
                   text: "Documentation",
-                  style: Styles.headerText(fontSize: 20, color: Colors.white),
+                  style:
+                      Styles.headerText(fontSize: 20.sp, color: Colors.white),
                 ),
-                const SizedBox(
+                SizedBox(
                   width: 10,
                 ),
                 const Icon(

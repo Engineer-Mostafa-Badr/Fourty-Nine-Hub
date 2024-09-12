@@ -13,7 +13,7 @@ class CallingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () => context.push(Routes.CHATROOM),
         child: Row(
@@ -22,7 +22,7 @@ class CallingCard extends StatelessWidget {
               backgroundColor: Colors.white,
               backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
             ),
-            const Sizer(),
+            Sizer(),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,7 +31,7 @@ class CallingCard extends StatelessWidget {
                       text: 'Mohamed Gamal',
                       style: Styles.mediumText(fontWeight: FontWeight.bold)),
                   Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
+                    padding: EdgeInsets.only(right: 8.0),
                     child: Row(
                       children: [
                         const Icon(
@@ -39,7 +39,7 @@ class CallingCard extends StatelessWidget {
                           color: Colors.red,
                           size: 10,
                         ),
-                        const Sizer(),
+                        Sizer(),
                         Expanded(
                           child: Label(
                               text: 'May 21,6:50 PM',

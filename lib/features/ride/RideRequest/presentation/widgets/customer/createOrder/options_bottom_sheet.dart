@@ -55,13 +55,13 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // const Sizer(),
+              // Sizer(),
               // AppButton(
               //     label: 'Requests History',
               //     icon: Icons.history,
               //     onPressed: () => context.go(Routes.REQUESTSHISTORY)),
 
-              const Sizer(),
+              Sizer(),
 
               // Text('${state.subCategories?.length ?? 0}'),
               if (state.subCategories?.isNotEmpty ?? false)
@@ -108,10 +108,10 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                           ),
                         );
                       },
-                      separatorBuilder: (context, index) => const Sizer(),
+                      separatorBuilder: (context, index) => Sizer(),
                       itemCount: state.subCategories?.length ?? 0),
                 ),
-              const Sizer(),
+              Sizer(),
               if (state.fromAddress != null)
                 InkWell(
                   onTap: () {
@@ -139,7 +139,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                             radius: 4,
                           ),
                         ),
-                        const Sizer(),
+                        Sizer(),
                         Expanded(
                             child: Text(
                           state.fromAddress?.address ??
@@ -150,7 +150,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                     ),
                   ),
                 ),
-              const Sizer(),
+              Sizer(),
               // if (state.isFromAndToLocationSelected)
               InkWell(
                 onTap: () {
@@ -173,7 +173,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                         Icons.search,
                         color: AppColors.QUANTITY_COLOR,
                       ),
-                      const Sizer(),
+                      Sizer(),
                       Expanded(
                           child: Label(
                         text: state.toAddress?.address ??
@@ -187,7 +187,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                 ),
               ),
 
-              const Sizer(),
+              Sizer(),
               if (state.time != null)
                 Column(
                   children: [
@@ -223,7 +223,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                         ),
                       ),
                     ),
-                    const Sizer(),
+                    Sizer(),
                     InkWell(
                       onTap: () {
                         bottomSheet(
@@ -244,7 +244,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                                 text: 'EGP',
                                 style: Styles.mediumText(
                                     fontWeight: FontWeight.bold)),
-                            const Sizer(
+                            Sizer(
                               width: 20,
                             ),
                             Label(
@@ -266,7 +266,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                           Icons.rocket_launch,
                           size: 14,
                         ),
-                        const Sizer(),
+                        Sizer(),
                         Expanded(
                             child: Label(
                                 text: 'Auto Accept offer of EGP',
@@ -289,7 +289,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                             Icons.info_outline,
                             color: AppColors.PRIMARY_COLOR,
                           ),
-                          const Sizer(),
+                          Sizer(),
                           Label(
                               text:
                                   'Travel time ~ ${state.time ?? ''} - ${state.distance ?? ''}',
@@ -297,7 +297,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                         ],
                       ),
                     ),
-                    const Sizer(),
+                    Sizer(),
                   ],
                 ),
               if (state.reqestIsReady)
@@ -318,7 +318,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                         )),
                       ),
                     )),
-                    const Sizer(),
+                    Sizer(),
                     InkWell(
                       onTap: () {
                         bottomSheet(

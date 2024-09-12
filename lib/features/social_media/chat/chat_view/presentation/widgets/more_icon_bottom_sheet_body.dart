@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_item_model.dart';
@@ -21,8 +22,8 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      height: 200,
+      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10.h),
+      height: 200.h,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -77,8 +78,8 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
       color: Theme.of(context).scaffoldBackgroundColor,
       child: Column(
         children: [
-          const SizedBox(
-            height: 8,
+          SizedBox(
+            height: 8.h,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -93,12 +94,12 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
               ),
             ],
           ),
-          const SizedBox(
-            height: 8,
+          SizedBox(
+            height: 8.h,
           ),
           if (withUnderLine)
-            const Divider(
-              height: 1,
+             Divider(
+              height: 1.h,
             ),
         ],
       ),
@@ -153,7 +154,7 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
                         type: TextInputType.number,
                         // initialValue: '',
                         style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 20.sp,
                             color: Theme.of(context).scaffoldBackgroundColor,
                             fontWeight: FontWeight.bold),
                         action: (v) => () {}),

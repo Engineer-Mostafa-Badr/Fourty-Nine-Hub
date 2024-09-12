@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import '../../../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -33,35 +34,35 @@ class GiveOffer extends StatelessWidget {
               Label(
                   text: 'Offer your fare',
                   style: Styles.mediumText(fontWeight: FontWeight.bold)),
-              const Sizer(),
+              Sizer(),
               FormTextField(
                   hint: 'EGP',
                   type: TextInputType.number,
                   initialValue: state.offerPrice.toString(),
-                  style: const TextStyle(
-                      fontSize: 20,
+                  style:  TextStyle(
+                      fontSize: 20.sp,
                       color: Colors.grey,
                       fontWeight: FontWeight.bold),
                   action: (v) => controller.changeExpectedPrice(v)),
-              const Sizer(),
+              Sizer(),
               Row(
                 children: [
                   const Icon(
                     Icons.money,
                     color: Colors.green,
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Label(text: 'Cash', style: Styles.mediumText())
                 ],
               ),
-              const Sizer(),
+              Sizer(),
               Row(
                 children: [
                   const Icon(
                     Icons.rocket_launch,
                     color: AppColors.PRIMARY_COLOR,
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Expanded(
                       child: Label(
                           text:
@@ -72,7 +73,7 @@ class GiveOffer extends StatelessWidget {
                       onChanged: (v) => controller.changeAutoAcceptStatus(v: v))
                 ],
               ),
-              const Sizer(),
+              Sizer(),
               AppButton(
                   label: 'Done',
                   onPressed: () {

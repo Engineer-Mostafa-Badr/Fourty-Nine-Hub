@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'mix_voices.dart';
 import 'my_voice.dart';
 import 'other_voice.dart';
@@ -13,7 +13,12 @@ class ReelsRecordingScreen extends StatefulWidget {
   final String? totalPrice;
   final String? advertisementType;
 
-  const ReelsRecordingScreen({super.key, this.voiceUrl, this.comeFromCompany, this.totalPrice, this.advertisementType});
+  const ReelsRecordingScreen(
+      {super.key,
+      this.voiceUrl,
+      this.comeFromCompany,
+      this.totalPrice,
+      this.advertisementType});
 
   @override
   ReelsRecordingScreenState createState() => ReelsRecordingScreenState();
@@ -67,8 +72,8 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
               },
             ),
           ),
-          const SizedBox(
-            height: 20,
+          SizedBox(
+            height: 20.h,
           ),
         ],
       ),
@@ -92,9 +97,10 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
                 child: Text(
                   options[index],
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 18.sp,
                     color: isSelected ? Colors.white : Colors.grey,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),
               ),
@@ -125,7 +131,8 @@ class ProgressPainter extends CustomPainter {
     const startAngle = -3.14 / 2;
     final sweepAngle = 2 * 3.14 * progress;
 
-    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle, sweepAngle, false, paint);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle,
+        sweepAngle, false, paint);
   }
 
   @override
@@ -187,7 +194,8 @@ class HorizontalTextWheelPicker extends StatefulWidget {
   });
 
   @override
-  HorizontalTextWheelPickerState createState() => HorizontalTextWheelPickerState();
+  HorizontalTextWheelPickerState createState() =>
+      HorizontalTextWheelPickerState();
 }
 
 class HorizontalTextWheelPickerState extends State<HorizontalTextWheelPicker> {
@@ -198,14 +206,15 @@ class HorizontalTextWheelPickerState extends State<HorizontalTextWheelPicker> {
   void initState() {
     super.initState();
     selectedItemIndex = 1; // Set the second item as initially selected
-    _scrollController = FixedExtentScrollController(initialItem: selectedItemIndex);
+    _scrollController =
+        FixedExtentScrollController(initialItem: selectedItemIndex);
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 50,
+      height: 50.h,
       child: RotatedBox(
         quarterTurns: 3,
         child: ListWheelScrollView.useDelegate(
@@ -230,7 +239,7 @@ class HorizontalTextWheelPickerState extends State<HorizontalTextWheelPicker> {
                     child: Text(
                       widget.options[index],
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 20.sp,
                         color: isSelected ? Colors.white : Colors.white38,
                       ),
                     ),

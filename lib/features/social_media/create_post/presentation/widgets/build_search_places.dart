@@ -4,7 +4,7 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.da
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -25,7 +25,7 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
     final searchController = TextEditingController();
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsetsDirectional.only(top: 20.0, end: 8, start: 8),
+        padding: EdgeInsetsDirectional.only(top: 20.0, end: 8, start: 8),
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
@@ -34,7 +34,7 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
                   InkWell(
                       onTap: () => context.pop(),
                       child: const Icon(Icons.arrow_back)),
-                  const SizedBox(
+                  SizedBox(
                     width: 10,
                   ),
                   Expanded(
@@ -59,7 +59,7 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
                 pagingController: widget.controller.placesPagingController,
                 builderDelegate: PagedChildBuilderDelegate<PlaceEntity>(
                   noItemsFoundIndicatorBuilder: (context) {
-                    return const SizedBox.shrink();
+                    return SizedBox.shrink();
                   },
                   itemBuilder: (context, item, index) {
                     return GestureDetector(
@@ -68,7 +68,7 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
                             .placesPagingController.itemList![index]);
                       },
                       child: Container(
-                        padding: const EdgeInsets.all(15),
+                        padding: EdgeInsets.all(15),
                         child: Row(
                           children: [
                             const Icon(
@@ -76,7 +76,7 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
                               size: 25,
                             ),
                             SizedBox(
-                              width: 10.zW,
+                              width: 10.h,
                             ),
                             Expanded(
                               child: Label(

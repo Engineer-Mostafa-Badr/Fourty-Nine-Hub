@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/installment_feature/create_installment/presentation/cubit/create_installment_cubit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/error/failure.dart';
@@ -29,7 +30,7 @@ class CreateInstallmentView extends StatelessWidget {
             builder: (context, state) {
           final controller = context.read<CreateInstallmentCubit>();
           return Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -48,7 +49,7 @@ class CreateInstallmentView extends StatelessWidget {
                               controller: controller.nameController,
                               hint: 'Name',
                             )),
-                            const Sizer(),
+                            Sizer(),
                             Expanded(
                                 child: FormTextField(
                               controller: controller.durationController,
@@ -57,7 +58,7 @@ class CreateInstallmentView extends StatelessWidget {
                             )),
                           ],
                         ),
-                        const Sizer(),
+                        Sizer(),
                         Row(
                           children: [
                             Expanded(
@@ -66,7 +67,7 @@ class CreateInstallmentView extends StatelessWidget {
                               type: TextInputType.number,
                               hint: 'Down Payment',
                             )),
-                            const Sizer(),
+                            Sizer(),
                             Expanded(
                                 child: FormTextField(
                               controller: controller.installmentController,
@@ -75,19 +76,19 @@ class CreateInstallmentView extends StatelessWidget {
                             )),
                           ],
                         ),
-                        const Sizer(),
+                        Sizer(),
                         AppButton(
                             label: Labels.addPlan,
                             onPressed: () => controller.addPlan(adId: adId))
                       ],
                     )),
-                const Sizer(),
+                Sizer(),
                 Expanded(
                   child: ListView.separated(
                       shrinkWrap: true,
                       itemCount: state.plans?.length ?? 0,
-                      separatorBuilder: (context, index) => const Sizer(
-                            height: 5,
+                      separatorBuilder: (context, index) => Sizer(
+                            height: 5.h,
                           ),
                       itemBuilder: (context, index) {
                         final item = state.plans![index];

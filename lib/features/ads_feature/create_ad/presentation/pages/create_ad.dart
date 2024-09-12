@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,7 +74,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                       radius: 10,
                       url: widget.categorization.subCategory.image,
                     ),
-                    const Sizer(),
+                    Sizer(),
                     Expanded(
                         child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,14 +90,14 @@ class _CreateAdViewState extends State<CreateAdView> {
                 ),
                 const Divider(),
                 _buildImagePicker(),
-                const Sizer(),
+                Sizer(),
                 FormTextField(
                   label: 'title',
                   height: kToolbarHeight * .8,
                   hint: 'Type here',
                   action: (v) => controller.title = v,
                 ),
-                const Sizer(),
+                Sizer(),
                 FormTextField(
                   label: 'Description',
                   // height: kToolbarHeight * .8,
@@ -104,7 +105,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                   action: (v) => controller.description = v,
                   maxLines: 3,
                 ),
-                const Sizer(),
+                Sizer(),
                 FormTextField(
                   label: 'Phone',
                   type: TextInputType.phone,
@@ -112,7 +113,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                   hint: 'Type here',
                   action: (v) => controller.phone = v,
                 ),
-                const Sizer(),
+                Sizer(),
                 ListView.separated(
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
@@ -123,11 +124,11 @@ class _CreateAdViewState extends State<CreateAdView> {
                           controller.onChanged(v: v, index: index),
                     );
                   },
-                  separatorBuilder: (context, index) => const Sizer(),
+                  separatorBuilder: (context, index) => Sizer(),
                   shrinkWrap: true,
                   itemCount: state.adProperties?.length ?? 0,
                 ),
-                const Sizer(),
+                Sizer(),
                 FormTextField(
                   label: 'Price',
                   type: TextInputType.number,
@@ -143,7 +144,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                   ),
                   action: (v) => controller.price = v,
                 ),
-                const Sizer(),
+                Sizer(),
                 DefaultButton(
                     label: 'Publish',
                     onPressed: () {
@@ -169,7 +170,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                 subCategoryId: widget.categorization.subCategory.id),
             child: Container(
               height: kToolbarHeight * 3,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+              padding:
+                   EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(5)),
@@ -204,7 +206,7 @@ class _CreateAdViewState extends State<CreateAdView> {
               ),
             ),
           ),
-          const Sizer(),
+          Sizer(),
           if (state.images?.isNotEmpty ?? false)
             SizedBox(
               height: kToolbarHeight * 1,
@@ -242,7 +244,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                       ),
                     );
                   },
-                  separatorBuilder: (context, index) => const Sizer(),
+                  separatorBuilder: (context, index) => Sizer(),
                   itemCount: state.images?.length ?? 0),
             )
         ],

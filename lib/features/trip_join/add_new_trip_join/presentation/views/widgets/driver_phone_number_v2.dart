@@ -37,7 +37,7 @@ class _DriverPhoneNumberV2State extends State<DriverPhoneNumberV2> {
         fillColor: Colors.transparent,
         label: const Text('Phone Number'),
         isDense: true, // Added this
-        contentPadding: const EdgeInsets.all(14),
+        contentPadding: EdgeInsets.all(14),
       ),
       keyboardType: TextInputType.phone,
       onChanged: (value) {
