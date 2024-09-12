@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -24,14 +23,14 @@ class Stories extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: kToolbarHeight * 2.5,
-      margin: EdgeInsets.symmetric(vertical: 10.h),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: ListView(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         children: [
           Sizer(),
           _buildYourStory(context),
-          Sizer(),
+          Sizer(width: 8,),
           SizedBox(
             height: kToolbarHeight * 2.5,
             child: BlocBuilder<StoryCubit, StoryState>(
@@ -43,7 +42,9 @@ class Stories extends StatelessWidget {
                         shrinkWrap: true,
                         itemBuilder: (context, index) =>
                             _buildOthersStories(context, state, index),
-                        separatorBuilder: (context, index) => Sizer(),
+                        separatorBuilder: (context, index) => Sizer(
+                              width: 8,
+                            ),
                         itemCount: state.users.length)
                     : const Center(
                         child: CupertinoActivityIndicator(
@@ -120,7 +121,7 @@ class Stories extends StatelessWidget {
                     )),
                     Positioned.fill(
                         child: Padding(
-                      padding: EdgeInsets.all(4.0),
+                      padding: const EdgeInsets.all(4.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -224,7 +225,7 @@ class Stories extends StatelessWidget {
                   ),
                   Expanded(
                       child: Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
