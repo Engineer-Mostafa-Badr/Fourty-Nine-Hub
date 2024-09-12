@@ -52,8 +52,7 @@ class _TripJoinBodyState extends State<TripJoinBody> {
                 context.watch<StartingLocationCubit>();
                 context.watch<DestinationLocationCubit>();
                 return Visibility(
-                  visible: startingCubit.startingLocation != null &&
-                      destinationCubit.destinationLocation != null,
+                  visible: startingCubit.startingLocation != null && destinationCubit.destinationLocation != null,
                   // visible: true,
                   child: const TripAndCarInformationV2(),
                 );

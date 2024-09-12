@@ -64,7 +64,7 @@ class _PublishButtonState extends State<PublishButton> {
               onTap: () async {
                 if (widget.formKey.currentState!.validate()) {
                   await fetchData();
-                  // print(' ========= ${publishTripJoinCubit.tripJoinPublishParam}');
+                  // pr('${publishTripJoinCubit.tripJoinPublishParam}');
                   // return;
                   await publishTripJoinCubit.publishTripJoin();
                 }
@@ -101,8 +101,8 @@ class _PublishButtonState extends State<PublishButton> {
   Future<void> fetchData() async {
     publishTripJoinCubit.tripJoinPublishParam =
         publishTripJoinCubit.tripJoinPublishParam.copyWith(
-      fromAr: fetchPriceDistanceCubit.tripInfoEntity?.originAddress,
-      toAr: fetchPriceDistanceCubit.tripInfoEntity?.destinationAddress,
+      fromAr: fetchPriceDistanceCubit.tripInfoEntity?.originAddress ?? '',
+      toAr: fetchPriceDistanceCubit.tripInfoEntity?.destinationAddress ?? '',
       fromEn: startingCubit.startingLocation?.address,
       toEn: destinationCubit.destinationLocation?.address,
       distance: fetchPriceDistanceCubit.tripInfoEntity?.distance,

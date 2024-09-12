@@ -26,20 +26,23 @@ class UserProfileModel extends UserProfileEntity {
     super.isSenTRequest,
     super.sentFriendRequest,
     super.followers,
-    super.isBlock,  super.posts,
+    super.isBlock,
+    super.posts,
   });
 
   factory UserProfileModel.fromJson(Map<String, dynamic> json) {
     return UserProfileModel(
       id: json['userId']['_id'],
-      firstName: json['userId']['firstName'][0].toUpperCase() + json['userId']['firstName'].substring(1).toLowerCase() ?? '',
-      lastName: json['userId']['lastName'][0].toUpperCase() + json['userId']['lastName'].substring(1).toLowerCase() ?? '',
-      bio: json['userId']['bio']??'',
-      city: json['userId']['city']??'',
-      phone: json['userId']['phone']??'',
-      country: json['userId']['country']??'',
-      maritalStatus: json['userId']['maritalStatus']??'',
-      job: json['userId']['job']??'',
+      firstName:
+          json['userId']['firstName'][0].toUpperCase() + json['userId']['firstName'].substring(1).toLowerCase() ?? '',
+      lastName:
+          json['userId']['lastName'][0].toUpperCase() + json['userId']['lastName'].substring(1).toLowerCase() ?? '',
+      bio: json['userId']['bio'] ?? '',
+      city: json['userId']['city'] ?? '',
+      phone: json['userId']['phone'] ?? '',
+      country: json['userId']['country'] ?? '',
+      maritalStatus: json['userId']['maritalStatus'] ?? '',
+      job: json['userId']['job'] ?? '',
       email: json['userId']['email'] ?? '',
       isDocument: json['userId']['twitter_documentation'] ?? false,
       totalView: json['usersView'] ?? 0,
@@ -57,9 +60,7 @@ class UserProfileModel extends UserProfileEntity {
       isSenTRequest: json['isSenTRequest'] ?? false,
       followers: json['followedByUser'] == null
           ? null
-          : (json['followedByUser'] as List)
-          .map((e) => UserProfileFollowersModel.fromJson(e))
-          .toList(),
+          : (json['followedByUser'] as List).map((e) => UserProfileFollowersModel.fromJson(e)).toList(),
     );
   }
 }

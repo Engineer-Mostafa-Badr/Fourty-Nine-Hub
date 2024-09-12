@@ -13,12 +13,7 @@ class ReelsRecordingScreen extends StatefulWidget {
   final String? totalPrice;
   final String? advertisementType;
 
-  const ReelsRecordingScreen(
-      {super.key,
-      this.voiceUrl,
-      this.comeFromCompany,
-      this.totalPrice,
-      this.advertisementType});
+  const ReelsRecordingScreen({super.key, this.voiceUrl, this.comeFromCompany, this.totalPrice, this.advertisementType});
 
   @override
   ReelsRecordingScreenState createState() => ReelsRecordingScreenState();
@@ -99,8 +94,7 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     color: isSelected ? Colors.white : Colors.grey,
-                    fontWeight:
-                        isSelected ? FontWeight.bold : FontWeight.normal,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),
               ),
@@ -131,8 +125,7 @@ class ProgressPainter extends CustomPainter {
     const startAngle = -3.14 / 2;
     final sweepAngle = 2 * 3.14 * progress;
 
-    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle,
-        sweepAngle, false, paint);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle, sweepAngle, false, paint);
   }
 
   @override
@@ -194,8 +187,7 @@ class HorizontalTextWheelPicker extends StatefulWidget {
   });
 
   @override
-  HorizontalTextWheelPickerState createState() =>
-      HorizontalTextWheelPickerState();
+  HorizontalTextWheelPickerState createState() => HorizontalTextWheelPickerState();
 }
 
 class HorizontalTextWheelPickerState extends State<HorizontalTextWheelPicker> {
@@ -206,8 +198,7 @@ class HorizontalTextWheelPickerState extends State<HorizontalTextWheelPicker> {
   void initState() {
     super.initState();
     selectedItemIndex = 1; // Set the second item as initially selected
-    _scrollController =
-        FixedExtentScrollController(initialItem: selectedItemIndex);
+    _scrollController = FixedExtentScrollController(initialItem: selectedItemIndex);
   }
 
   @override
