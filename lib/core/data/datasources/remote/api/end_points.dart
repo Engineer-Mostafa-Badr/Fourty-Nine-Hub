@@ -108,7 +108,6 @@ class EndPoints {
   // static const report = '/report?subCategory=66a3583454e6e337915514db';
   static String report({required String subCategoryId}) => '/report?subCategory=$subCategoryId';
   static String documentRequest = '/twitter/document-request?subCategory=${Constants.documentSubCategory}';
-  static String documentRequest = '/twitter/document-request?subCategory=${Constants.documentSubCategory}';
 
   // ride
   //shipping
