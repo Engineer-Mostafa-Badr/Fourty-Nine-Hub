@@ -201,20 +201,29 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                       color: Colors.white,
                     ),
                     child: Row(children: [
-                      const ProfileImage(accountId: 0, userId: '',),
+                      ProfileImage(accountId: 0, userId: state.postDetails?.user.id,imageURL: user?.profilePicture,fromProfile: true,),
                       const Sizer(),
                       Expanded(
-                          child: FormTextField(
-                              hint: 'Type your comment ....',
-                              height: kToolbarHeight * .7,
-                              action: (v) {
-                                setState(() {});
-                              },
-                              controller: commentTextController)),
+                        child:TextFormField(
+                          maxLines: null,
+                          controller: commentTextController,
+                          onChanged: (v){
+                            setState(() {});
+                          },
+                          style: Styles.headerText(fontSize: 26),
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            contentPadding: const EdgeInsets.all(5),
+                            hintText: 'Type your comment ....',
+                            hintStyle: Styles.mediumText(),
+
+                          ),
+                        )),
                       const Sizer(),
                       if (commentTextController.text.isNotEmpty)
                         IconAppButton(
                           icon: Icons.send,
+                          size: 20,
                           isCircle: true,
                           onPressed: () async {
                             CommentEntity data = await widget.onAddComment(

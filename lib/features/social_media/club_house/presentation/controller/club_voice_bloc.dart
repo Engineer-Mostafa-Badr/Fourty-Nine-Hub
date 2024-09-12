@@ -4,6 +4,8 @@ import 'package:fourtyninehub/features/social_media/club_house/domain/entities/c
 import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/add_club_voice_use_case.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/join_club_voice_use_case.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/enums/zego_request_state.dart';
 import '../../domain/usecases/end_club_voice_use_case.dart';
 import '../../domain/usecases/get_club_voice_use_case.dart';
@@ -80,11 +82,25 @@ class ClubVoiceCubit extends Cubit<ClubVoiceState> {
     });
   }
 
+  final PagingController<int, ClubVoiceRoomEntity> roomsPagingController =
+      PagingController(firstPageKey: 1);
+  int pageSize = 10;
   int roomsLength = 0;
   List<ClubVoiceRoomEntity> rooms = [];
-  Future<void> getAllRooms() async{
+  void loadData() async {
+    await getAllRooms(1);
+    roomsPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getAllRooms(pageKey);
+    });
+  }
+  void refreshRooms() {
+    roomsPagingController.refresh();
+  }
+  Future<void> getAllRooms(int page) async {
     emit(state.copyWith(requestState: ZegoRequestState.loading));
-    getClubVoiceUseCase(const NoParams()).then((value) {
+    getClubVoiceUseCase(PaginationParams(page: page, limit: pageSize))
+        .then((value) {
       value.fold((l) {
         // CliLogger.error('there is an error ${l.toString()}',
         //     level: CliLoggerLevel.two);
@@ -92,6 +108,19 @@ class ClubVoiceCubit extends Cubit<ClubVoiceState> {
           requestState: ZegoRequestState.failure,
         ));
       }, (r) {
+        final isLastPage = r.length < pageSize;
+        if (page == 1) {
+          print("page == 1 $page");
+          roomsPagingController.itemList = [];
+        }
+        if (isLastPage) {
+          print("isLastPage = $isLastPage");
+          roomsPagingController.appendLastPage(r);
+        } else {
+          print("isNotLastPage = $isLastPage");
+          final nextPageKey = page + 1;
+          roomsPagingController.appendPage(r, nextPageKey);
+        }
         CliLogger.success('there is an success', level: CliLoggerLevel.two);
         rooms = r;
         roomsLength = r.length;

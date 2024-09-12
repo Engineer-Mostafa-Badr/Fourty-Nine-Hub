@@ -57,7 +57,7 @@ class HealthSubCategoryCard extends StatelessWidget {
                       right: 5,
                       child: IconAppButton(
                           size: 20,
-                          icon: subCategory.isFavorite
+                          icon: subCategory.isFavorite==true
                               ? Icons.favorite
                               : Icons.favorite_border,
                           color: ThemeCubit.get(context).isDarkTheme

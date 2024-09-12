@@ -168,7 +168,7 @@ class _CreateAdViewState extends State<CreateAdView> {
             onTap: () => controller.uploadImage(
                 subCategoryId: widget.categorization.subCategory.id),
             child: Container(
-              height: kToolbarHeight * 1.8,
+              height: kToolbarHeight * 3,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),

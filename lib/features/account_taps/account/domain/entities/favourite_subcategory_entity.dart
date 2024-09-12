@@ -1,8 +1,9 @@
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 class FavouriteSubcategoryEntity {
-  final int id;
+  final String id;
+  final String picture;
+  final String name;
+  bool? isFavorite;
 
-  final SubCategoryEntity item;
-  FavouriteSubcategoryEntity({required this.id, required this.item});
+  FavouriteSubcategoryEntity({required this.id, required this.picture, required this.name,this.isFavorite=false});
 }

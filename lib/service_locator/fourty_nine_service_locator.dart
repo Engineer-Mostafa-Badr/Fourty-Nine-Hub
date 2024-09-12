@@ -37,6 +37,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/add_main_cat
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/remove_main_category_to_favorites_usecase.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:get_it/get_it.dart';
@@ -285,6 +286,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<ToggleSubCategoryToFavoritesUseCase>(
+      () => ToggleSubCategoryToFavoritesUseCase(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<MakeAdRequestUsecase>(
       () => MakeAdRequestUsecase(
         serviceLocator(),
@@ -305,6 +311,7 @@ class FourtyNineServiceLocator {
     );
     serviceLocator.registerFactory<MainCategoriesTapsCubit>(
       () => MainCategoriesTapsCubit(
+        serviceLocator(),
         serviceLocator(),
       )..loadData(),
     );
@@ -336,7 +343,8 @@ class FourtyNineServiceLocator {
     serviceLocator.registerFactory<MainCategoriesCubit>(
       () => MainCategoriesCubit(
         serviceLocator(),
-      )..loadData(),
+        serviceLocator(),
+      ),
     );
 
     serviceLocator.registerFactory<AdsCubit>(

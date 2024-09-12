@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
+import '../../../../../../../../../../res/style/app_colors.dart';
+
 /// @nodoc
 class ZegoLiveAudioRoomEffectGridItem<T> {
   String id;
@@ -161,13 +163,13 @@ class _ZegoLiveAudioRoomEffectGridState
           : item.icon,
       iconBorderColor: widget.withBorderColor
           ? (item.id == widget.model.selectedID.value
-              ? const Color(0xffA653FF)
+              ? AppColors.SECONDARY_COLOR
               : Colors.transparent)
           : Colors.transparent,
       text: item.iconText,
       textStyle: TextStyle(
         color: item.id == widget.model.selectedID.value
-            ? const Color(0xffA653FF)
+            ? AppColors.SECONDARY_COLOR
             : const Color(0xffCCCCCC),
         fontSize: 24.zR,
         fontWeight: FontWeight.w500,

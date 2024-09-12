@@ -35,26 +35,34 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
         label: widget.mainCategory.name,
         centerTitle: false,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0.zW),
-        child: PaginationView<SubCategoryEntity>(
-          build: (ScrollController scrollController,
-              List<SubCategoryEntity> data) {
-            return GridView.builder(
-              itemCount: data.length,
-              controller: scrollController,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, childAspectRatio: 1),
-              itemBuilder: (context, index) => SubCategoryCard(
-                mainCategory: widget.mainCategory,
-                item: data[index],
-              ),
-            );
-          },
-          fetchData: (PaginationParams paginationParams) => context
-              .read<SubcategoriesCubit>()
-              .getSubcategories(paginationParams: paginationParams),
-        ),
+      body: BlocBuilder<SubcategoriesCubit,SubcategoriesState>(
+        builder: (context,state) {
+          final controller = context.read<SubcategoriesCubit>();
+          return Padding(
+            padding: EdgeInsets.all(16.0.zW),
+            child: PaginationView<SubCategoryEntity>(
+              build: (ScrollController scrollController,
+                  List<SubCategoryEntity> data) {
+                return GridView.builder(
+                  itemCount: data.length,
+                  controller: scrollController,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, childAspectRatio: 1),
+                  itemBuilder: (context, index) => SubCategoryCard(
+                    mainCategory: widget.mainCategory,
+                    item: data[index], onFav: () async{
+                      var result = await controller.toggleSubCategoryToFavorites(data[index].id);
+                      return result;
+                    },
+                  ),
+                );
+              },
+              fetchData: (PaginationParams paginationParams) => context
+                  .read<SubcategoriesCubit>()
+                  .getSubcategories(paginationParams: paginationParams),
+            ),
+          );
+        }
       ),
     );
   }

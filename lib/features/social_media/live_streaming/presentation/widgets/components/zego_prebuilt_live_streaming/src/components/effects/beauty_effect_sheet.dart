@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
+import '../../../../../../../../../../res/style/app_colors.dart';
 import '../../config.dart';
 import '../../inner_text.dart';
 import '../../internal/defines.dart';
@@ -89,7 +90,7 @@ class _ZegoLiveStreamingBeautyEffectSheetState
               selectIcon: ButtonIcon(
                 icon: ColorFiltered(
                   colorFilter: ColorFilter.mode(
-                    widget.config.selectedIconColor ?? const Color(0xffA653FF),
+                    widget.config.selectedIconColor ?? AppColors.SECONDARY_COLOR,
                     BlendMode.srcATop,
                   ),
                   child: ZegoLiveStreamingImage.asset(

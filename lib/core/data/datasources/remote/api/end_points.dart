@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
@@ -8,6 +9,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
 import '../../../../../features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
@@ -29,7 +31,7 @@ class EndPoints {
   static String friendsList(TwitterFeedParams params) =>
       '/friends/allFriends?search=${params.search}&page=${params.page}&limit=${params.limit}';
   static String searchUsers(TwitterFeedParams params) =>
-      '/search/users/${params.search}?page=${params.page}&limit=${params.limit}';
+      '/search/users/${params.search}?page=${params.page}&limit=${params.limit}&subCategory=${Constants.facebookSubCategory}';
   static String friendRequestsList(TwitterFeedParams params) =>
       '/friends/FriendRequests?search=${params.search}&page=${params.page}&limit=${params.limit}';
   static String blockedUsersList(TwitterFeedParams params) =>
@@ -38,13 +40,15 @@ class EndPoints {
       '/follow/followers?search=${params.search}&page=${params.page}&limit=${params.limit}';
   static const getParentMainCategories = '/category/parent';
   static const getMainCategories = '/category/parent/get-all-main';
-
+  static String favouriteCategories = '/favorite-category';
   static String getBannerByID({required String id}) => '/categories/main/$id';
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
 
   static String getMainCategoryDetails(String id) => '/categories/main/$id';
 
   static String addMainCategoryToFavorite(String id) => '/favorite-category/$id';
+
+  static String toggleSubCategoryToFavorites(String id) => '/favorite-sub-category/$id';
 
   static String deleteMainCategoryFromFavorite(String id) => '/favorite-category/$id';
 
@@ -101,7 +105,7 @@ class EndPoints {
   static const deleteAllNotification = '/notifications/all';
   // static const report = '/report?subCategory=66a3583454e6e337915514db';
   static String report({required String subCategoryId}) => '/report?subCategory=$subCategoryId';
-  static const documentRequest = '/twitter/document-request?subCategory=66a3583454e6e337915514db';
+  static String documentRequest = '/twitter/document-request?subCategory=${Constants.documentSubCategory}';
 
   // ride
   //shipping
@@ -182,6 +186,10 @@ class EndPoints {
     return '/categories/subcategories/$mainCategoryId';
   }
 
+  static String mainSubCategories({required GetSubCategoriesParams params}) {
+    return '/categories/subcategories/${params.mainCategoryId}?userId=${params.userId}';
+  }
+
   static const riderInfoRegister = '/ride/riders/register';
   static const sendComeWithYou = '/ride/come-with-you';
   static const sendPickMe = '/ride/pick-me';
@@ -230,16 +238,16 @@ class EndPoints {
   // social
 
   static const createFacebookPost = '/facebook/post';
-  static const createTwitterPost = '/twitter/post';
+  static String createTwitterPost = '/twitter/post?subCategory=${Constants.twitterSubCategory}';
 
   // static const getFeedPosts = '/facebook/feed';
   static const activities = '/facebook/post/activities';
   static const feelings = '/facebook/post/feelings';
-  static const getTwitterFeedPosts = '/twitter/feed';
+  static String getTwitterFeedPosts = '/twitter/feed?subCategory=${Constants.twitterSubCategory}';
   static const editProfile = '/users/profile-data';
 
   static String userPosts(UserPostsParams params) {
-    return '/facebook/post/user/${params.userId}?limit=${params.limit}&page=${params.page}&type=1&subCategory=66b77e77bb35968b535dc944';
+    return '/facebook/post/user/${params.userId}?limit=${params.limit}&page=${params.page}&type=1&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getFriendsFollowers(FriendsFollowersParams params) {
@@ -251,47 +259,47 @@ class EndPoints {
   }
 
   static String userSuggests(SuggestedFriendsParams params) {
-    return '/users/suggest?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
+    return '/users/suggest?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String userTweets(GetUserTweetsParams params) {
-    return '/twitter/post/user/${params.userId}?limit=10&page=${params.page}&type=1&subCategory=66a3583454e6e337915514db';
+    return '/twitter/post/user/${params.userId}?limit=10&page=${params.page}&type=1&subCategory=${Constants.twitterSubCategory}';
   }
 
   static String getFeedPosts(TwitterFeedParams params) {
-    return '/facebook/feed?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
+    return '/facebook/feed?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getGlobalFeed(TwitterFeedParams params) {
-    return '/facebook/feed/general?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
+    return '/facebook/feed/general?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getInstagramPosts(TwitterFeedParams params) {
-    return '/instagram/feed?limit=${params.limit}&page=${params.page}';
+    return '/instagram/feed?limit=${params.limit}&page=${params.page}&subCategory=${Constants.instagramSubCategory}';
   }
 
   static String getUserMedia(InstagramUserMediaParams params) {
-    return '/instagram/posts/${params.userId}?limit=${params.limit}&page=${params.page}';
+    return '/instagram/posts/${params.userId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.instagramSubCategory}';
   }
 
   static String getInstagramGlobalPosts(TwitterFeedParams params) {
-    return '/instagram/feed/general?limit=${params.limit}&page=${params.page}';
+    return '/instagram/feed/general?limit=${params.limit}&page=${params.page}&subCategory=${Constants.instagramSubCategory}';
   }
 
   static String getReels(TwitterFeedParams params) {
-    return '/reels/explore?limit=${params.limit}&page=${params.page}';
+    return '/reels/explore?limit=${params.limit}&page=${params.page}&subCategory=${Constants.reelsSubCategory}';
   }
 
   static String getUserReels(UserReelsParams params) {
-    return '/reels/users/${params.userId}?limit=${params.limit}&page=${params.page}';
+    return '/reels/users/${params.userId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.reelsSubCategory}';
   }
 
   static String getSavedReels(TwitterFeedParams params) {
-    return '/reels/saved?limit=${params.limit}&page=${params.page}';
+    return '/reels/saved?limit=${params.limit}&page=${params.page}&subCategory=${Constants.reelsSubCategory}';
   }
 
   static String getAdvertisement(TwitterFeedParams params) {
-    return '/advertisementCompany?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
+    return '/advertisementCompany?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String acceptTripRider(String id) {
@@ -335,127 +343,127 @@ class EndPoints {
   }
 
   static String reactOnPost(String postId) {
-    return '/facebook/post/react/$postId?subCategory=66b77e77bb35968b535dc944';
+    return '/facebook/post/react/$postId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String reactOnComment(String postId) {
-    return '/facebook/comment/react/$postId';
+    return '/facebook/comment/react/$postId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String reactOnTwitterPost(String postId) {
-    return '/twitter/post/react/$postId?subCategory=66a3583454e6e337915514db';
+    return '/twitter/post/react/$postId?subCategory=${Constants.twitterSubCategory}';
   }
 
   static String reactOnTwitterComment(String commentId) {
-    return '/twitter/comment/react/$commentId?subCategory=66a3583454e6e337915514db';
+    return '/twitter/comment/react/$commentId?subCategory=${Constants.twitterSubCategory}';
   }
 
   static String shareTwitterPost(String postId) {
-    return '/twitter/post/share/$postId?subCategory=66a3583454e6e337915514db';
+    return '/twitter/post/share/$postId?subCategory=${Constants.twitterSubCategory}';
   }
 
   static String shareFacebookPost(String postId) {
-    return '/facebook/post/share/$postId?subCategory=66b77e77bb35968b535dc944';
+    return '/facebook/post/share/$postId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String commentOnPost(String postId) {
-    return '/facebook/comment/create-comment/$postId?subCategory=66b77e77bb35968b535dc944';
+    return '/facebook/comment/create-comment/$postId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getUserProfile(String userId) {
-    return '/users/profile/$userId?subCategory=66b77e77bb35968b535dc944';
+    return '/users/profile/$userId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String viewProfile(String userId) {
-    return '/users/profile-view/$userId?subCategory=66b77e77bb35968b535dc944';
+    return '/users/profile-view/$userId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String editComment(PostCommentParams params) {
-    return '/facebook/comment/update-comment/${params.postId}?subCategory=66b77e77bb35968b535dc944';
+    return '/facebook/comment/update-comment/${params.postId}?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String acceptRejectFriendRequest(AcceptRejectFriendRequestParams params) {
-    return '/friends/acceptOrRejectrequest/${params.userId}?subCategory=62ef7cf658c90d4a7ed48120';
+    return '/friends/acceptOrRejectrequest/${params.userId}?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String deleteFriend(String userId) {
-    return '/friends/deleteFriend/$userId?subCategory=62ef7cf658c90d4a7ed48120';
+    return '/friends/deleteFriend/$userId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String commentOnTwitterPost(String postId) {
-    return '/twitter/comment/create-comment/$postId?subCategory=66b77e77bb35968b535dc944';
+    return '/twitter/comment/create-comment/$postId?subCategory=${Constants.twitterSubCategory}';
   }
 
   static String getPostComments(PostCommentsParams params) {
-    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
+    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getPostCommentReplies(PostCommentsParams params) {
-    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=66b77e77bb35968b535dc944';
+    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getTwitterPostComments(PostCommentsParams params) {
-    return '/twitter/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=66a3583454e6e337915514db';
+    return '/twitter/comment/get-post-comments/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.twitterSubCategory}';
   }
 
   static String getTwitterCommentReplies(PostCommentsParams params) {
-    return '/twitter/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=66a3583454e6e337915514db';
+    return '/twitter/comment/get-comment-replies/${params.postId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.twitterSubCategory}';
   }
 
   static String deletePost(String postId) {
-    return '/facebook/post/$postId?subCategory=66b77e77bb35968b535dc944';
+    return '/facebook/post/$postId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String deleteComment(String commentId) {
-    return '/facebook/comment/delete-comment/$commentId?subCategory=66b77e77bb35968b535dc944';
+    return '/facebook/comment/delete-comment/$commentId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String hidePost(String postId) {
-    return '/facebook/post/hide/$postId?subCategory=66b77e77bb35968b535dc944';
+    return '/facebook/post/hide/$postId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String deleteTwitterPost(String postId) {
-    return '/twitter/post/$postId?subCategory=66a3583454e6e337915514db';
+    return '/twitter/post/$postId?subCategory=${Constants.twitterSubCategory}';
   }
 
   static String hideTwitterPost(String postId) {
-    return '/twitter/post/hide/$postId?subCategory=66a3583454e6e337915514db';
+    return '/twitter/post/hide/$postId?subCategory=${Constants.twitterSubCategory}';
   }
 
   static String deleteTwitterComment(String commentId) {
-    return '/twitter/comment/delete-comment/$commentId?subCategory=66a3583454e6e337915514db';
+    return '/twitter/comment/delete-comment/$commentId?subCategory=${Constants.twitterSubCategory}';
   }
 
   static String editTwitterComment(String commentId) {
-    return '/twitter/comment/update-comment/$commentId?subCategory=66a3583454e6e337915514db';
+    return '/twitter/comment/update-comment/$commentId?subCategory=${Constants.twitterSubCategory}';
   }
 
   static String friendRequest(String userId) {
-    return '/friends/sendFriendRequest/$userId?subCategory=66b77e77bb35968b535dc944';
+    return '/friends/sendFriendRequest/$userId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String removeFriendRequest(String userId) {
-    return '/friends/deleteRequest/$userId?subCategory=66b77e77bb35968b535dc944';
+    return '/friends/deleteRequest/$userId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String blocUser(String userId) {
-    return '/users/$userId/blocked';
+    return '/users/$userId/blocked?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String followRequest(String userId) {
-    return '/follow/make-follow/$userId?subCategory=66b77e77bb35968b535dc944';
+    return '/follow/make-follow/$userId?subCategory=${Constants.instagramSubCategory}';
   }
 
   static String removeFollow(String userId) {
-    return '/follow/unFollow/$userId?subCategory=66b77e77bb35968b535dc944';
+    return '/follow/unFollow/$userId?subCategory=${Constants.instagramSubCategory}';
   }
 
   static String greetMessage(String userId) {
-    return '/users/greet/$userId?subCategory=66b77e77bb35968b535dc944';
+    return '/users/greet/$userId?subCategory=${Constants.instagramSubCategory}';
   }
 
   static String removeSuggestUser(String userId) {
-    return '/friends/remove-user-suggest/$userId?subCategory=66b77e77bb35968b535dc944';
+    return '/friends/remove-user-suggest/$userId?subCategory=${Constants.facebookSubCategory}';
   }
 
   // food
@@ -493,6 +501,7 @@ class EndPoints {
   static const myAds = '/ads/allMyAds';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const favouriteAds = '/ads-favourites/allFavouriteAds';
+  static const favouriteSubCategories = '/favorite-sub-category';
 
   static String deleteAd(String id) {
     return '/ads/deleteAd/$id';

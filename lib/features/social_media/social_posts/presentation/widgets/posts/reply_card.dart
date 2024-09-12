@@ -151,7 +151,7 @@ class _ReplyCardState extends State<ReplyCard> {
   Widget _buildPostOptions(
       {required bool isMyComment, required CommentEntity post}) {
     return SizedBox(
-      height: isMyComment ? 150 : 80,
+      height: isMyComment ? 160 : 80,
       child: Column(
         children: [
           if (!isMyComment)
