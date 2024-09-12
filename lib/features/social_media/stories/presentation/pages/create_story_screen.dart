@@ -49,6 +49,11 @@ class _CameraScreenState extends State<CameraScreen> {
     _disposeVideoControllers();
 
     _videoPlayerController = VideoPlayerController.file(videoFile);
+
+
+
+
+
     await _videoPlayerController!.initialize();
 
     _chewieController = ChewieController(
