@@ -583,7 +583,7 @@ class _UserPostCardState extends State<UserPostCard> {
             margin: EdgeInsets.symmetric(vertical: 10.h),
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
             color: backgroundColor != null && images.isEmpty
-                ? Color(int.parse(backgroundColor.substring(1), radix: 16))
+                ? Color(int.parse(backgroundColor.substring(1), radix: 16),)
                 : Colors.white,
             child: ReadMoreLabel(
               text: content,
