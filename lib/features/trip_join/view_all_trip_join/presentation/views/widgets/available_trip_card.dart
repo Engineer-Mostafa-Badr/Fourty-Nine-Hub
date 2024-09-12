@@ -16,6 +16,7 @@ class AvailableTripCard extends StatelessWidget {
     this.callOnTap,
     this.messageOnTap,
     this.reportOnTap,
+    this.subscribeMessageOnTap,
   });
   final TripJoinCardEntity tripJoinCardEntity;
   final void Function()? premuimRequestOnTap;
@@ -23,6 +24,7 @@ class AvailableTripCard extends StatelessWidget {
   final void Function()? callOnTap;
   final void Function()? messageOnTap;
   final void Function()? reportOnTap;
+  final void Function()? subscribeMessageOnTap;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -97,11 +99,13 @@ class AvailableTripCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.trip_origin, color: AppColors.CHECK_MARK_COLOR, size: 20),
                       const Sizer(width: 13),
-                      Text(
-                        tripJoinCardEntity.destinationAddressEn ?? '',
-                        style: Styles.headerText(fontSize: 32),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+                      Flexible(
+                        child: Text(
+                          tripJoinCardEntity.destinationAddressEn ?? '',
+                          style: Styles.headerText(fontSize: 32),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
                       ),
                     ],
                   ),
@@ -162,7 +166,7 @@ class AvailableTripCard extends StatelessWidget {
                           title: 'Report',
                           color: AppColors.SECONDARY_COLOR,
                           icon: Icons.report,
-                          onTap: messageOnTap,
+                          onTap: reportOnTap,
                         ),
                       ),
                     ],
@@ -186,13 +190,16 @@ class AvailableTripCard extends StatelessWidget {
           const Sizer(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              'Subscribe to contact the client!',
-              style: Styles.headerText(
-                color: Colors.red[300],
-                fontSize: 30,
+            child: InkWell(
+              onTap: subscribeMessageOnTap,
+              child: Text(
+                'Subscribe to contact the client!',
+                style: Styles.headerText(
+                  color: Colors.red[300],
+                  fontSize: 30,
+                ),
+                textAlign: TextAlign.start,
               ),
-              textAlign: TextAlign.start,
             ),
           )
         ],
@@ -204,7 +211,6 @@ class AvailableTripCard extends StatelessWidget {
     if (tripJoinCardEntity.publishDate == null) {
       return '';
     }
-    return DateFormat('dd MMM yyyy hh:mm aaa')
-        .format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate!));
+    return DateFormat('dd MMM, hh:mm aaa').format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate!));
   }
 }

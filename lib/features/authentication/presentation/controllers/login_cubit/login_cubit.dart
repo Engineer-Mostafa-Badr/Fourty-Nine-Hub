@@ -1,8 +1,8 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/authentication/data/models/login_model.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/facebook_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
@@ -39,12 +39,13 @@ class LoginCubit extends Cubit<LoginState> {
   String? token;
 
   Future<void> login() async {
+    String? token = await FirebaseMessaging.instance.getToken();
     if (formKey.currentState!.validate()) {
       emit(LoginLoading());
       final result = await _loginUseCase(
         LoginParams(
           email: emailTextController.text.trim(),
-          password: passwordTextController.text.trim(),
+          password: passwordTextController.text.trim(), token: token!,
         ),
       );
 
@@ -55,6 +56,9 @@ class LoginCubit extends Cubit<LoginState> {
           _attachToken(userToken); // attach to dio
           _saveTokens(userToken); // ensure tokens are saved before proceeding
           emit(LoginSuccess(userTokensEntity: userToken));
+          // print('*****************');
+          // print(token);
+          // print('*****************');
         },
       );
     }

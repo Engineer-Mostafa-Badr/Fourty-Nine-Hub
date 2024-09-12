@@ -22,10 +22,10 @@ class PaymobLink {
         required this.amount});
 }
 class PaymentView extends StatefulWidget {
-  const PaymentView({
+   PaymentView({
     Key? key,
-    required this.amountId,
-    required this.amount,
+     required this.amountId,
+     required this.amount,
   }) : super(key: key);
 
   final String amountId;

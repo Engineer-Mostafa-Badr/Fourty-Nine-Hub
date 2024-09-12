@@ -20,45 +20,51 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
   final DeleteCompanyAddUseCases _deleteCompanyAddUseCases;
   final GetPostsCompanyAdUseCase _getPostsCompanyAdUseCase;
 
-  CreateCompanyAdCubit(this._getPriceUseCases, this._companyAddUseCases, this._deleteCompanyAddUseCases, this._getPostsCompanyAdUseCase)
-      : super(const CreateCompanyAdState());
+  CreateCompanyAdCubit(this._getPriceUseCases,
+      this._companyAddUseCases,
+      this._deleteCompanyAddUseCases,
+      this._getPostsCompanyAdUseCase,) : super(const CreateCompanyAdState());
+
 
   void loadData() async {
     await getCompanyAdPrice();
-   // await getCompanyAdPosts();
   }
+
+
 
   Future<void> getCompanyAdPrice() async {
+    emit(state.copyWith(status: StateStatus.loading));
     final response = await _getPriceUseCases.call(const NoParams());
     response.fold(
-        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-        (data) => emit(state.copyWith(price: data)));
+          (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+          (data) => emit(state.copyWith(price: data)),
+    );
   }
 
-  List<CompanyAdEntity> company = [];
-  Future<List<CompanyAdEntity>> getCompanyAdPosts(String filter) async {
-
+  Future<List<CompanyAdEntity>> getCompanyAdPosts(String filter,
+      {required PaginationParams params}) async {
+    List<CompanyAdEntity> company = [];
     final response = await _getPostsCompanyAdUseCase(
-        FetchPostCompanyAdvertiseParams(filter: filter, paginationParams: PaginationParams(page: 1,limit: 10))
+      FetchPostCompanyAdvertiseParams(filter: filter, paginationParams: params),
     );
+
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) {
-              company=data;
-              emit(state.copyWith(posts: data));
-            });
+          (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+          (data) {
+        company = data;
+      },
+    );
     return company;
   }
-
 
   Future<void> addPostCompanyAdvertise({
     String? post,
     required String type,
     String? description,
     required int totalPrice,
-    List<String>? mediaIds, // Make sure this is used correctly
-  //  required String filter,
+    List<String>? mediaIds,
   }) async {
+    emit(state.copyWith(status: StateStatus.loading));
     var response = await _companyAddUseCases(
       CompanyAddParams(
         advertisementType: type,
@@ -69,24 +75,30 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
       ),
     );
     return response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) {
-          emit(state.copyWith(advertise: data, status: StateStatus.success));
-        //  getCompanyAdPosts(filter);
-          mediaIds?.clear();
-          print('Media IDs cleared after successful post.');
-        }
+          (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+          (data) {
+        emit(state.copyWith(advertise: data, status: StateStatus.success));
+        mediaIds?.clear();
+        print('Media IDs cleared after successful post.');
+      },
     );
-
   }
 
-  deleteCompanyAd({
-    required String id,
-    required String filter
-  })async{
-    await _deleteCompanyAddUseCases(
-        DeleteCompanyAdParams(id: id)
+  Future<bool> deleteCompanyAd({required String id}) async {
+    emit(state.copyWith(status: StateStatus.loading)); // Start loading state
+    final response = await _deleteCompanyAddUseCases(
+      DeleteCompanyAdParams(id: id),
     );
-    getCompanyAdPosts(filter);
+    bool result=false;
+
+    response.fold(
+          (failure) =>
+          emit(state.copyWith(failure: failure, status: StateStatus.error)),
+          (success) {
+            result=success;
+            emit(state.copyWith(status: StateStatus.success));
+          },
+    );
+    return result;
   }
 }

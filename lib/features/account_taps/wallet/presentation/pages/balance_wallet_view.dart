@@ -19,6 +19,8 @@ import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../payment/presentation/cubit/payment_cubit.dart';
+import '../../../../payment/presentation/pages/payment_view.dart';
 import '../../domain/entities/balance/balance_history_entity.dart';
 import '../widgets/wallet_history_card.dart';
 
@@ -32,21 +34,23 @@ class BalanceWalletView extends StatelessWidget {
           label: LocaleKeys.balance.localize,
         ),
         body: BlocProvider<BalanceCubit>(
-          create: (_) => serviceLocator()..loadData(),
+          create: (_) =>
+          serviceLocator()
+            ..loadData(),
           child: BlocConsumer<BalanceCubit, BalanceState>(
             listener: (BuildContext context, BalanceState state) {
               if (state.status == BalanceStates.initial) {
                 showSuccessMessage(context,
-                    'Your request withdrawal sent successfully waiting for administration approval');
+                    LocaleKeys.requestWithdrawal.localize);
               }
-              if (state.status == BalanceStates.successFive) {
-                showSuccessMessage(
-                    context, 'Transfer five_years balance done to gift wallet');
-              }
-              if (state.status == BalanceStates.successTen) {
-                showSuccessMessage(
-                    context, 'Transfer ten_years balance done to gift wallet');
-              }
+              // if (state.status == BalanceStates.successFive) {
+              //   showSuccessMessage(
+              //       context, 'Transfer five_years balance done to gift wallet');
+              // }
+              // if (state.status == BalanceStates.successTen) {
+              //   showSuccessMessage(
+              //       context, 'Transfer ten_years balance done to gift wallet');
+              // }
             },
             builder: (context, state) {
               return SingleChildScrollView(
@@ -90,40 +94,47 @@ class BalanceWalletView extends StatelessWidget {
                       ),
                       state.balance?.openBalance == true
                           ? AppButton(
-                              backColor: AppColors.SECONDARY_COLOR,
-                              color: AppColors.AUTH_CONTAINER_COLOR,
-                              label: LocaleKeys.requestWithdraw.localize,
-                              onPressed: () {
-                                context
-                                    .read<BalanceCubit>()
-                                    .requestWithdrawBalance();
-                                //Your request withdrawal sent successfully waiting for administration approval
-                              },
-                              margin: 10,
-                            )
-                          : AppButton(
-                              backColor: Colors.red.withOpacity(.5),
-                              label: LocaleKeys.requestWithdraw.localize,
-                              onPressed: () {},
-                              margin: 10,
-                            ),
-                      if(state.balance?.openBalance == true && state.withdraw?.data ==false)
-                        const Label(text: 'Please wait to check request'),
-                      state.withdraw?.data == true
-                          ? AppButton(
                         backColor: AppColors.SECONDARY_COLOR,
                         color: AppColors.AUTH_CONTAINER_COLOR,
-                        label: 'Withdraw',
+                        label: LocaleKeys.requestWithdraw.localize,
                         onPressed: () {
                           context
                               .read<BalanceCubit>()
                               .requestWithdrawBalance();
+                          //Your request withdrawal sent successfully waiting for administration approval
                         },
                         margin: 10,
                       )
                           : AppButton(
                         backColor: Colors.red.withOpacity(.5),
-                        label: 'Withdraw',
+                        label: LocaleKeys.requestWithdraw.localize,
+                        onPressed: () {},
+                        margin: 10,
+                      ),
+                      if(state.balance?.openBalance == true &&
+                          state.withdraw?.data == false)
+                         Label(text: LocaleKeys.checkRequest.localize),
+                      if (state.withdraw?.data == true) AppButton(
+                        backColor: AppColors.SECONDARY_COLOR,
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        label: LocaleKeys.withdraw.localize,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BlocProvider<PaymentCubit>(
+                                  create: (BuildContext context) =>serviceLocator(),
+                                  child: PaymentView(
+                                    amountId: '',
+                                    amount: state.balance?.balance ??0,
+                                  ),
+                                ),
+                              ));
+                        },
+                        margin: 10,
+                      ) else AppButton(
+                        backColor: Colors.red.withOpacity(.5),
+                        label: LocaleKeys.withdraw.localize,
                         onPressed: () {},
                         margin: 10,
                       ),
@@ -131,50 +142,65 @@ class BalanceWalletView extends StatelessWidget {
                       //   const Label(text: 'Please wait to check request'),
 
                       _buildWalletActionItem(
-                        label:
-                            '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
-                        subTitle:
-                            '${state.balance?.fiveYears ?? ''} . ${state.balance?.fiveYearsLeft ?? ''} years last',
-                        ontap: state.balance?.fiveYearsComplete == true
-                            ? () {}
-                            : state.balance?.fiveYearsTransfer == true
-                                ? () {
-                                    context
-                                        .read<BalanceCubit>()
-                                        .transferFiveBalance();
-                                  }
-                                : () {},
-                        color: state.balance?.fiveYearsComplete == true
-                            ? Theme.of(context).primaryColor
-                            : state.balance?.fiveYearsTransfer == true
-                                ? AppColors.SECONDARY_COLOR
-                                : AppColors.SECONDARY_COLOR.withOpacity(.5),
-                        transfer: state.balance?.fiveYearsComplete == true
-                            ? 'Complete'
-                            : 'Transfer',
+                          label:
+                          '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years
+                              .localize}',
+                          subTitle:
+                          '${state.balance?.fiveYears ?? ''} . ${state.balance
+                              ?.fiveYearsLeft ?? ''} ${LocaleKeys.yearsLast.localize}',
+                          ontap: state.balance?.fiveYearsComplete == true
+                              ? () {}
+                              : state.balance?.fiveYearsTransfer == true
+                              ? () {
+                            context
+                                .read<BalanceCubit>()
+                                .transferFiveBalance();
+                          }
+                              : () {},
+                          color: state.balance?.fiveYearsComplete == true
+                              ? Theme
+                              .of(context)
+                              .primaryColor
+                              : state.balance?.fiveYearsTransfer == true
+                              ? AppColors.SECONDARY_COLOR
+                              : AppColors.SECONDARY_COLOR.withOpacity(.5),
+                          transfer: state.balance?.fiveYearsComplete == true
+                              ? LocaleKeys.complete.localize
+                              : LocaleKeys.transfer.localize,
+                          textColor: Theme
+                              .of(context)
+                              .scaffoldBackgroundColor
                       ),
                       _buildWalletActionItem(
-                        label:
-                            '${LocaleKeys.gift.localize} / 10 ${LocaleKeys.years.localize}',
-                        subTitle:
-                            '${state.balance?.tenYears ?? ''} . ${state.balance?.tenYearsLeft ?? ''} years last',
-                        ontap: state.balance?.tenYearsTransfer == true
-                            ? () {}
-                            : state.balance?.tenYearsTransfer == true
-                                ? () {
-                                    context
-                                        .read<BalanceCubit>()
-                                        .transferFiveBalance();
-                                  }
-                                : () {},
-                        color: state.balance?.tenYearsComplete == true
-                            ? Theme.of(context).primaryColor
-                            : state.balance?.tenYearsTransfer == true
-                                ? AppColors.SECONDARY_COLOR
-                                : AppColors.SECONDARY_COLOR.withOpacity(.5),
-                        transfer: state.balance?.tenYearsComplete == true
-                            ? 'Complete'
-                            : 'Transfer',
+                          label:
+                          '${LocaleKeys.gift.localize} / 10 ${LocaleKeys.years
+                              .localize}',
+                          subTitle:
+                          '${state.balance?.tenYears ?? ''} . ${state.balance
+                              ?.tenYearsLeft ?? ''} ${LocaleKeys.yearsLast.localize}',
+                          ontap: state.balance?.tenYearsTransfer == true
+                              ? () {}
+                              : state.balance?.tenYearsTransfer == true
+                              ? () {
+                            context
+                                .read<BalanceCubit>()
+                                .transferFiveBalance();
+                          }
+                              : () {},
+                          color: state.balance?.tenYearsComplete == true
+                              ? Theme
+                              .of(context)
+                              .primaryColor
+                              : state.balance?.tenYearsTransfer == true
+                              ? AppColors.SECONDARY_COLOR
+                              : AppColors.SECONDARY_COLOR.withOpacity(.5),
+                          transfer: state.balance?.tenYearsComplete == true
+                              ? LocaleKeys.complete.localize
+                              : LocaleKeys.transfer.localize,
+                          textColor: state.balance?.tenYearsComplete == true
+                              ? Theme
+                              .of(context)
+                              .scaffoldBackgroundColor : AppColors.AUTH_CONTAINER_COLOR
                       ),
                       const Sizer(),
                       Label(
@@ -187,40 +213,40 @@ class BalanceWalletView extends StatelessWidget {
                             List<BalanceHistoryEntity> data) {
                           return data.isNotEmpty
                               ? ListView.separated(
-                                  controller: scrollController,
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    //  final item = state.history![index];
-                                    final DateTime createdAt =
-                                        DateTime.parse(data[index].createdAt);
-                                    final DateTime egyptTime = createdAt
-                                        .toUtc()
-                                        .add(const Duration(hours: 3));
-                                    final String formattedDateTime =
-                                        DateFormat('dd/MM/yyyy, h:mm a')
-                                            .format(egyptTime);
+                              controller: scrollController,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                //  final item = state.history![index];
+                                final DateTime createdAt =
+                                DateTime.parse(data[index].createdAt);
+                                final DateTime egyptTime = createdAt
+                                    .toUtc()
+                                    .add(const Duration(hours: 3));
+                                final String formattedDateTime =
+                                DateFormat('dd/MM/yyyy, h:mm a')
+                                    .format(egyptTime);
 
-                                    return WalletHistoryCard(
-                                        title:
-                                            '${data[index].transactionAmount}',
-                                        subTitle: formattedDateTime,
-                                        onTap: () {},
-                                        //amount: item.amount,
-                                        icon: FontAwesomeIcons.check);
-                                  },
-                                  separatorBuilder: (context, index) {
-                                    return const SizedBox();
-                                  },
-                                  itemCount: data.length)
-                              : const Center(
-                                  child: Label(text: 'No History Available'));
+                                return WalletHistoryCard(
+                                    title:
+                                    '${data[index].transactionAmount}',
+                                    subTitle: formattedDateTime,
+                                    onTap: () {},
+                                    //amount: item.amount,
+                                    icon: FontAwesomeIcons.check);
+                              },
+                              separatorBuilder: (context, index) {
+                                return const SizedBox();
+                              },
+                              itemCount: data.length)
+                              :  Center(
+                              child: Label(text: LocaleKeys.noHistoryAvailable.localize));
                         },
                         fetchData: (PaginationParams paginationParams) {
                           return context
                               .read<BalanceCubit>()
                               .fetchBalanceHistory(
-                                  paginationParams: paginationParams);
+                              paginationParams: paginationParams);
                         },
                       )
                     ],
@@ -237,6 +263,7 @@ class BalanceWalletView extends StatelessWidget {
     required String subTitle,
     required Function ontap,
     required Color color,
+    Color? textColor,
     required String transfer,
   }) {
     return ListTile(
@@ -255,7 +282,8 @@ class BalanceWalletView extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Label(
-              text: transfer, style: Styles.mediumText(color: Colors.white)),
+              text: transfer,
+              style: Styles.mediumText(color: textColor ?? Colors.white)),
         ),
       ),
     );

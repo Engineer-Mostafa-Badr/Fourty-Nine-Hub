@@ -106,6 +106,11 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/trip_join_view.dart';
+import 'package:fourtyninehub/features/trip_join/notifications/presentation/views/request_trip_join_notification.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/request_trip_join_usecase.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/view_all_trip_join_usecase.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/request_trip_join_cubit/request_trip_join_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/avaiable_trips_view.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
@@ -275,7 +280,7 @@ class AppPages {
                         name: Routes.CREATECOMPANYAD,
                         builder: (context, state) =>
                             BlocProvider<CreateCompanyAdCubit>(
-                                create: (_) => serviceLocator(),
+                                create: (_) => serviceLocator()..loadData(),
                                 child: const CreateCompanyAdView()),
                       ),
                     ]),
@@ -298,9 +303,9 @@ class AppPages {
                   create: (_) => serviceLocator<RegisterCubit>(),
                 ),
                 BlocProvider(
-                  create: (_) => serviceLocator<WalletCubit>(),
+                  create: (_) => serviceLocator<WalletCubit>()..loadData(),
                 ),BlocProvider(
-                  create: (_) => serviceLocator<GiftCubit>(),
+                  create: (_) => serviceLocator<GiftCubit>()..loadData(),
                 ),
               ],
               child: LoginView(
@@ -492,9 +497,10 @@ class AppPages {
               builder: (context, state) => const NotificationView(),
               routes: [
                 GoRoute(
-                    path: Paths.NOTIFICATIONS,
-                    name: Routes.NOTIFICATIONS,
-                    builder: (context, state) => const NotificationView()),
+                  path: Paths.NOTIFICATIONS,
+                  name: Routes.NOTIFICATIONS,
+                  builder: (context, state) => const NotificationView(),
+                ),
                 GoRoute(
                     path: Paths.SETTINGS,
                     name: Routes.SETTINGS,
@@ -1180,8 +1186,32 @@ class AppPages {
           GoRoute(
             path: Paths.AVAILABLE_TRIPS,
             name: Routes.AVAILABLE_TRIPS,
-            builder: (context, state) => const AvailableTripsView(),
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) => ViewAllTripJoinCubit(
+                    viewAllTripJoinUseCase:
+                        serviceLocator<ViewAllTripJoinUseCase>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (_) => RequestTripJoinCubit(
+                    requestTripJoinUseCase:
+                        serviceLocator<RequstTripJoinUseCase>(),
+                  ),
+                ),
+              ],
+              child: const AvailableTripsView(),
+            ),
           ),
+          GoRoute(
+            path: Paths.TRIP_JOIN_REQUEST_NOTIFICATIONS,
+            name: Routes.TRIP_JOIN_REQUEST_NOTIFICATIONS,
+            builder: (context, state) {
+              return RequestTripJoinNotificationView(
+                  payload: state.extra! as Map<String, dynamic>);
+            },
+          )
         ],
       ),
     ],
