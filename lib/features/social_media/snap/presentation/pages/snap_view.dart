@@ -1119,6 +1119,7 @@ class _AdvancedSnapchatCameraScreenState
                                     //   });
                                     //   log("Filter $index selected");
                                     // }
+
                                   },
                                   onLongPress: _toggleRecording,
                                   child: AnimatedOpacity(
