@@ -132,7 +132,7 @@ class MessagesRemoteDataSourceImplementation
       MarkMessageAsSeenParams params) async {
     try {
       _socket.connect();
-      CliLogger.info("you mark message as seen : chatId ${params.chatId}");
+      CliLogger.info("you mark messages as seen : chatId ${params.chatId}");
       _socket.emit(
           SocketIOEvents.markMessageAsSeen,
           jsonEncode({

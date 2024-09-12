@@ -49,9 +49,10 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     _listenToSeenMessages();
   }
 
-  void init({required ChatEntity chat}) {
+  Future<void> init({required ChatEntity chat}) async {
     _chat = chat;
-    _getMessages();
+    await _getMessages();
+    _markMessageAsSeen();
   }
 
 // =========================================== get messages ===========================================
@@ -70,7 +71,6 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       _messages = _messages.reverse();
       emit(state.copyWith(messages: _messages.values.toList()));
       _scrollDown();
-      _markMessageAsSeen();
     });
   }
 
@@ -126,8 +126,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   // =========================================== seen ============================================
 
   Future<void> _markMessageAsSeen() async {
-    await _markMessageAsSeenUseCase
-        .call(MarkMessageAsSeenParams(chatId: _chat.id));
+    await _markMessageAsSeenUseCase(MarkMessageAsSeenParams(chatId: _chat.id));
   }
 
   void _listenToSeenMessages() async {
