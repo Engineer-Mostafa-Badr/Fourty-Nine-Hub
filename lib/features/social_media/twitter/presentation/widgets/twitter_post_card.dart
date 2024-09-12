@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -262,7 +261,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
         if (label != null || label != '') ...[
           ReadMoreLabel(
             text: label ?? '',
-            style: Styles.headerText(fontSize: 30.sp),
+            style: Styles.headerText(fontSize: 30),
           ),
           Sizer(),
         ],

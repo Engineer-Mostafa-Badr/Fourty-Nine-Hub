@@ -430,12 +430,19 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                   context.push(Routes.LOGIN);
                 }
               },
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                backgroundImage: NetworkImage((post.user.image != null)
-                    ? post.user.image ?? ''
-                    : UIConst.profilePlaceHolder),
-              ),
+              child: ImageFromInternet(
+              image: (post.user.image!=null)?post.user.image:'',
+                height: 45,
+                width: 45,
+                isCircle: true,
+              )
+
+              // CircleAvatar(
+              //   backgroundColor: Colors.white,
+              //   backgroundImage: NetworkImage((post.user.image!=null)
+              //       ? post.user.image??''
+              //       : UIConst.profilePlaceHolder),
+              // ),
             ),
             Sizer(),
             Expanded(
@@ -508,7 +515,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                   Expanded(
                       child: Label(
                     text: post.location?.place ?? '',
-                    style: Styles.mediumText(fontSize: 14.sp),
+                    style: Styles.mediumText(fontSize: 14),
                   ))
                 ],
               ),
@@ -600,7 +607,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
               text: content,
               style: Styles.headerText(
                   color: Colors.black,
-                  fontSize: 24.sp,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold),
             ),
           )

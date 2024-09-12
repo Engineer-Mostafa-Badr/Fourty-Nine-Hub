@@ -341,9 +341,10 @@ class _InstagramProfileState extends State<InstagramProfile> {
                             decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: AppColors.PRIMARY_COLOR),
-                            child: const Icon(
+                            child: Icon(
                               Icons.camera_alt_outlined,
                               color: Colors.white,
+                              size: 32.w,
                             )),
                       )
                   ],
@@ -404,7 +405,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                         TextSpan(
                             text: '\t(${user.job})',
                             style: Styles.headerText(
-                                color: Colors.black, fontSize: 26.sp)),
+                                color: Colors.black, fontSize: 26)),
                     ])),
                 Sizer(
                   height: 4.h,
@@ -437,7 +438,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                 text:
                                     '${user.country}${user.city.isNotEmpty ? ',' : ''} ${user.city}',
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 26.sp),
+                                    color: Colors.black, fontSize: 26),
                                 maxLines: 1,
                               ),
                             ),
@@ -454,7 +455,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                               child: Label(
                                 text: user.phone,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 26.sp),
+                                    color: Colors.black, fontSize: 26),
                                 maxLines: 1,
                               ),
                             ),
@@ -471,7 +472,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                               child: Label(
                                 text: user.job,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 26.sp),
+                                    color: Colors.black, fontSize: 26),
                                 maxLines: 1,
                               ),
                             ),

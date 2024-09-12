@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 class LogoutWidget extends StatefulWidget {
   const LogoutWidget({super.key});
@@ -53,9 +54,13 @@ class _LogoutWidgetState extends State<LogoutWidget> {
                 color: AppColors.AUTH_CONTAINER_COLOR,
                 onPressed: () {
                   controller.logout();
-                  context.pop();
-                  context.pop();
-                  setState(() {});
+                  Phoenix.rebirth(context);
+                  // setState(() {});
+                  // context.pop();
+                  // context.pop();
+                  // context.go(Routes.HOME);
+                  // context.read<MainCategoriesCubit>().loadData(context);
+                  // setState(() {});
                 },
               ),
             ),
