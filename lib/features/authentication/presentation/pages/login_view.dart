@@ -1,8 +1,10 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -22,7 +24,9 @@ import 'package:go_router/go_router.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../common/widgets/stateless/buttons/default_button.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/localization/locales.dart';
 import '../../../../res/style/app_colors.dart';
@@ -255,9 +259,6 @@ class _LoginWidgetState extends State<LoginWidget> {
     return Column(
       children: [
         FormTextField(
-          validator: (v) {
-            return null;
-          },
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.zR),
@@ -274,9 +275,6 @@ class _LoginWidgetState extends State<LoginWidget> {
         ),
         const Sizer(),
         FormTextField(
-          validator: (v) {
-            return null;
-          },
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.zR),
@@ -319,46 +317,46 @@ class _LoginWidgetState extends State<LoginWidget> {
         // const Sizer(),
         // Column(
         //   children: [
-        //     const Sizer(),
-        //     Label(
-        //       text: 'Or Continue with',
-        //       style: Styles.mediumText(color: Colors.grey),
-        //     ),
-        //     const Sizer(),
-        //     Row(
-        //       children: [
-        //         Expanded(
-        //           child: AppButton(
-        //             label: 'Google',
-        //             backColor: AppColors.LIGHT_GRAY_COLOR,
-        //             textColor: Colors.black,
-        //             icon: FontAwesomeIcons.google,
-        //             onPressed: widget.loginCubit.signInWithGoogle,
-        //           ),
-        //         ),
-        //         const Sizer(),
-        //         Expanded(
-        //           child: AppButton(
-        //             label: 'Facebook',
-        //             backColor: AppColors.LIGHT_GRAY_COLOR,
-        //             textColor: Colors.black,
-        //             icon: FontAwesomeIcons.facebook,
-        //             onPressed: widget.loginCubit.signInWithFacebook,
-        //           ),
-        //         ),
-        //         if (Platform.isIOS) const Sizer(),
-        //         if (Platform.isIOS)
-        //           Expanded(
-        //             child: AppButton(
-        //               label: 'Apple',
-        //               backColor: AppColors.LIGHT_GRAY_COLOR,
-        //               textColor: Colors.black,
-        //               icon: FontAwesomeIcons.apple,
-        //               onPressed: widget.loginCubit.signInWithApple,
-        //             ),
-        //           ),
-        //       ],
-        //     ),
+        const Sizer(),
+        Label(
+          text: 'Or Continue with',
+          style: Styles.mediumText(color: Colors.grey),
+        ),
+        const Sizer(),
+        Row(
+          children: [
+            Expanded(
+              child: AppButton(
+                label: 'Google',
+                backColor: AppColors.LIGHT_GRAY_COLOR,
+                textColor: Colors.black,
+                icon: FontAwesomeIcons.google,
+                onPressed: widget.loginCubit.signInWithGoogle,
+              ),
+            ),
+            const Sizer(),
+            Expanded(
+              child: AppButton(
+                label: 'Facebook',
+                backColor: AppColors.LIGHT_GRAY_COLOR,
+                textColor: Colors.black,
+                icon: FontAwesomeIcons.facebook,
+                onPressed: widget.loginCubit.signInWithFacebook,
+              ),
+            ),
+            if (Platform.isIOS) const Sizer(),
+            if (Platform.isIOS)
+              Expanded(
+                child: AppButton(
+                  label: 'Apple',
+                  backColor: AppColors.LIGHT_GRAY_COLOR,
+                  textColor: Colors.black,
+                  icon: FontAwesomeIcons.apple,
+                  onPressed: widget.loginCubit.signInWithApple,
+                ),
+              ),
+          ],
+        ),
         //     const Sizer(),
         //     RichText(
         //       text: TextSpan(
@@ -420,6 +418,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   borderRadius: BorderRadius.circular(20.zR),
                   controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
+                  style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
                   hint: LocaleKeys.firstName.localize,
                   prefix: Icon(
                     Icons.person_2_rounded,
@@ -428,6 +427,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   ),
                   action: (v) {},
                 ),
+
                 Sizer(
                   height: 30.zH,
                 ),
@@ -436,6 +436,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20.zR),
                   controller: registerCubit.lastNameController,
+                  style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
                   // label: 'E-mail or phone number',
                   hint: LocaleKeys.lastName.localize,
                   prefix: Icon(
@@ -454,6 +455,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   borderRadius: BorderRadius.circular(20),
                   controller: registerCubit.emailTextController,
                   // label: 'E-mail or phone number',
+                  style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
                   hint: LocaleKeys.emailOrPhone.localize,
                   prefix: Icon(
                     Icons.email,
@@ -522,6 +524,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30.zH,
                 ),
                 FormTextField(
+                  style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
                   constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
@@ -547,6 +550,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30.zH,
                 ),
                 FormTextField(
+                  style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
                   constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
@@ -580,6 +584,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   borderRadius: BorderRadius.circular(20),
                   // controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
+                  style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
                   hint: LocaleKeys.code.localize,
                   prefix: Container(
                     margin: const EdgeInsets.all(9),

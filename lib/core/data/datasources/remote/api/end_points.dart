@@ -11,7 +11,6 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
-import '../../../../../features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
 
 class EndPoints {
@@ -48,9 +47,8 @@ class EndPoints {
 
   static String addMainCategoryToFavorite(String id) => '/favorite-category/$id';
 
-  static String toggleSubCategoryToFavorites(String id) => '/favorite-sub-category/$id';
-
   static String deleteMainCategoryFromFavorite(String id) => '/favorite-category/$id';
+  static String toggleSubCategoryToFavorites(String id) => '/favorite-sub-category/$id';
 
   static const getGift = '/subscriber/competitions';
   static const getBalance = '/main-wallet/user-balance';
@@ -59,8 +57,8 @@ class EndPoints {
     return '/user-transactions/balance';
   }
 
-  static String getHistoryWallet(WalletHistoryParams params) {
-    return '/user-transactions/mainWallet?limit=${params.limit}&page=${params.page}';
+  static String getHistoryWallet() {
+    return '/user-transactions/mainWallet';
   }
 
   static String geMainCategoryWallet() {
@@ -73,6 +71,10 @@ class EndPoints {
 
   static String deleteSubscription(String id) {
     return '/subscription/cancel-subscription/$id';
+  }
+
+  static String addSubscription() {
+    return '/subscription/subscribe';
   }
 
   static String deleteCompanyAd(String id) {
@@ -105,6 +107,7 @@ class EndPoints {
   static const deleteAllNotification = '/notifications/all';
   // static const report = '/report?subCategory=66a3583454e6e337915514db';
   static String report({required String subCategoryId}) => '/report?subCategory=$subCategoryId';
+  static String documentRequest = '/twitter/document-request?subCategory=${Constants.documentSubCategory}';
   static String documentRequest = '/twitter/document-request?subCategory=${Constants.documentSubCategory}';
 
   // ride

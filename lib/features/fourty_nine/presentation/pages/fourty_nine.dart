@@ -77,6 +77,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.read<UserCubit>().state.data;
+    print('userId111111111${user?.id ?? ''}');
     return BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
       listener: (context, state) {
         if (state is NotificationSocketIoNewNotification) {
@@ -134,6 +136,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             //main cats
             BlocBuilder<MainCategoriesCubit, BasicState<List<MainCategoryEntity>>>(
               builder: (context, state) {
+                final controller = context.read<MainCategoriesCubit>();
                 if (state.isLoading) {
                   return Shimmer.fromColors(
                     baseColor: Colors.grey[100]!,
@@ -170,7 +173,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         },
                         child: MainCategoryBanner(
                           category: state.data![index],
-                          onFavorite: () {},
+                          onFavorite: () {
+                            return controller.toggleFavoriteMedicalService(state.data![index].id);
+                          },
                         ),
                       );
                     },

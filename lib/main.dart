@@ -18,11 +18,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
-import 'features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'features/competition/data/repository/competition_repo_impl.dart';
-import 'features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
-import 'features/competition/presentation/cubit/winner_cubit/winner_cubit.dart';
 import 'features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'routes/pages.dart';
 
@@ -62,26 +58,14 @@ class MyApp extends StatelessWidget {
           create: (context) => serviceLocator<UserCubit>(),
         ),
         BlocProvider(
-            create: (context) =>
-                CompetitionCubit(serviceLocator.get<CompetitionRepoImpl>())..fetchCompetition(context)),
-        BlocProvider(
-          create: (BuildContext context) => serviceLocator<WalletCubit>(),
+          create: (BuildContext context) =>serviceLocator<WalletCubit>(),
+
         ),
-        BlocProvider(
-          create: (BuildContext context) => serviceLocator<CreateCompanyAdCubit>(),
-        ),
-        BlocProvider(
-            create: (context) => WinnerCubit(serviceLocator.get<CompetitionRepoImpl>())..fetchWinners(context)),
-        //    BlocProvider(create: (_) => CompanyAdvertiseCubit(serviceLocator<CompanyAdvertiseRepoImpl>())),
         // BlocProvider(
         //   create: (context) => serviceLocator<RiderequestCubit>(),
         // ),
         // BlocProvider(
         //   create: (context) => serviceLocator<CreateShippingRequestCubit>(),
-        // ),
-        // // CreateAdCubit
-        // BlocProvider(
-        //   create: (context) => serviceLocator<CreateAdCubit>(),
         // ),
         // //  tinder to be reviewed
         BlocProvider(
@@ -134,7 +118,9 @@ class MyApp extends StatelessWidget {
             return BlocBuilder<ThemeCubit, ThemeStates>(
               builder: (BuildContext context, state) {
                 return MaterialApp.router(
-                  themeMode: context.read<ThemeCubit>().isDarkTheme ? ThemeMode.dark : ThemeMode.light,
+                  themeMode: context.read<ThemeCubit>().isDarkTheme
+                      ? ThemeMode.dark
+                      : ThemeMode.light,
                   theme: lightTheme(),
                   darkTheme: darkTheme(),
                   title: '49',
