@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -41,7 +42,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
       final controller = context.read<SocialPostsCubit>();
       return state.suggestedFriends == null ||
               controller.suggestUserPagingController.itemList == []
-          ? SizedBox.shrink()
+          ? const SizedBox.shrink()
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -51,7 +52,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                   color: AppColors.LIGHT_GRAY_COLOR,
                 ),
                 Padding(
-                  padding: EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -61,7 +62,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                       ),
                       Container(
                         alignment: AlignmentDirectional.topStart,
-                        height: 250.h,
+                        height: 350.h,
                         child: PagedListView<int, SuggestUserEntity>(
                           scrollDirection: Axis.horizontal,
                           padding: EdgeInsets.symmetric(
@@ -76,14 +77,14 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                   noItemsFoundIndicatorBuilder: (context) {
                                     print(controller.suggestUserPagingController
                                         .itemList?.length);
-                                    return  Padding(
-                                        padding:const EdgeInsets.only(top: 200),
+                                    return  const Padding(
+                                        padding:EdgeInsets.only(top: 200),
                                         child: Center(
                                           child: Label(
                                             text: "No friends suggested",
                                             style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 18.sp,
+                                              fontSize: 18,
                                             ),
                                           ),
                                         ));
@@ -101,10 +102,10 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                 .id);
                                       },
                                       child: Container(
-                                        width: 200,
-                                        padding: EdgeInsets.only(bottom: 10),
+                                        width: 400.w,
+                                        padding: const EdgeInsets.only(bottom: 10),
                                         margin:
-                                            EdgeInsetsDirectional.only(end: 10),
+                                            const EdgeInsetsDirectional.only(end: 10),
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(5),
@@ -119,8 +120,6 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                             Expanded(
                                               child: ImageFromInternet(
                                                 image: item.profilePicture,
-                                                // height: 220.h,
-                                                width: 300,
                                                 borderRadius:
                                                     const BorderRadius.only(
                                                   topLeft: Radius.circular(5),
@@ -129,7 +128,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: EdgeInsets.symmetric(
+                                              padding: const EdgeInsets.symmetric(
                                                   horizontal: 8.0),
                                               child: Column(
                                                 crossAxisAlignment:
@@ -144,17 +143,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                     maxLines: 1,
                                                     style: Styles.mediumText(),
                                                   ),
-                                                  SizedBox(
-                                                    height: item.sendWelcomeSuccessfully ==
-                                                            true
-                                                        ? 30
-                                                        : item.followSuccessfully ==
-                                                                    true &&
-                                                                item.addedSuccessfully ==
-                                                                    true
-                                                            ? 20
-                                                            : 30,
-                                                  ),
+                                                  Sizer(height: 10.h,),
                                                   item.sendWelcomeSuccessfully ==
                                                           true
                                                       ? Label(
@@ -168,7 +157,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                       FontWeight
                                                                           .bold,
                                                                   fontSize:
-                                                                      14.sp),
+                                                                      14),
                                                         )
                                                       : Row(
                                                           children: [
@@ -258,7 +247,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                               },
                                                                               child: Container(
                                                                                 width: 100,
-                                                                                padding: EdgeInsets.all(2),
+                                                                                padding: const EdgeInsets.all(2),
                                                                                 decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4), border: Border.all(color: AppColors.PRIMARY_COLOR)),
                                                                                 alignment: Alignment.center,
                                                                                 child: Label(
@@ -279,7 +268,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                               },
                                                                               child: Container(
                                                                                 width: 100,
-                                                                                padding: EdgeInsets.all(2),
+                                                                                padding: const EdgeInsets.all(2),
                                                                                 decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(4)),
                                                                                 alignment: Alignment.center,
                                                                                 child: Label(
@@ -304,7 +293,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                       )
                                                                     : Container(
                                                                         height:
-                                                                            25,
+                                                                            40.h,
                                                                         alignment:
                                                                             Alignment.center,
                                                                         decoration:
@@ -329,65 +318,64 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                                   : "Send Greet Message",
                                                                           style: Styles.mediumText(
                                                                               color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
-                                                                              fontSize: 24.sp,
+                                                                              fontSize: 24,
                                                                               fontWeight: FontWeight.bold),
                                                                         ),
                                                                       ),
                                                               ),
                                                             ),
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               width: 10,
                                                             ),
                                                             if (item.addedSuccessfully ==
                                                                 false)
-                                                              Expanded(
-                                                                child: InkWell(
-                                                                  onTap:
-                                                                      () async {
-                                                                    bool data = await controller.removeSuggestUser(
-                                                                        context:
-                                                                            context,
-                                                                        userId:
-                                                                            item.id);
-                                                                    if (data ==
-                                                                        true) {
-                                                                      controller
-                                                                          .suggestUserPagingController
-                                                                          .itemList
-                                                                          ?.removeWhere((e) =>
-                                                                              e.id ==
-                                                                              controller.suggestUserPagingController.itemList?[index].id);
-                                                                      setState(
-                                                                          () {});
-                                                                    }
-                                                                  },
+                                                              InkWell(
+                                                                onTap:
+                                                                    () async {
+                                                                  bool data = await controller.removeSuggestUser(
+                                                                      context:
+                                                                          context,
+                                                                      userId:
+                                                                          item.id);
+                                                                  if (data ==
+                                                                      true) {
+                                                                    controller
+                                                                        .suggestUserPagingController
+                                                                        .itemList
+                                                                        ?.removeWhere((e) =>
+                                                                            e.id ==
+                                                                            controller.suggestUserPagingController.itemList?[index].id);
+                                                                    setState(
+                                                                        () {});
+                                                                  }
+                                                                },
+                                                                child:
+                                                                    Container(
+                                                                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                                                  height:
+                                                                      40.h,
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            4),
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
                                                                   child:
-                                                                      Container(
-                                                                    height:
-                                                                        25.h,
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              4),
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                    child:
-                                                                        Label(
-                                                                      text:
-                                                                          'Remove',
-                                                                      style: Styles.mediumText(
-                                                                          color: Colors
-                                                                              .black,
-                                                                          fontSize:
-                                                                              22,
-                                                                          fontWeight:
-                                                                              FontWeight.bold),
-                                                                    ),
+                                                                      Label(
+                                                                    text:
+                                                                        'Remove',
+                                                                    style: Styles.mediumText(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontSize:
+                                                                            22,
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
                                                                   ),
                                                                 ),
                                                               ),

@@ -121,7 +121,6 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
             followingCount: 0,
             wallet: 0));
     await _signOutUseCase(const NoParams());
-
     emit(const BasicState());
   }
 

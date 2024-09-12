@@ -498,7 +498,7 @@ class _UserPostCardState extends State<UserPostCard> {
                 Expanded(
                     child: Label(
                   text: post.location?.place ?? '',
-                  style: Styles.mediumText(fontSize: 14.sp),
+                  style: Styles.mediumText(fontSize: 14),
                 ))
               ],
             ),
@@ -578,7 +578,7 @@ class _UserPostCardState extends State<UserPostCard> {
             images!.isEmpty
         ? Container(
             width: double.infinity,
-            height: 160.h,
+            height: 260.h,
             alignment: Alignment.center,
             margin: EdgeInsets.symmetric(vertical: 10.h),
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
@@ -589,7 +589,7 @@ class _UserPostCardState extends State<UserPostCard> {
               text: content,
               style: Styles.headerText(
                   color: Colors.black,
-                  fontSize: 30.sp,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold),
             ),
           )

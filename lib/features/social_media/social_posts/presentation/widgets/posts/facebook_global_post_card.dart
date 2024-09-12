@@ -515,7 +515,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                   Expanded(
                       child: Label(
                     text: post.location?.place ?? '',
-                    style: Styles.mediumText(fontSize: 14.sp),
+                    style: Styles.mediumText(fontSize: 14),
                   ))
                 ],
               ),
@@ -607,7 +607,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
               text: content,
               style: Styles.headerText(
                   color: Colors.black,
-                  fontSize: 24.sp,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold),
             ),
           )
