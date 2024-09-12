@@ -7,6 +7,8 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentatio
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../../common/models/public/pagination_params.dart';
 import '../../../../../../common/widgets/stateful/dynamic/pagination_view.dart';
+import '../../../../../../core/enums/base_status_enum.dart';
+import '../../../../../../core/messages/messages.dart';
 import '../../../domain/entities/company_ad_entity.dart';
 import '../../cubit/create_company_ad_cubit.dart';
 
@@ -22,7 +24,12 @@ class _TextPostContentState extends State<TextPostContent> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: BlocBuilder<CreateCompanyAdCubit,CreateCompanyAdState>(
+      child: BlocConsumer<CreateCompanyAdCubit,CreateCompanyAdState>(
+        listener: (BuildContext context, CreateCompanyAdState state) {
+          if (state.status == StateStatus.success) {
+            showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
+          }
+        },
         builder: (BuildContext context, state) {
           return PaginationView<CompanyAdEntity>(
             loadingWidget:const SizedBox.shrink(),

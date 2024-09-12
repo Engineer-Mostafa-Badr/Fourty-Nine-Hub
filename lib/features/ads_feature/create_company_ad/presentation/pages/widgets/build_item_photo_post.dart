@@ -17,12 +17,13 @@ class BuildItemPhotoPost extends StatelessWidget {
   final int length;
   final CompanyAdEntity advertises;
   bool? isPhoto;
+  final Function(String) onDeleteItem;
 
    BuildItemPhotoPost(
       {super.key,
       required this.length,
       required this.advertises,
-        this.isPhoto=true,
+        this.isPhoto=true, required this.onDeleteItem,
       });
 
   @override
@@ -59,11 +60,7 @@ class BuildItemPhotoPost extends StatelessWidget {
                             builder: (context) => ImageDetails(
                               image: advertises.media![index].photo!,
                               function: () {
-                                context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!);
-                                // context
-                                //     .read<CompanyAdvertiseCubit>()
-                                //     .deletePost(context, advertises.media![index].sId!, 'photo');
-                                Navigator.pop(context);
+                                onDeleteItem(advertises.sId!);
                               },
                             ));
                       } else {
@@ -111,10 +108,7 @@ class BuildItemPhotoPost extends StatelessWidget {
                 if(isPhoto!)
                   IconButton(
                     onPressed: () {
-                      context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!,);
-                      // context
-                      //     .read<CompanyAdvertiseCubit>()
-                      //     .deletePost(context, advertises.sId!, 'photo');
+                      onDeleteItem(advertises.sId!);
                     },
                     icon: const Icon(
                       Icons.close,

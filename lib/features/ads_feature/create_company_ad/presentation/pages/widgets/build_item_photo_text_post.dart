@@ -12,9 +12,10 @@ import '../../../domain/entities/company_ad_entity.dart';
 import '../../cubit/create_company_ad_cubit.dart';
 
 class BuildItemPhotoTextPost extends StatelessWidget {
-  const BuildItemPhotoTextPost({super.key, required this.length, required this.advertises});
+  const BuildItemPhotoTextPost({super.key, required this.length, required this.advertises, required this.onDeleteItem});
   final int length;
   final CompanyAdEntity advertises;
+  final Function(String) onDeleteItem;
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +31,13 @@ class BuildItemPhotoTextPost extends StatelessWidget {
           children: [
             Column(
               children: [
-                BuildItemPhotoPost(length: length, advertises: advertises,isPhoto: false,),
+                BuildItemPhotoPost(length: length, advertises: advertises,isPhoto: false, onDeleteItem: (String ) {  },),
                 BuildItemTextPost(advertises: advertises,isScalable: false, onDeleteItem: (String ) {  },),
               ],
             ),
             IconButton(
               onPressed: () {
-                context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: advertises.sId!,);
-               // context
-                    // .read<CompanyAdvertiseCubit>()
-                    // .deletePost(context, advertises.sId!, 'photo_witten');
+                onDeleteItem(advertises.sId!);
               },
               icon: const Icon(
                 Icons.close,
