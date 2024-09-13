@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -36,7 +37,7 @@ class _UserPostsState extends State<UserPosts> {
           showErrorMessage(
             context,
             getFailureMessage(
-              state.failure ??  UnknownFailure(''),
+              state.failure ?? UnknownFailure(''),
               context,
             ),
           );
@@ -48,14 +49,14 @@ class _UserPostsState extends State<UserPosts> {
           builderDelegate: PagedChildBuilderDelegate<PostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.userPostsPagingController.itemList?.length);
-                return const Padding(
-                    padding: EdgeInsets.only(top: 200),
+                return  Padding(
+                    padding: const EdgeInsets.only(top: 200),
                     child: Center(
                       child: Text(
                         "No Posts",
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 18,
+                          fontSize: 18.sp,
                         ),
                       ),
                     ));
@@ -190,7 +191,7 @@ class _UserPostsState extends State<UserPosts> {
                     : Center(
                         child: Label(
                             text: getFailureMessage(
-                          state.failure ??  UnknownFailure(''),
+                          state.failure ?? UnknownFailure(''),
                           context,
                         )),
                       );

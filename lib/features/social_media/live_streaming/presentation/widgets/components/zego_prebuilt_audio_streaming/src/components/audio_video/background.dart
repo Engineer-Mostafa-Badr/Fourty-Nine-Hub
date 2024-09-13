@@ -66,6 +66,7 @@ class _ZegoSeatForegroundState extends State<ZegoLiveAudioRoomSeatBackground> {
       child: Container(
           width: seatIconWidth,
           height: seatIconWidth,
+          padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: const Color(0xffE6E6E6).withOpacity(0.5),

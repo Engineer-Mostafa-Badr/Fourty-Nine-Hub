@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/create_new_forgot_password_cubit/create_new_forgot_password_cubit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
@@ -14,7 +15,7 @@ import '../../../../../routes/routes.dart';
 class CreateNewForgetPasswordView extends StatelessWidget {
   final String email;
 
-  const CreateNewForgetPasswordView({
+  CreateNewForgetPasswordView({
     super.key,
     required this.email,
   });
@@ -41,16 +42,16 @@ class CreateNewForgetPasswordView extends StatelessWidget {
             label: 'Create New Password',
           ),
           bottomSheet: SizedBox(
-            height: 110,
+            height: 110.h,
             child: DefaultButton(
-              margin: const EdgeInsets.all(30),
+              margin: EdgeInsets.all(30.w),
               width: double.infinity,
               label: 'Create New Password',
               onPressed: () => cubit.createPassword(email),
             ),
           ),
           body: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20),
             child: Form(
               key: cubit.formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -63,7 +64,7 @@ class CreateNewForgetPasswordView extends StatelessWidget {
                     obsecure: true,
                     prefix: const Icon(Icons.password),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                   FormTextField(
                     controller: cubit.confirmPasswordController,
                     label: 'Confirm New Password',

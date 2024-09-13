@@ -3,6 +3,7 @@ import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/functions/helper/auth_helper.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -55,7 +56,7 @@ class _PlaceBiddingState extends State<PlaceBidding> {
         children: [
           Row(
             children: [
-              const Sizer(),
+              Sizer(),
               AppButton(
                 label: 'Minus',
                 onPressed: () => _decreaseBidding(),
@@ -81,7 +82,7 @@ class _PlaceBiddingState extends State<PlaceBidding> {
                       text:
                           '${Labels.currency} ${NumbersHelper.formatThousands(number: bidding)}',
                       style: Styles.headerText(
-                          fontSize: 30,
+                          fontSize: 30.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.PRIMARY_COLOR)),
                   Label(
@@ -102,7 +103,7 @@ class _PlaceBiddingState extends State<PlaceBidding> {
                   color: Colors.white,
                 ),
               ),
-              const Sizer(),
+              Sizer(),
             ],
           ),
           Row(
@@ -113,7 +114,7 @@ class _PlaceBiddingState extends State<PlaceBidding> {
                 color: AppColors.PRIMARY_COLOR,
                 size: 14,
               ),
-              const Sizer(),
+              Sizer(),
               Label(
                   text: Labels.biddingNote,
                   style: Styles.mediumText(

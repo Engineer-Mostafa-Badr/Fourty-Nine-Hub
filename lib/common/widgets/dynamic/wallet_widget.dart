@@ -1,12 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_states.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_states.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -38,14 +39,15 @@ class WalletWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WalletCubit,WalletState>(
+    return BlocBuilder<WalletCubit, WalletState>(
       builder: (BuildContext context, state) {
         return Container(
-          margin: EdgeInsets.symmetric(vertical: 10, horizontal: margin ?? 0),
+          margin:
+              EdgeInsets.symmetric(vertical: 10.h, horizontal: margin?.w ?? 0),
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: BorderRadius.circular(20.zR),
+              borderRadius: BorderRadius.circular(20.r),
               boxShadow: const [
                 BoxShadow(
                   color: AppColors.GRAY_LIGHT_COLOR3,
@@ -57,44 +59,41 @@ class WalletWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
-                radius: 6.zW,
+                radius: 6.w,
                 backgroundColor: AppColors.SECONDARY_COLOR,
               ),
-              const Sizer(),
+              Sizer(),
               BlocProvider<BalanceCubit>(
-                create: (BuildContext context) =>serviceLocator(),
-                child: BlocBuilder<BalanceCubit,BalanceState>(
+                create: (BuildContext context) => serviceLocator(),
+                child: BlocBuilder<BalanceCubit, BalanceState>(
                   builder: (BuildContext context, state) {
-                    return buildItem(
-                            () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const BalanceWalletView()));
-                        },
-                        LocaleKeys.balance.tr(),
-                        '${state.balance?.balance ?? ''}'
-                    );
+                    return buildItem(() {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const BalanceWalletView()));
+                    }, LocaleKeys.balance.tr(),
+                        '${state.balance?.balance ?? ''}');
                   },
                 ),
               ),
               Container(
-                width: 2.zW,
-                margin: const EdgeInsets.symmetric(horizontal: 5),
+                width: 2.h,
+                margin: EdgeInsets.symmetric(horizontal: 5.w),
                 color: Colors.grey,
-                height: kToolbarHeight * 1.3.zH,
+                height: kToolbarHeight * 1.3.h,
               ),
               CircleAvatar(
-                radius: 6.zW,
+                radius: 6.w,
                 backgroundColor: AppColors.SECONDARY_COLOR,
               ),
-              const Sizer(),
+              Sizer(),
               BlocProvider<GiftCubit>(
-                create: (BuildContext context) =>serviceLocator(),
-                child: BlocBuilder<GiftCubit,GiftState>(
+                create: (BuildContext context) => serviceLocator(),
+                child: BlocBuilder<GiftCubit, GiftState>(
                   builder: (BuildContext context, state) {
                     return buildItem(
-                          () {
+                      () {
                         //context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
                         Navigator.push(
                             context,
@@ -102,29 +101,26 @@ class WalletWidget extends StatelessWidget {
                                 builder: (context) => const GiftWalletView()));
                       },
                       LocaleKeys.gift.tr(),
-                      '${state.gift?.giftWallet.amount ??''}',
+                      '${state.gift?.giftWallet.amount ?? ''}',
                     );
                   },
                 ),
               ),
               Container(
-                width: 2.zW,
-                margin: const EdgeInsets.symmetric(horizontal: 5),
+                width: 2.h,
+                margin: EdgeInsets.symmetric(horizontal: 5.w),
                 color: Colors.grey,
-                height: kToolbarHeight * 1.3.zH,
+                height: kToolbarHeight * 1.3,
               ),
               CircleAvatar(
-                radius: 6.zW,
+                radius: 6.w,
                 backgroundColor: AppColors.SECONDARY_COLOR,
               ),
-              const Sizer(),
-              buildItem(
-                    () {
-                  context.push(Routes.WALLET, extra: WalletTypes.mainWallet);
-                },
-                LocaleKeys.wallet.tr(),
-                  '${state.wallet?.realAmount ?? ''}'
-              ),
+              Sizer(),
+              buildItem(() {
+                context.push(Routes.WALLET, extra: WalletTypes.mainWallet);
+              }, LocaleKeys.wallet.tr(),
+                  '${state.wallet?.realAmount?.floor() ?? ''}'),
             ],
           ),
         );
@@ -148,7 +144,7 @@ class WalletWidget extends StatelessWidget {
             Label(
                 text: amount,
                 style: Styles.mediumText(
-                    fontWeight: FontWeight.bold, fontSize: 32)),
+                    fontWeight: FontWeight.bold, fontSize: 32.sp)),
           ],
         ),
       ));

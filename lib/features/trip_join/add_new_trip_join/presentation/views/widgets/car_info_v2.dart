@@ -47,7 +47,7 @@ class _CarInfoV2State extends State<CarInfoV2> {
                   label: const Text('Brand'),
                   isDense: true,
                   // Added this
-                  contentPadding: const EdgeInsets.all(14),
+                  contentPadding: EdgeInsets.all(14),
                 ),
                 onChanged: (value) {
                   fetchCarBrandsCubit.brand = value;
@@ -77,7 +77,7 @@ class _CarInfoV2State extends State<CarInfoV2> {
             },
           ),
         ),
-        const Sizer(),
+        Sizer(),
         Expanded(
           flex: 1,
           child: TypeAheadField<String>(
@@ -93,7 +93,7 @@ class _CarInfoV2State extends State<CarInfoV2> {
                   label: const Text('Model'),
                   isDense: true,
                   // Added this
-                  contentPadding: const EdgeInsets.all(14),
+                  contentPadding: EdgeInsets.all(14),
                 ),
                 onChanged: (value) {
                   fetchCarModelsCubit.model = value;

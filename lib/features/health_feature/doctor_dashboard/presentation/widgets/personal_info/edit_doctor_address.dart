@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../core/localization/locale_keys.g.dart';
 
@@ -20,8 +21,8 @@ class EditDoctorAddressField extends StatelessWidget {
             if (value != null) {}
           },
         ),
-        const Sizer(
-          height: 20,
+         Sizer(
+          height: 20.h,
         ),
         DropdownMenu(
           width: MediaQuery.of(context).size.width * 0.9,
@@ -31,8 +32,8 @@ class EditDoctorAddressField extends StatelessWidget {
             if (value != null) {}
           },
         ),
-        const Sizer(
-          height: 20,
+         Sizer(
+          height: 20.h,
         ),
         DefaultTextFormField(
           hint: LocaleKeys.address.localize,

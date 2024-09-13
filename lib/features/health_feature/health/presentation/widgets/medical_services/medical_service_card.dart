@@ -36,7 +36,7 @@ class HealthMedicalServiceCard extends StatelessWidget {
       },
       child: Container(
         width: 200,
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(10),
@@ -60,7 +60,7 @@ class HealthMedicalServiceCard extends StatelessWidget {
                       right: 5,
                       child: IconAppButton(
                           size: 20,
-                          icon: subCategory.isFavorite==true
+                          icon: subCategory.isFavorite == true
                               ? Icons.favorite
                               : Icons.favorite_border,
                           color: ThemeCubit.get(context).isDarkTheme
@@ -74,7 +74,7 @@ class HealthMedicalServiceCard extends StatelessWidget {
                 ],
               ),
             )),
-            const Sizer(),
+            Sizer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

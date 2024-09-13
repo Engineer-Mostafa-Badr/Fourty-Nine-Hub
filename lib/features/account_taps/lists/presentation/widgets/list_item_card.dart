@@ -34,9 +34,9 @@ class ListItemCard extends StatelessWidget {
                 imageURL: user.image, userId: '',
                 fromProfile: true,
               ),
-              const Sizer(),
+              Sizer(),
               Expanded(child: Label(text: "${user.firstName}\t${user.lastName}")),
-              const Sizer(),
+              Sizer(),
               if (type == ListTypes.requests)
                 IconButton(
                     onPressed: () {
@@ -81,7 +81,7 @@ class ListItemCard extends StatelessWidget {
         ),
         if (type != ListTypes.blocked)
           ListTile(
-            onTap: () => context.push(Routes.CHATROOM, extra: user.id),
+            onTap: () => context.push(Routes.CHATROOM),
             leading: const Icon(Icons.chat),
             title: Label(text: 'Chat with ${user.firstName}'),
           ),

@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
@@ -12,15 +13,14 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/get_ser
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/screenutil_init.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'routes/pages.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +42,7 @@ void main() async {
       //   enabled: !kReleaseMode,
       //   builder: (context) => const MyApp(),
       // ),
-      child: const MyApp(),
+      child: Phoenix(child: const MyApp()),
     ),
   );
 }
@@ -68,9 +68,6 @@ class MyApp extends StatelessWidget {
         //   create: (context) => serviceLocator<CreateShippingRequestCubit>(),
         // ),
         // //  tinder to be reviewed
-        BlocProvider(
-          create: (context) => serviceLocator<ChatsCubit>(),
-        ),
         // BlocProvider(
         //   create: (context) => TinderViewCubit(),
         // ),
@@ -110,7 +107,7 @@ class MyApp extends StatelessWidget {
           )..notificationListener(),
         ),
       ],
-      child: ZegoScreenUtilInit(
+      child: ScreenUtilInit(
           designSize: const Size(750, 1334),
           minTextAdapt: true,
           splitScreenMode: true,

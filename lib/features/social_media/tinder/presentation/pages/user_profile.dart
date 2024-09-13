@@ -10,7 +10,7 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/ti
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key});
 
@@ -59,7 +59,7 @@ class UserProfilePageState extends State<UserProfilePage> {
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            padding: EdgeInsets.symmetric(vertical: 20.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -135,11 +135,11 @@ class UserProfilePageState extends State<UserProfilePage> {
                 "${userId?.firstName ?? ''} ${userId?.lastName ?? ''}"),
             style: Styles.headerText(
               color: AppColors.PRIMARY_COLOR,
-              fontSize: 38,
+              fontSize: 38.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Text(
             userId?.email ?? '',
             style: Styles.headerText(
@@ -182,7 +182,7 @@ class UserProfilePageState extends State<UserProfilePage> {
     final profileData = context.watch<TinderViewCubit>().state.profileUserData;
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10.0),
+      margin: EdgeInsets.symmetric(vertical: 10.h),
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: AppColors.PRIMARY_COLOR,
@@ -208,16 +208,16 @@ class UserProfilePageState extends State<UserProfilePage> {
       children: [
         Text(
           count,
-          style: const TextStyle(
-            fontSize: 22,
+          style:  TextStyle(
+            fontSize: 22.sp,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
-        const SizedBox(height: 5),
+        SizedBox(height: 5.h),
         Text(
           label,
-          style: const TextStyle(fontSize: 16, color: Colors.white70),
+          style:  TextStyle(fontSize: 16.sp, color: Colors.white70),
         ),
       ],
     );
@@ -307,7 +307,7 @@ class SwipeCardDemoState extends State<SwipeCardDemo> {
                 (dotIndex) => Expanded(
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                    height: 4,
+                    height: 4.h,
                     decoration: BoxDecoration(
                       color: (dotIndex == _currentStoryIndex)
                           ? Colors.red

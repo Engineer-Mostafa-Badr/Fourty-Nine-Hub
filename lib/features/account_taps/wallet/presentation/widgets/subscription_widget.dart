@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -45,10 +46,10 @@ class SubscriptionWidget extends StatelessWidget {
         Row(
           children: [
             SizedBox(
-                height: 30,
+                height: 30.h,
                 width: 30,
                 child: Image.network(subscription.picture ?? '')),
-            const Sizer(),
+             Sizer(),
             Expanded(
                 child: Row(
               children: [
@@ -56,7 +57,7 @@ class SubscriptionWidget extends StatelessWidget {
                     text: context.locale == Locales.english
                         ? subscription.nameEn ?? ''
                         : subscription.nameAr ?? ''),
-                const Sizer(
+                 Sizer(
                   width: 5,
                 ),
                 Label(
@@ -104,8 +105,8 @@ class SubscriptionWidget extends StatelessWidget {
             // )
           ],
         ),
-        const Sizer(
-          height: 10,
+         Sizer(
+          height: 10.h,
         ),
         Row(
           children: [
@@ -128,7 +129,7 @@ class SubscriptionWidget extends StatelessWidget {
                 },
               ),
             ),
-            const Sizer(
+             Sizer(
               width: 5,
             ),
             Expanded(
@@ -147,8 +148,8 @@ class SubscriptionWidget extends StatelessWidget {
             ),
           ],
         ),
-        const Sizer(
-          height: 15,
+         Sizer(
+          height: 15.h,
         ),
       ],
     );
@@ -165,7 +166,7 @@ class SubscriptionWidget extends StatelessWidget {
           function();
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 4),
+          padding:  EdgeInsets.symmetric(vertical: 4.h),
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(8),

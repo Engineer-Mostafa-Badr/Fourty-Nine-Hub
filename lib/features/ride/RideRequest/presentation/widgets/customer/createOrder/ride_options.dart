@@ -68,7 +68,7 @@ class RideOptions extends StatelessWidget {
                 itemCount: state.carTypes?.length ?? 0,
               ),
             ),
-            const Sizer(),
+            Sizer(),
             AppButton(label: 'Save', onPressed: () => context.pop()),
           ],
         ),

@@ -33,7 +33,7 @@ class EditDoctorProfileView extends StatelessWidget {
             showErrorMessage(
               context,
               getFailureMessage(
-                state.failure ??  UnknownFailure(''),
+                state.failure ?? UnknownFailure(''),
                 context,
               ),
             );
@@ -51,18 +51,18 @@ class EditDoctorProfileView extends StatelessWidget {
         ),
         body: ListView(
           padding: const EdgeInsets.all(18),
-          children: const [
-            UpdateProfilePhotoCard(),
+          children:  [
+            const UpdateProfilePhotoCard(),
             Sizer(),
-            UpdateDoctorIdCard(),
+            const UpdateDoctorIdCard(),
             Sizer(),
-            UpdateDoctorPracticingCirtificateCard(),
+            const UpdateDoctorPracticingCirtificateCard(),
             Sizer(),
-            UpdateDoctorTimetableCard(),
+            const UpdateDoctorTimetableCard(),
             Sizer(),
-            UpdateDoctorPersonalInfo(),
+            const UpdateDoctorPersonalInfo(),
             Sizer(),
-            DeleteDoctorAccountCard(),
+            const DeleteDoctorAccountCard(),
           ],
         ),
       ),

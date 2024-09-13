@@ -58,4 +58,19 @@ class NotificationSocketIoCubit extends Cubit<NotificationSocketIoState> {
       },
     );
   }
+
+  Future<void> clearAllNotificationsAndRefeatchAfterLogin() async {
+    final getAppNotificationsCubit = context.read<GetAppNotificationsCubit>();
+    final getSocialNotificationsCubit = context.read<GetSocialNotificationsCubit>();
+    final getServicesNotificationsCubit = context.read<GetServicesNotificationsCubit>();
+    getAppNotificationsCubit.notifications = [];
+    getAppNotificationsCubit.page = 1;
+    getSocialNotificationsCubit.notifications = [];
+    getSocialNotificationsCubit.page = 1;
+    getServicesNotificationsCubit.notifications = [];
+    getServicesNotificationsCubit.page = 1;
+    await getAppNotificationsCubit.getAppNotifications();
+    await getSocialNotificationsCubit.getSocialNotifications();
+    await getServicesNotificationsCubit.getServicesNotifications();
+  }
 }

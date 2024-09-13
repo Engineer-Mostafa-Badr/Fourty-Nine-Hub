@@ -11,7 +11,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/media_view.dart';
@@ -63,7 +63,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                     SliverToBoxAdapter(
                         child: Container(
                             width: double.infinity,
-                            padding: const EdgeInsetsDirectional.only(
+                            padding: EdgeInsetsDirectional.only(
                                 top: 35, end: 10, start: 10),
                             child: Row(
                                 mainAxisAlignment:
@@ -82,7 +82,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                               '${state.profileData?.email.split('@')[0]}',
                                           style: Styles.mediumText(
                                               color: Colors.grey)),
-                                      const Sizer(
+                                      Sizer(
                                         width: 4,
                                       ),
                                       const Icon(
@@ -190,7 +190,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                       child: state.profileData?.isBlock == false
                           ? Column(
                               children: [
-                                const Sizer(),
+                                Sizer(),
                                 TabBar(
                                     labelStyle: Styles.mediumText(),
                                     isScrollable: true,
@@ -198,17 +198,23 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                     // labelPadding: EdgeInsetsDirectional.only(end: 100),
                                     indicatorSize: TabBarIndicatorSize.tab,
                                     labelPadding:
-                                        const EdgeInsetsDirectional.symmetric(
+                                        EdgeInsetsDirectional.symmetric(
                                             horizontal: 50),
                                     onTap: (i) {
                                       controller.changeUserPage(i);
                                     },
                                     tabs: [
                                       Tab(
-                                        icon: Image.asset(Assets.userMedia,width: 30,),
+                                        icon: Image.asset(
+                                          Assets.userMedia,
+                                          width: 30,
+                                        ),
                                       ),
                                       Tab(
-                                        icon: Image.asset(Assets.userReels,width: 30,),
+                                        icon: Image.asset(
+                                          Assets.userReels,
+                                          width: 30,
+                                        ),
                                       ),
                                       if (context
                                               .read<UserCubit>()
@@ -217,7 +223,10 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                               ?.id ==
                                           widget.userId)
                                         Tab(
-                                          icon: Image.asset(Assets.savedReels,width: 30,),
+                                          icon: Image.asset(
+                                            Assets.savedReels,
+                                            width: 30,
+                                          ),
                                         ),
                                     ]),
                                 // _buildAccountPages(state.profileData!),
@@ -271,7 +280,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               children: [
                 Stack(
@@ -290,7 +299,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                         : ImageFromInternet(
                             image: user.profilePicture ??
                                 UIConst.profilePlaceHolder,
-                            height: 80,
+                            height: 80.h,
                             width: 80,
                             isCircle: true,
                           ),
@@ -328,196 +337,199 @@ class _InstagramProfileState extends State<InstagramProfile> {
                           );
                         },
                         child: Container(
-                            padding: const EdgeInsets.all(5),
+                            padding: EdgeInsets.all(5),
                             decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: AppColors.PRIMARY_COLOR),
-                            child: const Icon(
+                            child: Icon(
                               Icons.camera_alt_outlined,
                               color: Colors.white,
+                              size: 32.w,
                             )),
                       )
+                  ],
+                ),
+                Sizer(
+                  width: 20,
+                ),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildCounter(
+                        value: '${user.instagramPosts ?? 0} ',
+                        label: 'Post',
+                      ),
+                      Sizer(),
+                      _buildCounter(
+                        value: '${user.friendsCount} ',
+                        label: 'Friend',
+                      ),
+                      Sizer(),
+                      _buildCounter(
+                        value: '${user.followersCount} ',
+                        label: 'Follower',
+                      ),
+                      Sizer(
+                        width: 5,
+                      ),
+                      _buildCounter(
+                        value: '${user.totalView} ',
+                        label: 'View',
+                      ),
+                      Sizer(
+                        width: 5,
+                      ),
                     ],
                   ),
-                  const Sizer(
-                    width: 20,
-                  ),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _buildCounter(
-                          value: '${user.instagramPosts ?? 0} ',
-                          label: 'Post',
-                        ),
-                        const Sizer(),
-                        _buildCounter(
-                          value: '${user.friendsCount} ',
-                          label: 'Friend',
-                        ),
-                        const Sizer(),
-                        _buildCounter(
-                          value: '${user.followersCount} ',
-                          label: 'Follower',
-                        ),
-                        const Sizer(
-                          width: 5,
-                        ),
-                        _buildCounter(
-                          value: '${user.totalView} ',
-                          label: 'View',
-                        ),
-                        const Sizer(
-                          width: 5,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Sizer(),
-                  RichText(
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Sizer(),
+                RichText(
                     maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(children: [
+                    overflow: TextOverflow.ellipsis,
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: "${user.firstName} ${user.lastName}",
+                          style: Styles.headerText(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black)),
+                      if (user.job.isNotEmpty)
                         TextSpan(
-                            text:
-                            "${user.firstName} ${user.lastName}",
-                            style: Styles.headerText(fontWeight: FontWeight.w600,color: Colors.black)),
-                        if(user.job.isNotEmpty)TextSpan(
                             text: '\t(${user.job})',
                             style: Styles.headerText(
                                 color: Colors.black, fontSize: 26)),
-                      ])),
-                  const Sizer(
-                    height: 4,
-                  ),
-                  Label(
-                      text: '@ ${user.email.split('@')[0]}',
-                      style: Styles.mediumText(color: Colors.grey)),
-                  const Sizer(
-                    height: 4,
-                  ),
-                  if (user.bio.isNotEmpty)
-                    Label(
-                        text: user.bio,
-                        style: Styles.mediumText(color: Colors.black)),
-                  const Sizer(
-                    height: 5,
-                  ),
-                  if (user.city.isNotEmpty ||
-                      user.job.isNotEmpty ||
-                      user.country.isNotEmpty ||
-                      user.phone.isNotEmpty)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (user.city.isNotEmpty || user.country.isNotEmpty) ...[
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Label(
-                                  text:
-                                      '${user.country}${user.city.isNotEmpty ? ',' : ''} ${user.city}',
-                                  style: Styles.headerText(
-                                      color: Colors.black, fontSize: 26),
-                                  maxLines: 1,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Sizer(
-                            height: 5,
-                          ),
-                        ],
-                        if (user.phone.isNotEmpty) ...[
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Label(
-                                  text: user.phone,
-                                  style: Styles.headerText(
-                                      color: Colors.black, fontSize: 26),
-                                  maxLines: 1,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Sizer(
-                            height: 5,
-                          ),
-                        ],
-                        if (user.job.isNotEmpty)
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Label(
-                                  text: user.job,
-                                  style: Styles.headerText(
-                                      color: Colors.black, fontSize: 26),
-                                  maxLines: 1,
-                                ),
-                              ),
-                            ],
-                          ),
-                      ],
-                    ),
-                ],
-              ),
-            ),
-            if (user.followers != null && user.followers!.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 4
+                    ])),
+                Sizer(
+                  height: 4.h,
                 ),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: user.followers!.length == 1
-                          ? 25
-                          : user.followers!.length == 2
-                              ? 40
-                              : 60,
-                      height: 32,
-                      child: Stack(
-                        children: List.generate(
-                          user.followers!.length < 3 ? user.followers!.length : 3,
-                          (index) => Positioned(
-                              top: 0,
-                              left: index == 0
-                                  ? 0
-                                  : index == 1
-                                      ? 16
-                                      : 32,
-                              child: const ProfileImage(
-                                userId: '',
-                                accountId: 0,
-                                imageURL: UIConst.profilePlaceHolder,
-                                withBorder: false,
-                              )),
+                Label(
+                    text: '@ ${user.email.split('@')[0]}',
+                    style: Styles.mediumText(color: Colors.grey)),
+                Sizer(
+                  height: 4.h,
+                ),
+                if (user.bio.isNotEmpty)
+                  Label(
+                      text: user.bio,
+                      style: Styles.mediumText(color: Colors.black)),
+                Sizer(
+                  height: 5.h,
+                ),
+                if (user.city.isNotEmpty ||
+                    user.job.isNotEmpty ||
+                    user.country.isNotEmpty ||
+                    user.phone.isNotEmpty)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (user.city.isNotEmpty || user.country.isNotEmpty) ...[
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Label(
+                                text:
+                                    '${user.country}${user.city.isNotEmpty ? ',' : ''} ${user.city}',
+                                style: Styles.headerText(
+                                    color: Colors.black, fontSize: 26),
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
                         ),
+                        Sizer(
+                          height: 5.h,
+                        ),
+                      ],
+                      if (user.phone.isNotEmpty) ...[
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Label(
+                                text: user.phone,
+                                style: Styles.headerText(
+                                    color: Colors.black, fontSize: 26),
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Sizer(
+                          height: 5.h,
+                        ),
+                      ],
+                      if (user.job.isNotEmpty)
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Label(
+                                text: user.job,
+                                style: Styles.headerText(
+                                    color: Colors.black, fontSize: 26),
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
+              ],
+            ),
+          ),
+          if (user.followers != null && user.followers!.isNotEmpty)
+            Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.h),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: user.followers!.length == 1
+                        ? 25
+                        : user.followers!.length == 2
+                            ? 40
+                            : 60,
+                    height: 32.h,
+                    child: Stack(
+                      children: List.generate(
+                        user.followers!.length < 3 ? user.followers!.length : 3,
+                        (index) => Positioned(
+                            top: 0,
+                            left: index == 0
+                                ? 0
+                                : index == 1
+                                    ? 16
+                                    : 32,
+                            child: const ProfileImage(
+                              userId: '',
+                              accountId: 0,
+                              imageURL: UIConst.profilePlaceHolder,
+                              withBorder: false,
+                            )),
                       ),
                     ),
-                    const Sizer(),
-                    Expanded(
-                        child: Row(
-                      children: [
-                        Expanded(
-                          child: RichText(
-                              text: TextSpan(children: [
+                  ),
+                  Sizer(),
+                  Expanded(
+                      child: Row(
+                    children: [
+                      Expanded(
+                        child: RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text:
+                                  '${user.followers!.isNotEmpty ? '${user.followers![0].firstName} ${user.followers![0].lastName}' : ''} ${user.followers!.length > 1 ? '${user.followers![1].firstName} ${user.followers![1].lastName}' : ''}',
+                              style: Styles.mediumText(color: Colors.black)),
+                          if (user.followers!.length > 2)
                             TextSpan(
                                 text:
-                                    '${user.followers!.isNotEmpty ? '${user.followers![0].firstName} ${user.followers![0].lastName}' : ''} ${user.followers!.length > 1 ? '${user.followers![1].firstName} ${user.followers![1].lastName}' : ''}',
-                                style: Styles.mediumText(color: Colors.black)),
-                            if(user.followers!.length>2)TextSpan(
-                                text: '\tand ${user.followers!.length-2} others',
+                                    '\tand ${user.followers!.length - 2} others',
                                 style: Styles.mediumText(color: Colors.grey)),
                         ])),
                       ),
@@ -527,16 +539,16 @@ class _InstagramProfileState extends State<InstagramProfile> {
               ),
             ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.symmetric(horizontal: 8),
             child: Column(
               children: [
                 if (loginUser?.id != widget.userId) ...[
-                  const Sizer(),
+                  Sizer(),
                   Row(
                     children: [
                       Expanded(
                         child: AppButton(
-                            height: 42,
+                            height: 42.h,
                             backColor: user.isFollowed == true
                                 ? AppColors.PRIMARY_COLOR
                                 : null,
@@ -547,12 +559,12 @@ class _InstagramProfileState extends State<InstagramProfile> {
                               onFollow();
                             }),
                       ),
-                      const Sizer(),
+                      Sizer(),
                       Expanded(
                         child: PopupMenuButton(
                             child: Container(
                                 alignment: Alignment.center,
-                                padding: const EdgeInsets.all(10),
+                                padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
                                     color: AppColors.SECONDARY_COLOR),
@@ -576,16 +588,16 @@ class _InstagramProfileState extends State<InstagramProfile> {
                               context.push(Routes.CHAT);
                             }),
                       ),
-                      const Sizer(),
+                      Sizer(),
                       InkWell(
                         onTap: showHideSuggestPeople,
                         child: Container(
-                          height: 42,
+                          height: 42.h,
                           width: 42,
-                          margin: const EdgeInsets.all(0),
-                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          margin: EdgeInsets.all(0),
+                          padding: EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.zR),
+                            borderRadius: BorderRadius.circular(10.r),
                             color: AppColors.PRIMARY_COLOR,
                           ),
                           child: Center(
@@ -602,18 +614,18 @@ class _InstagramProfileState extends State<InstagramProfile> {
                   ),
                 ],
                 if (loginUser?.id == widget.userId) ...[
-                  const Sizer(),
+                  Sizer(),
                   Row(
                     children: [
                       Expanded(
                         child: InkWell(
                           onTap: getUserProfile,
                           child: Container(
-                            height: 42,
-                            margin: const EdgeInsets.all(0),
-                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                            height: 42.h,
+                            margin: EdgeInsets.all(0),
+                            padding: EdgeInsets.symmetric(horizontal: 0),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.zR),
+                              borderRadius: BorderRadius.circular(10.r),
                               color: AppColors.PRIMARY_COLOR,
                             ),
                             child: Center(
@@ -625,10 +637,10 @@ class _InstagramProfileState extends State<InstagramProfile> {
                           ),
                         ),
                       ),
-                      const Sizer(),
+                      Sizer(),
                       Expanded(
                         child: AppButton(
-                            height: 42,
+                            height: 42.h,
                             backColor: AppColors.PRIMARY_COLOR,
                             label: 'Share Profile',
                             style: Styles.mediumText(color: Colors.white),
@@ -636,16 +648,16 @@ class _InstagramProfileState extends State<InstagramProfile> {
                               onFollow();
                             }),
                       ),
-                      const Sizer(),
+                      Sizer(),
                       InkWell(
                         onTap: showHideSuggestPeople,
                         child: Container(
-                          height: 42,
+                          height: 42.h,
                           width: 42,
-                          margin: const EdgeInsets.all(0),
-                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          margin: EdgeInsets.all(0),
+                          padding: EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.zR),
+                            borderRadius: BorderRadius.circular(10.r),
                             color: AppColors.PRIMARY_COLOR,
                           ),
                           child: Center(
@@ -678,8 +690,8 @@ class _InstagramProfileState extends State<InstagramProfile> {
           value,
           style: Styles.headerText(),
         ),
-        const Sizer(
-          height: 2,
+        Sizer(
+          height: 2.h,
         ),
         Text(
           label,

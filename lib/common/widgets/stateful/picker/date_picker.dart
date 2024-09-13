@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -46,7 +47,7 @@ class _DatePickerFieldState extends State<DatePickerField> {
         }
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+        padding:  EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
         decoration: BoxDecoration(
           border:
               Border.all(width: .5, color: widget.borderColor ?? Colors.black),
@@ -67,7 +68,7 @@ class _DatePickerFieldState extends State<DatePickerField> {
                           Styles.mediumText(color: AppColors.DARK_GRAY_COLOR),
                     ),
             ),
-            const Sizer(),
+            Sizer(),
             const Icon(Icons.calendar_month),
           ],
         ),

@@ -11,9 +11,10 @@ import '../../../../../../core/enums/base_status_enum.dart';
 import '../../../../../../core/messages/messages.dart';
 import '../../../domain/entities/company_ad_entity.dart';
 import 'build_item_photo_post.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PhotoPostContent extends StatefulWidget {
-  const PhotoPostContent({super.key});
+  PhotoPostContent({super.key});
 
   @override
   State<PhotoPostContent> createState() => _PhotoPostContentState();
@@ -22,53 +23,52 @@ class PhotoPostContent extends StatefulWidget {
 class _PhotoPostContentState extends State<PhotoPostContent> {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CreateCompanyAdCubit,CreateCompanyAdState>(
+    return BlocConsumer<CreateCompanyAdCubit, CreateCompanyAdState>(
         listener: (BuildContext context, CreateCompanyAdState state) {
-          if (state.status == StateStatus.success) {
-            showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
-          }
-        },
-      builder: (context,state) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: PaginationView<CompanyAdEntity>(
-            loadingWidget: const SizedBox.shrink(),
-            build: (scrollController, data) {
-              return data.isNotEmpty
-                  ? ListView.separated(
-                controller: scrollController,
-                itemBuilder: (context, index) => BuildItemPhotoPost(
-                  length: data[index].media!.length,
-                  advertises: data[index],
-                  onDeleteItem: (id) async{
-                    var result=await context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: id,);
-                    if(result ==true){
-                      data.removeWhere((e)=>e.sId ==id);
-                      setState(() {
-
-                      });
-                    }
-                  },
-                ),
-                separatorBuilder: (context, index) => const Divider(
-                  color: AppColors.GREY_LIGHT_COLOR,
-                  height: 30,
-                  endIndent: 30,
-                ),
-                itemCount: data.length,
-              )
-                  : Center(
-                  child: Label(text: LocaleKeys.noPhotoPosts.localize));
-            },
-            fetchData: (PaginationParams paginationParams) {
-              return context.read<CreateCompanyAdCubit>().getCompanyAdPosts(
-                'photo',
-                params: paginationParams,
-              );
-            },
-          ),
-        );
+      if (state.status == StateStatus.success) {
+        showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
       }
-    );
+    }, builder: (context, state) {
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10.h),
+        child: PaginationView<CompanyAdEntity>(
+          loadingWidget: SizedBox.shrink(),
+          build: (scrollController, data) {
+            return data.isNotEmpty
+                ? ListView.separated(
+                    controller: scrollController,
+                    itemBuilder: (context, index) => BuildItemPhotoPost(
+                      length: data[index].media!.length,
+                      advertises: data[index],
+                      onDeleteItem: (id) async {
+                        var result = await context
+                            .read<CreateCompanyAdCubit>()
+                            .deleteCompanyAd(
+                              id: id,
+                            );
+                        if (result == true) {
+                          data.removeWhere((e) => e.sId == id);
+                          setState(() {});
+                        }
+                      },
+                    ),
+                    separatorBuilder: (context, index) => Divider(
+                      color: AppColors.GREY_LIGHT_COLOR,
+                      height: 30.h,
+                      endIndent: 30,
+                    ),
+                    itemCount: data.length,
+                  )
+                : Center(child: Label(text: LocaleKeys.noPhotoPosts.localize));
+          },
+          fetchData: (PaginationParams paginationParams) {
+            return context.read<CreateCompanyAdCubit>().getCompanyAdPosts(
+                  'photo',
+                  params: paginationParams,
+                );
+          },
+        ),
+      );
+    });
   }
 }

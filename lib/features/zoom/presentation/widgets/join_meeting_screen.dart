@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -77,15 +78,16 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
           leading: IconButton(
               onPressed: () => context.pop(),
               icon: const Icon(Icons.arrow_back_ios)),
-          title: const Text(
-            'Join a meeting',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: AppColors.PRIMARY_COLOR,
-            ),
+          title:  const Text('Join Meeting'),
+
+            // 'Join a meeting',
+            // style: TextStyle(
+            //   fontSize: 20.sp,
+            //   fontWeight: FontWeight.bold,
+            //   color: AppColors.PRIMARY_COLOR,
+            // ),
           ),
-        ),
+        
         body: Padding(
           padding: const EdgeInsets.only(
             left: 16.0,
@@ -104,7 +106,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                     style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
                   ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  padding:  EdgeInsets.symmetric(vertical: 15.h),
                   child: TextFormField(
                     controller: _meetingIdController,
                     keyboardType: TextInputType.number,
@@ -132,11 +134,11 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                 // Label(
                 //   text: 'Join with a Personal link name',
                 //   style: Styles.mediumText(
-                //       color: Colors.blue.shade900, fontSize: 25),
+                //       color: Colors.blue.shade900, fontSize: 25.sp),
                 //   // style: TextStyle(color: AppColors.PRIMARY_COLOR),
                 // ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  padding:  EdgeInsets.symmetric(vertical: 15.h),
                   child: TextField(
                     controller: _userNameController,
                     textAlign: TextAlign.center,
@@ -164,7 +166,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                   if (state.isSuccess) {
                     // context.pop();
                     CliLogger.success('Success');
-                    context.push(
+                    context.pushReplacement(
                       Routes.MEETINGROOM,
                       extra: ZegoArgs(
                         meetingId,

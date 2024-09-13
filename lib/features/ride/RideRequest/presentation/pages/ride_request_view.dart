@@ -24,17 +24,19 @@ class RideRequestView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: MainCategoryBanner(
-                category: MainCategoryEntity.fake(),
-                canRegister: true,
-                onRegister: () {
-                  if (context.read<UserCubit>().isLoggedIn) {
-                    context.push(Routes.CREATERESTURANT);
-                  } else {
-                    context.push(Routes.REGISTER);
-                  }
-                }, onFavorite: () {  },),
+              category: MainCategoryEntity.fake(),
+              canRegister: true,
+              onRegister: () {
+                if (context.read<UserCubit>().isLoggedIn) {
+                  context.push(Routes.CREATERESTURANT);
+                } else {
+                  context.push(Routes.REGISTER);
+                }
+              },
+              onFavorite: () {},
+            ),
           ),
           Expanded(
               child: Stack(

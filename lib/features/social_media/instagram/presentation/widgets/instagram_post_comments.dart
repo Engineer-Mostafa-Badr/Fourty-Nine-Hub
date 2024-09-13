@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_comment_card.dart';
@@ -66,7 +67,8 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
           children: [
             Expanded(
               child: PagedListView<int, CommentEntity>(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                padding:
+                    EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
                 pagingController: controller.commentsPagingController,
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(
@@ -75,14 +77,14 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                     noItemsFoundIndicatorBuilder: (context) {
                       print(
                           controller.commentsPagingController.itemList?.length);
-                      return const Padding(
-                          padding: EdgeInsets.only(top: 200),
+                      return  Padding(
+                          padding:const  EdgeInsets.only(top: 200),
                           child: Center(
                             child: Text(
                               "No Comments",
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 18,
+                                fontSize: 18.sp,
                               ),
                             ),
                           ));
@@ -104,10 +106,10 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                     },
                     noMoreItemsIndicatorBuilder: (context) => Container(),
                     firstPageProgressIndicatorBuilder: (context) => Container(
-                        margin: const EdgeInsets.only(top: 150),
+                        margin: EdgeInsets.only(top: 150),
                         child: const CupertinoActivityIndicator()),
                     newPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator()),
+                        const CupertinoActivityIndicator()),
               ),
             ),
             Container(
@@ -117,25 +119,27 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                 ),
                 child: Row(
                   children: [
-                    const ProfileImage(accountId: 0,userId: '',),
-                    const Sizer(),
+                    const ProfileImage(
+                      accountId: 0,
+                      userId: '',
+                    ),
+                    Sizer(),
                     Expanded(
-                        child:
-                        TextFormField(
-                          maxLines: null,
-                          controller: commentTextController,
-                          onChanged: (v) {
-                            setState(() {});
-                          },
-                          style: Styles.headerText(fontSize: 26),
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            contentPadding: EdgeInsets.all(5),
-                            hintText: 'Type your comment ....',
-                            hintStyle: Styles.mediumText(),
-                          ),
-                        )),
-                    const Sizer(),
+                        child: TextFormField(
+                      maxLines: null,
+                      controller: commentTextController,
+                      onChanged: (v) {
+                        setState(() {});
+                      },
+                      style: Styles.headerText(fontSize: 26.sp),
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        contentPadding: EdgeInsets.all(5),
+                        hintText: 'Type your comment ....',
+                        hintStyle: Styles.mediumText(),
+                      ),
+                    )),
+                    Sizer(),
                     if (commentTextController.text.isNotEmpty)
                       IconAppButton(
                           icon: Icons.send,

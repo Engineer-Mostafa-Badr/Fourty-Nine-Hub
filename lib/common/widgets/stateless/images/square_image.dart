@@ -30,7 +30,7 @@ class SquareImage extends StatelessWidget {
                     image: source!,
                     fit: fit ?? BoxFit.cover,
                   )
-                : const SizedBox()
+                : SizedBox()
             : CachedNetworkImage(
                 fit: fit ?? BoxFit.cover,
                 errorWidget: (context, i, v) {

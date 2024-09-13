@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -52,8 +53,11 @@ class _LiveCardState extends State<LiveCard> {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const ProfileImage(accountId: 0,userId: '',),
-          const Sizer(),
+          const ProfileImage(
+            accountId: 0,
+            userId: '',
+          ),
+          Sizer(),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,22 +73,19 @@ class _LiveCardState extends State<LiveCard> {
               ],
             ),
           ),
-          const Sizer(),
+          Sizer(),
           AppButton(
-              height: 25,
+              height: 25.h,
               label: 'Follow',
               padding: 10,
               radius: 20,
               icon: Icons.add,
               onPressed: () {
                 context.push(Routes.LIVEView,
-                    extra: ZegoArgs(
-                      '123',
-                      false,
-                      context.read<UserCubit>().state.data!.fullName
-                    ));
+                    extra: ZegoArgs('123', false,
+                        context.read<UserCubit>().state.data!.fullName));
               }),
-          const Sizer(),
+          Sizer(),
           Row(
             children: [
               IconAppButton(
@@ -92,14 +93,14 @@ class _LiveCardState extends State<LiveCard> {
                 color: Colors.white,
                 onPressed: () {},
               ),
-              const Sizer(
+              Sizer(
                 width: 5,
               ),
               Label(
                 text: '140 view',
                 style: Styles.mediumText(color: Colors.white),
               ),
-              const Sizer(
+              Sizer(
                 width: 5,
               ),
               IconAppButton(
@@ -132,8 +133,9 @@ class _LiveCardState extends State<LiveCard> {
         children: [
           Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              margin: const EdgeInsets.symmetric(vertical: 10),
+              padding:
+                  EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
+              margin: EdgeInsets.symmetric(vertical: 10.h),
               decoration: BoxDecoration(
                   color: AppColors.LIGHT_GRAY_COLOR,
                   borderRadius: BorderRadius.circular(10)),
@@ -152,7 +154,7 @@ class _LiveCardState extends State<LiveCard> {
               ),
             ),
           ),
-          const Sizer(),
+          Sizer(),
           _buildActionButton(
               image: Assets.giftbox,
               label: 'Gift',
@@ -162,14 +164,14 @@ class _LiveCardState extends State<LiveCard> {
                     backColor: Colors.black87,
                     widget: Container());
               }),
-          const Sizer(),
+          Sizer(),
           _buildActionButton(
               image: Assets.coin,
               label: 'Recharge',
               onTap: () {
                 bottomSheet(context: context, widget: const RechargeCoins());
               }),
-          const Sizer(),
+          Sizer(),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -177,8 +179,8 @@ class _LiveCardState extends State<LiveCard> {
                 Icons.share,
                 color: Colors.white,
               ),
-              const Sizer(
-                height: 5,
+              Sizer(
+                height: 5.h,
               ),
               Label(
                 text: 'Share',
@@ -200,10 +202,10 @@ class _LiveCardState extends State<LiveCard> {
         children: [
           Image.asset(
             image,
-            height: 20,
+            height: 20.h,
           ),
-          const Sizer(
-            height: 5,
+          Sizer(
+            height: 5.h,
           ),
           Label(
             text: label,

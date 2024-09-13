@@ -28,9 +28,9 @@ class Stories extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         children: [
-          const Sizer(),
+          Sizer(),
           _buildYourStory(context),
-          const Sizer(),
+          Sizer(width: 8,),
           SizedBox(
             height: kToolbarHeight * 2.5,
             child: BlocBuilder<StoryCubit, StoryState>(
@@ -42,7 +42,9 @@ class Stories extends StatelessWidget {
                         shrinkWrap: true,
                         itemBuilder: (context, index) =>
                             _buildOthersStories(context, state, index),
-                        separatorBuilder: (context, index) => const Sizer(),
+                        separatorBuilder: (context, index) => Sizer(
+                              width: 8,
+                            ),
                         itemCount: state.users.length)
                     : const Center(
                         child: CupertinoActivityIndicator(
@@ -90,25 +92,28 @@ class Stories extends StatelessWidget {
                           indicatorColor: Colors.transparent,
                           indicatorForegroundColor: Colors.transparent,
                           storyItems: [
-                        state.users[index].userStories!.first.type != 'video'
-                            ? createStoryItem(
-                                context,
-                                state.users[index].userStories!.first,
-                                userController)
-                            : StoryItem.pageImage(
-                                loadingWidget: const CupertinoActivityIndicator(
-                                  color: Colors.white,
-                                ),
-                                url: state
-                                    .users[index].user!.profilePictureUrl!,
-                                errorWidget: Image.network(
-                                  UIConst.profilePlaceHolder,
-                                  fit: BoxFit.fitHeight,
-                                ),
-                                imageFit: BoxFit.fitHeight,
-                                controller: userController,
-                              )
-                      ], controller: userController),
+                            state.users[index].userStories!.first.type !=
+                                    'video'
+                                ? createStoryItem(
+                                    context,
+                                    state.users[index].userStories!.first,
+                                    userController)
+                                : StoryItem.pageImage(
+                                    loadingWidget:
+                                        const CupertinoActivityIndicator(
+                                      color: Colors.white,
+                                    ),
+                                    url: state
+                                        .users[index].user!.profilePictureUrl!,
+                                    errorWidget: Image.network(
+                                      UIConst.profilePlaceHolder,
+                                      fit: BoxFit.fitHeight,
+                                    ),
+                                    imageFit: BoxFit.fitHeight,
+                                    controller: userController,
+                                  )
+                          ],
+                          controller: userController),
                     ),
                     Positioned.fill(
                         child: Container(
@@ -132,8 +137,7 @@ class Stories extends StatelessWidget {
                                           null &&
                                       state.users[index].user!
                                           .profilePictureUrl!.isNotEmpty
-                                  ? state
-                                      .users[index].user!.profilePictureUrl!
+                                  ? state.users[index].user!.profilePictureUrl!
                                   : UIConst.profilePlaceHolder),
                               onBackgroundImageError: (exception, stackTrace) =>
                                   const NetworkImage(

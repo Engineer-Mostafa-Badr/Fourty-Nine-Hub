@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -48,10 +48,10 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
         },
         builder: (context, state) {
           return Padding(
-            padding: EdgeInsets.all(20.zW),
+            padding: EdgeInsets.all(20.w),
             child: ListView(
               children: [
-                const Sizer(),
+                Sizer(),
                 Form(
                   key: cubit.emailFormKey,
                   child: FormTextField(
@@ -59,21 +59,21 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
                     label: LocaleKeys.email.localize,
                     hint: LocaleKeys.typeHere.localize,
                     style: TextStyle(
-                      fontSize: 30.zW,
+                      fontSize: 30.sp.w,
                     ),
                     prefix: Icon(
                       Icons.person,
                       color: AppColors.GREY_DARK_COLOR,
-                      size: 40.zW,
+                      size: 40.w,
                     ),
                   ),
                 ),
-                const Sizer(),
+                Sizer(),
                 DefaultButton(
                   label: LocaleKeys.sendOTP.localize,
                   onPressed: cubit.sendForgetPasswordOTP,
                   labelStyle: TextStyle(
-                      fontSize: 35.zW, color: AppColors.AUTH_CONTAINER_COLOR),
+                      fontSize: 35.sp.w, color: AppColors.AUTH_CONTAINER_COLOR),
                 ),
               ],
             ),

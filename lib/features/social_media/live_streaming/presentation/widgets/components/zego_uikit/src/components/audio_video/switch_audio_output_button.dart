@@ -59,30 +59,35 @@ class _ZegoSwitchAudioOutputButtonState
   }
 
   Widget getAudioRouteButtonByRoute(ZegoUIKitAudioRoute audioRoute) {
-    Widget icon = UIKitImage.asset(StyleIconUrls.iconS1ControlBarSpeakerOff);
+    Widget icon = UIKitImage.asset(StyleIconUrls.iconS1ControlBarSpeakerOff,
+        width: 35, height: 35);
     var backgroundColor = controlBarButtonBackgroundColor;
 
     /// get the new icon and background color
     if (ZegoUIKitAudioRoute.bluetooth == audioRoute) {
       /// always open
       icon = widget.bluetoothIcon?.icon ??
-          UIKitImage.asset(StyleIconUrls.iconS1ControlBarSpeakerBluetooth);
+          UIKitImage.asset(StyleIconUrls.iconS1ControlBarSpeakerBluetooth,
+              width: 35, height: 35);
       backgroundColor = widget.bluetoothIcon?.backgroundColor ??
           controlBarButtonBackgroundColor;
     } else if (ZegoUIKitAudioRoute.headphone == audioRoute) {
       /// always display speaker closed
       icon = widget.headphoneIcon?.icon ??
-          UIKitImage.asset(StyleIconUrls.iconS1ControlBarSpeakerOff);
+          UIKitImage.asset(StyleIconUrls.iconS1ControlBarSpeakerOff,
+              width: 35, height: 35);
       backgroundColor = widget.headphoneIcon?.backgroundColor ??
           controlBarButtonBackgroundColor;
     } else if (ZegoUIKitAudioRoute.speaker == audioRoute) {
       icon = widget.speakerIcon?.icon ??
-          UIKitImage.asset(StyleIconUrls.iconS1ControlBarSpeakerNormal);
+          UIKitImage.asset(StyleIconUrls.iconS1ControlBarSpeakerNormal,
+              width: 35, height: 35);
       backgroundColor = widget.speakerIcon?.backgroundColor ??
           controlBarButtonCheckedBackgroundColor;
     } else {
       icon = widget.headphoneIcon?.icon ??
-          UIKitImage.asset(StyleIconUrls.iconS1ControlBarSpeakerOff);
+          UIKitImage.asset(StyleIconUrls.iconS1ControlBarSpeakerOff,
+              width: 35, height: 35);
       backgroundColor = widget.headphoneIcon?.backgroundColor ??
           controlBarButtonBackgroundColor;
     }
@@ -93,10 +98,10 @@ class _ZegoSwitchAudioOutputButtonState
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        width: containerSize.width,
-        height: containerSize.height,
-        decoration: BoxDecoration(
-          color: backgroundColor,
+        // width: containerSize.width,
+        // height: containerSize.height,
+        decoration: const BoxDecoration(
+          // color: backgroundColor,
           shape: BoxShape.circle,
         ),
         child: SizedBox.fromSize(

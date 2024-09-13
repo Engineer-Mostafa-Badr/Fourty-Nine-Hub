@@ -54,7 +54,7 @@ class RestaurantHeader extends StatelessWidget {
                                 fit: BoxFit.cover,
                                 url:
                                     restaurant.restaurantMedia?.first.mediaKey),
-                            const Sizer(),
+                            Sizer(),
                             Expanded(
                                 child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +71,7 @@ class RestaurantHeader extends StatelessWidget {
                                       Icons.star_rounded,
                                       color: AppColors.ACCENT_COLOR,
                                     ),
-                                    const Sizer(),
+                                    Sizer(),
                                     Label(
                                         text:
                                             '${restaurant.totalRating ?? ""} ',
@@ -117,7 +117,7 @@ class RestaurantHeader extends StatelessWidget {
     return Column(
       children: [
         Label(text: label, style: Styles.mediumText(color: Colors.grey)),
-        // const Sizer(),
+        // Sizer(),
         Label(text: value, style: Styles.mediumText())
       ],
     );

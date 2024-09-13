@@ -7,7 +7,7 @@
 // import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 // import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+// import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
@@ -123,10 +123,10 @@
 //                   ),
 //             const Padding(
 //               padding: EdgeInsets.only(top: 8.0, bottom: 2),
-//               child: Divider(color: Colors.grey, height: 1),
+//               child: Divider(color: Colors.grey, height: 1.h),
 //             ),
 //             _buildSubCategoryList(context),
-//             const SizedBox(height: 50),
+//             SizedBox(height: 50.h),
 //           ],
 //         ),
 //       ),
@@ -135,12 +135,12 @@
 //
 //   Widget _buildHeader() {
 //     return Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+//       padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
 //       child: Align(
 //         alignment: Alignment.topLeft,
 //         child: Label(
 //           text: 'Find',
-//           style: Styles.headerText(fontSize: 18),
+//           style: Styles.headerText(fontSize: 18.sp),
 //         ),
 //       ),
 //     );
@@ -148,17 +148,17 @@
 //
 //   Widget _buildSubCategoryList(BuildContext context) {
 //     return SizedBox(
-//       height: 225,
+//       height: 225.h,
 //       child: BlocBuilder<TinderViewCubit, TinderViewState>(
 //         builder: (context, state) {
 //           return ListView.separated(
-//             padding: const EdgeInsets.symmetric(horizontal: 4),
+//             padding: EdgeInsets.symmetric(horizontal: 4),
 //             scrollDirection: Axis.horizontal,
 //             itemCount: state.subCategoryData.length,
-//             separatorBuilder: (context, index) => const SizedBox(width: 0),
+//             separatorBuilder: (context, index) => SizedBox(width: 0),
 //             itemBuilder: (context, index) {
 //               return Padding(
-//                 padding: const EdgeInsets.all(2.0),
+//                 padding: EdgeInsets.all(2.0),
 //                 child: BlocProvider.value(
 //                   value: serviceLocator<TinderViewCubit>()..fetchFavorites(),
 //                   child: TinderSubCategoryCard(
@@ -183,15 +183,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_card_stack.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_sub_category_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 const kToolbarHeightFactor = 0.80;
 const kDefaultPadding = 8.0;
 
@@ -271,12 +271,12 @@ class _TinderScreenState extends State<TinderScreen> {
                       child: CupertinoActivityIndicator(radius: 15),
                     ),
                   ),
-            const Padding(
-              padding: EdgeInsets.only(top: 8.0, bottom: 2),
-              child: Divider(color: Colors.grey, height: 1),
+             Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 2),
+              child: Divider(color: Colors.grey, height: 1.h),
             ),
             _buildSubCategoryList(state),
-            const SizedBox(height: 50),
+            SizedBox(height: 50.h),
           ],
         ),
       ),

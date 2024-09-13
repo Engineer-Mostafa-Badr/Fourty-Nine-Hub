@@ -43,7 +43,7 @@ class InstallmentAdCard extends StatelessWidget {
               ? UIConst.imagePlaceHolder
               : item.ad?.images.first,
         )),
-        const Sizer(),
+        Sizer(),
         Expanded(
           flex: 2,
           child: Column(
@@ -67,7 +67,7 @@ class InstallmentAdCard extends StatelessWidget {
                       ),
                     ],
                   )),
-                  const Sizer(),
+                  Sizer(),
                   // IconAppButton(
                   //     size: 20, icon: Icons.favorite_border, onPressed: () {}),
                 ],
@@ -123,7 +123,7 @@ class InstallmentAdCard extends StatelessWidget {
                 maxLines: 1,
               ),
             ),
-            const Sizer(),
+            Sizer(),
             // IconAppButton(
             //     size: 20, icon: Icons.favorite_border, onPressed: () {}),
           ],

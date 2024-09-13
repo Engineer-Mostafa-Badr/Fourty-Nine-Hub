@@ -8,7 +8,7 @@ class PostsSection extends StatelessWidget {
     return Container();
     // return ListView.separated(
     //     itemBuilder: (context, index) =>  PostCard(),
-    //     separatorBuilder: (context, index) => const Sizer(),
+    //     separatorBuilder: (context, index) => Sizer(),
     //     itemCount: 6);
   }
 }

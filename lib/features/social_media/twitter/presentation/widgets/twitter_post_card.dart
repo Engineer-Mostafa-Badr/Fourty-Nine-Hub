@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,7 +22,7 @@ import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/const.dart';
 import '../../../../../../res/style/styles.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 // ignore: must_be_immutable
 class TwitterPostCard extends StatefulWidget {
   bool isLiked;
@@ -97,8 +96,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                   post: widget.post,
                   date: widget.post.sinceTime),
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
               decoration: BoxDecoration(
                   border: isShared == true
                       ? Border.all(color: AppColors.LIGHT_GRAY_COLOR)
@@ -134,8 +133,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                             date: widget.post.isShared == true
                                 ? widget.post.mainPost?.sinceTime ?? ''
                                 : widget.post.sinceTime),
-                        const SizedBox(
-                          height: 10,
+                        SizedBox(
+                          height: 10.h,
                         ),
                         _buildContent(
                             label: widget.post.isShared == true
@@ -164,7 +163,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
 
   Widget _buildTwitterStaticsWidget(TwitterPostEntity post, bool isMain) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
+      margin: EdgeInsets.symmetric(vertical: 5.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -173,8 +172,9 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               icon: Icons.comment,
               label: '${post.commentsCount}',
               onTap: () {
-                if(context.read<UserCubit>().isLoggedIn){
-                return widget.showPostComments(widget.post.id);}else{
+                if (context.read<UserCubit>().isLoggedIn) {
+                  return widget.showPostComments(widget.post.id);
+                } else {
                   context.push(Routes.LOGIN);
                 }
               },
@@ -185,14 +185,14 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               icon: FontAwesomeIcons.retweet,
               label: "${widget.post.sharesCount}",
               onTap: () {
-                if(context.read<UserCubit>().isLoggedIn){
+                if (context.read<UserCubit>().isLoggedIn) {
                   widget.onShare();
                   if (widget.shareSuccess == true &&
                       widget.post.shares?.length == widget.post.sharesCount) {
                     widget.post.sharesCount = widget.post.sharesCount! + 1;
                   }
                   setState(() {});
-                }else{
+                } else {
                   context.push(Routes.LOGIN);
                 }
               },
@@ -205,8 +205,9 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                     : Icons.favorite,
                 label: "${post.loveCount}",
                 onTap: () {
-                  if(context.read<UserCubit>().isLoggedIn){
-                  widget.onReact();}else{
+                  if (context.read<UserCubit>().isLoggedIn) {
+                    widget.onReact();
+                  } else {
                     context.push(Routes.LOGIN);
                   }
                 },
@@ -233,7 +234,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             size: 14,
             color: iconColor ?? Colors.grey,
           ),
-          const Sizer(),
+          Sizer(),
           Label(text: label, style: Styles.mediumText(color: Colors.grey)),
         ],
       ),
@@ -257,11 +258,16 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (label != null||label!='')... [ReadMoreLabel(text: label??'',style: Styles.headerText(fontSize: 30),),
-        const Sizer(),],
+        if (label != null || label != '') ...[
+          ReadMoreLabel(
+            text: label ?? '',
+            style: Styles.headerText(fontSize: 30),
+          ),
+          Sizer(),
+        ],
         if (myImages!.isNotEmpty)
           GridView.builder(
-            padding: const EdgeInsets.only(right:10,left:10,bottom: 10),
+            padding: EdgeInsets.only(right: 10, left: 10, bottom: 10),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -350,7 +356,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 fromProfile: widget.fromProfile,
                 userId: post.user.id,
               ),
-        const Sizer(),
+        Sizer(),
         Label(
             text: "${post.user.firstName} ${post.user.lastName}",
             style: Styles.mediumText(fontWeight: FontWeight.w500)),
@@ -362,38 +368,40 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             Icons.verified,
             color: AppColors.PRIMARY_COLOR,
           ),
-        const Sizer(),
+        Sizer(),
         Expanded(
           child: Label(
               text: '@${post.user.email.split('@')[0]}',
               style: Styles.mediumText(color: Colors.grey)),
         ),
         Label(text: ' . $date', style: Styles.mediumText(color: Colors.grey)),
-        if(post.user.id!=user?.id&&context.read<UserCubit>().isLoggedIn)IconButton(
-          onPressed: () {
-            bottomSheet(
-                context: context,
-                widget: ReportView(
-                  id: widget.post.id,
-                  categoryId: '66a3583454e6e337915514db',
-                ));
-          },
-          icon: const Icon(
-            Icons.report,
-            color: AppColors.SECONDARY_COLOR,
+        if (post.user.id != user?.id && context.read<UserCubit>().isLoggedIn)
+          IconButton(
+            onPressed: () {
+              bottomSheet(
+                  context: context,
+                  widget: ReportView(
+                    id: widget.post.id,
+                    categoryId: '66a3583454e6e337915514db',
+                  ));
+            },
+            icon: const Icon(
+              Icons.report,
+              color: AppColors.SECONDARY_COLOR,
+            ),
           ),
-        ),
-        if(context.read<UserCubit>().isLoggedIn)IconAppButton(
-          icon: Icons.clear,
-          onPressed: () {
-            bottomSheet(
-              context: context,
-              widget: _buildPostOptions(
-                isMyPost: (post.user.id == user!.id),
-              ),
-            );
-          },
-        ),
+        if (context.read<UserCubit>().isLoggedIn)
+          IconAppButton(
+            icon: Icons.clear,
+            onPressed: () {
+              bottomSheet(
+                context: context,
+                widget: _buildPostOptions(
+                  isMyPost: (post.user.id == user!.id),
+                ),
+              );
+            },
+          ),
       ],
     );
   }
@@ -480,13 +488,13 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                       fromProfile: widget.fromProfile,
                       userId: post.user.id,
                     ),
-              const Sizer(),
+              Sizer(),
               Label(
                   text: post.isShared == true
                       ? post.mainPost?.user.firstName ?? ''
                       : post.user.firstName,
                   style: Styles.mediumText(fontWeight: FontWeight.w500)),
-              const Sizer(),
+              Sizer(),
               if (post.user.isDocumented == true && post.isShared == false ||
                   (post.mainPost?.user.isDocumented == true &&
                       post.isShared == true))
@@ -494,7 +502,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                   Icons.verified,
                   color: Theme.of(context).primaryColor,
                 ),
-              const Sizer(),
+              Sizer(),
               SizedBox(
                 width: 100,
                 child: Label(
@@ -503,11 +511,13 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                     maxLines: 1,
                     style: Styles.mediumText(color: Colors.grey)),
               ),
-              const Sizer(),
+              Sizer(),
             ],
           ),
         ),
-        if (post.isShared == false&&(post.user.id!=user?.id)&&context.read<UserCubit>().isLoggedIn) ...[
+        if (post.isShared == false &&
+            (post.user.id != user?.id) &&
+            context.read<UserCubit>().isLoggedIn) ...[
           IconButton(
             onPressed: () {
               bottomSheet(
@@ -523,15 +533,16 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               color: AppColors.SECONDARY_COLOR,
             ),
           ),
-          if(context.read<UserCubit>().isLoggedIn)IconAppButton(
-            icon: Icons.clear,
-            onPressed: () {
-              bottomSheet(
-                  context: context,
-                  widget:
-                      _buildPostOptions(isMyPost: (post.user.id == user!.id)));
-            },
-          ),
+          if (context.read<UserCubit>().isLoggedIn)
+            IconAppButton(
+              icon: Icons.clear,
+              onPressed: () {
+                bottomSheet(
+                    context: context,
+                    widget: _buildPostOptions(
+                        isMyPost: (post.user.id == user!.id)));
+              },
+            ),
         ]
       ],
     );

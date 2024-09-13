@@ -6,7 +6,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class RequstTripJoinBottomSheet extends StatefulWidget {
   const RequstTripJoinBottomSheet({
     super.key,
@@ -27,9 +27,9 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
       key: formKey,
       child: Container(
         width: double.infinity,
-        height: 200,
-        padding: const EdgeInsets.all(30),
-        // margin: const EdgeInsets.all(kToolbarHeight),
+        height: 200.h,
+        padding: EdgeInsets.all(30),
+        // margin: EdgeInsets.all(kToolbarHeight),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
@@ -47,7 +47,7 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                 fillColor: Colors.transparent,
                 label: const Text('Mobile'),
                 isDense: true,
-                contentPadding: const EdgeInsets.all(14),
+                contentPadding: EdgeInsets.all(14),
               ),
               onChanged: (String phone) {
                 phoneNumber = phone;
@@ -56,7 +56,7 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                 return _validateMobile(value);
               },
             ),
-            const Sizer(),
+            Sizer(),
             InkWell(
               onTap: () {
                 if (formKey.currentState!.validate()) {
@@ -72,7 +72,7 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                 children: [
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       color: AppColors.PRIMARY_COLOR,
@@ -85,7 +85,7 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                     top: 5,
                     right: 20,
                     child: SizedBox(
-                      height: 40,
+                      height: 40.h,
                       child: BlocBuilder<RequestTripJoinCubit,
                           RequestTripJoinState>(
                         builder: (context, state) {
@@ -107,7 +107,7 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                                   color: Colors.red[400], size: 30),
                             );
                           }
-                          return const SizedBox();
+                          return SizedBox();
                         },
                       ),
                     ),

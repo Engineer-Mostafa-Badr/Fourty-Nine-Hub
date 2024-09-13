@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/payment/domain/entities/fawry_saved_cards
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FawryPayment extends StatefulWidget {
   final String amountId;
@@ -59,7 +60,7 @@ class _FawryPaymentState extends State<FawryPayment> {
     final paymentData = mutliPaymentResponse?.data;
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           _paymentOptions(paymentCubit),
@@ -78,7 +79,7 @@ class _FawryPaymentState extends State<FawryPayment> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -95,7 +96,7 @@ class _FawryPaymentState extends State<FawryPayment> {
               text: "Card",
               isSelected: _isCardSelected,
             ),),
-           const Sizer(width: 10,),
+           Sizer(width: 10.w,),
            Expanded(child:    _paymentOptionButton(
              onTap: () {
                setState(() {
@@ -120,7 +121,7 @@ class _FawryPaymentState extends State<FawryPayment> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -146,7 +147,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                   isSelected: _showLink,
                 ),
               ),
-              const Sizer(width: 10,),
+              Sizer(width: 10,),
               Expanded(
                 child: _paymentOptionButton(
                   onTap: () {
@@ -179,15 +180,15 @@ class _FawryPaymentState extends State<FawryPayment> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+         Text(
           'Saved Cards',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 16.0),
+        SizedBox(height: 16.h),
         ...savedCards.map((card) {
           return Card(
-            elevation: 4.0,
-            margin: const EdgeInsets.symmetric(vertical: 8.0),
+            elevation: 4,
+            margin:  EdgeInsets.symmetric(vertical: 8.h),
             child: ListTile(
               title: Text(card.cardAlias.isNotEmpty ? card.cardAlias : 'No alias'),
               subtitle: Text('**** **** **** ${card.lastFourDigits} - Exp: ${card.updatedAt.year.toString().substring(2)}'),
@@ -277,12 +278,12 @@ class _FawryPaymentState extends State<FawryPayment> {
     _initializeListeners();
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           if (paymentCubit.state.savedCardsData != null && paymentCubit.state.savedCardsData!.isNotEmpty)
             _buildSavedCardsList(paymentCubit, paymentCubit.state.savedCardsData!),
-          const SizedBox(height: 16.0),
+          SizedBox(height: 16.h),
           if (paymentCubit.selectedCard != null)
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -304,9 +305,9 @@ class _FawryPaymentState extends State<FawryPayment> {
                 style: TextStyle(color: AppColors.LIGHT_COLOR),
               ),
             ),
-          const SizedBox(height: 16.0),
+          SizedBox(height: 16.h),
           AppButton(
-            height: 50,
+            height: 50.h,
             color: AppColors.LIGHT_COLOR,
             label:    _isAddingNewCard ? 'Hide Card Form' : 'Add New Card',
             backColor: AppColors.PRIMARY_COLOR_DARK,
@@ -331,7 +332,7 @@ class _FawryPaymentState extends State<FawryPayment> {
               isChipVisible: true,
               onCreditCardWidgetChange: (CreditCardBrand) {},
             ),
-            const SizedBox(height: 16.0),
+            SizedBox(height: 16.h),
             TextFormField(
               controller: _cardNumberController,
               decoration: InputDecoration(
@@ -359,7 +360,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                 LengthLimitingTextInputFormatter(16),
               ],
             ),
-            const SizedBox(height: 16.0),
+            SizedBox(height: 16.h),
             TextFormField(
               controller: _cardAlias,
               decoration: InputDecoration(
@@ -385,7 +386,7 @@ class _FawryPaymentState extends State<FawryPayment> {
 
             ),
 
-            const SizedBox(height: 16.0),
+            SizedBox(height: 16.h),
             Row(
               children: [
                 Expanded(
@@ -419,7 +420,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                   ),
 
                 ),
-                const SizedBox(width: 16.0),
+                const SizedBox(width: 16),
                 Expanded(
                   child: TextFormField(
                     controller: _expiryYearController,
@@ -452,7 +453,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                 ),
               ],
             ),
-            const SizedBox(height: 16.0),
+            SizedBox(height: 16.h),
             TextFormField(
               controller: _cvvController,
               decoration: InputDecoration(
@@ -461,15 +462,15 @@ class _FawryPaymentState extends State<FawryPayment> {
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16.0),
+                  borderRadius: BorderRadius.circular(16),
                   borderSide: const BorderSide(color: Colors.black),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16.0),
+                  borderRadius: BorderRadius.circular(16),
                   borderSide: const BorderSide(color: Colors.black),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16.0),
+                  borderRadius: BorderRadius.circular(16),
                   borderSide: const BorderSide(color: Colors.black),
                 ),
               ),
@@ -482,11 +483,11 @@ class _FawryPaymentState extends State<FawryPayment> {
               obscureText: true,
             ),
 
-            const SizedBox(height: 16.0),
+            SizedBox(height: 16.h),
           Row(
             children: [
               Expanded(child:  AppButton(
-                  height: 50,
+                  height: 50.h,
                   color: AppColors.LIGHT_COLOR,
                   label: "Pay With Card",
                   backColor: AppColors.PRIMARY_COLOR,
@@ -494,9 +495,9 @@ class _FawryPaymentState extends State<FawryPayment> {
                     print("Ok");
                     _handlePayWithCard();
                   }),),
-              const Sizer(width: 5,),
+              Sizer(width: 5,),
               Expanded(child:  AppButton(
-                  height: 50,
+                  height: 50.h,
                   color: AppColors.LIGHT_COLOR,
                   label:   "Save Card",
                   backColor: AppColors.PRIMARY_COLOR,
@@ -561,10 +562,10 @@ class _FawryPaymentState extends State<FawryPayment> {
 
                   ),),
 
-             const Sizer(width: 5,),
+             Sizer(width: 5,),
               Expanded(child:
               AppButton(
-                height: 50,
+                height: 50.h,
                 color: AppColors.LIGHT_COLOR,
                 label:   "Cancel",
                 backColor: AppColors.PRIMARY_COLOR_DARK,
@@ -656,11 +657,11 @@ class _FawryPaymentState extends State<FawryPayment> {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        width: 150.0, // Fixed width for all buttons
-        height: 60.0, // Fixed height for all buttons
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        width: 150, // Fixed width for all buttons
+        height: 60.h, // Fixed height for all buttons
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25.0),
+          borderRadius: BorderRadius.circular(25),
           color: isSelected ? AppColors.PRIMARY_COLOR : AppColors.LIGHT_GRAY_COLOR,
         ),
         child: Center(
@@ -679,7 +680,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                   style: TextStyle(
                     color: isSelected ? Colors.white : Colors.black87,
                     fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
+                    fontSize: 18.sp,
                   ),
                   textAlign: TextAlign.center, // Center text horizontally
                   maxLines: 1,
@@ -703,9 +704,9 @@ class _FawryPaymentState extends State<FawryPayment> {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
+        padding:  EdgeInsets.symmetric(horizontal: 30, vertical: 15.h),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25.0),
+          borderRadius: BorderRadius.circular(25),
           color:  isSelected ? AppColors.PRIMARY_COLOR : AppColors.LIGHT_GRAY_COLOR,
         ),
         child: Row(
@@ -720,7 +721,7 @@ class _FawryPaymentState extends State<FawryPayment> {
               style: TextStyle(
                 color: isSelected ? Colors.white : Colors.black87,
                 fontWeight: FontWeight.bold,
-                fontSize: 18.0,
+                fontSize: 18.sp,
               ),
               maxLines: 2,
             ),
@@ -732,13 +733,13 @@ class _FawryPaymentState extends State<FawryPayment> {
 
   Widget _paymentNumber(PaymentData paymentData) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding:  const EdgeInsets.all(16),
       child: Column(
         children: [
-          const Text("Payment Number:"),
-          const SizedBox(height: 10),
-          Text(paymentData.referenceNumber ?? 'No number available',style: const TextStyle(
-            fontSize: 30,
+           const Text("Payment Number:"),
+          SizedBox(height: 10.h),
+          Text(paymentData.referenceNumber ?? 'No number available',style:  TextStyle(
+            fontSize: 30.sp,
             fontWeight: FontWeight.bold,
             color: AppColors.PRIMARY_COLOR_DARK
           ),),
@@ -750,12 +751,12 @@ class _FawryPaymentState extends State<FawryPayment> {
 
   Widget _paymentLink(PaymentData paymentData) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text("Payment Link:"),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
           InkWell(
             onTap: () async {
               final url = paymentData.link;
@@ -765,8 +766,8 @@ class _FawryPaymentState extends State<FawryPayment> {
             },
             child: Text(
               paymentData.link ?? 'No link available',
-              style: const TextStyle(
-                fontSize: 25,
+              style:  TextStyle(
+                fontSize: 25.sp,
                 color: Colors.blue,
                 decoration: TextDecoration.underline,
               ),
@@ -782,12 +783,12 @@ class _FawryPaymentState extends State<FawryPayment> {
     final qrCodeBase64 =
         paymentCubit.state.mutliPaymentResponse?.data?.walletQr;
     if (qrCodeBase64 == null || qrCodeBase64.isEmpty) {
-      return const Padding(
-        padding: EdgeInsets.all(16.0),
+      return  Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            Text("QR Code:"),
-            SizedBox(height: 10),
+            const Text("QR Code:"),
+            SizedBox(height: 10.h),
             // Text('No QR code available'),
           ],
         ),
@@ -798,12 +799,12 @@ class _FawryPaymentState extends State<FawryPayment> {
     try {
       imageBytes = _decodeBase64Image(qrCodeBase64);
     } catch (e) {
-      return const Padding(
-        padding: EdgeInsets.all(16.0),
+      return  Padding(
+        padding: EdgeInsets.all(16),
         child: Column(
           children: [
             Text("QR Code:"),
-            SizedBox(height: 10),
+            SizedBox(height: 10.h),
             Text('Error decoding QR code'),
           ],
         ),
@@ -811,11 +812,11 @@ class _FawryPaymentState extends State<FawryPayment> {
     }
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           const Text("QR Code:"),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
           Center(
             child: Image.memory(
               imageBytes,

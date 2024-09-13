@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_place
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ImageValidation extends StatelessWidget {
   const ImageValidation(
@@ -35,7 +36,7 @@ class ImageValidation extends StatelessWidget {
                     text: tilte ?? "",
                     style: Styles.headerText(),
                   ),
-                  const Sizer(),
+                  Sizer(),
                 ],
               ),
             GestureDetector(
@@ -57,7 +58,7 @@ class ImageValidation extends StatelessWidget {
             if (field.hasError)
               Column(
                 children: [
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8.h),
                   Text(
                     field.errorText ?? "",
                     style: Styles.mediumText(color: Colors.red),

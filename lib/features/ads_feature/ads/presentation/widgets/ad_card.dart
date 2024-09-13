@@ -9,6 +9,7 @@ import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AdCard extends StatelessWidget {
   final AdEntity item;
@@ -20,7 +21,7 @@ class AdCard extends StatelessWidget {
       onTap: () => context.push(Routes.ADdetails, extra: item.id),
       child: Container(
         width: kToolbarHeight * 2.5,
-        height: 250,
+        height: 250.h,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -61,7 +62,7 @@ class AdCard extends StatelessWidget {
                     maxLines: 1,
                   ),
                 ),
-                const Sizer(),
+                Sizer(),
                 IconAppButton(
                     size: 18, icon: Icons.favorite_border, onPressed: () {}),
               ],

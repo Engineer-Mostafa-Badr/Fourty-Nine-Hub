@@ -33,7 +33,7 @@ class SQFLiteDataSource {
         delivered INTEGER,
         isDeleted INTEGER,
         isReply INTEGER,
-        type TEXT,
+        type INTEGER,
         sharesCount INTEGER,
         likesCount INTEGER,
         loveCount INTEGER,

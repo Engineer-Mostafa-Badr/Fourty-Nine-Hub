@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -21,7 +22,7 @@ class InstallmentOrderDetails extends StatelessWidget {
       appBar: const HomeAppbar(),
       drawer: const DrawerWidget(),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(8.0),
         child: ListView(
           children: [
             _buildSellerWidget(),
@@ -34,7 +35,7 @@ class InstallmentOrderDetails extends StatelessWidget {
                 },
                 separatorBuilder: (context, index) => const Divider(),
                 itemCount: 4),
-            const Sizer(),
+            Sizer(),
             stepItemWidget(
                 label: 'Step#1: Order Sent',
                 isDone: true,
@@ -59,8 +60,12 @@ class InstallmentOrderDetails extends StatelessWidget {
   Widget _buildSellerWidget() {
     return Row(
       children: [
-        const ProfileImage(size: 20, accountId: 0, userId: '',),
-        const Sizer(),
+        const ProfileImage(
+          size: 20,
+          accountId: 0,
+          userId: '',
+        ),
+        Sizer(),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +97,7 @@ class InstallmentOrderDetails extends StatelessWidget {
           Row(
             children: [
               const Icon(FontAwesomeIcons.ccVisa),
-              const Sizer(),
+              Sizer(),
               Label(text: 'xxx xxx xxx 4893', style: Styles.mediumText()),
             ],
           )
@@ -130,7 +135,7 @@ class InstallmentOrderDetails extends StatelessWidget {
               ),
           ],
         ),
-        const Sizer(),
+        Sizer(),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,7 +143,7 @@ class InstallmentOrderDetails extends StatelessWidget {
             Label(
                 text: label,
                 style: Styles.mediumText(
-                    fontWeight: FontWeight.w500, fontSize: 18)),
+                    fontWeight: FontWeight.w500, fontSize: 18.sp)),
             ReadMoreLabel(text: description),
           ],
         )),

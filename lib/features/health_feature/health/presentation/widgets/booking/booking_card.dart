@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HealthBookingCard extends StatelessWidget {
   final BookedAppointmentEntity appointment;
@@ -29,8 +30,8 @@ class HealthBookingCard extends StatelessWidget {
         context.push(Routes.VISITADOCTORDETAILS, extra: appointment.doctor.id);
       },
       child: Container(
-        margin: const EdgeInsets.all(10),
-        padding: const EdgeInsets.all(10),
+        margin: EdgeInsets.all(10),
+        padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Theme.of(context).scaffoldBackgroundColor,
@@ -40,7 +41,7 @@ class HealthBookingCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 5),
+              padding: EdgeInsets.symmetric(vertical: 5.h),
               child: Label(
                   text:
                       '${appointment.bookingType.translatedName} ${Labels.booking}: ${appointment.day} - ${appointment.time}',
@@ -58,7 +59,7 @@ class HealthBookingCard extends StatelessWidget {
                   width: kToolbarHeight,
                   url: appointment.doctor.image,
                 ),
-                const Sizer(),
+                Sizer(),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

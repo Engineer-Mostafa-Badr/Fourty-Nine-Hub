@@ -29,7 +29,7 @@ class CartItemCard extends StatelessWidget {
             width: kToolbarHeight,
             radius: 10,
             source: NetworkImage(meal.meal.picture?.mediaKey ?? "")),
-        const Sizer(),
+        Sizer(),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +63,7 @@ class CartItemCard extends StatelessWidget {
           ),
         ),
         Label(text: 'x ${meal.qty}'),
-        const Sizer(),
+        Sizer(),
         IconAppButton(
             icon: Icons.delete,
             isCircle: true,

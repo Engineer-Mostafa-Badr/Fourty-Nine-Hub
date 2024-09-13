@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/address_field.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/description_filed.dart';
@@ -55,7 +56,7 @@ class CreateResturantView extends StatelessWidget {
       child: Scaffold(
         appBar: const HomeAppbar(),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(15.0),
+          padding: EdgeInsets.all(15.0),
           child: Form(
             key: context.read<CreateResturantCubit>().formKey,
             child: Column(
@@ -65,15 +66,15 @@ class CreateResturantView extends StatelessWidget {
                     text: Labels.welcomRegiesterResturant,
                     style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
                 const CreateDoctorSubcategoryDropdown(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 CreateDoctorOptionsCheckbox(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorNameField(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorProfilePhotoPicker(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorIDPhotoPicker(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 CreateDoctorIDExpiryDatePicker(
                   onDateSelected: (date) {
                     context
@@ -81,13 +82,13 @@ class CreateResturantView extends StatelessWidget {
                         .pickIDExpiryDate(date!);
                   },
                 ),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorLicensePhotoPicker(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorLicenseExpiryDatePicker(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorDescriptionField(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 CreateDoctorGovernorateDropdown(
                   onSelected: (value) {
                     if (value != null) {
@@ -97,25 +98,25 @@ class CreateResturantView extends StatelessWidget {
                     }
                   },
                 ),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorCitiesDropdowns(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorAddressField(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorClinicTimeTable(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorCallTimeTable(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorHomeVisitTimeTable(),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const AppInfoText(
                     text:
                         "The application does not deduct any percentage from the service provider."),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const AppInfoText(
                     text:
                         'You will get EGP 3,650 per year if you subscribe daily.'),
-                const Sizer(height: 20),
+                Sizer(height: 20.h),
                 const CreateDoctorSubmitButton(),
               ],
             ),

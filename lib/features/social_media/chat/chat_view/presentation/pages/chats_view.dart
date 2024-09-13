@@ -11,7 +11,7 @@
 // import 'package:fourtyninehub/core/states/basic_state.dart';
 // import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 // import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+// import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 // import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/more_icon_bottom_sheet_body.dart';
 // import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -171,7 +171,7 @@
 //                                 context: context,
 //                                 isScrollControlled: true,
 //                                 widget: MoreIconBottomSheet(
-//                                   chatItemModel: state.chats![index],
+//                                   ChatCategoryEntity: state.chats![index],
 //                                   chatsCubit: chatCubit,
 //                                 ));
 //                           },
@@ -201,7 +201,7 @@
 //                     // onDismissed: ,
 //                     child: ChatCard(
 //                       isSecret: isSecret,
-//                       chatItemModel: state.chats?[index],
+//                       ChatCategoryEntity: state.chats?[index],
 //                       chatsCubit: chatCubit,
 //                     ),
 //                   ),
@@ -271,6 +271,7 @@
 //after add index to navigate
 import 'dart:math';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -279,16 +280,19 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.da
 import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/enums/chat_categories.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/more_icon_bottom_sheet_body.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import '../../../../stories/presentation/cubit/stories_cubit.dart';
 import '../widgets/calling_card.dart';
@@ -303,52 +307,213 @@ class ChatView extends StatefulWidget {
   State<ChatView> createState() => _ChatViewState();
 }
 
-class _ChatViewState extends State<ChatView> {
+class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
   late ChatsCubit chatCubit;
+  late TabController tabController;
 
   @override
   void initState() {
+    chatCubit = context.read<ChatsCubit>()..init();
+    tabController =
+        TabController(length: ChatCategories.values.length, vsync: this)
+          ..addListener(() {
+            if (tabController.previousIndex != tabController.index) {
+              chatCubit.getChatsByCategory(
+                  ChatCategories.values[tabController.index]);
+            }
+          });
     super.initState();
-    initSocketConnection();
   }
 
-  initSocketConnection() {
-    chatCubit = context.read<ChatsCubit>()..initSocketConnection();
-    chatCubit.initChat();
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
-
-  final List<String> groups = [
-    'Social',
-    'Services',
-    'Call & Video(Social)',
-    'Call & Video(Services)',
-    'Greet',
-    'Groups',
-    'Anonymous',
-    'Archive',
-    'Lock Chat',
-    'Unread',
-    'Broadcast',
-  ];
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: groups.length,
+      length: ChatCategories.values.length,
       initialIndex: widget.initialTabIndex,
       child: SharedScaffold(
+        floatingActionButton: context.read<UserCubit>().isLoggedIn
+            ? FloatingActionButton(
+                onPressed: () {
+                  context.push(Routes.CONTACTSVIEW);
+                },
+                tooltip: 'Contacts',
+                backgroundColor: AppColors.PRIMARY_COLOR,
+                child: const Icon(
+                  Icons.contacts,
+                  color: Colors.white,
+                ),
+              )
+            : null,
         mainCategoryId: 2,
         body: NestedAppbar(
           scrollController: ScrollController(),
           appBars: [
             SliverAppBar(
-              expandedHeight: MediaQuery.of(context).size.height * 0.15, // Responsive height
+              // expandedHeight: kToolbarHeight * 1.9,
               automaticallyImplyLeading: false,
               floating: true,
-              flexibleSpace: BlocProvider(
-                create: (context) =>
-                    serviceLocator<StoryCubit>()..fetchStories(),
-                child: const ChatStories(),
+              flexibleSpace: BlocProvider.value(
+                value: serviceLocator<StoryCubit>()..fetchStories(),
+                child: BlocBuilder<ChatsCubit, ChatsState>(
+                  builder: (context, state) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        context.read<UserCubit>().isLoggedIn
+                            ? SizedBox(
+                                // height: 30,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 4),
+                                      child: Text(
+                                        context
+                                                .read<ChatsCubit>()
+                                                .selectedChats
+                                                .isNotEmpty
+                                            ? "${context.read<ChatsCubit>().selectedChats.length} ${LocaleKeys.selected.tr()}"
+                                            : "",
+                                        style: Styles.mediumText(
+                                            color: AppColors.PRIMARY_COLOR),
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    context
+                                            .read<ChatsCubit>()
+                                            .selectedChats
+                                            .isEmpty
+                                        ? const SizedBox.shrink()
+                                        : Row(
+                                            children: [
+                                              IconButton(
+                                                onPressed: () {},
+                                                icon:
+                                                    const Icon(Icons.push_pin),
+                                                color: AppColors.PRIMARY_COLOR,
+                                              ),
+                                              IconButton(
+                                                onPressed: () {},
+                                                icon: const Icon(
+                                                  Icons.delete_forever,
+                                                  color:
+                                                      AppColors.PRIMARY_COLOR,
+                                                ),
+                                              ),
+                                              IconButton(
+                                                onPressed: () {},
+                                                icon: const Icon(
+                                                  Icons.notifications_off,
+                                                  color:
+                                                      AppColors.PRIMARY_COLOR,
+                                                ),
+                                              ),
+                                              IconButton(
+                                                onPressed: () {},
+                                                icon: const Icon(
+                                                  Icons.archive,
+                                                  color:
+                                                      AppColors.PRIMARY_COLOR,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                    context
+                                            .read<ChatsCubit>()
+                                            .selectedChats
+                                            .isEmpty
+                                        ? PopupMenuButton(
+                                            icon: const Icon(
+                                              Icons.more_vert,
+                                              color: AppColors.PRIMARY_COLOR,
+                                            ),
+                                            color: AppColors.BACKGROUND_COLOR,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(16.0)),
+                                            ),
+                                            offset: const Offset(0, 50),
+                                            onSelected: (int value) async {
+                                              if (value == 4) {
+                                                context.push(
+                                                    Routes.CHATPROFILEVIEW);
+                                              }
+                                            },
+                                            itemBuilder: (context) {
+                                              return _mainMenuBuilder();
+                                            },
+                                          )
+                                        : PopupMenuButton(
+                                            icon: const Icon(
+                                              Icons.more_vert,
+                                              color: AppColors.PRIMARY_COLOR,
+                                            ),
+                                            color: AppColors.BACKGROUND_COLOR,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(16.0)),
+                                            ),
+                                            offset: const Offset(0, 50),
+                                            onSelected: (int value) async {},
+                                            itemBuilder: (context) {
+                                              return [
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Text(
+                                                    LocaleKeys.addShortcut.tr(),
+                                                    style: Styles.mediumText(
+                                                        color: AppColors
+                                                            .PRIMARY_COLOR),
+                                                  ),
+                                                ),
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Text(
+                                                    LocaleKeys.markAsUnread
+                                                        .tr(),
+                                                    style: Styles.mediumText(
+                                                        color: AppColors
+                                                            .PRIMARY_COLOR),
+                                                  ),
+                                                ),
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Text(
+                                                    LocaleKeys.selectAll.tr(),
+                                                    style: Styles.mediumText(
+                                                        color: AppColors
+                                                            .PRIMARY_COLOR),
+                                                  ),
+                                                ),
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Text(
+                                                    LocaleKeys.lockChat.tr(),
+                                                    style: Styles.mediumText(
+                                                        color: AppColors
+                                                            .PRIMARY_COLOR),
+                                                  ),
+                                                ),
+                                              ];
+                                            },
+                                          ),
+                                  ],
+                                ),
+                              )
+                            : const SizedBox(),
+                        // const ChatStories(),
+                      ],
+                    );
+                  },
+                ),
               ),
             ),
             SliverAppBar(
@@ -364,18 +529,53 @@ class _ChatViewState extends State<ChatView> {
               return context.read<UserCubit>().isLoggedIn
                   ? _buildCategoriesViews()
                   : Center(
-                      child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                            onTap: () => context.push(Routes.LOGIN),
-                            child: Label(
-                                text: 'Login', style: Styles.headerText())),
-                        Label(
-                            text: ', To continue in using chat services',
-                            style: Styles.headerText()),
-                      ],
-                    ));
+                      child: SingleChildScrollView(
+                        child: GestureDetector(
+                          onTap: () => context.push(Routes.LOGIN),
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            width: 300,
+                            height: 300,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Theme.of(context).primaryColor,
+                                width: 4,
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Please Login, Register to enjoy the app',
+                                style: Styles.headerText(
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+              // Center(
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         GestureDetector(
+              //           onTap: () => context.push(Routes.LOGIN),
+              //           child: Label(
+              //             text: 'Login',
+              //             style: Styles.headerText(
+              //                 color: AppColors.PRIMARY_COLOR_DARK),
+              //           ),
+              //         ),
+              //         Label(
+              //             text: ', To continue in using chat services',
+              //             style: Styles.headerText()),
+              //       ],
+              //     ),
+              //   );
             },
           ),
         ),
@@ -383,48 +583,83 @@ class _ChatViewState extends State<ChatView> {
     );
   }
 
+  List<PopupMenuEntry<int>> _mainMenuBuilder() {
+    return [
+      PopupMenuItem<int>(
+        value: 0,
+        child: Text(
+          LocaleKeys.newGroup.tr(),
+          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 1,
+        child: Text(
+          LocaleKeys.newBroadcast.tr(),
+          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 2,
+        child: Text(
+          LocaleKeys.linkedDevice.tr(),
+          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 3,
+        child: Text(
+          LocaleKeys.starredMessages.tr(),
+          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+        ),
+      ),
+      PopupMenuItem<int>(
+        value: 4,
+        child: Text(
+          LocaleKeys.profile.tr(),
+          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+        ),
+      ),
+    ];
+  }
+
   Widget _buildCategoriesLabels() {
     return TabBar(
+        controller: tabController,
         labelColor: AppColors.PRIMARY_COLOR,
         indicatorColor: Colors.red,
-        onTap: (index) {
-          if (context.read<UserCubit>().isLoggedIn) {
-            context.read<ChatsCubit>().getChats(index: index);
-
-            // if this locked chat we request password
-            if (index == 8) {
-              showDialogToConfirmChatLockPassword(context);
-            }
-          }
-        },
         tabAlignment: TabAlignment.start,
         isScrollable: true,
-        tabs: groups.map((e) {
-          return Tab(
-              // text: 'there was error here look at code and solve it',
-              // text: chatCubit.selectedTabIndex == groups.indexOf(e)
-              //     ? unReadMessages == 0
-              //         ? e
-              //         : "$e($unReadMessages)"
-              //     : error,
-              text: e);
+        tabs: ChatCategories.values.map((e) {
+          return Tab(text: e.name.tr());
         }).toList());
   }
 
   Widget _buildCategoriesViews() {
-    return TabBarView(children: [
-      _buildCategoryChats(),
-      _buildCategoryChats(),
-      _buildCallingHistory(isVideo: false),
-      _buildCallingHistory(isVideo: true),
-      _buildCallingHistory(isVideo: false),
-      _buildCallingHistory(isVideo: true),
-      _buildCategoryChats(isSecret: true),
-      _buildCategoryChats(),
-      _buildCategoryChats(),
-      _buildCategoryChats(),
-      _buildCategoryChats(),
-    ]);
+    return TabBarView(
+        controller: tabController,
+        children: ChatCategories.values
+            .map((e) => _chatCategoryWidgetMapper(e))
+            .toList());
+  }
+
+  Widget _chatCategoryWidgetMapper(ChatCategories category) {
+    switch (category) {
+      case ChatCategories.social:
+      case ChatCategories.service:
+      case ChatCategories.groups:
+      case ChatCategories.greet:
+      case ChatCategories.unread:
+      case ChatCategories.archived:
+      case ChatCategories.anonymous:
+      case ChatCategories.broadcast:
+        return _buildCategoryChats();
+      case ChatCategories.socialCalls:
+      case ChatCategories.serviceCalls:
+        return _buildCallingHistory(isVideo: false);
+      case ChatCategories.locked:
+        return _buildCategoryChats(isSecret: true);
+    }
   }
 
   Widget _buildCategoryChats({bool isSecret = false}) {
@@ -433,7 +668,7 @@ class _ChatViewState extends State<ChatView> {
           ? const Center(
               child: CircularProgressIndicator.adaptive(),
             )
-          : state.chats?.length == 0
+          : state.chats!.isEmpty
               ? Center(
                   child: Label(
                       text: 'No Chats until now',
@@ -452,15 +687,15 @@ class _ChatViewState extends State<ChatView> {
                       children: [
                         SlidableAction(
                           onPressed: (value) {
-                            bottomSheet(
-                                backColor:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                                context: context,
-                                isScrollControlled: true,
-                                widget: MoreIconBottomSheet(
-                                  chatItemModel: state.chats![index],
-                                  chatsCubit: chatCubit,
-                                ));
+                            // bottomSheet(
+                            //     backColor:
+                            //         Theme.of(context).scaffoldBackgroundColor,
+                            //     context: context,
+                            //     isScrollControlled: true,
+                            //     widget: MoreIconBottomSheet(
+                            //       ChatCategoryEntity: state.chats![index],
+                            //       chatsCubit: chatCubit,
+                            //     ));
                           },
                           backgroundColor:
                               const Color.fromARGB(255, 191, 191, 191),
@@ -470,14 +705,11 @@ class _ChatViewState extends State<ChatView> {
                           padding: EdgeInsets.zero,
                         ),
                         SlidableAction(
-                          onPressed: (value) async {
-                            chatCubit.changeChatToArchiveOrNormalUseCase(
-                                state.chats![index].sId!);
-                          },
+                          onPressed: (value) async {},
                           backgroundColor: AppColors.PRIMARY_COLOR,
                           foregroundColor: Colors.white,
                           icon: Icons.delete_outlined,
-                          label: state.chats![index].archived!
+                          label: state.chats![index].archived
                               ? 'Unarchive'
                               : 'Archive',
                           padding: EdgeInsets.zero,
@@ -486,7 +718,7 @@ class _ChatViewState extends State<ChatView> {
                     ),
                     child: ChatCard(
                       isSecret: isSecret,
-                      chatItemModel: state.chats?[index],
+                      chat: state.chats?[index],
                       chatsCubit: chatCubit,
                     ),
                   ),
@@ -505,50 +737,5 @@ class _ChatViewState extends State<ChatView> {
             ),
         separatorBuilder: (context, index) => const SizedBox(),
         itemCount: 8);
-  }
-
-  Future<bool?> showDialogToConfirmChatLockPassword(
-      BuildContext context) async {
-    TextEditingController passwordController = TextEditingController(text: '');
-    return await showDialog(
-      context: context,
-      builder: ((context) => AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            title: Label(
-                text: 'Lock chats password please',
-                style: Styles.headerText(
-                    fontWeight: FontWeight.bold, color: Colors.black)),
-            content: Material(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 100.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    FormTextField(
-                        controller: passwordController,
-                        hint: 'password',
-                        type: TextInputType.number,
-                        style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold),
-                        action: (v) => () {}),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () async {
-                    chatCubit.getChats(
-                        index: 8, password: passwordController.text.trim());
-                    Navigator.of(context).pop(false);
-                  },
-                  child: const Text('Confirm password')),
-            ],
-          )),
-    );
   }
 }

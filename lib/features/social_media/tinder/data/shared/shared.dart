@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -11,6 +12,8 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/ti
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+
+import '../../../../../res/style/styles.dart';
 
 class BottomSheetContent extends StatefulWidget {
   final String? receiverId;
@@ -89,27 +92,26 @@ class BottomSheetContentState extends State<BottomSheetContent> {
   Widget _buildGiftItem(BuildContext context, GiftData gift,
       {required String? receiverId}) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () => _handleGiftTap(context, gift, receiverId: receiverId),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildGiftImage(gift),
-            const SizedBox(height: 8),
-            FittedBox(
-              child: Text(
-                gift.nameEn ?? 'No Name',
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                style: const TextStyle(fontSize: 16, color: Colors.white),
-              ),
+            SizedBox(height: 8.h),
+            Text(
+              gift.nameEn ?? 'No Name',
+              textAlign: TextAlign.center,
+              softWrap: true,
+              maxLines: null,
+              style: Styles.headerText(color: Colors.white),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4.h),
             FittedBox(
               child: Text(
                 '${gift.value ?? 0} 💰',
-                style: const TextStyle(color: Colors.white),
+                style:  Styles.mediumText(color: Colors.white),
               ),
             ),
           ],
@@ -122,24 +124,23 @@ class BottomSheetContentState extends State<BottomSheetContent> {
     return SvgPicture.network(
       gift.picture!,
       fit: BoxFit.scaleDown,
-      placeholderBuilder: (BuildContext context) =>
-          Image.asset(
-            'assets/images/icon.png',
-            width: 50,
-            height: 50,
-          ),
-      width: 50,
-      height: 50,
+      placeholderBuilder: (BuildContext context) => Image.asset(
+        'assets/images/icon.png',
+        width: 80.w,
+        height: 80.h,
+      ),
+      width: 80.w,
+      height: 80.h,
     );
   }
 
   Future<void> _handleGiftTap(BuildContext context, GiftData gift,
       {required String? receiverId}) async {
     final data = await context.read<TinderViewCubit>().sendGift(
-      receiverId: receiverId!,
-      subCategoryId: '66af974f8bf69f9469944746',
-      giftId: gift.sId ?? '',
-    );
+          receiverId: receiverId!,
+          subCategoryId: '66af974f8bf69f9469944746',
+          giftId: gift.sId ?? '',
+        );
 
     _handleGiftResponse(context: context, response: data, gift: gift);
   }
@@ -174,8 +175,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
         isError: true,
       );
       return;
-    }
-    else {
+    } else {
       _showDialog(
         context: context,
         icon: Icons.error,
@@ -240,9 +240,9 @@ class BottomSheetContentState extends State<BottomSheetContent> {
       builder: (context) {
         return AlertDialog(
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
           title: title == 'Gift Sent'
-              ? const SizedBox.shrink()
+              ? SizedBox.shrink()
               : _buildDialogTitle(icon, title, primaryColor),
           content: title == 'Gift Sent'
               ? _buildGiftContent(gift!, message)
@@ -258,7 +258,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
     return Row(
       children: [
         Icon(icon, color: primaryColor, size: 30),
-        const SizedBox(width: 10),
+        SizedBox(width: 10),
         Text(title),
       ],
     );
@@ -271,13 +271,13 @@ class BottomSheetContentState extends State<BottomSheetContent> {
           gift.picture ?? '',
           fit: BoxFit.scaleDown,
           placeholderBuilder: (BuildContext context) =>
-              Image.asset('assets/images/icon.png', width: 50, height: 50),
+              Image.asset('assets/images/icon.png', width: 50, height: 50.h),
           width: 50,
-          height: 50,
+          height: 50.h,
         ),
         Text(
           "${gift.nameEn} gift $message",
-          style: const TextStyle(fontSize: 16, color: Colors.black87),
+          style: TextStyle(fontSize: 16.sp, color: Colors.black87),
           textAlign: TextAlign.left,
         ),
       ],
@@ -287,13 +287,13 @@ class BottomSheetContentState extends State<BottomSheetContent> {
   Widget _buildMessageContent(String message) {
     return Text(
       message,
-      style: const TextStyle(fontSize: 16, color: Colors.black87),
+      style: TextStyle(fontSize: 16.sp, color: Colors.black87),
       textAlign: TextAlign.left,
     );
   }
 
-  List<Widget> _buildDialogActions(BuildContext context, bool isError,
-      Color buttonColor) {
+  List<Widget> _buildDialogActions(
+      BuildContext context, bool isError, Color buttonColor) {
     return [
       TextButton(
         onPressed: () => Navigator.of(context).pop(),
@@ -301,9 +301,9 @@ class BottomSheetContentState extends State<BottomSheetContent> {
           foregroundColor: Colors.white,
           backgroundColor: buttonColor,
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         ),
-        child: const Text('OK', style: TextStyle(fontSize: 16)),
+        child: Text('OK', style: TextStyle(fontSize: 16.sp)),
       ),
       if (isError)
         TextButton(
@@ -333,97 +333,94 @@ void showGiftBottomSheet(BuildContext context, {required String? receiverId}) {
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (context) =>
-        MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (_) => GiftsCubit()),
-            BlocProvider(create: (_) => serviceLocator<TinderViewCubit>()),
-            BlocProvider(create: (_) => serviceLocator<UserCubit>()),
-          ],
-          child: DraggableScrollableSheet(
-            initialChildSize: 0.6,
-            minChildSize: 0.4,
-            maxChildSize: 0.9,
-            expand: false,
-            builder: (BuildContext context, ScrollController scrollController) {
-              return Container(
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.8),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
+    builder: (context) => MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => GiftsCubit()),
+        BlocProvider(create: (_) => serviceLocator<TinderViewCubit>()),
+        BlocProvider(create: (_) => serviceLocator<UserCubit>()),
+      ],
+      child: DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        minChildSize: 0.4,
+        maxChildSize: 0.9,
+        expand: false,
+        builder: (BuildContext context, ScrollController scrollController) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.8),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: kToolbarHeight * 0.80,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.4),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(20)),
+                  ),
+                  child: const FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      'Send a gift 🎁',
+                      style: TextStyle(
+                          color: AppColors.ACCENT_COLOR,
+                          fontWeight: FontWeight.w300),
+                      textAlign: TextAlign.center,
+                      textScaler: TextScaler.linear(1.6),
+                    ),
                   ),
                 ),
-                child: Column(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: kToolbarHeight * 0.80,
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.4),
-                        borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(20)),
-                      ),
-                      child: const FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          'Send a gift 🎁',
-                          style: TextStyle(
-                              color: AppColors.ACCENT_COLOR,
-                              fontWeight: FontWeight.w300),
-                          textAlign: TextAlign.center,
-                          textScaler: TextScaler.linear(1.6),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          BottomSheetContent(receiverId: receiverId),
-                          Positioned(
-                            bottom: 5,
-                            right: 5,
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: OutlinedButton(
-                                style: const ButtonStyle(
-                                  side: MaterialStatePropertyAll(BorderSide(
-                                      width: 1.5,
-                                      color: AppColors.ACCENT_COLOR)),
-                                  iconColor: MaterialStatePropertyAll(
-                                      Colors.white),
-                                  backgroundColor:
+                Expanded(
+                  child: Stack(
+                    children: [
+                      BottomSheetContent(receiverId: receiverId),
+                      Positioned(
+                        bottom: 5,
+                        right: 5,
+                        child: Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: OutlinedButton(
+                            style: const ButtonStyle(
+                              side: MaterialStatePropertyAll(BorderSide(
+                                  width: 1.5, color: AppColors.ACCENT_COLOR)),
+                              iconColor: MaterialStatePropertyAll(Colors.white),
+                              backgroundColor:
                                   MaterialStatePropertyAll(Colors.black),
-                                ),
-                                onPressed: () {
-                                  serviceLocator<SubscriptionController>()
-                                      .showActiveSubscriptionAmounts(
+                            ),
+                            onPressed: () {
+                              serviceLocator<SubscriptionController>()
+                                  .showActiveSubscriptionAmounts(
                                       walletType: WalletTypes.balance);
-                                },
-                                child: const Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      '💳 Recharge',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          color: Colors.white),
-                                      textScaler: TextScaler.linear(1.2),
-                                    ),
-                                    Icon(Icons.arrow_right),
-                                  ],
+                            },
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  '💳 Recharge',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.white),
+                                  textScaler: TextScaler.linear(1.2),
                                 ),
-                              ),
+                                Icon(Icons.arrow_right),
+                              ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              );
-            },
-          ),
-        ),
+              ],
+            ),
+          );
+        },
+      ),
+    ),
   );
 }

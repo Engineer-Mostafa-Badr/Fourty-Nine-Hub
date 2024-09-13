@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'zego_gift_item.dart';
 
@@ -22,7 +23,7 @@ void showGiftListSheet(BuildContext context) {
         padding: MediaQuery.of(context).viewInsets,
         duration: const Duration(milliseconds: 50),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10),
           child: SizedBox(
             height: MediaQuery.of(context).size.height * 0.3,
             child: ZegoGiftSheet(
@@ -80,7 +81,7 @@ class _ZegoGiftSheetState extends State<ZegoGiftSheet> {
           children: [
             countDropList(),
             SizedBox(
-              height: 30,
+              height: 30.h,
               child: sendButton(),
             ),
           ],
@@ -115,9 +116,9 @@ class _ZegoGiftSheetState extends State<ZegoGiftSheet> {
   }
 
   Widget countDropList() {
-    const textStyle = TextStyle(
+    var textStyle = TextStyle(
       color: Colors.white,
-      fontSize: 15,
+      fontSize: 15.sp,
     );
 
     return ValueListenableBuilder<String>(
@@ -168,7 +169,7 @@ class _ZegoGiftSheetState extends State<ZegoGiftSheet> {
                             ),
                           ),
                           width: 50,
-                          height: 50,
+                          height: 50.h,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(3),
                             child: item.icon.isEmpty

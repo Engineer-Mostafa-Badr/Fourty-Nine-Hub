@@ -5,7 +5,7 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class DestinationTextFieldAndFindButon extends StatefulWidget {
   const DestinationTextFieldAndFindButon({
     super.key,
@@ -39,7 +39,7 @@ class _DestinationTextFieldAndFindButonState
     return Form(
       key: formKey,
       child: SizedBox(
-        // height: 45,
+        // height: 45.h,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -58,7 +58,7 @@ class _DestinationTextFieldAndFindButonState
                 },
               ),
             ),
-            const Sizer(width: 5),
+            Sizer(width: 5),
             CustomButton(
               onTap: () {
                 if (formKey.currentState!.validate()) {
@@ -66,7 +66,7 @@ class _DestinationTextFieldAndFindButonState
                       address: destinationController.text);
                 }
               },
-              height: 45,
+              height: 45.h,
             ),
           ],
         ),
@@ -83,9 +83,9 @@ class _DestinationTextFieldAndFindButonState
       );
     }
     if (state is DestinationLocationLoading) {
-      return const SizedBox(
+      return SizedBox(
         width: 10,
-        height: 10,
+        height: 10.h,
         child: Center(
           child: CircularProgressIndicator(
             color: AppColors.PRIMARY_COLOR,

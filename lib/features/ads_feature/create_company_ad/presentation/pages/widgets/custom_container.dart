@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../../../common/models/public/pagination_params.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/company_ad_entity.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomContainerAdvertise extends StatelessWidget {
   const CustomContainerAdvertise({
@@ -36,20 +36,20 @@ class CustomContainerAdvertise extends StatelessWidget {
         child: Column(
           children: List.generate(
               1,
-                  (index) => Padding(
-                padding: EdgeInsets.only(bottom: 15.zH),
-                child: Container(
-                  height: MediaQuery.of(context).size.height * .15.zH,
-                  width: double.infinity,
-                  margin: EdgeInsets.symmetric(horizontal: 10.zW),
-                  padding: EdgeInsets.symmetric(horizontal: 10.zW),
-                  decoration: BoxDecoration(
-                    color: AppColors.AUTH_CONTAINER_COLOR,
-                    borderRadius: BorderRadius.circular(20.zR),
-                    border: Border.all(color: Colors.grey),
-                  ),
-                ),
-              )),
+              (index) => Padding(
+                    padding: EdgeInsets.only(bottom: 15.h),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * .15.h,
+                      width: double.infinity,
+                      margin: EdgeInsets.symmetric(horizontal: 10.w),
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      decoration: BoxDecoration(
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        borderRadius: BorderRadius.circular(20.r),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                    ),
+                  )),
         ),
       ),
       build: (ScrollController scrollController, List<CompanyAdEntity> data) {
@@ -66,8 +66,9 @@ class CustomContainerAdvertise extends StatelessWidget {
             function();
           },
           child: Container(
-            margin: const EdgeInsetsDirectional.only(bottom: 20),
-            padding: const EdgeInsetsDirectional.symmetric(vertical: 7, horizontal: 10),
+            margin: EdgeInsetsDirectional.only(bottom: 20),
+            padding: EdgeInsetsDirectional.symmetric(
+                vertical: 7.h, horizontal: 10.w),
             width: double.infinity,
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
@@ -77,25 +78,30 @@ class CustomContainerAdvertise extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: Styles.headerText(color: Theme.of(context).scaffoldBackgroundColor),
+                  style: Styles.headerText(
+                      color: Theme.of(context).scaffoldBackgroundColor),
                 ),
-                const SizedBox(width: 6),
-                if(numberOfAdvertises >0)
+                SizedBox(width: 6),
+                if (numberOfAdvertises > 0)
                   Text(
                     '($numberOfAdvertises)',
-                    style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
+                    style: Styles.mediumText(
+                        color: Theme.of(context).scaffoldBackgroundColor),
                   ),
                 const Spacer(),
-                if(numberOfAdvertises >0)
-                Text(
-                  '$totalPrice',
-                  style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
-                ),
+                if (numberOfAdvertises > 0)
+                  Text(
+                    '$totalPrice',
+                    style: Styles.mediumText(
+                        color: Theme.of(context).scaffoldBackgroundColor),
+                  ),
                 IconButton(
                   onPressed: () {},
-                  icon:  Icon(
+                  icon: Icon(
                     Icons.check_circle,
-                    color:numberOfAdvertises >0? AppColors.SECONDARY_COLOR :Colors.transparent,
+                    color: numberOfAdvertises > 0
+                        ? AppColors.SECONDARY_COLOR
+                        : Colors.transparent,
                   ),
                 ),
               ],
@@ -105,11 +111,10 @@ class CustomContainerAdvertise extends StatelessWidget {
       },
       fetchData: (PaginationParams paginationParams) {
         return context.read<CreateCompanyAdCubit>().getCompanyAdPosts(
-          filter,
-          params: paginationParams,
-        );
+              filter,
+              params: paginationParams,
+            );
       },
     );
   }
 }
-

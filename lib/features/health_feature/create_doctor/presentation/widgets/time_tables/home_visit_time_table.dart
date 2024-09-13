@@ -31,7 +31,7 @@ class CreateDoctorHomeVisitTimeTable extends StatelessWidget {
                     isRequired: true,
                     hint: 'Home Visit Price',
                   ),
-                  const Sizer(),
+                  Sizer(),
                   DefaultTextFormField(
                     hint: 'Home Visit Examine Duration (in minutes)',
                     keyboardType: TextInputType.number,
@@ -44,7 +44,7 @@ class CreateDoctorHomeVisitTimeTable extends StatelessWidget {
                 ],
               ));
         } else {
-          return const SizedBox.shrink();
+          return SizedBox.shrink();
         }
       },
     );

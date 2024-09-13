@@ -30,7 +30,7 @@ class SelectActivity extends StatelessWidget {
                 Navigator.pop(context, item);
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
+                padding: EdgeInsets.symmetric(horizontal: 5),
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey, width: .5)),
                 child: Row(
@@ -40,7 +40,7 @@ class SelectActivity extends StatelessWidget {
                       backgroundColor: Colors.white,
                       backgroundImage: NetworkImage(item.image),
                     ),
-                    const Sizer(),
+                    Sizer(),
                     Expanded(child: Label(text: item.name))
                   ],
                 ),

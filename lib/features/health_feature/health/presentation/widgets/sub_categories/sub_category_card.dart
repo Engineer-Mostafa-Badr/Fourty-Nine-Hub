@@ -33,7 +33,7 @@ class HealthSubCategoryCard extends StatelessWidget {
       },
       child: Container(
         width: 200,
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(10),
@@ -57,7 +57,7 @@ class HealthSubCategoryCard extends StatelessWidget {
                       right: 5,
                       child: IconAppButton(
                           size: 20,
-                          icon: subCategory.isFavorite==true
+                          icon: subCategory.isFavorite == true
                               ? Icons.favorite
                               : Icons.favorite_border,
                           color: ThemeCubit.get(context).isDarkTheme
@@ -71,11 +71,11 @@ class HealthSubCategoryCard extends StatelessWidget {
                 ],
               ),
             )),
-            const Sizer(),
+            Sizer(),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
+                 Row(
                   children: [
                     Expanded(
                       child: Sizer(

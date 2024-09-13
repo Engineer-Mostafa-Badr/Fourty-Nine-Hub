@@ -42,13 +42,13 @@ class OfferControl extends StatelessWidget {
                       style: Styles.mediumText(color: Colors.white))),
             ],
           ),
-          const Sizer(),
+          Sizer(),
           AppButton(
               label: 'Raise fare',
               onPressed: () {},
               backColor: Colors.grey[100] ?? Colors.grey,
               textColor: true ? Colors.green : Colors.grey),
-          const Sizer(),
+          Sizer(),
           AppButton(
               label: 'Cancel Request',
               onPressed: () {
@@ -59,14 +59,14 @@ class OfferControl extends StatelessWidget {
               },
               backColor: Colors.grey[100] ?? Colors.grey,
               textColor: Colors.red),
-          const Sizer(),
+          Sizer(),
           Row(
             children: [
               const Icon(
                 Icons.rocket_launch,
                 size: 14,
               ),
-              const Sizer(),
+              Sizer(),
               Expanded(
                   child: Label(
                       text: 'Auto Accept offer of EGP',

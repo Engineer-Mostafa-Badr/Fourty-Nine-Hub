@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/lucky_wheel/domain/entities/wheel_wallet_
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_cubit/wheel_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
@@ -21,24 +22,24 @@ import '../../../../res/style/styles.dart';
 import '../../domain/entities/wheel_item_entity.dart';
 
 class LuckyWheelView extends StatelessWidget {
-  const LuckyWheelView({super.key});
+   const LuckyWheelView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final spinWheelCubit = BlocProvider.of<SpinWheelCubit>(context);
     return Scaffold(
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         centerTitle: false,
         label: LocaleKeys.luckyWheel.localize,
       ),
       body: BlocBuilder<WheelCubit, BasicState<WheelEntity>>(
         builder: (context, state) {
           if (state.status != StateStatus.success) {
-            return const Center(child: CircularProgressIndicator());
+            return  Center(child: CircularProgressIndicator());
           }
           return BlocBuilder<SpinWheelCubit, BasicState<WheelItemEntity>>(
             builder: (_, priceState) => Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding:  EdgeInsets.all(15.0),
               child: Column(
                 children: [
                   BlocBuilder<WheelWalletCubit, BasicState<WheelWalletEntity>>(
@@ -47,9 +48,10 @@ class LuckyWheelView extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Container(
-                            padding: const EdgeInsetsDirectional.symmetric(vertical: 5,horizontal: 10),
+                            padding:  EdgeInsetsDirectional.symmetric(
+                                vertical: 5.h, horizontal: 10),
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.zR),
+                                borderRadius: BorderRadius.circular(10.r),
                                 color: Theme.of(context).primaryColor),
                             child: Row(
                               children: [
@@ -59,8 +61,7 @@ class LuckyWheelView extends StatelessWidget {
                                       color: Theme.of(context)
                                           .scaffoldBackgroundColor),
                                 ),
-                                const Spacer(),
-
+                                 Spacer(),
                                 Text(
                                   '${state.data?.amount.round() ?? 0}',
                                   style: Styles.mediumText(
@@ -71,12 +72,13 @@ class LuckyWheelView extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const Sizer(),
+                         Sizer(),
                         Expanded(
                           child: Container(
-                            padding: const EdgeInsetsDirectional.symmetric(vertical: 5,horizontal: 10),
+                            padding:  EdgeInsetsDirectional.symmetric(
+                                vertical: 5.h, horizontal: 10),
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.zR),
+                                borderRadius: BorderRadius.circular(10.r),
                                 color: Theme.of(context).primaryColor),
                             child: Row(
                               children: [
@@ -86,8 +88,7 @@ class LuckyWheelView extends StatelessWidget {
                                       color: Theme.of(context)
                                           .scaffoldBackgroundColor),
                                 ),
-                                const Spacer(),
-
+                                 Spacer(),
                                 Text(
                                   '${state.data?.points.round() ?? 0}',
                                   style: Styles.mediumText(
@@ -106,7 +107,7 @@ class LuckyWheelView extends StatelessWidget {
                         ? FortuneWheel(
                             selected: spinWheelCubit.controller.stream,
                             animateFirst: false,
-                            duration: const Duration(seconds: 3),
+                            duration:  Duration(seconds: 3),
                             hapticImpact: HapticImpact.heavy,
                             onAnimationEnd: () {
                               spinWheelCubit.showPrize(context);
@@ -115,31 +116,34 @@ class LuckyWheelView extends StatelessWidget {
                             items: state.data!.items
                                 .map(
                                   (e) => FortuneItem(
-                                    child: Text(e.type == WheelItemTypes.point
-                                        ? '${e.value.round()} ${LocaleKeys.points.localize}'
-                                        : '${e.value.round()} ${LocaleKeys.money.localize}',
-                                    style: Styles.mediumText(fontSize: 40,),
+                                    child: Text(
+                                      e.type == WheelItemTypes.point
+                                          ? '${e.value.round()} ${LocaleKeys.points.localize}'
+                                          : '${e.value.round()} ${LocaleKeys.money.localize}',
+                                      style: Styles.mediumText(
+                                        fontSize: 40.sp,
+                                      ),
                                     ),
                                   ),
                                 )
                                 .toList(),
                           )
-                        :  Center(
+                        : Center(
                             child: Text(LocaleKeys.notEnoughWheel.localize),
                           ),
                   ),
                   AppButton(
-                    height: 50,
+                    height: 50.h,
                     width: double.infinity,
                     label: LocaleKeys.spin.localize,
                     backColor: Theme.of(context).primaryColor,
                     style: Styles.headerText(
-                      fontSize: 45,
+                      fontSize: 45.sp,
                       color: Theme.of(context).scaffoldBackgroundColor,
                     ),
                     onPressed: () => spinWheelCubit.spin(state.data!),
                   ),
-                  const SizedBox(height: 30),
+                   SizedBox(height: 30.h),
                 ],
               ),
             ),

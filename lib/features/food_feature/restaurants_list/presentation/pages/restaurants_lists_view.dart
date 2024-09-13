@@ -20,6 +20,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
 import '../cubit/meal_cubit/restaurants_list_cubit.dart';
 import '../widgets/restaurant_card.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RestaurantsListsView extends StatelessWidget {
   const RestaurantsListsView({super.key});
@@ -80,13 +81,13 @@ class RestaurantsListsView extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                const Sizer(),
+                                Sizer(),
                                 Visibility(
                                     visible: (state.isResturant?.isRestaurant ??
                                             false) &&
                                         (state.isResturant?.approved ?? false),
                                     child: const ResturantDashboardButton()),
-                                const Sizer(),
+                                Sizer(),
                                 GestureDetector(
                                   onTap: () {
                                     if (context.read<UserCubit>().isLoggedIn) {
@@ -97,9 +98,9 @@ class RestaurantsListsView extends StatelessWidget {
                                   },
                                   child: Container(
                                       alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      height: 36,
+                                      padding:  EdgeInsets.symmetric(
+                                          horizontal: 10.w),
+                                      height: 36.h,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         border: Border.all(
@@ -115,7 +116,7 @@ class RestaurantsListsView extends StatelessWidget {
                                         ],
                                       )),
                                 ),
-                                const Sizer(),
+                                Sizer(),
                                 if (state.mealCategories?.isNotEmpty ?? false)
                                   const MealCategories(),
                                 if (state.loadingSubCategories) ...[
@@ -152,17 +153,17 @@ class RestaurantsListsView extends StatelessWidget {
                                         .tr(),
                                     style: Styles.headerText(),
                                   ),
-                                  const Sizer(),
+                                  Sizer(),
                                   _buildSubCatigoriesRestaurants(),
                                 ],
-                                const Sizer(),
-                                const Sizer(),
+                                Sizer(),
+                                Sizer(),
                                 if ((state.allRestaurant?.isNotEmpty ??
                                     false)) ...[
                                   Label(
                                       text: LocaleKeys.allRestaurants.tr(),
                                       style: Styles.headerText()),
-                                  const Sizer(),
+                                  Sizer(),
                                   _buildAllRestaurants(),
                                 ],
                               ],
@@ -206,7 +207,7 @@ class RestaurantsListsView extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) => SubCatigoriesRestaurantCard(
                   item: state.subCategories?[index]),
-              separatorBuilder: (context, index) => const Sizer(),
+              separatorBuilder: (context, index) => Sizer(),
               itemCount: state.subCategories?.length ?? 0));
     });
   }
@@ -221,7 +222,7 @@ class RestaurantsListsView extends StatelessWidget {
                 isVert: false,
                 item: state.allRestaurant![index],
               ),
-          separatorBuilder: (context, index) => const Sizer(),
+          separatorBuilder: (context, index) => Sizer(),
           itemCount: state.allRestaurant?.length ?? 0);
     });
   }

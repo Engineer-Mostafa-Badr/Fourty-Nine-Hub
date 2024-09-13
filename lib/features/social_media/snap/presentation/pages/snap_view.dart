@@ -1,22 +1,35 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/snap/utils/filters.dart';
 import 'package:image_filter_pro/named_color_filter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:video_player/video_player.dart';
+import 'dart:async';
+import 'dart:io';
+import 'dart:ui' as ui;
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/rendering.dart';
+
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter/return_code.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import 'package:path/path.dart' as path;
-import 'package:flutter/rendering.dart';
 import 'package:image_filter_pro/photo_filter.dart';
 
-import '../../../../../service_locator/service_locator.dart';
+import '../../../reels/presentation/shared/filter_utiles.dart';
 import '../../../stories/presentation/cubit/stories_cubit.dart';
 
 class SnapView extends StatelessWidget {
@@ -24,9 +37,1543 @@ class SnapView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MediaPreviewScreen();
+    return AdvancedSnapchatCameraScreen();
   }
 }
+
+// class AdvancedSnapchatCameraScreen extends StatefulWidget {
+//   @override
+//   _AdvancedSnapchatCameraScreenState createState() =>
+//       _AdvancedSnapchatCameraScreenState();
+// }
+//
+// class _AdvancedSnapchatCameraScreenState
+//     extends State<AdvancedSnapchatCameraScreen> with TickerProviderStateMixin {
+//   late CameraController _cameraController;
+//   late List<CameraDescription> _cameras;
+//   bool isReady = false;
+//   bool isFrontCamera = false;
+//   bool isRecording = false;
+//   FlashMode _flashMode = FlashMode.off;
+//   double _currentZoomLevel = 1.0;
+//   double _maxZoomLevel = 5.0;
+//
+//   // Animation controllers
+//   late AnimationController _flashAnimationController;
+//   late Animation<double> _flashAnimation;
+//
+//   // Filter PageView properties
+//   int selectedFilterIndex = 0; // Tracks which filter is applied
+//   PageController _pageController =
+//       PageController(viewportFraction: 0.3); // Controls the page scrolling
+//   int totalFilters = 10; // Total number of filters
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _initializeCamera();
+//     _initializeFlashAnimation();
+//   }
+//
+//   /// Initializes the camera and sets up necessary configurations
+//   Future<void> _initializeCamera() async {
+//     try {
+//       _cameras = await availableCameras();
+//       _cameraController = CameraController(
+//         _cameras[0],
+//         ResolutionPreset.high,
+//         enableAudio: true,
+//       );
+//       await _cameraController.initialize();
+//       setState(() {
+//         isReady = true;
+//       });
+//     } catch (e) {
+//       // Enhanced error logging for easier debugging
+//       log("Camera initialization error: $e");
+//     }
+//   }
+//
+//   /// Initializes flash mode animations
+//   void _initializeFlashAnimation() {
+//     _flashAnimationController = AnimationController(
+//         duration: const Duration(milliseconds: 500), vsync: this);
+//     _flashAnimation =
+//         Tween<double>(begin: 0.0, end: 1.0).animate(_flashAnimationController);
+//   }
+//
+//   /// Switches between front and back cameras
+//   void _switchCamera() {
+//     setState(() {
+//       isFrontCamera = !isFrontCamera;
+//     });
+//     _cameraController = CameraController(
+//       isFrontCamera ? _cameras[1] : _cameras[0],
+//       ResolutionPreset.high,
+//       enableAudio: true,
+//     );
+//     _cameraController.initialize().then((_) {
+//       setState(() {});
+//     }).catchError((e) {
+//       log("Error switching camera: $e");
+//     });
+//   }
+//
+//   /// Takes a picture using the camera
+//   Future<void> _takePicture() async {
+//     if (!_cameraController.value.isInitialized) return;
+//
+//     try {
+//       await _cameraController.takePicture();
+//     } catch (e) {
+//       log("Error capturing image: $e");
+//     }
+//   }
+//
+//   /// Toggles video recording
+//   Future<void> _toggleRecording() async {
+//     if (!_cameraController.value.isInitialized) return;
+//
+//     try {
+//       if (isRecording) {
+//         await _cameraController.stopVideoRecording();
+//         setState(() {
+//           isRecording = false;
+//         });
+//       } else {
+//         await _cameraController.startVideoRecording();
+//         setState(() {
+//           isRecording = true;
+//         });
+//       }
+//     } catch (e) {
+//       log("Recording error: $e");
+//     }
+//   }
+//
+//   /// Changes the flash mode and triggers flash animation
+//   void _changeFlashMode() {
+//     setState(() {
+//       if (_flashMode == FlashMode.off) {
+//         _flashMode = FlashMode.auto;
+//       } else if (_flashMode == FlashMode.auto) {
+//         _flashMode = FlashMode.torch;
+//       } else {
+//         _flashMode = FlashMode.off;
+//       }
+//     });
+//
+//     _cameraController.setFlashMode(_flashMode);
+//     _flashAnimationController.forward(from: 0.0);
+//   }
+//
+//   @override
+//   void dispose() {
+//     _cameraController.dispose();
+//     _flashAnimationController.dispose();
+//     _pageController.dispose();
+//     super.dispose();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     if (!isReady || !_cameraController.value.isInitialized) {
+//       return const Scaffold(
+//         backgroundColor: Colors.black,
+//         body: Center(child: CircularProgressIndicator()),
+//       );
+//     }
+//
+//     return Scaffold(
+//       backgroundColor: Colors.black,
+//       body: GestureDetector(
+//         onScaleUpdate: (details) {
+//           if (details.scale != 1.0) {
+//             _currentZoomLevel =
+//                 (_currentZoomLevel * details.scale).clamp(1.0, _maxZoomLevel);
+//             _cameraController.setZoomLevel(_currentZoomLevel);
+//           }
+//         },
+//         child: Stack(
+//           children: [
+//             // Camera Preview
+//             CameraPreview(_cameraController),
+//
+//             // Swipe Gesture Detection
+//             GestureDetector(
+//               onHorizontalDragEnd: (details) {
+//                 if (details.primaryVelocity! > 0) {
+//                   log("Swiped right: open chat");
+//                 } else if (details.primaryVelocity! < 0) {
+//                   log("Swiped left: open stories");
+//                 }
+//               },
+//             ),
+//
+//             // Flash Mode Animation
+//             _buildFlashModeWidget(),
+//
+//             // Top Control Icons
+//             _buildTopIcons(),
+//
+//             // Bottom Capture Controls
+//             // _buildBottomControls(),
+//
+//             // Filters carousel at the bottom using PageView
+//             // Align(
+//             //   alignment: Alignment.bottomRight,
+//             //   child: Container(
+//             //     color: Colors.red, // Make the container transparent
+//             //     height: 200,
+//             //     width: MediaQuery.of(context).size.width * 0.7,
+//             //     child: Stack(
+//             //       alignment: Alignment.center,
+//             //       children: [
+//             //         // Center circle indicator
+//             //         Center(
+//             //           child: Container(
+//             //             height: 100,
+//             //             width: 100,
+//             //             decoration: BoxDecoration(
+//             //               shape: BoxShape.circle,
+//             //               border: Border.all(color: Colors.white, width: 3),
+//             //             ),
+//             //           ),
+//             //         ),
+//             //
+//             //         // Filter PageView
+//             //         PageView.builder(
+//             //           controller: _pageController,
+//             //           itemCount: totalFilters,
+//             //           onPageChanged: (index) {
+//             //             setState(() {
+//             //               selectedFilterIndex = index;
+//             //               log("Filter $index applied");
+//             //             });
+//             //           },
+//             //           itemBuilder: (context, index) {
+//             //             bool isSelected = selectedFilterIndex == index;
+//             //
+//             //             return Container(
+//             //               height: 100,
+//             //               width: 100,
+//             //               decoration: BoxDecoration(
+//             //                 shape: BoxShape.circle,
+//             //                 border: Border.all(color: Colors.white, width: 3),
+//             //               ),
+//             //               child: InkWell(
+//             //                 onTap: () {
+//             //                   if (selectedFilterIndex == index) {
+//             //                     log("Filter $index selected");
+//             //                   }
+//             //                 },
+//             //                 child: AnimatedOpacity(
+//             //                   duration: Duration(milliseconds: 300),
+//             //                   opacity: isSelected ? 1.0 : 0.3,
+//             //                   child: AnimatedContainer(
+//             //                     duration: Duration(milliseconds: 300),
+//             //                     curve: Curves.easeOut,
+//             //                     width: isSelected ? 100 : 80,
+//             //                     height: isSelected ? 100 : 80,
+//             //                     decoration: BoxDecoration(
+//             //                       shape: BoxShape.circle,
+//             //                       border: Border.all(
+//             //                           color: isSelected
+//             //                               ? Colors.blue
+//             //                               : Colors.white.withOpacity(0.5),
+//             //                           width: isSelected ? 4 : 2),
+//             //                     ),
+//             //                     child: CircleAvatar(
+//             //                       backgroundColor: Colors.grey[800],
+//             //                       child: Icon(
+//             //                         Icons.filter_vintage,
+//             //                         color:
+//             //                             isSelected ? Colors.blue : Colors.white,
+//             //                       ),
+//             //                     ),
+//             //                   ),
+//             //                 ),
+//             //               ),
+//             //             );
+//             //           },
+//             //         ),
+//             //       ],
+//             //     ),
+//             //   ),
+//             // )
+//
+//             Align(
+//               alignment: Alignment.bottomCenter,
+//               child: SizedBox(
+//                 height: MediaQuery.of(context).size.height *
+//                     0.25, // Responsive height
+//                 child: Row(
+//                   children: [
+//                     Expanded(
+//                       flex: 1,
+//                       child: Container(
+//                         // height: MediaQuery.of(context).size.height *
+//                         //     0.25, // Responsive height
+//                         // color: Colors.blue, // Make the container transparent
+//                         child: Center(
+//                             child: IconButton(
+//                           color: Colors.white,
+//                           icon: Stack(
+//                             children: [
+//                               const Icon(
+//                                 size: 30,
+//                                 Icons.photo_library,
+//                               ),
+//                               Positioned(
+//                                   right: 0,
+//                                   top: 0,
+//                                   child: Container(
+//                                     decoration: BoxDecoration(
+//                                         color: Colors.red,
+//                                         borderRadius:
+//                                             BorderRadius.circular(50)),
+//                                     width: 10,
+//                                     height: 10,
+//                                   )),
+//                             ],
+//                           ),
+//                           onPressed: () {},
+//                         )),
+//                       ),
+//                     ),
+//                     Expanded(
+//                       flex: 7,
+//                       child: Container(
+//                         // color: Colors.red, // Make the container transparent
+//                         // height: MediaQuery.of(context).size.height *
+//                         //     0.25, // Responsive height
+//                         // width: MediaQuery.of(context).size.width *
+//                         //     0.8, // Responsive width
+//                         child: Stack(
+//                           alignment: Alignment.center,
+//                           children: [
+//                             // Center circle indicator
+//                             Center(
+//                               child: Container(
+//                                 height: MediaQuery.of(context).size.height *
+//                                     0.13, // Responsive circle height
+//                                 width: MediaQuery.of(context).size.height *
+//                                     0.13, // Responsive circle width
+//                                 decoration: BoxDecoration(
+//                                   shape: BoxShape.circle,
+//                                   border:
+//                                       Border.all(color: Colors.white, width: 6),
+//                                 ),
+//                               ),
+//                             ),
+//
+//                             // Filter PageView with spacing between items
+//                             PageView.builder(
+//                               controller: _pageController,
+//                               itemCount: totalFilters,
+//                               onPageChanged: (index) {
+//                                 setState(() {
+//                                   selectedFilterIndex = index;
+//                                   log("Filter $index applied -----------------------------------------------------------------------/\\");
+//                                 });
+//                               },
+//                               itemBuilder: (context, index) {
+//                                 bool isSelected = selectedFilterIndex == index;
+//
+//                                 return Padding(
+//                                   padding: const EdgeInsets.symmetric(
+//                                       horizontal: 6.0),
+//                                   child: Container(
+//                                     height: MediaQuery.of(context).size.height *
+//                                         0.12,
+//                                     // Responsive height
+//                                     width: MediaQuery.of(context).size.height *
+//                                         0.12,
+//                                     // Responsive width
+//                                     // decoration: BoxDecoration(
+//                                     //   shape: BoxShape.circle,
+//                                     //   border: Border.all(color: Colors.white, width: 2),
+//                                     // ),
+//                                     child: GestureDetector(
+//                                       onTap: () {
+//                                         if (selectedFilterIndex == index) {
+//                                           _takePicture();
+//                                           log("Filter $index selected  applied -----------------------------------------------------------------------/\\");
+//                                         }
+//                                       },
+//                                       onLongPress: _toggleRecording,
+//                                       child: AnimatedOpacity(
+//                                         duration:
+//                                             const Duration(milliseconds: 300),
+//                                         opacity: isSelected ? 1.0 : 0.3,
+//                                         // Fade unselected filters
+//                                         child: AnimatedContainer(
+//                                           duration:
+//                                               const Duration(milliseconds: 300),
+//                                           curve: Curves.easeOut,
+//                                           width: isSelected
+//                                               ? MediaQuery.of(context)
+//                                                       .size
+//                                                       .height *
+//                                                   0.12 // Bigger when selected
+//                                               : MediaQuery.of(context)
+//                                                       .size
+//                                                       .height *
+//                                                   0.1,
+//                                           // Smaller when not selected
+//                                           height: isSelected
+//                                               ? MediaQuery.of(context)
+//                                                       .size
+//                                                       .height *
+//                                                   0.12
+//                                               : MediaQuery.of(context)
+//                                                       .size
+//                                                       .height *
+//                                                   0.1,
+//                                           // decoration: BoxDecoration(
+//                                           //   shape: BoxShape.circle,
+//                                           //   border: Border.all(
+//                                           //       color: isSelected
+//                                           //           ? Colors.blue
+//                                           //           : Colors.white
+//                                           //               .withOpacity(0.5),
+//                                           //       width: isSelected ? 4 : 2),
+//                                           // ),
+//                                           child: CircleAvatar(
+//                                             backgroundColor: Colors.grey[800],
+//                                             child: Icon(
+//                                               Icons.filter_vintage,
+//                                               color: isSelected
+//                                                   ? Colors.blue
+//                                                   : Colors.white,
+//                                               size: MediaQuery.of(context)
+//                                                       .size
+//                                                       .height *
+//                                                   0.05, // Responsive icon size
+//                                             ),
+//                                           ),
+//                                         ),
+//                                       ),
+//                                     ),
+//                                   ),
+//                                 );
+//                               },
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+//
+//   /// Builds the widget that shows flash mode animation
+//   Widget _buildFlashModeWidget() {
+//     return Positioned(
+//       top: 60,
+//       left: 50,
+//       child: FadeTransition(
+//         opacity: _flashAnimation,
+//         child: Container(
+//           padding: const EdgeInsets.all(8),
+//           decoration: BoxDecoration(
+//             color: Colors.black.withOpacity(0.6),
+//             borderRadius: BorderRadius.circular(8),
+//           ),
+//           child: Text(
+//             _flashMode == FlashMode.off
+//                 ? "Flash Off"
+//                 : _flashMode == FlashMode.auto
+//                     ? "Flash Auto"
+//                     : "Flash On",
+//             style: const TextStyle(color: Colors.white),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+//
+//   /// Builds the widget containing the top icons
+//   Widget _buildTopIcons() {
+//     return Positioned(
+//       top: 40,
+//       left: 16,
+//       right: 16,
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           const CircleAvatar(
+//             backgroundColor: Colors.red,
+//             radius: 20,
+//             child: Icon(Icons.person, color: Colors.white),
+//           ),
+//           Row(
+//             children: [
+//               IconButton(
+//                 icon: Icon(
+//                   Icons.flash_on,
+//                   color:
+//                       _flashMode == FlashMode.off ? Colors.grey : Colors.yellow,
+//                 ),
+//                 onPressed: _changeFlashMode,
+//               ),
+//               const SizedBox(width: 16),
+//               const Icon(Icons.search, color: Colors.white),
+//               const SizedBox(width: 16),
+//               IconButton(
+//                 icon: const Icon(Icons.cached, color: Colors.white, size: 30),
+//                 onPressed: _switchCamera,
+//               ),
+//             ],
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+//
+//   /// Builds the widget containing bottom capture controls
+//   Widget _buildBottomControls() {
+//     return Positioned(
+//       bottom: 100,
+//       left: 0,
+//       right: 0,
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//         children: [
+//           IconButton(
+//             icon: Icon(
+//               isRecording ? Icons.stop : Icons.videocam,
+//               color: Colors.red,
+//               size: 30,
+//             ),
+//             onPressed: _toggleRecording,
+//           ),
+//           GestureDetector(
+//             onTap: _takePicture,
+//             onLongPress: _toggleRecording,
+//             child: CircleAvatar(
+//               backgroundColor: Colors.white,
+//               radius: 35,
+//               child: CircleAvatar(
+//                 backgroundColor: Colors.black,
+//                 radius: 30,
+//                 child: Icon(
+//                   isRecording ? Icons.videocam : Icons.camera_alt,
+//                   color: Colors.white,
+//                   size: 35,
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+//============================================================================================
+
+class AdvancedSnapchatCameraScreen extends StatefulWidget {
+  @override
+  _AdvancedSnapchatCameraScreenState createState() =>
+      _AdvancedSnapchatCameraScreenState();
+}
+
+class _AdvancedSnapchatCameraScreenState
+    extends State<AdvancedSnapchatCameraScreen> with TickerProviderStateMixin {
+  final List<Map<String, dynamic>> _advancedFilters = advancedFilters;
+
+  late CameraController _cameraController;
+  late List<CameraDescription> _cameras;
+  bool isReady = false;
+  bool isFrontCamera = false;
+  bool isRecording = false;
+  FlashMode _flashMode = FlashMode.off;
+  double _currentZoomLevel = 1.0;
+  final double _maxZoomLevel = 5.0;
+  File? _selectedImage; // Holds the selected image
+  final ImagePicker _picker = ImagePicker(); // Image picker instance
+
+  // Animation controllers
+  late AnimationController _flashAnimationController;
+  late Animation<double> _flashAnimation;
+  OverlayEntry? _overlayEntry;
+
+  void _showOverlay(BuildContext context) {
+    _overlayEntry = _createOverlayEntry();
+    Overlay.of(context).insert(_overlayEntry!);
+
+    // Simulate a 3-second delay to hide the overlay
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      _hideOverlay();
+    });
+  }
+
+  void _hideOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
+  OverlayEntry _createOverlayEntry() {
+    return OverlayEntry(
+      builder: (context) => Stack(
+        children: [
+          Positioned.fill(
+            child: ModalBarrier(
+              color: Colors.black.withOpacity(0.5),
+              dismissible:
+                  false, // Prevents tapping outside to dismiss the overlay
+            ),
+          ),
+          const Center(
+            child: CupertinoActivityIndicator(
+              radius: 25,
+              color: Colors.yellow,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Filter PageView properties
+  int selectedFilterIndex = 0; // Tracks which filter is applied
+  final PageController _pageController =
+      PageController(viewportFraction: 0.3); // Controls the page scrolling
+  int totalFilters = 10; // Total number of filters
+  GlobalKey _globalKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeCamera();
+    _initializeFlashAnimation();
+  }
+
+  /// Initializes the camera and sets up necessary configurations
+  Future<void> _initializeCamera() async {
+    try {
+      _cameras = await availableCameras();
+      _cameraController = CameraController(
+        _cameras[0],
+        ResolutionPreset.high,
+        enableAudio: true,
+      );
+      await _cameraController.initialize();
+      setState(() {
+        isReady = true;
+      });
+    } catch (e) {
+      log("Camera initialization error: $e");
+    }
+  }
+
+  /// Initializes flash mode animations
+  void _initializeFlashAnimation() {
+    _flashAnimationController = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
+    _flashAnimation =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_flashAnimationController);
+  }
+
+  /// Switches between front and back cameras
+  void _switchCamera() {
+    setState(() {
+      isFrontCamera = !isFrontCamera;
+    });
+    _cameraController = CameraController(
+      isFrontCamera ? _cameras[1] : _cameras[0],
+      ResolutionPreset.high,
+      enableAudio: true,
+    );
+    _cameraController.initialize().then((_) {
+      setState(() {});
+    }).catchError((e) {
+      log("Error switching camera: $e");
+    });
+  }
+
+  /// Takes a picture using the camera
+  Future<void> _takePicture() async {
+    if (!_cameraController.value.isInitialized) return;
+
+    // try {
+    //   await _cameraController.takePicture();
+    // } catch (e) {
+    //   log("Error capturing image: $e");
+    // }
+
+    try {
+      final XFile pickedFile = await _cameraController.takePicture();
+      if (pickedFile.path.isNotEmpty) {
+        setState(() {
+          _selectedImage = File(pickedFile.path); // Set the image file
+        });
+      } else {
+        print("No image taken.");
+      }
+    } catch (e) {
+      print("Error taking image: $e");
+    }
+  }
+
+  /// Toggles video recording
+  Future<void> _toggleRecording() async {
+    if (!_cameraController.value.isInitialized) return;
+
+    try {
+      if (isRecording) {
+        await _cameraController.stopVideoRecording();
+        setState(() {
+          isRecording = false;
+        });
+      } else {
+        await _cameraController.startVideoRecording();
+        setState(() {
+          isRecording = true;
+        });
+      }
+    } catch (e) {
+      log("Recording error: $e");
+    }
+  }
+
+  /// Changes the flash mode and triggers flash animation
+  void _changeFlashMode() {
+    setState(() {
+      if (_flashMode == FlashMode.off) {
+        _flashMode = FlashMode.auto;
+      } else if (_flashMode == FlashMode.auto) {
+        _flashMode = FlashMode.torch;
+      } else {
+        _flashMode = FlashMode.off;
+      }
+    });
+
+    _cameraController.setFlashMode(_flashMode);
+    _flashAnimationController.forward(from: 0.0);
+  }
+
+  /// Picks an image from the gallery
+  Future<void> _pickImageFromGallery() async {
+    try {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() {
+          _selectedImage = File(pickedFile.path); // Set the image file
+        });
+      } else {
+        print("No image selected.");
+      }
+    } catch (e) {
+      print("Error picking image: $e");
+    }
+  }
+
+  @override
+  void dispose() {
+    _cameraController.dispose();
+    _flashAnimationController.dispose();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _capturePng() async {
+    try {
+      // Check if the camera controller is initialized
+      if (!_cameraController.value.isInitialized) {
+        print('Camera is not initialized');
+        return;
+      }
+
+      // Capture the widget as an image
+      RenderRepaintBoundary? boundary = _globalKey.currentContext
+          ?.findRenderObject() as RenderRepaintBoundary?;
+
+      // Check if boundary is null
+      if (boundary == null) {
+        print('Error: RepaintBoundary is null');
+        return;
+      }
+
+      // Capture the image from the RepaintBoundary
+      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+
+      // Check if byteData is null
+      if (byteData == null) {
+        print('Error: ByteData is null');
+        return;
+      }
+
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+
+      // Get the directory to save the image
+      final directory = await getApplicationDocumentsDirectory();
+      String path =
+          '${directory.path}/filtered_image_${DateTime.now().millisecondsSinceEpoch}.png'; // Use timestamp to generate a unique file name
+
+      // Save (and overwrite) the image as a PNG file
+      File imgFile = File(path);
+
+      // Write the new image
+      File savedImage = await imgFile.writeAsBytes(pngBytes);
+
+      // Ensure the state is updated after saving and file is valid
+      if (savedImage.existsSync()) {
+        setState(() {
+          _selectedImage = savedImage; // Update the selected image
+          print('Image captured and saved at ${_selectedImage!.path}');
+        });
+      } else {
+        print('Error: Saved image does not exist');
+      }
+    } catch (e) {
+      print('Error saving image: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!isReady || !_cameraController.value.isInitialized) {
+      return const Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: GestureDetector(
+        onScaleUpdate: (details) {
+          if (details.scale != 1.0) {
+            _currentZoomLevel =
+                (_currentZoomLevel * details.scale).clamp(1.0, _maxZoomLevel);
+            _cameraController.setZoomLevel(_currentZoomLevel);
+          }
+        },
+        child: Stack(
+          children: [
+            // Camera Preview
+            // RepaintBoundary to capture the image with the applied filter
+
+            RepaintBoundary(
+              key: _globalKey,
+              // Force the RepaintBoundary to repaint on every build
+              child: ColorFiltered(
+                colorFilter: advancedFilters[selectedFilterIndex]
+                    ['colorFilter'],
+                child: CameraPreview(_cameraController),
+              ),
+            ),
+
+            // // Image overlay if an image is picked from gallery
+            // if (_selectedImage != null)
+            //   Positioned(
+            //     bottom: 20,
+            //     right: 20,
+            //     child: Image.file(
+            //       _selectedImage!,
+            //       width: 100,
+            //       height: 100,
+            //       fit: BoxFit.cover,
+            //     ),
+            //   ),
+
+            // Swipe Gesture Detection
+            GestureDetector(
+              onHorizontalDragEnd: (details) {
+                if (details.primaryVelocity! > 0) {
+                  log("Swiped right: open chat");
+                } else if (details.primaryVelocity! < 0) {
+                  log("Swiped left: open stories");
+                }
+              },
+            ),
+
+            // Flash Mode Animation
+            // _buildFlashModeWidget(),
+
+            // Top Control Icons
+            _buildTopIcons(),
+
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height *
+                    0.25, // Responsive height
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        child: Center(
+                          child: IconButton(
+                            color: Colors.white,
+                            icon: Stack(
+                              children: [
+                                const Icon(
+                                  size: 30,
+                                  Icons.photo_library,
+                                ),
+                                Positioned(
+                                    right: 0,
+                                    top: 0,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius:
+                                              BorderRadius.circular(50)),
+                                      width: 10,
+                                      height: 10,
+                                    )),
+                              ],
+                            ),
+                            onPressed: () => _pickImageFromGallery()
+                                .then((value) => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MediaPreview(
+                                          mediaPath: _selectedImage!.path,
+                                          mediaType: MediaType.image),
+                                    ))), // Pick an image from gallery
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 7,
+                      child: Container(
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Center(
+                              child: Container(
+                                height: MediaQuery.of(context).size.height *
+                                    0.13, // Responsive circle height
+                                width: MediaQuery.of(context).size.height *
+                                    0.13, // Responsive circle width
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border:
+                                      Border.all(color: Colors.white, width: 6),
+                                ),
+                              ),
+                            ),
+
+                            // Filter PageView with spacing between items
+                            // PageView.builder(
+                            //   controller: _pageController,
+                            //   itemCount: advancedFilters.length,
+                            //   onPageChanged: (index) {
+                            //     setState(() {
+                            //       selectedFilterIndex = index;
+                            //       log("Filter $index applied");
+                            //     });
+                            //   },
+                            //   itemBuilder: (context, index) {
+                            //     bool isSelected = selectedFilterIndex == index;
+                            //     final filter = advancedFilters[index];
+                            //
+                            //     return Padding(
+                            //       padding: const EdgeInsets.symmetric(
+                            //           horizontal: 6.0),
+                            //       child: Container(
+                            //         height: MediaQuery.of(context).size.height *
+                            //             0.12, // Responsive height
+                            //         width: MediaQuery.of(context).size.height *
+                            //             0.12, // Responsive width
+                            //         child: GestureDetector(
+                            //           onTap: () {
+                            //             if (selectedFilterIndex == index) {
+                            //               _showOverlay(context);
+                            //
+                            //               // _takePicture();
+                            //               _capturePng().then((value) {
+                            //                 setState(() {
+                            //                   // _selectedImage = value;
+                            //                   log("${_selectedImage!.path}____________________");
+                            //                   Navigator.push(
+                            //                       context,
+                            //                       MaterialPageRoute(
+                            //                         builder: (context) =>
+                            //                             MediaPreview(
+                            //                                 mediaPath:
+                            //                                     _selectedImage!
+                            //                                         .path,
+                            //                                 mediaType: MediaType
+                            //                                     .image),
+                            //                       ));
+                            //                 });
+                            //               });
+                            //               log("Filter $index selected");
+                            //             }
+                            //           },
+                            //           onLongPress: _toggleRecording,
+                            //           child: AnimatedOpacity(
+                            //             duration:
+                            //                 const Duration(milliseconds: 300),
+                            //             opacity: isSelected ? 1.0 : 0.3,
+                            //             // Fade unselected filters
+                            //             child: AnimatedContainer(
+                            //               duration:
+                            //                   const Duration(milliseconds: 300),
+                            //               curve: Curves.easeOut,
+                            //               width: isSelected
+                            //                   ? MediaQuery.of(context)
+                            //                           .size
+                            //                           .height *
+                            //                       0.12 // Bigger when selected
+                            //                   : MediaQuery.of(context)
+                            //                           .size
+                            //                           .height *
+                            //                       0.1,
+                            //               height: isSelected
+                            //                   ? MediaQuery.of(context)
+                            //                           .size
+                            //                           .height *
+                            //                       0.12
+                            //                   : MediaQuery.of(context)
+                            //                           .size
+                            //                           .height *
+                            //                       0.1,
+                            //               child: ColorFiltered(
+                            //                 colorFilter: filter['colorFilter'],
+                            //                 child: CircleAvatar(
+                            //                   // backgroundColor: Colors.grey[800],
+                            //
+                            //                   backgroundImage: const NetworkImage(
+                            //                       'https://images.unsplash.com/photo-1723496954926-d6b4c06d9276?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+                            //                   // backgroundColor: Colors.grey[800],
+                            //
+                            //                   child: Text(
+                            //                     filter['name'],
+                            //                     style: const TextStyle(
+                            //                         color: Colors.white),
+                            //                   ),
+                            //                   // child: Icon(
+                            //                   //   Icons.filter_vintage,
+                            //                   //   color: isSelected
+                            //                   //       ? Colors.blue
+                            //                   //       : Colors.white,
+                            //                   //   size: MediaQuery.of(context)
+                            //                   //           .size
+                            //                   //           .height *
+                            //                   //       0.05, // Responsive icon size
+                            //                   // ),
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     );
+                            //   },
+                            // ),
+                            PageView.builder(
+                              controller: _pageController,
+                              itemCount: advancedFilters.length,
+                              onPageChanged: (index) {
+                                setState(() {
+                                  selectedFilterIndex = index;
+                                  log("Filter $index applied");
+                                });
+                              },
+                              itemBuilder: (context, index) {
+                                bool isSelected = selectedFilterIndex == index;
+
+                                if (index == 0) isSelected = true;
+
+                                log("${isSelected}88888888888888888888888888888888888");
+                                final filter = advancedFilters[index];
+
+                                return GestureDetector(
+                                  onTap: () {
+                                    // if (selectedFilterIndex == index) {
+                                    //   _showOverlay(context);
+                                    //
+                                    //   // _takePicture();
+                                    //   _capturePng().then((value) {
+                                    //     setState(() {
+                                    //       log("${_selectedImage!.path}____________________");
+                                    //       Navigator.push(
+                                    //           context,
+                                    //           MaterialPageRoute(
+                                    //             builder: (context) =>
+                                    //                 MediaPreview(
+                                    //                     mediaPath:
+                                    //                         _selectedImage!
+                                    //                             .path,
+                                    //                     mediaType:
+                                    //                         MediaType.image),
+                                    //           ));
+                                    //     });
+                                    //   });
+                                    //   log("Filter $index selected");
+                                    // }
+                                  },
+                                  onLongPress: _toggleRecording,
+                                  child: AnimatedOpacity(
+                                    duration: const Duration(milliseconds: 300),
+                                    opacity: isSelected ? 1.0 : 0.5,
+                                    // Fade unselected filters
+                                    child: AnimatedContainer(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      curve: Curves.easeOut,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(14.0),
+                                        child: Transform.scale(
+                                          scale: isSelected ? 1.2 : 0.8,
+                                          // Scaling effect
+                                          child: ColorFiltered(
+                                            colorFilter: filter['colorFilter'],
+                                            child: CircleAvatar(
+                                              backgroundImage:
+                                                  //     const NetworkImage(
+                                                  //   'https://images.unsplash.com/photo-1723496954926-d6b4c06d9276?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                                                  // ),
+                                                  const AssetImage(
+                                                      'assets/filters/camera_filter.webp'),
+                                              child: Text(
+                                                filter['name'],
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Builds the widget that shows flash mode animation
+  Widget _buildFlashModeWidget() {
+    return Positioned(
+      top: 40,
+      left: 100,
+      child: FadeTransition(
+        opacity: _flashAnimation,
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.6),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            _flashMode == FlashMode.off
+                ? "Flash Off"
+                : _flashMode == FlashMode.auto
+                    ? "Flash Auto"
+                    : "Flash On",
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Builds the widget containing the top icons
+  Widget _buildTopIcons() {
+    return Positioned(
+      top: 40,
+      left: 8,
+      right: 8,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
+            children: [
+              IconButton(
+                color: Colors.red,
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.person,
+                  size: 35,
+                ),
+              ),
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    FontAwesomeIcons.shareNodes,
+                    size: 30,
+                    color: Colors.white,
+                  ))
+            ],
+          ),
+          const Spacer(),
+          Column(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.loop, color: Colors.white, size: 30),
+                onPressed: _switchCamera,
+              ),
+              // FadeTransition(
+              //   opacity: _flashAnimation,
+              //   child: Container(
+              //     padding: const EdgeInsets.all(8),
+              //     decoration: BoxDecoration(
+              //       color: Colors.black.withOpacity(0.6),
+              //       borderRadius: BorderRadius.circular(8),
+              //     ),
+              //     child: Text(
+              //       _flashMode == FlashMode.off
+              //           ? "Flash Off"
+              //           : _flashMode == FlashMode.auto
+              //               ? "Flash Auto"
+              //               : "Flash On",
+              //       style: const TextStyle(color: Colors.white),
+              //     ),
+              //   ),
+              // ),
+              IconButton(
+                icon: Icon(
+                  size: 30,
+                  _flashMode == FlashMode.off
+                      ? FontAwesomeIcons.bolt
+                      : _flashMode == FlashMode.auto
+                          ? FontAwesomeIcons.bolt
+                          : FontAwesomeIcons.bolt,
+                  color: _flashMode == FlashMode.off
+                      ? Colors.grey
+                      : _flashMode == FlashMode.auto
+                          ? Colors.yellow.shade100
+                          : Colors.yellow,
+                ),
+                onPressed: _changeFlashMode,
+              ),
+              IconButton(
+                color: Colors.white,
+                onPressed: () {},
+                icon: const Icon(
+                  FontAwesomeIcons.search,
+                  size: 25,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+//============================================================================================
+// class AdvancedSnapchatCameraScreen extends StatefulWidget {
+//   @override
+//   _AdvancedSnapchatCameraScreenState createState() =>
+//       _AdvancedSnapchatCameraScreenState();
+// }
+//
+// class _AdvancedSnapchatCameraScreenState
+//     extends State<AdvancedSnapchatCameraScreen> with TickerProviderStateMixin {
+//   late CameraController _cameraController;
+//   late List<CameraDescription> _cameras;
+//   bool isReady = false;
+//   bool isFrontCamera = false;
+//   bool isRecording = false;
+//   FlashMode _flashMode = FlashMode.off;
+//   double _currentZoomLevel = 1.0;
+//   double _maxZoomLevel = 5.0;
+//
+//   // Animation controllers
+//   late AnimationController _flashAnimationController;
+//   late Animation<double> _flashAnimation;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _initializeCamera();
+//     _flashAnimationController = AnimationController(
+//         duration: const Duration(milliseconds: 500), vsync: this);
+//     _flashAnimation = Tween<double>(begin: 0.0, end: 1.0)
+//         .animate(_flashAnimationController);
+//   }
+//
+//   Future<void> _initializeCamera() async {
+//     _cameras = await availableCameras();
+//     _cameraController = CameraController(
+//       _cameras[0],
+//       ResolutionPreset.high,
+//       enableAudio: true,
+//     );
+//     await _cameraController.initialize();
+//     setState(() {
+//       isReady = true;
+//     });
+//   }
+//
+//   void _switchCamera() {
+//     setState(() {
+//       isFrontCamera = !isFrontCamera;
+//     });
+//     _cameraController = CameraController(
+//       isFrontCamera ? _cameras[1] : _cameras[0],
+//       ResolutionPreset.high,
+//       enableAudio: true,
+//     );
+//     _cameraController.initialize().then((_) {
+//       setState(() {});
+//     });
+//   }
+//
+//   void _takePicture() async {
+//     if (!_cameraController.value.isInitialized) return;
+//
+//     try {
+//       await _cameraController.takePicture();
+//     } catch (e) {
+//       log(e);
+//     }
+//   }
+//
+//   void _toggleRecording() async {
+//     if (!_cameraController.value.isRecordingVideo) {
+//       try {
+//         await _cameraController.startVideoRecording();
+//         setState(() {
+//           isRecording = true;
+//         });
+//       } catch (e) {
+//         log(e);
+//       }
+//     } else {
+//       await _cameraController.stopVideoRecording();
+//       setState(() {
+//         isRecording = false;
+//       });
+//     }
+//   }
+//
+//   void _changeFlashMode() {
+//     setState(() {
+//       if (_flashMode == FlashMode.off) {
+//         _flashMode = FlashMode.auto;
+//       } else if (_flashMode == FlashMode.auto) {
+//         _flashMode = FlashMode.torch;
+//       } else {
+//         _flashMode = FlashMode.off;
+//       }
+//     });
+//
+//     _cameraController.setFlashMode(_flashMode);
+//     _flashAnimationController.forward(from: 0.0); // Trigger flash animation
+//   }
+//
+//   @override
+//   void dispose() {
+//     _cameraController.dispose();
+//     _flashAnimationController.dispose();
+//     super.dispose();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     if (!isReady || !_cameraController.value.isInitialized) {
+//       return Container(
+//         color: Colors.black,
+//         child: Center(child: CircularProgressIndicator()),
+//       );
+//     }
+//
+//     return Scaffold(
+//       backgroundColor: Colors.black,
+//       body: GestureDetector(
+//         onScaleUpdate: (details) {
+//           if (details.scale != 1.0) {
+//             _currentZoomLevel = (_currentZoomLevel * details.scale)
+//                 .clamp(1.0, _maxZoomLevel); // Pinch to zoom
+//             _cameraController.setZoomLevel(_currentZoomLevel);
+//           }
+//         },
+//         child: Stack(
+//           children: [
+//             // Camera Preview
+//             CameraPreview(_cameraController),
+//
+//             // Swipe Animation / Gesture Detector
+//             GestureDetector(
+//               onHorizontalDragEnd: (details) {
+//                 if (details.primaryVelocity! > 0) {
+//                   log("Swiped right: open chat");
+//                   // Add transition to chat screen with animation
+//                 } else if (details.primaryVelocity! < 0) {
+//                   log("Swiped left: open stories");
+//                   // Add transition to story screen with animation
+//                 }
+//               },
+//             ),
+//
+//             // Flash Mode Animation
+//             Positioned(
+//               top: 60,
+//               left: 50,
+//               child: FadeTransition(
+//                 opacity: _flashAnimation,
+//                 child: Container(
+//                   padding: EdgeInsets.all(8),
+//                   decoration: BoxDecoration(
+//                     color: Colors.black.withOpacity(0.6),
+//                     borderRadius: BorderRadius.circular(8),
+//                   ),
+//                   child: Text(
+//                     _flashMode == FlashMode.off
+//                         ? "Flash Off"
+//                         : _flashMode == FlashMode.auto
+//                         ? "Flash Auto"
+//                         : "Flash On",
+//                     style: TextStyle(color: Colors.white),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//
+//             // Top Icons (Profile, Search, Flash control)
+//             Positioned(
+//               top: 40,
+//               left: 16,
+//               right: 16,
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   CircleAvatar(
+//                     backgroundColor: Colors.red,
+//                     radius: 20,
+//                     child: Icon(Icons.person, color: Colors.white),
+//                   ),
+//                   Row(
+//                     children: [
+//                       IconButton(
+//                         icon: Icon(
+//                           Icons.flash_on,
+//                           color: _flashMode == FlashMode.off
+//                               ? Colors.grey
+//                               : Colors.yellow,
+//                         ),
+//                         onPressed: _changeFlashMode,
+//                       ),
+//                       SizedBox(width: 16),
+//                       Icon(Icons.search, color: Colors.white),
+//                       SizedBox(width: 16),
+//                       IconButton(
+//                         icon: Icon(Icons.cached, color: Colors.white, size: 30),
+//                         onPressed: _switchCamera,
+//                       ),
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//             ),
+//
+//             // Bottom Controls (Capture button, Zoom slider, Filters)
+//             Positioned(
+//               bottom: 100,
+//               left: 0,
+//               right: 0,
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                 children: [
+//                   IconButton(
+//                     icon: Icon(
+//                       isRecording ? Icons.stop : Icons.videocam,
+//                       color: Colors.red,
+//                       size: 30,
+//                     ),
+//                     onPressed: _toggleRecording,
+//                   ),
+//                   GestureDetector(
+//                     onTap: _takePicture,
+//                     onLongPress: _toggleRecording,
+//                     child: CircleAvatar(
+//                       backgroundColor: Colors.white,
+//                       radius: 35,
+//                       child: CircleAvatar(
+//                         backgroundColor: Colors.black,
+//                         radius: 30,
+//                         child: Icon(
+//                           isRecording ? Icons.videocam : Icons.camera_alt,
+//                           color: Colors.white,
+//                           size: 35,
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                   Icon(Icons.photo_library, color: Colors.white, size: 30),
+//                 ],
+//               ),
+//             ),
+//
+//             // Filters carousel at the bottom
+//             Positioned(
+//               bottom: 16,
+//               left: 0,
+//               right: 0,
+//               child: Container(
+//                 height: 100,
+//                 child: ListView.builder(
+//                   scrollDirection: Axis.horizontal,
+//                   itemCount: 10,
+//                   itemBuilder: (context, index) {
+//                     return Padding(
+//                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
+//                       child: GestureDetector(
+//                         onTap: () {
+//                           log("Filter $index applied");
+//                           // Apply real-time filter effect here
+//                         },
+//                         child: AnimatedContainer(
+//                           duration: Duration(milliseconds: 200),
+//                           decoration: BoxDecoration(
+//                             shape: BoxShape.circle,
+//                             border: Border.all(
+//                                 color: Colors.white.withOpacity(0.5), width: 2),
+//                           ),
+//                           child: CircleAvatar(
+//                             backgroundColor: Colors.grey[800],
+//                             radius: 30,
+//                             child: Icon(Icons.filter_vintage,
+//                                 color: Colors.white),
+//                           ),
+//                         ),
+//                       ),
+//                     );
+//                   },
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class FilteredImageWidget extends StatefulWidget {
   const FilteredImageWidget({super.key});
@@ -150,7 +1697,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
       _cameras = await availableCameras();
       if (_cameras != null && _cameras!.isNotEmpty) {
         _controller = CameraController(
-          _cameras![1],
+          _cameras![cameraIndex],
           ResolutionPreset.high,
         );
         _initializeControllerFuture = _controller?.initialize();
@@ -253,38 +1800,6 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
         _initializeCamera(_selectedCameraIndex);
       });
     }
-  }
-
-  Future<void> _discardMedia(BuildContext context) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-              'Are you sure you want to abandon your Snapsterpiece?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                File(filePath).delete();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('$mediaType discarded!')),
-                );
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-              child: const Text('Abandon'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   void _showErrorDialog(String title, String message) {
@@ -425,8 +1940,24 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                     tooltip: 'Edit',
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,
-                    onPressed: () {
-                      _applyFilterToImage();
+                    onPressed: () async {
+                      if (mediaType == 'image') {
+                        _applyFilterToImage();
+                      }
+                      if (mediaType == 'video') {
+                        // await Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) =>
+                        //           MyVoiceVideoRecordingScreen(filePath),
+                        //     )).then((value) {
+                        //   setState(() {
+                        //     filePath = value.toString();
+                        //   });
+                        //   log("${filePath}111111111111111111111111111111111111111111111111111111111111111111111111111");
+                        // });
+                        // setState(() {});
+                      }
                     },
                     child: const Icon(Icons.edit),
                   ),
@@ -506,17 +2037,18 @@ Future<void> saveMedia(
       // Proceed with saving the video
       GallerySaver.saveVideo(filePath).then((bool? success) {
         log(filePath.toString());
-
-        print('Video saved: $success');
+        if (success!) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Video saved to gallery!')),
+          );
+        }
+        log('Video saved: $success');
       });
     } else {
       log(filePath.toString());
-      print('Error: The file is not a video.');
+      log('Error: The file is not a video.');
     }
     // await GallerySaver.saveVideo(filePath);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Video saved to gallery!')),
-    );
   }
 }
 
@@ -567,12 +2099,13 @@ Widget buildStoryButton(context, {selectedFile}) {
                 const SnackBar(content: Text('Story created')),
               ));
     },
-    icon: CircleAvatar(
+    icon: const CircleAvatar(
       // backgroundImage: AssetImage('assets/avatar.png'),
       // backgroundColor: Colors.red, radius: 15,
       radius: 15,
-      backgroundImage:
-          NetworkImage(serviceLocator<UserCubit>().state.data!.profilePicture!),
+      // backgroundImage:
+      //     NetworkImage(serviceLocator<UserCubit>().state.data!.profilePicture!),
+      // onBackgroundImageError: (exception, stackTrace) => Sizer(),
     ),
     label: const Text('Story', style: TextStyle(color: Colors.white)),
     style: ElevatedButton.styleFrom(
@@ -1031,10 +2564,10 @@ Widget buildSendToButton() {
 // VideoPlayerWidget for video preview
 
 class MediaPreview extends StatefulWidget {
-  final String mediaPath;
-  final MediaType mediaType;
+  String mediaPath;
+  MediaType mediaType;
 
-  MediaPreview({required this.mediaPath, required this.mediaType});
+  MediaPreview({super.key, required this.mediaPath, required this.mediaType});
 
   @override
   _MediaPreviewState createState() => _MediaPreviewState();
@@ -1105,7 +2638,7 @@ class _MediaPreviewState extends State<MediaPreview> {
                         : Icons.play_arrow,
                   ),
                 )
-              : const Sizer(),
+              : Sizer(),
           Positioned(
             bottom: 10,
             left: 0,
@@ -1113,11 +2646,9 @@ class _MediaPreviewState extends State<MediaPreview> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-
-
-                // buildSaveButton(context, widget.mediaPath, widget.mediaType),
-                // buildStoryButton(context, selectedFile: File(widget.mediaPath)),
-                // buildSendToButton(),
+                buildSaveButton(context, widget.mediaPath, widget.mediaType),
+                buildStoryButton(context, selectedFile: File(widget.mediaPath)),
+                buildSendToButton(),
               ],
             ),
           ),
@@ -1160,5 +2691,191 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     return _controller != null && _controller!.value.isInitialized
         ? VideoPlayer(_controller!)
         : const Center(child: CircularProgressIndicator());
+  }
+}
+
+class MyVoiceVideoRecordingScreen extends StatefulWidget {
+  final String? videoPath;
+
+  const MyVoiceVideoRecordingScreen(this.videoPath, {super.key});
+
+  @override
+  MyVoiceVideoRecordingScreenState createState() =>
+      MyVoiceVideoRecordingScreenState();
+}
+
+class MyVoiceVideoRecordingScreenState
+    extends State<MyVoiceVideoRecordingScreen> with TickerProviderStateMixin {
+  String? filteredVideoPath;
+  VideoPlayerController? _videoController;
+
+  @override
+  void initState() {
+    super.initState();
+    _videoController = VideoPlayerController.file(File(widget.videoPath!))
+      ..initialize().then((_) {
+        setState(() {});
+      });
+  }
+
+  @override
+  void dispose() {
+    _videoController?.dispose();
+    super.dispose();
+  }
+
+  final List<Filter> filters = FilterLibrary.filters;
+  Filter? _selectedFilter;
+
+  void _applyFilter(Filter filter) {
+    setState(() {
+      _selectedFilter = filter;
+    });
+  }
+
+  Future _mergeVideoWithFilter() async {
+    final directory = await getTemporaryDirectory();
+    filteredVideoPath =
+        '${directory.path}/filtered_${DateTime.now().millisecondsSinceEpoch}.mp4';
+
+    // Construct the FFmpeg command with the selected filter and horizontal flip
+    final filterCommand = _selectedFilter?.ffmpegFilter != null
+        ? '${_selectedFilter!.ffmpegFilter},hflip' // Add hflip to the existing filter
+        : 'hflip'; // Just use hflip if no other filter is selected
+
+    final commandArgs = [
+      '-i', widget.videoPath!,
+      '-vf', filterCommand, // Apply the filter and horizontal flip
+      '-c:v', 'mpeg4', // Use `mpeg4` for faster encoding
+      '-q:v', '5', // Lower quality for faster processing
+      '-b:v', '1M', // Lower bitrate
+      filteredVideoPath!,
+    ];
+
+    log("Executing FFmpeg command: ${commandArgs.join(' ')}");
+
+    try {
+      final session = await FFmpegKit.executeWithArguments(commandArgs);
+      final returnCode = await session.getReturnCode();
+      final output = await session.getOutput();
+      log("FFmpeg output: $output");
+
+      if (ReturnCode.isSuccess(returnCode)) {
+        // Navigator.pop(context, filteredVideoPath.toString());
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MediaPreview(
+                  mediaPath: filteredVideoPath.toString(),
+                  mediaType: MediaType.video),
+            ));
+      }
+
+      // if (ReturnCode.isSuccess(returnCode)) {
+      //   log("FFmpeg process succeeded");
+      //   final savedSuccessfully =
+      //       await GallerySaver.saveVideo(filteredVideoPath!);
+      //   if (savedSuccessfully ?? false) {
+      //     serviceLocator<ReelsCubit>().uploadReel(
+      //       File(filteredVideoPath!),
+      //     );
+      //   } else {
+      //     throw Exception("Failed to save video to gallery");
+      //   }
+      // } else {
+      //   final failStackTrace = await session.getFailStackTrace();
+      //   throw Exception(
+      //       "FFmpeg process failed with return code $returnCode\n$failStackTrace");
+      // }
+    } catch (e) {
+      log("Error in _mergeVideoWithFilter: $e");
+      filteredVideoPath = null;
+    }
+  }
+
+  Widget _buildFilterSelector() {
+    return SizedBox(
+      height: 100,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: filters.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () => _applyFilter(filters[index]),
+            child: Container(
+              width: 80,
+              margin: const EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(
+                border: Border.all(
+                    color: _selectedFilter == filters[index]
+                        ? Colors.blue
+                        : Colors.transparent),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage: AssetImage(
+                      FilterLibrary.filterImagesPaths[index].toString(),
+                    ),
+                  ),
+                  FittedBox(
+                    child: Text(filters[index].name,
+                        style: const TextStyle(color: Colors.white)),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 120.0),
+        child: FloatingActionButton.small(
+          shape: const CircleBorder(),
+          elevation: 0,
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.black,
+          onPressed: () async {
+            await _mergeVideoWithFilter();
+          },
+          tooltip: 'Accept Edit',
+          child: const Icon(Icons.check_circle),
+        ),
+      ),
+      body: Stack(
+        children: [
+          Positioned.fill(
+              child: widget.videoPath != null &&
+                      _videoController != null &&
+                      _videoController!.value.isInitialized
+                  ? ColorFiltered(
+                      colorFilter: _selectedFilter?.colorFilter ??
+                          const ColorFilter.mode(
+                              Colors.transparent, BlendMode.srcOver),
+                      child: AspectRatio(
+                        aspectRatio: _videoController!.value.aspectRatio,
+                        child: VideoPlayer(_videoController!),
+                      ),
+                    )
+                  : const CircularProgressIndicator()),
+          Positioned(
+            bottom: 20,
+            left: 0,
+            right: 0,
+            child: _buildFilterSelector(),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -73,6 +73,7 @@ abstract class Assets {
   static String doctorCall = 'assets/images/doctor_call.png';
   static String doctorClinicVisit = 'assets/images/doctor_clinic.png';
   static String profileIcon = 'assets/images/profile_icon.png';
+  static String chatRoomBackground = 'assets/images/background.png';
 
   //drawer
   static String contact_us_icon = 'assets/settings/contact_us_icon.png';

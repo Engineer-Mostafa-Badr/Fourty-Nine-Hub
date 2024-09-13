@@ -13,7 +13,7 @@ import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TwitterReplyCard extends StatefulWidget {
   final Color textColor;
   final TwitterCommentReplyEntity reply;
@@ -58,7 +58,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                     imageURL: widget.reply.user.image,
                     userId: '',
                   ),
-            const Sizer(),
+            Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,7 +90,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
             ),
           ],
         ),
-        const Sizer(),
+        Sizer(),
         Label(
           textAlign: TextAlign.start,
           text: widget.reply.content ?? '',
@@ -106,15 +106,15 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                 onChanged: (v) {
                   setState(() {});
                 },
-                style: Styles.headerText(fontSize: 26),
+                style: Styles.headerText(fontSize: 26.sp),
                 decoration: InputDecoration(
                   fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.all(5),
+                  contentPadding: EdgeInsets.all(5),
                   hintText: 'Type your reply ....',
                   hintStyle: Styles.mediumText(),
                 ),
               )),
-              const Sizer(),
+              Sizer(),
               if (editTextController.text.isNotEmpty)
                 IconAppButton(
                     icon: Icons.send,
@@ -132,7 +132,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                     })
             ],
           ),
-        const Sizer(height: 5,),
+        Sizer(height: 5.h,),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -163,7 +163,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
             ),
           ],
         ),
-        const Sizer(height: 5,),
+        Sizer(height: 5.h,),
       ],
     );
   }

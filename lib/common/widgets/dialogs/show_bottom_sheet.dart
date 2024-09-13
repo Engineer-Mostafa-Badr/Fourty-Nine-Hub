@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void bottomSheet(
     {required BuildContext context,
@@ -13,12 +13,12 @@ void bottomSheet(
       builder: (context) {
         return Container(
           width: double.infinity,
-          padding: EdgeInsets.all(30.zW),
-          // margin: const EdgeInsets.all(kToolbarHeight),
+          padding: EdgeInsets.all(30.w),
+          // margin: EdgeInsets.all(kToolbarHeight),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20.zR),
-              topRight: Radius.circular(20.zR),
+              topLeft: Radius.circular(20.r),
+              topRight: Radius.circular(20.r),
             ),
             color: backColor ?? Theme.of(context).dialogBackgroundColor,
           ),

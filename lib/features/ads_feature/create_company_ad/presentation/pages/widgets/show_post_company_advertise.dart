@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/style/app_colors.dart';
@@ -33,25 +34,24 @@ class _ShowPostCompanyAdvertiseState extends State<ShowPostCompanyAdvertise> {
       appBar: BackAppBar(
         centerTitle: false,
         label: LocaleKeys.myPosts.localize,
-        leading:
-          IconButton(
-            onPressed: () {
-              context.pop();
-              context.pop();
-              context.push(Routes.CREATECOMPANYAD);
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-              size: 20,
-            ),
+        leading: IconButton(
+          onPressed: () {
+            context.pop();
+            context.pop();
+            context.push(Routes.CREATECOMPANYAD);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            size: 20,
           ),
+        ),
       ),
       body: BlocProvider(
         create: (_) => serviceLocator<CreateCompanyAdCubit>(),
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               height: kToolbarHeight * 1,
               child: ListView(
                 scrollDirection: Axis.horizontal,
@@ -89,9 +89,9 @@ class _ShowPostCompanyAdvertiseState extends State<ShowPostCompanyAdvertise> {
       case 'Text Post':
         return const TextPostContent();
       case 'Photo Post':
-        return const PhotoPostContent();
+        return PhotoPostContent();
       case 'Photo And Text Post':
-        return const PhotoAndTextPostContent();
+        return PhotoAndTextPostContent();
       case 'Reels Post':
         return ReelsPostContent();
       default:
@@ -111,8 +111,8 @@ class _ShowPostCompanyAdvertiseState extends State<ShowPostCompanyAdvertise> {
         });
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        margin: const EdgeInsets.all(5),
+        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+        margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color:

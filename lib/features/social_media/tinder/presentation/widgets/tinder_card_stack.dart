@@ -7,8 +7,8 @@
 // import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 // import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room_view.dart';
-// import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+// import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
+// import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
@@ -48,7 +48,7 @@
 //           state.userData.length < 3 ? state.userData.length : 2,
 //       scale: 0.9,
 //       isLoop: true,
-//       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+//       padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.h),
 //       onSwipe: (previousIndex, currentIndex, direction) {
 //         if (currentIndex != null) {
 //           _fetchUserDataOnSwipe(context, state.userData[currentIndex].id);
@@ -80,7 +80,7 @@
 //
 //   Widget _buildCardWidget(BuildContext context, UserData cardUser) {
 //     return Padding(
-//       padding: const EdgeInsets.all(2.0),
+//       padding: EdgeInsets.all(2.0),
 //       child: Card(
 //         clipBehavior: Clip.hardEdge,
 //         elevation: 2,
@@ -132,7 +132,7 @@
 //       top: 25,
 //       child: Container(
 //         width: 40,
-//         height: 40,
+//         height: 40.h,
 //         decoration: BoxDecoration(
 //           color: Colors.grey.withOpacity(0.5),
 //           shape: BoxShape.circle,
@@ -164,8 +164,8 @@
 //           user.pictures.length,
 //           (dotIndex) => Expanded(
 //             child: Container(
-//               margin: const EdgeInsets.symmetric(horizontal: 2.0),
-//               height: 4,
+//               margin: EdgeInsets.symmetric(horizontal: 2.0),
+//               height: 4.h,
 //               decoration: BoxDecoration(
 //                 color: dotIndex ==
 //                         context.watch<TinderViewCubit>().state.currentStoryIndex
@@ -186,7 +186,7 @@
 //       right: 8,
 //       left: 8,
 //       child: Padding(
-//         padding: const EdgeInsets.all(4.0),
+//         padding: EdgeInsets.all(4.0),
 //         child: Column(
 //           crossAxisAlignment: CrossAxisAlignment.start,
 //           children: [
@@ -229,7 +229,7 @@
 //               color: AppColors.WHATS_APP_COLOR,
 //               label: state.lastSeenModel?.data?.status ?? 'offline',
 //             ),
-//             const SizedBox(width: 10),
+//             SizedBox(width: 10),
 //             BadgedLabel(
 //               color: AppColors.SECONDARY_COLOR,
 //               label: state.isUserNearby?.data?.isNearBy == true
@@ -251,7 +251,7 @@
 //           style: Styles.mediumText(
 //             color: Colors.white,
 //             fontWeight: FontWeight.bold,
-//             fontSize: 14,
+//             fontSize: 14.sp,
 //             shadows: [
 //               const Shadow(
 //                 offset: Offset(1.0, 1.0),
@@ -272,7 +272,7 @@
 //       right: 8,
 //       left: 8,
 //       child: Padding(
-//         padding: const EdgeInsets.all(4.0),
+//         padding: EdgeInsets.all(4.0),
 //         child: Row(
 //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //           children: [
@@ -596,8 +596,8 @@
 //               pictures.length,
 //               (dotIndex) => Expanded(
 //                 child: Container(
-//                   margin: const EdgeInsets.symmetric(horizontal: 2.0),
-//                   height: 4,
+//                   margin: EdgeInsets.symmetric(horizontal: 2.0),
+//                   height: 4.h,
 //                   decoration: BoxDecoration(
 //                     color: (dotIndex == _currentStoryIndex)
 //                         ? Colors.red
@@ -613,7 +613,7 @@
 //     );
 //   }
 // }
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -622,9 +622,9 @@ import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room_view.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
@@ -675,7 +675,7 @@ class TinderCardStack extends StatelessWidget {
           state.userData.length < 3 ? state.userData.length : 2,
       scale: 0.9,
       isLoop: true,
-      padding: const EdgeInsets.only(right: 4.0, left: 4.0, bottom: 16),
+      padding: EdgeInsets.only(right: 4.0, left: 4.0, bottom: 16),
       onSwipe: (previousIndex, currentIndex, direction) {
         // Disable swapping if there's only one card
         if (state.userData.length == 1) {
@@ -708,7 +708,7 @@ class TinderCardStack extends StatelessWidget {
 
   Widget _buildCardWidget(BuildContext context, UserData cardUser) {
     return Padding(
-      padding: const EdgeInsets.all(2.0),
+      padding: EdgeInsets.all(2.0),
       child: Card(
         clipBehavior: Clip.hardEdge,
         elevation: 2,
@@ -759,7 +759,7 @@ class TinderCardStack extends StatelessWidget {
       top: 25,
       child: Container(
         width: 40,
-        height: 40,
+        height: 40.h,
         decoration: BoxDecoration(
           color: Colors.grey.withOpacity(0.5),
           shape: BoxShape.circle,
@@ -805,8 +805,8 @@ class TinderCardStack extends StatelessWidget {
           user.pictures.length,
           (dotIndex) => Expanded(
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 2.0),
-              height: 4,
+              margin: EdgeInsets.symmetric(horizontal: 2.0),
+              height: 4.h,
               decoration: BoxDecoration(
                 color: dotIndex ==
                         context.read<TinderViewCubit>().state.currentStoryIndex
@@ -827,7 +827,7 @@ class TinderCardStack extends StatelessWidget {
       right: 8,
       left: 8,
       child: Padding(
-        padding: const EdgeInsets.all(4.0),
+        padding: EdgeInsets.all(4.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -872,7 +872,7 @@ class TinderCardStack extends StatelessWidget {
                   ?.status ??
               'offline',
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: 10),
         BadgedLabel(
           close: false,
           color: AppColors.SECONDARY_COLOR,
@@ -916,7 +916,7 @@ class TinderCardStack extends StatelessWidget {
       right: 8,
       left: 8,
       child: Padding(
-        padding: const EdgeInsets.all(4.0),
+        padding: EdgeInsets.all(4.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -1110,7 +1110,7 @@ class ChatAlertDialogue extends StatelessWidget {
         final chatId =
             tinderCubit.state.anonymousChatResponse?.data.chat.id ?? '';
         if (chatId.isNotEmpty) {
-          chatsCubit.initSocketConnection();
+          chatsCubit.init();
           _navigateToChatRoom(context, chatId, chatRoomCubit, chatsCubit);
         } else {
           log("Chat ID is empty.");
@@ -1127,7 +1127,7 @@ class ChatAlertDialogue extends StatelessWidget {
           .then((_) {
         final chatId = tinderCubit.state.normalChatResponse?.data.chat.id ?? '';
         if (chatId.isNotEmpty) {
-          chatsCubit.initSocketConnection();
+          chatsCubit.init();
           _navigateToChatRoom(context, chatId, chatRoomCubit, chatsCubit);
         } else {
           log("Chat ID is empty.");
@@ -1148,7 +1148,7 @@ class ChatAlertDialogue extends StatelessWidget {
             BlocProvider.value(value: chatRoomCubit),
             BlocProvider.value(value: chatsCubit),
           ],
-          child: ChatRoomView(chatId: chatId),
+          child: ChatRoomView(chatsCubit: chatsCubit),
         ),
       ),
     );
@@ -1236,8 +1236,8 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
               pictures.length,
               (dotIndex) => Expanded(
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                  height: 4,
+                  margin: EdgeInsets.symmetric(horizontal: 2.0),
+                  height: 4.h,
                   decoration: BoxDecoration(
                     color: (dotIndex == _currentStoryIndex)
                         ? Colors.red

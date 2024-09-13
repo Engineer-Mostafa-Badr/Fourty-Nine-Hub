@@ -31,7 +31,7 @@ class Biddings extends StatelessWidget {
 
   Widget _buildBiddingItem({required BiddingEntity item}) {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
       decoration: const BoxDecoration(),
       child: Row(
         children: [
@@ -40,7 +40,7 @@ class Biddings extends StatelessWidget {
             backgroundImage: NetworkImage(
                 item.user.profilePicture ?? UIConst.profilePlaceHolder),
           ),
-          const Sizer(),
+          Sizer(),
           Expanded(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +51,7 @@ class Biddings extends StatelessWidget {
                   style: Styles.mediumText(color: Colors.grey))
             ],
           )),
-          const Sizer(),
+          Sizer(),
           Label(
               text: '${item.bidding} ${Labels.currency}',
               style: Styles.headerText(color: AppColors.PRIMARY_COLOR))

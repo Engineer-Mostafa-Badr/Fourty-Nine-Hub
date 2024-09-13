@@ -26,7 +26,7 @@ class _RechargeCoinsState extends State<RechargeCoins> {
           text: 'Recharge',
           style: Styles.headerText(),
         ),
-        const Sizer(),
+        Sizer(),
         Label(
           text: 'Select Recharge Amount',
           style: Styles.mediumText(fontWeight: FontWeight.bold),
@@ -35,9 +35,9 @@ class _RechargeCoinsState extends State<RechargeCoins> {
           text: 'Recharge to get bonus Coins',
           style: Styles.mediumText(color: Colors.grey),
         ),
-        const Sizer(),
+        Sizer(),
         _buildPackagesWidget(),
-        const Sizer(),
+        Sizer(),
         Label(
           text: 'By continuing, you agree to the virtual items Policy',
           style: Styles.mediumText(color: Colors.grey),
@@ -55,7 +55,7 @@ class _RechargeCoinsState extends State<RechargeCoins> {
         setState(() {});
       },
       child: Container(
-        padding: const EdgeInsets.all(15),
+        padding: EdgeInsets.all(15),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
@@ -71,7 +71,7 @@ class _RechargeCoinsState extends State<RechargeCoins> {
                   Icons.monetization_on,
                   color: AppColors.ACCENT_COLOR,
                 ),
-                const Sizer(),
+                Sizer(),
                 Label(text: title),
               ],
             ),
@@ -91,7 +91,7 @@ class _RechargeCoinsState extends State<RechargeCoins> {
               id: index,
               title: '${5 * (index + 1)}',
               subTitle: 'EGP ${5 * (index + 1)}'),
-          separatorBuilder: (context, index) => const Sizer(),
+          separatorBuilder: (context, index) => Sizer(),
           itemCount: 10),
     );
   }

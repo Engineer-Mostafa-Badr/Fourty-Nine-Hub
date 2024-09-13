@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/contro
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HealthBookingTypeCard extends StatelessWidget {
   final HealthBookingFilterModel bookingFilterModel;
@@ -25,7 +26,7 @@ class HealthBookingTypeCard extends StatelessWidget {
         }
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 5),
+        padding:  EdgeInsets.symmetric(vertical: 5.h),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(10),

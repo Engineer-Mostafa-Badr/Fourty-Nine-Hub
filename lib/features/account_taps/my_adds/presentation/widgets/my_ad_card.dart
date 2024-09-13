@@ -42,7 +42,7 @@ class MyAdCard extends StatelessWidget {
               color: AppColors.SECONDARY_COLOR,
               style: Styles.smallText(color: Colors.white),
             ),
-            const Sizer(),
+            Sizer(),
             Row(
               children: [
                 Expanded(
@@ -55,7 +55,7 @@ class MyAdCard extends StatelessWidget {
                               onDelete(item.id);
                             },
                             context: context))),
-                const Sizer(),
+                Sizer(),
                 AppButton(
                     label: '',
                     icon: Icons.more_horiz,
@@ -149,7 +149,7 @@ class MyAdCard extends StatelessWidget {
       Expanded(
           child:
               SquareImage(radius: 10, source: NetworkImage(item.images.first))),
-      const Sizer(),
+      Sizer(),
       Expanded(
           flex: 3,
           child: Column(
@@ -205,7 +205,7 @@ class MyAdCard extends StatelessWidget {
           ),
           child: Icon(icon),
         ),
-        const Sizer(),
+        Sizer(),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

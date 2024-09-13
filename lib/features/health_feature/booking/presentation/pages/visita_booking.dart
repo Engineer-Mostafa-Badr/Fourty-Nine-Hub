@@ -15,6 +15,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../res/strings/labels.dart';
@@ -71,7 +72,7 @@ class _VisitaBookingState extends State<VisitaBooking> {
           },
           builder: (context, state) {
             return Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(10.0),
               child: ListView(
                 children: [
                   const BookingDoctorProfileWidget(),
@@ -79,41 +80,47 @@ class _VisitaBookingState extends State<VisitaBooking> {
                   const BookDoctorAppointmentTimeCard(),
                   const BookDoctorAppointmentLocationInfoCard(),
                   const BookDoctorAppointmentFeesCard(),
-                  const Sizer(),
+                  Sizer(),
 
-                Row(
-                  children: [
-                    Expanded(child: AppButton(
-                        color: AppColors.LIGHT_COLOR,
-                        height: 50,
-                        label: "${Labels.premium} ${Labels.book}",
-                        onPressed: () {
-                          serviceLocator<SubscriptionController>()
-                              .checkIfUserSubscribed(
-                            title: serviceLocator<HealthSharedData>()
-                                .doctorSearchParams
-                                .subCategory.name,
-                            onSubscribed: () async {
-                              await controller.premiumBook();
-                            },
-                            subCategoryId: serviceLocator<HealthSharedData>()
-                                .doctorSearchParams
-                                .subCategory
-                                .id,
-                          );
-                        }),),
-                   const Sizer(),
-                   Expanded(child:  AppButton(
-                       height: 50,
-                       color: AppColors.LIGHT_COLOR,
-                       label: Labels.book,
-                       backColor: AppColors.PRIMARY_COLOR,
-                       onPressed: () => controller.regularBooking()),),
-                  ],
-                ),
-                  // const Sizer(),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: AppButton(
+                            color: AppColors.LIGHT_COLOR,
+                            height: 50.h,
+                            label: "${Labels.premium} ${Labels.book}",
+                            onPressed: () {
+                              serviceLocator<SubscriptionController>()
+                                  .checkIfUserSubscribed(
+                                title: serviceLocator<HealthSharedData>()
+                                    .doctorSearchParams
+                                    .subCategory
+                                    .name,
+                                onSubscribed: () async {
+                                  await controller.premiumBook();
+                                },
+                                subCategoryId:
+                                    serviceLocator<HealthSharedData>()
+                                        .doctorSearchParams
+                                        .subCategory
+                                        .id,
+                              );
+                            }),
+                      ),
+                      Sizer(),
+                      Expanded(
+                        child: AppButton(
+                            height: 50.h,
+                            color: AppColors.LIGHT_COLOR,
+                            label: Labels.book,
+                            backColor: AppColors.PRIMARY_COLOR,
+                            onPressed: () => controller.regularBooking()),
+                      ),
+                    ],
+                  ),
+                  // Sizer(),
                   //
-                  // const Sizer(),
+                  // Sizer(),
                 ],
               ),
             );

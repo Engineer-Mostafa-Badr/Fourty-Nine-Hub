@@ -5,7 +5,7 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class StartTextFieldAndFindButon extends StatefulWidget {
   const StartTextFieldAndFindButon({
     super.key,
@@ -39,7 +39,7 @@ class _StartTextFieldAndFindButonState
     return Form(
       key: formKey,
       child: SizedBox(
-        // height: 45,
+        // height: 45.h,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -57,7 +57,7 @@ class _StartTextFieldAndFindButonState
                 },
               ),
             ),
-            const Sizer(width: 5),
+            Sizer(width: 5),
             CustomButton(
               onTap: () {
                 if (formKey.currentState!.validate()) {
@@ -65,7 +65,7 @@ class _StartTextFieldAndFindButonState
                       address: startingController.text);
                 }
               },
-              height: 45,
+              height: 45.h,
             ),
           ],
         ),
@@ -82,9 +82,9 @@ class _StartTextFieldAndFindButonState
       );
     }
     if (state is StartingLocationLoading) {
-      return const SizedBox(
+      return SizedBox(
         width: 10,
-        height: 10,
+        height: 10.h,
         child: Center(
           child: CircularProgressIndicator(
             color: AppColors.PRIMARY_COLOR,

@@ -30,7 +30,7 @@ class _FacebookUserOnMapState extends State<FacebookUserOnMap> {
   @override
   Widget build(BuildContext context) {
     return GoogleMap(
-      padding: const EdgeInsets.only(top: 100, bottom: 50, left: 25),
+      padding: EdgeInsets.only(top: 100, bottom: 50, left: 25),
       myLocationButtonEnabled: true,
       myLocationEnabled: true,
       rotateGesturesEnabled: true,

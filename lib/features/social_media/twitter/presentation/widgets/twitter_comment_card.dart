@@ -14,7 +14,7 @@ import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TwitterCommentCard extends StatefulWidget {
   final Color textColor;
   final TwitterPostCommentEntity comment;
@@ -63,7 +63,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                     fromProfile: widget.fromProfile,
                     userId: widget.comment.user.id,
                   ),
-            const Sizer(),
+            Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +93,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
             ),
           ],
         ),
-        const Sizer(),
+        Sizer(),
         Label(
           textAlign: TextAlign.start,
           text: widget.comment.content ?? '',
@@ -112,16 +112,16 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                 onChanged: (v) {
                 setState(() {});
                 },
-                style: Styles.headerText(fontSize: 26),
+                style: Styles.headerText(fontSize: 26.sp),
                 decoration: InputDecoration(
                 fillColor: Colors.white,
-                contentPadding: const EdgeInsets.all(5),
+                contentPadding: EdgeInsets.all(5),
                 hintText: 'Type your comment ....',
                 hintStyle: Styles.mediumText(),
                 ),
                 )
                     ),
-                const Sizer(),
+                Sizer(),
                 if (editTextController.text.isNotEmpty)
                   IconAppButton(
                       icon: Icons.send,
@@ -141,7 +141,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
               ],
             ),
           ),
-        const Sizer(height: 5,),
+        Sizer(height: 5.h,),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -168,14 +168,14 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
             Label(
                 text: widget.comment.loveCount.toString(),
                 style: Styles.mediumText(color: widget.textColor)),
-            const Sizer(),
+            Sizer(),
             TextAppButton(
                 style: Styles.mediumText(),
                 label: 'Reply',
                 onPressed: widget.onCommentReply)
           ],
         ),
-        const Sizer(height: 5,),
+        Sizer(height: 5.h,),
       ],
     );
   }

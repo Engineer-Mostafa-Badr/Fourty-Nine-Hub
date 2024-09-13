@@ -46,7 +46,7 @@ abstract class MainTextFormField extends StatefulWidget {
     this.keyboardType,
     required this.validator,
     this.textCapitalization = TextCapitalization.none,
-    this.margin = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    this.margin = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
     this.enabled = true,
     this.maxLength,
     this.inputFormatters,
@@ -114,7 +114,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
               (widget.enabled ? Colors.white : Colors.white),
           filled: true,
           contentPadding:
-              widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 0, 16, 0),
+              widget.contentPadding ?? EdgeInsets.fromLTRB(16, 0, 16, 0),
           hintText: widget.hintText,
           labelText: widget.label,
           hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),

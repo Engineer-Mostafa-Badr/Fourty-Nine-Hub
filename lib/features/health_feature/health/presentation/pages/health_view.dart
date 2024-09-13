@@ -11,7 +11,7 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/widget
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/booking_types/booking_types.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/sub_categories/sub_categories.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/payment_view.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -28,7 +28,7 @@ class HealthView extends StatelessWidget {
           builder: (context, state) {
             // var controller = context.read<HealthCubit>();
             return ListView(
-              padding: EdgeInsets.all(16.0.zW),
+              padding: EdgeInsets.all(16.0.w),
               children: [
                 BlocProvider.value(
                   value: serviceLocator<HealthCubit>(),
@@ -36,7 +36,7 @@ class HealthView extends StatelessWidget {
                 ),
                 if (state.isDoctor == false)
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: InkWell(
                       onTap: () {
                         if (context.read<UserCubit>().isLoggedIn) {
@@ -53,17 +53,17 @@ class HealthView extends StatelessWidget {
                       ),
                     ),
                   ),
-                const Sizer(),
+                Sizer(),
                 if (state.isApproved == true) const DoctorDashboardBanner(),
-                const Sizer(),
+                Sizer(),
                 const HealthBookingTypesWidgt(),
-                const Sizer(),
+                Sizer(),
                 const HealthSubCategories(),
-                const Sizer(),
+                Sizer(),
                 const HealthMedicalServices(),
-                const Sizer(),
+                Sizer(),
                 const HealthBookings(),
-                const Sizer(),
+                Sizer(),
               ],
             );
           },

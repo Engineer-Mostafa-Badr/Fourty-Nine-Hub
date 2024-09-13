@@ -16,7 +16,7 @@ class PrivacyView extends StatelessWidget {
           label: Labels.privacy,
         ),
         body: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0),
           child: SingleChildScrollView(
             child: Column(
               children: [
