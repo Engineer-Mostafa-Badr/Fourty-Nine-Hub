@@ -28,9 +28,11 @@ dependencies:
   firebase_auth: ^4.19.6
   firebase_core: ^2.31.0
   firebase_messaging: ^14.9.2
+
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.5
+  flutter_contacts: ^1.1.9+2
   flutter_cache_manager: ^3.3.3
   flutter_card_swiper: ^7.0.1
   flutter_credit_card: ^4.0.1

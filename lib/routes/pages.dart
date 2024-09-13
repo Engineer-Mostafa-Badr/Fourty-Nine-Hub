@@ -65,11 +65,15 @@ import 'package:fourtyninehub/features/settings/presentation/pages/settings_view
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/attachments/presentation/pages/attachments_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_profile/presentation/pages/chat_profile_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/select_contacts_to_share_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/viewcontact_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/contacts/presentation/pages/contacts_view.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_dialogue.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
@@ -88,6 +92,7 @@ import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/s
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/instagram_profile.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
+
 // import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
@@ -227,6 +232,16 @@ class AppPages {
             path: Paths.MAINCATEGORIESCARDS,
             name: Routes.MAINCATEGORIESCARDS,
             builder: (context, state) =>  const MainCategoriesFlipCardsView(),
+          ),
+          GoRoute(
+            path: Paths.CONTACTS_VIEW,
+            name: Routes.CONTACTSVIEW,
+            builder: (context, state) => const ContactsView(),
+          ),
+          GoRoute(
+            path: Paths.CHATPROFILEVIEW,
+            name: Routes.CHATPROFILEVIEW,
+            builder: (context, state) => const ChatProfileView(),
           ),
           //GRID VIEW
           GoRoute(
@@ -759,12 +774,8 @@ class AppPages {
           GoRoute(
               path: Paths.CHATROOM,
               name: Routes.CHATROOM,
-              builder: (context, state) => BlocProvider<ChatRoomCubit>(
-                    create: (_) => serviceLocator(),
-                    child: ChatRoomView(
-                      chatId: state.extra as String,
-                    ),
-                  ),
+              builder: (context, state) =>
+                  ChatRoomView(chatsCubit: state.extra as ChatsCubit),
               routes: [
                 GoRoute(
                   path: Paths.CHATROOMCAMERAPICKER,
@@ -777,9 +788,24 @@ class AppPages {
                   builder: (context, state) => MediaSliderView(
                       params: (state.extra) as MediaSliderViewParams),
                 ),
+                GoRoute(
+                  path: Paths.VIEWCONTACT,
+                  name: Routes.VIEWCONTACT,
+                  builder: (context, state) =>  ViewContactView(sender: state.extra as String,),
+                ),
+                GoRoute(
+                  path: Paths.ATTACHMENTSVIEW,
+                  name: Routes.ATTACHMENTSVIEW,
+                  builder: (context, state) => const AttachementsView(),
+                ),
+                GoRoute(
+                  path: Paths.SELECTCONTACTSTOSHARE,
+                  name: Routes.SELECTCONTACTSTOSHARE,
+                  builder: (context, state) => const SelectContactsToShareView(),
+                ),
               ]),
-
           // Snap
+
           GoRoute(
               path: Paths.SNAP,
               name: Routes.SNAP,
