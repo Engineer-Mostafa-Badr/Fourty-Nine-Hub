@@ -19,12 +19,13 @@ class _ReelsPostContentState extends State<ReelsPostContent> {
   late PageController _pageController;
   VideoPlayerController? _videoController;
   int currentPageIndex = 0;
+  bool isVideoLoading = false;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
-    context.read<CreateCompanyAdCubit>().getCompanyAdPosts('reel', params: PaginationParams.basic()); // Trigger the fetch
+    context.read<CreateCompanyAdCubit>().getCompanyAdPosts('reel', params: PaginationParams.basic());
   }
 
   @override
@@ -35,12 +36,23 @@ class _ReelsPostContentState extends State<ReelsPostContent> {
   }
 
   void _initializeVideoController(String videoUrl) {
-    _videoController?.dispose(); // Dispose the previous controller before initializing a new one
+    setState(() {
+      isVideoLoading = true;
+    });
+
+    _videoController?.dispose(); // Dispose the previous controller
     _videoController = VideoPlayerController.network(videoUrl)
       ..initialize().then((_) {
         setState(() {
           _videoController?.play();
+          isVideoLoading = false;
         });
+      }).catchError((error) {
+        setState(() {
+          isVideoLoading = false;
+        });
+        // Handle video load error here
+        print('Error loading video: $error');
       });
   }
 
@@ -50,12 +62,17 @@ class _ReelsPostContentState extends State<ReelsPostContent> {
     });
 
     _videoController?.pause(); // Pause the current video
-    _initializeVideoController(data[index].media?.first.photo ?? ''); // Load the next video
+    final videoUrl = data[index].media?.first.photo ?? ''; // Ensure correct URL
+    if (videoUrl.isNotEmpty) {
+      _initializeVideoController(videoUrl);
+    } else {
+      print('Invalid video URL'); // Handle missing or incorrect URL
+    }
   }
 
   void _togglePlayPause() {
     setState(() {
-      if (_videoController!.value.isPlaying) {
+      if (_videoController != null && _videoController!.value.isPlaying) {
         _videoController?.pause();
       } else {
         _videoController?.play();
@@ -80,8 +97,7 @@ class _ReelsPostContentState extends State<ReelsPostContent> {
         }
 
         return PaginationView<CompanyAdEntity>(
-          build:
-              (ScrollController scrollController, List<CompanyAdEntity> data) {
+          build: (ScrollController scrollController, List<CompanyAdEntity> data) {
             return PageView.builder(
               controller: _pageController,
               scrollDirection: Axis.vertical,
@@ -90,7 +106,8 @@ class _ReelsPostContentState extends State<ReelsPostContent> {
               itemBuilder: (context, index) {
                 // Initialize the video for the first page if not initialized
                 if (index == 0 && (_videoController == null || !_videoController!.value.isInitialized)) {
-                  _initializeVideoController(data[index].media?.first.photo ?? '');
+                  final videoUrl = data[index].media?.first.photo ?? '';
+                  _initializeVideoController(videoUrl);
                 }
 
                 return GestureDetector(
@@ -101,7 +118,9 @@ class _ReelsPostContentState extends State<ReelsPostContent> {
                       aspectRatio: _videoController!.value.aspectRatio,
                       child: VideoPlayer(_videoController!),
                     )
-                        : const CircularProgressIndicator(),
+                        : isVideoLoading
+                        ? const CircularProgressIndicator()
+                        : const Text('No video available'),
                   ),
                 );
               },
@@ -117,6 +136,7 @@ class _ReelsPostContentState extends State<ReelsPostContent> {
     );
   }
 }
+
 
 
 

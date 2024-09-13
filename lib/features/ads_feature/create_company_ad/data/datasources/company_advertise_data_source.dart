@@ -54,7 +54,7 @@ class CompanyAdvertiseDataSourceImpl implements CompanyAdvertiseDataSource {
     };
 
     final response = await _apiConsumer.post(
-      EndPoints.postCompanyAd,
+      EndPoints.postCompanyAd(),
       data: jsonData,
     );
 
