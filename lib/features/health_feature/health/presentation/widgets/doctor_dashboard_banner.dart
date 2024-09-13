@@ -19,7 +19,7 @@ class DoctorDashboardBanner extends StatelessWidget {
             route: Routes.DOCTORDASHBOARD,
           );
         } else {
-          return const SizedBox.shrink();
+          return SizedBox.shrink();
         }
       },
     );

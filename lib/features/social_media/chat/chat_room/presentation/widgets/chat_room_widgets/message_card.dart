@@ -486,7 +486,7 @@ class MessageCard extends StatelessWidget {
               backgroundColor: Colors.white,
               backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
             ),
-            const Sizer(width: 5),
+             Sizer(width: 5),
             IntrinsicWidth(
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: width * 0.65),

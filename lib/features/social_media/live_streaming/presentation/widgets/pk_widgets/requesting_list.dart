@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
@@ -36,8 +37,8 @@ class _PKRequestingListState extends State<PKRequestingList> {
           ),
         ),
         Container(
-          width: 120,
-          height: 100,
+          width: 120.w,
+          height: 100.h,
           decoration: BoxDecoration(
             color: Colors.black.withOpacity(0.5),
             border: Border.all(color: Colors.white.withOpacity(0.2)),

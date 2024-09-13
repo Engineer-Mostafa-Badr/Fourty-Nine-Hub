@@ -9,7 +9,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../tinder/presentation/pages/user_profile.dart';
 import '../../domain/usecases/twitter_report_usecase.dart';
 import '../bloc/twitter_bloc.dart';
@@ -53,11 +53,11 @@ class _ReportViewState extends State<ReportView> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                       _buildHandleIndicator(),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                       _buildHeader(context, screenWidth),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10.h),
                       if (reports.isEmpty)
                         const Center(
                           child: Text(
@@ -71,16 +71,16 @@ class _ReportViewState extends State<ReportView> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: reports.length,
                           separatorBuilder: (context, i) =>
-                          const SizedBox(height: 10),
+                              SizedBox(height: 10.h),
                           itemBuilder: (context, i) {
                             return _buildReportOption(
                                 context, reports[i], screenWidth);
                           },
                         ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
                       _buildTextFieldWithSendButton(
                           context, screenWidth, controller, state),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
                     ],
                   ),
                 ),
@@ -95,7 +95,7 @@ class _ReportViewState extends State<ReportView> {
   Widget _buildHandleIndicator() {
     return Container(
       width: 40,
-      height: 5,
+      height: 5.h,
       decoration: BoxDecoration(
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(10),
@@ -115,7 +115,7 @@ class _ReportViewState extends State<ReportView> {
             color: Colors.black,
           ),
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: 10),
         const Icon(
           Icons.report_gmailerrorred_rounded,
           color: AppColors.SECONDARY_COLOR,
@@ -134,7 +134,7 @@ class _ReportViewState extends State<ReportView> {
         });
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10),
         decoration: BoxDecoration(
           color: selectedReport == report
               ? AppColors.SECONDARY_COLOR.withOpacity(0.1)
@@ -215,7 +215,7 @@ class _ReportViewState extends State<ReportView> {
             ),
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         AnimatedOpacity(
           opacity: reportTextController.text.isNotEmpty ? 1.0 : 0.5,
           duration: const Duration(milliseconds: 300),

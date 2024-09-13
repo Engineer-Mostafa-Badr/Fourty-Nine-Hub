@@ -14,6 +14,7 @@ import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 import '../cubit/share_app_cubit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ShareTheApp extends StatelessWidget {
   const ShareTheApp({super.key});
@@ -67,9 +68,9 @@ class ShareTheApp extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Image.asset(Assets.share),
-                            const Sizer(),
+                            Sizer(),
                             _buildLinkWidget(context: context),
-                            const Sizer(),
+                            Sizer(),
                             _buildStatisticsWidget(context: context),
                           ],
                         ),
@@ -95,7 +96,7 @@ class ShareTheApp extends StatelessWidget {
               color: AppColors.GREY_NORMAL_COLOR,
               label: controller.link),
         ),
-        const Sizer(),
+        Sizer(),
         AppButton(
             color: AppColors.AUTH_CONTAINER_COLOR,
             label: 'Share The App',
@@ -114,7 +115,7 @@ class ShareTheApp extends StatelessWidget {
                   color: AppColors.PRIMARY_COLOR,
                   title: 'Users',
                   subTitle: '30 user')),
-          const Sizer(),
+          Sizer(),
           Expanded(
               child: _buildStatisticsItem(
                   color: AppColors.PRIMARY_COLOR,
@@ -151,7 +152,7 @@ class ShareTheApp extends StatelessWidget {
 
   Widget _buildShareChannelsWidget() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      padding:  EdgeInsets.symmetric(vertical: 10.h, horizontal: 10),
       margin: const EdgeInsets.symmetric(
         horizontal: 20,
       ),
@@ -234,7 +235,7 @@ class ShareTheApp extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) => _buildHistoryItemWidget(),
-            separatorBuilder: (context, index) => const Sizer(),
+            separatorBuilder: (context, index) => Sizer(),
             itemCount: 10),
       ],
     );
@@ -243,8 +244,11 @@ class ShareTheApp extends StatelessWidget {
   Widget _buildHistoryItemWidget() {
     return Row(
       children: [
-        const ProfileImage(accountId: 0,userId: '',),
-        const Sizer(),
+        const ProfileImage(
+          accountId: 0,
+          userId: '',
+        ),
+        Sizer(),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

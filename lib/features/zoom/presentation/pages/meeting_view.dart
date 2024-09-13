@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/animations/create_custom_transition.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_state.dart';
@@ -18,7 +19,7 @@ import 'package:fourtyninehub/features/zoom/presentation/widgets/schedule_meetin
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../res/style/app_colors.dart';
@@ -38,7 +39,7 @@ class MeetingView extends StatelessWidget {
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 16.zH),
+            SizedBox(height: 16.h),
             BlocBuilder<MeetingCubit, MeetingState>(
               builder: (context, state) {
                 var cubit = context.read<MeetingCubit>();
@@ -109,7 +110,7 @@ class MeetingView extends StatelessWidget {
             ),
             const Divider(),
             SizedBox(
-              height: 40.zH,
+              height: 40.h,
             ),
             Align(
               alignment: Alignment.center,
@@ -117,17 +118,17 @@ class MeetingView extends StatelessWidget {
                 onTap: () {
                   _scheduleAMeeting(context);
                 },
-                child: const Text(
+                child:  Text(
                   'Add a calender',
                   style: TextStyle(
                       color: AppColors.PRIMARY_COLOR,
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w600),
                 ),
               ),
             ),
             SizedBox(
-              height: 10.zH,
+              height: 10.h,
             ),
             _scheduledMeetings()
           ],
@@ -180,17 +181,17 @@ class MeetingView extends StatelessWidget {
                           color: Colors.grey[400],
                           width: double.maxFinite,
                           padding: EdgeInsets.only(
-                            left: 30.zW,
-                            top: 5.zH,
-                            bottom: 5.zH,
+                            left: 30.w,
+                            top: 5.h,
+                            bottom: 5.h,
                           ),
                           child: Label(
                             text: formatDateString(scheduledMeeting.startDate),
-                            style: Styles.headerText(fontSize: 25),
+                            style: Styles.headerText(fontSize: 25.sp),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(15),
+                          padding: EdgeInsets.all(15),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -199,32 +200,35 @@ class MeetingView extends StatelessWidget {
                                   Label(
                                     text: getHour(scheduledMeeting.startDate),
                                     style: Styles.headerText(
-                                        fontSize: 25, color: Colors.grey[600]),
+                                        fontSize: 25.sp,
+                                        color: Colors.grey[600]),
                                   ),
                                   Label(
                                     text: getPeriod(scheduledMeeting.startDate),
                                     style: Styles.headerText(
-                                        fontSize: 18, color: Colors.grey[600]),
+                                        fontSize: 18.sp,
+                                        color: Colors.grey[600]),
                                   ),
                                 ],
                               ),
                               Column(
                                 children: [
-                                  SizedBox(height: 5.zH),
+                                  SizedBox(height: 5.h),
                                   Label(
                                     text: scheduledMeeting.title,
-                                    style: Styles.headerText(fontSize: 25),
+                                    style: Styles.headerText(fontSize: 25.sp),
                                   ),
-                                  SizedBox(height: 5.zH),
+                                  SizedBox(height: 5.h),
                                   Label(
                                     text:
                                         'Meeting ID: ${scheduledMeeting.roomId}',
                                     style: Styles.headerText(
-                                        fontSize: 20, color: Colors.grey[600]),
+                                        fontSize: 20.sp,
+                                        color: Colors.grey[600]),
                                   ),
                                 ],
                               ),
-                              SizedBox(width: 15.zW),
+                              SizedBox(width: 15.h),
                               InkWell(
                                 onTap: () {
                                   //to unschedule
@@ -243,7 +247,7 @@ class MeetingView extends StatelessWidget {
                                   }
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.all(8),
+                                  padding: EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                     color: AppColors.PRIMARY_COLOR,
                                     borderRadius: BorderRadius.circular(10),
@@ -335,9 +339,9 @@ class MeetingView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            // height: 80,
+            // height: 80.h,
             // width: 80,
-            padding: const EdgeInsets.all(10),
+            padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10), color: color),
             child: Icon(
@@ -347,12 +351,12 @@ class MeetingView extends StatelessWidget {
             ),
           ),
           Sizer(
-            height: twoLines ? 10.zH : 30.zH,
+            height: twoLines ? 10.h : 30.h,
           ),
           Label(
               text: label,
               textAlign: TextAlign.center,
-              style: Styles.headerText(fontSize: 25))
+              style: Styles.headerText(fontSize: 25.sp))
         ],
       ),
     );

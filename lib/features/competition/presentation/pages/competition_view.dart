@@ -11,6 +11,7 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../../account_taps/wallet/domain/entities/competition_entity.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CompetitionView extends StatelessWidget {
   final List<CompetitionEntity> list;
@@ -52,7 +53,7 @@ class CompetitionView extends StatelessWidget {
               color: AppColors.ACCENT_COLOR,
               size: 30,
             ),
-            const Sizer(),
+            Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +67,7 @@ class CompetitionView extends StatelessWidget {
                     style: Styles.mediumText(color: Colors.grey))
               ],
             )),
-            const Sizer(),
+            Sizer(),
             const Icon(
               Icons.arrow_forward_ios,
               color: Colors.black,
@@ -89,7 +90,7 @@ class CompetitionView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // timeFrame(),
-          const Sizer(),
+          Sizer(),
           GridView.builder(
               itemCount: list.length,
               shrinkWrap: true,
@@ -114,7 +115,7 @@ class CompetitionView extends StatelessWidget {
   Widget timeFrame() {
     return Container(
       height: kToolbarHeight * .6,
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      margin:  EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.PRIMARY_COLOR),
       ),
@@ -192,7 +193,7 @@ class CompetitionView extends StatelessWidget {
                 ],
               ),
             ),
-            const Sizer(),
+            Sizer(),
             Label(
                 text: title,
                 maxLines: 1,

@@ -34,12 +34,12 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
           "You don't have in money in ${widget.walletType.translatedName}",
           style: Styles.headerText(),
         ),
-        const Sizer(),
+        Sizer(),
         Text(
           "select amount to charge",
           style: Styles.mediumText(),
         ),
-        const Sizer(),
+        Sizer(),
         Expanded(
           child: ListView.builder(
             shrinkWrap: true,
@@ -68,13 +68,13 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
             },
           ),
         ),
-        const Sizer(),
+        Sizer(),
         ElevatedAppButton(
           label: 'Charge Now',
           onPressed: () {
             context.push(Routes.PAYMENT,
                 extra: PaymobLink(
-                    amountId:newIndex,
+                    amountId: newIndex,
                     // providerId: "667331f44fbaddc4357d612b",
                     amount: newAmount));
           },

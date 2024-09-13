@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/food_feature/restaurant_details/presentat
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ItemCard extends StatefulWidget {
   const ItemCard({
@@ -54,7 +55,7 @@ class _ItemCardState extends State<ItemCard> {
         ),
         leading: SquareImage(
           url: widget.meal?.picture?.mediaKey ?? "",
-          height: 50,
+          height: 50.h,
           width: 50,
         ),
         trailing: Row(

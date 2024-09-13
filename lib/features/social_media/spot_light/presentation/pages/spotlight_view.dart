@@ -39,7 +39,7 @@
 // // //         backgroundColor: Colors.white,
 // // //         elevation: 2,
 // // //         leading: Padding(
-// // //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
+// // //           padding: EdgeInsets.symmetric(horizontal: 8.0),
 // // //           child: CircleAvatar(
 // // //             backgroundColor: Colors.grey[300],
 // // //             child: const Icon(
@@ -78,7 +78,7 @@
 // // //                     '8',
 // // //                     style: TextStyle(
 // // //                       color: Colors.white,
-// // //                       fontSize: 10,
+// // //                       fontSize: 10.sp,
 // // //                     ),
 // // //                   ),
 // // //                 ),
@@ -105,9 +105,9 @@
 // // //           children: [
 // // //             // StorySection(),
 // // //             FriendsList(),
-// // //             const Sizer(),
+// // //             Sizer(),
 // // //             FollowingSection(),
-// // //             const Sizer(),
+// // //             Sizer(),
 // // //             DiscoverSection(),
 // // //             // DiscoverSection(),
 // // //           ],
@@ -171,14 +171,14 @@
 // // //           ),
 // // //         ),
 // // //         Container(
-// // //           height: 200,
+// // //           height: 200.h,
 // // //           child: ListView.builder(
 // // //             physics: const BouncingScrollPhysics(),
 // // //             scrollDirection: Axis.horizontal,
 // // //             itemCount: 20, // Adjust based on your data
 // // //             itemBuilder: (context, index) {
 // // //               return Padding(
-// // //                 padding: const EdgeInsets.all(8.0),
+// // //                 padding: EdgeInsets.all(8.0),
 // // //                 child: Container(
 // // //                   width: 100,
 // // //                   decoration: BoxDecoration(
@@ -246,8 +246,8 @@
 // // //                   return SizedBox(
 // // //                     width: MediaQuery.of(context).size.width / 2.5,
 // // //                     child: Padding(
-// // //                       padding: const EdgeInsets.symmetric(
-// // //                           horizontal: 4.0, vertical: 12),
+// // //                       padding: EdgeInsets.symmetric(
+// // //                           horizontal: 4.0, vertical: 12.h),
 // // //                       child: Card(
 // // //                         elevation: 8,
 // // //                         clipBehavior: Clip.hardEdge,
@@ -288,7 +288,7 @@
 // // //                                   children: [
 // // //                                     const Icon(Icons.play_arrow,
 // // //                                         color: Colors.white, size: 16),
-// // //                                     const SizedBox(width: 4),
+// // //                                     SizedBox(width: 4),
 // // //                                     Text(
 // // //                                       state.reels![index].viewCount.toString(),
 // // //                                       style:
@@ -320,7 +320,7 @@
 // // //         //   // Adjust based on your data
 // // //         //   itemBuilder: (context, index) {
 // // //         //     return Padding(
-// // //         //       padding: const EdgeInsets.all(8.0),
+// // //         //       padding: EdgeInsets.all(8.0),
 // // //         //       child: Container(
 // // //         //         decoration: BoxDecoration(
 // // //         //           image: const DecorationImage(
@@ -386,7 +386,7 @@
 // //                 extra: serviceLocator<UserCubit>().state.data!.id);
 // //           },
 // //           icon: Padding(
-// //             padding: const EdgeInsets.symmetric(horizontal: 8.0),
+// //             padding: EdgeInsets.symmetric(horizontal: 8.0),
 // //             child: CircleAvatar(
 // //               backgroundColor: Colors.grey[300],
 // //               child: const Icon(
@@ -426,7 +426,7 @@
 // //                     '8',
 // //                     style: TextStyle(
 // //                       color: Colors.white,
-// //                       fontSize: 10,
+// //                       fontSize: 10.sp,
 // //                     ),
 // //                   ),
 // //                 ),
@@ -456,7 +456,7 @@
 // //                   Sizer(),
 // //                   DiscoverSection(),
 // //                   Sizer(
-// //                     height: 100,
+// //                     height: 100.h,
 // //                   )
 // //                 ],
 // //               ),
@@ -473,7 +473,7 @@
 // //
 // //   @override
 // //   Widget build(BuildContext context) {
-// //     return const SizedBox(
+// //     return SizedBox(
 // //       width: double.infinity,
 // //       child: Column(
 // //         crossAxisAlignment: CrossAxisAlignment.start,
@@ -525,8 +525,8 @@
 // //                   return SizedBox(
 // //                     width: MediaQuery.of(context).size.width / 2.5,
 // //                     child: Padding(
-// //                       padding: const EdgeInsets.symmetric(
-// //                           horizontal: 4.0, vertical: 12),
+// //                       padding: EdgeInsets.symmetric(
+// //                           horizontal: 4.0, vertical: 12.h),
 // //                       child: Card(
 // //                         elevation: 8,
 // //                         clipBehavior: Clip.hardEdge,
@@ -568,7 +568,7 @@
 // //                                       color: Colors.white,
 // //                                       size: 16,
 // //                                     ),
-// //                                     const SizedBox(width: 4),
+// //                                     SizedBox(width: 4),
 // //                                     Text(
 // //                                       state.reels![index].viewCount.toString(),
 // //                                       style:
@@ -707,7 +707,7 @@
 // //                                   color: Colors.white,
 // //                                   size: 16,
 // //                                 ),
-// //                                 const SizedBox(width: 4),
+// //                                 SizedBox(width: 4),
 // //                                 Text(
 // //                                   state.reels![index].viewCount.toString(),
 // //                                   style: const TextStyle(color: Colors.white),
@@ -780,7 +780,7 @@
 //             FollowingSection(),
 //             Sizer(),
 //             DiscoverSection(),
-//             Sizer(height: 100),
+//             Sizer(height: 100.h),
 //           ],
 //         ),
 //       )
@@ -802,7 +802,7 @@
 //           );
 //         },
 //         icon: Padding(
-//           padding: const EdgeInsets.symmetric(horizontal: 8.0),
+//           padding: EdgeInsets.symmetric(horizontal: 8.0),
 //           child: CircleAvatar(
 //             backgroundColor: Colors.grey[300],
 //             child: const Icon(
@@ -815,7 +815,7 @@
 //       title: const Center(
 //         child: Text(
 //           'Stories',
-//           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+//           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
 //         ),
 //       ),
 //       actions: [
@@ -857,7 +857,7 @@
 //               '8',
 //               style: TextStyle(
 //                 color: Colors.white,
-//                 fontSize: 10,
+//                 fontSize: 10.sp,
 //               ),
 //             ),
 //           ),
@@ -872,7 +872,7 @@
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     return const SizedBox(
+//     return SizedBox(
 //       width: double.infinity,
 //       child: Column(
 //         crossAxisAlignment: CrossAxisAlignment.start,
@@ -881,7 +881,7 @@
 //             padding: EdgeInsets.all(8.0),
 //             child: Text(
 //               'Friends',
-//               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+//               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp),
 //             ),
 //           ),
 //           ChatStories(),
@@ -903,7 +903,7 @@
 //           padding: EdgeInsets.all(8.0),
 //           child: Text(
 //             'Following',
-//             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+//             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp),
 //           ),
 //         ),
 //         SizedBox(
@@ -922,8 +922,8 @@
 //                   return SizedBox(
 //                     width: MediaQuery.of(context).size.width / 2.5,
 //                     child: Padding(
-//                       padding: const EdgeInsets.symmetric(
-//                           horizontal: 4.0, vertical: 12),
+//                       padding: EdgeInsets.symmetric(
+//                           horizontal: 4.0, vertical: 12.h),
 //                       child: _buildReelCard(context, state.reels[index]),
 //                     ),
 //                   );
@@ -976,7 +976,7 @@
 //                     color: Colors.white,
 //                     size: 16,
 //                   ),
-//                   const SizedBox(width: 4),
+//                   SizedBox(width: 4),
 //                   Text(
 //                     reel.viewCount.toString(),
 //                     style: const TextStyle(color: Colors.white),
@@ -1042,7 +1042,7 @@
 //           padding: EdgeInsets.all(8.0),
 //           child: Text(
 //             'Discover',
-//             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+//             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp),
 //           ),
 //         ),
 //         SizedBox(
@@ -1129,7 +1129,7 @@
 //                     color: Colors.white,
 //                     size: 16,
 //                   ),
-//                   const SizedBox(width: 4),
+//                   SizedBox(width: 4),
 //                   Text(
 //                     reel.viewCount.toString(),
 //                     style: const TextStyle(color: Colors.white),
@@ -1162,7 +1162,7 @@ import '../../../reels/data/models/new_reels_model.dart';
 import '../../../reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import '../../../reels/presentation/pages/audio_screen.dart';
 import '../../../stories/presentation/cubit/stories_cubit.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class SpotlightView extends StatefulWidget {
   const SpotlightView({super.key});
 
@@ -1229,9 +1229,9 @@ class _SpotlightViewState extends State<SpotlightView> {
                   SliverToBoxAdapter(
                     child: Column(
                       children: [
-                        FriendsList(),
+                        const FriendsList(),
                         Sizer(),
-                        FollowingSection(),
+                        const FollowingSection(),
                         Sizer(),
                       ],
                     ),
@@ -1296,7 +1296,7 @@ class _SpotlightViewState extends State<SpotlightView> {
           ),
           onPressed: () {},
         ),
-        const Positioned(
+         Positioned(
           right: 6,
           top: 6,
           child: CircleAvatar(
@@ -1306,7 +1306,7 @@ class _SpotlightViewState extends State<SpotlightView> {
               '8',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 10,
+                fontSize: 10.sp,
               ),
             ),
           ),
@@ -1362,7 +1362,7 @@ class _FollowingSectionState extends State<FollowingSection> {
   // Detect when the user scrolls near the end and fetch more data
   void _onScroll() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200 &&
+            _scrollController.position.maxScrollExtent - 200 &&
         !_isFetchingMore) {
       _fetchMoreReels();
     }
@@ -1405,7 +1405,8 @@ class _FollowingSectionState extends State<FollowingSection> {
               return Stack(
                 children: [
                   ListView.builder(
-                    controller: _scrollController, // Attach the scroll controller
+                    controller:
+                        _scrollController, // Attach the scroll controller
                     physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     itemCount: state.reelsForFollower.length,
@@ -1413,8 +1414,8 @@ class _FollowingSectionState extends State<FollowingSection> {
                       return SizedBox(
                         width: MediaQuery.of(context).size.width / 2.5,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 4.0, vertical: 12),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 4.0, vertical: 12.h),
                           child: _buildReelCard(
                               context, state.reelsForFollower[index]),
                         ),
@@ -1422,7 +1423,7 @@ class _FollowingSectionState extends State<FollowingSection> {
                     },
                   ),
                   if (_isFetchingMore) // Show loader when fetching more
-                    Positioned(
+                    const Positioned(
                       right: 16,
                       bottom: 16,
                       child: CircularProgressIndicator(),
@@ -1464,7 +1465,7 @@ class _FollowingSectionState extends State<FollowingSection> {
               height: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
-              const Center(child: CupertinoActivityIndicator()),
+                  const Center(child: CupertinoActivityIndicator()),
             ),
             Positioned(
               bottom: 8,

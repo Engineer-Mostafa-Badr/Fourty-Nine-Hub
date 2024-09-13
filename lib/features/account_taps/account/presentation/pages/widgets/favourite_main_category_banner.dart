@@ -10,9 +10,16 @@ import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FavouriteMainCategoryBanner extends StatefulWidget {
-  const FavouriteMainCategoryBanner({super.key, required this.category, required this.canRegister, this.onRegister, required this.onFavorite, this.isFavorite=false});
+  FavouriteMainCategoryBanner(
+      {super.key,
+      required this.category,
+      required this.canRegister,
+      this.onRegister,
+      required this.onFavorite,
+      this.isFavorite = false});
   final FavouriteCategoryEntity category;
   final bool canRegister;
   final Function()? onRegister;
@@ -20,20 +27,24 @@ class FavouriteMainCategoryBanner extends StatefulWidget {
   final bool? isFavorite;
 
   @override
-  State<FavouriteMainCategoryBanner> createState() => _FavouriteMainCategoryBannerState();
+  State<FavouriteMainCategoryBanner> createState() =>
+      _FavouriteMainCategoryBannerState();
 }
 
-class _FavouriteMainCategoryBannerState extends State<FavouriteMainCategoryBanner> {
+class _FavouriteMainCategoryBannerState
+    extends State<FavouriteMainCategoryBanner> {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: widget.category.banner,
       height: MediaQuery.sizeOf(context).height * 0.08,
-      imageBuilder: (context,i)=>Container(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      imageBuilder: (context, i) => Container(
+        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: widget.category.banner.isNotEmpty?Colors.transparent:AppColors.PRIMARY_COLOR,
+          color: widget.category.banner.isNotEmpty
+              ? Colors.transparent
+              : AppColors.PRIMARY_COLOR,
           image: DecorationImage(
             fit: BoxFit.cover,
             image: CachedNetworkImageProvider(
@@ -45,16 +56,16 @@ class _FavouriteMainCategoryBannerState extends State<FavouriteMainCategoryBanne
             ),
           ),
         ),
-        child:Stack(
+        child: Stack(
           alignment: Alignment.center,
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
               text: widget.category.name,
-              style: const TextStyle(
+              style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 45),
+                  fontSize: 45.sp),
             ),
             PositionedDirectional(
               start: 0,
@@ -62,18 +73,19 @@ class _FavouriteMainCategoryBannerState extends State<FavouriteMainCategoryBanne
                 children: [
                   context.read<UserCubit>().isLoggedIn
                       ? InkWell(
-                    onTap: () async =>await widget.onFavorite(),
-                    child: const Icon(
-                      Icons.favorite,
-                      color: AppColors.SECONDARY_COLOR,
-                    ),
-                  )
-                      : const SizedBox.shrink(),
-                  const Sizer(
-                    height: 15,
+                          onTap: () async => await widget.onFavorite(),
+                          child: const Icon(
+                            Icons.favorite,
+                            color: AppColors.SECONDARY_COLOR,
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                  Sizer(
+                    height: 15.h,
                   ),
                   Label(
-                    text: '${widget.category.numberOfAds.toShortScale} ${Labels.ads}',
+                    text:
+                        '${widget.category.numberOfAds.toShortScale} ${Labels.ads}',
                     style: Styles.mediumText(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -85,7 +97,7 @@ class _FavouriteMainCategoryBannerState extends State<FavouriteMainCategoryBanne
           ],
         ),
       ),
-      placeholder: (context,u)=>Shimmer.fromColors(
+      placeholder: (context, u) => Shimmer.fromColors(
         baseColor: Colors.grey[100]!,
         highlightColor: Colors.white24,
         child: Container(
@@ -97,22 +109,22 @@ class _FavouriteMainCategoryBannerState extends State<FavouriteMainCategoryBanne
           ),
         ),
       ),
-      errorWidget: (context,url, error)=>Container(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      errorWidget: (context, url, error) => Container(
+        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color:AppColors.PRIMARY_COLOR,
+          color: AppColors.PRIMARY_COLOR,
         ),
-        child:Stack(
+        child: Stack(
           alignment: Alignment.center,
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
               text: widget.category.name,
-              style: const TextStyle(
+              style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 45),
+                  fontSize: 45.sp),
             ),
             PositionedDirectional(
               start: 0,
@@ -120,18 +132,19 @@ class _FavouriteMainCategoryBannerState extends State<FavouriteMainCategoryBanne
                 children: [
                   context.read<UserCubit>().isLoggedIn
                       ? InkWell(
-                    onTap: () async =>await widget.onFavorite(),
-                    child: const Icon(
-                      Icons.favorite,
-                      color: AppColors.SECONDARY_COLOR,
-                    ),
-                  )
-                      : const SizedBox.shrink(),
-                  const Sizer(
-                    height: 15,
+                          onTap: () async => await widget.onFavorite(),
+                          child: const Icon(
+                            Icons.favorite,
+                            color: AppColors.SECONDARY_COLOR,
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                  Sizer(
+                    height: 15.h,
                   ),
                   Label(
-                    text: '${widget.category.numberOfAds.toShortScale} ${Labels.ads}',
+                    text:
+                        '${widget.category.numberOfAds.toShortScale} ${Labels.ads}',
                     style: Styles.mediumText(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -155,7 +168,7 @@ class _FavouriteMainCategoryBannerState extends State<FavouriteMainCategoryBanne
                 color: Colors.white, fontWeight: FontWeight.bold)),
       );
     } else {
-      return const SizedBox.shrink();
+      return SizedBox.shrink();
     }
   }
 }

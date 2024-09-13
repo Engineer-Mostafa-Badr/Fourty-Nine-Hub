@@ -43,11 +43,11 @@ class DriverTripDetails extends StatelessWidget {
             destLat: trip.toCoordinates[0],
             destLng: trip.toCoordinates[1],
           )),
-          const Sizer(),
+          Sizer(),
           Row(
             children: [
               const Icon(FontAwesomeIcons.car, color: AppColors.PRIMARY_COLOR),
-              const Sizer(),
+              Sizer(),
               Label(
                 text: trip.category?.name ?? "",
                 style: Styles.mediumText(fontWeight: FontWeight.bold),
@@ -63,7 +63,7 @@ class DriverTripDetails extends StatelessWidget {
                   Icons.location_searching,
                   color: AppColors.PRIMARY_COLOR,
                 ),
-                const Sizer(),
+                Sizer(),
                 Expanded(child: Label(text: trip.fromAddress)),
                 IconAppButton(
                     icon: Icons.directions,
@@ -83,7 +83,7 @@ class DriverTripDetails extends StatelessWidget {
                   Icons.location_on,
                   color: AppColors.SECONDARY_COLOR,
                 ),
-                const Sizer(),
+                Sizer(),
                 Expanded(child: Label(text: trip.toAddress)),
                 IconAppButton(
                     icon: Icons.directions,
@@ -100,7 +100,7 @@ class DriverTripDetails extends StatelessWidget {
                   child: Row(
                 children: [
                   const Icon(Icons.monetization_on_rounded),
-                  const Sizer(),
+                  Sizer(),
                   Label(text: '${trip.price} L.E')
                 ],
               )),
@@ -108,7 +108,7 @@ class DriverTripDetails extends StatelessWidget {
                   child: Row(
                 children: [
                   const Icon(Icons.timer),
-                  const Sizer(),
+                  Sizer(),
                   Label(text: trip.time.toString())
                 ],
               )),
@@ -116,21 +116,21 @@ class DriverTripDetails extends StatelessWidget {
                   child: Row(
                 children: [
                   const Icon(Icons.add_road),
-                  const Sizer(),
+                  Sizer(),
                   Label(text: trip.distance.toString())
                 ],
               )),
             ],
           ),
-          const Sizer(),
+          Sizer(),
           ProgressButton(
             label: 'Accept',
             width: double.infinity,
             onPressed: () => acceptRide(trip.id),
           ),
-          const Sizer(),
+          Sizer(),
           const Label(text: 'Offer your price'),
-          const Sizer(),
+          Sizer(),
           Row(
             children: [
               Expanded(
@@ -145,7 +145,7 @@ class DriverTripDetails extends StatelessWidget {
                             lat: 50.00,
                             lng: 30.450));
                       })),
-              const Sizer(),
+              Sizer(),
               Expanded(
                   child: AppButton(
                       label:
@@ -158,7 +158,7 @@ class DriverTripDetails extends StatelessWidget {
                             lat: 50.00,
                             lng: 30.450));
                       })),
-              const Sizer(),
+              Sizer(),
               Expanded(
                   child: AppButton(
                       label:
@@ -173,7 +173,7 @@ class DriverTripDetails extends StatelessWidget {
                       })),
             ],
           ),
-          const Sizer(),
+          Sizer(),
           AppButton(
               backColor: Colors.grey.withAlpha(30),
               textColor: Colors.black,

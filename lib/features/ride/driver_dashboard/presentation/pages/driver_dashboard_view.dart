@@ -44,7 +44,7 @@ class DriverDashboardView extends StatelessWidget {
                   //     item: state.statistics!,
                   //   ),
                   // _buildConectedStatus(context: context),
-                  // const Sizer(),
+                  // Sizer(),
                   Expanded(
                     child: ListView.builder(
                       itemCount: state.trips?.length ?? 0,
@@ -82,7 +82,7 @@ class DriverDashboardView extends StatelessWidget {
                     : AppColors.SECONDARY_COLOR.withOpacity(.4),
                 label: 'Not Connected'),
           ),
-          const Sizer(),
+          Sizer(),
           Expanded(
             child: AppButton(
                 onPressed: () => controller.changeConnectState(v: true),

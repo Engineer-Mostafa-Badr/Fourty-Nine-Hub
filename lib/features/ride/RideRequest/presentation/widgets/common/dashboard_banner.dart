@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,10 +19,10 @@ class DashboardBanner extends StatelessWidget {
         }
       },
       child: Container(
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(20.zR)),
+              borderRadius: BorderRadius.circular(20.r)),
           child: Row(
             children: [
               Expanded(
@@ -45,7 +45,7 @@ class DashboardBanner extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios_outlined,
                 color: Theme.of(context).scaffoldBackgroundColor,
-                size: 35.zW,
+                size: 35.w,
               ),
             ],
           )),

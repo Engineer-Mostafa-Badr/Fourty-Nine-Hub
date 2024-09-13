@@ -86,7 +86,7 @@ class MyAddsView extends StatelessWidget {
       }
       return ListView.separated(
           itemCount: state.myInstallments?.length ?? 0,
-          separatorBuilder: (context, index) => const Sizer(),
+          separatorBuilder: (context, index) => Sizer(),
           itemBuilder: (context, index) {
             return InstallmentAdCard(
               isVertical: false,
@@ -104,7 +104,7 @@ class MyAddsView extends StatelessWidget {
       }
       return ListView.separated(
           itemCount: state.myAuctions?.length ?? 0,
-          separatorBuilder: (context, index) => const Sizer(),
+          separatorBuilder: (context, index) => Sizer(),
           itemBuilder: (context, index) {
             return AuctionCard(
               isVertical: false,
@@ -122,7 +122,7 @@ class MyAddsView extends StatelessWidget {
       }
       return ListView.separated(
           itemCount: state.myAds?.length ?? 0,
-          separatorBuilder: (context, index) => const Sizer(),
+          separatorBuilder: (context, index) => Sizer(),
           itemBuilder: (context, index) {
             return MyAdCard(
               item: state.myAds![index],
@@ -140,7 +140,7 @@ class MyAddsView extends StatelessWidget {
       }
       return ListView.separated(
           itemCount: state.pickMeTrips?.length ?? 0,
-          separatorBuilder: (context, index) => const Sizer(),
+          separatorBuilder: (context, index) => Sizer(),
           itemBuilder: (context, index) {
             return TripCard(
               requests: state.pickMeTrips![index].requests,
@@ -162,7 +162,7 @@ class MyAddsView extends StatelessWidget {
       }
       return ListView.separated(
           itemCount: state.comeWithMeTrips?.length ?? 0,
-          separatorBuilder: (context, index) => const Sizer(),
+          separatorBuilder: (context, index) => Sizer(),
           itemBuilder: (context, index) {
             return TripCard(
               requests: state.comeWithMeTrips![index].requests,

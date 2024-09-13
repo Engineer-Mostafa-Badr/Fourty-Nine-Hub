@@ -27,7 +27,7 @@ class TotalPriceV2 extends StatelessWidget {
         Expanded(
           flex: 3,
           child: Container(
-            padding: const EdgeInsets.only(left: 15),
+            padding: EdgeInsets.only(left: 15),
             child: BlocBuilder<TripJoinViewCubit, TripJoinViewState>(
               buildWhen: (previous, current) =>
                   current is TripJoinViewSeatNumberState,

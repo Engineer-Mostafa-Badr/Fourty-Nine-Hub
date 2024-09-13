@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/style/styles.dart';
 import '../../stateless/labels/label.dart';
@@ -21,7 +21,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.iconColor,
     this.actions,
     this.centerTitle = false,
-     this.leading,
+    this.leading,
   });
 
   @override
@@ -30,14 +30,15 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: centerTitle,
       automaticallyImplyLeading: automaticallyImplyLeading,
-      leading: leading ?? IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            size: 40.zW,
-          )),
+      leading: leading ??
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(
+                Icons.arrow_back,
+                size: 40.w,
+              )),
       title: label != null
           ? Label(text: label ?? '', style: Styles.headerText())
           : null,

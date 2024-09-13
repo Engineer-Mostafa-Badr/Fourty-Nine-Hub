@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MealBanner extends StatelessWidget {
   const MealBanner({super.key});
@@ -22,7 +23,7 @@ class MealBanner extends StatelessWidget {
             baseColor: Colors.grey[100]!,
             highlightColor: Colors.white,
             child: Container(
-              height: 150,
+              height: 150.h,
               width: double.infinity,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(10)),
@@ -31,35 +32,36 @@ class MealBanner extends StatelessWidget {
         }
         if (state.mainCategory != null || state.banner != null) {
           return MainCategoryBanner(
-              category: state.mainCategory != null
-                  ? MainCategoryEntity(
-                      id: state.mainCategory?.id ?? "",
-                      name: LocaleKeys.meal.tr(),
-                      image: state.mainCategory?.image ?? "",
-                      banner: state.mainCategory?.banner ?? "",
-                      cover: state.mainCategory?.cover ?? "",
-                      isFavorite: state.mainCategory?.isFavorite ?? false,
-                      total: state.mainCategory?.total ?? 0,
-                    )
-                  : MainCategoryEntity(
-                      id: state.banner?.id ?? "",
-                      name: LocaleKeys.meal.tr(),
-                      image: state.banner?.banner ?? "",
-                      banner: state.banner?.banner ?? "",
-                      cover: state.banner?.cover ?? "",
-                      isFavorite: false,
-                      total: state.banner?.numberOfAds ?? 0),
-              canRegister:
-                  state.isResturant?.isRestaurant == true ? false : true,
-              onRegister: () {
-                if (context.read<UserCubit>().isLoggedIn) {
-                  context.push(Routes.CREATERESTURANT);
-                } else {
-                  context.push(Routes.REGISTER);
-                }
-              }, onFavorite: () {  },);
+            category: state.mainCategory != null
+                ? MainCategoryEntity(
+                    id: state.mainCategory?.id ?? "",
+                    name: LocaleKeys.meal.tr(),
+                    image: state.mainCategory?.image ?? "",
+                    banner: state.mainCategory?.banner ?? "",
+                    cover: state.mainCategory?.cover ?? "",
+                    isFavorite: state.mainCategory?.isFavorite ?? false,
+                    total: state.mainCategory?.total ?? 0,
+                  )
+                : MainCategoryEntity(
+                    id: state.banner?.id ?? "",
+                    name: LocaleKeys.meal.tr(),
+                    image: state.banner?.banner ?? "",
+                    banner: state.banner?.banner ?? "",
+                    cover: state.banner?.cover ?? "",
+                    isFavorite: false,
+                    total: state.banner?.numberOfAds ?? 0),
+            canRegister: state.isResturant?.isRestaurant == true ? false : true,
+            onRegister: () {
+              if (context.read<UserCubit>().isLoggedIn) {
+                context.push(Routes.CREATERESTURANT);
+              } else {
+                context.push(Routes.REGISTER);
+              }
+            },
+            onFavorite: () {},
+          );
         } else {
-          return const SizedBox.shrink();
+          return SizedBox.shrink();
         }
       },
     );

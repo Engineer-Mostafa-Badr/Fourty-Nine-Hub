@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -43,12 +44,12 @@ class _InstagramProfileSuggestPeopleState
       final controller = context.read<SocialPostsCubit>();
       return state.suggestedFriends == null ||
               controller.suggestUserPagingController.itemList == []
-          ? const SizedBox.shrink()
+          ? SizedBox.shrink()
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -58,11 +59,11 @@ class _InstagramProfileSuggestPeopleState
                       ),
                       Container(
                         alignment: AlignmentDirectional.topStart,
-                        height: 200,
+                        height: 240.h,
                         child: PagedListView<int, SuggestUserEntity>(
                           scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 5),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 8.h, horizontal: 5),
                           pagingController:
                               controller.suggestUserPagingController,
                           shrinkWrap: true,
@@ -73,7 +74,7 @@ class _InstagramProfileSuggestPeopleState
                                   noItemsFoundIndicatorBuilder: (context) {
                                     print(controller.suggestUserPagingController
                                         .itemList?.length);
-                                    return const Padding(
+                                    return  Padding(
                                         padding: EdgeInsets.only(top: 200),
                                         child: Center(
                                           child: Label(
@@ -99,11 +100,9 @@ class _InstagramProfileSuggestPeopleState
                                       },
                                       child: Container(
                                         width: 200,
-                                        padding:
-                                            const EdgeInsets.only(bottom: 10),
+                                        padding: EdgeInsets.only(bottom: 10),
                                         margin:
-                                            const EdgeInsetsDirectional.only(
-                                                end: 10),
+                                            EdgeInsetsDirectional.only(end: 10),
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(4),
@@ -112,7 +111,7 @@ class _InstagramProfileSuggestPeopleState
                                         ),
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                              CrossAxisAlignment.center,
                                           children: [
                                             Align(
                                               alignment:
@@ -143,20 +142,21 @@ class _InstagramProfileSuggestPeopleState
                                             Expanded(
                                               child: ImageFromInternet(
                                                 image: item.profilePicture,
-                                                // height: 220,
+                                                // height: 220.h,
+                                                width: 120.w,
+                                                height: 120.h,
                                                 isCircle: true,
                                               ),
                                             ),
                                             Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 8.0),
                                               child: Column(
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                    CrossAxisAlignment.center,
                                                 children: [
-                                                  const SizedBox(
-                                                    height: 10,
+                                                  SizedBox(
+                                                    height: 10.h,
                                                   ),
                                                   Label(
                                                     text:
@@ -164,8 +164,8 @@ class _InstagramProfileSuggestPeopleState
                                                     maxLines: 1,
                                                     style: Styles.mediumText(),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 10,
+                                                  SizedBox(
+                                                    height: 10.h,
                                                   ),
                                                   item.sendWelcomeSuccessfully ==
                                                           true
@@ -179,7 +179,8 @@ class _InstagramProfileSuggestPeopleState
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
-                                                                  fontSize: 14),
+                                                                  fontSize:
+                                                                      14),
                                                         )
                                                       : Row(
                                                           children: [
@@ -263,7 +264,7 @@ class _InstagramProfileSuggestPeopleState
                                                                               },
                                                                               child: Container(
                                                                                 width: 100,
-                                                                                padding: const EdgeInsets.all(5),
+                                                                                padding: EdgeInsets.all(5),
                                                                                 decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(15)),
                                                                                 alignment: Alignment.center,
                                                                                 child: Label(

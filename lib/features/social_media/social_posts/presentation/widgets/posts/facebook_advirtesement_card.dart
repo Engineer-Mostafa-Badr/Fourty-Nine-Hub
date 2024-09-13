@@ -8,7 +8,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class FacebookAdvertisementCard extends StatelessWidget {
   const FacebookAdvertisementCard({super.key, required this.post});
   final PostEntity post;
@@ -67,9 +67,9 @@ class FacebookAdvertisementCard extends StatelessWidget {
                           ),
 
                           // Container(
-                          //   margin: const EdgeInsetsDirectional.only(
+                          //   margin: EdgeInsetsDirectional.only(
                           //       end: 10, bottom: 10),
-                          //   padding: const EdgeInsets.all(10),
+                          //   padding: EdgeInsets.all(10),
                           //   decoration: BoxDecoration(
                           //     color: Colors.red,
                           //     borderRadius: BorderRadius.circular(15),
@@ -85,7 +85,7 @@ class FacebookAdvertisementCard extends StatelessWidget {
                             Container(
                               margin: const EdgeInsetsDirectional.only(
                                   end: 10, bottom: 10),
-                              // padding: const EdgeInsets.all(10),
+                              // padding: EdgeInsets.all(10),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
@@ -104,14 +104,14 @@ class FacebookAdvertisementCard extends StatelessWidget {
                       ),
                     )),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: 10.h,
           ),
           Label(
             text: post.description ?? '',
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: 10.h,
           ),
           GestureDetector(
             onTap: () {},

@@ -7,7 +7,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class MyAccountView extends StatelessWidget {
   const MyAccountView({super.key});
 
@@ -110,7 +110,7 @@ class MyAccountView extends StatelessWidget {
                       style: Styles.mediumText(fontWeight: FontWeight.bold)),
                   Container(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                        EdgeInsets.symmetric(horizontal: 10, vertical: 3.h),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: AppColors.LIGHT_GRAY_COLOR),
@@ -133,12 +133,12 @@ class MyAccountView extends StatelessWidget {
           Label(
               text: '49Hub owner, welcome to your fav. app',
               style: Styles.mediumText()),
-          const Sizer(),
+          Sizer(),
           Row(
             children: [
               Expanded(
                   child: AppButton(label: 'Edit Profile', onPressed: () {})),
-              const Sizer(),
+              Sizer(),
               Expanded(
                   child: AppButton(label: 'Share Profile', onPressed: () {})),
             ],

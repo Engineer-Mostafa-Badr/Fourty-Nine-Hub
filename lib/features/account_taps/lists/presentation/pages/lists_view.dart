@@ -13,6 +13,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ListsView extends StatefulWidget {
   const ListsView({super.key});
@@ -22,7 +23,6 @@ class ListsView extends StatefulWidget {
 }
 
 class _ListsViewState extends State<ListsView> {
-
   TextEditingController searchController = TextEditingController();
 
   @override
@@ -30,7 +30,7 @@ class _ListsViewState extends State<ListsView> {
     return Scaffold(
         appBar: const BackAppBar(
           centerTitle: false,
-            label: Labels.lists,
+          label: Labels.lists,
         ),
         body: BlocConsumer<ListsCubit, ListsState>(
             listener: (context, state) {},
@@ -67,16 +67,19 @@ class _ListsViewState extends State<ListsView> {
                       ],
                     ),
                   ),
-                  _buildSortingWidget(context: context,controller: searchController,search: (v){
-                    if(state.selectedList == ListTypes.friends) {
+                  _buildSortingWidget(
+                      context: context,
+                      controller: searchController,
+                      search: (v) {
+                        if (state.selectedList == ListTypes.friends) {
                           controller.loadFriends(v);
-                        }else if(state.selectedList == ListTypes.followers) {
-                      controller.loadFollowers(v);
-                    }else if(state.selectedList == ListTypes.blocked) {
-                      controller.loadBlocked(v);
-                    }else if(state.selectedList == ListTypes.requests) {
-                      controller.loadRequests(v);
-                    }
+                        } else if (state.selectedList == ListTypes.followers) {
+                          controller.loadFollowers(v);
+                        } else if (state.selectedList == ListTypes.blocked) {
+                          controller.loadBlocked(v);
+                        } else if (state.selectedList == ListTypes.requests) {
+                          controller.loadRequests(v);
+                        }
                       }),
                   Expanded(
                       child: state.isLoading
@@ -207,7 +210,10 @@ class _ListsViewState extends State<ListsView> {
             }));
   }
 
-  Widget _buildSortingWidget({required BuildContext context, required TextEditingController controller,required Function(String) search}) {
+  Widget _buildSortingWidget(
+      {required BuildContext context,
+      required TextEditingController controller,
+      required Function(String) search}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -215,7 +221,7 @@ class _ListsViewState extends State<ListsView> {
           Expanded(
             child: TextFormField(
               controller: searchController,
-              onChanged: (v){
+              onChanged: (v) {
                 search(v);
               },
               decoration: InputDecoration(
@@ -247,14 +253,14 @@ class _ListsViewState extends State<ListsView> {
       builderDelegate: PagedChildBuilderDelegate<UserFriendEntity>(
           noItemsFoundIndicatorBuilder: (context) {
             print(controller.itemList?.length);
-            return const Padding(
-                padding: EdgeInsets.only(top: 200),
+            return  Padding(
+                padding: const EdgeInsets.only(top: 200),
                 child: Center(
                   child: Text(
                     "No Users",
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 18,
+                      fontSize: 18.sp,
                     ),
                   ),
                 ));
@@ -308,7 +314,7 @@ class _ListsViewState extends State<ListsView> {
                   size: 14,
                   color: selected ? Colors.white : Colors.black,
                 ),
-                const Sizer(
+                Sizer(
                   width: 5,
                 ),
                 Label(

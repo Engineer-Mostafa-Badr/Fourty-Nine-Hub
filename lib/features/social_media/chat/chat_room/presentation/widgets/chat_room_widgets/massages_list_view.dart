@@ -31,7 +31,7 @@ class MessagesListView extends StatelessWidget {
                       messageEntity: state.messages![index],
                       anotherUserName: 'Anonymous',
                     ),
-                separatorBuilder: (context, index) => const Sizer(
+                separatorBuilder: (context, index) =>  Sizer(
                       height: 3,
                     ));
           } else {

@@ -17,34 +17,35 @@ class Winners extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         centerTitle: false,
         label: LocaleKeys.winners.localize,
       ),
       body: BlocProvider(
         create: (context) =>
-        WinnerCubit(serviceLocator.get<CompetitionRepoImpl>())
-          ..fetchWinners(context),
+            WinnerCubit(serviceLocator.get<CompetitionRepoImpl>())
+              ..fetchWinners(context),
         child: BlocBuilder<WinnerCubit, WinnerState>(
           builder: (BuildContext context, state) {
             if (state is WinnersSuccessState) {
               return Padding(
-                padding: const EdgeInsets.all(10),
+                padding: EdgeInsets.all(10),
                 child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3, childAspectRatio: .6),
-                    itemBuilder: (context, index) {
-                      return WinnerCard(
-                        isWinner: true,
-                        model: state.winnersModel.data![index],
-                      );
-                    },
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3, childAspectRatio: .6),
+                  itemBuilder: (context, index) {
+                    return WinnerCard(
+                      isWinner: true,
+                      model: state.winnersModel.data![index],
+                    );
+                  },
                   itemCount: state.winnersModel.data!.length,
                 ),
               );
             } else if (state is WinnersErrorState) {
               return Center(
-                child: Text(state.errMessage,
+                child: Text(
+                  state.errMessage,
                   textAlign: TextAlign.center,
                   style: Styles.mediumText(),
                 ),

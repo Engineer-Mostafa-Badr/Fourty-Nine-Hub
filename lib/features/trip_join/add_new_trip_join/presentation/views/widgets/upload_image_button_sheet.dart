@@ -3,7 +3,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/upload_button_and_info.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/upload_image_popup.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class UploadImageButtonSheet extends StatelessWidget {
   const UploadImageButtonSheet({
     super.key,
@@ -12,10 +12,10 @@ class UploadImageButtonSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 380,
+      height: 380.h,
       color: Colors.transparent,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10.h),
         decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
@@ -23,7 +23,7 @@ class UploadImageButtonSheet extends StatelessWidget {
                 topRight: Radius.circular(10.0))),
         child: Column(
           children: [
-            const Sizer(),
+            Sizer(),
             Container(
               alignment: Alignment.centerRight,
               child: IconButton(
@@ -33,7 +33,7 @@ class UploadImageButtonSheet extends StatelessWidget {
                 },
               ),
             ),
-            const Sizer(),
+            Sizer(),
             UploadButtonAndInfo(
               isCarImage: true,
               number: 1,

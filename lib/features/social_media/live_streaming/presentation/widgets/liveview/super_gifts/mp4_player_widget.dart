@@ -105,7 +105,7 @@ class ZegoMp4PlayerWidgetState extends State<ZegoMp4PlayerWidget>
                   ),
             ),
           )
-        : const SizedBox.shrink();
+        : SizedBox.shrink();
 
     if (displaySize.width < MediaQuery.of(context).size.width) {
       /// width < 1/2

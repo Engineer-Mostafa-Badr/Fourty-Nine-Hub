@@ -20,25 +20,25 @@ class WinnerCard extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Row(
+         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Icon(
+            const Icon(
               Icons.star,
               size: 14,
               color: AppColors.ACCENT_COLOR,
             ),
             Column(
               children: [
-                Icon(
+                const Icon(
                   FontAwesomeIcons.crown,
                   color: AppColors.ACCENT_COLOR,
                 ),
                 Sizer(),
               ],
             ),
-            Icon(
+            const Icon(
               Icons.star,
               size: 14,
               color: AppColors.ACCENT_COLOR,
@@ -56,7 +56,7 @@ class WinnerCard extends StatelessWidget {
                 NetworkImage('${model.userId?.userProfile?.profilePictureKey?.mediaKey}' ?? ''),
           ),
         ),
-        const Sizer(),
+        Sizer(),
         Label(
             text: model.userId?.fullName ??'',
             style: Styles.mediumText(fontWeight: FontWeight.w500)),

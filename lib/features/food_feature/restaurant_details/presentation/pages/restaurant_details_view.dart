@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/food_feature/restaurant_details/presentat
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
@@ -83,12 +84,12 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                     Container(
                       margin: const EdgeInsets.only(top: 5),
                       color: AppColors.SECONDARY_COLOR,
-                      height: 2,
+                      height: 2.h,
                       width: 80,
                     ),
                 ],
               ),
-          separatorBuilder: (context, index) => const Sizer(),
+          separatorBuilder: (context, index) => Sizer(),
           itemCount: 20),
     );
   }

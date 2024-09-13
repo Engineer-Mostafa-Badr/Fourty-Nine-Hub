@@ -11,18 +11,20 @@ import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../core/messages/messages.dart';
 import '../../../domain/entities/company_ad_entity.dart';
 import 'build_item_photo_text_post.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PhotoAndTextPostContent extends StatefulWidget {
-  const PhotoAndTextPostContent({super.key});
+  PhotoAndTextPostContent({super.key});
 
   @override
-  State<PhotoAndTextPostContent> createState() => _PhotoAndTextPostContentState();
+  State<PhotoAndTextPostContent> createState() =>
+      _PhotoAndTextPostContentState();
 }
 
 class _PhotoAndTextPostContentState extends State<PhotoAndTextPostContent> {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CreateCompanyAdCubit,CreateCompanyAdState>(
+    return BlocConsumer<CreateCompanyAdCubit, CreateCompanyAdState>(
       listener: (BuildContext context, CreateCompanyAdState state) {
         if (state.status == StateStatus.success) {
           showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
@@ -30,39 +32,41 @@ class _PhotoAndTextPostContentState extends State<PhotoAndTextPostContent> {
       },
       builder: (BuildContext context, state) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10.h),
           child: PaginationView<CompanyAdEntity>(
-            loadingWidget: const SizedBox.shrink(),
+            loadingWidget: SizedBox.shrink(),
             build: (scrollController, data) {
               return data.isNotEmpty
                   ? ListView.separated(
-                itemBuilder: (context, index) => BuildItemPhotoTextPost(
-                  length: data[index].media!.length,
-                  advertises: data[index],
-                  onDeleteItem: (id) async{
-                    var result=await context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: id,);
-                    if(result ==true){
-                      data.removeWhere((e)=>e.sId ==id);
-                      setState(() {
-
-                      });
-                    }
-                  },
-                ),
-                separatorBuilder: (context, index) => const Divider(
-                  color: AppColors.GREY_LIGHT_COLOR,
-                  height: 30,
-                  endIndent: 30,
-                ),
-                itemCount: data.length,
-              )
+                      itemBuilder: (context, index) => BuildItemPhotoTextPost(
+                        length: data[index].media!.length,
+                        advertises: data[index],
+                        onDeleteItem: (id) async {
+                          var result = await context
+                              .read<CreateCompanyAdCubit>()
+                              .deleteCompanyAd(
+                                id: id,
+                              );
+                          if (result == true) {
+                            data.removeWhere((e) => e.sId == id);
+                            setState(() {});
+                          }
+                        },
+                      ),
+                      separatorBuilder: (context, index) => Divider(
+                        color: AppColors.GREY_LIGHT_COLOR,
+                        height: 30.h,
+                        endIndent: 30,
+                      ),
+                      itemCount: data.length,
+                    )
                   : Center(child: Label(text: LocaleKeys.noPosts.localize));
             },
             fetchData: (PaginationParams paginationParams) {
               return context.read<CreateCompanyAdCubit>().getCompanyAdPosts(
-                'photo_written',
-                params: paginationParams,
-              );
+                    'photo_written',
+                    params: paginationParams,
+                  );
             },
           ),
         );

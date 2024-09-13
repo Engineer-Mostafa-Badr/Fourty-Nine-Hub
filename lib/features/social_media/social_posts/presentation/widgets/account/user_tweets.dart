@@ -19,7 +19,7 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_comments.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class UserTweets extends StatefulWidget {
   const UserTweets({super.key, required this.userData});
   final UserProfileEntity userData;
@@ -38,7 +38,7 @@ class _UserTweetsState extends State<UserTweets> {
           showErrorMessage(
             context,
             getFailureMessage(
-              state.failure ??  UnknownFailure(''),
+              state.failure ?? UnknownFailure(''),
               context,
             ),
           );
@@ -46,20 +46,20 @@ class _UserTweetsState extends State<UserTweets> {
       }, builder: (context, state) {
         final controller = context.read<TwitterCubit>();
         return PagedSliverList<int, TwitterPostEntity>(
-          // padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+          // padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
           pagingController: controller.userTweetsPagingController,
           // shrinkWrap: true,
           // physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           builderDelegate: PagedChildBuilderDelegate<TwitterPostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.userTweetsPagingController.itemList?.length);
-                return const Padding(
-                    padding: EdgeInsets.only(top: 200),
+                return  Padding(
+                    padding: const EdgeInsets.only(top: 200),
                     child: Center(
                       child: Text(
                         "No Posts",
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 18.sp,
                         ),
                       ),
                     ));
@@ -251,7 +251,7 @@ class _UserTweetsState extends State<UserTweets> {
                     : Center(
                         child: Label(
                             text: getFailureMessage(
-                          state.failure ??  UnknownFailure(''),
+                          state.failure ?? UnknownFailure(''),
                           context,
                         )),
                       );

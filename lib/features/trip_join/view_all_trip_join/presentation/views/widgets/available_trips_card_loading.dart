@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/custom_fading_widget.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AvailableTripCardLoadingList extends StatelessWidget {
   const AvailableTripCardLoadingList({super.key});
 
@@ -36,7 +36,7 @@ class AvailableTripCardLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15),
+      padding: EdgeInsets.symmetric(vertical: 15.h),
       child: CustomCard(
         children: [
           CustomGrayContainer(decoration: decoration, height: height, flex: 4),
@@ -69,7 +69,7 @@ class CustomGrayContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
       child: Row(children: [
         Expanded(
             flex: flex,
@@ -94,8 +94,8 @@ class CustomGrayContainerEqualSizes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 5,
+      padding: EdgeInsets.symmetric(
+        vertical: 5.h,
       ),
       child: Row(children: [
         ...List.generate(
@@ -103,7 +103,7 @@ class CustomGrayContainerEqualSizes extends StatelessWidget {
           (index) => Expanded(
             flex: 1,
             child: Container(
-                margin: const EdgeInsets.symmetric(
+                margin: EdgeInsets.symmetric(
                   horizontal: 5,
                 ),
                 height: height,

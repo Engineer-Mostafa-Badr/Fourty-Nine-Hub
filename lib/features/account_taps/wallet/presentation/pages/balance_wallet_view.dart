@@ -64,14 +64,14 @@ class BalanceWalletView extends StatelessWidget {
                         target: 1002,
                         type: WalletTypes.balance,
                       ),
-                      const Sizer(),
+                      Sizer(),
                       Row(
                         children: [
                           const Icon(
                             Icons.info_outline,
                             color: Colors.grey,
                           ),
-                          const Sizer(),
+                          Sizer(),
                           Expanded(
                             child: Row(
                               children: [
@@ -202,7 +202,7 @@ class BalanceWalletView extends StatelessWidget {
                               .of(context)
                               .scaffoldBackgroundColor : AppColors.AUTH_CONTAINER_COLOR
                       ),
-                      const Sizer(),
+                      Sizer(),
                       Label(
                         text: LocaleKeys.history.localize,
                         style: Styles.headerText(),

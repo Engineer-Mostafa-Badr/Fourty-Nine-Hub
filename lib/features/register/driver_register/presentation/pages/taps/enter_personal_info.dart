@@ -40,7 +40,7 @@ class EnterPersonalInfo extends StatelessWidget {
                   minHeight: 5,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                const Sizer(),
+                Sizer(),
                 Row(
                   children: [
                     Expanded(
@@ -52,7 +52,7 @@ class EnterPersonalInfo extends StatelessWidget {
                         info: 'This name will appear to clients',
                       ),
                     ),
-                    const Sizer(),
+                    Sizer(),
                     Expanded(
                       child: FormTextField(
                         // prefix: ,
@@ -64,7 +64,7 @@ class EnterPersonalInfo extends StatelessWidget {
                     ),
                   ],
                 ),
-                const Sizer(),
+                Sizer(),
                 FormTextField(
                   // prefix: ,
                   controller: controller.driverPhoneTextController,
@@ -72,7 +72,7 @@ class EnterPersonalInfo extends StatelessWidget {
                   label: 'Phone Number',
                   prefix: const Icon(Icons.phone_android_rounded),
                 ),
-                const Sizer(),
+                Sizer(),
                 if (controller.enterPrice())
                   Row(
                     children: [
@@ -87,7 +87,7 @@ class EnterPersonalInfo extends StatelessWidget {
                               action: (v) {}))
                     ],
                   ),
-                const Sizer(),
+                Sizer(),
                 _buildCategoriesWidget(context: context),
                 const EnterCarInfo(),
               ],

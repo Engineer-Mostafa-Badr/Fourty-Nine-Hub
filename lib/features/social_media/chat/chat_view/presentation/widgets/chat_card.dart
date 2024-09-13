@@ -1,15 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -32,10 +28,10 @@ class _ChatCardState extends State<ChatCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      splashColor:
-          AppColors.PRIMARY_COLOR.withOpacity(0.05), // Ripple effect color
-      highlightColor:
-          AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2), // Highlight color on tap
+      splashColor: AppColors.PRIMARY_COLOR.withOpacity(0.05),
+      // Ripple effect color
+      highlightColor: AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2),
+      // Highlight color on tap
       onTap: () {
         if (context.read<ChatsCubit>().selectedChats.isEmpty) {
           context.read<ChatsCubit>().selectChat = widget.chat!;
@@ -139,7 +135,7 @@ class _ChatCardState extends State<ChatCard> {
                             ],
                           ),
                   ),
-                  const Sizer(),
+                  Sizer(),
                   Flexible(
                     flex: 1,
                     child: Column(

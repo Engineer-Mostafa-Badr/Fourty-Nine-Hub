@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreateRestaurantCitiesDropdowns extends StatelessWidget {
   const CreateRestaurantCitiesDropdowns({super.key});
@@ -46,9 +47,9 @@ class CreateRestaurantCitiesDropdowns extends StatelessWidget {
                               : Colors.grey),
                     ),
                     isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 5,
-                      horizontal: 10,
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 5.h,
+                      horizontal: 10.w,
                     ),
                   ),
                   menuHeight: MediaQuery.of(context).size.height / 1.5,
@@ -83,7 +84,7 @@ class CreateRestaurantCitiesDropdowns extends StatelessWidget {
             ],
           );
         } else {
-          return const SizedBox.shrink();
+          return SizedBox.shrink();
         }
       },
     );

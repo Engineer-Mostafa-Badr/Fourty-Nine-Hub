@@ -183,8 +183,8 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                     );
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.all(10),
-                                    margin: const EdgeInsets.all(10),
+                                    padding: EdgeInsets.all(10),
+                                    margin: EdgeInsets.all(10),
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                       color: Theme.of(context).primaryColor,
@@ -217,7 +217,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
 
   Widget _buildCreatePost() {
     return Container(
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.all(10),
         // color: Colors.white,
         child: TextFormField(
           maxLines: 4,
@@ -249,7 +249,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
       return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(10),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: state.images!.length == 1 ? 1 : 2),
           itemCount: state.images!.length < 4 ? state.images!.length : 4,
@@ -282,9 +282,9 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                     Stack(
                       children: [
                         Container(
-                          margin: const EdgeInsetsDirectional.only(
-                              end: 10, bottom: 10),
-                          padding: const EdgeInsets.all(10),
+                          margin:
+                              EdgeInsetsDirectional.only(end: 10, bottom: 10),
+                          padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             image: DecorationImage(
@@ -297,9 +297,9 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                         ),
                         if (index == 3 && state.images!.length > 4)
                           Container(
-                            margin: const EdgeInsetsDirectional.only(
-                                end: 10, bottom: 10),
-                            // padding: const EdgeInsets.all(10),
+                            margin:
+                                EdgeInsetsDirectional.only(end: 10, bottom: 10),
+                            // padding: EdgeInsets.all(10),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),

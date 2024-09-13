@@ -10,9 +10,10 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wa
 import 'package:fourtyninehub/features/subscripe/domain/usecases/subscribe_usecase.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../res/style/styles.dart';
 import '../../../account_taps/wallet/domain/usecases/add_subscribe_use_case.dart';
 import '../../domain/entities/subscription_plans_entity.dart';
@@ -44,10 +45,10 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
     return BlocBuilder<WalletCubit, WalletState>(
       builder: (BuildContext context, state) {
         return Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0),
           child: ListView(
             children: [
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               Text(
                 widget.title ?? "",
                 textAlign: TextAlign.center,
@@ -55,15 +56,15 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                     color: AppColors.PRIMARY_COLOR_LIGHT,
                     fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 20),
-              // const SizedBox(height: 20),
+              SizedBox(height: 20.h),
+              // SizedBox(height: 20.h),
               Row(
                 children: [
                   Expanded(
                     child: GestureDetector(
                       onTap: () => setState(() => _isPremium = false),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
                         decoration: BoxDecoration(
                           color: !_isPremium
                               ? AppColors.PRIMARY_COLOR
@@ -74,8 +75,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                           LocaleKeys.regular.localize,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color:!_isPremium? AppColors.AUTH_CONTAINER_COLOR : Theme.of(context).primaryColor,
-
+                            color: !_isPremium
+                                ? AppColors.AUTH_CONTAINER_COLOR
+                                : Theme.of(context).primaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -86,19 +88,19 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                     child: GestureDetector(
                       onTap: () => setState(() => _isPremium = true),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
                         decoration: BoxDecoration(
-                          color: _isPremium
-                              ? Colors.red
-                              : Colors.transparent,
+                          color: _isPremium ? Colors.red : Colors.transparent,
                           // : Colors.red,
                           borderRadius: BorderRadius.circular(25),
                         ),
-                        child:  Text(
+                        child: Text(
                           LocaleKeys.premium.localize,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color:_isPremium? AppColors.AUTH_CONTAINER_COLOR : Theme.of(context).primaryColor,
+                            color: _isPremium
+                                ? AppColors.AUTH_CONTAINER_COLOR
+                                : Theme.of(context).primaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -107,15 +109,16 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               _buildList(),
-              const SizedBox(height: 20),
-               AppInfoText(
-                  text: LocaleKeys.premiumPackage.localize,
-                      ),
+              SizedBox(height: 20.h),
+              AppInfoText(
+                text: LocaleKeys.premiumPackage.localize,
+              ),
               ElevatedAppButton(
                 label: LocaleKeys.confirm.localize,
-                textStyle: Styles.mediumText(color: AppColors.AUTH_CONTAINER_COLOR),
+                textStyle:
+                    Styles.mediumText(color: AppColors.AUTH_CONTAINER_COLOR),
                 onPressed: () async {
                   List<num> list = _isPremium
                       ? widget.subscribePlans.premiumPlans
@@ -147,9 +150,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                             ),
                           );
                       if (context.mounted) {
-                        context.pop();
+                        context.go(Routes.HOME);
                       }
-                      context.pop();
+                      // context.pop();
                     } else {
                       await serviceLocator<SubscriptionController>().subscribe(
                         subscribeParams: SubscribeParams(
@@ -161,9 +164,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                       );
                     }
                   }
-                  setState(() {
-
-                  });
+                  setState(() {});
                 },
               ),
             ],
@@ -189,7 +190,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
         : widget.subscribePlans.regularPlans;
 
     if (list.isEmpty) {
-      return  Text(LocaleKeys.noSubscriptionPlans.localize);
+      return Text(LocaleKeys.noSubscriptionPlans.localize);
     }
 
     final List<int> days = [1, 7, 30, 365];
@@ -224,7 +225,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
     required int value,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: 10),
       child: Row(
         children: [
           Radio<int>(
@@ -243,18 +244,19 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                 color: _isPremium
                     ? AppColors.AUTH_CONTAINER_COLOR
                     : AppColors.AUTH_CONTAINER_COLOR,
+              ),
             ),
-          ),),
-          const SizedBox(width: 10),
+          ),
+          SizedBox(width: 10),
           Expanded(
             child: ElevatedAppButton(
               label: '$price',
               onPressed: () {},
               backColor: _isPremium ? Colors.red : AppColors.PRIMARY_COLOR,
               textStyle: Styles.mediumText(
-                  color: _isPremium
-                      ? AppColors.AUTH_CONTAINER_COLOR
-                      : AppColors.AUTH_CONTAINER_COLOR,
+                color: _isPremium
+                    ? AppColors.AUTH_CONTAINER_COLOR
+                    : AppColors.AUTH_CONTAINER_COLOR,
               ),
             ),
           ),

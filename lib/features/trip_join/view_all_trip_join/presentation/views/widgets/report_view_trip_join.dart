@@ -12,7 +12,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ReportViewTripJoin extends StatefulWidget {
   const ReportViewTripJoin({
     super.key,
@@ -52,11 +52,11 @@ class _ReportViewTripJoinState extends State<ReportViewTripJoin> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
                     _buildHandleIndicator(),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
                     _buildHeader(context, screenWidth),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10.h),
                     if (reports.isEmpty)
                       const Center(
                         child: Text(
@@ -69,14 +69,17 @@ class _ReportViewTripJoinState extends State<ReportViewTripJoin> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: reports.length,
-                        separatorBuilder: (context, i) => const SizedBox(height: 10),
+                        separatorBuilder: (context, i) =>
+                            SizedBox(height: 10.h),
                         itemBuilder: (context, i) {
-                          return _buildReportOption(context, reports[i], screenWidth);
+                          return _buildReportOption(
+                              context, reports[i], screenWidth);
                         },
                       ),
-                    const SizedBox(height: 20),
-                    _buildTextFieldWithSendButton(context, screenWidth, controller, state),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
+                    _buildTextFieldWithSendButton(
+                        context, screenWidth, controller, state),
+                    SizedBox(height: 20.h),
                   ],
                 ),
               ),
@@ -90,7 +93,7 @@ class _ReportViewTripJoinState extends State<ReportViewTripJoin> {
   Widget _buildHandleIndicator() {
     return Container(
       width: 40,
-      height: 5,
+      height: 5.h,
       decoration: BoxDecoration(
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(10),
@@ -110,7 +113,7 @@ class _ReportViewTripJoinState extends State<ReportViewTripJoin> {
             color: Colors.black,
           ),
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: 10),
         const Icon(
           Icons.report_gmailerrorred_rounded,
           color: AppColors.SECONDARY_COLOR,
@@ -120,7 +123,8 @@ class _ReportViewTripJoinState extends State<ReportViewTripJoin> {
     );
   }
 
-  Widget _buildReportOption(BuildContext context, ReportsEnum report, double screenWidth) {
+  Widget _buildReportOption(
+      BuildContext context, ReportsEnum report, double screenWidth) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -128,12 +132,16 @@ class _ReportViewTripJoinState extends State<ReportViewTripJoin> {
         });
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10),
         decoration: BoxDecoration(
-          color: selectedReport == report ? AppColors.SECONDARY_COLOR.withOpacity(0.1) : Colors.white,
+          color: selectedReport == report
+              ? AppColors.SECONDARY_COLOR.withOpacity(0.1)
+              : Colors.white,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: selectedReport == report ? AppColors.SECONDARY_COLOR : Colors.grey[300]!,
+            color: selectedReport == report
+                ? AppColors.SECONDARY_COLOR
+                : Colors.grey[300]!,
             width: 1.5,
           ),
         ),
@@ -145,7 +153,9 @@ class _ReportViewTripJoinState extends State<ReportViewTripJoin> {
                 style: Styles.headerText(
                   fontSize: screenWidth * 0.09,
                   fontWeight: FontWeight.bold,
-                  color: selectedReport == report ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                  color: selectedReport == report
+                      ? AppColors.SECONDARY_COLOR
+                      : AppColors.DARK_GRAY_COLOR,
                 ),
                 maxLines: 3,
               ),
@@ -166,8 +176,8 @@ class _ReportViewTripJoinState extends State<ReportViewTripJoin> {
     );
   }
 
-  Widget _buildTextFieldWithSendButton(
-      BuildContext context, double screenWidth, TwitterCubit controller, TwitterState state) {
+  Widget _buildTextFieldWithSendButton(BuildContext context, double screenWidth,
+      TwitterCubit controller, TwitterState state) {
     return Row(
       children: [
         Expanded(
@@ -203,7 +213,7 @@ class _ReportViewTripJoinState extends State<ReportViewTripJoin> {
             ),
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         AnimatedOpacity(
           opacity: reportTextController.text.isNotEmpty ? 1.0 : 0.5,
           duration: const Duration(milliseconds: 300),
@@ -244,7 +254,8 @@ class _ReportViewTripJoinState extends State<ReportViewTripJoin> {
                       } else {
                         showErrorMessage(
                           context,
-                          getFailureMessage(state.failure ?? UnknownFailure(''), context),
+                          getFailureMessage(
+                              state.failure ?? UnknownFailure(''), context),
                         );
                         context.pop();
                       }

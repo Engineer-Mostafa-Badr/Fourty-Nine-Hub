@@ -18,7 +18,7 @@ import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/comment_entity.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CommentCard extends StatefulWidget {
   final Color textColor;
   final String from;
@@ -62,7 +62,7 @@ class _CommentCardState extends State<CommentCard> {
                   : null,
               userId: widget.comment.user.id,
             ),
-            const Sizer(),
+            Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,7 +90,7 @@ class _CommentCardState extends State<CommentCard> {
                     Icons.more_vert,
                     color: widget.textColor,
                   )),
-            const Sizer(),
+            Sizer(),
             GestureDetector(
               onTap: () {
                 bottomSheet(
@@ -109,7 +109,7 @@ class _CommentCardState extends State<CommentCard> {
             ),
           ],
         ),
-        const Sizer(),
+        Sizer(),
         Text(
           widget.comment.content,
           style: Styles.mediumText(color: widget.textColor),
@@ -126,7 +126,7 @@ class _CommentCardState extends State<CommentCard> {
                   onChanged: (v) {
                     setState(() {});
                   },
-                  style: Styles.headerText(fontSize: 26),
+                  style: Styles.headerText(fontSize: 26.sp),
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     contentPadding: EdgeInsets.all(5),
@@ -134,16 +134,17 @@ class _CommentCardState extends State<CommentCard> {
                     hintStyle: Styles.mediumText(),
                   ),
                 )),
-                const Sizer(),
+                Sizer(),
                 if (editTextController.text.isNotEmpty)
                   IconAppButton(
                       icon: Icons.send,
                       isCircle: true,
                       size: 20,
                       onPressed: () async {
-                        var result = await widget.onEditComment(PostCommentParams(
-                            postId: widget.comment.id,
-                            content: editTextController.text));
+                        var result = await widget.onEditComment(
+                            PostCommentParams(
+                                postId: widget.comment.id,
+                                content: editTextController.text));
                         if (result == true) {
                           widget.comment.content = editTextController.text;
                           widget.comment.edit = false;
@@ -160,7 +161,7 @@ class _CommentCardState extends State<CommentCard> {
               post: widget.comment,
               from: 'comments',
             ),
-            const Sizer(),
+            Sizer(),
             TextAppButton(
                 style: Styles.mediumText(),
                 label: 'Reply',
@@ -187,7 +188,7 @@ class _CommentCardState extends State<CommentCard> {
                 })
           ],
         ),
-        const Sizer(),
+        Sizer(),
       ],
     );
   }

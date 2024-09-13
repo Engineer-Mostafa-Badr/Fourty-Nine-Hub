@@ -18,7 +18,7 @@ import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TwitterCommentReplies extends StatefulWidget {
   final List<TwitterCommentReplyEntity> replies;
   final String commentId;
@@ -69,7 +69,8 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
           children: [
             Expanded(
               child: PagedListView<int, TwitterCommentReplyEntity>(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                padding:
+                    EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
                 pagingController: controller.repliesPagingController,
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(
@@ -79,14 +80,14 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                     noItemsFoundIndicatorBuilder: (context) {
                       print(
                           controller.repliesPagingController.itemList?.length);
-                      return const Padding(
+                      return  Padding(
                           padding: EdgeInsets.only(top: 200),
                           child: Center(
                             child: Text(
                               "No Replies",
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 18,
+                                fontSize: 18.sp,
                               ),
                             ),
                           ));
@@ -106,7 +107,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                     },
                     noMoreItemsIndicatorBuilder: (context) => Container(),
                     firstPageProgressIndicatorBuilder: (context) => Container(
-                        margin: const EdgeInsets.only(top: 150),
+                        margin: EdgeInsets.only(top: 150),
                         child: const CupertinoActivityIndicator()),
                     newPageProgressIndicatorBuilder: (context) =>
                         const CupertinoActivityIndicator()),
@@ -119,8 +120,11 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                 ),
                 child: Row(
                   children: [
-                    const ProfileImage(accountId: 0,userId: '',),
-                    const Sizer(),
+                    const ProfileImage(
+                      accountId: 0,
+                      userId: '',
+                    ),
+                    Sizer(),
                     Expanded(
                         child: TextFormField(
                       maxLines: null,
@@ -128,15 +132,15 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                       onChanged: (v) {
                         setState(() {});
                       },
-                      style: Styles.headerText(fontSize: 26),
+                      style: Styles.headerText(fontSize: 26.sp),
                       decoration: InputDecoration(
                         fillColor: Colors.white,
-                        contentPadding: const EdgeInsets.all(5),
+                        contentPadding: EdgeInsets.all(5),
                         hintText: 'Type your reply ....',
                         hintStyle: Styles.mediumText(),
                       ),
                     )),
-                    const Sizer(),
+                    Sizer(),
                     if (replyTextController.text.isNotEmpty)
                       IconAppButton(
                         icon: Icons.send,

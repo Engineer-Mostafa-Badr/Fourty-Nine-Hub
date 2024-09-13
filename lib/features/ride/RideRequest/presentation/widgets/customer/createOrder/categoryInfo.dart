@@ -13,7 +13,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return Container(
-//       padding: const EdgeInsets.all(10),
+//       padding: EdgeInsets.all(10),
 //       decoration: const BoxDecoration(
 //           color: Colors.white,
 //           borderRadius: BorderRadius.only(
@@ -27,13 +27,13 @@
 //           ),
 //           Label(
 //             text: item.name,
-//             style: Styles.mediumText(fontSize: 20),
+//             style: Styles.mediumText(fontSize: 20.sp),
 //           ),
 //           Label(
 //               text: item.description ??
 //                   '49 Hub provides several services! You can now increase your income with 49Hub',
 //               style: Styles.mediumText()),
-//           const Sizer(),
+//           Sizer
 //           InkWell(
 //             onTap: () {
 //               context.pop();

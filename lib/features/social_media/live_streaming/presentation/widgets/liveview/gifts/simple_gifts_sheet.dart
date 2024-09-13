@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
@@ -51,11 +52,11 @@ void showSimpleGiftBottomSheet(BuildContext context, String userId) {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const Text(
+             Text(
               'Select a gift',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 16.0),
+            SizedBox(height: 16.h),
             Expanded(
               child: GridView.builder(
                 itemCount: gifts.length,
@@ -78,23 +79,23 @@ void showSimpleGiftBottomSheet(BuildContext context, String userId) {
                       children: [
                         SvgPicture.asset(
                           item.svgPath,
-                          height: 60,
+                          height: 60.h,
                         ),
-                        const SizedBox(height: 8.0),
+                        SizedBox(height: 8.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               item.price, // Replace with your desired text
-                              style: const TextStyle(
-                                  fontSize: 14.0, fontWeight: FontWeight.bold),
+                              style:  TextStyle(
+                                  fontSize: 14.sp, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(
                               width: 5,
                             ),
                             Image.asset(
                               Assets.coin,
-                              height: 20,
+                              height: 20.h,
                             )
                           ],
                         ),

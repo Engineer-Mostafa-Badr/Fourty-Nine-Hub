@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class UploadImagePopup extends StatelessWidget {
   const UploadImagePopup({
     super.key,
@@ -16,7 +16,7 @@ class UploadImagePopup extends StatelessWidget {
     return Center(
       child: Container(
         width: 180,
-        height: 150,
+        height: 150.h,
         padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
@@ -39,40 +39,40 @@ class UploadImagePopup extends StatelessWidget {
                 GestureDetector(
                   onTap: galleryCallback,
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 5.h),
                     decoration: BoxDecoration(
                       border:
                           Border.all(width: 2, color: AppColors.PRIMARY_COLOR),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Row(
+                    child:  Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('From Gallery'),
+                        const Text('From Gallery'),
                         Sizer(),
-                        Icon(Icons.perm_media, color: AppColors.PRIMARY_COLOR),
+                        const Icon(Icons.perm_media, color: AppColors.PRIMARY_COLOR),
                       ],
                     ),
                   ),
                 ),
-                const Sizer(),
+                Sizer(),
                 GestureDetector(
                   onTap: cameraCallback,
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 5.h),
                     decoration: BoxDecoration(
                       border:
                           Border.all(width: 2, color: AppColors.PRIMARY_COLOR),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Row(
+                    child:  Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('From Camera'),
+                        const Text('From Camera'),
                         Sizer(),
-                        Icon(Icons.videocam, color: AppColors.SECONDARY_COLOR),
+                        const Icon(Icons.videocam, color: AppColors.SECONDARY_COLOR),
                       ],
                     ),
                   ),

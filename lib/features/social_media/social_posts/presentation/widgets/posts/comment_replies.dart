@@ -17,7 +17,7 @@ import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CommentReplies extends StatefulWidget {
   final List<CommentEntity> replies;
   final String commentId;
@@ -67,7 +67,8 @@ class _CommentRepliesState extends State<CommentReplies> {
           children: [
             Expanded(
               child: PagedListView<int, CommentEntity>(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                padding:
+                    EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
                 pagingController: controller.repliesPagingController,
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(
@@ -76,14 +77,14 @@ class _CommentRepliesState extends State<CommentReplies> {
                     noItemsFoundIndicatorBuilder: (context) {
                       print(
                           controller.repliesPagingController.itemList?.length);
-                      return const Padding(
+                      return  Padding(
                           padding: EdgeInsets.only(top: 200),
                           child: Center(
                             child: Text(
                               "No Replies",
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 18,
+                                fontSize: 18.sp,
                               ),
                             ),
                           ));
@@ -116,25 +117,29 @@ class _CommentRepliesState extends State<CommentReplies> {
                 ),
                 child: Row(
                   children: [
-                    ProfileImage(accountId: 0,fromProfile: true,imageURL: user?.profilePicture, userId: '',),
-                    const Sizer(),
+                    ProfileImage(
+                      accountId: 0,
+                      fromProfile: true,
+                      imageURL: user?.profilePicture,
+                      userId: '',
+                    ),
+                    Sizer(),
                     Expanded(
                         child: TextFormField(
-                          maxLines: null,
-                          controller: replyTextController,
-                          onChanged: (v){
-                            setState(() {});
-                          },
-                          style: Styles.headerText(fontSize: 26),
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            contentPadding: const EdgeInsets.all(5),
-                            hintText: 'Type your reply ....',
-                            hintStyle: Styles.mediumText(),
-
-                          ),
-                        )),
-                    const Sizer(),
+                      maxLines: null,
+                      controller: replyTextController,
+                      onChanged: (v) {
+                        setState(() {});
+                      },
+                      style: Styles.headerText(fontSize: 26.sp),
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        contentPadding: const EdgeInsets.all(5),
+                        hintText: 'Type your reply ....',
+                        hintStyle: Styles.mediumText(),
+                      ),
+                    )),
+                    Sizer(),
                     if (replyTextController.text.isNotEmpty)
                       IconAppButton(
                         icon: Icons.send,

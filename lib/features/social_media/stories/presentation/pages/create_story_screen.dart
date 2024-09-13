@@ -1,11 +1,9 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/pages/privacy_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
@@ -51,6 +49,11 @@ class _CameraScreenState extends State<CameraScreen> {
     _disposeVideoControllers();
 
     _videoPlayerController = VideoPlayerController.file(videoFile);
+
+
+
+
+
     await _videoPlayerController!.initialize();
 
     _chewieController = ChewieController(
@@ -154,7 +157,7 @@ class _CameraScreenState extends State<CameraScreen> {
           IconButton(
             icon: Icon(Icons.color_lens_outlined,
                 color:
-                currentColor == Colors.white ? Colors.black : Colors.white,
+                    currentColor == Colors.white ? Colors.black : Colors.white,
                 size: 30),
             onPressed: getRandomColor,
             style: ElevatedButton.styleFrom(
@@ -170,11 +173,10 @@ class _CameraScreenState extends State<CameraScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        BlocProvider(
-                          create: (context) => serviceLocator<StoryCubit>(),
-                          child: StatusPrivacyScreen(),
-                        ),
+                    builder: (context) => BlocProvider(
+                      create: (context) => serviceLocator<StoryCubit>(),
+                      child: StatusPrivacyScreen(),
+                    ),
                   ));
             },
           ),
@@ -214,8 +216,7 @@ class _CameraScreenState extends State<CameraScreen> {
                   if (_storyText != null && _storyText!.isNotEmpty) {
                     await serviceLocator<StoryCubit>()
                         .createTextStory(
-                        "${getColorStringFromColor(
-                            currentColor)}~${_storyText!}")
+                            "${getColorStringFromColor(currentColor)}~${_storyText!}")
                         .then((value) => Navigator.pop(context));
                   }
                 }
@@ -233,7 +234,7 @@ class _CameraScreenState extends State<CameraScreen> {
                     // Call your upload method
                     await serviceLocator<StoryCubit>()
                         .uploadStoryVideoOrImage(file, fileType, fileSize,
-                        description: _descriptionText)
+                            description: _descriptionText)
                         .then((value) => Navigator.pop(context));
                   }
                 }
@@ -270,10 +271,10 @@ class _CameraScreenState extends State<CameraScreen> {
         child: TextField(
           cursorColor: Colors.white,
           maxLines: null,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 28,
             color: Colors.white,
-            shadows: [
+            shadows: const [
               Shadow(
                 offset: Offset(1.0, 1.0),
                 blurRadius: 4.0,
@@ -305,18 +306,17 @@ class _CameraScreenState extends State<CameraScreen> {
     }
     return _selectedFile != null
         ? Image.file(
-      _selectedFile!,
-      fit: BoxFit.fitHeight,
-      errorBuilder: (context, error, stackTrace) =>
-          Image.network(
+            _selectedFile!,
+            fit: BoxFit.fitHeight,
+            errorBuilder: (context, error, stackTrace) => Image.network(
+              UIConst.imagePlaceHolder,
+              fit: BoxFit.fitHeight,
+            ),
+          )
+        : Image.network(
             UIConst.imagePlaceHolder,
             fit: BoxFit.fitHeight,
-          ),
-    )
-        : Image.network(
-      UIConst.imagePlaceHolder,
-      fit: BoxFit.fitHeight,
-    );
+          );
   }
 
   Widget _buildVideoPreview() {
@@ -339,10 +339,10 @@ class _CameraScreenState extends State<CameraScreen> {
 
   // Widget _buildDescriptionField() {
   //   return Padding(
-  //     padding: const EdgeInsets.all(8.0),
+  //     padding: EdgeInsets.all(8.0),
   //     child: TextField(
   //       maxLines: 2,
-  //       style: const TextStyle(fontSize: 16, color: Colors.black),
+  //       style: const TextStyle(fontSize: 16.sp, color: Colors.black),
   //       decoration: InputDecoration(
   //         hintText: 'Add a description...',
   //         border: OutlineInputBorder(
@@ -381,14 +381,14 @@ class _CameraScreenState extends State<CameraScreen> {
                     cursorColor: Colors.white,
                     cursorErrorColor: Colors.red,
                     maxLines: 1,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       color: Colors.white, // White text color
                     ),
                     decoration: InputDecoration(
                         hintText: 'Add a description...',
                         hintStyle:
-                        TextStyle(color: Colors.white.withOpacity(0.7)),
+                            TextStyle(color: Colors.white.withOpacity(0.7)),
                         // Hint text color
                         border: InputBorder.none,
                         fillColor: Colors.transparent),
@@ -407,9 +407,10 @@ class _CameraScreenState extends State<CameraScreen> {
     );
   }
 
-  Widget _buildIconButton({required IconData icon,
-    required Color color,
-    required VoidCallback onPressed}) {
+  Widget _buildIconButton(
+      {required IconData icon,
+      required Color color,
+      required VoidCallback onPressed}) {
     return IconButton(
       icon: Icon(icon, color: color, size: 30),
       onPressed: onPressed,
@@ -482,7 +483,7 @@ class _CameraScreenState extends State<CameraScreen> {
             color: isSelected ? Colors.white12 : Colors.transparent,
             // Background color for selected item
             borderRadius:
-            BorderRadius.circular(50), // Rounded corners for selected item
+                BorderRadius.circular(50), // Rounded corners for selected item
           ),
           // Padding for buttons
           child: Center(

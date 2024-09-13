@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_state.dart';
@@ -77,42 +78,41 @@ class ClubHouseHome extends StatelessWidget {
 
   PagedListView<int, Object?> _pagedRooms(ClubVoiceCubit cubit) {
     return PagedListView.separated(
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.only(bottom: 0),
-                        pagingController: cubit.roomsPagingController,
-                        shrinkWrap: true,
-                        builderDelegate: PagedChildBuilderDelegate(
-                          noItemsFoundIndicatorBuilder: (context) {
-                            return const Center(
-                              child: Text(
-                                "No Rooms",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            );
-                          },
-                          noMoreItemsIndicatorBuilder: (context) =>
-                              Container(),
-                          firstPageProgressIndicatorBuilder: (context) =>
-                              const CupertinoActivityIndicator(),
-                          newPageProgressIndicatorBuilder: (context) =>
-                              const CupertinoActivityIndicator(),
-                          itemBuilder: (context, _, index) {
-                            print('room length $cubit.rooms.length');
-                            final room = cubit.rooms[index];
-                            return AudioRoomCard(
-                              room: room,
-                            );
-                          },
-                        ),
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(
-                            height: 10,
-                          );
-                        },
-                      );
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(bottom: 0),
+      pagingController: cubit.roomsPagingController,
+      shrinkWrap: true,
+      builderDelegate: PagedChildBuilderDelegate(
+        noItemsFoundIndicatorBuilder: (context) {
+          return  Center(
+            child: Text(
+              "No Rooms",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18.sp,
+              ),
+            ),
+          );
+        },
+        noMoreItemsIndicatorBuilder: (context) => Container(),
+        firstPageProgressIndicatorBuilder: (context) =>
+            const CupertinoActivityIndicator(),
+        newPageProgressIndicatorBuilder: (context) =>
+            const CupertinoActivityIndicator(),
+        itemBuilder: (context, _, index) {
+          print('room length $cubit.rooms.length');
+          final room = cubit.rooms[index];
+          return AudioRoomCard(
+            room: room,
+          );
+        },
+      ),
+      separatorBuilder: (context, index) {
+        return SizedBox(
+          height: 10.h,
+        );
+      },
+    );
   }
 }
 

@@ -20,14 +20,18 @@ class _HealthBannerState extends State<HealthBanner> {
       builder: (context, state) {
         if (state.mainCategory != null) {
           return MainCategoryBanner(
-            isFavorite: state.mainCategory!.isFavorite ?? false,
+              isFavorite: state.mainCategory!.isFavorite ?? false,
               onFavorite: () async {
                 // context.read<HealthCubit>().toggleFavoriteMedicalService(state.mainCategory!.id);
                 print(state.mainCategory!.id);
-                setState(() {
-
-                });
-                 return await  state.mainCategory!.isFavorite == true ? context.read<HealthCubit>().deleteMedicalService(state.mainCategory!.id) : context.read<HealthCubit>().toggleFavoriteMedicalService(state.mainCategory!.id);
+                setState(() {});
+                return await state.mainCategory!.isFavorite == true
+                    ? context
+                        .read<HealthCubit>()
+                        .deleteMedicalService(state.mainCategory!.id)
+                    : context
+                        .read<HealthCubit>()
+                        .toggleFavoriteMedicalService(state.mainCategory!.id);
               },
               category: state.mainCategory!,
               canRegister: state.isDoctor == true ? false : true,
@@ -39,7 +43,7 @@ class _HealthBannerState extends State<HealthBanner> {
                 }
               });
         } else {
-          return const SizedBox.shrink();
+          return SizedBox.shrink();
         }
       },
     );

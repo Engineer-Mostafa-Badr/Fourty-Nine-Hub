@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BarData {
   final String label;
@@ -59,7 +60,8 @@ class BarChartPainter extends CustomPainter {
       final textPainter = TextPainter(
         text: TextSpan(
           text: data[i].value.toShortScale,
-          style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12),
+          style:
+              TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.sp),
         ),
         textDirection: TextDirection.ltr,
       );
@@ -73,7 +75,8 @@ class BarChartPainter extends CustomPainter {
       final labelPainter = TextPainter(
         text: TextSpan(
           text: data[i].label,
-          style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12),
+          style:
+              TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.sp),
         ),
         textDirection: TextDirection.ltr,
       );

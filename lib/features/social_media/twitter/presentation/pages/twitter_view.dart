@@ -26,7 +26,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TwitterView extends StatefulWidget {
   const TwitterView({super.key});
   @override
@@ -60,9 +60,9 @@ class _TwitterViewState extends State<TwitterView> {
           child: FloatingActionButton(
             backgroundColor: Colors.red,
             onPressed: () {
-              if(context.read<UserCubit>().isLoggedIn){
+              if (context.read<UserCubit>().isLoggedIn) {
                 context.push(Routes.CREATEPOST, extra: 'twitter');
-              }else{
+              } else {
                 context.push(Routes.LOGIN);
               }
             },
@@ -79,7 +79,7 @@ class _TwitterViewState extends State<TwitterView> {
 
   Widget _buildTwitterTitle() {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
       child: Label(
         text: 'Tweets',
         style: Styles.headerText(),
@@ -89,8 +89,9 @@ class _TwitterViewState extends State<TwitterView> {
 
   Widget _buildTwitterWidget(UserEntity userData) {
     return BlocProvider<TwitterCubit>(
-      create: (_) =>serviceLocator()..loadData(),
-      child: BlocConsumer<TwitterCubit, TwitterState>(listener: (context, state) {
+      create: (_) => serviceLocator()..loadData(),
+      child:
+          BlocConsumer<TwitterCubit, TwitterState>(listener: (context, state) {
         if (state.status == StateStatus.error) {
           showErrorMessage(
             context,
@@ -120,12 +121,12 @@ class _TwitterViewState extends State<TwitterView> {
                 pagingController: controller.postsPagingController,
                 builderDelegate: PagedChildBuilderDelegate<TwitterPostEntity>(
                   noItemsFoundIndicatorBuilder: (context) {
-                    return const Center(
+                    return  Center(
                       child: Text(
                         "No Posts",
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 18,
+                          fontSize: 18.sp,
                         ),
                       ),
                     );
@@ -166,13 +167,14 @@ class _TwitterViewState extends State<TwitterView> {
                           postId: controller.postsPagingController
                                       .itemList![index].isShared ==
                                   true
-                              ? controller.postsPagingController.itemList![index]
-                                  .mainPost!.id
+                              ? controller.postsPagingController
+                                  .itemList![index].mainPost!.id
                               : controller
                                   .postsPagingController.itemList![index].id,
                         );
                         if (state.shareSuccess == true) {
-                          showSuccessMessage(context, "Post shared successfully");
+                          showSuccessMessage(
+                              context, "Post shared successfully");
                         }
                         setState(() {});
                       },
@@ -186,8 +188,8 @@ class _TwitterViewState extends State<TwitterView> {
                             value: serviceLocator<TwitterCubit>()
                               ..loadComments(
                                   context,
-                                  controller
-                                      .postsPagingController.itemList![index].id),
+                                  controller.postsPagingController
+                                      .itemList![index].id),
                             child: TwitterPostComments(
                               comments: const [],
                               postId: controller
@@ -200,7 +202,8 @@ class _TwitterViewState extends State<TwitterView> {
                                 return await controller.onCommentReply(
                                     params: params);
                               },
-                              onCommentReact: (TwitterCommentReactParams params) {
+                              onCommentReact:
+                                  (TwitterCommentReactParams params) {
                                 controller.onCommentReact(params: params);
                               },
                               onGetReplies: (String id,
@@ -271,12 +274,11 @@ class _TwitterViewState extends State<TwitterView> {
     );
   }
 
-
-
   Widget _buildGlobalTwitterWidget() {
     return BlocProvider<TwitterCubit>(
-      create: (_)=>serviceLocator()..loadGlobalData(),
-      child: BlocConsumer<TwitterCubit, TwitterState>(listener: (context, state) {
+      create: (_) => serviceLocator()..loadGlobalData(),
+      child:
+          BlocConsumer<TwitterCubit, TwitterState>(listener: (context, state) {
         if (state.status == StateStatus.error) {
           showErrorMessage(
             context,
@@ -306,12 +308,12 @@ class _TwitterViewState extends State<TwitterView> {
                 pagingController: controller.globalPostsPagingController,
                 builderDelegate: PagedChildBuilderDelegate<TwitterPostEntity>(
                   noItemsFoundIndicatorBuilder: (context) {
-                    return const Center(
+                    return  Center(
                       child: Text(
                         "No Posts",
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 18,
+                          fontSize: 18.sp,
                         ),
                       ),
                     );
@@ -319,29 +321,34 @@ class _TwitterViewState extends State<TwitterView> {
                   itemBuilder: (context, item, index) {
                     final user = context.read<UserCubit>().state.data;
                     return TwitterPostCard(
-                      post: controller.globalPostsPagingController.itemList![index],
+                      post: controller
+                          .globalPostsPagingController.itemList![index],
                       onReact: () async {
                         var result = await controller.onReact(
                             params: TwitterPostReactParams(
-                                postId: controller
-                                    .globalPostsPagingController.itemList![index].id,
+                                postId: controller.globalPostsPagingController
+                                    .itemList![index].id,
                                 react: 'love'));
                         if (result == true) {
-                          if (controller.globalPostsPagingController.itemList?[index]
-                              .isReact ==
+                          if (controller.globalPostsPagingController
+                                  .itemList?[index].isReact ==
                               true) {
-                            controller.globalPostsPagingController.itemList?[index]
-                                .isReact = false;
-                            controller.globalPostsPagingController.itemList?[index]
-                                .loveCount = (controller.globalPostsPagingController
-                                .itemList![index].loveCount! -
+                            controller.globalPostsPagingController
+                                .itemList?[index].isReact = false;
+                            controller.globalPostsPagingController
+                                .itemList?[index].loveCount = (controller
+                                    .globalPostsPagingController
+                                    .itemList![index]
+                                    .loveCount! -
                                 1);
                           } else {
-                            controller.globalPostsPagingController.itemList?[index]
-                                .isReact = true;
-                            controller.globalPostsPagingController.itemList?[index]
-                                .loveCount = (controller.globalPostsPagingController
-                                .itemList![index].loveCount! +
+                            controller.globalPostsPagingController
+                                .itemList?[index].isReact = true;
+                            controller.globalPostsPagingController
+                                .itemList?[index].loveCount = (controller
+                                    .globalPostsPagingController
+                                    .itemList![index]
+                                    .loveCount! +
                                 1);
                           }
                         }
@@ -350,15 +357,16 @@ class _TwitterViewState extends State<TwitterView> {
                       onShare: () {
                         controller.onShare(
                           postId: controller.globalPostsPagingController
-                              .itemList![index].isShared ==
-                              true
-                              ? controller.globalPostsPagingController.itemList![index]
-                              .mainPost!.id
-                              : controller
-                              .globalPostsPagingController.itemList![index].id,
+                                      .itemList![index].isShared ==
+                                  true
+                              ? controller.globalPostsPagingController
+                                  .itemList![index].mainPost!.id
+                              : controller.globalPostsPagingController
+                                  .itemList![index].id,
                         );
                         if (state.shareSuccess == true) {
-                          showSuccessMessage(context, "Post shared successfully");
+                          showSuccessMessage(
+                              context, "Post shared successfully");
                         }
                         setState(() {});
                       },
@@ -372,12 +380,12 @@ class _TwitterViewState extends State<TwitterView> {
                             value: serviceLocator<TwitterCubit>()
                               ..loadComments(
                                   context,
-                                  controller
-                                      .globalPostsPagingController.itemList![index].id),
+                                  controller.globalPostsPagingController
+                                      .itemList![index].id),
                             child: TwitterPostComments(
                               comments: const [],
-                              postId: controller
-                                  .globalPostsPagingController.itemList![index].id,
+                              postId: controller.globalPostsPagingController
+                                  .itemList![index].id,
                               user: user,
                               onAddComment: (TwitterPostCommentParams params) =>
                                   controller.onPostComment(params: params),
@@ -386,7 +394,8 @@ class _TwitterViewState extends State<TwitterView> {
                                 return await controller.onCommentReply(
                                     params: params);
                               },
-                              onCommentReact: (TwitterCommentReactParams params) {
+                              onCommentReact:
+                                  (TwitterCommentReactParams params) {
                                 controller.onCommentReact(params: params);
                               },
                               onGetReplies: (String id,
@@ -409,12 +418,14 @@ class _TwitterViewState extends State<TwitterView> {
                                     params: params);
                               },
                               onDeleteComment: (id) async =>
-                              await controller.deleteComment(
-                                  context: context,
-                                  commentId: id,
-                                  postId: controller.globalPostsPagingController
-                                      .itemList![index].id,
-                                  from: 'posts'),
+                                  await controller.deleteComment(
+                                      context: context,
+                                      commentId: id,
+                                      postId: controller
+                                          .globalPostsPagingController
+                                          .itemList![index]
+                                          .id,
+                                      from: 'posts'),
                             ),
                           ),
                         );
@@ -440,14 +451,14 @@ class _TwitterViewState extends State<TwitterView> {
                             from: 'details');
                       },
                       onEditComment: (params) async =>
-                      await controller.editComment(params: params),
+                          await controller.editComment(params: params),
                     );
                   },
                   noMoreItemsIndicatorBuilder: (context) => Container(),
                   firstPageProgressIndicatorBuilder: (context) =>
-                  const CupertinoActivityIndicator(),
+                      const CupertinoActivityIndicator(),
                   newPageProgressIndicatorBuilder: (context) =>
-                  const CupertinoActivityIndicator(),
+                      const CupertinoActivityIndicator(),
                 ),
               ),
             ],
@@ -457,6 +468,3 @@ class _TwitterViewState extends State<TwitterView> {
     );
   }
 }
-
-
-

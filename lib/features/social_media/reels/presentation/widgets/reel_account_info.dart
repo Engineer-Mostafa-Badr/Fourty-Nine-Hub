@@ -25,16 +25,17 @@ class ReelAccountInfo extends StatelessWidget {
           children: [
             const ProfileImage(
               withBorder: true,
-              accountId: 0, userId: '',
+              accountId: 0,
+              userId: '',
             ),
-            const Sizer(),
+            Sizer(),
             TextAppButton(
               label: item.user?.fullName ?? '',
               style: Styles.mediumText(
                   fontWeight: FontWeight.bold, color: Colors.white),
               onPressed: () => context.push(Routes.OTHERSACCOUNT),
             ),
-            const Sizer(),
+            Sizer(),
             AppButton(
               height: kToolbarHeight * .4,
               padding: 20,

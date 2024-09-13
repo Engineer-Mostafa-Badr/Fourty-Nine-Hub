@@ -23,7 +23,7 @@ class FoodCartView extends StatelessWidget {
             label: 'Place Order',
             onPressed: () => controller.placeOrder(context)),
         body: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0),
           child: ListView(
             children: [
               _buildCartItems(context: context),
@@ -42,7 +42,7 @@ class FoodCartView extends StatelessWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) => const Text('label'),
-          separatorBuilder: (context, state) => const SizedBox(),
+          separatorBuilder: (context, state) => SizedBox(),
           itemCount: state.data?.allItems.length ?? 0);
     });
   }

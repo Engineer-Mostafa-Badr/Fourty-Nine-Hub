@@ -27,7 +27,7 @@ class ReviewCard extends StatelessWidget {
               accountId: 0,
               imageURL: review.image ?? UIConst.profilePlaceHolder,
             ),
-            const Sizer(),
+            Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

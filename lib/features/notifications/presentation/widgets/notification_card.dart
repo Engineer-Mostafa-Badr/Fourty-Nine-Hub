@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/all_not
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/assets/assets.dart';
 
@@ -42,7 +43,7 @@ class _NotificationCardState extends State<NotificationCard> {
             setState(() {});
           },
           child: Container(
-            padding: const EdgeInsets.all(5),
+            padding: EdgeInsets.all(5),
             child: Dismissible(
               key: UniqueKey(),
               direction: DismissDirection.startToEnd,
@@ -53,7 +54,8 @@ class _NotificationCardState extends State<NotificationCard> {
                   context: context,
                   builder: (context) {
                     return Container(
-                      padding: const EdgeInsets.only(top: 20, right: 10, left: 10, bottom: 20),
+                      padding: EdgeInsets.only(
+                          top: 20, right: 10, left: 10, bottom: 20),
                       child: AreYouSure(
                         title: LocaleKeys.alert.localize,
                         subTitle: LocaleKeys.clearNoti.localize,
@@ -70,7 +72,7 @@ class _NotificationCardState extends State<NotificationCard> {
                 return confirmDelete;
               },
               background: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 color: Colors.red,
                 alignment: Alignment.centerLeft,
                 child: const Icon(
@@ -79,7 +81,9 @@ class _NotificationCardState extends State<NotificationCard> {
                 ),
               ),
               child: NotificationCustomContainer(
-                color: widget.notificationEntity.read! ? Colors.transparent : AppColors.PRIMARY_COLOR.withOpacity(0.1),
+                color: widget.notificationEntity.read!
+                    ? Colors.transparent
+                    : AppColors.PRIMARY_COLOR.withOpacity(0.1),
                 child: Row(
                   children: [
                     SizedBox(
@@ -91,7 +95,7 @@ class _NotificationCardState extends State<NotificationCard> {
                             )
                           : _networkImage(),
                     ),
-                    // const Sizer(),
+                    // Sizer(),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,12 +104,12 @@ class _NotificationCardState extends State<NotificationCard> {
                             widget.notificationEntity.title ?? '',
                             style: Styles.headerText(),
                           ),
-                          const Sizer(height: 5),
+                          Sizer(height: 5.h),
                           Text(
                             widget.notificationEntity.body ?? '',
                             style: Styles.mediumText(),
                           ),
-                          const Sizer(height: 5),
+                          Sizer(height: 5.h),
                           Label(
                             text: _formatDate(),
                             style: Styles.mediumText(color: Colors.grey),
@@ -148,12 +152,14 @@ class _NotificationCardState extends State<NotificationCard> {
     if (widget.notificationEntity.createdAt == null) {
       return '';
     }
-    return DateFormat('dd MMM, hh:mm aaa').format(widget.notificationEntity.createdAt!);
+    return DateFormat('dd MMM, hh:mm aaa')
+        .format(widget.notificationEntity.createdAt!);
   }
 }
 
 class NotificationCustomContainer extends StatelessWidget {
-  const NotificationCustomContainer({super.key, required this.color, required this.child});
+  const NotificationCustomContainer(
+      {super.key, required this.color, required this.child});
   final Color color;
   final Widget child;
   @override
@@ -163,7 +169,7 @@ class NotificationCustomContainer extends StatelessWidget {
         color: color,
         borderRadius: BorderRadius.circular(10),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5.h),
       child: child,
     );
   }

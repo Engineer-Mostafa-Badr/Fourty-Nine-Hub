@@ -21,9 +21,10 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../controllers/user_cubit/user_cubit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+   RegisterView({super.key});
 
   @override
   State<RegisterView> createState() => _RegisterViewState();
@@ -52,9 +53,9 @@ class _RegisterViewState extends State<RegisterView> {
         }
       },
       child: Scaffold(
-        appBar: const BackAppBar(),
+        appBar:  const BackAppBar(),
         body: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding:  const EdgeInsets.all(8.0),
           child: Form(
             key: registerCubit.formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -71,7 +72,7 @@ class _RegisterViewState extends State<RegisterView> {
                           nextFocusNode: registerCubit.lastNameFocusNode,
                         ),
                       ),
-                      const Sizer(),
+                       Sizer(),
                       Expanded(
                         child: LastNameTextFormField(
                           currentFocusNode: registerCubit.lastNameFocusNode,
@@ -81,13 +82,13 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                     ],
                   ),
-                  const Sizer(),
+                   Sizer(),
                   DefaultTextFormField(
                     currentFocusNode: registerCubit.emailFocusNode,
                     currentController: registerCubit.emailTextController,
                     nextFocusNode: registerCubit.passwordFocusNode,
                     keyboardType: TextInputType.emailAddress,
-                    suffixIcon: const Icon(Icons.email),
+                    suffixIcon:  const Icon(Icons.email),
                     hint: 'Email',
                     validator: (v) {
                       String pattern =
@@ -99,7 +100,7 @@ class _RegisterViewState extends State<RegisterView> {
                       return null;
                     },
                   ),
-                  const Sizer(),
+                   Sizer(),
                   PasswordTextFormField(
                     currentFocusNode: registerCubit.passwordFocusNode,
                     currentController: registerCubit.passwordTextController,
@@ -116,21 +117,21 @@ class _RegisterViewState extends State<RegisterView> {
                     ),
                     hint: 'Password',
                   ),
-                  const Sizer(),
+                   Sizer(),
                   ConfirmPasswordTextFormField(
                     currentFocusNode: registerCubit.confirmPasswordFocusNode,
                     currentController:
                         registerCubit.confirmPasswordTextController,
                     passwordController: registerCubit.passwordTextController,
                   ),
-                  const Sizer(),
+                   Sizer(),
                   StatefulBuilder(
                     builder: (context, setState) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Gender : ',
-                              style: Styles.headerText(fontSize: 14)),
+                              style: Styles.headerText(fontSize: 14.sp)),
                           Row(
                             children: [
                               Expanded(
@@ -172,7 +173,7 @@ class _RegisterViewState extends State<RegisterView> {
                       );
                     },
                   ),
-                  const Sizer(height: 30),
+                   Sizer(height: 30.h),
                   DefaultButton(
                     label: 'Register',
                     width: double.infinity,
@@ -182,19 +183,19 @@ class _RegisterViewState extends State<RegisterView> {
                     //   log(r.toString());
                     // },
                   ),
-                  const Sizer(),
-                  const Sizer(),
+                   Sizer(),
+                   Sizer(),
                   Label(
                     text: 'Or Continue with',
                     style: Styles.mediumText(color: Colors.grey),
                   ),
-                  const Sizer(),
+                   Sizer(),
                   Row(
                     children: [
                       Expanded(
                         child: AppButton(
                           style:
-                              const TextStyle(color: AppColors.QUANTITY_COLOR),
+                               const TextStyle(color: AppColors.QUANTITY_COLOR),
                           label: 'Google',
                           backColor: AppColors.LIGHT_GRAY_COLOR,
                           textColor: Colors.black,
@@ -202,11 +203,11 @@ class _RegisterViewState extends State<RegisterView> {
                           onPressed: () {},
                         ),
                       ),
-                      const Sizer(),
+                       Sizer(),
                       Expanded(
                         child: AppButton(
                           style:
-                              const TextStyle(color: AppColors.QUANTITY_COLOR),
+                               const TextStyle(color: AppColors.QUANTITY_COLOR),
                           label: 'Facebook',
                           backColor: AppColors.LIGHT_GRAY_COLOR,
                           textColor: Colors.black,
@@ -216,7 +217,7 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                     ],
                   ),
-                  const Sizer(height: 20),
+                   Sizer(height: 20.h),
                   RichText(
                     text: TextSpan(
                       children: [

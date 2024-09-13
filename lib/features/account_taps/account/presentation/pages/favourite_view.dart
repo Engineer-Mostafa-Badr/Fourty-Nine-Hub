@@ -28,7 +28,7 @@ class _FavouriteViewState extends State<FavouriteView> {
           return const Center(child: CircularProgressIndicator.adaptive());
         }
         return Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(10.0),
           child: GridView.builder(
               itemBuilder: (context, index) => AdCard(
                     item: state.data![index].item,

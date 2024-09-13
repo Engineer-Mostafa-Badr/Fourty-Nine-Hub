@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
@@ -65,7 +66,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                   child: CircularProgressIndicator.adaptive(),
                 )
               : Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: ListView(
                     children: [
                       _buildAdInfoWidget(ad: state.installment!.ad!),
@@ -115,14 +116,14 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Icon(Icons.location_on_outlined),
-              const Sizer(),
+              Sizer(),
               Expanded(child: Label(text: ad.address?.address ?? '')),
-              const Sizer(),
+              Sizer(),
               Label(text: ad.formatedDate)
             ],
           ),
         ),
-        const Sizer(),
+        Sizer(),
         Label(
           text: 'Description',
           style: Styles.mediumText(fontWeight: FontWeight.bold),
@@ -147,7 +148,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
             itemBuilder: (context, index) {
               final detail = ad.details[index];
               return Container(
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
                 decoration: BoxDecoration(
                     color: index.isEven
                         ? AppColors.LIGHT_GRAY_COLOR
@@ -172,7 +173,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
         Label(
             text: Labels.description,
             style: Styles.mediumText(fontWeight: FontWeight.bold)),
-        const Sizer(),
+        Sizer(),
         const ReadMoreLabel(text: UIConst.placeholderText),
       ],
     );
@@ -189,7 +190,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
           color: AppColors.PRIMARY_COLOR,
           size: 20,
         ),
-        const Sizer(),
+        Sizer(),
         Expanded(child: Label(text: label, style: Styles.mediumText()))
       ],
     );
@@ -206,9 +207,9 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                           child: InkWell(
                         onTap: () => controller.changeInstallmentPlan(v: e),
                         child: Container(
-                          margin: const EdgeInsets.all(3),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 2),
+                          margin: EdgeInsets.all(3),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 2.h),
                           decoration: BoxDecoration(
                               color: e == state.selectedPlan
                                   ? AppColors.SECONDARY_COLOR
@@ -241,7 +242,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
             fit: BoxFit.cover,
             source: NetworkImage(UIConst.productImage)),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -261,9 +262,8 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                       children: [0, 1, 2, 3, 4, 5].map((e) {
                 return WidgetSpan(
                     child: Container(
-                  margin: const EdgeInsets.all(3),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                  margin: EdgeInsets.all(3),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2.h),
                   decoration: BoxDecoration(
                       color: e == 0 ? AppColors.SECONDARY_COLOR : null,
                       borderRadius: BorderRadius.circular(5),
