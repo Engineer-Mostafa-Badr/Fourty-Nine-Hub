@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_price_distance/fetch_price_distance_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/custom_row_v2.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class DistanceAndPricePerPersonV2 extends StatelessWidget {
   const DistanceAndPricePerPersonV2({
     super.key,
@@ -16,8 +16,7 @@ class DistanceAndPricePerPersonV2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FetchPriceDistanceCubit, FetchPriceDistanceState>(
       builder: (context, state) {
-        FetchPriceDistanceCubit fetchPriceDistanceCubit =
-            context.read<FetchPriceDistanceCubit>();
+        FetchPriceDistanceCubit fetchPriceDistanceCubit = context.read<FetchPriceDistanceCubit>();
         double distance = fetchPriceDistanceCubit.tripInfoEntity?.distance ?? 0;
         String distanceFormated = '${(distance / 1000).toStringAsFixed(1)} KM';
         double price = fetchPriceDistanceCubit.tripInfoEntity?.price ?? 0;
@@ -32,7 +31,7 @@ class DistanceAndPricePerPersonV2 extends StatelessWidget {
               style: Styles.headerText(
                 color: Colors.green[500],
                 fontWeight: FontWeight.bold,
-                fontSize: 40.sp,
+                fontSize: 40,
               ),
             ),
           ],

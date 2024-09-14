@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
@@ -12,7 +13,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class PublishButton extends StatefulWidget {
   const PublishButton({
     super.key,
@@ -49,8 +50,7 @@ class _PublishButtonState extends State<PublishButton> {
         listener: (context, state) {
           if (state is PublishTripJoinSuccess) {
             Future.delayed(const Duration(seconds: 1)).then((value) {
-              context.pushAndRemoveUntil(
-                  Routes.AVAILABLE_TRIPS, (route) => true);
+              context.pushAndRemoveUntil(Routes.AVAILABLE_TRIPS, (route) => true);
             });
           }
           if (state is PublishTripJoinFailed) {
@@ -60,7 +60,7 @@ class _PublishButtonState extends State<PublishButton> {
         child: Stack(
           children: [
             CustomButton(
-              height: 50.h,
+              height: 80.h,
               onTap: () async {
                 if (widget.formKey.currentState!.validate()) {
                   await fetchData();
@@ -72,10 +72,10 @@ class _PublishButtonState extends State<PublishButton> {
               title: 'Publish',
             ),
             Positioned(
-              top: 5,
+              top: 0,
               right: 20,
               child: SizedBox(
-                height: 40.h,
+                height: 80.h,
                 child: BlocBuilder<PublishTripJoinCubit, PublishTripJoinState>(
                   builder: (context, state) {
                     if (state is PublishTripJoinLoading) {
@@ -85,11 +85,10 @@ class _PublishButtonState extends State<PublishButton> {
                     }
                     if (state is PublishTripJoinSuccess) {
                       return Center(
-                        child: Icon(Icons.check,
-                            color: Colors.green[400], size: 30),
+                        child: Icon(Icons.check, color: Colors.green[400], size: 30),
                       );
                     }
-                    return SizedBox();
+                    return const SizedBox();
                   },
                 ),
               ),
@@ -99,8 +98,7 @@ class _PublishButtonState extends State<PublishButton> {
   }
 
   Future<void> fetchData() async {
-    publishTripJoinCubit.tripJoinPublishParam =
-        publishTripJoinCubit.tripJoinPublishParam.copyWith(
+    publishTripJoinCubit.tripJoinPublishParam = publishTripJoinCubit.tripJoinPublishParam.copyWith(
       fromAr: fetchPriceDistanceCubit.tripInfoEntity?.originAddress ?? '',
       toAr: fetchPriceDistanceCubit.tripInfoEntity?.destinationAddress ?? '',
       fromEn: startingCubit.startingLocation?.address,
