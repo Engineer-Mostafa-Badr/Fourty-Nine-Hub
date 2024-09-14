@@ -1,7 +1,7 @@
 class GiftWalletEntity{
   final String id;
   final String userId;
-  final int? amount;
+  final num? amount;
   final bool isActive;
   final String createdAt;
   final String updatedAt;

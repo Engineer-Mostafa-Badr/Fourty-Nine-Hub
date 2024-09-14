@@ -26,11 +26,11 @@ class SubscriptionInterceptor extends Interceptor {
         err.response?.data['endPointSubscription'] != null &&
         err.response?.data['endPointSubscription'] == true &&
         err.response?.data['userSubscription'] == false) {
-      // List<WalletTypes> wallets = (err.response?.data['paymentMethod'] as List)
-      //     .map((e) => (e as String).toWalletType)
-      //     .toList();
+      List<WalletTypes> wallets = (err.response?.data['paymentMethod'] as List)
+          .map((e) => (e as String).toWalletType)
+          .toList();
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-          subCategoryId: err.response?.data['subCategoryId']);
+          subCategoryId: err.response?.data['subCategoryId'],wallets: wallets);
     }
     super.onError(err, handler);
   }
