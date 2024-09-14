@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -20,7 +21,7 @@ class AttachmentTypes extends StatelessWidget {
       children: [
         _buildAttachmentTypeItem(
           color: Colors.purple,
-          label: LocaleKeys.document,
+          label: LocaleKeys.document.tr(),
           icon: Icons.insert_drive_file_outlined,
           onTap: () {
             chatRoomCubit.pickDocuments();
@@ -28,7 +29,7 @@ class AttachmentTypes extends StatelessWidget {
         ),
         _buildAttachmentTypeItem(
           color: Colors.redAccent,
-          label: LocaleKeys.camera,
+          label: LocaleKeys.camera.tr(),
           icon: Icons.camera_alt,
           onTap: () async {
             context.push(Routes.CHATROOMCAMERAPICKER);
@@ -36,21 +37,21 @@ class AttachmentTypes extends StatelessWidget {
         ),
         _buildAttachmentTypeItem(
             color: Colors.purpleAccent,
-            label: LocaleKeys.gallery,
+            label: LocaleKeys.gallery.tr(),
             onTap: () => chatRoomCubit.pickMedia(),
             icon: Icons.image_outlined),
         _buildAttachmentTypeItem(
             color: Colors.orange[600]!,
-            label: LocaleKeys.audio,
+            label: LocaleKeys.audio.tr(),
             onTap: () => chatRoomCubit.pickAudio(),
             icon: Icons.headphones_rounded),
         _buildAttachmentTypeItem(
             color: Colors.green,
-            label: LocaleKeys.location,
+            label: LocaleKeys.location.tr(),
             icon: Icons.location_on_rounded),
         _buildAttachmentTypeItem(
             color: Colors.lightBlue,
-            label: LocaleKeys.contact,
+            label: LocaleKeys.contact.tr(),
             icon: Icons.person,
             onTap: () {
               context.push(Routes.SELECTCONTACTSTOSHARE);

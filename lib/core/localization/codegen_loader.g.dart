@@ -323,7 +323,7 @@ class CodegenLoader extends AssetLoader{
   "checkRequest": "يرجى الانتظار للتحقق من الطلب",
   "aBirdInHand": "عصفور في اليد خير من عشرة على الشجرة",
   "permissionDenied": "تم رفض الصلاحيات",
-  "contacts": "Contacts",
+  "contacts": "جهات الاتصال",
   "pleaseLoginRegisterToEnjoyTheApp": "من فضلك قم بتسجيل الدخول او التسجيل للتفاعل معنا",
   "noChatsUntilNow": "لا توجد محادثات حتى الآن",
   "unarchive": "إلغاء الأرشفة"

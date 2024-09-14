@@ -101,7 +101,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                 ),
               ),
               SizedBox(
-                height: 150.h.w,
+                height: 150.h,
                 child: ListView.separated(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   scrollDirection: Axis.horizontal,
@@ -276,7 +276,7 @@ class _TrimmerViewState extends State<_TrimmerView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20.h.h),
+      padding: EdgeInsets.symmetric(vertical: 20.h),
       color: Colors.black,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

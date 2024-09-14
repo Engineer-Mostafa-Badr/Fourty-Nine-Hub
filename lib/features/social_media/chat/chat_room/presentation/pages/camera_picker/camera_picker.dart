@@ -397,7 +397,7 @@ class _ImagesListState extends State<_ImagesList> {
                       current.pickMode != previous.pickMode,
                   builder: (context, state) {
                     return ElevatedAppButton(
-                      label: LocaleKeys.photo,
+                      label: LocaleKeys.photo.tr(),
                       backColor: state.pickMode == PickMode.photo
                           ? AppColors.SECONDARY_COLOR
                           : null,
@@ -416,7 +416,7 @@ class _ImagesListState extends State<_ImagesList> {
                       current.pickMode != previous.pickMode,
                   builder: (context, state) {
                     return ElevatedAppButton(
-                      label: LocaleKeys.video,
+                      label: LocaleKeys.video.tr(),
                       backColor: state.pickMode == PickMode.video
                           ? AppColors.SECONDARY_COLOR
                           : null,
@@ -566,7 +566,7 @@ class __VideoCircularIndicatorState extends State<_VideoCircularIndicator> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 80.h,
+      height: 80,
       width: 80,
       child: CircularProgressIndicator(
         value: 1 - (_time / widget.duration.inSeconds),
