@@ -305,5 +305,9 @@ abstract class  LocaleKeys {
   static const complete = 'complete';
   static const yearsLast = 'yearsLast';
   static const checkRequest = 'checkRequest';
+  static const confirmNewPassword = 'confirmNewPassword';
+  static const newPassword = 'newPassword';
+  static const createNewPassword = 'createNewPassword';
+  static const passwordChangedSuccessfully = 'passwordChangedSuccessfully';
 
 }

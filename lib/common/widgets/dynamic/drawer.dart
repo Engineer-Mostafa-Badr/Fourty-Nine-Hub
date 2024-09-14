@@ -14,7 +14,6 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_entit
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -41,7 +40,7 @@ class DrawerWidget extends StatelessWidget {
         builder: (context, state) {
           context.read<GetWalletCubit>();
           return Drawer(
-            width: 600.h,
+            width: 600.w,
             child: SafeArea(
               child: SingleChildScrollView(
                 child: Column(
@@ -418,10 +417,10 @@ class DrawerWidget extends StatelessWidget {
           children: [
             CircleAvatar(
               backgroundColor: AppColors.GREY_BORDER_COLOR,
-              radius: 45.w,
+              radius: 45.r,
               child: Icon(
                 icon,
-                size: 40.w,
+                size: 40.sp,
                 color: AppColors.QUANTITY_COLOR,
               ),
             ),
@@ -432,7 +431,7 @@ class DrawerWidget extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Label(text: label, style: Styles.mediumText(color: Colors.grey)),
+            Label(text: label, style: Styles.smallText(color: Colors.grey)),
           ],
         ),
       ),
@@ -564,11 +563,11 @@ class DrawerWidget extends StatelessWidget {
               Sizer(
                 height: 10.h,
               ),
-              InkWell(
+              GestureDetector(
                 onTap: () {
-                  context.push(
-                    Routes.WALLET,
-                  );
+                  // context.push(
+                  //   Routes.WALLET,
+                  // );
                 },
                 child: Row(
                   children: [

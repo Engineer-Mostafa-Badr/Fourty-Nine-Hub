@@ -196,7 +196,7 @@ class _LoginViewState extends State<LoginView> {
                       widget.authType == AuthType.REGISTER
                           ? DefaultButton(
                               labelStyle: TextStyle(
-                                  fontSize: 35.sp.h,
+                                  fontSize: 50.sp.h,
                                   color: AppColors.AUTH_CONTAINER_COLOR),
                               label: LocaleKeys.register.localize,
                               width: double.infinity,
@@ -213,7 +213,7 @@ class _LoginViewState extends State<LoginView> {
                               width: double.infinity,
                               label: LocaleKeys.login.localize,
                               labelStyle: TextStyle(
-                                  fontSize: 35.sp.h,
+                                  fontSize: 50.sp.h,
                                   color: AppColors.AUTH_CONTAINER_COLOR),
                               onPressed: loginCubit.login,
                             ),
@@ -261,14 +261,14 @@ class LoginWidget extends StatefulWidget {
 class _LoginWidgetState extends State<LoginWidget> {
   bool obsecure = false;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext  context) {
     return Column(
       children: [
         FormTextField(
-          constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+          constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.r),
-          style: TextStyle(fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
+          style: const TextStyle(color: AppColors.QUANTITY_COLOR),
           controller: widget.loginCubit.emailTextController,
           // label: 'E-mail or phone number',
           hint: LocaleKeys.emailOrPhone.localize,
@@ -279,12 +279,12 @@ class _LoginWidgetState extends State<LoginWidget> {
           ),
           action: (v) {},
         ),
-        Sizer(),
+        const Sizer(),
         FormTextField(
-          constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+          constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.r),
-          style: TextStyle(fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
+          style: const TextStyle( color: AppColors.QUANTITY_COLOR),
           controller: widget.loginCubit.passwordTextController,
           // label: 'Password',
           hint: LocaleKeys.password.localize,
@@ -303,12 +303,11 @@ class _LoginWidgetState extends State<LoginWidget> {
           ),
           action: (v) {},
         ),
-        Sizer(),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             TextAppButton(
-                style: Styles.smallText(color: Theme.of(context).primaryColor),
+                style: Styles.smallText(fontSize: 40.sp,color: Theme.of(context).primaryColor),
                 label: LocaleKeys.forgetPassword.localize,
                 onPressed: () => context.push(Routes.FORGOTPASSWORD)),
           ],
@@ -323,12 +322,12 @@ class _LoginWidgetState extends State<LoginWidget> {
         // Sizer(),
         // Column(
         //   children: [
-        Sizer(),
+        const Sizer(),
         Label(
           text: 'Or Continue with',
           style: Styles.mediumText(color: Colors.grey),
         ),
-        Sizer(),
+        const Sizer(),
         Row(
           children: [
             Expanded(
@@ -340,7 +339,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 onPressed: widget.loginCubit.signInWithGoogle,
               ),
             ),
-            Sizer(),
+            const Sizer(),
             Expanded(
               child: AppButton(
                 label: 'Facebook',
@@ -350,7 +349,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 onPressed: widget.loginCubit.signInWithFacebook,
               ),
             ),
-            if (Platform.isIOS) Sizer(),
+            if (Platform.isIOS) const Sizer(),
             if (Platform.isIOS)
               Expanded(
                 child: AppButton(
@@ -419,7 +418,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             child: Column(
               children: [
                 FormTextField(
-                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.firstNameController,
@@ -439,7 +438,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30.h,
                 ),
                 FormTextField(
-                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.lastNameController,
@@ -458,7 +457,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30.h,
                 ),
                 FormTextField(
-                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   controller: registerCubit.emailTextController,
@@ -535,7 +534,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 FormTextField(
                   style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
                   constraints:
-                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                       BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   controller: registerCubit.passwordTextController,
@@ -563,7 +562,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   style: TextStyle(
                       fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
                   constraints:
-                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                       BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   controller: registerCubit.confirmPasswordTextController,
@@ -591,7 +590,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   validator: (p0) {
                     return null;
                   },
-                  constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20),
                   // controller: registerCubit.firstNameController,

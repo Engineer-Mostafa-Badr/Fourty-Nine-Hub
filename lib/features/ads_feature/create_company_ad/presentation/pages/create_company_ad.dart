@@ -257,9 +257,9 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                 child: GestureDetector(
                   onTap: () => context.push(Routes.LOGIN),
                   child: Container(
-                    padding: EdgeInsets.all(12),
-                    width: 300,
-                    height: 300.h,
+                    padding: EdgeInsets.all(12.w),
+                    width: 500.w,
+                    height: 500.h,
                     decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor,
                       shape: BoxShape.circle,

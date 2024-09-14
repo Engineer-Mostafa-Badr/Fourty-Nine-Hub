@@ -304,5 +304,9 @@
   "requestWithdrawal": "تم إرسال طلب السحب الخاص بك بنجاح في انتظار موافقة الإدارة",
   "complete": "تم إكماله",
   "yearsLast": "سنوات مضت",
-  "checkRequest": "يرجى الانتظار للتحقق من الطلب"
+  "checkRequest": "يرجى الانتظار للتحقق من الطلب",
+  "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+  "newPassword": "كلمة مرور جديدة",
+  "createNewPassword": "إنشاء كلمة مرور جديدة",
+  "passwordChangedSuccessfully": "تم تغيير كلمة المرور بنجاح"
 }

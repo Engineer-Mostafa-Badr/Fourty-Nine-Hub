@@ -126,6 +126,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             onTap: () {
               context.push(Routes.NOTIFICATIONS);
             },
+
             child: const UnreadNotificationsBuilder(),
           ),
           SizedBox(

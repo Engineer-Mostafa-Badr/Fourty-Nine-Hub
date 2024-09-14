@@ -35,7 +35,6 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../widgets/announce_widget.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
@@ -120,9 +119,11 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           children: [
             //carousel slider
             const AnnounceWidget(),
-            // Sizer(),
+             if(!context.read<UserCubit>().isLoggedIn)
+              Sizer(),
             //wallet
-            context.read<UserCubit>().isLoggedIn?const WalletWidget():const SizedBox.shrink(),
+            if(context.read<UserCubit>().isLoggedIn)
+              const WalletWidget(),
             //    Sizer(),
             //admob
             //   const GoogleAddsBanner(),

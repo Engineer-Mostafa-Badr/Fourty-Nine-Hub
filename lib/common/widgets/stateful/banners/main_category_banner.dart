@@ -10,7 +10,6 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 import 'package:shimmer/shimmer.dart';
 
 class MainCategoryBanner extends StatefulWidget {
@@ -45,9 +44,9 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: widget.category.banner,
-      height: MediaQuery.sizeOf(context).height * 0.08,
+      height: MediaQuery.sizeOf(context).height * 0.13.h,
       imageBuilder: (context, i) => Container(
-        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color: widget.category.banner.isNotEmpty

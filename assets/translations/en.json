@@ -307,5 +307,9 @@
   "requestWithdrawal": "Your request withdrawal sent successfully waiting for administration approval",
   "complete": "Complete",
   "yearsLast": "years last",
-  "checkRequest": "Please wait to check request"
+  "checkRequest": "Please wait to check request",
+  "confirmNewPassword": "Confirm New Password",
+  "newPassword": "New Password",
+  "createNewPassword": "Create New Password",
+  "passwordChangedSuccessfully": "Password Changed Successfully"
 }

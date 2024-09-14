@@ -187,9 +187,9 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                       ],
                     ),
                   ),
-                  Sizer(),
+                  const Sizer(),
                   DropDownSubscription(),
-                  Sizer(),
+                  const Sizer(),
                   Label(
                     text: LocaleKeys.history.localize,
                     style: Styles.headerText(),
@@ -222,8 +222,8 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                         },
                         itemCount: data.length,
                       )
-                          : const Center(
-                        child: Label(text: 'No History Available'),
+                          :  Center(
+                        child: Label(text: LocaleKeys.noHistoryAvailable.localize),
                       );
                     },
                     fetchData: (PaginationParams paginationParams) {

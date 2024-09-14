@@ -29,15 +29,16 @@ class WalletHistoryCard extends StatelessWidget {
       subtitle: Label(
         text: subTitle,
         style: Styles.mediumText(
-            fontSize: 24.sp, color: AppColors.GREY_NORMAL_COLOR),
+            fontSize: 50.sp, color: AppColors.GREY_NORMAL_COLOR),
       ),
       trailing: Icon(
         Icons.line_axis,
+        size: 50.sp,
         color: amount! ? AppColors.WHATS_APP_COLOR : AppColors.SECONDARY_COLOR,
       ),
       leading: Container(
-          height: kToolbarHeight * .7,
-          width: kToolbarHeight * .7,
+          height: kToolbarHeight * 1.2.h,
+          width: kToolbarHeight * 1.4.w,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: AppColors.PRIMARY_COLOR,
@@ -45,7 +46,7 @@ class WalletHistoryCard extends StatelessWidget {
           child: Icon(
             icon,
             color: Colors.white,
-            size: 14,
+            size: 30.sp,
           )),
       onTap: () => onTap!(),
     );

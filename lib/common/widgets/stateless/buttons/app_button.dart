@@ -38,7 +38,7 @@ class AppButton extends StatelessWidget {
     return InkWell(
       onTap: () => onPressed(),
       child: Container(
-        height: height ?? kToolbarHeight * .6,
+        height: height ?? kToolbarHeight * 1.2.h,
         width: width,
         margin: EdgeInsets.all(margin ?? 0),
         padding: EdgeInsets.symmetric(horizontal: padding ?? 0),

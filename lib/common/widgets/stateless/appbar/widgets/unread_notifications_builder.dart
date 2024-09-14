@@ -20,8 +20,8 @@ class UnreadNotificationsBuilder extends StatelessWidget {
         return IconWithViewCount(
           icon: Image.asset(
             Assets.notification,
-            width: 20,
-            height: 20.h,
+            width: 30.w,
+            height: 30.h,
             fit: BoxFit.cover,
           ),
           unreadCount: getUnreadNotificationsCountCubit

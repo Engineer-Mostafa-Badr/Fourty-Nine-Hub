@@ -7,7 +7,6 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Ba
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_states.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';

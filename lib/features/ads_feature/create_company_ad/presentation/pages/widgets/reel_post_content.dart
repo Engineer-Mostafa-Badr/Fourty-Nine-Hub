@@ -380,9 +380,8 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
   Widget _buildReelInfo(
       CompanyAdEntity advertises, final Function(String) onDeleteItem) {
     final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
     return Padding(
-      padding: EdgeInsets.all(0.0),
+      padding: const EdgeInsets.all(0.0),
       child: SizedBox(
         height: height * 0.5,
         width: double.infinity,

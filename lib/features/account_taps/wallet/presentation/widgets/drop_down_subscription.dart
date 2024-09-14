@@ -31,15 +31,16 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
           _showCategoryDialog();
         },
         child: Container(
-          padding:  EdgeInsets.symmetric(vertical: 12.h),
+          padding:  EdgeInsets.symmetric(vertical: 22.h),
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(20.r),
           ),
           child: Center(
             child: Text(
               LocaleKeys.addSubcategoryToSubscribe.localize,
               style: TextStyle(
+                fontSize: 25.sp,
                 color: Theme.of(context).scaffoldBackgroundColor,
               ),
             ),
