@@ -73,7 +73,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
           ? BlocBuilder<CreateCompanyAdCubit, CreateCompanyAdState>(
               builder: (context, state) {
                 return Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
                       Expanded(
@@ -113,7 +113,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                                     builder: (context) => CreatePostCompany(
                                       text: false,
                                       title:
-                                          LocaleKeys.createPicturePost.localize,
+                                      LocaleKeys.createPicturePost.localize,
                                       type: 'photo',
                                       totalPrice: state.price?.photoPrice ?? 0,
                                     ),
@@ -137,7 +137,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                                       title: LocaleKeys.createPost.localize,
                                       type: 'photo_written',
                                       totalPrice:
-                                          state.price?.postAndPhotoPrice ?? 0,
+                                      state.price?.postAndPhotoPrice ?? 0,
                                     ),
                                   ),
                                 );
@@ -158,7 +158,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                                     builder: (context) => ReelsRecordingScreen(
                                       voiceUrl: '',
                                       totalPrice:
-                                          '${state.price?.reelPrice ?? 0}',
+                                      '${state.price?.reelPrice ?? 0}',
                                       advertisementType: 'reel',
                                       comeFromCompany: 'company',
                                     ),
@@ -177,11 +177,11 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                           Expanded(
                             child: Container(
                               padding: EdgeInsetsDirectional.symmetric(
-                                  vertical: 10.h, horizontal: 14.w),
+                                  vertical: 15.h, horizontal: 15.w),
                               width: double.infinity,
                               decoration: BoxDecoration(
                                 color: Theme.of(context).primaryColor,
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(20.r),
                               ),
                               child: Row(
                                 children: [
@@ -202,7 +202,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 5),
                           Expanded(
                             child: GestureDetector(
                               onTap: totalPrice > 0
@@ -225,14 +225,14 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                                   : () {},
                               child: Container(
                                 padding: EdgeInsetsDirectional.symmetric(
-                                    vertical: 10.h, horizontal: 10.w),
+                                    vertical: 15.h, horizontal: 15.w),
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   color: totalPrice > 0
                                       ? AppColors.SECONDARY_COLOR
                                       : AppColors.SECONDARY_COLOR
                                           .withOpacity(.5),
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(20.r),
                                 ),
                                 child: Center(
                                   child: Text(
@@ -283,4 +283,6 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
             ),
     );
   }
+
+
 }

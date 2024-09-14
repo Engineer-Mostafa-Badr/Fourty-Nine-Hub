@@ -122,7 +122,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             const AnnounceWidget(),
             // Sizer(),
             //wallet
-            const WalletWidget(),
+            context.read<UserCubit>().isLoggedIn?const WalletWidget():const SizedBox.shrink(),
             //    Sizer(),
             //admob
             //   const GoogleAddsBanner(),

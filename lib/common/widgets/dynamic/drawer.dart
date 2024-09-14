@@ -59,7 +59,9 @@ class DrawerWidget extends StatelessWidget {
                     drawerListTile(
                         image: Assets.microphone,
                         label: LocaleKeys.advertiseYourCompany.localize,
-                        onTap: () => context.push(Routes.CREATECOMPANYAD)),
+                        onTap: () {
+                          return context.push(Routes.CREATECOMPANYAD);
+                        }),
                     drawerListTile(
                         image: Assets.quran,
                         label: LocaleKeys.quraan.localize,

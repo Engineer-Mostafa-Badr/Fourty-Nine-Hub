@@ -61,7 +61,7 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
     String? post,
     required String type,
     String? description,
-    required int totalPrice,
+    required num totalPrice,
     List<String>? mediaIds,
   }) async {
     emit(state.copyWith(status: StateStatus.loading));

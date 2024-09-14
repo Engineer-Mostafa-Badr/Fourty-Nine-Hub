@@ -140,7 +140,7 @@ class SubscriptionWidget extends StatelessWidget {
                 function: () {
                   serviceLocator<SubscriptionController>()
                       .showSubscriptionPlans(
-                    subCategoryId: '66adecd7aa2ff24015872e9f',
+                    subCategoryId: subscription.subCategoryId!,
                     wallets: [],
                   );
                 },

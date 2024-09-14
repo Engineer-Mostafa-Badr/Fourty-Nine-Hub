@@ -42,6 +42,7 @@ class WalletWidget extends StatelessWidget {
     return BlocBuilder<WalletCubit, WalletState>(
       builder: (BuildContext context, state) {
         return Container(
+          height: 90.h,
           margin:
               EdgeInsets.symmetric(vertical: 10.h, horizontal: margin?.w ?? 0),
           padding: const EdgeInsets.all(5),
@@ -62,7 +63,7 @@ class WalletWidget extends StatelessWidget {
                 radius: 6.w,
                 backgroundColor: AppColors.SECONDARY_COLOR,
               ),
-              Sizer(),
+              const Sizer(),
               BlocProvider<BalanceCubit>(
                 create: (BuildContext context) => serviceLocator(),
                 child: BlocBuilder<BalanceCubit, BalanceState>(
@@ -78,7 +79,7 @@ class WalletWidget extends StatelessWidget {
                 ),
               ),
               Container(
-                width: 2.h,
+                width: 2.w,
                 margin: EdgeInsets.symmetric(horizontal: 5.w),
                 color: Colors.grey,
                 height: kToolbarHeight * 1.3.h,
@@ -87,7 +88,7 @@ class WalletWidget extends StatelessWidget {
                 radius: 6.w,
                 backgroundColor: AppColors.SECONDARY_COLOR,
               ),
-              Sizer(),
+              const Sizer(),
               BlocProvider<GiftCubit>(
                 create: (BuildContext context) => serviceLocator(),
                 child: BlocBuilder<GiftCubit, GiftState>(
@@ -144,7 +145,7 @@ class WalletWidget extends StatelessWidget {
             Label(
                 text: amount,
                 style: Styles.mediumText(
-                    fontWeight: FontWeight.bold, fontSize: 32.sp)),
+                    fontWeight: FontWeight.bold,)),
           ],
         ),
       ));

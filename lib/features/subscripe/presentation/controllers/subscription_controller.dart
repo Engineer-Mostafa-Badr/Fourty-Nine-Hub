@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
@@ -8,6 +9,7 @@ import 'package:fourtyninehub/features/subscripe/domain/usecases/get_active_subs
 import 'package:fourtyninehub/features/subscripe/presentation/widgets/amounts.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../domain/usecases/check_if_user_subscribed_usecase.dart';
 import '../../domain/usecases/get_subscription_plans_usecase.dart';
@@ -46,26 +48,65 @@ class SubscriptionController {
     });
   }
 
+  // Future<void> showSubscriptionPlans({List<WalletTypes>? wallets, required String subCategoryId, String? title}) async {
+  //    showLoadingDialog(context);
+  //    Navigator.of(context).pop();
+  //   final plansResponse = await _getSubscriptionPlansUseCase(subCategoryId);
+  //   // AppPages.router.pop();
+  //   plansResponse.fold(
+  //       (l) {
+  //         showErrorMessage(
+  //             context,
+  //             Labels.errorHappened,
+  //           );
+  //       }, (plans) {
+  //     bottomSheet(
+  //         context: context,
+  //         backColor: Theme.of(context).scaffoldBackgroundColor,
+  //         widget: SubscriptionPlansWidget(
+  //           title: title,
+  //           subscribePlans: plans,
+  //           subCategoryId: subCategoryId,
+  //           paymentMenthods: wallets,
+  //         ));
+  //   });
+  // }
+  bool _isBottomSheetShown = false;
+
   Future<void> showSubscriptionPlans({List<WalletTypes>? wallets, required String subCategoryId, String? title}) async {
-    showLoadingDialog(context);
-    final plansResponse = await _getSubscriptionPlansUseCase(subCategoryId);
-    AppPages.router.pop();
-    plansResponse.fold(
-        (l) => showErrorMessage(
-              context,
-              Labels.errorHappened,
-            ), (plans) {
-      bottomSheet(
-          context: context,
-          backColor: Theme.of(context).scaffoldBackgroundColor,
-          widget: SubscriptionPlansWidget(
-            title: title,
-            subscribePlans: plans,
-            subCategoryId: subCategoryId,
-            paymentMenthods: wallets,
-          ));
-    });
+    if (!_isBottomSheetShown) {
+      _isBottomSheetShown = true;
+
+      // Example wallets data or pass in your actual wallet list
+      List<WalletTypes> wallets = [];
+
+      showLoadingDialog(context);
+      Navigator.of(context).pop(); // Close loading dialog
+
+      final plansResponse = await _getSubscriptionPlansUseCase(subCategoryId);
+      plansResponse.fold(
+              (l) {
+            showErrorMessage(context, Labels.errorHappened);
+            _isBottomSheetShown = false; // Reset flag on error
+          },
+              (plans) {
+            bottomSheet(
+              context: context,
+              backColor: Theme.of(context).scaffoldBackgroundColor,
+              widget: SubscriptionPlansWidget(
+                title: title,
+                subscribePlans: plans,
+                subCategoryId: subCategoryId,
+                paymentMenthods: wallets,
+              ),
+            );
+          }
+      );
+
+      _isBottomSheetShown = false; // Reset flag after bottom sheet is shown
+    }
   }
+
 
   Future<void> showActiveSubscriptionAmounts({required WalletTypes walletType}) async {
     final response = await _getActiveSubscriptionAmountsUseCase(const NoParams());

@@ -15,7 +15,7 @@ import '../models/fetch_post_company_advertise_params.dart';
 abstract class CompanyAdvertiseDataSource {
   Future<Either<Failure, PriceModel>> getPrice();
 
-  Future<Either<Failure, List<CompanyAdOptionEntity>>> addCompanyAd(
+  Future<Either<Failure, CompanyAdOptionEntity>> addCompanyAd(
       CompanyAddParams params);
 
   Future<Either<Failure, bool>> deleteCompanyAd(DeleteCompanyAdParams params);
@@ -39,7 +39,7 @@ class CompanyAdvertiseDataSourceImpl implements CompanyAdvertiseDataSource {
   }
 
   @override
-  Future<Either<Failure, List<CompanyAdOptionEntity>>> addCompanyAd(
+  Future<Either<Failure, CompanyAdOptionEntity>> addCompanyAd(
       CompanyAddParams params) async {
     final Map<String, dynamic> jsonData = {
       "advertisements": [
@@ -61,10 +61,8 @@ class CompanyAdvertiseDataSourceImpl implements CompanyAdvertiseDataSource {
     return response.fold(
       (failure) => Left(failure),
       (response) {
-        final list = (response['data'] as List)
-            .map((e) => CompanyAdOptionModel.fromJson(e))
-            .toList();
-        return Right(list);
+        return Right(CompanyAdOptionModel.fromJson(response));
+       // return Right(list);
       },
     );
   }

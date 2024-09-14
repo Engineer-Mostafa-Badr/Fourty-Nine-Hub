@@ -4,7 +4,7 @@ class CreateCompanyAdState {
   final StateStatus status;
   final Failure? failure;
   final PriceEntity? price;
-  final List<CompanyAdOptionEntity>? advertise;
+  final CompanyAdOptionEntity? advertise;
   final List<CompanyAdEntity>? posts;
   final num totalPrice;
 
@@ -20,7 +20,7 @@ class CreateCompanyAdState {
     StateStatus? status,
     Failure? failure,
     PriceEntity? price,
-    List<CompanyAdOptionEntity>? advertise,
+    CompanyAdOptionEntity? advertise,
     List<CompanyAdEntity>? posts,
     num? totalPrice,
   }) {

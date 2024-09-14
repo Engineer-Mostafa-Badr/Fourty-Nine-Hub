@@ -1,266 +1,496 @@
+import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chewie/chewie.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:video_player/video_player.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/entities/company_ad_entity.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
+import 'package:video_player/video_player.dart';
 
+import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/enums/base_status_enum.dart';
-import '../../cubit/create_company_ad_cubit.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/messages/messages.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../domain/entities/company_ad_entity.dart';
+import '../../../domain/entities/media_entity.dart';
 
-class ReelsPostContent extends StatefulWidget {
-  const ReelsPostContent({Key? key}) : super(key: key);
+class ReelsPostContent extends StatelessWidget {
+  const ReelsPostContent({super.key});
 
   @override
-  _ReelsPostContentState createState() => _ReelsPostContentState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      // appBar: _buildAppBar(context),
+      backgroundColor: Colors.transparent,
+      body: const ReelsScreen(),
+    );
+  }
 }
 
-class _ReelsPostContentState extends State<ReelsPostContent> {
-  late PageController _pageController;
-  VideoPlayerController? _videoController;
-  int currentPageIndex = 0;
-  bool isVideoLoading = false;
+class ReelsScreen extends StatefulWidget {
+  const ReelsScreen({super.key});
+
+  @override
+  ReelsScreenState createState() => ReelsScreenState();
+}
+
+class ReelsScreenState extends State<ReelsScreen> {
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
-    context.read<CreateCompanyAdCubit>().getCompanyAdPosts('reel', params: PaginationParams.basic());
+    _fetchInitialReels();
+  }
+
+  void _fetchInitialReels() {
+    if (mounted) {
+      context
+          .read<CreateCompanyAdCubit>()
+          .getCompanyAdPosts('reel', params: PaginationParams.basic());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<CreateCompanyAdCubit, CreateCompanyAdState>(
+      listener: (BuildContext context, CreateCompanyAdState state) {
+        if (state.status == StateStatus.success) {
+          showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
+        }
+      },
+      builder: (context, state) {
+        return PaginationView<CompanyAdEntity>(
+          loadingWidget: const SizedBox.shrink(),
+          build:
+              (ScrollController scrollController, List<CompanyAdEntity> data) {
+            if (data.isEmpty) {
+              return const Center(
+                child: CupertinoActivityIndicator(radius: 25),
+              );
+            }
+            return data.isNotEmpty
+                ? PageView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    controller: _pageController,
+                    scrollDirection: Axis.vertical,
+                    itemCount: data.length,
+                    onPageChanged: (index){
+                      _handlePageChange(index,data);
+                    },
+                itemBuilder: (context, index) {
+                  if (index >= data.length) {
+                    return const Center(
+                      child: CupertinoActivityIndicator(radius: 25),
+                    );
+                  }
+
+                  var mediaList = data[index].media;
+                  if (mediaList == null || index >= mediaList.length) {
+                    return const Center(
+                      child: CupertinoActivityIndicator(radius: 25),
+                    );
+                  }
+
+                  var mediaItem = mediaList[index];
+                  return ReelItem(
+                    key: ValueKey(mediaItem.sId),
+                    post: mediaItem,
+                    isVisible: _currentPage == index,
+                    advertises: data[index],
+                    onDeleteItem: (id) async {
+                      var result = await context
+                          .read<CreateCompanyAdCubit>()
+                          .deleteCompanyAd(id: id);
+                      if (result == true) {
+                        data.removeWhere((e) => e.sId == id);
+                        setState(() {});
+                      }
+                    },
+                  );
+                }
+                  )
+                : Center(child: Label(text: LocaleKeys.noPosts.localize));
+          },
+          fetchData: (PaginationParams paginationParams) {
+            return context.read<CreateCompanyAdCubit>().getCompanyAdPosts(
+                  'reel',
+                  params: paginationParams,
+                );
+          },
+        );
+      },
+    );
+  }
+
+
+
+  void _handlePageChange(index,data) {
+    setState(() => _currentPage = index);
+    final postsCubit = context.read<CreateCompanyAdCubit>();
+    if (index == data.length - 1 && mounted) {
+      postsCubit.getCompanyAdPosts('reel', params: PaginationParams.basic());
+    }
   }
 
   @override
   void dispose() {
-    _videoController?.dispose();
     _pageController.dispose();
     super.dispose();
   }
+}
 
-  void _initializeVideoController(String videoUrl) {
-    setState(() {
-      isVideoLoading = true;
-    });
+class ReelItem extends StatefulWidget {
+  final MediaEntity? post;
+  final bool isVisible;
+  final CompanyAdEntity advertises;
+  final Function(String) onDeleteItem;
 
-    _videoController?.dispose(); // Dispose the previous controller
-    _videoController = VideoPlayerController.network(videoUrl)
-      ..initialize().then((_) {
-        setState(() {
-          _videoController?.play();
-          isVideoLoading = false;
-        });
-      }).catchError((error) {
-        setState(() {
-          isVideoLoading = false;
-        });
-        // Handle video load error here
-        print('Error loading video: $error');
-      });
+  const ReelItem(
+      {super.key,
+      required this.post,
+      required this.isVisible,
+      required this.advertises,
+      required this.onDeleteItem});
+
+  @override
+  ReelItemState createState() => ReelItemState(advertises, onDeleteItem);
+}
+
+class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
+  late final VideoPlayerController _videoPlayerController;
+  ChewieController? _chewieController;
+  bool _isInitialized = false;
+  bool _isPlaying = false;
+  bool _showPlayPauseIcon = false;
+  final CompanyAdEntity advertises;
+  final Function(String) onDeleteItem;
+
+  ReelItemState(this.advertises, this.onDeleteItem);
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializePlayer();
   }
 
-  void _onPageChanged(int index, List<CompanyAdEntity> data) {
-    setState(() {
-      currentPageIndex = index;
-    });
+  @override
+  void didUpdateWidget(ReelItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isVisible != oldWidget.isVisible) {
+      widget.isVisible ? _playVideo() : _pauseVideo();
+    }
+  }
 
-    _videoController?.pause(); // Pause the current video
-    final videoUrl = data[index].media?.first.photo ?? ''; // Ensure correct URL
-    if (videoUrl.isNotEmpty) {
-      _initializeVideoController(videoUrl);
-    } else {
-      print('Invalid video URL'); // Handle missing or incorrect URL
+  Future<void> _initializePlayer() async {
+    if (!await _checkConnectivity()) return;
+
+    await _initializeVideoController();
+    _setupChewieController();
+    _setInitialVideoState();
+  }
+
+  Future<void> _initializeVideoController() async {
+    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(widget.post?.photo ?? ''));
+    try {
+      print('Initializing video controller with URL: ${widget.post?.photo}');
+      await _videoPlayerController.initialize();
+      print('Video controller initialized successfully');
+    } catch (error) {
+      print('Error initializing video controller: $error');
+      if (mounted) {
+        _handleVideoError('Failed to load video');
+      }
+    }
+  }
+
+
+  void _setupChewieController() {
+    _chewieController = ChewieController(
+      videoPlayerController: _videoPlayerController,
+      autoPlay: widget.isVisible,
+      looping: true,
+      showControls: false,
+      aspectRatio: _videoPlayerController.value.aspectRatio,
+    );
+  }
+
+  void _setInitialVideoState() {
+    if (mounted) {
+      setState(() {
+        _isInitialized = true;
+        _isPlaying = widget.isVisible;
+      });
+    }
+  }
+
+  Future<bool> _checkConnectivity() async {
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      if (mounted) {
+        _handleVideoError('No internet connection');
+      }
+      return false;
+    }
+    return true;
+  }
+
+  void _handleVideoError(String message) {
+    if (mounted) {
+      setState(() {
+        _isInitialized = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    }
+  }
+
+  void _playVideo() {
+    if (_isInitialized && !_isPlaying) {
+      _chewieController?.play();
+      if (mounted) {
+        setState(() {
+          _isPlaying = true;
+          _showPlayPauseIcon = true;
+        });
+      }
+      _hidePlayPauseIconAfterDelay();
+    }
+  }
+
+  void _pauseVideo() {
+    if (_isInitialized && _isPlaying) {
+      _chewieController?.pause();
+      if (mounted) {
+        setState(() {
+          _isPlaying = false;
+          _showPlayPauseIcon = true;
+        });
+      }
     }
   }
 
   void _togglePlayPause() {
-    setState(() {
-      if (_videoController != null && _videoController!.value.isPlaying) {
-        _videoController?.pause();
-      } else {
-        _videoController?.play();
+    if (_isPlaying) {
+      _pauseVideo();
+    } else {
+      _playVideo();
+    }
+  }
+
+  void _hidePlayPauseIconAfterDelay() {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        setState(() {
+          _showPlayPauseIcon = false;
+        });
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateCompanyAdCubit, CreateCompanyAdState>(
-      builder: (BuildContext context, state) {
-        if (state.status == StateStatus.loading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state.status == StateStatus.error) {
-          return Center(child: Text('Error: ${state.failure}'));
-        }
-
-        final List<CompanyAdEntity> data = state.posts ?? [];
-
-        if (data.isEmpty) {
-          return const Center(child: Text('No videos available.'));
-        }
-
-        return PaginationView<CompanyAdEntity>(
-          build: (ScrollController scrollController, List<CompanyAdEntity> data) {
-            return PageView.builder(
-              controller: _pageController,
-              scrollDirection: Axis.vertical,
-              onPageChanged: (index) => _onPageChanged(index, data),
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                // Initialize the video for the first page if not initialized
-                if (index == 0 && (_videoController == null || !_videoController!.value.isInitialized)) {
-                  final videoUrl = data[index].media?.first.photo ?? '';
-                  _initializeVideoController(videoUrl);
-                }
-
-                return GestureDetector(
-                  onTap: _togglePlayPause,
-                  child: Center(
-                    child: _videoController != null && _videoController!.value.isInitialized
-                        ? AspectRatio(
-                      aspectRatio: _videoController!.value.aspectRatio,
-                      child: VideoPlayer(_videoController!),
-                    )
-                        : isVideoLoading
-                        ? const CircularProgressIndicator()
-                        : const Text('No video available'),
-                  ),
-                );
-              },
-            );
-          },
-          fetchData: (PaginationParams paginationParams) {
-            return context
-                .read<CreateCompanyAdCubit>()
-                .getCompanyAdPosts('reel', params: paginationParams);
-          },
-        );
-      },
+    super.build(context);
+    return GestureDetector(
+      onTap: _togglePlayPause,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          _buildVideoOrPlaceholder(),
+          _buildPlayPauseIcon(),
+          _buildOverlay(advertises, onDeleteItem),
+          if (!_isInitialized)
+            const Center(
+              child: CupertinoActivityIndicator(radius: 25),
+            ),
+        ],
+      ),
     );
+  }
+
+  Widget _buildVideoOrPlaceholder() {
+    if (_isInitialized && _chewieController != null) {
+      return FittedBox(
+        fit: BoxFit.fitHeight,
+        child: SizedBox(
+          width: _videoPlayerController.value.size.width,
+          height: _videoPlayerController.value.size.height,
+          child: Chewie(controller: _chewieController!),
+        ),
+      );
+    } else {
+      return CachedNetworkImage(
+        imageUrl: widget.post?.photo ?? '',
+        fit: BoxFit.cover,
+        placeholder: (context, url) => const Center(
+          child: CupertinoActivityIndicator(radius: 25),
+        ),
+        errorWidget: (context, url, error) =>
+            const Center(child: Icon(Icons.error)),
+      );
+    }
+  }
+
+  Widget _buildPlayPauseIcon() {
+    return GestureDetector(
+      onTap: _togglePlayPause,
+      child: Center(
+        child: AnimatedOpacity(
+          opacity: _showPlayPauseIcon ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 300),
+          child: Icon(
+            _isPlaying ? Icons.pause : Icons.play_arrow,
+            color: Colors.white,
+            size: 100,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOverlay(
+      CompanyAdEntity advertises, Function(String) onDeleteItem) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildReelInfo(advertises, onDeleteItem),
+        SizedBox(height: kToolbarHeight + 20),
+        Expanded(
+          child: GestureDetector(
+            onTap: _togglePlayPause,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildReelInfo(
+      CompanyAdEntity advertises, final Function(String) onDeleteItem) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: EdgeInsets.all(0.0),
+      child: SizedBox(
+        height: height * 0.5,
+        width: double.infinity,
+        child: Stack(
+          alignment: AlignmentDirectional.topEnd,
+          children: [
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: IconButton(
+                onPressed: () {
+                  // _pauseVideo();
+
+                  onDeleteItem(advertises.sId!);
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => const ReelsRecordingScreen(),
+                  //     ));
+                },
+                icon: const FaIcon(
+                  Icons.close,
+                  color: Colors.red,
+                  size: 35,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _pauseVideo();
+    _videoPlayerController.dispose();
+    _chewieController?.dispose();
+    super.dispose();
   }
 }
 
+class ScrollingText extends StatefulWidget {
+  final String text;
 
+  const ScrollingText({super.key, required this.text});
 
+  @override
+  ScrollingTextState createState() => ScrollingTextState();
+}
 
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:video_player/video_player.dart';
-//
-// import '../../cubit/create_company_ad_cubit.dart';
-//
-// class ReelsPostContent extends StatefulWidget {
-//   @override
-//   _VideoReelsScreenState createState() => _VideoReelsScreenState();
-// }
-//
-// class _VideoReelsScreenState extends State<ReelsPostContent> {
-//   final List<String> videoUrls = [
-//     'https://49hub-reels.s3.eu-central-1.amazonaws.com/Social/reels/66ca3e98d62c72b67feec0f1/4f733d2a-ac26-4836-bebe-8e3c536c3b53.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZI2LDRJFLQMKAMUH%2F20240911%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20240911T205213Z&X-Amz-Expires=3600&X-Amz-Signature=d985a13c8c2da77f125d2aee5dfe8ed2f6572905c9b46019aa6db04e2b1343ea&X-Amz-SignedHeaders=host&x-id=GetObject',
-//     'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-//     'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-//   ];
-//
-//   PageController _pageController = PageController();
-//   int currentPageIndex = 0;
-//   late VideoPlayerController _videoController;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _videoController = VideoPlayerController.network(videoUrls[currentPageIndex])
-//       ..initialize().then((_) {
-//         setState(() {
-//           _videoController.play();
-//         });
-//       });
-//   }
-//
-//   @override
-//   void dispose() {
-//     _videoController.dispose();
-//     super.dispose();
-//   }
-//
-//   void _onPageChanged(int index) {
-//     setState(() {
-//       currentPageIndex = index;
-//     });
-//
-//     _videoController.pause();
-//     _videoController = VideoPlayerController.network(videoUrls[index])
-//       ..initialize().then((_) {
-//         setState(() {
-//           _videoController.play();
-//         });
-//       });
-//   }
-//
-//   // Function to toggle play/pause when screen is tapped
-//   void _togglePlayPause() {
-//     setState(() {
-//       if (_videoController.value.isPlaying) {
-//         _videoController.pause();
-//       } else {
-//         _videoController.play();
-//       }
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<CreateCompanyAdCubit,CreateCompanyAdState>(
-//       builder: (BuildContext context, state) {
-//         return  PageView.builder(
-//           controller: _pageController,
-//           scrollDirection: Axis.vertical,
-//           onPageChanged: _onPageChanged,
-//           itemCount:state.posts?.length,
-//           itemBuilder: (context, index) {
-//             return GestureDetector(
-//               onTap: _togglePlayPause, // Detect tap to play/pause
-//               child: Stack(
-//                 children: [
-//                   Center(
-//                     child: _videoController.value.isInitialized
-//                         ? AspectRatio(
-//                       aspectRatio: _videoController.value.aspectRatio,
-//                       child: VideoPlayer(_videoController),
-//                     )
-//                         : CircularProgressIndicator(),
-//                   ),
-//                   // Positioned(
-//                   //   bottom: 40,
-//                   //   left: 10,
-//                   //   right: 10,
-//                   //   child: Row(
-//                   //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   //     children: [
-//                   //       Column(
-//                   //         children: [
-//                   //           Icon(Icons.favorite_border,
-//                   //               color: Colors.white, size: 35),
-//                   //           Text('Like', style: TextStyle(color: Colors.white)),
-//                   //         ],
-//                   //       ),
-//                   //       Column(
-//                   //         children: [
-//                   //           Icon(Icons.comment, color: Colors.white, size: 35),
-//                   //           Text('Comment', style: TextStyle(color: Colors.white)),
-//                   //         ],
-//                   //       ),
-//                   //       Column(
-//                   //         children: [
-//                   //           Icon(Icons.share, color: Colors.white, size: 35),
-//                   //           Text('Share', style: TextStyle(color: Colors.white)),
-//                   //         ],
-//                   //       ),
-//                   //     ],
-//                   //   ),
-//                   // ),
-//                 ],
-//               ),
-//             );
-//           },
-//         );
-//       },
-//     );
-//   }
-// }
+class ScrollingTextState extends State<ScrollingText>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      duration: const Duration(seconds: 10),
+      vsync: this,
+    )..repeat(reverse: false);
+
+    _animation = Tween<double>(begin: -1.0, end: 1.0).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double textSize = screenWidth * 0.03;
+
+    return ClipRect(
+      child: Container(
+        alignment: Alignment.centerLeft,
+        child: AnimatedBuilder(
+          animation: _animation,
+          builder: (context, child) {
+            return FractionalTranslation(
+              translation: Offset(_animation.value, 0),
+              child: child,
+            );
+          },
+          child: Text(
+            widget.text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: textSize,
+              color: AppColors.UNSELECTED_GRAY_COLOR,
+              decoration: TextDecoration.none,
+              shadows: const [
+                Shadow(
+                  offset: Offset(1.0, 1.0),
+                  blurRadius: 4.0,
+                  color: Colors.black,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

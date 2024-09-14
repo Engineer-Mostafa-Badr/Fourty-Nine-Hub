@@ -5,13 +5,13 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/repo
 
 import '../entities/company_ad_option_entity.dart';
 
-class GetCompanyAddUseCases extends UseCase<List<CompanyAdOptionEntity>,CompanyAddParams>{
+class GetCompanyAddUseCases extends UseCase<CompanyAdOptionEntity,CompanyAddParams>{
   final CompanyAdvertiseRepository _advertiseRepository;
 
   GetCompanyAddUseCases(this._advertiseRepository);
 
   @override
-  Future<Either<Failure, List<CompanyAdOptionEntity>>> call(CompanyAddParams params)async {
+  Future<Either<Failure, CompanyAdOptionEntity>> call(CompanyAddParams params)async {
    return await _advertiseRepository.addCompanyAd(params);
   }
 
@@ -22,7 +22,7 @@ class CompanyAddParams {
    String? post;
   final String advertisementType;
    String? description;
-  final int totalPrice;
+  final num totalPrice;
    List<String>? media;
 
   CompanyAddParams({
