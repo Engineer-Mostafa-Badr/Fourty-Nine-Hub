@@ -38,7 +38,7 @@ class ViewContactView extends StatelessWidget {
           },
           icon: Icon(
             Icons.arrow_back,
-            size: 40.zW,
+            size: 26,
             color: AppColors.BACKGROUND_COLOR,
           ),
         ),
