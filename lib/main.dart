@@ -20,7 +20,6 @@ import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'routes/pages.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
@@ -74,9 +73,6 @@ class MyApp extends StatelessWidget {
         //   create: (context) => serviceLocator<CreateShippingRequestCubit>(),
         // ),
         // //  tinder to be reviewed
-        BlocProvider(
-          create: (context) => serviceLocator<ChatsCubit>(),
-        ),
         // BlocProvider(
         //   create: (context) => TinderViewCubit(),
         // ),
