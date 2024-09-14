@@ -17,7 +17,6 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/r
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -420,13 +419,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             child: Column(
               children: [
                 FormTextField(
-                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
+                  constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
-                  style: TextStyle(
-                      fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
+                  style: const TextStyle( color: AppColors.QUANTITY_COLOR),
                   hint: LocaleKeys.firstName.localize,
                   prefix: Icon(
                     Icons.person_2_rounded,
@@ -444,8 +442,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.lastNameController,
-                  style: TextStyle(
-                      fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
+                  style: const TextStyle( color: AppColors.QUANTITY_COLOR),
                   // label: 'E-mail or phone number',
                   hint: LocaleKeys.lastName.localize,
                   prefix: Icon(
@@ -461,11 +458,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 FormTextField(
                   constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.emailTextController,
                   // label: 'E-mail or phone number',
-                  style: TextStyle(
-                      fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
+                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                   hint: LocaleKeys.emailOrPhone.localize,
                   prefix: Icon(
                     Icons.email,
@@ -534,11 +530,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30.h,
                 ),
                 FormTextField(
-                  style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
-                  constraints:
-                       BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
+                  style: const TextStyle( color: AppColors.QUANTITY_COLOR),
+                  constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.passwordTextController,
                   // label: 'Password',
                   hint: LocaleKeys.password.localize,
@@ -561,12 +556,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30.h,
                 ),
                 FormTextField(
-                  style: TextStyle(
-                      fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
-                  constraints:
-                       BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
+                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
+                  constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.confirmPasswordTextController,
                   // label: 'Password',
                   hint: '${LocaleKeys.confirm.localize} ${LocaleKeys.password.localize}',
@@ -594,11 +587,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   },
                   constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   // controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
-                  style: TextStyle(
-                      fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
+                  style: const TextStyle( color: AppColors.QUANTITY_COLOR),
                   hint: LocaleKeys.code.localize,
                   prefix: Container(
                     margin: const EdgeInsets.all(9),
