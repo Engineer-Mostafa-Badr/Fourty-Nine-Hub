@@ -7,7 +7,7 @@ import '../../domain/entities/privacy_status_enum.dart';
 
 class PrivacySwitchItem extends StatelessWidget {
   final String label;
-  final PrivacyStatus privacy;
+  final bool privacy;
   final Function(bool value) onPress;
 
   const PrivacySwitchItem({

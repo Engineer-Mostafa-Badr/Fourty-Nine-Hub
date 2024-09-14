@@ -8,7 +8,7 @@ import '../../domain/entities/privacy_status_enum.dart';
 
 class PrivacyMultiSelectItem extends StatelessWidget {
   final String label;
-  final PrivacyStatus privacy;
+  final String privacy;
   final Function(PrivacyStatus value) onChoose;
   final bool isFriendEnable;
 
@@ -72,7 +72,7 @@ class PrivacyMultiSelectItem extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Label(text: getPrivacyName()),
+                  Label(text: privacy),
                   SizedBox(
                     width: 10,
                   ),

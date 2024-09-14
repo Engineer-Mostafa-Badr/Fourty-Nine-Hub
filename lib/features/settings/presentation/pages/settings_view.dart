@@ -3,6 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/settings/presentation/cubit/settings_cubit.dart';
+import 'package:fourtyninehub/features/settings/presentation/cubit/settings_state.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -25,84 +29,105 @@ class SettingsView extends StatelessWidget {
         appBar: BackAppBar(
           label: LocaleKeys.settings.localize,
         ),
-        body: Column(
-          children: [
-            listTileWidget(
-              image: Assets.notification,
-              trailing: FutureBuilder(
-                  future: Permission.notification.isGranted,
-                  builder: (context, snap) {
-                    final isGranted = snap.data ?? false;
-                    return Switch(
-                        activeColor: AppColors.SECONDARY_COLOR,
-                        activeTrackColor: Colors.grey,
-                        value: isGranted,
-                        onChanged: (v) async =>
-                            await Permission.notification.request());
-                  }),
-              label: LocaleKeys.enableNotifications.localize,
-              onTap: () async => await Permission.notification.request(),
-            ),
-            BlocBuilder<ThemeCubit, ThemeStates>(
-              builder: (BuildContext context, theme) {
-                return SwitchListTile(
-                  secondary: Image.asset(
-                    Assets.theme,
-                    width: 50.h,
-                    height: 50.h,
-                    fit: BoxFit.cover,
-                  ),
-                  title: theme is DarkThemeModeStates
-                      ? Text(
-                          LocaleKeys.lightMode.localize,
-                          style: Styles.mediumText(
-                              fontSize: 32.sp, fontWeight: FontWeight.w400),
-                        )
-                      : Text(
-                          LocaleKeys.darkMode.localize,
-                          style: Styles.mediumText( fontWeight: FontWeight.w400),
-                        ),
-                  value: ThemeCubit.get(context).isDarkTheme,
-                  activeColor: AppColors.SECONDARY_COLOR,
-                  activeTrackColor: AppColors.AUTH_CONTAINER_COLOR,
-                  onChanged: (value) {
-                    if (theme is LightThemeModeStates) {
-                      ThemeCubit.get(context).darkThemeMode();
-                    }
-                    if (theme is DarkThemeModeStates) {
-                      ThemeCubit.get(context).lightThemeMode();
-                    }
-                  },
+        body: BlocProvider<SettingCubit>(
+          create: (BuildContext context) =>serviceLocator(),
+          child: BlocConsumer<SettingCubit, SettingState>(
+            listener: (BuildContext context, SettingState state) {
+              if (state.status == SettingStates.success) {
+                showSuccessMessage(
+                  context,
+                  LocaleKeys.deleteSuccessfully.localize,
                 );
-              },
-            ),
-            listTileWidget(
-                image: Assets.password,
-                trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
-                label: LocaleKeys.changePassword.localize,
-                onTap: () => context.push(Routes.FORGOTPASSWORD)),
-            listTileWidget(
-                image: Assets.noPerson,
-                trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
-                label: LocaleKeys.disableAccount.localize,
-                onTap: () => showAreYouSure(
-                    title: LocaleKeys.alert.localize,
-                    subTitle: LocaleKeys.disable.localize,
-                    action: () => context.go(Routes.LOGIN),
-                    context: context)),
-            listTileWidget(
-                image: Assets.person,
-                trailing: Icon(
-                  Icons.arrow_forward_ios_outlined,
-                  size: 40.h,
-                ),
-                label: LocaleKeys.deleteAccount.localize,
-                onTap: () => showAreYouSure(
-                    title: LocaleKeys.alert.localize,
-                    subTitle: LocaleKeys.delete.localize,
-                    action: () => context.go(Routes.LOGIN),
-                    context: context)),
-          ],
+                context.push(Routes.HOME);
+              }
+            },
+            builder: (BuildContext context, state) {
+              return Column(
+                children: [
+                  listTileWidget(
+                    image: Assets.notification,
+                    trailing: FutureBuilder(
+                        future: Permission.notification.isGranted,
+                        builder: (context, snap) {
+                          final isGranted = snap.data ?? false;
+                          return Switch(
+                              activeColor: AppColors.SECONDARY_COLOR,
+                              activeTrackColor: Colors.grey,
+                              value: isGranted,
+                              onChanged: (v) async =>
+                                  await Permission.notification.request());
+                        }),
+                    label: LocaleKeys.enableNotifications.localize,
+                    onTap: () async => await Permission.notification.request(),
+                  ),
+                  BlocBuilder<ThemeCubit, ThemeStates>(
+                    builder: (BuildContext context, theme) {
+                      return SwitchListTile(
+                        secondary: Image.asset(
+                          Assets.theme,
+                          width: 50.h,
+                          height: 50.h,
+                          fit: BoxFit.cover,
+                        ),
+                        title: theme is DarkThemeModeStates
+                            ? Text(
+                                LocaleKeys.lightMode.localize,
+                                style: Styles.mediumText(
+                                    fontWeight: FontWeight.w400),
+                              )
+                            : Text(
+                                LocaleKeys.darkMode.localize,
+                                style: Styles.mediumText(
+                                    fontWeight: FontWeight.w400),
+                              ),
+                        value: ThemeCubit.get(context).isDarkTheme,
+                        activeColor: AppColors.SECONDARY_COLOR,
+                        activeTrackColor: AppColors.AUTH_CONTAINER_COLOR,
+                        onChanged: (value) {
+                          if (theme is LightThemeModeStates) {
+                            ThemeCubit.get(context).darkThemeMode();
+                          }
+                          if (theme is DarkThemeModeStates) {
+                            ThemeCubit.get(context).lightThemeMode();
+                          }
+                        },
+                      );
+                    },
+                  ),
+                  listTileWidget(
+                      image: Assets.password,
+                      trailing:
+                          Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
+                      label: LocaleKeys.changePassword.localize,
+                      onTap: () => context.push(Routes.FORGOTPASSWORD)),
+                  listTileWidget(
+                      image: Assets.noPerson,
+                      trailing:
+                          Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
+                      label: LocaleKeys.disableAccount.localize,
+                      onTap: () => showAreYouSure(
+                          title: LocaleKeys.alert.localize,
+                          subTitle: LocaleKeys.disable.localize,
+                          action: () => context.go(Routes.LOGIN),
+                          context: context)),
+                  listTileWidget(
+                      image: Assets.person,
+                      trailing: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        size: 40.h,
+                      ),
+                      label: LocaleKeys.deleteAccount.localize,
+                      onTap: () => showAreYouSure(
+                          title: LocaleKeys.alert.localize,
+                          subTitle: LocaleKeys.delete.localize,
+                          action: () {
+                            context.read<SettingCubit>().deleteAccount();
+                          },
+                          context: context)),
+                ],
+              );
+            },
+          ),
         ));
   }
 
@@ -118,9 +143,7 @@ class SettingsView extends StatelessWidget {
         height: 50.h,
       ),
       title: Label(
-          text: label,
-          style:
-              Styles.mediumText( fontWeight: FontWeight.w400)),
+          text: label, style: Styles.mediumText(fontWeight: FontWeight.w400)),
       onTap: () => onTap(),
       trailing: trailing,
     );

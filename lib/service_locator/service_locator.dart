@@ -187,7 +187,9 @@ import 'package:fourtyninehub/service_locator/face_book_service_locator.dart';
 import 'package:fourtyninehub/service_locator/instagram_service_locator.dart';
 import 'package:fourtyninehub/service_locator/notification_service_locator.dart';
 import 'package:fourtyninehub/service_locator/payment_service_locator.dart';
+import 'package:fourtyninehub/service_locator/privacy_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
+import 'package:fourtyninehub/service_locator/setting_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
 import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
 import 'package:fourtyninehub/service_locator/trip_join_service_locator.dart';
@@ -380,6 +382,8 @@ class DI {
     TwitterServiceLocator.execute(serviceLocator: serviceLocator);
     BalanceServiceLocator.execute(serviceLocator: serviceLocator);
     CompanyAddServiceLocator.execute(serviceLocator: serviceLocator);
+    PrivacyServiceLocator.execute(serviceLocator: serviceLocator);
+    SettingServiceLocator.execute(serviceLocator: serviceLocator);
     PaymentProviderServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }
