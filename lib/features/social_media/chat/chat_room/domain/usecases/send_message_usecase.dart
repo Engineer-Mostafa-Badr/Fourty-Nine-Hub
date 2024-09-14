@@ -42,7 +42,7 @@ class SendMessageParams {
       "mediaIds": mediaIds,
       "text": message,
       "groupId": null,
-      // if (replyMessageId != null) "replyMessageId": replyMessageId
+      if (replyMessageId != null) "replyMessageId": replyMessageId
     });
   }
 }

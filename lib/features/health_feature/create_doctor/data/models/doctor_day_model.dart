@@ -26,8 +26,8 @@ class DoctorDayModel extends DoctorDayEntity {
   Map<String, dynamic> toJson() {
     return {
       'day': day.name.toLowerCase(),
-      'workFrom': from.display,
-      'workTo': to.display,
+      'workFrom': from.formattedIn12Hour,
+      'workTo': to.formattedIn12Hour,
       'isAvailable': isAvailable
     };
   }
