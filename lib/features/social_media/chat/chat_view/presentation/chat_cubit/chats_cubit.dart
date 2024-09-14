@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
@@ -17,6 +18,7 @@ part 'chats_state.dart';
 class ChatsCubit extends Cubit<ChatsState> {
   final ListenToNewMessageUseCase _listenToNewMessageUseCase;
   final StopListenToMessagesUseCase _stopListenToMessagesUseCase;
+  final MarkMessagesAsDeliveredUseCase _markMessagesAsDeliveredUseCase;
   final GetChatsUseCase _getChatsUseCase;
   final Map<String, ChatEntity> _chats = {};
   ChatCategories _selectedChatCategory = ChatCategories.values.first;
@@ -27,6 +29,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._getChatsUseCase,
     this._listenToNewMessageUseCase,
     this._stopListenToMessagesUseCase,
+    this._markMessagesAsDeliveredUseCase,
   ) : super(const ChatsState());
 
   // Selected Chats
@@ -144,6 +147,12 @@ class ChatsCubit extends Cubit<ChatsState> {
     _listenToNewMessageUseCase((message) {
       emit(state.copyWith(newMessage: message, status: ChatsStates.newMessage));
       _chats[message.chatId]?.lastMessage = message;
+      if (!message.byMe &&
+          message.chatId != null &&
+          message.chatId!.isNotEmpty) {
+        _markMessagesAsDeliveredUseCase(
+            MarkMessagesAsDeliveredParams(chatId: message.chatId!));
+      }
       getChatsByCategory(_selectedChatCategory);
     });
   }

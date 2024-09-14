@@ -2,12 +2,14 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasour
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasources/remote/chat_message_remote_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/repositories/chat_room_repository_implement.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/deleteMessage_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_delivered_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_seen_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_delivered_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_seen_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
@@ -73,11 +75,6 @@ class SocialServiceLocator {
           serviceLocator(),
         ));
 
-    serviceLocator.registerLazySingleton<DeleteChatMessageUseCase>(
-        () => DeleteChatMessageUseCase(
-              serviceLocator(),
-            ));
-
     serviceLocator.registerLazySingleton<ListenToNewMessageUseCase>(
         () => ListenToNewMessageUseCase(
               serviceLocator(),
@@ -96,27 +93,42 @@ class SocialServiceLocator {
               serviceLocator(),
             ));
 
-    serviceLocator
-        .registerLazySingleton<MarkMessageAsSeenUseCase>(() => MarkMessageAsSeenUseCase(
-      serviceLocator(),
-    ));
-    serviceLocator
-        .registerLazySingleton<ListenToSeenMessagesUseCase>(() => ListenToSeenMessagesUseCase(
-      serviceLocator(),
-    ));
-    serviceLocator
-        .registerLazySingleton<StopListenToSeenMessagesUseCase>(() => StopListenToSeenMessagesUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<MarkMessageAsSeenUseCase>(
+        () => MarkMessageAsSeenUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToSeenMessagesUseCase>(
+        () => ListenToSeenMessagesUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<StopListenToSeenMessagesUseCase>(
+        () => StopListenToSeenMessagesUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<MarkMessagesAsDeliveredUseCase>(
+        () => MarkMessagesAsDeliveredUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToDeliveredMessagesUseCase>(
+        () => ListenToDeliveredMessagesUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<StopListenToDeliveredMessagesUseCase>(
+        () => StopListenToDeliveredMessagesUseCase(
+              serviceLocator(),
+            ));
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerFactory<ChatsCubit>(() => ChatsCubit(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
         ));
 
     serviceLocator.registerFactory<ChatRoomCubit>(() => ChatRoomCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

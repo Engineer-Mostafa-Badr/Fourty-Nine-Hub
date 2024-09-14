@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/m
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -39,6 +40,8 @@ abstract class MessagesRemoteDataSource {
   void listenToDeliveredStatus(Function(List<MessageEntity> messages) params);
 
   void stopListenToDeliveredStatus();
+
+  Future<Either<Failure, bool>> markMessageAsDelivered(MarkMessagesAsDeliveredParams params);
 }
 
 class MessagesRemoteDataSourceImplementation
@@ -181,5 +184,22 @@ class MessagesRemoteDataSourceImplementation
   @override
   void stopListenToSeenStatus() {
     _socket.off(SocketIOListeners.messageSeen);
+  }
+
+  @override
+  Future<Either<Failure, bool>> markMessageAsDelivered(MarkMessagesAsDeliveredParams params) async {
+    try {
+      _socket.connect();
+      CliLogger.info("you mark messages as delivered : chatId ${params.chatId}");
+      _socket.emit(
+          SocketIOEvents.markMessageAsDelivered,
+          jsonEncode({
+            "chatId": params.chatId,
+          }));
+      return const Right(true);
+    } catch (e) {
+      CliLogger.info("can't mark message as delivered error $e");
+      return const Left(ServerFailure(message: "can't mark message as delivered"));
+    }
   }
 }
