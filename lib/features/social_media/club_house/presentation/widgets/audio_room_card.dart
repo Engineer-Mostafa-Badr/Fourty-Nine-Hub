@@ -11,8 +11,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/images/profile_image.dart';
-import '../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../res/style/styles.dart';
 import '../pages/audio_stream_screen.dart';
 
@@ -44,7 +44,7 @@ class AudioRoomCard extends StatelessWidget {
       },
       child: Container(
         padding:
-            EdgeInsets.only(right: 100, top: 10, left: 10, bottom: 10),
+            const EdgeInsets.only(right: 10, top: 10, left: 10, bottom: 10),
         decoration: BoxDecoration(
           color: const Color(0xfff0f2ff),
           borderRadius: BorderRadius.circular(15),
@@ -117,7 +117,7 @@ class AudioRoomCard extends StatelessWidget {
                           );
                         },
                         separatorBuilder: (context, index) {
-                          return Sizer();
+                          return const Sizer();
                         },
                       ),
                       Row(
@@ -127,7 +127,7 @@ class AudioRoomCard extends StatelessWidget {
                             color: Colors.grey,
                             size: 14,
                           ),
-                          Sizer(),
+                          const Sizer(),
                           Label(
                               text: room.users?.length.toString() ?? '0',
                               style: Styles.mediumText(color: Colors.grey))

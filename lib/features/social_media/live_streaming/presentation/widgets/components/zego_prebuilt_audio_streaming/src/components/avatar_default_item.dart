@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 // Project imports:
@@ -51,7 +52,7 @@ class _ZegoLiveAudioRoomAvatarDefaultItemState
     ZegoUIKitUser? user,
     Map<String, dynamic> extraInfo,
   ) {
-    final avatarURL = user?.inRoomAttributes.value[attributeKeyAvatar] ?? '';
+    final avatarURL = UserCubit.to.state.data?.profilePicture ?? '';
 
     return widget.avatarBuilder?.call(
           context,

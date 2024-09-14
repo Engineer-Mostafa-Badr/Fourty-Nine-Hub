@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 // Package imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
@@ -7,6 +8,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
 
+import '../../../../../../../../../../core/localization/locale_keys.g.dart';
 import '../defines.dart';
 import '../pop_up_manager.dart';
 import 'effect_grid.dart';
@@ -164,7 +166,7 @@ class _ZegoLiveAudioRoomSoundEffectSheetState
     }
 
     reverbPresetModel = ZegoLiveAudioRoomEffectGridModel(
-      title: widget.innerText.audioEffectReverbTitle,
+      title: LocaleKeys.reverb.localize,
       selectedID: widget.reverbSelectedIDNotifier,
       items: reverbEffect
           .map(

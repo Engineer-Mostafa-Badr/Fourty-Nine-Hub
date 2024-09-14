@@ -2,11 +2,15 @@
 import 'dart:async';
 
 // Flutter imports:
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 // Package imports:
 
 // Project imports:
+import '../../../../../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../zego_uikit/src/components/defines.dart';
 import '../../../../zego_uikit/src/components/functions.dart';
 import '../../../../zego_uikit/src/components/member/member_list.dart';
@@ -213,7 +217,7 @@ class _ZegoLiveStreamingMemberListSheetState
               stream: ZegoUIKit().getUserListStream(),
               builder: (context, snapshot) {
                 return Text(
-                  '${widget.innerText.memberListTitle} '
+                  '${LocaleKeys.audience.localize} '
                   '(${ZegoUIKit().getAllUsers().length})',
                   style: TextStyle(
                     fontSize: 36.0.zR,
@@ -477,21 +481,41 @@ class _ZegoLiveStreamingMemberListSheetState
     ZegoUIKitUser user,
     ZegoAvatarBuilder? builder,
   ) {
-    return Container(
-      width: 92.zR,
-      height: 92.zR,
-      decoration:
-          const BoxDecoration(color: Color(0xffDBDDE3), shape: BoxShape.circle),
-      child: Center(
-        child: builder?.call(context, Size(92.zR, 92.zR), user, {}) ??
-            Text(
-              user.name.isNotEmpty ? user.name.characters.first : '',
-              style: TextStyle(
-                fontSize: 32.0.zR,
-                color: const Color(0xff222222),
-                decoration: TextDecoration.none,
-              ),
-            ),
+    final avatarURL = UserCubit.to.state.data?.profilePicture ?? '';
+
+    return  CachedNetworkImage(
+                imageUrl: avatarURL,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    CircularProgressIndicator(value: downloadProgress.progress),
+                errorWidget: (context, url, error) {
+                  ZegoLoggerService.logInfo(
+                    '$user avatar url is invalid',
+                    tag: 'audio-room',
+                    subTag: 'live page',
+                  );
+                  return textAvatar(user);
+                },
+              )
+            ;
+  }
+   Widget textAvatar(ZegoUIKitUser user) {
+    return Text(
+      (user.name.isNotEmpty)
+          ? user.name.characters.first
+          : '',
+      style: TextStyle(
+        fontSize: 32.0.zR,
+        color: const Color(0xff222222),
+        decoration: TextDecoration.none,
       ),
     );
   }

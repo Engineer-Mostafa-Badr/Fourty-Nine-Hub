@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/time_of_day_helper.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -9,6 +10,9 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:intl/intl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../../core/localization/locale_keys.g.dart';
+
 class ScheduleMeetingScreen extends StatefulWidget {
   const ScheduleMeetingScreen({super.key});
 
@@ -126,13 +130,13 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                 children: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text(
-                      "Cancel",
+                    child:  Text(
+                      LocaleKeys.cancel.localize,
                       style: TextStyle(color: AppColors.SECONDARY_COLOR),
                     ),
                   ),
                   Text(
-                    "Schedule Meeting",
+                    LocaleKeys.scheduleAMeeting.localize,
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: AppColors.PRIMARY_COLOR,
                           fontWeight: FontWeight.w600,
@@ -235,12 +239,13 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
     required String content,
     required VoidCallback onTap,
   }) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
+      splashColor: Colors.transparent,
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 16.0),
+            padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -254,15 +259,15 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                 ),
                 Text(
                   content,
-                  style:  TextStyle(
-                    fontSize: 16.sp,
+                  style: TextStyle(
+                    fontSize: 20.sp,
                     color: Colors.black54,
                   ),
                 ),
                 const Icon(
                   Icons.arrow_forward_ios_rounded,
                   color: Colors.black54,
-                  size: 20,
+                  size: 15,
                 )
               ],
             ),

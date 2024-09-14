@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/animations/create_custom_transition.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 // import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -22,6 +24,7 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
@@ -49,7 +52,8 @@ class MeetingView extends StatelessWidget {
                   children: [
                     _buildMeetingItem(
                       color: AppColors.SECONDARY_COLOR,
-                      label: 'New \n Meeting'.tr(),
+                      label:context.isArabic?
+                          '${LocaleKeys.meeting.localize} \n ${LocaleKeys.nnew.localize}':'${LocaleKeys.nnew.localize} \n ${LocaleKeys.meeting.localize}',
                       icon: Icons.video_call,
                       twoLines: true,
                       onTap: () async {
@@ -86,7 +90,8 @@ class MeetingView extends StatelessWidget {
                         }),
                     _buildMeetingItem(
                       color: AppColors.PRIMARY_COLOR,
-                      label: 'Schedule'.tr(),
+                      label:
+                          LocaleKeys.schedule.localize,
                       icon: Icons.calendar_today_outlined,
                       onTap: () async {
                         _scheduleAMeeting(context);
@@ -94,7 +99,8 @@ class MeetingView extends StatelessWidget {
                     ),
                     _buildMeetingItem(
                         color: AppColors.PRIMARY_COLOR,
-                        label: 'Share\nScreen'.tr(),
+                        label:
+                            '${LocaleKeys.share.localize} \n ${LocaleKeys.screen.localize}',
                         icon: Icons.screen_share,
                         twoLines: true,
                         onTap: () {
@@ -118,11 +124,11 @@ class MeetingView extends StatelessWidget {
                 onTap: () {
                   _scheduleAMeeting(context);
                 },
-                child:  Text(
-                  'Add a calender',
+                child: Text(
+                  LocaleKeys.addAcalender.localize,
                   style: TextStyle(
                       color: AppColors.PRIMARY_COLOR,
-                      fontSize: 16.sp,
+                      fontSize: 32.sp,
                       fontWeight: FontWeight.w600),
                 ),
               ),
@@ -187,11 +193,11 @@ class MeetingView extends StatelessWidget {
                           ),
                           child: Label(
                             text: formatDateString(scheduledMeeting.startDate),
-                            style: Styles.headerText(fontSize: 25.sp),
+                            style: Styles.headerText(fontSize: 25),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(15),
+                          padding: const EdgeInsets.all(15),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -200,14 +206,12 @@ class MeetingView extends StatelessWidget {
                                   Label(
                                     text: getHour(scheduledMeeting.startDate),
                                     style: Styles.headerText(
-                                        fontSize: 25.sp,
-                                        color: Colors.grey[600]),
+                                        fontSize: 25, color: Colors.grey[600]),
                                   ),
                                   Label(
                                     text: getPeriod(scheduledMeeting.startDate),
                                     style: Styles.headerText(
-                                        fontSize: 18.sp,
-                                        color: Colors.grey[600]),
+                                        fontSize: 18, color: Colors.grey[600]),
                                   ),
                                 ],
                               ),
@@ -216,15 +220,14 @@ class MeetingView extends StatelessWidget {
                                   SizedBox(height: 5.h),
                                   Label(
                                     text: scheduledMeeting.title,
-                                    style: Styles.headerText(fontSize: 25.sp),
+                                    style: Styles.headerText(fontSize: 25),
                                   ),
                                   SizedBox(height: 5.h),
                                   Label(
                                     text:
-                                        'Meeting ID: ${scheduledMeeting.roomId}',
+                                        '${LocaleKeys.meetingId.localize}: ${scheduledMeeting.roomId}',
                                     style: Styles.headerText(
-                                        fontSize: 20.sp,
-                                        color: Colors.grey[600]),
+                                        fontSize: 20, color: Colors.grey[600]),
                                   ),
                                 ],
                               ),
@@ -247,13 +250,13 @@ class MeetingView extends StatelessWidget {
                                   }
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.all(8),
+                                  padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                     color: AppColors.PRIMARY_COLOR,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
-                                    'Start Now',
+                                    LocaleKeys.startNow.localize,
                                     style:
                                         Styles.smallText(color: Colors.white),
                                   ),
@@ -289,11 +292,11 @@ class MeetingView extends StatelessWidget {
     // Compare the date and return the appropriate string
     if (dateTime.isAfter(today.subtract(const Duration(seconds: 1))) &&
         dateTime.isBefore(tomorrow)) {
-      return 'Today';
+      return LocaleKeys.tommorow.localize;
     } else if (dateTime
             .isAfter(tomorrow.subtract(const Duration(seconds: 1))) &&
         dateTime.isBefore(tomorrow.add(const Duration(days: 1)))) {
-      return 'Tomorrow';
+      return LocaleKeys.today.localize;
     } else {
       // Format the date as dd/MM
       return DateFormat('d/M').format(dateTime);
@@ -341,7 +344,7 @@ class MeetingView extends StatelessWidget {
           Container(
             // height: 80.h,
             // width: 80,
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10), color: color),
             child: Icon(
@@ -356,7 +359,7 @@ class MeetingView extends StatelessWidget {
           Label(
               text: label,
               textAlign: TextAlign.center,
-              style: Styles.headerText(fontSize: 25.sp))
+              style: Styles.headerText(fontSize: 25))
         ],
       ),
     );
