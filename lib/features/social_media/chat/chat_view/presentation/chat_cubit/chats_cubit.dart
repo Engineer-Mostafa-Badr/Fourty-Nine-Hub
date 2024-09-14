@@ -30,7 +30,9 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._listenToNewMessageUseCase,
     this._stopListenToMessagesUseCase,
     this._markMessagesAsDeliveredUseCase,
-  ) : super(const ChatsState());
+  ) : super(const ChatsState()){
+    _markMessagesAsDeliveredUseCase(MarkMessagesAsDeliveredParams(chatId: ''));
+  }
 
   // Selected Chats
   void addChatToSelectedChats({required ChatEntity chat}) {
@@ -145,7 +147,6 @@ class ChatsCubit extends Cubit<ChatsState> {
   // ======================================= listening ========================================
   _listenToNewMessages() {
     _listenToNewMessageUseCase((message) {
-      emit(state.copyWith(newMessage: message, status: ChatsStates.newMessage));
       _chats[message.chatId]?.lastMessage = message;
       if (!message.byMe &&
           message.chatId != null &&
@@ -153,6 +154,7 @@ class ChatsCubit extends Cubit<ChatsState> {
         _markMessagesAsDeliveredUseCase(
             MarkMessagesAsDeliveredParams(chatId: message.chatId!));
       }
+      emit(state.copyWith(newMessage: message, status: ChatsStates.newMessage));
       getChatsByCategory(_selectedChatCategory);
     });
   }

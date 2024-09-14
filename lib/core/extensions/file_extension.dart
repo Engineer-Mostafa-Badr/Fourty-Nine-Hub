@@ -7,7 +7,7 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 enum FileTypeEnum {
   video,
   image,
-  doc,
+  document,
   audio,
   temp,
   unknown,
@@ -67,7 +67,7 @@ extension FileTypeChecker on File {
     if (tempExtensions.contains(extension)) {
       return FileTypeEnum.temp;
     } else if (docsExtensions.contains(extension)) {
-      return FileTypeEnum.doc;
+      return FileTypeEnum.document;
     } else if (audioExtensions.contains(extension)) {
       return FileTypeEnum.audio;
     } else if (videosExtensions.contains(extension)) {
@@ -87,7 +87,7 @@ extension FileTypeChecker on File {
 
   bool get isAudio => type == FileTypeEnum.audio;
 
-  bool get isDoc => type == FileTypeEnum.doc;
+  bool get isDoc => type == FileTypeEnum.document;
 
   bool get isTemp => type == FileTypeEnum.temp;
 }

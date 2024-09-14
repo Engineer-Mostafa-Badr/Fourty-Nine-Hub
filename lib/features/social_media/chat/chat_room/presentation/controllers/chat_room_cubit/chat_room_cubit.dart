@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -34,7 +35,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final ScrollController scrollController = ScrollController();
   final TextEditingController messageTextController = TextEditingController();
   final FilePicker _filePicker = FilePicker.platform;
-
+  final List<File> _media = [];
   Map<String, MessageEntity> _messages = {};
   MessageEntity? _replayMessage;
   late ChatEntity _chat;
@@ -48,14 +49,14 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     this._listenToDeliveredMessagesUseCase,
     this._stopListenToDeliveredMessagesUseCase,
   ) : super(const ChatRoomState()) {
-    _listenToSeenMessages();
     _listenToDeliveredMessages();
+
+    _listenToSeenMessages();
   }
 
   Future<void> init({required ChatEntity chat}) async {
     _chat = chat;
     await _getMessages();
-    _markMessageAsSeen();
   }
 
 // =========================================== get messages ===========================================
@@ -96,8 +97,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     final result = await _sendMessageUseCase(SendMessageParams(
         replyMessageId: _replayMessage?.id,
         message: messageTextController.text,
-        chatId: _chat.id,
-        mediaIds: [],
+        chat: _chat,
+        media: [],
         oneTimeView: false));
     result.fold(
         (l) => emit(state.copyWith(failure: l, status: ChatRoomStates.error)),
@@ -156,10 +157,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       if (result != null) {
         for (var file in result.files) {
-          debugPrint('Picked file: ${file.name}');
+          _media.add(File(file.path!));
         }
-      } else {
-        debugPrint('File picking canceled');
       }
     } catch (e) {
       CliLogger.error('Error picking file: $e');
@@ -178,10 +177,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       if (result != null) {
         for (var file in result.files) {
-          debugPrint('Picked file: ${file.name}');
+          _media.add(File(file.path!));
         }
-      } else {
-        debugPrint('File picking canceled');
       }
     } catch (e) {
       CliLogger.error('Error picking file: $e');
@@ -200,10 +197,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       if (result != null) {
         for (var file in result.files) {
-          debugPrint('Picked file: ${file.name}');
+          _media.add(File(file.path!));
         }
-      } else {
-        debugPrint('File picking canceled');
       }
     } catch (e) {
       CliLogger.error('Error picking file: $e');
