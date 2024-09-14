@@ -60,8 +60,7 @@ class SettingsView extends StatelessWidget {
                         )
                       : Text(
                           LocaleKeys.darkMode.localize,
-                          style: Styles.mediumText(
-                              fontSize: 32.sp, fontWeight: FontWeight.w400),
+                          style: Styles.mediumText( fontWeight: FontWeight.w400),
                         ),
                   value: ThemeCubit.get(context).isDarkTheme,
                   activeColor: AppColors.SECONDARY_COLOR,
@@ -121,7 +120,7 @@ class SettingsView extends StatelessWidget {
       title: Label(
           text: label,
           style:
-              Styles.mediumText(fontSize: 32.sp, fontWeight: FontWeight.w400)),
+              Styles.mediumText( fontWeight: FontWeight.w400)),
       onTap: () => onTap(),
       trailing: trailing,
     );

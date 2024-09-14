@@ -332,7 +332,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       child: InkWell(
         onTap: () => context.go(Routes.MAZADAT),
         child: SizedBox(
-          height: kToolbarHeight * .8.h,
+          height: kToolbarHeight * .9.h,
           child: Stack(
             children: [
               Positioned.fill(
