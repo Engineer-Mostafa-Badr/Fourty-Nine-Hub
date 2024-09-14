@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_services_notifications/get_services_notifications_cubit.dart';
@@ -60,6 +61,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (BuildContext context) =>serviceLocator<WalletCubit>(),
+
+        ),
+        BlocProvider(
+          create: (BuildContext context) =>serviceLocator<MainCategoriesCubit>()..loadData(),
 
         ),
         // BlocProvider(
