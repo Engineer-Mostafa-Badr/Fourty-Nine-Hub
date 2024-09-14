@@ -119,11 +119,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           children: [
             //carousel slider
             const AnnounceWidget(),
-             if(!context.read<UserCubit>().isLoggedIn)
-              Sizer(),
+               !context.read<UserCubit>().isLoggedIn?  Sizer():const SizedBox.shrink(),
             //wallet
-            if(context.read<UserCubit>().isLoggedIn)
-              const WalletWidget(),
+              context.read<UserCubit>().isLoggedIn? const WalletWidget():const SizedBox.shrink(),
             //    Sizer(),
             //admob
             //   const GoogleAddsBanner(),
@@ -425,19 +423,19 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
+              padding:  EdgeInsets.symmetric(horizontal: 10.w),
               child: Row(
                 children: [
                   Label(
                     text: service.title(),
                     style: Styles.mediumText(
                       color: AppColors.AUTH_CONTAINER_COLOR,
-                      fontSize: 34.sp,
+                      fontSize: 65.sp,
                     ),
                   ),
                   const Spacer(),
                   Padding(
-                    padding:  EdgeInsets.symmetric(vertical: 2.h),
+                    padding:  EdgeInsets.symmetric(vertical: 5.h),
                     child: Column(
                       children: [
                         InkWell(
@@ -451,7 +449,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         const Spacer(),
                         Label(
                           text: '4 ${LocaleKeys.ads.tr()}',
-                          style: Styles.smallText(
+                          style: Styles.mediumText(
                             color: Colors.white,
                           ),
                         ),

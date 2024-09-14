@@ -150,7 +150,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                             ),
                           );
                       if (context.mounted) {
-                        context.go(Routes.HOME);
+                        context.push(Routes.HOME);
                       }
                       // context.pop();
                     } else {

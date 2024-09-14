@@ -38,93 +38,97 @@ class WalletWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WalletCubit, WalletState>(
-      builder: (BuildContext context, state) {
-        return Container(
-          height: 90.h,
-          margin:
-              EdgeInsets.symmetric(vertical: 10.h, horizontal: margin?.w ?? 0),
-          padding: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: BorderRadius.circular(20.r),
-              boxShadow: const [
-                BoxShadow(
-                  color: AppColors.GRAY_LIGHT_COLOR3,
-                  blurRadius: 5,
-                  spreadRadius: 5,
-                )
-              ]),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                radius: 6.w,
-                backgroundColor: AppColors.SECONDARY_COLOR,
-              ),
-              const Sizer(),
-              BlocProvider<BalanceCubit>(
-                create: (BuildContext context) => serviceLocator(),
-                child: BlocBuilder<BalanceCubit, BalanceState>(
-                  builder: (BuildContext context, state) {
-                    return buildItem(() {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const BalanceWalletView()));
-                    }, LocaleKeys.balance.tr(),
-                        '${state.balance?.balance ?? ''}');
-                  },
+    return BlocProvider<GiftCubit>(
+      create: (BuildContext context) =>serviceLocator(),
+      child: BlocBuilder<GiftCubit, GiftState>(
+        builder: (BuildContext context, state) {
+          return Container(
+            height: 90.h,
+            margin:
+                EdgeInsets.symmetric(vertical: 10.h, horizontal: margin?.w ?? 5.w),
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: BorderRadius.circular(12.r),
+                boxShadow: const [
+                  BoxShadow(
+                    color: AppColors.GRAY_LIGHT_COLOR3,
+                    blurRadius: 5,
+                    spreadRadius: 5,
+                  )
+                ]),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 6.w,
+                  backgroundColor: AppColors.SECONDARY_COLOR,
                 ),
-              ),
-              Container(
-                width: 2.w,
-                margin: EdgeInsets.symmetric(horizontal: 5.w),
-                color: Colors.grey,
-                height: kToolbarHeight * 1.3.h,
-              ),
-              CircleAvatar(
-                radius: 6.w,
-                backgroundColor: AppColors.SECONDARY_COLOR,
-              ),
-              const Sizer(),
-              BlocProvider<GiftCubit>(
-                create: (BuildContext context) => serviceLocator(),
-                child: BlocBuilder<GiftCubit, GiftState>(
-                  builder: (BuildContext context, state) {
-                    return buildItem(
-                      () {
-                        //context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
+                const Sizer(),
+                BlocProvider<BalanceCubit>(
+                  create: (BuildContext context) => serviceLocator(),
+                  child: BlocBuilder<BalanceCubit, BalanceState>(
+                    builder: (BuildContext context, state) {
+                      return buildItem(() {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const GiftWalletView()));
-                      },
-                      LocaleKeys.gift.tr(),
-                      '${state.gift?.giftWallet.amount ?? ''}',
-                    );
-                  },
+                                builder: (context) => const BalanceWalletView()));
+                      }, LocaleKeys.balance.tr(),
+                          '${state.balance?.balance ?? ''}');
+                    },
+                  ),
                 ),
-              ),
-              Container(
-                width: 2.h,
-                margin: EdgeInsets.symmetric(horizontal: 5.w),
-                color: Colors.grey,
-                height: kToolbarHeight * 1.3,
-              ),
-              CircleAvatar(
-                radius: 6.w,
-                backgroundColor: AppColors.SECONDARY_COLOR,
-              ),
-              Sizer(),
-              buildItem(() {
-                context.push(Routes.WALLET, extra: WalletTypes.mainWallet);
-              }, LocaleKeys.wallet.tr(),
-                  '${state.wallet?.realAmount?.floor() ?? ''}'),
-            ],
-          ),
-        );
-      },
+                Container(
+                  width: 2.w,
+                  margin: EdgeInsets.symmetric(horizontal: 5.w),
+                  color: Colors.grey,
+                  height: kToolbarHeight * 1.3.h,
+                ),
+                CircleAvatar(
+                  radius: 6.w,
+                  backgroundColor: AppColors.SECONDARY_COLOR,
+                ),
+                const Sizer(),
+            buildItem(
+                  () {
+                //context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const GiftWalletView()));
+              },
+              LocaleKeys.gift.tr(),
+              '${state.gift?.giftWallet.amount ?? ''}',
+            ),
+                Container(
+                  width: 2.h,
+                  margin: EdgeInsets.symmetric(horizontal: 5.w),
+                  color: Colors.grey,
+                  height: kToolbarHeight * 1.3,
+                ),
+                CircleAvatar(
+                  radius: 6.w,
+                  backgroundColor: AppColors.SECONDARY_COLOR,
+                ),
+                const Sizer(),
+                BlocProvider<WalletCubit>(
+                  create: (BuildContext context) =>serviceLocator(),
+                  child: BlocBuilder<WalletCubit,WalletState>(
+                    builder: (BuildContext context, state) {
+                      return buildItem(() {
+                        context.push(Routes.WALLET, extra: WalletTypes.mainWallet);
+                      },
+                          LocaleKeys.wallet.tr(),
+                          '${state.wallet?.realAmount?.floor() ?? ''}');
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 

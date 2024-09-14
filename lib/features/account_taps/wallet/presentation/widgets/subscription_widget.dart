@@ -129,9 +129,7 @@ class SubscriptionWidget extends StatelessWidget {
                 },
               ),
             ),
-             Sizer(
-              width: 5,
-            ),
+             const Sizer(),
             Expanded(
               child: buildContainer(
                 text: LocaleKeys.renewal.localize,

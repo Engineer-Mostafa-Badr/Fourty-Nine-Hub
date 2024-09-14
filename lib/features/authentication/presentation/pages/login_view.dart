@@ -12,6 +12,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -100,6 +101,7 @@ class _LoginViewState extends State<LoginView> {
               ..attachToken()
               ..getUser().then((value) async {
                 serviceLocator<GetWalletCubit>().getWallet();
+                serviceLocator<WalletCubit>().getWallet();
                 String? accessToken = await TokenManager.getAccessToken();
                 String? refreshToken = await TokenManager.getRefreshToken();
                 debugPrint('/////////////////////////////////////////////////////////////////////////');
@@ -107,8 +109,9 @@ class _LoginViewState extends State<LoginView> {
                 debugPrint('Access Token: $accessToken');
                 debugPrint('/////////////////////////////////////////////////////////////////////////');
                 debugPrint(serviceLocator<UserCubit>().state.data.toString());
+                // Navigator.pop(context);
                 Navigator.pop(context);
-                Navigator.pop(context);
+                context.push(Routes.HOME);
               });
             context.read<NotificationSocketIoCubit>().notificationListener();
             context.read<NotificationSocketIoCubit>().clearAllNotificationsAndRefeatchAfterLogin();

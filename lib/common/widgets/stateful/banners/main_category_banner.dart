@@ -46,7 +46,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       imageUrl: widget.category.banner,
       height: MediaQuery.sizeOf(context).height * 0.13.h,
       imageBuilder: (context, i) => Container(
-        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color: widget.category.banner.isNotEmpty
