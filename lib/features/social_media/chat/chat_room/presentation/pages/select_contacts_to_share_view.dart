@@ -82,7 +82,7 @@ class _SelectContactsToShareViewState extends State<SelectContactsToShareView> {
 
   Widget _body() {
     if (_permissionDenied) {
-      return const Center(child: Text('Permission denied'));
+      return  Center(child: Text(LocaleKeys.permissionDenied.tr()));
     }
     if (_contacts == null) {
       return const Center(child: CircularProgressIndicator());

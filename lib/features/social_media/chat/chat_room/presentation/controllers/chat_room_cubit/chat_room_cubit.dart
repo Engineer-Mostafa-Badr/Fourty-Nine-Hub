@@ -98,13 +98,14 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         replyMessageId: _replayMessage?.id,
         message: messageTextController.text,
         chat: _chat,
-        media: [],
+        media: _media,
         oneTimeView: false));
     result.fold(
         (l) => emit(state.copyWith(failure: l, status: ChatRoomStates.error)),
         (r) {
       cancelReplay();
       messageTextController.text = '';
+      _media.clear();
     });
   }
 

@@ -98,7 +98,7 @@ class ChatProfileView extends StatelessWidget {
                 style: Styles.mediumText(fontWeight: FontWeight.bold),
               ),
               subtitle: Text(
-                'لا حول ولا قوة الا بالله العلي العظيم❤',
+              LocaleKeys.aBirdInHand,
                 // context.read<UserCubit>().state.data!.about,
                 style: Styles.mediumText(
                     color: AppColors.LIGHT_GRAY_COLOR2, fontSize: 24),

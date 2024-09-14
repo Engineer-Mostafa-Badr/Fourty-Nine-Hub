@@ -304,5 +304,11 @@
   "requestWithdrawal": "تم إرسال طلب السحب الخاص بك بنجاح في انتظار موافقة الإدارة",
   "complete": "تم إكماله",
   "yearsLast": "سنوات مضت",
-  "checkRequest": "يرجى الانتظار للتحقق من الطلب"
+  "checkRequest": "يرجى الانتظار للتحقق من الطلب",
+  "aBirdInHand": "عصفور في اليد خير من عشرة على الشجرة",
+  "permissionDenied": "تم رفض الصلاحيات",
+  "contacts": "Contacts",
+  "pleaseLoginRegisterToEnjoyTheApp":"من فضلك قم بتسجيل الدخول او التسجيل للتفاعل معنا",
+  "noChatsUntilNow": "لا توجد محادثات حتى الآن",
+  "unarchive": "إلغاء الأرشفة"
 }

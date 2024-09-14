@@ -17,7 +17,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../../core/error/failure.dart';
 import '../helper/file_picker_helper.dart';
 
- class UploadFile {
+class UploadFile {
   Future<Either<Failure, bool>?> uploadImage(
       {bool isGallery = true,
       required String subCategoryId,
@@ -64,6 +64,7 @@ import '../helper/file_picker_helper.dart';
     try {
       final fileInBytes = await file.readAsBytes();
       String? mediaId;
+      CliLogger.info("creating upload url for : ${file.path}");
       final uploadUrlResponse =
           await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
         "type": "${file.type.name}/${file.path.split('.').last}",
@@ -76,6 +77,8 @@ import '../helper/file_picker_helper.dart';
           CliLogger.error("can't get upload url");
         },
         (data) async {
+          CliLogger.info(
+              "upload url : ${data['data']['signedUrl']}\nmediaId : ${data['data']['mediaId']}");
           final uploadUrl = data['data']['signedUrl'];
           mediaId = data['data']['mediaId'];
           Options options = Options(contentType: file.type.name, headers: {
@@ -85,17 +88,20 @@ import '../helper/file_picker_helper.dart';
             'Connection': 'keep-alive',
             'User-Agent': 'ClinicPlush',
           });
-
+          CliLogger.info("uploading file : ${file.path}");
           await Dio().put(uploadUrl,
               data: Stream.fromIterable(fileInBytes.map((e) => [e])),
               options: options);
+          file.length();
+          fileInBytes.lengthInBytes;
+          CliLogger.success("file uploaded : ${file.path}");
         },
       );
 
       return mediaId;
     } catch (e) {
       CliLogger.error("can't upload file $e");
-      rethrow;
+      return null;
     }
   }
 

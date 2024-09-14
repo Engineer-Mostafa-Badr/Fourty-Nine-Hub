@@ -108,15 +108,18 @@ class MessagesRemoteDataSourceImplementation
       CliLogger.info('you send message : ${params.toString()}');
       List<String> mediaIds = [];
       for (var file in params.media) {
-        UploadFile.uploadPickedFile(
+       final id = await UploadFile.uploadPickedFile(
             file: file, subCategoryId: params.chat.categoryId);
+        if (id != null) {
+          mediaIds.add(id);
+        }
       }
       _socket.emit(
           SocketIOEvents.sendMessage,
           jsonEncode({
             "chatId": params.chat.id,
             "type": 1,
-            "mediaIds": [],
+            "mediaIds": mediaIds,
             "text": params.message,
             "groupId": null,
             "oneTimeView": params.oneTimeView,
