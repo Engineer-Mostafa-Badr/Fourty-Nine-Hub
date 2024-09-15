@@ -357,5 +357,23 @@
   "requestWithdrawal": "تم إرسال طلب السحب الخاص بك بنجاح في انتظار موافقة الإدارة",
   "complete": "تم إكماله",
   "yearsLast": "سنوات مضت",
-  "checkRequest": "يرجى الانتظار للتحقق من الطلب"
+  "checkRequest": "يرجى الانتظار للتحقق من الطلب",
+
+
+  "whatDoYouThink": "بم تفكر؟",
+  "peopleYouMayKnow": "أشخاص قد تعرفهم",
+  "noFriendsSuggested": "لا يوجد اصدقاء مقترحين",
+  "messageSentSuccessfully": "تم إرسال الرسالة بنجاح",
+  "days": "يوم",
+  "comments": "تعليقات",
+  "comment": "تعليق",
+  "like": "أعجبني",
+  "sad": "أحزنني",
+  "angry": "أغطبني",
+  "haha": "أضحكني",
+  "love": "أحببته",
+  "feeling": "يشعر",
+  "enterGreetMessage": "أكتب رسالة ترحيب",
+  "greetMessage": "رسالة ترحيب",
+  "send": "إرسال"
 }

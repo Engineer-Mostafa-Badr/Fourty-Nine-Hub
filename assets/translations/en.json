@@ -360,5 +360,24 @@
   "requestWithdrawal": "Your request withdrawal sent successfully waiting for administration approval",
   "complete": "Complete",
   "yearsLast": "years last",
-  "checkRequest": "Please wait to check request"
+  "checkRequest": "Please wait to check request",
+
+
+
+  "whatDoYouThink": "What do you think about?",
+  "peopleYouMayKnow": "People You May Know",
+  "noFriendsSuggested": "No Friends Suggested",
+  "days": "Days",
+  "comments": "Comments",
+  "comment": "Comment",
+  "like": "Like",
+  "sad": "Sad",
+  "angry": "Angry",
+  "haha": "Haha",
+  "love": "Love",
+  "feeling": "Feeling",
+  "messageSentSuccessfully": "Message Sent Successfully",
+  "enterGreetMessage": "Enter Greet Message",
+  "greetMessage": "Greet Message",
+  "send": "Send"
 }
