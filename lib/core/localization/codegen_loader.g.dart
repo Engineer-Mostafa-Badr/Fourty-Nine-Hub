@@ -126,7 +126,7 @@ class CodegenLoader extends AssetLoader{
   "tweet": "تغريدة",
   "reels": "ريلز",
   "chat": "دردشة",
-  "find": "اكتشف",
+  "find": "ايجاد",
   "health": "صحه",
   "ship": "تحميله",
   "ride": "توصيله",
@@ -381,29 +381,6 @@ class CodegenLoader extends AssetLoader{
   "contacts": "جهات الاتصال",
   "pleaseLoginRegisterToEnjoyTheApp": "من فضلك قم بتسجيل الدخول او التسجيل للتفاعل معنا",
   "noChatsUntilNow": "لا توجد محادثات حتى الآن",
-  "tinder": {
-    "header": "تيندر",
-    "favorites": "المفضلة",
-    "noData": "لا توجد بيانات متاحة",
-    "find": "ابحث"
-  },
-  "chat_alert_dialog": {
-    "pick_chat_type": "اختر نوع الدردشة:",
-    "anonymous": "مجهول",
-    "regular": "عادي",
-    "error": {
-      "starting_anonymous": "حدث خطأ أثناء بدء الدردشة المجهولة: {error}",
-      "starting_normal": "حدث خطأ أثناء بدء الدردشة العادية: {error}",
-      "chat_id_empty": "معرف الدردشة فارغ."
-    }
-  },
-  "user_info": {
-    "date_of_birth": "تاريخ الميلاد",
-    "gender": "الجنس",
-    "followers": "المتابعين",
-    "following": "المتابَعون",
-    "friends": "الأصدقاء"
-  },
   "unarchive": "إلغاء الأرشفة",
   "checkRequest": "يرجى الانتظار للتحقق من الطلب",
   "whatDoYouThink": "بم تفكر؟",
@@ -478,7 +455,31 @@ class CodegenLoader extends AssetLoader{
   "following": "يتابع",
   "livesIn": "يقيم في",
   "reportSentSuccess": "تم ارسال الابلاغ",
-  "work": "يعمل"
+  "work": "يعمل",
+  "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+  "newPassword": "كلمة مرور جديدة",
+  "createNewPassword": "إنشاء كلمة مرور جديدة",
+  "passwordChangedSuccessfully": "تم تغيير كلمة المرور بنجاح",
+  "country": "الدولة",
+  "birthDate": "تاريخ الميلاد",
+  "socialStatus": "الحالة الاجتماعية",
+  "job": "الوظيفة",
+  "language": "اللغة",
+  "receiveMessages": "استقبال الرسائل",
+  "lastSeen": "آخر ظهور",
+  "friendsList": "قائمة الأصدقاء",
+  "followerList": "قائمة المتابعين",
+  "friendRequest": "طلب الصداقة",
+  "followRequest": "طلب المتابعة",
+  "public": "عام",
+  "followers": "المتابعون",
+  "onlyMe": "أنا فقط",
+  "on": "تشغيل",
+  "off": "إيقاف",
+  "activity": "نشاط",
+  "google": "جوجل",
+  "facebook": "فيسبوك",
+  "orContinueWith": "او استمر باستخدام"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -850,6 +851,28 @@ static const Map<String,dynamic> en = {
   "contacts": "Contacts",
   "pleaseLoginRegisterToEnjoyTheApp": "Please Login, Register to enjoy the app",
   "noChatsUntilNow": "No Chats until now",
+  "confirmNewPassword": "Confirm New Password",
+  "newPassword": "New Password",
+  "createNewPassword": "Create New Password",
+  "passwordChangedSuccessfully": "Password Changed Successfully",
+  "country": "Country",
+  "birthDate": "Birth Date",
+  "socialStatus": "Social Status",
+  "job": "Job",
+  "language": "Language",
+  "receiveMessages": "Receive Messages",
+  "lastSeen": "Last Seen",
+  "friendsList": "Friends List",
+  "followerList": "Followers List",
+  "friendRequest": "Friend Request",
+  "followRequest": "Follow Request",
+  "public": "Public",
+  "followers": "Followers",
+  "onlyMe": "Only Me",
+  "on": "ON",
+  "off": "Off",
+  "activity": "Activity",
+  "unarchive": "Unarchive",
   "availableTrips": "Available Trips",
   "checkRequest": "Please wait to check request",
   "reportSentSuccess": "Report sent successfully",
@@ -922,30 +945,9 @@ static const Map<String,dynamic> en = {
   "following": "Following",
   "livesIn": "Lives in",
   "work": "Work",
-  "unarchive": "Unarchive",
-  "tinder": {
-    "header": "Tinder",
-    "favorites": "Favorites",
-    "noData": "No Data Available",
-    "find": "Find"
-  },
-  "chat_alert_dialog": {
-    "pick_chat_type": "Pick a Chat Type:",
-    "anonymous": "Anonymous",
-    "regular": "Regular",
-    "error": {
-      "starting_anonymous": "Error starting anonymous chat: {error}",
-      "starting_normal": "Error starting normal chat: {error}",
-      "chat_id_empty": "Chat ID is empty."
-    }
-  },
-  "user_info": {
-    "date_of_birth": "Date of Birth",
-    "gender": "Gender",
-    "followers": "Followers",
-    "following": "Following",
-    "friends": "Friends"
-  }
+  "google": "Google",
+  "facebook": "Facebook",
+  "orContinueWith": "Or Continue with"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -46,10 +46,10 @@ class SubscriptionWidget extends StatelessWidget {
         Row(
           children: [
             SizedBox(
-                height: 30.h,
-                width: 30,
+                height: 40.h,
+                width: 40.w,
                 child: Image.network(subscription.picture ?? '')),
-            Sizer(),
+             const Sizer(),
             Expanded(
                 child: Row(
               children: [
@@ -57,8 +57,8 @@ class SubscriptionWidget extends StatelessWidget {
                     text: context.locale == Locales.english
                         ? subscription.nameEn ?? ''
                         : subscription.nameAr ?? ''),
-                Sizer(
-                  width: 5,
+                 Sizer(
+                  width: 10.w,
                 ),
                 Label(
                   text: subscription.isActive == true &&
@@ -105,7 +105,7 @@ class SubscriptionWidget extends StatelessWidget {
             // )
           ],
         ),
-        Sizer(
+         Sizer(
           height: 10.h,
         ),
         Row(
@@ -129,9 +129,7 @@ class SubscriptionWidget extends StatelessWidget {
                 },
               ),
             ),
-            Sizer(
-              width: 5,
-            ),
+             const Sizer(),
             Expanded(
               child: buildContainer(
                 text: LocaleKeys.renewal.localize,
@@ -148,7 +146,7 @@ class SubscriptionWidget extends StatelessWidget {
             ),
           ],
         ),
-        Sizer(
+         Sizer(
           height: 15.h,
         ),
       ],
@@ -166,10 +164,10 @@ class SubscriptionWidget extends StatelessWidget {
           function();
         },
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 4.h),
+          padding:  EdgeInsets.symmetric(vertical: 10.h),
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(12.r),
           ),
           child: Center(
             child: Label(

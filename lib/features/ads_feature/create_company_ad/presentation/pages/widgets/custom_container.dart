@@ -66,13 +66,13 @@ class CustomContainerAdvertise extends StatelessWidget {
             function();
           },
           child: Container(
-            margin: EdgeInsetsDirectional.only(bottom: 20),
+            margin: EdgeInsetsDirectional.only(bottom: 20.h),
             padding: EdgeInsetsDirectional.symmetric(
-                vertical: 7.h, horizontal: 10.w),
+                vertical: 15.h, horizontal: 15.w),
             width: double.infinity,
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20.r),
             ),
             child: Row(
               children: [
@@ -81,7 +81,7 @@ class CustomContainerAdvertise extends StatelessWidget {
                   style: Styles.headerText(
                       color: Theme.of(context).scaffoldBackgroundColor),
                 ),
-                SizedBox(width: 6),
+                const SizedBox(width: 6),
                 if (numberOfAdvertises > 0)
                   Text(
                     '($numberOfAdvertises)',

@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 import 'package:shimmer/shimmer.dart';
 
 class MainCategoryBanner extends StatefulWidget {
@@ -46,9 +48,9 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: widget.category.banner,
-      height: MediaQuery.sizeOf(context).height * 0.08,
+      height: MediaQuery.sizeOf(context).height * 0.13.h,
       imageBuilder: (context, i) => Container(
-        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color: widget.category.banner.isNotEmpty
@@ -108,7 +110,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                     height: 15.h,
                   ),
                   Label(
-                    text: '${widget.category.total.toShortScale} ${Labels.ads}',
+                    text: '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
                     style: Styles.mediumText(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,

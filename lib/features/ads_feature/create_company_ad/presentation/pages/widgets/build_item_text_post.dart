@@ -52,17 +52,17 @@ class BuildItemTextPost extends StatelessWidget {
                         motion: const ScrollMotion(),
                         dismissible: DismissiblePane(onDismissed: () {}),
                         children: [
-                          SizedBox(width: 5),
+                          SizedBox(width: 10.w),
                           GestureDetector(
                             onTap: () {
                               onDeleteItem(advertises.sId!);
                             },
                             child: Container(
-                              constraints: const BoxConstraints(minHeight: 80),
+                              constraints: BoxConstraints(minHeight: 120.h),
                               padding: EdgeInsets.symmetric(
-                                  vertical: 5.h, horizontal: 20),
+                                  vertical: 8.h, horizontal: 40.w),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(20.r),
                                   color: Theme.of(context).primaryColor),
                               child: Icon(
                                 Icons.delete_outlined,
@@ -87,17 +87,17 @@ class BuildItemTextPost extends StatelessWidget {
 
   Widget buildItem(context) {
     return Container(
-      constraints: const BoxConstraints(minHeight: 80),
+      constraints:  BoxConstraints(minHeight: 120.h),
       width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10),
+      padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 15.w),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20.r),
         color: Theme.of(context).primaryColor,
       ),
       child: Text(
         advertises.post!,
         style: Styles.mediumText(
-          fontSize: 34.sp,
+         // fontSize: 34.sp,
           color: Theme.of(context).scaffoldBackgroundColor,
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
@@ -19,8 +20,6 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../../core/localization/locale_keys.g.dart';
 
 class TwitterPostDetails extends StatefulWidget {
   const TwitterPostDetails({
@@ -68,7 +67,7 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
               showErrorMessage(
                 context,
                 getFailureMessage(
-                  state.failure ?? UnknownFailure(''),
+                  state.failure ??  UnknownFailure(''),
                   context,
                 ),
               );
@@ -80,7 +79,7 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
                 ? TwitterPostCard(
                     post: state.postDetails!,
                     onReact: () async {
-                      if (context.read<UserCubit>().isLoggedIn) {
+                      if(context.read<UserCubit>().isLoggedIn){
                         var result = await controller.onReact(
                           params: TwitterPostReactParams(
                               react: 'love', postId: state.postDetails!.id),
@@ -96,12 +95,12 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
                                 (state.postDetails!.loveCount! + 1);
                           }
                         }
-                      } else {
+                      }else{
                         context.push(Routes.LOGIN);
                       }
                     },
                     showPostComments: (i) {
-                      if (context.read<UserCubit>().isLoggedIn) {
+                      if(context.read<UserCubit>().isLoggedIn){
                         final user = context.read<UserCubit>().state.data;
 
                         bottomSheet(
@@ -169,21 +168,21 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
                             ),
                           ),
                         );
-                      } else {
+                      }else{
                         context.push(Routes.LOGIN);
                       }
                     },
                     onShare: () {
-                      if (context.read<UserCubit>().isLoggedIn) {
+                      if(context.read<UserCubit>().isLoggedIn){
                         controller.onShare(postId: state.postDetails!.id);
-                      } else {
+                      }else{
                         context.push(Routes.LOGIN);
                       }
                     },
                     getPost: () {},
                     onReport: (TwitterReportParams params) async {
                       controller.onReport(params);
-                      showSuccessMessage(context, LocaleKeys.reportSentSuccess.localize);
+                      showSuccessMessage(context, LocaleKeys.reportSentSuccessfully.localize);
                       context.pop();
                     },
                     deletePost: (String id) {

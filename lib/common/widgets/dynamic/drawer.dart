@@ -7,7 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
@@ -41,7 +40,7 @@ class DrawerWidget extends StatelessWidget {
         builder: (context, state) {
           context.read<GetWalletCubit>();
           return Drawer(
-            width: context.screenWidth * 0.8,
+            width: 600.w,
             child: SafeArea(
               child: SingleChildScrollView(
                 child: Column(
@@ -59,7 +58,9 @@ class DrawerWidget extends StatelessWidget {
                     drawerListTile(
                         image: Assets.microphone,
                         label: LocaleKeys.advertiseYourCompany.localize,
-                        onTap: () => context.push(Routes.CREATECOMPANYAD)),
+                        onTap: () {
+                          return context.push(Routes.CREATECOMPANYAD);
+                        }),
                     drawerListTile(
                         image: Assets.quran,
                         label: LocaleKeys.quraan.localize,
@@ -416,10 +417,10 @@ class DrawerWidget extends StatelessWidget {
           children: [
             CircleAvatar(
               backgroundColor: AppColors.GREY_BORDER_COLOR,
-              radius: 45.w,
+              radius: 45.r,
               child: Icon(
                 icon,
-                size: 40.w,
+                size: 40.sp,
                 color: AppColors.QUANTITY_COLOR,
               ),
             ),
@@ -430,7 +431,7 @@ class DrawerWidget extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Label(text: label, style: Styles.mediumText(color: Colors.grey)),
+            Label(text: label, style: Styles.smallText(color: Colors.grey)),
           ],
         ),
       ),
@@ -562,11 +563,11 @@ class DrawerWidget extends StatelessWidget {
               Sizer(
                 height: 10.h,
               ),
-              InkWell(
+              GestureDetector(
                 onTap: () {
-                  context.push(
-                    Routes.WALLET,
-                  );
+                  // context.push(
+                  //   Routes.WALLET,
+                  // );
                 },
                 child: Row(
                   children: [
