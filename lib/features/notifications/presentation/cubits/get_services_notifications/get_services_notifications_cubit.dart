@@ -10,7 +10,8 @@ import 'package:fourtyninehub/res/strings/labels.dart';
 
 part 'get_services_notifications_state.dart';
 
-class GetServicesNotificationsCubit extends Cubit<GetServicesNotificationsState> {
+class GetServicesNotificationsCubit
+    extends Cubit<GetServicesNotificationsState> {
   GetNotficationsUseCase getNotficationsUseCase;
   final BuildContext context;
   GetServicesNotificationsCubit({
@@ -20,13 +21,15 @@ class GetServicesNotificationsCubit extends Cubit<GetServicesNotificationsState>
   List<NotificationEntity> notifications = [];
   int page = 1;
   Future<void> getServicesNotifications() async {
-    final getUnreadNotificationsCountCubit = context.read<GetUnreadNotificationsCountCubit>();
+    final getUnreadNotificationsCountCubit =
+        context.read<GetUnreadNotificationsCountCubit>();
     getUnreadNotificationsCountCubit.getUnreadNotificationsCount();
     pr('getServicesNotifications is called');
     pr('pages: $page');
     pr('notifications: $notifications');
     emit(GetServicesNotificationsLoading());
-    final response = await getNotficationsUseCase.call(type: 'services', page: page);
+    final response =
+        await getNotficationsUseCase.call(type: 'services', page: page);
     response.fold(
       (Failure failure) {
         emit(GetServicesNotificationsFailed(Labels.errorHappened));

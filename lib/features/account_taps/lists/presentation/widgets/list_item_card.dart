@@ -15,7 +15,15 @@ import '../cubit/lists_cubit.dart';
 class ListItemCard extends StatelessWidget {
   final UserFriendEntity user;
   final ListTypes type;
-  const ListItemCard({super.key, required this.user, required this.type, required this.removeRequest, required this.acceptRequest, required this.unblockUser, required this.unfollowUser, required this.deleteFriend});
+  const ListItemCard(
+      {super.key,
+      required this.user,
+      required this.type,
+      required this.removeRequest,
+      required this.acceptRequest,
+      required this.unblockUser,
+      required this.unfollowUser,
+      required this.deleteFriend});
   final Function(AcceptRejectFriendRequestParams) removeRequest;
   final Function(AcceptRejectFriendRequestParams) acceptRequest;
   final Function(String) unblockUser;
@@ -23,51 +31,52 @@ class ListItemCard extends StatelessWidget {
   final Function(String) unfollowUser;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ListsCubit,ListsState>(
-      builder: (context,state) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal:10.0),
-          child: Row(
-            children: [
-              UserProfileImage(
-                accountId:0,
-                imageURL: user.image, userId: '',
-                fromProfile: true,
-              ),
-              Sizer(),
-              Expanded(child: Label(text: "${user.firstName}\t${user.lastName}")),
-              Sizer(),
-              if (type == ListTypes.requests)
-                IconButton(
-                    onPressed: () {
-                      acceptRequest(AcceptRejectFriendRequestParams(userId: user.id,status: true));
-                    },
-                    icon: const Icon(
-                      Icons.check,
-                      color: Colors.green,
-                    )),
-              if (type == ListTypes.requests)
-                IconButton(
-                    onPressed: () {
-                      removeRequest(AcceptRejectFriendRequestParams(userId: user.id,status: false));
-                    },
-                    icon: const Icon(
-                      Icons.clear,
-                      color: Colors.red,
-                    )),
+    return BlocBuilder<ListsCubit, ListsState>(builder: (context, state) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: Row(
+          children: [
+            UserProfileImage(
+              accountId: 0,
+              imageURL: user.image,
+              userId: '',
+              fromProfile: true,
+            ),
+            Sizer(),
+            Expanded(child: Label(text: "${user.firstName}\t${user.lastName}")),
+            Sizer(),
+            if (type == ListTypes.requests)
               IconButton(
                   onPressed: () {
-                    bottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        widget: _buildOptionsBottomSheet(context));
+                    acceptRequest(AcceptRejectFriendRequestParams(
+                        userId: user.id, status: true));
                   },
-                  icon: const Icon(Icons.more_horiz)),
-            ],
-          ),
-        );
-      }
-    );
+                  icon: const Icon(
+                    Icons.check,
+                    color: Colors.green,
+                  )),
+            if (type == ListTypes.requests)
+              IconButton(
+                  onPressed: () {
+                    removeRequest(AcceptRejectFriendRequestParams(
+                        userId: user.id, status: false));
+                  },
+                  icon: const Icon(
+                    Icons.clear,
+                    color: Colors.red,
+                  )),
+            IconButton(
+                onPressed: () {
+                  bottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      widget: _buildOptionsBottomSheet(context));
+                },
+                icon: const Icon(Icons.more_horiz)),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildOptionsBottomSheet(BuildContext context) {
@@ -92,7 +101,7 @@ class ListItemCard extends StatelessWidget {
               text: 'Unfollow ${user.firstName}',
               style: Styles.mediumText(fontWeight: FontWeight.w600),
             ),
-            onTap: (){
+            onTap: () {
               unfollowUser(user.id);
               context.pop();
             },
@@ -107,7 +116,7 @@ class ListItemCard extends StatelessWidget {
               Icons.check,
               color: Colors.green,
             ),
-            onTap: (){
+            onTap: () {
               unblockUser(user.id);
               context.pop();
             },
@@ -126,8 +135,9 @@ class ListItemCard extends StatelessWidget {
               Icons.check,
               color: Colors.green,
             ),
-            onTap: (){
-              acceptRequest(AcceptRejectFriendRequestParams(userId: user.id,status: true));
+            onTap: () {
+              acceptRequest(AcceptRejectFriendRequestParams(
+                  userId: user.id, status: true));
               context.pop();
             },
             title: Label(
@@ -142,8 +152,9 @@ class ListItemCard extends StatelessWidget {
               Icons.clear,
               color: Colors.red,
             ),
-            onTap: (){
-              removeRequest(AcceptRejectFriendRequestParams(userId: user.id,status: false));
+            onTap: () {
+              removeRequest(AcceptRejectFriendRequestParams(
+                  userId: user.id, status: false));
               context.pop();
             },
             title: Label(
@@ -158,7 +169,7 @@ class ListItemCard extends StatelessWidget {
               Icons.block_flipped,
               color: Colors.red,
             ),
-            onTap: (){
+            onTap: () {
               deleteFriend(user.id);
               context.pop();
             },

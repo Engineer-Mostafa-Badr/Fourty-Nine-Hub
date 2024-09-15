@@ -79,10 +79,10 @@ class RoomInfoWidget extends StatelessWidget {
             ),
             child: TextField(
               textAlignVertical: TextAlignVertical.bottom,
-              style:  TextStyle(color: Colors.black, fontSize: 12.sp),
+              style: TextStyle(color: Colors.black, fontSize: 12.sp),
               decoration: InputDecoration(
                 hintText: 'Room title',
-                hintStyle:  TextStyle(color: Colors.grey, fontSize: 12.sp),
+                hintStyle: TextStyle(color: Colors.grey, fontSize: 12.sp),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
                   borderSide: const BorderSide(color: Color(0xfff3f3f3)),

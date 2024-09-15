@@ -14,14 +14,17 @@ class ServicesIconBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
-      final getUnreadNotificationsCountCubit = context.watch<GetUnreadNotificationsCountCubit>();
+      final getUnreadNotificationsCountCubit =
+          context.watch<GetUnreadNotificationsCountCubit>();
 
       return IconWithViewCount(
         icon: Image.asset(
           Assets.hand,
           height: 30.h,
         ),
-        unreadCount: getUnreadNotificationsCountCubit.unreadNotificationsCountEntity?.servicesCount ?? 0,
+        unreadCount: getUnreadNotificationsCountCubit
+                .unreadNotificationsCountEntity?.servicesCount ??
+            0,
       );
     });
   }

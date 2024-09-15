@@ -21,7 +21,6 @@ import '../core.dart';
 
 // Project imports:
 
-
 /// @nodoc
 mixin ZegoUIKitCoreDataMedia {
   final _mediaImpl = ZegoUIKitCoreDataMediaImpl();

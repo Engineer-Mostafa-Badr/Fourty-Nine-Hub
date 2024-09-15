@@ -16,8 +16,8 @@ class ReplyMessageModel extends ReplyMessageEntity {
         avatar: json['avatar'] ?? UIConst.profilePlaceHolder,
         id: json['userId'] ?? 'no id',
       ),
-      text: json['text']??'no message',
-      id: json['_id']??'no id',
+      text: json['text'] ?? 'no message',
+      id: json['_id'] ?? 'no id',
       media: [],
     );
   }

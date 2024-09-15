@@ -11,7 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 
 class DoctorGovernorateFilterView extends StatelessWidget {
-   const DoctorGovernorateFilterView({super.key});
+  const DoctorGovernorateFilterView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class DoctorGovernorateFilterView extends StatelessWidget {
         label: LocaleKeys.governorate.localize,
       ),
       body: Padding(
-        padding:  EdgeInsets.symmetric(
+        padding: EdgeInsets.symmetric(
           horizontal: 20,
           vertical: 10.h,
         ),
@@ -33,10 +33,10 @@ class DoctorGovernorateFilterView extends StatelessWidget {
               currentFocusNode: doctorGovernorateFilter.searchFocusNode,
               currentController: doctorGovernorateFilter.searchController,
               hint: LocaleKeys.search.localize,
-              prefixIcon:  const Icon(Icons.search),
+              prefixIcon: const Icon(Icons.search),
               onChanged: (value) => doctorGovernorateFilter.search(value),
             ),
-             Sizer(
+            Sizer(
               height: 30.h,
             ),
             // BlocBuilder<HealthCubit, HealthState>(builder: (context, state) {
@@ -59,12 +59,12 @@ class DoctorGovernorateFilterView extends StatelessWidget {
                   return Expanded(
                       child: ListView.separated(
                     itemCount: state.governorates.length,
-                    separatorBuilder: (context, index) =>  Divider(),
+                    separatorBuilder: (context, index) => Divider(),
                     itemBuilder: (context, index) => GovernorateListTitle(
                         governorate: state.governorates[index]),
                   ));
                 } else {
-                  return  SizedBox.shrink();
+                  return SizedBox.shrink();
                 }
                 // switch (state) {
                 //   case DoctorGovernorateFilterLoaded _:

@@ -245,7 +245,8 @@ class TinderViewState {
       lastSeenModel: lastSeenModel ?? this.lastSeenModel,
       lastSeenModelState: lastSeenModelState ?? this.lastSeenModelState,
       getFavCategoryModel: getFavCategoryList ?? getFavCategoryModel,
-      getFavoriteCategoryModel: FavoriteCategoryList ?? getFavoriteCategoryModel,
+      getFavoriteCategoryModel:
+          FavoriteCategoryList ?? getFavoriteCategoryModel,
       getFavCategoryModelState:
           getFavCategoryListState ?? getFavCategoryModelState,
       addCategoryModel: addCategoryModel ?? this.addCategoryModel,

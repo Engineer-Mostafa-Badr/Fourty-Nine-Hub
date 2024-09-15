@@ -2,7 +2,6 @@ import 'package:fourtyninehub/features/competition/data/models/competion_model.d
 
 import '../../../data/models/winners_model.dart';
 
-
 abstract class WinnerState {}
 
 class WinnerInitial extends WinnerState {}

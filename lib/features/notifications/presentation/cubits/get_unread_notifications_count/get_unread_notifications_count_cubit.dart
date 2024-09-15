@@ -7,7 +7,8 @@ import 'package:fourtyninehub/res/strings/labels.dart';
 
 part 'get_unread_notifications_count_state.dart';
 
-class GetUnreadNotificationsCountCubit extends Cubit<GetUnreadNotificationsCountState> {
+class GetUnreadNotificationsCountCubit
+    extends Cubit<GetUnreadNotificationsCountState> {
   GetUnreadNotificationsCountUseCase getUnreadNotificationsCountUseCase;
   GetUnreadNotificationsCountCubit({
     required this.getUnreadNotificationsCountUseCase,

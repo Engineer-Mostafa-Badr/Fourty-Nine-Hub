@@ -40,38 +40,36 @@ class PaymentProviderRepositoryImpl implements PaymentProviderRepository {
   }
 
   @override
-  Future<Either<Failure, FawryCardTokenResponseEntity>> saveCardToken(FawrySaveCardTokenParams params) async {
+  Future<Either<Failure, FawryCardTokenResponseEntity>> saveCardToken(
+      FawrySaveCardTokenParams params) async {
     return await remoteDataSource.saveCardToken(params);
   }
 
   @override
-  Future<Either<Failure, List<CardEntity>>> getSavedCards() async{
+  Future<Either<Failure, List<CardEntity>>> getSavedCards() async {
     return await remoteDataSource.getSavedCards();
-
   }
 
   @override
-  Future<Either<Failure, DeleteCardResponse>> deleteCard(String cardId) async{
+  Future<Either<Failure, DeleteCardResponse>> deleteCard(String cardId) async {
     return await remoteDataSource.deleteCard(cardId);
-
   }
 
   @override
-  Future<Either<Failure, MutliPaymentResponse>> makeMultiPayment(MutliPaymentParams params)async {
+  Future<Either<Failure, MutliPaymentResponse>> makeMultiPayment(
+      MutliPaymentParams params) async {
     return await remoteDataSource.makeMultiPayment(params);
-
   }
 
   @override
-  Future<Either<Failure, InstaPayResponseEntity>> postInstaPay(InstaPayParams params) async{
+  Future<Either<Failure, InstaPayResponseEntity>> postInstaPay(
+      InstaPayParams params) async {
     return await remoteDataSource.postInstaPay(params);
-
   }
 
   @override
-  Future<Either<Failure, PayWithTokenResponseEntity>> payWithToken(PayWithTokenParams params) async{
+  Future<Either<Failure, PayWithTokenResponseEntity>> payWithToken(
+      PayWithTokenParams params) async {
     return await remoteDataSource.payWithToken(params);
-
   }
-
 }

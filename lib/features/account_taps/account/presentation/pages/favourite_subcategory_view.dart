@@ -8,48 +8,49 @@ import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/m
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/favourite_sub_category_card.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 
-
-
 class FavSubCategoryView extends StatelessWidget {
-
-  const FavSubCategoryView({super.key, });
+  const FavSubCategoryView({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BackAppBar(
-          label: Labels.favouriteSubcategories,
-        ),
-      body: BlocBuilder<FavouriteSubCategoryCubit,FavouriteSubCategoryState>(
-          builder: (context,state) {
-            final controller = context.read<FavouriteSubCategoryCubit>();
-            return Padding(
-              padding: EdgeInsets.all(16.0),
-              child: PaginationView<FavouriteSubcategoryEntity>(
-                build: (ScrollController scrollController,
-                    List<FavouriteSubcategoryEntity> data) {
-                  return GridView.builder(
-                    itemCount: data.length,
-                    controller: scrollController,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2, childAspectRatio: 1),
-                    itemBuilder: (context, index) => FavouriteSubCategoryCard(
-                      item: data[index], onFav: () async{
-                        var result = await controller.toggleSubCategoryToFavorites(data[index].id);
-                        if(result==true){
-                          data.removeWhere((element) => element.id==data[index].id);
-                        }
-                    },
-                    ),
-                  );
-                },
-                fetchData: (PaginationParams paginationParams) => context
-                    .read<FavouriteSubCategoryCubit>()
-                    .getSubcategories(paginationParams: paginationParams),
-              ),
-            );
-          }
+      appBar: const BackAppBar(
+        label: Labels.favouriteSubcategories,
       ),
+      body: BlocBuilder<FavouriteSubCategoryCubit, FavouriteSubCategoryState>(
+          builder: (context, state) {
+        final controller = context.read<FavouriteSubCategoryCubit>();
+        return Padding(
+          padding: EdgeInsets.all(16.0),
+          child: PaginationView<FavouriteSubcategoryEntity>(
+            build: (ScrollController scrollController,
+                List<FavouriteSubcategoryEntity> data) {
+              return GridView.builder(
+                itemCount: data.length,
+                controller: scrollController,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, childAspectRatio: 1),
+                itemBuilder: (context, index) => FavouriteSubCategoryCard(
+                  item: data[index],
+                  onFav: () async {
+                    var result = await controller
+                        .toggleSubCategoryToFavorites(data[index].id);
+                    if (result == true) {
+                      data.removeWhere(
+                          (element) => element.id == data[index].id);
+                    }
+                  },
+                ),
+              );
+            },
+            fetchData: (PaginationParams paginationParams) => context
+                .read<FavouriteSubCategoryCubit>()
+                .getSubcategories(paginationParams: paginationParams),
+          ),
         );
+      }),
+    );
   }
 }

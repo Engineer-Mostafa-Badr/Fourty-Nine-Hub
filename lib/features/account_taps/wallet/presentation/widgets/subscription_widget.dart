@@ -49,7 +49,7 @@ class SubscriptionWidget extends StatelessWidget {
                 height: 30.h,
                 width: 30,
                 child: Image.network(subscription.picture ?? '')),
-             Sizer(),
+            Sizer(),
             Expanded(
                 child: Row(
               children: [
@@ -57,7 +57,7 @@ class SubscriptionWidget extends StatelessWidget {
                     text: context.locale == Locales.english
                         ? subscription.nameEn ?? ''
                         : subscription.nameAr ?? ''),
-                 Sizer(
+                Sizer(
                   width: 5,
                 ),
                 Label(
@@ -105,7 +105,7 @@ class SubscriptionWidget extends StatelessWidget {
             // )
           ],
         ),
-         Sizer(
+        Sizer(
           height: 10.h,
         ),
         Row(
@@ -129,7 +129,7 @@ class SubscriptionWidget extends StatelessWidget {
                 },
               ),
             ),
-             Sizer(
+            Sizer(
               width: 5,
             ),
             Expanded(
@@ -148,7 +148,7 @@ class SubscriptionWidget extends StatelessWidget {
             ),
           ],
         ),
-         Sizer(
+        Sizer(
           height: 15.h,
         ),
       ],
@@ -166,7 +166,7 @@ class SubscriptionWidget extends StatelessWidget {
           function();
         },
         child: Container(
-          padding:  EdgeInsets.symmetric(vertical: 4.h),
+          padding: EdgeInsets.symmetric(vertical: 4.h),
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(8),

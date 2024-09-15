@@ -184,7 +184,7 @@ class AvailableTripCard extends StatelessWidget {
               Positioned.directional(
                 top: 5,
                 end: 20,
-                textDirection: context.isArabic?TextDirection.rtl:TextDirection.ltr,
+                textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
                 child: Column(
                   children: [
                     Text(tripJoinCardEntity.journeyPrice?.toStringAsFixed(0) ?? '',
@@ -220,6 +220,7 @@ class AvailableTripCard extends StatelessWidget {
     if (tripJoinCardEntity.publishDate == null) {
       return '';
     }
-    return intl.DateFormat('dd MMM, hh:mm aaa').format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate!));
+    return intl.DateFormat('dd MMM, hh:mm aaa')
+        .format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate!));
   }
 }

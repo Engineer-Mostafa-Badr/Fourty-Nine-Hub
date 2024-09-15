@@ -13,7 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 
 class DoctorCityFilterView extends StatefulWidget {
-   const DoctorCityFilterView({
+  const DoctorCityFilterView({
     super.key,
   });
 
@@ -40,7 +40,7 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
         label: LocaleKeys.city.localize,
       ),
       body: Padding(
-        padding:  EdgeInsets.symmetric(
+        padding: EdgeInsets.symmetric(
           horizontal: 20,
           vertical: 10.h,
         ),
@@ -51,10 +51,10 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
               currentFocusNode: doctorCityFilter.searchFocusNode,
               currentController: doctorCityFilter.searchController,
               hint: LocaleKeys.search.localize,
-              prefixIcon:  Icon(Icons.search),
+              prefixIcon: Icon(Icons.search),
               onChanged: (value) => doctorCityFilter.search(value),
             ),
-             Sizer(
+            Sizer(
               height: 30.h,
             ),
             BlocBuilder<DoctorCityFilterCubit, DoctorCityFilterState>(
@@ -64,14 +64,14 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
                     return Expanded(
                         child: ListView.separated(
                       itemCount: state.cities.length,
-                      separatorBuilder: (context, index) =>  Divider(),
+                      separatorBuilder: (context, index) => Divider(),
                       itemBuilder: (context, index) =>
                           CityListTitle(city: state.cities[index]),
                     ));
                   case DoctorCityFilterError _:
                     return Center(child: Text(state.message));
                   default:
-                    return  Center(child: CircularProgressIndicator());
+                    return Center(child: CircularProgressIndicator());
                 }
               },
             ),

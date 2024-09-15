@@ -4,21 +4,19 @@ import '../../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../../../../core/error/failure.dart';
 
-abstract class GiftRemoteDataSource{
-  Future<Either<Failure,GiftModelModel>> fetchGiftWallet();
+abstract class GiftRemoteDataSource {
+  Future<Either<Failure, GiftModelModel>> fetchGiftWallet();
 }
 
-class GiftRemoteDataSourceImpl implements GiftRemoteDataSource{
+class GiftRemoteDataSourceImpl implements GiftRemoteDataSource {
   final ApiConsumer _apiConsumer;
 
   GiftRemoteDataSourceImpl(this._apiConsumer);
 
-
   @override
-  Future<Either<Failure, GiftModelModel>> fetchGiftWallet() async{
+  Future<Either<Failure, GiftModelModel>> fetchGiftWallet() async {
     final response = await _apiConsumer.get(EndPoints.getGift);
-    return response.fold(
-            (failure) => Left(failure),
-            (response) => Right(GiftModelModel.fromJson(response['data'])));
+    return response.fold((failure) => Left(failure),
+        (response) => Right(GiftModelModel.fromJson(response['data'])));
   }
 }

@@ -32,6 +32,7 @@ import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 import '../../../domain/usecases/post_react_usecase.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class FacebookPostCard extends StatefulWidget {
   final PostEntity post;
   final int index;

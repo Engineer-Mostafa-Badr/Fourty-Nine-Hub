@@ -20,7 +20,8 @@ class GetAppNotificationsCubit extends Cubit<GetAppNotificationsState> {
   List<NotificationEntity> notifications = [];
   int page = 1;
   Future<void> getAppNotifications() async {
-    final getUnreadNotificationsCountCubit = context.read<GetUnreadNotificationsCountCubit>();
+    final getUnreadNotificationsCountCubit =
+        context.read<GetUnreadNotificationsCountCubit>();
     getUnreadNotificationsCountCubit.getUnreadNotificationsCount();
     pr('getAppNotifications is called');
     pr('pages: $page');

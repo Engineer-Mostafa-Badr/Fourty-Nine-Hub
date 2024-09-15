@@ -16,6 +16,7 @@ import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class ReplyCard extends StatefulWidget {
   final Color textColor;
   final CommentEntity reply;

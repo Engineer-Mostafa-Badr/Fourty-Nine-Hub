@@ -8,8 +8,6 @@ class PayWithTokenResponseEntity {
     required this.message,
     required this.data,
   });
-
-
 }
 
 class PaymentTokenData {
@@ -52,6 +50,4 @@ class PaymentTokenData {
     required this.statusDescription,
     required this.basketPayment,
   });
-
-
 }

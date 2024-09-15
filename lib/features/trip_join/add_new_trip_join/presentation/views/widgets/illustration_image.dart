@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class IllustrationImage extends StatelessWidget {
   const IllustrationImage({
     super.key,

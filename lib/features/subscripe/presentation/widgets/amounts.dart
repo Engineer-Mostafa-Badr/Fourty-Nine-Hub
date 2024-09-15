@@ -72,7 +72,7 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
         ElevatedAppButton(
           label: 'Charge Now',
           onPressed: () {
-            if(groupValue!=null){
+            if (groupValue != null) {
               context.push(Routes.PAYMENT,
                   extra: PaymobLink(
                       amountId: newIndex,

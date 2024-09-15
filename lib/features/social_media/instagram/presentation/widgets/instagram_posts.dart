@@ -120,7 +120,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
               pagingController: controller.feedPagingController,
               builderDelegate: PagedChildBuilderDelegate<PostEntity>(
                 noItemsFoundIndicatorBuilder: (context) {
-                  return  Center(
+                  return Center(
                     child: Text(
                       "No Posts",
                       style: TextStyle(
@@ -215,7 +215,8 @@ class _InstagramPostsState extends State<InstagramPosts> {
                             height: 10.h,
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

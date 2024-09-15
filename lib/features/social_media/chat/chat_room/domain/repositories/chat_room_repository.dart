@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 
 abstract class ChatRoomRepository {
-
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params);
 
   Future<Either<Failure, List<MessageEntity>>> getMessages(

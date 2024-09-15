@@ -21,11 +21,11 @@ class GiftWalletView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar:  BackAppBar(
+        appBar: BackAppBar(
           label: LocaleKeys.gift.localize,
         ),
         body: BlocProvider<GiftCubit>(
-          create:(_)=>serviceLocator(),
+          create: (_) => serviceLocator(),
           child: BlocBuilder<GiftCubit, GiftState>(builder: (context, state) {
             return SingleChildScrollView(
               child: Padding(
@@ -33,8 +33,8 @@ class GiftWalletView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     WalletCardWidget(
-                      balance: '${state.gift?.giftWallet.amount ??''}',
+                    WalletCardWidget(
+                      balance: '${state.gift?.giftWallet.amount ?? ''}',
                       type: WalletTypes.giftWallet,
                     ),
                     Sizer(),
@@ -48,8 +48,9 @@ class GiftWalletView extends StatelessWidget {
                         itemCount: state.gift?.competitionsWallet.length ?? 0,
                         itemBuilder: (context, index) {
                           return CompetitionCard(
-                            competitionsWalletEntity: state.gift!.competitionsWallet[index],
-                            onTap: (context){},
+                            competitionsWalletEntity:
+                                state.gift!.competitionsWallet[index],
+                            onTap: (context) {},
                             // onTap: (context) =>
                             //     controller.showGiftsHistory(context: context),
                           );

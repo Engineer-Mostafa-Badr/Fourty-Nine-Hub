@@ -24,7 +24,8 @@ class EditProfileEntity {
       required this.job,
       required this.country,
       required this.city,
-        required this.maritalStatus,required this.maritalPrivacy,
+      required this.maritalStatus,
+      required this.maritalPrivacy,
       this.isMale = true});
 
   Map<String, dynamic> toJson() => {

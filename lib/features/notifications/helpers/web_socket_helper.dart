@@ -16,7 +16,8 @@ class WebSocketHelper {
 
   bool isCalled = true;
 
-  Future<void> notificationListener(Function(Map<String, dynamic> data) notificationCallback) async {
+  Future<void> notificationListener(
+      Function(Map<String, dynamic> data) notificationCallback) async {
     try {
       pr('notificationListener is called ');
       socket.disconnect();
@@ -27,7 +28,8 @@ class WebSocketHelper {
       // pr('saved token is ');
       // pr(await TokenManager.getAccessToken());
 
-      socket.io.options?['extraHeaders']?['authorization'] = await TokenManager.getAccessToken();
+      socket.io.options?['extraHeaders']?['authorization'] =
+          await TokenManager.getAccessToken();
       socket.connect();
       socket.onConnect((_) {
         pr('Connect To Socket successfully ');

@@ -192,6 +192,7 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 const kToolbarHeightFactor = 0.80;
 const kDefaultPadding = 8.0;
 
@@ -271,7 +272,7 @@ class _TinderScreenState extends State<TinderScreen> {
                       child: CupertinoActivityIndicator(radius: 15),
                     ),
                   ),
-             Padding(
+            Padding(
               padding: const EdgeInsets.only(top: 8.0, bottom: 2),
               child: Divider(color: Colors.grey, height: 1.h),
             ),

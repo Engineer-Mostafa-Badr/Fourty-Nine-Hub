@@ -5,11 +5,13 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/lists_repo.dart';
 
-class GetFriendsUsecase extends UseCase<List<UserFriendEntity>, TwitterFeedParams> {
+class GetFriendsUsecase
+    extends UseCase<List<UserFriendEntity>, TwitterFeedParams> {
   final ListsRepo _repo;
   GetFriendsUsecase(this._repo);
   @override
-  Future<Either<Failure, List<UserFriendEntity>>> call(TwitterFeedParams params) async {
-    return await _repo.getFriendsList(params:params);
+  Future<Either<Failure, List<UserFriendEntity>>> call(
+      TwitterFeedParams params) async {
+    return await _repo.getFriendsList(params: params);
   }
 }

@@ -24,7 +24,8 @@ class _ReelsPostContentState extends State<ReelsPostContent> {
   void initState() {
     super.initState();
     _pageController = PageController();
-    context.read<CreateCompanyAdCubit>().getCompanyAdPosts('reel', params: PaginationParams.basic()); // Trigger the fetch
+    context.read<CreateCompanyAdCubit>().getCompanyAdPosts('reel',
+        params: PaginationParams.basic()); // Trigger the fetch
   }
 
   @override
@@ -35,7 +36,8 @@ class _ReelsPostContentState extends State<ReelsPostContent> {
   }
 
   void _initializeVideoController(String videoUrl) {
-    _videoController?.dispose(); // Dispose the previous controller before initializing a new one
+    _videoController
+        ?.dispose(); // Dispose the previous controller before initializing a new one
     _videoController = VideoPlayerController.network(videoUrl)
       ..initialize().then((_) {
         setState(() {
@@ -50,7 +52,8 @@ class _ReelsPostContentState extends State<ReelsPostContent> {
     });
 
     _videoController?.pause(); // Pause the current video
-    _initializeVideoController(data[index].media?.first.photo ?? ''); // Load the next video
+    _initializeVideoController(
+        data[index].media?.first.photo ?? ''); // Load the next video
   }
 
   void _togglePlayPause() {
@@ -89,18 +92,22 @@ class _ReelsPostContentState extends State<ReelsPostContent> {
               itemCount: data.length,
               itemBuilder: (context, index) {
                 // Initialize the video for the first page if not initialized
-                if (index == 0 && (_videoController == null || !_videoController!.value.isInitialized)) {
-                  _initializeVideoController(data[index].media?.first.photo ?? '');
+                if (index == 0 &&
+                    (_videoController == null ||
+                        !_videoController!.value.isInitialized)) {
+                  _initializeVideoController(
+                      data[index].media?.first.photo ?? '');
                 }
 
                 return GestureDetector(
                   onTap: _togglePlayPause,
                   child: Center(
-                    child: _videoController != null && _videoController!.value.isInitialized
+                    child: _videoController != null &&
+                            _videoController!.value.isInitialized
                         ? AspectRatio(
-                      aspectRatio: _videoController!.value.aspectRatio,
-                      child: VideoPlayer(_videoController!),
-                    )
+                            aspectRatio: _videoController!.value.aspectRatio,
+                            child: VideoPlayer(_videoController!),
+                          )
                         : const CircularProgressIndicator(),
                   ),
                 );
@@ -117,8 +124,6 @@ class _ReelsPostContentState extends State<ReelsPostContent> {
     );
   }
 }
-
-
 
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';

@@ -115,7 +115,7 @@ class CompetitionView extends StatelessWidget {
   Widget timeFrame() {
     return Container(
       height: kToolbarHeight * .6,
-      margin:  EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+      margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.PRIMARY_COLOR),
       ),

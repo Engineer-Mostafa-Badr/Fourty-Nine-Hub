@@ -152,7 +152,7 @@ class ShareTheApp extends StatelessWidget {
 
   Widget _buildShareChannelsWidget() {
     return Container(
-      padding:  EdgeInsets.symmetric(vertical: 10.h, horizontal: 10),
+      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10),
       margin: const EdgeInsets.symmetric(
         horizontal: 20,
       ),

@@ -54,7 +54,8 @@ class _NotificationCardState extends State<NotificationCard> {
                   context: context,
                   builder: (context) {
                     return Container(
-                      padding: EdgeInsets.only(top: 20.h, right: 10.w, left: 10.w, bottom: 20.h),
+                      padding: EdgeInsets.only(
+                          top: 20.h, right: 10.w, left: 10.w, bottom: 20.h),
                       child: AreYouSure(
                         title: LocaleKeys.alert.localize,
                         subTitle: LocaleKeys.clearNoti.localize,
@@ -80,7 +81,9 @@ class _NotificationCardState extends State<NotificationCard> {
                 ),
               ),
               child: NotificationCustomContainer(
-                color: widget.notificationEntity.read! ? Colors.transparent : AppColors.PRIMARY_COLOR.withOpacity(0.1),
+                color: widget.notificationEntity.read!
+                    ? Colors.transparent
+                    : AppColors.PRIMARY_COLOR.withOpacity(0.1),
                 child: Row(
                   children: [
                     SizedBox(
@@ -149,12 +152,14 @@ class _NotificationCardState extends State<NotificationCard> {
     if (widget.notificationEntity.createdAt == null) {
       return '';
     }
-    return DateFormat('dd MMM, hh:mm aaa').format(widget.notificationEntity.createdAt!);
+    return DateFormat('dd MMM, hh:mm aaa')
+        .format(widget.notificationEntity.createdAt!);
   }
 }
 
 class NotificationCustomContainer extends StatelessWidget {
-  const NotificationCustomContainer({super.key, required this.color, required this.child});
+  const NotificationCustomContainer(
+      {super.key, required this.color, required this.child});
   final Color color;
   final Widget child;
   @override

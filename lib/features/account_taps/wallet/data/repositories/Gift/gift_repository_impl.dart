@@ -4,16 +4,13 @@ import 'package:fourtyninehub/features/account_taps/wallet/data/datasources/Gift
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_entities.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/gift_repository.dart';
 
-class GiftRepositoryImpl implements GiftRepository{
+class GiftRepositoryImpl implements GiftRepository {
   final GiftRemoteDataSource _remoteDataSource;
 
   GiftRepositoryImpl(this._remoteDataSource);
-
 
   @override
   Future<Either<Failure, GiftEntity>> fetchGiftWallet() {
     return _remoteDataSource.fetchGiftWallet();
   }
-
-
 }

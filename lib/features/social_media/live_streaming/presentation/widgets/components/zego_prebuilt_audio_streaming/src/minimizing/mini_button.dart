@@ -11,7 +11,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 
 import '../components/defines.dart';
 
-
 /// @nodoc
 class ZegoMinimizingButton extends StatefulWidget {
   const ZegoMinimizingButton({

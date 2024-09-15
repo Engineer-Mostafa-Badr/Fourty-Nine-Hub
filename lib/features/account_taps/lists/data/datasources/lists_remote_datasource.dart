@@ -7,19 +7,23 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import '../../../../../core/error/failure.dart';
 
 abstract class ListsRemoteDataSource {
-  Future<Either<Failure, List<UserFriendEntity>>> getFriendsList({required TwitterFeedParams params});
-  Future<Either<Failure, List<UserFriendEntity>>> getFollowers({required TwitterFeedParams params});
-  Future<Either<Failure, List<UserFriendEntity>>> getFreindRequests({required TwitterFeedParams params});
-  Future<Either<Failure, List<UserFriendEntity>>> getBlockedUsers({required TwitterFeedParams params});
+  Future<Either<Failure, List<UserFriendEntity>>> getFriendsList(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, List<UserFriendEntity>>> getFollowers(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, List<UserFriendEntity>>> getFreindRequests(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, List<UserFriendEntity>>> getBlockedUsers(
+      {required TwitterFeedParams params});
 }
 
 class ListsRemoteDataSourceImpl implements ListsRemoteDataSource {
   final ApiConsumer _apiConsumer;
   ListsRemoteDataSourceImpl(this._apiConsumer);
   @override
-  Future<Either<Failure, List<UserFriendEntity >>> getBlockedUsers({required TwitterFeedParams params}) async {
-    final response = await _apiConsumer.get(
-        EndPoints.blockedUsersList(params));
+  Future<Either<Failure, List<UserFriendEntity>>> getBlockedUsers(
+      {required TwitterFeedParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.blockedUsersList(params));
 
     return response.fold((l) {
       return Left(l);
@@ -32,9 +36,9 @@ class ListsRemoteDataSourceImpl implements ListsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<UserFriendEntity>>> getFollowers({required TwitterFeedParams params}) async {
-    final response = await _apiConsumer.get(
-        EndPoints.followersList(params));
+  Future<Either<Failure, List<UserFriendEntity>>> getFollowers(
+      {required TwitterFeedParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.followersList(params));
 
     return response.fold((l) {
       return Left(l);
@@ -47,9 +51,10 @@ class ListsRemoteDataSourceImpl implements ListsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<UserFriendEntity>>> getFreindRequests({required TwitterFeedParams params}) async {
-    final response = await _apiConsumer.get(
-        EndPoints.friendRequestsList(params));
+  Future<Either<Failure, List<UserFriendEntity>>> getFreindRequests(
+      {required TwitterFeedParams params}) async {
+    final response =
+        await _apiConsumer.get(EndPoints.friendRequestsList(params));
 
     return response.fold((l) {
       return Left(l);
@@ -62,9 +67,9 @@ class ListsRemoteDataSourceImpl implements ListsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<UserFriendEntity>>> getFriendsList({required TwitterFeedParams params}) async {
-    final response = await _apiConsumer.get(
-        EndPoints.friendsList(params));
+  Future<Either<Failure, List<UserFriendEntity>>> getFriendsList(
+      {required TwitterFeedParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.friendsList(params));
 
     return response.fold((l) {
       return Left(l);

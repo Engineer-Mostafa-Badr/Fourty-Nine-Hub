@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 
-
 import '../../../../../core/error/failure.dart';
 
 import '../../../installment_list/data/models/installment_model.dart';

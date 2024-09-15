@@ -1163,6 +1163,7 @@ import '../../../reels/presentation/controllers/explore_reels_cubit/explore_reel
 import '../../../reels/presentation/pages/audio_screen.dart';
 import '../../../stories/presentation/cubit/stories_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class SpotlightView extends StatefulWidget {
   const SpotlightView({super.key});
 
@@ -1296,7 +1297,7 @@ class _SpotlightViewState extends State<SpotlightView> {
           ),
           onPressed: () {},
         ),
-         Positioned(
+        Positioned(
           right: 6,
           top: 6,
           child: CircleAvatar(

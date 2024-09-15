@@ -20,6 +20,7 @@ import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class CommentReplies extends StatefulWidget {
   final List<CommentEntity> replies;
   final String commentId;
@@ -69,8 +70,7 @@ class _CommentRepliesState extends State<CommentReplies> {
           children: [
             Expanded(
               child: PagedListView<int, CommentEntity>(
-                padding:
-                    EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
+                padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
                 pagingController: controller.repliesPagingController,
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(
@@ -79,7 +79,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                     noItemsFoundIndicatorBuilder: (context) {
                       print(
                           controller.repliesPagingController.itemList?.length);
-                      return  Padding(
+                      return Padding(
                           padding: EdgeInsets.only(top: 200),
                           child: Center(
                             child: Text(

@@ -5,13 +5,12 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/b
 
 import '../entities/balance/balance_data_entity.dart';
 
-class GetBalanceUseCases extends UseCase<BalanceDataEntity,NoParams>{
- final BalanceRepository _balanceRepository;
+class GetBalanceUseCases extends UseCase<BalanceDataEntity, NoParams> {
+  final BalanceRepository _balanceRepository;
 
   GetBalanceUseCases(this._balanceRepository);
   @override
-  Future<Either<Failure,BalanceDataEntity>> call(NoParams params)async {
-   return await _balanceRepository.fetchBalance();
+  Future<Either<Failure, BalanceDataEntity>> call(NoParams params) async {
+    return await _balanceRepository.fetchBalance();
   }
-
 }

@@ -5,11 +5,13 @@ import '../../../../../core/error/failure.dart';
 import '../repositories/lists_repo.dart';
 import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
 
-class GetFollowersUseCase extends UseCase<List<UserFriendEntity>, TwitterFeedParams> {
+class GetFollowersUseCase
+    extends UseCase<List<UserFriendEntity>, TwitterFeedParams> {
   final ListsRepo _repo;
   GetFollowersUseCase(this._repo);
   @override
-  Future<Either<Failure, List<UserFriendEntity>>> call(TwitterFeedParams params) async {
+  Future<Either<Failure, List<UserFriendEntity>>> call(
+      TwitterFeedParams params) async {
     return await _repo.getFollowers(params: params);
   }
 }

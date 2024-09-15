@@ -11,7 +11,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorSubcategoryFilterView extends StatelessWidget {
-   const DoctorSubcategoryFilterView({super.key});
+  const DoctorSubcategoryFilterView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
         label: LocaleKeys.speciality.localize,
       ),
       body: Padding(
-        padding:  EdgeInsets.symmetric(
+        padding: EdgeInsets.symmetric(
           horizontal: 20,
           vertical: 10.h,
         ),
@@ -34,16 +34,16 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
               currentFocusNode: doctorSubcategoryFilter.searchFocusNode,
               currentController: doctorSubcategoryFilter.searchController,
               hint: LocaleKeys.search.localize,
-              prefixIcon:  const Icon(
+              prefixIcon: const Icon(
                 Icons.search,
                 color: AppColors.QUANTITY_COLOR,
               ),
               onChanged: (value) => doctorSubcategoryFilter.search(value),
             ),
-             Sizer(
+            Sizer(
               height: 30.h,
             ),
-             const DoctorsSubcategoriesFilterList()
+            const DoctorsSubcategoriesFilterList()
           ],
         ),
       ),

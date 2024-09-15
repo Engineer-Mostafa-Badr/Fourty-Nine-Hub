@@ -6,10 +6,10 @@ class PayWithTokenModel extends PayWithTokenResponseEntity {
     required String message,
     required PaymentTokenData data,
   }) : super(
-    status: status,
-    message: message,
-    data: data,
-  );
+          status: status,
+          message: message,
+          data: data,
+        );
 
   factory PayWithTokenModel.fromJson(Map<String, dynamic> json) {
     return PayWithTokenModel(
@@ -41,25 +41,25 @@ class PaymentTokenDataModel extends PaymentTokenData {
     required String statusDescription,
     required bool basketPayment,
   }) : super(
-    type: type,
-    referenceNumber: referenceNumber,
-    merchantRefNumber: merchantRefNumber,
-    orderAmount: orderAmount,
-    paymentAmount: paymentAmount,
-    fawryFees: fawryFees,
-    orderStatus: orderStatus,
-    paymentMethod: paymentMethod,
-    paymentTime: paymentTime,
-    cardLastFourDigits: cardLastFourDigits,
-    customerName: customerName,
-    customerProfileId: customerProfileId,
-    authNumber: authNumber,
-    signature: signature,
-    taxes: taxes,
-    statusCode: statusCode,
-    statusDescription: statusDescription,
-    basketPayment: basketPayment,
-  );
+          type: type,
+          referenceNumber: referenceNumber,
+          merchantRefNumber: merchantRefNumber,
+          orderAmount: orderAmount,
+          paymentAmount: paymentAmount,
+          fawryFees: fawryFees,
+          orderStatus: orderStatus,
+          paymentMethod: paymentMethod,
+          paymentTime: paymentTime,
+          cardLastFourDigits: cardLastFourDigits,
+          customerName: customerName,
+          customerProfileId: customerProfileId,
+          authNumber: authNumber,
+          signature: signature,
+          taxes: taxes,
+          statusCode: statusCode,
+          statusDescription: statusDescription,
+          basketPayment: basketPayment,
+        );
 
   factory PaymentTokenDataModel.fromJson(Map<String, dynamic> json) {
     return PaymentTokenDataModel(

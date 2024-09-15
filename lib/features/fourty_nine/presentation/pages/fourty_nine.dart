@@ -34,7 +34,6 @@ import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../widgets/announce_widget.dart';
 
-
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
 
@@ -65,7 +64,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         }
       }
     });
-    context.read<FirebaseNotficationsCubit>().setupInterceptedMessage(context: context);
+    context
+        .read<FirebaseNotficationsCubit>()
+        .setupInterceptedMessage(context: context);
     context.read<NotificationSocketIoCubit>().notificationListener();
     super.initState();
   }
@@ -163,7 +164,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     ),
                   );
                 }
-                if (state.status==StateStatus.success && state.data != null) {
+                if (state.status == StateStatus.success && state.data != null) {
                   return ListView.separated(
                     itemCount: state.data?.length ?? 0,
                     physics: const NeverScrollableScrollPhysics(),
@@ -384,7 +385,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       onTap: () => route != null ? context.push(route) : null,
       child: Container(
         height: kToolbarHeight * 2.h,
-        padding:  EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(10.r),
@@ -431,7 +432,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   ),
                   const Spacer(),
                   Padding(
-                    padding:  EdgeInsets.symmetric(vertical: 2.h),
+                    padding: EdgeInsets.symmetric(vertical: 2.h),
                     child: Column(
                       children: [
                         InkWell(

@@ -11,8 +11,6 @@ import '../minimizing/mini_button.dart';
 import 'defines.dart';
 import 'leave_button.dart';
 
-
-
 /// @nodoc
 class ZegoLiveAudioRoomTopBar extends StatefulWidget {
   final ZegoUIKitPrebuiltLiveAudioRoomConfig config;

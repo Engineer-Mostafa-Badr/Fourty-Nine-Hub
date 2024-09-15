@@ -45,7 +45,8 @@ class LoginCubit extends Cubit<LoginState> {
       final result = await _loginUseCase(
         LoginParams(
           email: emailTextController.text.trim(),
-          password: passwordTextController.text.trim(), token: token!,
+          password: passwordTextController.text.trim(),
+          token: token!,
         ),
       );
 

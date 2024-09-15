@@ -3,7 +3,7 @@ import 'package:fourtyninehub/features/payment/domain/entities/fawry_save_card_t
 class MutliPaymentResponse {
   final bool status;
   final String message;
-  final PaymentData  data;
+  final PaymentData data;
 
   MutliPaymentResponse({
     required this.status,
@@ -15,9 +15,9 @@ class MutliPaymentResponse {
     return MutliPaymentResponse(
       status: json['status'],
       message: json['message'],
-       data: json['data'] is String ? json['data'] : PaymentData.fromJson(json['data']),
-
-
+      data: json['data'] is String
+          ? json['data']
+          : PaymentData.fromJson(json['data']),
     );
   }
 

@@ -27,7 +27,9 @@ class AuctionListCubit extends Cubit<AuctionListState> {
   Future<void> getSubCategories() async {
     final user = UserCubit.to.state.data?.id;
     final response = await _getSubCategoriesUseCase.call(GetSubCategoriesParams(
-        mainCategoryId: '', paginationParams: PaginationParams.basic(), userId: user??''));
+        mainCategoryId: '',
+        paginationParams: PaginationParams.basic(),
+        userId: user ?? ''));
     response.fold(
         (failure) => emit(
             state.copyWith(failure: failure, status: AuctionListStates.error)),

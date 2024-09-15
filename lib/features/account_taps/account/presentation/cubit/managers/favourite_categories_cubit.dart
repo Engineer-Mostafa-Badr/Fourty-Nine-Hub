@@ -8,12 +8,12 @@ import '../../../domain/usecases/get_favourite_categories_usecase.dart';
 
 part 'favourite_categories_state.dart';
 
-class FavouriteCategoryCubit
-    extends Cubit<FavouriteCategoryState> {
+class FavouriteCategoryCubit extends Cubit<FavouriteCategoryState> {
   final GetFavouriteCategoriesUseCase _getMainCategoriesUseCase;
   final ToggleFavoriteCategoryUseCase _toggleFavoriteCategoryUseCase;
 
-  FavouriteCategoryCubit(this._getMainCategoriesUseCase, this._toggleFavoriteCategoryUseCase)
+  FavouriteCategoryCubit(
+      this._getMainCategoriesUseCase, this._toggleFavoriteCategoryUseCase)
       : super(
           const FavouriteCategoryState(),
         );
@@ -40,12 +40,12 @@ class FavouriteCategoryCubit
     final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
     bool result = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (data) {
-          result=data;
-          emit(state.copyWith(status:StateStatus.success));
-        });
+        (data) {
+      result = data;
+      emit(state.copyWith(status: StateStatus.success));
+    });
     return result;
   }
 }

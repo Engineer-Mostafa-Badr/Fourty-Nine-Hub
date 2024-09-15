@@ -4,7 +4,8 @@ import 'package:path/path.dart';
 class SQFLiteDataSource {
   SQFLiteDataSource._privateConstructor();
 
-  static final SQFLiteDataSource instance = SQFLiteDataSource._privateConstructor();
+  static final SQFLiteDataSource instance =
+      SQFLiteDataSource._privateConstructor();
 
   static Database? _database;
 
@@ -72,4 +73,3 @@ abstract class DatabaseTables {
   static const messages = 'messages';
   static const chats = 'chats';
 }
-

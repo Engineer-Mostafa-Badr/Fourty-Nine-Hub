@@ -67,7 +67,7 @@ class ContactsViewState extends State<ContactsView> {
 
   Widget _body() {
     if (_permissionDenied) {
-      return  Center(child: Text(LocaleKeys.permissionDenied.tr()));
+      return Center(child: Text(LocaleKeys.permissionDenied.tr()));
     }
     if (_contacts == null) {
       return const Center(child: CircularProgressIndicator());

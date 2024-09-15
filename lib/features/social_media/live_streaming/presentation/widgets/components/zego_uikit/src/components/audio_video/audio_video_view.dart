@@ -18,7 +18,6 @@ import 'defines.dart';
 
 // Project imports:
 
-
 /// display user audio and video information,
 /// and z order of widget(from bottom to top) is:
 /// 1. background view

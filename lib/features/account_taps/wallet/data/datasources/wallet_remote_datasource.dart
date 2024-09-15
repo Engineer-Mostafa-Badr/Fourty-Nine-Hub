@@ -32,7 +32,7 @@ abstract class WalletRemoteDataSource {
   Future<Either<Failure, bool>> deleteSubscription(
       DeleteSubscriptionParams params);
 
-  Future<Either<Failure, bool>>addSubscription(AddSubscriptionParams params);
+  Future<Either<Failure, bool>> addSubscription(AddSubscriptionParams params);
 }
 
 class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
@@ -63,10 +63,8 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   @override
   Future<Either<Failure, List<WalletHistoryEntity>>> fetchHistoryWallet(
       WalletHistoryParams params) async {
-    final response = await _apiConsumer.get(
-        EndPoints.getHistoryWallet(),
-        queryParameters: params.paginationParams.toJson()
-    );
+    final response = await _apiConsumer.get(EndPoints.getHistoryWallet(),
+        queryParameters: params.paginationParams.toJson());
     return response.fold((l) {
       return Left(l);
     }, (data) {
@@ -138,25 +136,25 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
       EndPoints.deleteSubscription(params.subscriptionId!),
     );
     return response.fold(
-      (failure)=>Left(failure),
-      (response)=>Right(response['status']),
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
   }
 
   @override
-  Future<Either<Failure, bool>> addSubscription(AddSubscriptionParams params)async {
-    final response = await _apiConsumer.post(
-      EndPoints.addSubscription(),
-      data: {
-        'subCategoryId': params.subCategoryId,
-        'paymentMethodType': params.paymentMethod,
-        'isPremium': params.isPremium,
-        'period': params.period,
-        'periodType': params.periodType,
-      });
+  Future<Either<Failure, bool>> addSubscription(
+      AddSubscriptionParams params) async {
+    final response =
+        await _apiConsumer.post(EndPoints.addSubscription(), data: {
+      'subCategoryId': params.subCategoryId,
+      'paymentMethodType': params.paymentMethod,
+      'isPremium': params.isPremium,
+      'period': params.period,
+      'periodType': params.periodType,
+    });
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right(response['status']),
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
   }
 }

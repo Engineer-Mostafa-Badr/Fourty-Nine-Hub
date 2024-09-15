@@ -51,7 +51,7 @@ class EditDoctorProfileView extends StatelessWidget {
         ),
         body: ListView(
           padding: const EdgeInsets.all(18),
-          children:  [
+          children: [
             const UpdateProfilePhotoCard(),
             Sizer(),
             const UpdateDoctorIdCard(),
