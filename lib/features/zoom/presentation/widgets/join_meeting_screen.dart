@@ -80,16 +80,15 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
           leading: IconButton(
               onPressed: () => context.pop(),
               icon: const Icon(Icons.arrow_back_ios)),
-          title:   Text(LocaleKeys.joinMeeting.localize),
+          title: Text(LocaleKeys.joinMeeting.localize),
 
-            // 'Join a meeting',
-            // style: TextStyle(
-            //   fontSize: 20.sp,
-            //   fontWeight: FontWeight.bold,
-            //   color: AppColors.PRIMARY_COLOR,
-            // ),
-          ),
-        
+          // 'Join a meeting',
+          // style: TextStyle(
+          //   fontSize: 20.sp,
+          //   fontWeight: FontWeight.bold,
+          //   color: AppColors.PRIMARY_COLOR,
+          // ),
+        ),
         body: Padding(
           padding: const EdgeInsets.only(
             left: 16.0,
@@ -105,10 +104,13 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                 if (widget.shareScreen)
                   Label(
                     text: LocaleKeys.joinMeetingWithShareScreen.localize,
-                    style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+                    style: Styles.mediumText(
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR),
                   ),
                 Padding(
-                  padding:  EdgeInsets.symmetric(vertical: 15.h),
+                  padding: EdgeInsets.symmetric(vertical: 15.h),
                   child: TextFormField(
                     controller: _meetingIdController,
                     keyboardType: TextInputType.number,
@@ -116,12 +118,14 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                     validator: validateInput,
                     maxLength: 8,
                     onChanged: onTextChanged,
-                    decoration:  InputDecoration(
+                    decoration: InputDecoration(
                       hintText: LocaleKeys.meetingId.localize,
                       // errorText: _errorMessage,
                       counterText: '',
-                      labelStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
-                      hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
+                      labelStyle:
+                          const TextStyle(color: AppColors.QUANTITY_COLOR),
+                      hintStyle:
+                          const TextStyle(color: AppColors.QUANTITY_COLOR),
                       border: const OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.all(
@@ -129,7 +133,9 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                         ),
                       ),
                       filled: true,
-                      fillColor: AppColors.GREY_LIGHT_COLOR,
+                      fillColor: context.isDarkMode
+                          ? AppColors.GREY_DARK_COLOR
+                          : AppColors.GREY_LIGHT_COLOR,
                     ),
                   ),
                 ),
@@ -140,7 +146,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                 //   // style: TextStyle(color: AppColors.PRIMARY_COLOR),
                 // ),
                 Padding(
-                  padding:  EdgeInsets.symmetric(vertical: 15.h),
+                  padding: EdgeInsets.symmetric(vertical: 15.h),
                   child: TextField(
                     controller: _userNameController,
                     textAlign: TextAlign.center,
@@ -157,7 +163,9 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       ),
                       filled: true,
-                      fillColor: AppColors.GREY_LIGHT_COLOR,
+                      fillColor: context.isDarkMode
+                          ? AppColors.GREY_DARK_COLOR
+                          : AppColors.GREY_LIGHT_COLOR,
                     ),
                   ),
                 ),
@@ -209,7 +217,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                         minimumSize: Size(context.screenWidth * 0.8, 50),
                         backgroundColor: AppColors.PRIMARY_COLOR,
                       ),
-                      child:  Label(
+                      child: Label(
                         text: LocaleKeys.joinMeeting.localize,
                         color: Colors.white,
                       ),

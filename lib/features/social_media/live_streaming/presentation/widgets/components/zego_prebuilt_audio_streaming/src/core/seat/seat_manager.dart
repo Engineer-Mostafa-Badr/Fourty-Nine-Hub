@@ -1694,8 +1694,8 @@ class ZegoLiveAudioRoomSeatManager with ZegoLiveSeatCoHost {
           subTag: 'prebuilt',
         );
 
-        showDebugToast(
-            'set local user avatar attribute failed, ${result.error}');
+        // showDebugToast(
+        //     'set local user avatar attribute failed, ${result.error}');
       }
       return success;
     });

@@ -56,6 +56,7 @@ abstract class  LocaleKeys {
   static const audience = 'audience';
   static const voiceChanging = 'voiceChanging';
   static const reverb = 'reverb';
+  static const meetingTitle = 'meetingTitle';
   static const audioEffects = 'audioEffects';
   static const arabic = 'arabic';
   static const english = 'english';

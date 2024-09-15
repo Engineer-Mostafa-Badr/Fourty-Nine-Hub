@@ -278,13 +278,17 @@ class _ZegoLiveStreamingPreviewPageState
           },
           child: Text(
             LocaleKeys.cancel.localize,
-            style: const TextStyle(color: Colors.blue),
+            style: TextStyle(
+                color: context.isDarkMode ? Colors.white : Colors.blue),
           ),
         ),
         title: Text(
           LocaleKeys.startAMeeting.localize,
-          style: const TextStyle(
-              color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+              fontSize: 18,
+              fontWeight: FontWeight.bold),
         ),
       ),
       resizeToAvoidBottomInset: false,
@@ -676,7 +680,9 @@ class _ZegoLiveStreamingPreviewPageState
                         _toggleCamera(v);
                       },
                       activeColor: Colors.white,
-                      activeTrackColor: Colors.green,
+                      activeTrackColor: context.isDarkMode
+                          ? AppColors.SECONDARY_COLOR
+                          : Colors.green,
                     );
                   }),
               Container(
@@ -709,7 +715,9 @@ class _ZegoLiveStreamingPreviewPageState
                       print('use id notifier ${usePersonalIdNotifier.value}');
                     },
                     activeColor: Colors.white,
-                    activeTrackColor: Colors.green,
+                    activeTrackColor: context.isDarkMode
+                        ? AppColors.SECONDARY_COLOR
+                        : Colors.green,
                   );
                 },
               ),
