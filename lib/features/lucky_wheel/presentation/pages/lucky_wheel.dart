@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -16,7 +15,6 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 import '../../../../core/enums/wheel.dart';
 import '../../../../res/style/styles.dart';
 import '../../domain/entities/wheel_item_entity.dart';
@@ -49,7 +47,7 @@ class LuckyWheelView extends StatelessWidget {
                         Expanded(
                           child: Container(
                             padding:  EdgeInsetsDirectional.symmetric(
-                                vertical: 5.h, horizontal: 10),
+                                vertical: 15.h, horizontal: 15.w),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.r),
                                 color: Theme.of(context).primaryColor),
@@ -76,7 +74,7 @@ class LuckyWheelView extends StatelessWidget {
                         Expanded(
                           child: Container(
                             padding:  EdgeInsetsDirectional.symmetric(
-                                vertical: 5.h, horizontal: 10),
+                                vertical: 15.h, horizontal: 15.w),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.r),
                                 color: Theme.of(context).primaryColor),
@@ -133,12 +131,12 @@ class LuckyWheelView extends StatelessWidget {
                           ),
                   ),
                   AppButton(
-                    height: 50.h,
+                    height: 80.h,
                     width: double.infinity,
                     label: LocaleKeys.spin.localize,
                     backColor: Theme.of(context).primaryColor,
                     style: Styles.headerText(
-                      fontSize: 45.sp,
+                      fontSize: 70.sp,
                       color: Theme.of(context).scaffoldBackgroundColor,
                     ),
                     onPressed: () => spinWheelCubit.spin(state.data!),

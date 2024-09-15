@@ -42,7 +42,7 @@ class BuildItemListView extends StatelessWidget {
             // ),
           ],
         ),
-        const Sizer(),
+         const Sizer(),
         Row(
           children: [
             Expanded(
@@ -91,7 +91,7 @@ class BuildItemListView extends StatelessWidget {
           ],
         ),
         SizedBox(
-          height: 10.h, // Space between the text and the row
+          height: 20.h, // Space between the text and the row
         ),
         Padding(
           padding:  EdgeInsets.only(left: 5.w),
