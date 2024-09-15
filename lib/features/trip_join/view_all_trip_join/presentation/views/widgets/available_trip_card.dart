@@ -69,12 +69,18 @@ class AvailableTripCard extends StatelessWidget {
                       const Sizer(),
                       Text('${tripJoinCardEntity.seatNumber ?? 1} Seat', style: Styles.headerText()),
                       const Spacer(),
-                      Icon(
-                        (tripJoinCardEntity.isRepeated ?? false) ? Icons.check_box : Icons.check_box_outline_blank,
-                        color: AppColors.PRIMARY_COLOR,
+                      Visibility(
+                        visible: tripJoinCardEntity.isRepeated ?? false,
+                        child: Icon(
+                          (tripJoinCardEntity.isRepeated ?? false) ? Icons.check_box : Icons.check_box_outline_blank,
+                          color: AppColors.PRIMARY_COLOR,
+                        ),
                       ),
                       const Sizer(),
-                      Text('Repeated', style: Styles.headerText()),
+                      Visibility(
+                        visible: tripJoinCardEntity.isRepeated ?? false,
+                        child: Text('Repeated', style: Styles.headerText()),
+                      ),
                       const Sizer(width: 20),
                     ],
                   ),
