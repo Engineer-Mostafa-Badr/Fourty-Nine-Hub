@@ -31,7 +31,6 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         ? <BottomItemModel>[
             BottomItemModel(
               icon: FontAwesomeIcons.microphone,
-              height: 30.h,
               label: 'snap',
               // Translated text
               index: 0,
@@ -43,7 +42,6 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
               label: 'live',
               // Translated text
               index: 0,
-              height: 25.h,
               image: Assets.live,
               route: Routes.LIVE,
             ),
@@ -52,7 +50,6 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
               label: 'meet',
               // Translated text
               index: 0,
-              height: 25.h,
               image: Assets.zoomMeeting,
               route: Routes.ZOOM,
             ),
@@ -61,7 +58,6 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
               label: 'spotlight',
               // Translated text
               index: 0,
-              height: 25.h,
               image: Assets.spotlightIcon,
               route: Routes.SPOTLIGHT,
             ),

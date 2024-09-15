@@ -50,10 +50,6 @@ class _CameraScreenState extends State<CameraScreen> {
 
     _videoPlayerController = VideoPlayerController.file(videoFile);
 
-
-
-
-
     await _videoPlayerController!.initialize();
 
     _chewieController = ChewieController(

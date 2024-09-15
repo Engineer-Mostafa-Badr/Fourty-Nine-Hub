@@ -10,7 +10,6 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/widget
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/medical_services/medical_services.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/booking_types/booking_types.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/sub_categories/sub_categories.dart';
-import 'package:fourtyninehub/features/payment/presentation/pages/payment_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
