@@ -587,7 +587,7 @@ class MixVoiceVideoRecordingScreenState
 
   Widget _buildFilterSelector() {
     return SizedBox(
-      height: 100.h,
+      height: 100,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: filters.length,
