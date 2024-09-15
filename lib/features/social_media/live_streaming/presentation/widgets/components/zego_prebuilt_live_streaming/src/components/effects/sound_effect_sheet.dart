@@ -1,9 +1,11 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 // Package imports:
 
+import '../../../../../../../../../../core/localization/locale_keys.g.dart';
 import '../../config.dart';
 import '../../inner_text.dart';
 import '../../internal/defines.dart';
@@ -144,7 +146,7 @@ class _ZegoLiveStreamingSoundEffectSheetState
     }
 
     voiceChangerModel = ZegoEffectGridModel(
-      title: widget.translationText.audioEffectVoiceChangingTitle,
+      title: LocaleKeys.voiceChanging.localize,
       selectedID: widget.voiceChangerSelectedIDNotifier,
       items: voiceChangerEffect
           .map(

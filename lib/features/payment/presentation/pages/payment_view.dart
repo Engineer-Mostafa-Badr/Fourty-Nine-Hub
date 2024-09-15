@@ -11,8 +11,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 class PaymobLink {
@@ -151,7 +152,7 @@ class _PaymentViewState extends State<PaymentView> {
         }
       },
       child: Container(
-        height: 130.h,
+        height: 150.h,
         margin: EdgeInsets.symmetric(horizontal: 8.0),
         padding: EdgeInsets.all(16.0),
         decoration: BoxDecoration(
@@ -320,6 +321,7 @@ class _PaymentViewState extends State<PaymentView> {
                             backgroundColor: Colors.green,
                           ),
                         );
+                        context.go(Routes.HOME);
                       }
                     },
                     child: Text(

@@ -108,7 +108,7 @@ class SubscriptionController {
 
   Future<void> showActiveSubscriptionAmounts({required WalletTypes walletType}) async {
     final response = await _getActiveSubscriptionAmountsUseCase(const NoParams());
-    response.fold(
+     response.fold(
       (l) => showErrorMessage(
         context,
         Labels.errorHappened,
