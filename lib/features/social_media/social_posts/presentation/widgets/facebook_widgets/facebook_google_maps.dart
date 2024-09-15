@@ -18,8 +18,8 @@ class _FacebookUserOnMapState extends State<FacebookUserOnMap> {
   @override
   void initState() {
     markers.add(Marker(
-      markerId: MarkerId('0'),
-      infoWindow: InfoWindow(title: 'user'),
+      markerId: const MarkerId('0'),
+      infoWindow: const InfoWindow(title: 'user'),
       // icon: markerIcon,
       position: LatLng(
           double.parse(widget.location.lat), double.parse(widget.location.log)),
@@ -30,7 +30,7 @@ class _FacebookUserOnMapState extends State<FacebookUserOnMap> {
   @override
   Widget build(BuildContext context) {
     return GoogleMap(
-      padding: EdgeInsets.only(top: 100, bottom: 50, left: 25),
+      padding: const EdgeInsets.only(top: 100, bottom: 50, left: 25),
       myLocationButtonEnabled: true,
       myLocationEnabled: true,
       rotateGesturesEnabled: true,

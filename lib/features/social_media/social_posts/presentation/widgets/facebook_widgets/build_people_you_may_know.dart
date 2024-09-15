@@ -289,7 +289,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                         true
                                                                     ? Label(
                                                                         text:
-                                                                            'Message send successfully',
+                                                                        LocaleKeys.messageSentSuccessfully.localize,
                                                                         style: Styles
                                                                             .headerText(),
                                                                       )
@@ -314,10 +314,10 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                         child:
                                                                             Label(
                                                                           text: item.addedSuccessfully == false
-                                                                              ? 'Add Friend'
+                                                                              ? LocaleKeys.addFriend.localize
                                                                               : item.addedSuccessfully == true && item.followSuccessfully == false
-                                                                                  ? 'Follow'
-                                                                                  : "Send Greet Message",
+                                                                                  ? LocaleKeys.follow.localize
+                                                                                  : LocaleKeys.sendGreetMessage.localize,
                                                                           style: Styles.mediumText(
                                                                               color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
                                                                               fontSize: 24,

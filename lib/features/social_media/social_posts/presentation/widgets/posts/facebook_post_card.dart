@@ -4,6 +4,8 @@ import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
@@ -153,12 +155,12 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                           child: Center(
                             child: Row(
                               children: [
-                                Sizer(),
+                                const Sizer(),
                                 const Icon(
                                   Icons.lock,
                                   color: Colors.black,
                                 ),
-                                Sizer(),
+                                const Sizer(),
                                 Label(
                                   text: "This content is not available now.",
                                   style: Styles.headerText(
@@ -173,7 +175,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 8, right: 8),
+                  padding: const EdgeInsets.only(left: 8, right: 8),
                   child: Row(
                     children: [
                       if (myPost.likesCount != 0)
@@ -203,11 +205,11 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                               text: myPost.commentsCount.toString(),
                               style: Styles.mediumText(),
                             ),
-                            Sizer(
+                            const Sizer(
                               width: 5,
                             ),
                             Label(
-                              text: 'Comments',
+                              text: LocaleKeys.comment.localize,
                               style: Styles.mediumText(),
                             )
                           ],
@@ -232,13 +234,13 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                         Expanded(
                           child: _buildReactionPlaceHolder(
                               icon: FontAwesomeIcons.message,
-                              label: 'Comment',
+                              label: LocaleKeys.comment.localize,
                               image: Assets.comment,
                               onTap: () => widget.showPostComments(myPost.id)),
                         ),
                       Expanded(
                         child: _buildReactionPlaceHolder(
-                            label: 'Share',
+                            label: LocaleKeys.share.localize,
                             isImage: true,
                             image: Assets.facebookShare,
                             onTap: () async {
@@ -248,7 +250,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                       : myPost.id);
                               if (result == true) {
                                 showSuccessMessage(
-                                    context, "Post shared successfully");
+                                    context, LocaleKeys.postSharedSuccessfully.localize);
                               }
                             }),
                       ),
@@ -278,7 +280,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   backgroundColor: myPost.backgroundColor,
                   images: myPost.images),
               Padding(
-                padding: EdgeInsets.only(left: 8, right: 8),
+                padding: const EdgeInsets.only(left: 8, right: 8),
                 child: Row(
                   children: [
                     if (myPost.likesCount != 0)
@@ -308,11 +310,11 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                             text: myPost.commentsCount.toString(),
                             style: Styles.mediumText(),
                           ),
-                          Sizer(
+                          const Sizer(
                             width: 5,
                           ),
                           Label(
-                            text: 'Comments',
+                            text: LocaleKeys.comments.localize,
                             style: Styles.mediumText(),
                           )
                         ],
@@ -338,13 +340,13 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                         child: _buildReactionPlaceHolder(
                             icon: FontAwesomeIcons.message,
                             image: Assets.comment,
-                            label: 'Comment',
+                            label: LocaleKeys.comments.localize,
                             onTap: () => widget.showPostComments(myPost.id)),
                       ),
                     Expanded(
                       child: _buildReactionPlaceHolder(
                           icon: FontAwesomeIcons.share,
-                          label: 'Share',
+                          label: LocaleKeys.share.localize,
                           isImage: true,
                           image: Assets.facebookShare,
                           onTap: () async {
@@ -378,7 +380,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           image,
           height: 20.h,
         ),
-        Sizer(
+        const Sizer(
           width: 5,
         ),
         Label(
@@ -399,8 +401,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             listTile(
                 icon: Icons.report,
                 iconColor: Colors.red,
-                title: 'Report post',
-                subTitle: 'Your well reports this post.',
+                title: LocaleKeys.reportPost.localize,
+                subTitle: LocaleKeys.youWillReportPost.localize,
                 onTap: () async {
                   Future.delayed(const Duration(milliseconds: 200), () {
                     bottomSheet(
@@ -414,9 +416,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           if (widget.isMyPost)
             listTile(
                 icon: Icons.delete,
-                title: 'Delete Post',
+                title: LocaleKeys.deletePost.localize,
                 subTitle:
-                    'Your post will be deleted, and you cannot get it again',
+                LocaleKeys.youWillDeletePost.localize,
                 onTap: () {
                   widget.deletePost(post.id);
                   if (fromDetails == true) {
@@ -425,8 +427,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 }),
           listTile(
               icon: Icons.visibility_off,
-              title: 'Hide Post',
-              subTitle: 'Your post will be hidden, you can get it again',
+              title: LocaleKeys.hidePost.localize,
+              subTitle: LocaleKeys.youWillHidePost.localize,
               onTap: () {
                 widget.hidePost(post.id);
                 if (fromDetails == true) {
@@ -466,7 +468,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
     required PostEntity post,
   }) {
     return Padding(
-      padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+      padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -486,7 +488,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   height: 40.h,
                 ),
               ),
-              Sizer(),
+              const Sizer(),
               Expanded(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -528,7 +530,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   ],
                 ),
               ),
-              Sizer(),
+              const Sizer(),
               IconAppButton(
                 icon: Icons.more_horiz_outlined,
                 onPressed: () {
@@ -545,7 +547,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           ),
           if (post.location != null)
             Padding(
-              padding: EdgeInsetsDirectional.only(start: 40.0),
+              padding: const EdgeInsetsDirectional.only(start: 40.0),
               child: InkWell(
                 onTap: () {
                   showDialog(
@@ -581,7 +583,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
     required MainPostEntity post,
   }) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
         children: [
           InkWell(
@@ -598,7 +600,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               height: 40.h,
             ),
           ),
-          Sizer(),
+          const Sizer(),
           Expanded(
               child: Row(
             children: [
@@ -680,7 +682,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 if ((images?.isNotEmpty ?? false))
                   SizedBox(
                     child: GridView.builder(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -807,16 +809,16 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
 
   Widget _buildActivityFeelingWidget(PostEntity post) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (post.feeling != null || post.activity != null) ...[
             Text(
-              'feeling ${post.feeling != null ? post.feeling?.name ?? '' : ''}${post.activity != null ? ', ${post.activity?.name}' : ''}',
+              '${LocaleKeys.feeling.localize} ${post.feeling != null ? post.feeling?.name ?? '' : ''}${post.activity != null ? ', ${post.activity?.name}' : ''}',
               style: Styles.mediumText(),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
           ],
@@ -824,7 +826,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             Row(
               children: [
                 Label(
-                  text: 'with: ',
+                  text: '${LocaleKeys.withKey.localize}: ',
                   style: Styles.mediumText(),
                 ),
                 GestureDetector(

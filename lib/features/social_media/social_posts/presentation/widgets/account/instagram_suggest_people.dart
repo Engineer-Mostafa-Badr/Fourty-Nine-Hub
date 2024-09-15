@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
@@ -44,17 +46,17 @@ class _InstagramProfileSuggestPeopleState
       final controller = context.read<SocialPostsCubit>();
       return state.suggestedFriends == null ||
               controller.suggestUserPagingController.itemList == []
-          ? SizedBox.shrink()
+          ? const SizedBox.shrink()
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Label(
-                        text: "Discover People",
+                        text: LocaleKeys.discoverPeople.localize,
                         style: Styles.headerText(),
                       ),
                       Container(
@@ -75,11 +77,11 @@ class _InstagramProfileSuggestPeopleState
                                     print(controller.suggestUserPagingController
                                         .itemList?.length);
                                     return  Padding(
-                                        padding: EdgeInsets.only(top: 200),
+                                        padding: const EdgeInsets.only(top: 200),
                                         child: Center(
                                           child: Label(
-                                            text: "No friends suggested",
-                                            style: TextStyle(
+                                            text: LocaleKeys.noFriendsSuggested.localize,
+                                            style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 18,
                                             ),
@@ -100,9 +102,9 @@ class _InstagramProfileSuggestPeopleState
                                       },
                                       child: Container(
                                         width: 200,
-                                        padding: EdgeInsets.only(bottom: 10),
+                                        padding: const EdgeInsets.only(bottom: 10),
                                         margin:
-                                            EdgeInsetsDirectional.only(end: 10),
+                                            const EdgeInsetsDirectional.only(end: 10),
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(4),
@@ -136,7 +138,7 @@ class _InstagramProfileSuggestPeopleState
                                                     setState(() {});
                                                   }
                                                 },
-                                                child: Icon(Icons.close),
+                                                child: const Icon(Icons.close),
                                               ),
                                             ),
                                             Expanded(
@@ -149,7 +151,7 @@ class _InstagramProfileSuggestPeopleState
                                               ),
                                             ),
                                             Padding(
-                                              padding: EdgeInsets.symmetric(
+                                              padding: const EdgeInsets.symmetric(
                                                   horizontal: 8.0),
                                               child: Column(
                                                 crossAxisAlignment:
@@ -171,7 +173,7 @@ class _InstagramProfileSuggestPeopleState
                                                           true
                                                       ? Label(
                                                           text:
-                                                              "Message sent successfully",
+                                                          LocaleKeys.messageSentSuccessfully.localize,
                                                           style:
                                                               Styles.mediumText(
                                                                   color: Colors
@@ -221,7 +223,7 @@ class _InstagramProfileSuggestPeopleState
                                                                           title:
                                                                               Label(
                                                                             text:
-                                                                                'Enter Greet Message',
+                                                                            LocaleKeys.enterGreetMessage.localize,
                                                                             style:
                                                                                 Styles.headerText(),
                                                                           ),
@@ -237,7 +239,7 @@ class _InstagramProfileSuggestPeopleState
                                                                             controller:
                                                                                 messageController,
                                                                             decoration: InputDecoration(
-                                                                                hintText: "Greet Message",
+                                                                                hintText: LocaleKeys.greetMessage.localize,
                                                                                 fillColor: Colors.white,
                                                                                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
                                                                                 hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
@@ -248,7 +250,7 @@ class _InstagramProfileSuggestPeopleState
                                                                                 Navigator.of(context).pop(); // Close the dialog
                                                                               },
                                                                               child: Label(
-                                                                                text: 'Cancel',
+                                                                                text: LocaleKeys.cancel.localize,
                                                                                 style: Styles.headerText(),
                                                                               ),
                                                                             ),
@@ -257,18 +259,18 @@ class _InstagramProfileSuggestPeopleState
                                                                                 if (messageController.text.isNotEmpty) {
                                                                                   await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
                                                                                   controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
-                                                                                  showSuccessMessage(context, 'Message send successfully');
+                                                                                  showSuccessMessage(context, LocaleKeys.messageSentSuccessfully.localize);
                                                                                   Navigator.of(context).pop();
                                                                                   setState(() {});
                                                                                 }
                                                                               },
                                                                               child: Container(
                                                                                 width: 100,
-                                                                                padding: EdgeInsets.all(5),
+                                                                                padding: const EdgeInsets.all(5),
                                                                                 decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(15)),
                                                                                 alignment: Alignment.center,
                                                                                 child: Label(
-                                                                                  text: 'Send',
+                                                                                  text: LocaleKeys.send.localize,
                                                                                   style: Styles.headerText(color: Colors.white),
                                                                                 ),
                                                                               ),
@@ -283,7 +285,7 @@ class _InstagramProfileSuggestPeopleState
                                                                         true
                                                                     ? Label(
                                                                         text:
-                                                                            'Message send successfully',
+                                                                        LocaleKeys.messageSentSuccessfully.localize,
                                                                         style: Styles
                                                                             .headerText(),
                                                                       )
@@ -306,8 +308,8 @@ class _InstagramProfileSuggestPeopleState
                                                                         child:
                                                                             Label(
                                                                           text: item.followSuccessfully == false
-                                                                              ? 'Follow'
-                                                                              : "Send Greet Message",
+                                                                              ? LocaleKeys.follow.localize
+                                                                              : LocaleKeys.sendGreetMessage.localize,
                                                                           style: Styles.mediumText(
                                                                               color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
                                                                               fontSize: 22,
