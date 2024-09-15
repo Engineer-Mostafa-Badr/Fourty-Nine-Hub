@@ -5,10 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/snap/utils/filters.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_filter_pro/named_color_filter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gallery_saver/gallery_saver.dart';
@@ -29,6 +31,9 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:path/path.dart' as path;
 import 'package:image_filter_pro/photo_filter.dart';
 
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/const.dart';
+import '../../../../../routes/routes.dart';
 import '../../../reels/presentation/shared/filter_utiles.dart';
 import '../../../stories/presentation/cubit/stories_cubit.dart';
 
@@ -648,6 +653,7 @@ class _AdvancedSnapchatCameraScreenState
       PageController(viewportFraction: 0.3); // Controls the page scrolling
   int totalFilters = 10; // Total number of filters
   GlobalKey _globalKey = GlobalKey();
+  bool isSelected = false;
 
   @override
   void initState() {
@@ -686,6 +692,8 @@ class _AdvancedSnapchatCameraScreenState
   void _switchCamera() {
     setState(() {
       isFrontCamera = !isFrontCamera;
+      selectedFilterIndex = 0;
+      isSelected = false;
     });
     _cameraController = CameraController(
       isFrontCamera ? _cameras[1] : _cameras[0],
@@ -1087,37 +1095,37 @@ class _AdvancedSnapchatCameraScreenState
                                 });
                               },
                               itemBuilder: (context, index) {
-                                bool isSelected = selectedFilterIndex == index;
+                                isSelected = selectedFilterIndex == index;
 
-                                if (index == 0) isSelected = true;
+                                // if (index == 0) isSelected = true;
 
-                                log("${isSelected}88888888888888888888888888888888888");
+                                log("${isSelected}88888888888888888888888888888888888$selectedFilterIndex  $index");
                                 final filter = advancedFilters[index];
 
                                 return GestureDetector(
                                   onTap: () {
-                                    // if (selectedFilterIndex == index) {
-                                    //   _showOverlay(context);
-                                    //
-                                    //   // _takePicture();
-                                    //   _capturePng().then((value) {
-                                    //     setState(() {
-                                    //       log("${_selectedImage!.path}____________________");
-                                    //       Navigator.push(
-                                    //           context,
-                                    //           MaterialPageRoute(
-                                    //             builder: (context) =>
-                                    //                 MediaPreview(
-                                    //                     mediaPath:
-                                    //                         _selectedImage!
-                                    //                             .path,
-                                    //                     mediaType:
-                                    //                         MediaType.image),
-                                    //           ));
-                                    //     });
-                                    //   });
-                                    //   log("Filter $index selected");
-                                    // }
+                                    if (selectedFilterIndex == index) {
+                                      _showOverlay(context);
+
+                                      // _takePicture();
+                                      _capturePng().then((value) {
+                                        setState(() {
+                                          log("${_selectedImage!.path}____________________");
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MediaPreview(
+                                                        mediaPath:
+                                                            _selectedImage!
+                                                                .path,
+                                                        mediaType:
+                                                            MediaType.image),
+                                              ));
+                                        });
+                                      });
+                                      log("Filter $index selected");
+                                    }
                                   },
                                   onLongPress: _toggleRecording,
                                   child: AnimatedOpacity(
@@ -1213,7 +1221,10 @@ class _AdvancedSnapchatCameraScreenState
             children: [
               IconButton(
                 color: Colors.red,
-                onPressed: () {},
+                onPressed: () {
+                  context.push(Routes.OTHERSACCOUNT,
+                      extra: serviceLocator<UserCubit>().state.data!.id);
+                },
                 icon: const Icon(
                   Icons.person,
                   size: 35,
@@ -1268,14 +1279,6 @@ class _AdvancedSnapchatCameraScreenState
                           : Colors.yellow,
                 ),
                 onPressed: _changeFlashMode,
-              ),
-              IconButton(
-                color: Colors.white,
-                onPressed: () {},
-                icon: const Icon(
-                  FontAwesomeIcons.search,
-                  size: 25,
-                ),
               ),
             ],
           ),
@@ -2099,9 +2102,16 @@ Widget buildStoryButton(context, {selectedFile}) {
                 const SnackBar(content: Text('Story created')),
               ));
     },
-    icon: const CircleAvatar(
-      // backgroundImage: AssetImage('assets/avatar.png'),
-      // backgroundColor: Colors.red, radius: 15,
+    icon: CircleAvatar(
+      backgroundColor: AppColors.PRIMARY_COLOR,
+      backgroundImage: NetworkImage(
+        serviceLocator<UserCubit>().state.data != null
+            ? serviceLocator<UserCubit>().state.data!.profilePicture!
+            : UIConst.profilePlaceHolder,
+      ),
+      onBackgroundImageError: (_, __) => Image.asset(
+        UIConst.profilePlaceHolder,
+      ),
       radius: 15,
       // backgroundImage:
       //     NetworkImage(serviceLocator<UserCubit>().state.data!.profilePicture!),
@@ -2577,6 +2587,52 @@ enum MediaType { image, video }
 
 class _MediaPreviewState extends State<MediaPreview> {
   VideoPlayerController? _videoController;
+  OverlayEntry? _overlayEntry;
+
+  void _showOverlay(BuildContext context) {
+    _overlayEntry = _createOverlayEntry();
+    Overlay.of(context).insert(_overlayEntry!);
+
+    // Simulate a 3-second delay to hide the overlay
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      _hideOverlay();
+    });
+  }
+
+  void _hideOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
+  OverlayEntry _createOverlayEntry() {
+    return OverlayEntry(
+      builder: (context) => Stack(
+        children: [
+          Positioned.fill(
+            child: ModalBarrier(
+              color: Colors.black.withOpacity(0.5),
+              dismissible:
+                  false, // Prevents tapping outside to dismiss the overlay
+            ),
+          ),
+          const Center(
+            child: CupertinoActivityIndicator(
+              radius: 25,
+              color: Colors.yellow,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Filter PageView properties
+  int selectedFilterIndex = 0; // Tracks which filter is applied
+  final PageController _pageController =
+      PageController(viewportFraction: 0.3); // Controls the page scrolling
+  GlobalKey _globalKey = GlobalKey();
+  bool isSelected = false;
+  bool isCollapsed = false;
 
   @override
   void initState() {
@@ -2595,64 +2651,273 @@ class _MediaPreviewState extends State<MediaPreview> {
     super.dispose();
   }
 
+  Future<void> _capturePng() async {
+    try {
+      // Check if the camera controller is initialized
+      if (widget.mediaPath.isEmpty) {
+        print('mediaPath is not initialized');
+        return;
+      }
+
+      // Capture the widget as an image
+      RenderRepaintBoundary? boundary = _globalKey.currentContext
+          ?.findRenderObject() as RenderRepaintBoundary?;
+
+      // Check if boundary is null
+      if (boundary == null) {
+        print('Error: RepaintBoundary is null');
+        return;
+      }
+
+      // Capture the image from the RepaintBoundary
+      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+
+      // Check if byteData is null
+      if (byteData == null) {
+        print('Error: ByteData is null');
+        return;
+      }
+
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+
+      // Get the directory to save the image
+      final directory = await getApplicationDocumentsDirectory();
+      String path =
+          '${directory.path}/filtered_image_${DateTime.now().millisecondsSinceEpoch}.png'; // Use timestamp to generate a unique file name
+
+      // Save (and overwrite) the image as a PNG file
+      File imgFile = File(path);
+
+      // Write the new image
+      File savedImage = await imgFile.writeAsBytes(pngBytes);
+
+      // Ensure the state is updated after saving and file is valid
+      if (savedImage.existsSync()) {
+        setState(() {
+          widget.mediaPath = savedImage.path; // Update the selected image
+          print('Image captured and saved at ${widget.mediaPath}');
+        });
+      } else {
+        print('Error: Saved image does not exist');
+      }
+    } catch (e) {
+      print('Error saving image: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (widget.mediaType == MediaType.video) {
-          setState(() {
-            _videoController!.value.isPlaying
-                ? _videoController!.pause()
-                : _videoController!.play();
-          });
-        }
-      },
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: widget.mediaType == MediaType.image
-                ? Image.file(
-                    File(widget.mediaPath),
-                    height: 500,
-                    width: 500,
-                  )
-                : _videoController != null &&
-                        _videoController!.value.isInitialized
-                    ? AspectRatio(
-                        aspectRatio: _videoController!.value.aspectRatio,
-                        child: VideoPlayer(_videoController!),
-                      )
-                    : const CircularProgressIndicator(),
-          ),
-          widget.mediaType == MediaType.video
-              ? Positioned(
-                  bottom: 10,
-                  right: 10,
-                  left: 10,
-                  top: 10,
-                  child: Icon(
-                    size: 50,
-                    color: Colors.white,
-                    _videoController!.value.isPlaying
-                        ? Icons.pause
-                        : Icons.play_arrow,
-                  ),
-                )
-              : Sizer(),
-          Positioned(
-            bottom: 10,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                buildSaveButton(context, widget.mediaPath, widget.mediaType),
-                buildStoryButton(context, selectedFile: File(widget.mediaPath)),
-                buildSendToButton(),
-              ],
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: GestureDetector(
+        onTap: () {
+          if (widget.mediaType == MediaType.video) {
+            setState(() {
+              _videoController!.value.isPlaying
+                  ? _videoController!.pause()
+                  : _videoController!.play();
+            });
+          }
+        },
+        child: Stack(
+          children: [
+            // RepaintBoundary(
+            //   key: _globalKey,
+            //   // Force the RepaintBoundary to repaint on every build
+            //   child: ColorFiltered(
+            //     colorFilter: advancedFilters[selectedFilterIndex]['colorFilter'],
+            //     child: CameraPreview(_cameraController),
+            //   ),
+            // ),
+            Positioned.fill(
+              child: widget.mediaType == MediaType.image
+                  ? RepaintBoundary(
+                      key: _globalKey,
+                      // Force the RepaintBoundary to repaint on every build
+                      child: ColorFiltered(
+                        colorFilter: advancedFilters[selectedFilterIndex]
+                            ['colorFilter'],
+                        child: Image.file(
+                          File(widget.mediaPath),
+                        ),
+                      ),
+                    )
+                  : _videoController != null &&
+                          _videoController!.value.isInitialized
+                      ? AspectRatio(
+                          aspectRatio: _videoController!.value.aspectRatio,
+                          child: VideoPlayer(_videoController!),
+                        )
+                      : const CircularProgressIndicator(),
             ),
-          ),
-        ],
+            widget.mediaType == MediaType.video
+                ? Positioned(
+                    bottom: 10,
+                    right: 10,
+                    left: 10,
+                    top: 10,
+                    child: Icon(
+                      size: 50,
+                      color: Colors.white,
+                      _videoController!.value.isPlaying
+                          ? Icons.pause
+                          : Icons.play_arrow,
+                    ),
+                  )
+                : Sizer(),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildSaveButton(context, widget.mediaPath, widget.mediaType),
+                  buildStoryButton(context,
+                      selectedFile: File(widget.mediaPath)),
+                  Container(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        _capturePng();
+                        // Handle Send action
+                      },
+                      icon: const Icon(Icons.check_circle_rounded,
+                          color: AppColors.PRIMARY_COLOR),
+                      label: const Text('Apply Filter',
+                          style: TextStyle(color: Colors.black)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.yellow[700],
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(right: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[800],
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                        icon: Icon(isCollapsed ? Icons.edit : Icons.edit_off,
+                            size: 30, color: Colors.white),
+                        onPressed: () {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _pageController.jumpToPage(
+                                selectedFilterIndex); // Change this index to the desired page.
+                          });
+                          setState(() {
+                            isCollapsed = !isCollapsed;
+                          });
+                        }),
+                  )
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: const EdgeInsets.only(bottom: kToolbarHeight),
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.25,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    margin: const EdgeInsets.only(bottom: kToolbarHeight),
+                    width: isCollapsed ? 0 : MediaQuery.of(context).size.width,
+
+                    // Full width when expanded
+                    alignment: Alignment.center,
+
+                    // Align content to the left
+                    child: isCollapsed
+                        ? null
+                        : Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Center(
+                                child: Container(
+                                  height: MediaQuery.of(context).size.height *
+                                      0.13, // Responsive circle height
+                                  width: MediaQuery.of(context).size.height *
+                                      0.13, // Responsive circle width
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: Colors.white, width: 6),
+                                  ),
+                                ),
+                              ),
+                              PageView.builder(
+                                controller: _pageController,
+                                itemCount: advancedFilters.length,
+                                onPageChanged: (index) {
+                                  setState(() {
+                                    selectedFilterIndex = index;
+                                    log("Filter $index applied");
+                                  });
+                                },
+                                itemBuilder: (context, index) {
+                                  isSelected = selectedFilterIndex == index;
+
+                                  // if (index == 0) isSelected = true;
+
+                                  log("${isSelected}88888888888888888888888888888888888$selectedFilterIndex  $index");
+                                  final filter = advancedFilters[index];
+
+                                  return AnimatedOpacity(
+                                    duration: const Duration(milliseconds: 300),
+                                    opacity: isSelected ? 1.0 : 0.5,
+                                    // Fade unselected filters
+                                    child: AnimatedContainer(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      curve: Curves.easeOut,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(14.0),
+                                        child: Transform.scale(
+                                          scale: isSelected ? 1 : 0.6,
+                                          // Scaling effect
+                                          child: ColorFiltered(
+                                            colorFilter: filter['colorFilter'],
+                                            child: CircleAvatar(
+                                              backgroundImage:
+                                                  //     const NetworkImage(
+                                                  //   'https://images.unsplash.com/photo-1723496954926-d6b4c06d9276?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                                                  // ),
+                                                  const AssetImage(
+                                                      'assets/filters/camera_filter.webp'),
+                                              child: Text(
+                                                filter['name'],
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
