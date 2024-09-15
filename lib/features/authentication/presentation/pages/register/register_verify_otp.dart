@@ -19,7 +19,6 @@ import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
-import '../../../../notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import '../../controllers/user_cubit/user_cubit.dart';
 
 class RegisterVerifyOTP extends StatefulWidget {
@@ -75,9 +74,8 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
               print(serviceLocator<UserCubit>().state.data.toString());
 
               // Navigate to the home screen
-              context.go(Routes.HOME);
-              context.pop();
-              context.pop();
+              Navigator.pop(context);
+              context.push(Routes.HOME);
 
               // Show the success dialog after navigation
               WidgetsBinding.instance.addPostFrameCallback((_) {

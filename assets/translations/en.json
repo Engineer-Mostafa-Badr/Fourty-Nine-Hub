@@ -369,6 +369,28 @@
   "contacts": "Contacts",
   "pleaseLoginRegisterToEnjoyTheApp":"Please Login, Register to enjoy the app",
   "noChatsUntilNow": "No Chats until now",
+  "confirmNewPassword": "Confirm New Password",
+  "newPassword": "New Password",
+  "createNewPassword": "Create New Password",
+  "passwordChangedSuccessfully": "Password Changed Successfully",
+  "country": "Country",
+  "birthDate": "Birth Date",
+  "socialStatus": "Social Status",
+  "job": "Job",
+  "language": "Language",
+  "receiveMessages": "Receive Messages",
+  "lastSeen": "Last Seen",
+  "friendsList": "Friends List",
+  "followerList": "Followers List",
+  "friendRequest": "Friend Request",
+  "followRequest": "Follow Request",
+  "public": "Public",
+  "followers": "Followers",
+  "onlyMe": "Only Me",
+  "on": "ON",
+  "off": "Off",
+  "activity": "Activity",
+  "unarchive": "Unarchive",
   "availableTrips": "Available Trips",
   "checkRequest": "Please wait to check request",
   "reportSentSuccess": "Report sent successfully",
@@ -461,8 +483,6 @@
   "suggestedForYou": "Suggested For You",
   "hours": "H",
   "minute": "Min",
-
-  "unarchive": "Unarchive",
   "tinder": {
     "header": "Tinder",
     "favorites": "Favorites",
@@ -485,5 +505,8 @@
     "followers": "Followers",
     "following": "Following",
     "friends": "Friends"
-  }
+  },
+  "google": "Google",
+  "facebook": "Facebook",
+  "orContinueWith": "Or Continue with"
 }
