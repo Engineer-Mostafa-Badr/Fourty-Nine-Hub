@@ -4,7 +4,6 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
@@ -17,6 +16,33 @@ class BroadcastView extends StatefulWidget {
 
 class _BroadcastViewState extends State<BroadcastView> {
   bool isFollowing = false;
+
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+
+    // Scroll to the end when the screen is loaded
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      scrollToEnd();
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void scrollToEnd() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,6 +159,7 @@ class _BroadcastViewState extends State<BroadcastView> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: ListView(
+              controller: _scrollController,
               children: [
                 _buildBroadcastMessage(
                   context,
@@ -192,7 +219,7 @@ class _BroadcastViewState extends State<BroadcastView> {
       PopupMenuItem<int>(
         value: 0,
         child: Text(
-          "Channel info",
+          "Channel info  ",
           style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
         ),
       ),

@@ -289,6 +289,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/widgets/follow_broadcast_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -637,7 +638,6 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       case ChatCategories.social:
       case ChatCategories.service:
       case ChatCategories.groups:
-      case ChatCategories.greet:
       case ChatCategories.unread:
       case ChatCategories.archived:
       case ChatCategories.anonymous:
@@ -649,7 +649,56 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
         return _buildCategoryChats(isSecret: true);
       case ChatCategories.broadcast:
         return buildBroadcast();
+      case ChatCategories.greet:
+        return _buildGreet();
     }
+  }
+
+  Widget _buildGreet() {
+    final List<FriendRequest> requests = [
+      FriendRequest(
+        name: 'Kerollos Nabil',
+        mutualFriends: 5,
+        profileImageUrl:
+            'https://example.com/profile1.jpg', // Replace with actual URLs
+      ),
+      FriendRequest(
+        name: 'Amr Hossam',
+        mutualFriends: 101,
+        profileImageUrl:
+            'https://example.com/profile2.jpg', // Replace with actual URLs
+      ),
+      FriendRequest(
+        name: 'Omar Mohammad Adel',
+        mutualFriends: 3,
+        profileImageUrl:
+            'https://example.com/profile3.jpg', // Replace with actual URLs
+      ),
+      FriendRequest(
+        name: 'Ahmed Ameen',
+        mutualFriends: 6,
+        profileImageUrl:
+            'https://example.com/profile4.jpg', // Replace with actual URLs
+      ),
+      FriendRequest(
+        name: 'Karam Karim',
+        mutualFriends: 28,
+        profileImageUrl:
+            'https://example.com/profile5.jpg', // Replace with actual URLs
+      ),
+      FriendRequest(
+        name: 'Karam Reda',
+        mutualFriends: 4,
+        profileImageUrl:
+            'https://example.com/profile6.jpg', // Replace with actual URLs
+      ),
+    ];
+    return ListView.builder(
+      itemCount: requests.length,
+      itemBuilder: (context, index) {
+        return FriendRequestItem(request: requests[index]);
+      },
+    );
   }
 
   Widget _buildCategoryChats({bool isSecret = false}) {
@@ -818,5 +867,134 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
         ],
       ),
     );
+  }
+}
+
+class FriendRequest {
+  final String name;
+  final int mutualFriends;
+  final String profileImageUrl;
+
+  FriendRequest({
+    required this.name,
+    required this.mutualFriends,
+    required this.profileImageUrl,
+  });
+}
+
+class FriendRequestItem extends StatefulWidget {
+  final FriendRequest request;
+
+  const FriendRequestItem({super.key, required this.request});
+
+  @override
+  _FriendRequestItemState createState() => _FriendRequestItemState();
+}
+
+class _FriendRequestItemState extends State<FriendRequestItem> {
+  String buttonText = 'Add Friend';
+  bool isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child: Row(
+        children: [
+          // Profile Image
+          CircleAvatar(
+            radius: 30,
+            backgroundImage: NetworkImage(
+              serviceLocator<UserCubit>().state.data != null
+                  ? serviceLocator<UserCubit>().state.data!.profilePicture!
+                  : UIConst.profilePlaceHolder,
+            ),
+          ),
+          const SizedBox(width: 8),
+
+          // Name and Mutual Friends
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.request.name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  '${widget.request.mutualFriends} mutual friends',
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Confirm Button (Add Friend/Follow/Greet)
+          ElevatedButton(
+            onPressed:
+                isLoading ? null : handleButtonPress, // Disable if loading
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.PRIMARY_COLOR,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            ),
+            child: isLoading
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : Text(
+                    buttonText,
+                    style: const TextStyle(color: Colors.white, fontSize: 11),
+                  ),
+          ),
+          const SizedBox(width: 8),
+
+          // Delete Button
+          ElevatedButton(
+            onPressed: () {
+              // Add delete logic here
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            ),
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: Colors.white, fontSize: 11),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void handleButtonPress() async {
+    // Start showing loading indicator
+    setState(() {
+      isLoading = true;
+    });
+
+    // Simulate 1 second delay (replace with your logic)
+    await Future.delayed(const Duration(seconds: 1));
+
+    // Update the button text based on the current state
+    setState(() {
+      if (buttonText == 'Add Friend') {
+        buttonText = 'Follow';
+      } else if (buttonText == 'Follow') {
+        buttonText = 'Greet';
+      }
+      isLoading = false;
+    });
   }
 }
