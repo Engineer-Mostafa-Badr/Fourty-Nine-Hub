@@ -56,13 +56,13 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     final result = await _getUserUseCase(const NoParams());
     emit(
       result.fold(
-            (failure) {
+        (failure) {
           return state.copyWith(
             status: StateStatus.error,
             failure: failure,
           );
         },
-            (user) {
+        (user) {
           return state.copyWith(status: StateStatus.success, data: user);
         },
       ),
@@ -133,8 +133,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
 
     // UserTokensEntity? token;
     result.fold(
-          (_) {},
-          (tokens) {
+      (_) {},
+      (tokens) {
         _attachTokenUseCase(tokens);
         isTokenAttached = true;
         // token = tokens!;
@@ -170,11 +170,11 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
             data: {'profilePictureId': data.mediaId},
           );
           return response.fold(
-                (failure) {
+            (failure) {
               emit(state.copyWith(status: StateStatus.error, failure: failure));
               return Left(failure);
             },
-                (data) {
+            (data) {
               getUser();
               emit(state.copyWith(
                 status: StateStatus.success,

@@ -1,4 +1,3 @@
-
 class PaymentProviderEntity {
   final String id;
   final String nameEn;
@@ -38,4 +37,3 @@ class PaymentProviderMetadata {
     required this.phone2,
   });
 }
-

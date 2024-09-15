@@ -6,7 +6,7 @@ class DoctorDetailsDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Divider(
+    return Divider(
       thickness: 1,
       height: 50.h,
     );

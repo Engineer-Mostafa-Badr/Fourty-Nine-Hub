@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class SeatsNumberWidget extends StatefulWidget {
   const SeatsNumberWidget({
     super.key,

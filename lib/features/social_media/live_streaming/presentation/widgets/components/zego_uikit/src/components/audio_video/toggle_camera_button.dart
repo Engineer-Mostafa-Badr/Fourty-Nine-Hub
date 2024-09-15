@@ -7,7 +7,6 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
-
 /// button used to open/close camera
 class ZegoToggleCameraButton extends StatefulWidget {
   const ZegoToggleCameraButton({

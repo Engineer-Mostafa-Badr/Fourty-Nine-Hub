@@ -14,7 +14,7 @@ import '../../../../zego_uikit/src/services/uikit_service.dart';
 /// @nodoc
 Future<bool> showLiveDialog({
   required BuildContext? context,
-   bool rootNavigator= false,
+  bool rootNavigator = false,
   required String title,
   required String content,
   required String rightButtonText,

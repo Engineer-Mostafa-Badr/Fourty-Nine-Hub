@@ -16,17 +16,17 @@ class BalanceHistoryModel extends BalanceHistoryEntity {
 
   factory BalanceHistoryModel.fromJson(Map<String, dynamic> json) {
     return BalanceHistoryModel(
-      id: json['_id'] ??'',
-      userId: json['userId'] ??'',
-      subCategoryId: json['subCategoryId'] ??'',
-      taxPrice: json['taxPrice'] ??0,
-      transactionAmount: json['transactionAmount'] ??0,
-      transactionPurpose: json['transactionPurpose'] ??'',
-      internalPayment: json['internalPayment'] ??'',
-      currency: json['currency'] ??'',
-      isPaid: json['isPaid'] ??false,
-      status: json['status'] ??'',
-      createdAt: json['createdAt'] ??'',
+      id: json['_id'] ?? '',
+      userId: json['userId'] ?? '',
+      subCategoryId: json['subCategoryId'] ?? '',
+      taxPrice: json['taxPrice'] ?? 0,
+      transactionAmount: json['transactionAmount'] ?? 0,
+      transactionPurpose: json['transactionPurpose'] ?? '',
+      internalPayment: json['internalPayment'] ?? '',
+      currency: json['currency'] ?? '',
+      isPaid: json['isPaid'] ?? false,
+      status: json['status'] ?? '',
+      createdAt: json['createdAt'] ?? '',
     );
   }
 }

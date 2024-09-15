@@ -9,10 +9,12 @@ class RequestTripJoinNotificationView extends StatefulWidget {
   const RequestTripJoinNotificationView({super.key, required this.payload});
   final Map<String, dynamic> payload;
   @override
-  State<RequestTripJoinNotificationView> createState() => _RequestTripJoinNotificationViewState();
+  State<RequestTripJoinNotificationView> createState() =>
+      _RequestTripJoinNotificationViewState();
 }
 
-class _RequestTripJoinNotificationViewState extends State<RequestTripJoinNotificationView> {
+class _RequestTripJoinNotificationViewState
+    extends State<RequestTripJoinNotificationView> {
   @override
   Widget build(BuildContext context) {
     TripJoinCardEntity tripJoinCardEntity = TripJoinCardEntity(
@@ -22,7 +24,8 @@ class _RequestTripJoinNotificationViewState extends State<RequestTripJoinNotific
       model: 'Corolla',
       journeyPrice: 300,
       status: 'regular',
-      startingAddressEn: 'Samia El Gamal, Mansoura Qism 2, El Mansoura, Dakahlia Governorate 7650310, Egypt',
+      startingAddressEn:
+          'Samia El Gamal, Mansoura Qism 2, El Mansoura, Dakahlia Governorate 7650310, Egypt',
       destinationAddressEn: 'El Gomhouria St, Dakahlia Governorate, Egypt',
       publishDate: 1726399641,
       isRepeated: true,

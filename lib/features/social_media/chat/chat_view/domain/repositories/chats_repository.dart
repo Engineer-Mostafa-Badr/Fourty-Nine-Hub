@@ -7,8 +7,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_request.dart';
 
 abstract class ChatsRepository {
-  Future<Either<Failure, List<ChatEntity>>> getChats(
-      GetChatsParams params);
+  Future<Either<Failure, List<ChatEntity>>> getChats(GetChatsParams params);
   Future<Either<Failure, bool>> changeChatMuteState(String chatId);
   Future<Either<Failure, bool>> changeChatToArchiveNormal(String chatId);
   Future<Either<Failure, bool>> lockChat(LockChatParams lockChatParams);

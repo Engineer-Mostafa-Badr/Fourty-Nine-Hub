@@ -12,22 +12,26 @@ class ListsRepoImpl implements ListsRepo {
   final ListsRemoteDataSource _remoteDataSource;
   ListsRepoImpl(this._remoteDataSource);
   @override
-  Future<Either<Failure, List<UserFriendEntity>>> getBlockedUsers({required TwitterFeedParams params}) async {
+  Future<Either<Failure, List<UserFriendEntity>>> getBlockedUsers(
+      {required TwitterFeedParams params}) async {
     return await _remoteDataSource.getBlockedUsers(params: params);
   }
 
   @override
-  Future<Either<Failure, List<UserFriendEntity>>> getFollowers({required TwitterFeedParams params}) async {
+  Future<Either<Failure, List<UserFriendEntity>>> getFollowers(
+      {required TwitterFeedParams params}) async {
     return await _remoteDataSource.getFollowers(params: params);
   }
 
   @override
-  Future<Either<Failure, List<UserFriendEntity>>> getFreindRequests({required TwitterFeedParams params}) async {
+  Future<Either<Failure, List<UserFriendEntity>>> getFreindRequests(
+      {required TwitterFeedParams params}) async {
     return await _remoteDataSource.getFreindRequests(params: params);
   }
 
   @override
-  Future<Either<Failure, List<UserFriendEntity>>> getFriendsList({required TwitterFeedParams params}) async {
+  Future<Either<Failure, List<UserFriendEntity>>> getFriendsList(
+      {required TwitterFeedParams params}) async {
     return await _remoteDataSource.getFriendsList(params: params);
   }
 }

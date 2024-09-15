@@ -10,7 +10,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'dialogs.dart';
 import 'pop_up_manager.dart';
 
-
 /// @nodoc
 Future<void> checkPermissions({
   required BuildContext context,

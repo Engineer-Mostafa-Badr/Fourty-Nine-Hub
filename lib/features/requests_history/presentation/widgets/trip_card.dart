@@ -191,7 +191,7 @@ class TripCard extends StatelessWidget {
             FormTextField(
                 hint: 'Phone',
                 type: TextInputType.number,
-                style:  TextStyle(
+                style: TextStyle(
                     fontSize: 20.sp,
                     color: Colors.grey,
                     fontWeight: FontWeight.bold),

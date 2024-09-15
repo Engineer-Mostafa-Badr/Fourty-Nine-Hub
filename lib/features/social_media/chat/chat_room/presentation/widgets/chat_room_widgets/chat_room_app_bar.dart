@@ -32,7 +32,8 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: BlocBuilder<ChatRoomCubit, ChatRoomState>(
         builder: (context, state) {
           return GestureDetector(
-            onTap: () => context.push(Routes.VIEWCONTACT, extra: context.read<ChatsCubit>().selectedChat.name),
+            onTap: () => context.push(Routes.VIEWCONTACT,
+                extra: context.read<ChatsCubit>().selectedChat.name),
             child: Row(
               children: [
                 const CircleAvatar(
@@ -68,7 +69,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () {},
           color: Colors.white,
         ),
-         Sizer(
+        Sizer(
           width: 15,
         ),
         // call
@@ -90,7 +91,8 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
           offset: const Offset(0, 50),
           onSelected: (int value) async {
             if (value == 0) {
-              context.push(Routes.VIEWCONTACT,  extra: context.read<ChatsCubit>().selectedChat.name);
+              context.push(Routes.VIEWCONTACT,
+                  extra: context.read<ChatsCubit>().selectedChat.name);
             }
             if (value == 1) {
               context.push(Routes.ATTACHMENTSVIEW);

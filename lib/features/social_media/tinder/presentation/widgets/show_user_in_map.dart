@@ -192,7 +192,10 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        title: const Text("Your friend's location 🌍",style: TextStyle(fontWeight: FontWeight.bold),),
+        title: const Text(
+          "Your friend's location 🌍",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: AppColors.PRIMARY_COLOR,
       ),
       extendBodyBehindAppBar: true,

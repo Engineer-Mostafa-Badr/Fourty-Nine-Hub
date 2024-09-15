@@ -67,7 +67,8 @@ class TwitterCubit extends Cubit<TwitterState> {
     this._deleteTwitterPostUseCase,
     this._hideTwitterPostUseCase,
     this._deleteTwitterCommentUseCase,
-    this._editTwitterCommentUseCase, this._getTwitterGlobalFeedUseCase,
+    this._editTwitterCommentUseCase,
+    this._getTwitterGlobalFeedUseCase,
   ) : super(const TwitterState());
 
   void loadData() async {
@@ -162,8 +163,8 @@ class TwitterCubit extends Cubit<TwitterState> {
 
   // get global feed posts
   Future<void> getGlobalFeed(int page) async {
-    final response =
-        await _getTwitterGlobalFeedUseCase(TwitterFeedParams(limit: pageSize, page: page));
+    final response = await _getTwitterGlobalFeedUseCase(
+        TwitterFeedParams(limit: pageSize, page: page));
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) {
@@ -207,7 +208,6 @@ class TwitterCubit extends Cubit<TwitterState> {
   //         emit(state.copyWith( status: StateStatus.success));
   //       });
   // }
-
 
   Future<void> getUserTweets(int page, String userId) async {
     final response = await _getUserTweetsUseCase(
@@ -462,10 +462,7 @@ class TwitterCubit extends Cubit<TwitterState> {
 
   removeBackId() {
     print('Before: ${state.backId?.mediaId}');
-    UploadFileEntity backId = UploadFileEntity(
-      mediaId: '',
-      file: XFile('')
-    );
+    UploadFileEntity backId = UploadFileEntity(mediaId: '', file: XFile(''));
     state.copyWith(backId: null);
     state.copyWith(status: StateStatus.success);
     print(state.backId?.mediaId);

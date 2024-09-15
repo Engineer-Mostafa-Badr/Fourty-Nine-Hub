@@ -61,7 +61,6 @@ class CategoryFavoriteItem {
     );
   }
 
-
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
@@ -73,7 +72,6 @@ class CategoryFavoriteItem {
     };
   }
 }
-
 
 class FavoriteCategory {
   final String id;

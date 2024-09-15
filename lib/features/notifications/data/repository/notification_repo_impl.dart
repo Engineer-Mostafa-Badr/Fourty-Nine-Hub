@@ -18,7 +18,8 @@ class NotificationRepoImpl implements NotificationRepo {
     required int page,
     int limit = 10,
   }) async {
-    return notificationRemoteDataSource.fetchNotifications(type: type, page: page, limit: limit);
+    return notificationRemoteDataSource.fetchNotifications(
+        type: type, page: page, limit: limit);
   }
 
   @override
@@ -29,12 +30,15 @@ class NotificationRepoImpl implements NotificationRepo {
   }
 
   @override
-  Future<void> notificationListener({required Function(Map<String, dynamic> data) notificationCallback}) {
-    return notificationRemoteDataSource.notificationListener(notificationCallback: notificationCallback);
+  Future<void> notificationListener(
+      {required Function(Map<String, dynamic> data) notificationCallback}) {
+    return notificationRemoteDataSource.notificationListener(
+        notificationCallback: notificationCallback);
   }
 
   @override
-  Future<Either<Failure, UnreadNotificationsCountEntity>> getUnreadNotificationsCount() {
+  Future<Either<Failure, UnreadNotificationsCountEntity>>
+      getUnreadNotificationsCount() {
     return notificationRemoteDataSource.getUnreadNotificationsCount();
   }
 

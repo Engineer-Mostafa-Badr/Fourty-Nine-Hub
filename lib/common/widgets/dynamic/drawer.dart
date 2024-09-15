@@ -41,7 +41,7 @@ class DrawerWidget extends StatelessWidget {
         builder: (context, state) {
           context.read<GetWalletCubit>();
           return Drawer(
-            width: context.screenWidth*0.8,
+            width: context.screenWidth * 0.8,
             child: SafeArea(
               child: SingleChildScrollView(
                 child: Column(

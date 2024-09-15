@@ -18,7 +18,7 @@ class VendorCard extends StatelessWidget {
           radius: 20,
           backgroundImage: NetworkImage(UIConst.socialImagePlaceHolder),
         ),
-         Sizer(
+        Sizer(
           height: 5.h,
         ),
         Label(text: 'H&M', style: Styles.mediumText()),

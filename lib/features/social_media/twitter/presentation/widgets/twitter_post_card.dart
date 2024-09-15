@@ -23,6 +23,7 @@ import '../../../../../../res/style/const.dart';
 import '../../../../../../res/style/styles.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 // ignore: must_be_immutable
 class TwitterPostCard extends StatefulWidget {
   bool isLiked;

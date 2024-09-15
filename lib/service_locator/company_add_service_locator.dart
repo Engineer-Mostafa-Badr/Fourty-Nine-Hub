@@ -23,25 +23,25 @@ class CompanyAddServiceLocator {
         .registerLazySingleton<GetPriceUseCases>(() => GetPriceUseCases(
               serviceLocator(),
             ));
-    serviceLocator
-        .registerLazySingleton<GetCompanyAddUseCases>(() => GetCompanyAddUseCases(
+    serviceLocator.registerLazySingleton<GetCompanyAddUseCases>(
+        () => GetCompanyAddUseCases(
               serviceLocator(),
             ));
-    serviceLocator
-        .registerLazySingleton<DeleteCompanyAddUseCases>(() => DeleteCompanyAddUseCases(
+    serviceLocator.registerLazySingleton<DeleteCompanyAddUseCases>(
+        () => DeleteCompanyAddUseCases(
               serviceLocator(),
             ));
-    serviceLocator
-        .registerLazySingleton<GetPostsCompanyAdUseCase>(() => GetPostsCompanyAdUseCase(
+    serviceLocator.registerLazySingleton<GetPostsCompanyAdUseCase>(
+        () => GetPostsCompanyAdUseCase(
               serviceLocator(),
             ));
 
-    serviceLocator.registerFactory<CreateCompanyAdCubit>(
-        () => CreateCompanyAdCubit(
-            serviceLocator(),
-            serviceLocator(),
-            serviceLocator(),
-            serviceLocator(),
-        )..loadData());
+    serviceLocator
+        .registerFactory<CreateCompanyAdCubit>(() => CreateCompanyAdCubit(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+            )..loadData());
   }
 }

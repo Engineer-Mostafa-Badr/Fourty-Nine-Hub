@@ -21,8 +21,8 @@ class _UploadImageWidgetState extends State<UploadImageWidget> {
       onTap: () => widget.action(),
       child: Container(
         width: double.infinity,
-        padding:  EdgeInsets.symmetric(vertical: 15.h, horizontal: 10),
-        margin:  EdgeInsets.symmetric(vertical: 15.h, horizontal: 10),
+        padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 10),
+        margin: EdgeInsets.symmetric(vertical: 15.h, horizontal: 10),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey, width: .5),
           borderRadius: BorderRadius.circular(10),

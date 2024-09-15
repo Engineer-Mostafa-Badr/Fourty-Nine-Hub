@@ -4,8 +4,12 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import '../../../../../core/error/failure.dart';
 
 abstract class ListsRepo {
-  Future<Either<Failure, List<UserFriendEntity>>> getFriendsList({required TwitterFeedParams params});
-  Future<Either<Failure, List<UserFriendEntity>>> getFollowers({required TwitterFeedParams params});
-  Future<Either<Failure, List<UserFriendEntity>>> getFreindRequests({required TwitterFeedParams params});
-  Future<Either<Failure, List<UserFriendEntity>>> getBlockedUsers({required TwitterFeedParams params});
+  Future<Either<Failure, List<UserFriendEntity>>> getFriendsList(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, List<UserFriendEntity>>> getFollowers(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, List<UserFriendEntity>>> getFreindRequests(
+      {required TwitterFeedParams params});
+  Future<Either<Failure, List<UserFriendEntity>>> getBlockedUsers(
+      {required TwitterFeedParams params});
 }

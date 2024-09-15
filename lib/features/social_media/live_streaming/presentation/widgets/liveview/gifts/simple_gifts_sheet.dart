@@ -52,7 +52,7 @@ void showSimpleGiftBottomSheet(BuildContext context, String userId) {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-             Text(
+            Text(
               'Select a gift',
               style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
             ),
@@ -87,7 +87,7 @@ void showSimpleGiftBottomSheet(BuildContext context, String userId) {
                           children: [
                             Text(
                               item.price, // Replace with your desired text
-                              style:  TextStyle(
+                              style: TextStyle(
                                   fontSize: 14.sp, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(

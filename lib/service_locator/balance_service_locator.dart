@@ -48,14 +48,13 @@ class BalanceServiceLocator {
               serviceLocator(),
             ));
 
-    serviceLocator.registerFactory<BalanceCubit>(
-        () => BalanceCubit(
-            serviceLocator(),
-            serviceLocator(),
-            serviceLocator(),
-            serviceLocator(),
-            serviceLocator(),
-            serviceLocator(),
+    serviceLocator.registerFactory<BalanceCubit>(() => BalanceCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
         )..loadData());
   }
 }

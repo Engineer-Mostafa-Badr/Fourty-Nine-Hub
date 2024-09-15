@@ -11,7 +11,6 @@ import '../../minimizing/overlay_machine.dart';
 
 // Package imports:
 
-
 /// @nodoc
 enum ZegoLiveAudioRoomPluginNetworkState {
   unknown,

@@ -2,7 +2,6 @@ import '../../../zego_uikit_prebuilt_live_streaming.dart';
 import '../audio_video.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
-
 /// @nodoc
 mixin ZegoLiveStreamingControllerAudioVideoImplPrivate {
   final _private = ZegoLiveStreamingControllerAudioVideoImplPrivateImpl();

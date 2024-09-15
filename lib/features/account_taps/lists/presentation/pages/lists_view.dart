@@ -253,7 +253,7 @@ class _ListsViewState extends State<ListsView> {
       builderDelegate: PagedChildBuilderDelegate<UserFriendEntity>(
           noItemsFoundIndicatorBuilder: (context) {
             print(controller.itemList?.length);
-            return  Padding(
+            return Padding(
                 padding: const EdgeInsets.only(top: 200),
                 child: Center(
                   child: Text(

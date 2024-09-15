@@ -1,4 +1,3 @@
-
 class DeleteCardResponse {
   final bool status;
   final String message;

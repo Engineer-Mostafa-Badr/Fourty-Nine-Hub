@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 
-
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/models/appointment_booking_model.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/models/category_favorite_model.dart';
@@ -17,7 +16,8 @@ abstract class HealthRemoteDataSource {
   Future<Either<Failure, List<HealthSubcategoryEntity>>>
       getHealthSubcategories();
   Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices();
-  Future<Either<Failure, List<FavoriteCategoryBannersEntity>>> getFavoriteCategory();
+  Future<Either<Failure, List<FavoriteCategoryBannersEntity>>>
+      getFavoriteCategory();
 
   Future<Either<Failure, bool>> isDoctor();
   Future<Either<Failure, bool>> isDoctorApproval();
@@ -79,20 +79,20 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> isDoctorApproval() async{
+  Future<Either<Failure, bool>> isDoctorApproval() async {
     final response = await _apiConsumer.get(EndPoints.isDoctorApproval);
     return response.fold(
-            (l) => Left(l), (data) => Right(data["data"]["isApproved"] as bool));
+        (l) => Left(l), (data) => Right(data["data"]["isApproved"] as bool));
   }
 
   @override
-  Future<Either<Failure, List<FavoriteCategoryBannersEntity>>> getFavoriteCategory() async{
+  Future<Either<Failure, List<FavoriteCategoryBannersEntity>>>
+      getFavoriteCategory() async {
     final response = await _apiConsumer.get(EndPoints.getFavoriteCategory);
     return response.fold(
-            (failure) => Left(failure),
-            (data) => Right((data['data']['favorites'] as List)
+        (failure) => Left(failure),
+        (data) => Right((data['data']['favorites'] as List)
             .map((e) => FavoriteCategoryModel.fromJson(e))
             .toList()));
   }
-
 }

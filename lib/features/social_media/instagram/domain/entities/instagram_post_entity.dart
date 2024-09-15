@@ -5,6 +5,10 @@ class InstagramPostEntity {
   final String firstName;
   final String lastName;
 
-  InstagramPostEntity({required this.id, required this.content, required this.userId, required this.firstName, required this.lastName});
-
+  InstagramPostEntity(
+      {required this.id,
+      required this.content,
+      required this.userId,
+      required this.firstName,
+      required this.lastName});
 }

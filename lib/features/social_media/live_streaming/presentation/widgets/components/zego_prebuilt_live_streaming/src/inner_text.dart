@@ -460,10 +460,12 @@ class ZegoUIKitPrebuiltLiveStreamingInnerText {
               message: 'Do you want to end the cohosting?',
             ),
         audioEffectTitle = audioEffectTitle ?? 'Audio effect',
-        audioEffectReverbTitle = audioEffectReverbTitle ?? LocaleKeys.reverb.localize,
+        audioEffectReverbTitle =
+            audioEffectReverbTitle ?? LocaleKeys.reverb.localize,
         audioEffectVoiceChangingTitle =
             audioEffectVoiceChangingTitle ?? LocaleKeys.voiceChanging.localize,
-        beautyEffectTitle = beautyEffectTitle ?? LocaleKeys.faceBeautification.localize,
+        beautyEffectTitle =
+            beautyEffectTitle ?? LocaleKeys.faceBeautification.localize,
         voiceChangerNoneTitle = voiceChangerNoneTitle ?? 'None',
         voiceChangerLittleBoyTitle = voiceChangerLittleBoyTitle ?? 'Little boy',
         voiceChangerLittleGirlTitle =

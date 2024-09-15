@@ -75,7 +75,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                     noItemsFoundIndicatorBuilder: (context) {
                       print(controller
                           .globalFeedPagingController.itemList?.length);
-                      return  Center(
+                      return Center(
                         child: Text(
                           "No Posts",
                           style: TextStyle(
@@ -186,7 +186,8 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                 ),
                               ],
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,

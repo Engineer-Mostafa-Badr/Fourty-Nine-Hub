@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
-
 class ZegoInRoomMessageView extends StatefulWidget {
   final Stream<List<ZegoInRoomMessage>> stream;
 

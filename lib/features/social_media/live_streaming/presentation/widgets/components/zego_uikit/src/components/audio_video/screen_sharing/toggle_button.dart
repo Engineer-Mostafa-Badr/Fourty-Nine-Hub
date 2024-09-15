@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 // Project imports:
 import '../../../../zego_uikit.dart';
 
-
 class ZegoScreenSharingToggleButton extends StatefulWidget {
   const ZegoScreenSharingToggleButton({
     Key? key,
@@ -78,7 +77,6 @@ class _ZegoScreenSharingToggleButtonState
     /// reverse current state
     if (targetState) {
       await ZegoUIKit().startSharingScreen();
-      
     } else {
       await ZegoUIKit().stopSharingScreen();
     }

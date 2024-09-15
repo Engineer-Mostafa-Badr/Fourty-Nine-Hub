@@ -20,7 +20,7 @@ class WinnerCard extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-         Row(
+        Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -52,13 +52,14 @@ class WinnerCard extends StatelessWidget {
           child: CircleAvatar(
             radius: isWinner ? 40 : 33,
             backgroundColor: Colors.white,
-            backgroundImage:
-                NetworkImage('${model.userId?.userProfile?.profilePictureKey?.mediaKey}' ?? ''),
+            backgroundImage: NetworkImage(
+                '${model.userId?.userProfile?.profilePictureKey?.mediaKey}' ??
+                    ''),
           ),
         ),
         Sizer(),
         Label(
-            text: model.userId?.fullName ??'',
+            text: model.userId?.fullName ?? '',
             style: Styles.mediumText(fontWeight: FontWeight.w500)),
         Label(
             text: context.locale == Locales.english

@@ -3,6 +3,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class UploadImagePopup extends StatelessWidget {
   const UploadImagePopup({
     super.key,
@@ -39,19 +40,20 @@ class UploadImagePopup extends StatelessWidget {
                 GestureDetector(
                   onTap: galleryCallback,
                   child: Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 5.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15, vertical: 5.h),
                     decoration: BoxDecoration(
                       border:
                           Border.all(width: 2, color: AppColors.PRIMARY_COLOR),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child:  Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('From Gallery'),
                         Sizer(),
-                        const Icon(Icons.perm_media, color: AppColors.PRIMARY_COLOR),
+                        const Icon(Icons.perm_media,
+                            color: AppColors.PRIMARY_COLOR),
                       ],
                     ),
                   ),
@@ -60,19 +62,20 @@ class UploadImagePopup extends StatelessWidget {
                 GestureDetector(
                   onTap: cameraCallback,
                   child: Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 5.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15, vertical: 5.h),
                     decoration: BoxDecoration(
                       border:
                           Border.all(width: 2, color: AppColors.PRIMARY_COLOR),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child:  Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('From Camera'),
                         Sizer(),
-                        const Icon(Icons.videocam, color: AppColors.SECONDARY_COLOR),
+                        const Icon(Icons.videocam,
+                            color: AppColors.SECONDARY_COLOR),
                       ],
                     ),
                   ),

@@ -8,6 +8,8 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/cu
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:lottie/lottie.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 class BuildReactionsButtons extends StatefulWidget {
   const BuildReactionsButtons(
@@ -276,31 +278,37 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
             ? 'likes'
             : 'like',
         icon: _buildReactionItem(
+            name: LocaleKeys.like.localize,
             item: Reactions.like, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'haha',
         icon: _buildReactionItem(
+            name: LocaleKeys.haha.localize,
             item: Reactions.haha, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'love',
         icon: _buildReactionItem(
+            name: LocaleKeys.love.localize,
             item: Reactions.love, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'wow',
         icon: _buildReactionItem(
+            name: LocaleKeys.wow.localize,
             item: Reactions.wow, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'sad',
         icon: _buildReactionItem(
+            name: LocaleKeys.sad.localize,
             item: Reactions.sad, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'angry',
         icon: _buildReactionItem(
+          name: LocaleKeys.angry.localize,
             item: Reactions.angry, count: widget.post.totalCount),
       ),
     ];
@@ -309,6 +317,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
   Widget _buildReactionItem({
     required Reactions item,
     required num count,
+    required String name,
     String? from,
   }) {
     return Column(
@@ -329,7 +338,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
                 ),
         ),
         if (widget.from == 'posts' && from == 'view') ...[
-          Label(text: item.name, style: Styles.mediumText(color: Colors.grey)),
+          Label(text: name, style: Styles.mediumText(color: Colors.grey)),
         ],
       ],
     );
@@ -345,7 +354,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
           size: 18,
         ),
         if (widget.from == 'posts') ...[
-          Label(text: 'Like', style: Styles.mediumText(color: Colors.grey)),
+          Label(text: LocaleKeys.like.localize, style: Styles.mediumText(color: Colors.grey)),
         ],
       ],
     );
@@ -354,21 +363,27 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
   Widget _buildCurrentReaction() {
     if (widget.post.isLikes) {
       return _buildReactionItem(
+          name: LocaleKeys.like.localize,
           item: Reactions.like, count: widget.post.totalCount, from: "view");
     } else if (widget.post.isLove) {
       return _buildReactionItem(
+          name: LocaleKeys.love.localize,
           item: Reactions.love, count: widget.post.totalCount, from: "view");
     } else if (widget.post.isWow) {
       return _buildReactionItem(
+          name: LocaleKeys.wow.localize,
           item: Reactions.wow, count: widget.post.totalCount, from: "view");
     } else if (widget.post.isSad) {
       return _buildReactionItem(
+          name: LocaleKeys.sad.localize,
           item: Reactions.sad, count: widget.post.totalCount, from: "view");
     } else if (widget.post.isAngry) {
       return _buildReactionItem(
+          name: LocaleKeys.angry.localize,
           item: Reactions.angry, count: widget.post.totalCount, from: "view");
     } else if (widget.post.isHaha) {
       return _buildReactionItem(
+          name: LocaleKeys.haha.localize,
           item: Reactions.haha, count: widget.post.totalCount, from: "view");
     } else {
       return _buildReactionPlaceholder();

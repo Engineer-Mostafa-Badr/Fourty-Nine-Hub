@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../res/style/app_colors.dart';
 
 class ReportWidget extends StatelessWidget {
-   const ReportWidget({super.key});
+  const ReportWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class ReportWidget extends StatelessWidget {
         child: ListView(
           shrinkWrap: true,
           children: [
-             Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
@@ -39,7 +39,7 @@ class ReportWidget extends StatelessWidget {
             ),
             Row(
               children: [
-                 Expanded(
+                Expanded(
                   child: Text(
                     'غير لائق / عري',
                     style: TextStyle(
@@ -54,10 +54,10 @@ class ReportWidget extends StatelessWidget {
                 ),
               ],
             ),
-             const Divider(),
+            const Divider(),
             Row(
               children: [
-                 Expanded(
+                Expanded(
                   child: Text(
                     'محتوي احتيالي',
                     style: TextStyle(
@@ -69,10 +69,10 @@ class ReportWidget extends StatelessWidget {
                 Checkbox(value: false, onChanged: (v) {}),
               ],
             ),
-             const Divider(),
+            const Divider(),
             Row(
               children: [
-                 Expanded(
+                Expanded(
                   child: Text(
                     'وهمي',
                     style: TextStyle(
@@ -84,10 +84,10 @@ class ReportWidget extends StatelessWidget {
                 Checkbox(value: false, onChanged: (v) {}),
               ],
             ),
-             const Divider(),
+            const Divider(),
             Row(
               children: [
-                 Expanded(
+                Expanded(
                   child: Text(
                     'إيذاء / إرهاب / عنف',
                     style: TextStyle(
@@ -99,10 +99,10 @@ class ReportWidget extends StatelessWidget {
                 Checkbox(value: false, onChanged: (v) {}),
               ],
             ),
-             const Divider(),
+            const Divider(),
             Row(
               children: [
-                 Expanded(
+                Expanded(
                   child: Text(
                     'حض على الكراهية',
                     style: TextStyle(
@@ -114,10 +114,10 @@ class ReportWidget extends StatelessWidget {
                 Checkbox(value: false, onChanged: (v) {}),
               ],
             ),
-             const Divider(),
+            const Divider(),
             Row(
               children: [
-                 Expanded(
+                Expanded(
                   child: Text(
                     'سلع غير مصرح بها / غير قانونية',
                     style: TextStyle(
@@ -129,10 +129,10 @@ class ReportWidget extends StatelessWidget {
                 Checkbox(value: false, onChanged: (v) {}),
               ],
             ),
-             const Divider(),
+            const Divider(),
             Row(
               children: [
-                 Expanded(
+                Expanded(
                   child: Text(
                     'سبب اخر',
                     style: TextStyle(
@@ -144,13 +144,13 @@ class ReportWidget extends StatelessWidget {
                 Checkbox(value: false, onChanged: (v) {}),
               ],
             ),
-             const Divider(),
+            const Divider(),
             DecoratedBox(
               decoration: BoxDecoration(
-                color:  const Color(0xfff3f3f3),
+                color: const Color(0xfff3f3f3),
                 borderRadius: BorderRadius.circular(5),
               ),
-              child:  TextField(
+              child: TextField(
                 maxLines: 2,
                 decoration: InputDecoration(
                   enabledBorder: const OutlineInputBorder(
@@ -175,7 +175,7 @@ class ReportWidget extends StatelessWidget {
               onPressed: () {},
               style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.PRIMARY_COLOR),
-              child:  const Text('إبلاغ'),
+              child: const Text('إبلاغ'),
             ),
           ],
         ),

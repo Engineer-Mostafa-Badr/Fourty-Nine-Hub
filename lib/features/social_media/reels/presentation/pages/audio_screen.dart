@@ -367,6 +367,7 @@ import '../../data/models/new_reels_model.dart';
 import '../controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import '../widgets/comments.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class InstagramAudioScreen extends StatefulWidget {
   final Audio audio;
   final Reel reel;
@@ -542,7 +543,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                       Text(
                         capitalizeAndSplit(widget.audio.audioName),
                         softWrap: true,
-                        style:  const TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -1147,7 +1148,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
         Text(
           capitalizeAndSplit(
               '${widget.reel.user.firstName} ${widget.reel.user.lastName}'),
-          style:  const TextStyle(
+          style: const TextStyle(
             fontSize: 26,
             decoration: TextDecoration.none,
             color: Colors.white,
@@ -1176,7 +1177,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
               widget.reel.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style:  const TextStyle(
+              style: const TextStyle(
                 color: AppColors.DARK_GRAY_COLOR,
                 decoration: TextDecoration.none,
                 fontSize: 18,
@@ -1192,7 +1193,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
           const SizedBox(width: 8),
           Text(
             widget.reel.viewCount.toString(),
-            style:  const TextStyle(
+            style: const TextStyle(
               color: AppColors.DARK_GRAY_COLOR,
               fontSize: 18,
               decoration: TextDecoration.none,

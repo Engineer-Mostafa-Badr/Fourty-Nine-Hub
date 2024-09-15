@@ -30,7 +30,9 @@ class Stories extends StatelessWidget {
         children: [
           Sizer(),
           _buildYourStory(context),
-          Sizer(width: 8,),
+          Sizer(
+            width: 8,
+          ),
           SizedBox(
             height: kToolbarHeight * 2.5,
             child: BlocBuilder<StoryCubit, StoryState>(

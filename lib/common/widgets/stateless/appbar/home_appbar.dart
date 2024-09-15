@@ -78,12 +78,15 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               child: Container(
                 height: 55.h,
                 padding: EdgeInsets.symmetric(horizontal: 10.w),
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(40.r), color: AppColors.AUTH_CONTAINER_COLOR),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40.r),
+                    color: AppColors.AUTH_CONTAINER_COLOR),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(40.r),
                   onTap: () {
-                    showDialog(context: context, builder: (_) => const SearchAppUsers());
+                    showDialog(
+                        context: context,
+                        builder: (_) => const SearchAppUsers());
                   },
                   child: Row(
                     children: [
@@ -96,20 +99,25 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                       Expanded(
                         child: Label(
                             text: LocaleKeys.search.localize,
-                            style: Styles.mediumText(color: AppColors.QUANTITY_COLOR)),
+                            style: Styles.mediumText(
+                                color: AppColors.QUANTITY_COLOR)),
                       ),
                     ],
                   ),
                 ),
               ),
             ),
-            if (showLanguage) TextButton(onPressed: () {}, child: Label(text: 'Register', style: Styles.mediumText())),
+            if (showLanguage)
+              TextButton(
+                  onPressed: () {},
+                  child: Label(text: 'Register', style: Styles.mediumText())),
             if (language)
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 5.w),
                   child: TextAppButton(
                       label: LocaleKeys.lang.tr(),
-                      style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
+                      style:
+                          Styles.headerText(color: AppColors.SECONDARY_COLOR),
                       onPressed: () {
                         if (context.locale == Locales.english) {
                           changeLang(locale: Locales.arabic, context: context);

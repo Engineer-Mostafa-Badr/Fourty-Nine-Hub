@@ -10,7 +10,8 @@ class GetFriendRequestsUsecase
   final ListsRepo _repo;
   GetFriendRequestsUsecase(this._repo);
   @override
-  Future<Either<Failure, List<UserFriendEntity>>> call(TwitterFeedParams params) async {
+  Future<Either<Failure, List<UserFriendEntity>>> call(
+      TwitterFeedParams params) async {
     return await _repo.getFreindRequests(params: params);
   }
 }

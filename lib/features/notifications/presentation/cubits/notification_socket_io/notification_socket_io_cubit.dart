@@ -18,14 +18,17 @@ class NotificationSocketIoCubit extends Cubit<NotificationSocketIoState> {
 
   Future<void> notificationListener() async {
     final getAppNotificationsCubit = context.read<GetAppNotificationsCubit>();
-    final getSocialNotificationsCubit = context.read<GetSocialNotificationsCubit>();
-    final getServicesNotificationsCubit = context.read<GetServicesNotificationsCubit>();
+    final getSocialNotificationsCubit =
+        context.read<GetSocialNotificationsCubit>();
+    final getServicesNotificationsCubit =
+        context.read<GetServicesNotificationsCubit>();
 
     notificationListenerUseCase.call(
       notificationCallback: (Map<String, dynamic> data) async {
         String? type = data['filterType'];
         if (type == null) {
-          emit(NotificationSocketIoFailed('Notfication Type is not Provided From the Server'));
+          emit(NotificationSocketIoFailed(
+              'Notfication Type is not Provided From the Server'));
           return;
         }
         if (type == 'app') {
@@ -33,7 +36,8 @@ class NotificationSocketIoCubit extends Cubit<NotificationSocketIoState> {
           getAppNotificationsCubit.page = 1;
           await getAppNotificationsCubit.getAppNotifications();
           if (getAppNotificationsCubit.notifications.isNotEmpty) {
-            emit(NotificationSocketIoNewNotification(getAppNotificationsCubit.notifications.first));
+            emit(NotificationSocketIoNewNotification(
+                getAppNotificationsCubit.notifications.first));
           }
           return;
         }
@@ -42,7 +46,8 @@ class NotificationSocketIoCubit extends Cubit<NotificationSocketIoState> {
           getSocialNotificationsCubit.page = 1;
           await getSocialNotificationsCubit.getSocialNotifications();
           if (getSocialNotificationsCubit.notifications.isNotEmpty) {
-            emit(NotificationSocketIoNewNotification(getSocialNotificationsCubit.notifications.first));
+            emit(NotificationSocketIoNewNotification(
+                getSocialNotificationsCubit.notifications.first));
           }
           return;
         }
@@ -51,7 +56,8 @@ class NotificationSocketIoCubit extends Cubit<NotificationSocketIoState> {
           getServicesNotificationsCubit.page = 1;
           await getServicesNotificationsCubit.getServicesNotifications();
           if (getServicesNotificationsCubit.notifications.isNotEmpty) {
-            emit(NotificationSocketIoNewNotification(getServicesNotificationsCubit.notifications.first));
+            emit(NotificationSocketIoNewNotification(
+                getServicesNotificationsCubit.notifications.first));
           }
           return;
         }
@@ -61,8 +67,10 @@ class NotificationSocketIoCubit extends Cubit<NotificationSocketIoState> {
 
   Future<void> clearAllNotificationsAndRefeatchAfterLogin() async {
     final getAppNotificationsCubit = context.read<GetAppNotificationsCubit>();
-    final getSocialNotificationsCubit = context.read<GetSocialNotificationsCubit>();
-    final getServicesNotificationsCubit = context.read<GetServicesNotificationsCubit>();
+    final getSocialNotificationsCubit =
+        context.read<GetSocialNotificationsCubit>();
+    final getServicesNotificationsCubit =
+        context.read<GetServicesNotificationsCubit>();
     getAppNotificationsCubit.notifications = [];
     getAppNotificationsCubit.page = 1;
     getSocialNotificationsCubit.notifications = [];

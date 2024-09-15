@@ -42,7 +42,8 @@ class _CarInfoV2State extends State<CarInfoV2> {
                 focusNode: focusNode,
                 // autofocus: true,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15)),
                   fillColor: Colors.transparent,
                   label: const Text('Brand'),
                   isDense: true,
@@ -73,7 +74,9 @@ class _CarInfoV2State extends State<CarInfoV2> {
             },
             suggestionsCallback: (search) async {
               // fetchCarBrandsCubit.brand = search;
-              return fetchCarBrandsCubit.carBrandsList.map((e) => e?.brand ?? '').toList();
+              return fetchCarBrandsCubit.carBrandsList
+                  .map((e) => e?.brand ?? '')
+                  .toList();
             },
           ),
         ),
@@ -88,7 +91,8 @@ class _CarInfoV2State extends State<CarInfoV2> {
                 focusNode: focusNode,
                 // autofocus: true,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15)),
                   fillColor: Colors.transparent,
                   label: const Text('Model'),
                   isDense: true,
@@ -98,7 +102,8 @@ class _CarInfoV2State extends State<CarInfoV2> {
                 onChanged: (value) {
                   fetchCarModelsCubit.model = value;
                   if (value.length == 1) {
-                    fetchCarModelsCubit.fetchCarModel(brand: fetchCarBrandsCubit.brand ?? '');
+                    fetchCarModelsCubit.fetchCarModel(
+                        brand: fetchCarBrandsCubit.brand ?? '');
                   }
                 },
                 validator: (value) {
@@ -120,7 +125,8 @@ class _CarInfoV2State extends State<CarInfoV2> {
             suggestionsCallback: (search) async {
               return fetchCarModelsCubit.carModels
                   .map((e) => e?.model ?? '')
-                  .where((element) => element.toLowerCase().contains(search.toLowerCase()))
+                  .where((element) =>
+                      element.toLowerCase().contains(search.toLowerCase()))
                   .toList();
             },
           ),

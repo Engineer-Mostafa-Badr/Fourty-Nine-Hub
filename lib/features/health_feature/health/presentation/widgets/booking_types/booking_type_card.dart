@@ -26,7 +26,7 @@ class HealthBookingTypeCard extends StatelessWidget {
         }
       },
       child: Container(
-        padding:  EdgeInsets.symmetric(vertical: 5.h),
+        padding: EdgeInsets.symmetric(vertical: 5.h),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(10),
