@@ -3007,6 +3007,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
@@ -3474,11 +3475,18 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
                 ],
               ),
             ),
-            Positioned(
-              right: 8,
-              bottom: 0,
-              child: _buildActionButtons(),
-            ),
+
+            context.isArabic
+                ? Positioned(
+                    left: 8,
+                    bottom: 0,
+                    child: _buildActionButtons(),
+                  )
+                : Positioned(
+                    right: 8,
+                    bottom: 0,
+                    child: _buildActionButtons(),
+                  ),
           ],
         ),
       ),
