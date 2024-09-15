@@ -365,7 +365,6 @@
   "contacts": "جهات الاتصال",
   "pleaseLoginRegisterToEnjoyTheApp": "من فضلك قم بتسجيل الدخول او التسجيل للتفاعل معنا",
   "noChatsUntilNow": "لا توجد محادثات حتى الآن",
-  "unarchive": "إلغاء الأرشفة",
   "tinder": {
     "header": "تيندر",
     "favorites": "المفضلة",
@@ -388,7 +387,7 @@
     "followers": "المتابعين",
     "following": "المتابَعون",
     "friends": "الأصدقاء"
-  }
+  },
   "unarchive": "إلغاء الأرشفة",
   "checkRequest": "يرجى الانتظار للتحقق من الطلب",
 
