@@ -59,7 +59,7 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
                     label: LocaleKeys.email.localize,
                     hint: LocaleKeys.typeHere.localize,
                     style: TextStyle(
-                      fontSize: 30.sp.w,
+                      fontSize: 30.sp,
                     ),
                     prefix: Icon(
                       Icons.person,
@@ -73,7 +73,7 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
                   label: LocaleKeys.sendOTP.localize,
                   onPressed: cubit.sendForgetPasswordOTP,
                   labelStyle: TextStyle(
-                      fontSize: 35.sp.w, color: AppColors.AUTH_CONTAINER_COLOR),
+                      fontSize: 35.sp, color: AppColors.AUTH_CONTAINER_COLOR),
                 ),
               ],
             ),

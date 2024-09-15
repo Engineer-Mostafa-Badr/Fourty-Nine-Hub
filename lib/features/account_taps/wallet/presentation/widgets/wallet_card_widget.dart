@@ -49,7 +49,7 @@ class WalletCardWidget extends StatelessWidget {
                 Label(
                   text: balance,
                   style:
-                      Styles.headerText(color: Colors.white, fontSize: 25.sp),
+                      Styles.headerText(color: Colors.white, fontSize: 25),
                 ),
                 Label(
                   text: LocaleKeys.hUB.localize,

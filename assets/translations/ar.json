@@ -463,5 +463,26 @@
   "following": "يتابع",
   "livesIn": "يقيم في",
   "reportSentSuccess": "تم ارسال الابلاغ",
-  "work": "يعمل"
+  "work": "يعمل",
+  "noReels": "لا يوجد مقاطع فيديو",
+  "noTweets": "لا يوجد تغريدات",
+  "documentation": "توثيق",
+  "userName": "اسم المستخدم",
+  "typeYourName": "أدخل اسمك",
+  "personalPhoto": "الصورة الشخصية",
+  "id": "الهوية",
+  "front": "الوجه",
+  "back": "الخلف",
+  "requestVerification": "طلب التحقق",
+  "documentSuccessfully": "لقد قمت بتحميل المستند الخاص بك بنجاح. وهو الآن في انتظار مراجعة الإدارة وموافقتها.",
+  "noReportCategoriesAvailable": "لا توجد فئات تقرير متاحة",
+  "typeReportReason": "اكتب سبب الابلاغ",
+  "pleaseSelectReason": "برجاء اختار السبب!",
+  "reportSentSuccessfully": "تم ارسال الابلاغ بنجاح",
+  "play": "ابدء",
+  "showComments": "عرض التعليقات",
+  "suggestedForYou": "مقترح لك",
+  "hours": "ساعة",
+  "minute": "دقيقة"
+
 }

@@ -4,6 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
@@ -193,14 +195,14 @@ class _UserPostCardState extends State<UserPostCard> {
                       child: Center(
                         child: Row(
                           children: [
-                            Sizer(),
+                            const Sizer(),
                             const Icon(
                               Icons.lock,
                               color: Colors.black,
                             ),
-                            Sizer(),
+                            const Sizer(),
                             Label(
-                              text: "This content is not available now.",
+                              text: LocaleKeys.thisContentIsNotAvailableNow.localize,
                               style: Styles.headerText(
                                 color: Colors.black,
                               ),
@@ -246,11 +248,11 @@ class _UserPostCardState extends State<UserPostCard> {
                       text: myPost.commentsCount.toString(),
                       style: Styles.mediumText(),
                     ),
-                    Sizer(
+                    const Sizer(
                       width: 5,
                     ),
                     Label(
-                      text: 'Comments',
+                      text: LocaleKeys.comments.localize,
                       style: Styles.mediumText(),
                     )
                   ],
@@ -271,7 +273,7 @@ class _UserPostCardState extends State<UserPostCard> {
                           post: widget.post, from: 'userPosts')
                       : _buildReactionPlaceHolder(
                           icon: Icons.thumb_up_alt_outlined,
-                          label: 'Like',
+                          label: LocaleKeys.like.localize,
                           onTap: () {
                             if (context.read<UserCubit>().isLoggedIn) {
                               return widget.showPostComments(myPost.id);
@@ -284,7 +286,7 @@ class _UserPostCardState extends State<UserPostCard> {
                   Expanded(
                     child: _buildReactionPlaceHolder(
                         icon: FontAwesomeIcons.message,
-                        label: 'Comment',
+                        label: LocaleKeys.comment.localize,
                         onTap: () {
                           if (context.read<UserCubit>().isLoggedIn) {
                             return widget.showPostComments(myPost.id);
@@ -296,7 +298,7 @@ class _UserPostCardState extends State<UserPostCard> {
                 Expanded(
                   child: _buildReactionPlaceHolder(
                       icon: FontAwesomeIcons.share,
-                      label: 'Share',
+                      label: LocaleKeys.share.localize,
                       onTap: () async {
                         if (context.read<UserCubit>().isLoggedIn) {
                           var result = await controller.onShare(
@@ -305,7 +307,7 @@ class _UserPostCardState extends State<UserPostCard> {
                                   : myPost.id);
                           if (result == true) {
                             showSuccessMessage(
-                                context, 'Post shared successfully');
+                                context, LocaleKeys.postSharedSuccessfully.localize);
                           }
                         } else {
                           context.push(Routes.LOGIN);
@@ -330,7 +332,7 @@ class _UserPostCardState extends State<UserPostCard> {
           image,
           height: 20.h,
         ),
-        Sizer(
+        const Sizer(
           width: 5,
         ),
         Label(
@@ -349,9 +351,9 @@ class _UserPostCardState extends State<UserPostCard> {
         children: [
           listTile(
               icon: Icons.delete,
-              title: 'Delete Post',
+              title: LocaleKeys.deletePost.localize,
               subTitle:
-                  'Your post will be deleted, and you cannot get it again',
+              LocaleKeys.youWillDeletePost.localize,
               onTap: () {
                 widget.deletePost(post.id);
                 if (fromDetails == true) {
@@ -360,8 +362,8 @@ class _UserPostCardState extends State<UserPostCard> {
               }),
           listTile(
               icon: Icons.visibility_off,
-              title: 'Hide Post',
-              subTitle: 'Your post will be hidden, you can get it again',
+              title: LocaleKeys.hidePost.localize,
+              subTitle: LocaleKeys.youWillHidePost.localize,
               onTap: () {
                 widget.hidePost(post.id);
                 if (fromDetails == true) {
@@ -419,7 +421,7 @@ class _UserPostCardState extends State<UserPostCard> {
                 isCircle: true,
               ),
             ),
-            Sizer(),
+            const Sizer(),
             Expanded(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -474,7 +476,7 @@ class _UserPostCardState extends State<UserPostCard> {
                 icon: Icons.report,
                 color: AppColors.SECONDARY_COLOR,
               ),
-            Sizer(),
+            const Sizer(),
             if (post.user.id == user?.id)
               IconAppButton(
                 icon: Icons.clear,
@@ -489,7 +491,7 @@ class _UserPostCardState extends State<UserPostCard> {
         ),
         if (post.location != null)
           Padding(
-            padding: EdgeInsetsDirectional.only(start: 40.0),
+            padding: const EdgeInsetsDirectional.only(start: 40.0),
             child: Row(
               children: [
                 const Icon(
@@ -528,7 +530,7 @@ class _UserPostCardState extends State<UserPostCard> {
             isCircle: true,
           ),
         ),
-        Sizer(),
+        const Sizer(),
         Expanded(
             child: Row(
           children: [
@@ -610,7 +612,7 @@ class _UserPostCardState extends State<UserPostCard> {
                 if ((images?.isNotEmpty ?? false))
                   SizedBox(
                     child: GridView.builder(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -696,7 +698,7 @@ class _UserPostCardState extends State<UserPostCard> {
             size: 20,
             color: Colors.grey,
           ),
-          Sizer(),
+          const Sizer(),
           Label(text: label, style: Styles.mediumText(color: Colors.grey))
         ],
       );
@@ -711,7 +713,7 @@ class _UserPostCardState extends State<UserPostCard> {
               size: 20,
               color: Colors.grey,
             ),
-            Sizer(),
+            const Sizer(),
             Label(text: label, style: Styles.mediumText(color: Colors.grey))
           ],
         ),
@@ -721,16 +723,16 @@ class _UserPostCardState extends State<UserPostCard> {
 
   Widget _buildActivityFeelingWidget(PostEntity post) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (post.feeling != null || post.activity != null) ...[
             Text(
-              'feeling ${post.feeling?.name}, ${post.activity?.name}',
+              '${LocaleKeys.feeling.localize} ${post.feeling?.name}, ${post.activity?.name}',
               style: Styles.mediumText(),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
           ],
@@ -738,7 +740,7 @@ class _UserPostCardState extends State<UserPostCard> {
             Row(
               children: [
                 Label(
-                  text: 'with: ',
+                  text: '${LocaleKeys.withKey.localize}: ',
                   style: Styles.mediumText(),
                 ),
                 GestureDetector(

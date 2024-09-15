@@ -206,7 +206,7 @@ class _LoginViewState extends State<LoginView> {
                       widget.authType == AuthType.REGISTER
                           ? DefaultButton(
                               labelStyle: TextStyle(
-                                  fontSize: 35.sp.h,
+                                  fontSize: 35.sp,
                                   color: AppColors.AUTH_CONTAINER_COLOR),
                               label: LocaleKeys.register.localize,
                               width: double.infinity,
@@ -228,7 +228,7 @@ class _LoginViewState extends State<LoginView> {
                               width: double.infinity,
                               label: LocaleKeys.login.localize,
                               labelStyle: TextStyle(
-                                  fontSize: 35.sp.h,
+                                  fontSize: 35.sp,
                                   color: AppColors.AUTH_CONTAINER_COLOR),
                               onPressed: () => loginCubit.login(formKey),
                             ),
@@ -287,7 +287,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.r),
-          style: TextStyle(fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
+          style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
           controller: widget.loginCubit.emailTextController,
           // label: 'E-mail or phone number',
           hint: LocaleKeys.emailOrPhone.localize,
@@ -303,7 +303,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.r),
-          style: TextStyle(fontSize: 30.sp.w, color: AppColors.QUANTITY_COLOR),
+          style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
           controller: widget.loginCubit.passwordTextController,
           // label: 'Password',
           hint: LocaleKeys.password.localize,

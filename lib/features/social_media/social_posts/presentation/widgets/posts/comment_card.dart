@@ -124,7 +124,7 @@ class _CommentCardState extends State<CommentCard> {
                   onChanged: (v) {
                     setState(() {});
                   },
-                  style: Styles.headerText(fontSize: 26.sp),
+                  style: Styles.headerText(fontSize: 26),
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     contentPadding: const EdgeInsets.all(5),

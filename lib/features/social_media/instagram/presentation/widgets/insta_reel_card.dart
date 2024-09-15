@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -113,14 +115,14 @@ class _ControlsOverlay extends StatelessWidget {
           reverseDuration: const Duration(milliseconds: 200),
           child: controller.value.isPlaying
               ? SizedBox.shrink()
-              : const ColoredBox(
+              : ColoredBox(
                   color: Colors.black26,
                   child: Center(
                     child: Icon(
                       Icons.play_arrow,
                       color: Colors.white,
                       size: 100.0,
-                      semanticLabel: 'Play',
+                      semanticLabel: LocaleKeys.play.localize,
                     ),
                   ),
                 ),

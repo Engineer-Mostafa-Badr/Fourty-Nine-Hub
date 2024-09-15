@@ -29,7 +29,7 @@ class WalletHistoryCard extends StatelessWidget {
       subtitle: Label(
         text: subTitle,
         style: Styles.mediumText(
-            fontSize: 24.sp, color: AppColors.GREY_NORMAL_COLOR),
+            fontSize: 24, color: AppColors.GREY_NORMAL_COLOR),
       ),
       trailing: Icon(
         Icons.line_axis,

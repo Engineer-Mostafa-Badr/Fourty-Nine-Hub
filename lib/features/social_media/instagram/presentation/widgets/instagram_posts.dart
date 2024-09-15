@@ -12,6 +12,8 @@ import 'package:fourtyninehub/common/widgets/stateless/images/social_image_viewe
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
@@ -97,8 +99,6 @@ class _InstagramPostsState extends State<InstagramPosts> {
       }
     }, builder: (context, state) {
       final controller = context.read<InstagramCubit>();
-      // print(controller.feedPagingController
-      //         .itemList![5].comments);
       return RefreshIndicator(
         onRefresh: () async => controller.onRefresh(),
         child: CustomScrollView(
@@ -122,7 +122,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                 noItemsFoundIndicatorBuilder: (context) {
                   return Center(
                     child: Text(
-                      "No Posts",
+                      LocaleKeys.noPosts.localize,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 18.sp,
@@ -150,12 +150,12 @@ class _InstagramPostsState extends State<InstagramPosts> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Sizer(),
+                          const Sizer(),
                           _buildMainAccountHeader(
                               post: controller
                                   .feedPagingController.itemList![index],
                               context: context),
-                          Sizer(),
+                          const Sizer(),
                           SizedBox(
                             height: kToolbarHeight * 5,
                             child: PageView.builder(
@@ -197,7 +197,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                     scrollDirection: Axis.horizontal,
                                     itemCount: controller.feedPagingController
                                         .itemList![index].images!.length,
-                                    separatorBuilder: (context, index) => Sizer(
+                                    separatorBuilder: (context, index) => const Sizer(
                                           width: 3,
                                         ),
                                     itemBuilder: (context, index) {
@@ -277,7 +277,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                             : Colors.grey,
                                         size: 25,
                                       ),
-                                      Sizer(
+                                      const Sizer(
                                         width: 5,
                                       ),
                                       Label(
@@ -288,7 +288,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                         style: Styles.mediumText(
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      Sizer(),
+                                      const Sizer(),
                                       IconAppButton(
                                         icon: Icons.chat_bubble_outline_rounded,
                                         onPressed: () {
@@ -388,7 +388,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                         color: Colors.grey,
                                         size: 25,
                                       ),
-                                      Sizer(
+                                      const Sizer(
                                         width: 5,
                                       ),
                                       Label(
@@ -478,7 +478,6 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                                           .itemList![index]
                                                           .id,
                                                       from: 'feed');
-                                              // print(result);
                                             },
                                             onDeleteReply: (String id) async {
                                               return await controller
@@ -512,7 +511,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                                   accountId: 0,
                                                   userId: '',
                                                 ),
-                                                Sizer(),
+                                                const Sizer(),
                                                 Expanded(
                                                     child: TextFormField(
                                                   maxLines: null,
@@ -522,28 +521,23 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                                     setState(() {});
                                                   },
                                                   style: Styles.headerText(
-                                                      fontSize: 26.sp),
+                                                      fontSize: 26),
                                                   decoration: InputDecoration(
                                                     fillColor: Colors.white,
                                                     contentPadding:
                                                         const EdgeInsets.all(5),
                                                     hintText:
-                                                        'Type your comment ....',
+                                                        '${LocaleKeys.typeYourComment.localize} ....',
                                                     hintStyle:
                                                         Styles.mediumText(),
                                                   ),
                                                 )),
-                                                Sizer(),
+                                                const Sizer(),
                                                 IconAppButton(
                                                     icon: Icons.send,
                                                     size: 20,
                                                     isCircle: true,
                                                     onPressed: () async {
-                                                      // CommentEntity data = await widget.onAddComment(
-                                                      //   PostCommentParams(
-                                                      //       postId: widget.postId,
-                                                      //       content: commentTextController.text),
-                                                      // );
                                                       CommentEntity data = await controller.onPostComment(
                                                           params: PostCommentParams(
                                                               content:
@@ -616,7 +610,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                             )),
                                       ),
                                     ),
-                                child: const Label(text: 'Show Comments'))
+                                child: Label(text: LocaleKeys.showComments.localize))
                           ],
                           if (controller.feedPagingController.itemList![index]
                                   .content!.isEmpty &&
@@ -713,7 +707,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                 : UIConst.profilePlaceHolder),
           ),
         ),
-        Sizer(),
+        const Sizer(),
         Expanded(
             child: Row(
           children: [

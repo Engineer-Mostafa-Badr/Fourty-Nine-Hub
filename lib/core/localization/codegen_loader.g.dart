@@ -126,7 +126,7 @@ class CodegenLoader extends AssetLoader{
   "tweet": "تغريدة",
   "reels": "ريلز",
   "chat": "دردشة",
-  "find": "اكتشف",
+  "find": "ايجاد",
   "health": "صحه",
   "ship": "تحميله",
   "ride": "توصيله",
@@ -381,29 +381,6 @@ class CodegenLoader extends AssetLoader{
   "contacts": "جهات الاتصال",
   "pleaseLoginRegisterToEnjoyTheApp": "من فضلك قم بتسجيل الدخول او التسجيل للتفاعل معنا",
   "noChatsUntilNow": "لا توجد محادثات حتى الآن",
-  "tinder": {
-    "header": "تيندر",
-    "favorites": "المفضلة",
-    "noData": "لا توجد بيانات متاحة",
-    "find": "ابحث"
-  },
-  "chat_alert_dialog": {
-    "pick_chat_type": "اختر نوع الدردشة:",
-    "anonymous": "مجهول",
-    "regular": "عادي",
-    "error": {
-      "starting_anonymous": "حدث خطأ أثناء بدء الدردشة المجهولة: {error}",
-      "starting_normal": "حدث خطأ أثناء بدء الدردشة العادية: {error}",
-      "chat_id_empty": "معرف الدردشة فارغ."
-    }
-  },
-  "user_info": {
-    "date_of_birth": "تاريخ الميلاد",
-    "gender": "الجنس",
-    "followers": "المتابعين",
-    "following": "المتابَعون",
-    "friends": "الأصدقاء"
-  },
   "unarchive": "إلغاء الأرشفة",
   "checkRequest": "يرجى الانتظار للتحقق من الطلب",
   "whatDoYouThink": "بم تفكر؟",
@@ -477,8 +454,27 @@ class CodegenLoader extends AssetLoader{
   "follower": "متابع",
   "following": "يتابع",
   "livesIn": "يقيم في",
-  "reportSentSuccess": "تم ارسال الابلاغ",
-  "work": "يعمل"
+  "work": "يعمل",
+  "noReels": "لا يوجد مقاطع فيديو",
+  "noTweets": "لا يوجد تغريدات",
+  "documentation": "توثيق",
+  "userName": "اسم المستخدم",
+  "typeYourName": "أدخل اسمك",
+  "personalPhoto": "الصورة الشخصية",
+  "id": "الهوية",
+  "front": "الوجه",
+  "back": "الخلف",
+  "requestVerification": "طلب التحقق",
+  "documentSuccessfully": "لقد قمت بتحميل المستند الخاص بك بنجاح. وهو الآن في انتظار مراجعة الإدارة وموافقتها.",
+  "noReportCategoriesAvailable": "لا توجد فئات تقرير متاحة",
+  "typeReportReason": "اكتب سبب الابلاغ",
+  "pleaseSelectReason": "برجاء اختار السبب!",
+  "reportSentSuccessfully": "تم ارسال الابلاغ بنجاح",
+  "play": "ابدء",
+  "showComments": "عرض التعليقات",
+  "suggestedForYou": "مقترح لك",
+  "hours": "ساعة",
+  "minute": "دقيقة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -850,9 +846,9 @@ static const Map<String,dynamic> en = {
   "contacts": "Contacts",
   "pleaseLoginRegisterToEnjoyTheApp": "Please Login, Register to enjoy the app",
   "noChatsUntilNow": "No Chats until now",
+  "unarchive": "Unarchive",
   "availableTrips": "Available Trips",
   "checkRequest": "Please wait to check request",
-  "reportSentSuccess": "Report sent successfully",
   "whatDoYouThink": "What do you think about?",
   "peopleYouMayKnow": "People You May Know",
   "noFriendsSuggested": "No Friends Suggested",
@@ -922,30 +918,26 @@ static const Map<String,dynamic> en = {
   "following": "Following",
   "livesIn": "Lives in",
   "work": "Work",
-  "unarchive": "Unarchive",
-  "tinder": {
-    "header": "Tinder",
-    "favorites": "Favorites",
-    "noData": "No Data Available",
-    "find": "Find"
-  },
-  "chat_alert_dialog": {
-    "pick_chat_type": "Pick a Chat Type:",
-    "anonymous": "Anonymous",
-    "regular": "Regular",
-    "error": {
-      "starting_anonymous": "Error starting anonymous chat: {error}",
-      "starting_normal": "Error starting normal chat: {error}",
-      "chat_id_empty": "Chat ID is empty."
-    }
-  },
-  "user_info": {
-    "date_of_birth": "Date of Birth",
-    "gender": "Gender",
-    "followers": "Followers",
-    "following": "Following",
-    "friends": "Friends"
-  }
+  "noReels": "No Reels",
+  "noTweets": "No Tweets",
+  "documentation": "Documentation",
+  "userName": "User Name",
+  "typeYourName": "Type Your Name",
+  "personalPhoto": "Personal Photo",
+  "id": "ID",
+  "front": "Front",
+  "back": "Back",
+  "requestVerification": "Request Verification",
+  "documentSuccessfully": "You have successfully uploaded your document. It is now awaiting administration review and approval.",
+  "noReportCategoriesAvailable": "No report categories available",
+  "Type report reason": "Type Report Reason",
+  "pleaseSelectReason": "Please select a reason!",
+  "reportSentSuccessfully": "Report sent successfully",
+  "play": "Play",
+  "showComments": "Show Comments",
+  "suggestedForYou": "Suggested For You",
+  "hours": "H",
+  "minute": "Min"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -123,7 +123,7 @@ class WalletWidget extends StatelessWidget {
             Label(
                 text: amount,
                 style: Styles.mediumText(
-                    fontWeight: FontWeight.bold, fontSize: 32.sp)),
+                    fontWeight: FontWeight.bold, fontSize: 32)),
           ],
         ),
       ));
