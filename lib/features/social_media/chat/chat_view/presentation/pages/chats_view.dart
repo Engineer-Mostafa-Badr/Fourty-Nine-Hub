@@ -269,14 +269,12 @@
 //   }
 // }
 //after add index to navigate
-import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -287,12 +285,15 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_entit
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/more_icon_bottom_sheet_body.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:icons_launcher/utils/cli_logger.dart';
+
+
+
+
+
 import '../../../../../../service_locator/service_locator.dart';
 import '../../../../stories/presentation/cubit/stories_cubit.dart';
 import '../widgets/calling_card.dart';
@@ -342,7 +343,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                 onPressed: () {
                   context.push(Routes.CONTACTSVIEW);
                 },
-                tooltip: 'Contacts',
+                tooltip: LocaleKeys.contacts.tr(),
                 backgroundColor: AppColors.PRIMARY_COLOR,
                 child: const Icon(
                   Icons.contacts,
@@ -355,165 +356,168 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
           scrollController: ScrollController(),
           appBars: [
             SliverAppBar(
-              // expandedHeight: kToolbarHeight * 1.9,
+
               automaticallyImplyLeading: false,
               floating: true,
               flexibleSpace: BlocProvider.value(
                 value: serviceLocator<StoryCubit>()..fetchStories(),
                 child: BlocBuilder<ChatsCubit, ChatsState>(
                   builder: (context, state) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        context.read<UserCubit>().isLoggedIn
-                            ? SizedBox(
-                                // height: 30,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16, vertical: 4),
-                                      child: Text(
-                                        context
-                                                .read<ChatsCubit>()
-                                                .selectedChats
-                                                .isNotEmpty
-                                            ? "${context.read<ChatsCubit>().selectedChats.length} ${LocaleKeys.selected.tr()}"
-                                            : "",
-                                        style: Styles.mediumText(
-                                            color: AppColors.PRIMARY_COLOR),
+                    return context.read<UserCubit>().isLoggedIn
+                        ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding:  EdgeInsets.symmetric(
+                                  horizontal: 16.w),
+                              child: Text(
+                                context
+                                        .read<ChatsCubit>()
+                                        .selectedChats
+                                        .isNotEmpty
+                                    ? "${context.read<ChatsCubit>().selectedChats.length} ${LocaleKeys.selected.tr()}"
+                                    : "",
+                                style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR),
+                              ),
+                            ),
+                            const Spacer(),
+                            context
+                                    .read<ChatsCubit>()
+                                    .selectedChats
+                                    .isEmpty
+                                ? const SizedBox.shrink()
+                                : Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon:
+                                            const Icon(Icons.push_pin),
+                                        color: AppColors.PRIMARY_COLOR,
                                       ),
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          Icons.delete_forever,
+                                          color:
+                                              AppColors.PRIMARY_COLOR,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          Icons.notifications_off,
+                                          color:
+                                              AppColors.PRIMARY_COLOR,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          Icons.archive,
+                                          color:
+                                              AppColors.PRIMARY_COLOR,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                            context
+                                    .read<ChatsCubit>()
+                                    .selectedChats
+                                    .isEmpty
+                                ? PopupMenuButton(
+                                    icon: const Icon(
+                                      Icons.more_vert,
+                                      color: AppColors.PRIMARY_COLOR,
                                     ),
-                                    const Spacer(),
-                                    context
-                                            .read<ChatsCubit>()
-                                            .selectedChats
-                                            .isEmpty
-                                        ? const SizedBox.shrink()
-                                        : Row(
-                                            children: [
-                                              IconButton(
-                                                onPressed: () {},
-                                                icon:
-                                                    const Icon(Icons.push_pin),
-                                                color: AppColors.PRIMARY_COLOR,
-                                              ),
-                                              IconButton(
-                                                onPressed: () {},
-                                                icon: const Icon(
-                                                  Icons.delete_forever,
-                                                  color:
-                                                      AppColors.PRIMARY_COLOR,
-                                                ),
-                                              ),
-                                              IconButton(
-                                                onPressed: () {},
-                                                icon: const Icon(
-                                                  Icons.notifications_off,
-                                                  color:
-                                                      AppColors.PRIMARY_COLOR,
-                                                ),
-                                              ),
-                                              IconButton(
-                                                onPressed: () {},
-                                                icon: const Icon(
-                                                  Icons.archive,
-                                                  color:
-                                                      AppColors.PRIMARY_COLOR,
-                                                ),
-                                              ),
-                                            ],
+                                    color: AppColors.BACKGROUND_COLOR,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(16.0)),
+                                    ),
+                                    offset: const Offset(0, 50),
+                                    onSelected: (int value) async {
+                                      if (value == 4) {
+                                        context.push(
+                                            Routes.CHATPROFILEVIEW);
+                                      }
+                                    },
+                                    itemBuilder: (context) {
+                                      return _mainMenuBuilder();
+                                    },
+                                  )
+                                : PopupMenuButton(
+                                    icon: const Icon(
+                                      Icons.more_vert,
+                                      color: AppColors.PRIMARY_COLOR,
+                                    ),
+                                    color: AppColors.BACKGROUND_COLOR,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(16.0)),
+                                    ),
+                                    offset: const Offset(0, 50),
+                                    onSelected: (int value) async {},
+                                    itemBuilder: (context) {
+                                      return [
+                                        PopupMenuItem<int>(
+                                          value: 0,
+                                          child: Text(
+                                            LocaleKeys.addShortcut.tr(),
+                                            style: Styles.mediumText(
+                                                color: AppColors
+                                                    .PRIMARY_COLOR),
                                           ),
-                                    context
-                                            .read<ChatsCubit>()
-                                            .selectedChats
-                                            .isEmpty
-                                        ? PopupMenuButton(
-                                            icon: const Icon(
-                                              Icons.more_vert,
-                                              color: AppColors.PRIMARY_COLOR,
-                                            ),
-                                            color: AppColors.BACKGROUND_COLOR,
-                                            shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(16.0)),
-                                            ),
-                                            offset: const Offset(0, 50),
-                                            onSelected: (int value) async {
-                                              if (value == 4) {
-                                                context.push(
-                                                    Routes.CHATPROFILEVIEW);
-                                              }
-                                            },
-                                            itemBuilder: (context) {
-                                              return _mainMenuBuilder();
-                                            },
-                                          )
-                                        : PopupMenuButton(
-                                            icon: const Icon(
-                                              Icons.more_vert,
-                                              color: AppColors.PRIMARY_COLOR,
-                                            ),
-                                            color: AppColors.BACKGROUND_COLOR,
-                                            shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(16.0)),
-                                            ),
-                                            offset: const Offset(0, 50),
-                                            onSelected: (int value) async {},
-                                            itemBuilder: (context) {
-                                              return [
-                                                PopupMenuItem<int>(
-                                                  value: 0,
-                                                  child: Text(
-                                                    LocaleKeys.addShortcut.tr(),
-                                                    style: Styles.mediumText(
-                                                        color: AppColors
-                                                            .PRIMARY_COLOR),
-                                                  ),
-                                                ),
-                                                PopupMenuItem<int>(
-                                                  value: 0,
-                                                  child: Text(
-                                                    LocaleKeys.markAsUnread
-                                                        .tr(),
-                                                    style: Styles.mediumText(
-                                                        color: AppColors
-                                                            .PRIMARY_COLOR),
-                                                  ),
-                                                ),
-                                                PopupMenuItem<int>(
-                                                  value: 0,
-                                                  child: Text(
-                                                    LocaleKeys.selectAll.tr(),
-                                                    style: Styles.mediumText(
-                                                        color: AppColors
-                                                            .PRIMARY_COLOR),
-                                                  ),
-                                                ),
-                                                PopupMenuItem<int>(
-                                                  value: 0,
-                                                  child: Text(
-                                                    LocaleKeys.lockChat.tr(),
-                                                    style: Styles.mediumText(
-                                                        color: AppColors
-                                                            .PRIMARY_COLOR),
-                                                  ),
-                                                ),
-                                              ];
-                                            },
+                                        ),
+                                        PopupMenuItem<int>(
+                                          value: 0,
+                                          child: Text(
+                                            LocaleKeys.markAsUnread
+                                                .tr(),
+                                            style: Styles.mediumText(
+                                                color: AppColors
+                                                    .PRIMARY_COLOR),
                                           ),
-                                  ],
-                                ),
-                              )
-                            : const SizedBox(),
-                        // const ChatStories(),
-                      ],
-                    );
+                                        ),
+                                        PopupMenuItem<int>(
+                                          value: 0,
+                                          child: Text(
+                                            LocaleKeys.selectAll.tr(),
+                                            style: Styles.mediumText(
+                                                color: AppColors
+                                                    .PRIMARY_COLOR),
+                                          ),
+                                        ),
+                                        PopupMenuItem<int>(
+                                          value: 0,
+                                          child: Text(
+                                            LocaleKeys.lockChat.tr(),
+                                            style: Styles.mediumText(
+                                                color: AppColors
+                                                    .PRIMARY_COLOR),
+                                          ),
+                                        ),
+                                      ];
+                                    },
+                                  ),
+                          ],
+                        )
+                        : const SizedBox.shrink();
                   },
                 ),
+              ),
+            ),
+
+            SliverAppBar(
+              expandedHeight: MediaQuery.of(context).size.height *
+                  0.15, // Responsive height
+              automaticallyImplyLeading: false,
+              floating: true,
+              flexibleSpace: BlocProvider(
+                create: (context) =>
+                serviceLocator<StoryCubit>()..fetchStories(),
+                child:  const ChatStories(),
               ),
             ),
             SliverAppBar(
@@ -546,7 +550,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                             ),
                             child: Center(
                               child: Text(
-                                'Please Login, Register to enjoy the app',
+                                LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.tr(),
                                 style: Styles.headerText(
                                   color:
                                       Theme.of(context).scaffoldBackgroundColor,
@@ -671,7 +675,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
           : state.chats!.isEmpty
               ? Center(
                   child: Label(
-                      text: 'No Chats until now',
+                      text: LocaleKeys.noChatsUntilNow.tr(),
                       style: Styles.mediumText(
                           fontWeight: FontWeight.bold, fontSize: 18)),
                 )
@@ -701,17 +705,18 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                               const Color.fromARGB(255, 191, 191, 191),
                           foregroundColor: Colors.white,
                           icon: Icons.more_horiz,
-                          label: 'More',
+                          label: LocaleKeys.more.tr(),
                           padding: EdgeInsets.zero,
                         ),
-                        SlidableAction(
+                        SlidableAction
+                          (
                           onPressed: (value) async {},
                           backgroundColor: AppColors.PRIMARY_COLOR,
                           foregroundColor: Colors.white,
                           icon: Icons.delete_outlined,
                           label: state.chats![index].archived
-                              ? 'Unarchive'
-                              : 'Archive',
+                              ? LocaleKeys.unarchive.tr()
+                              : LocaleKeys.archive.tr(),
                           padding: EdgeInsets.zero,
                         ),
                       ],

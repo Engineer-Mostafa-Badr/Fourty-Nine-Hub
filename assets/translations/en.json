@@ -361,5 +361,11 @@
   "requestWithdrawal": "Your request withdrawal sent successfully waiting for administration approval",
   "complete": "Complete",
   "yearsLast": "years last",
-  "checkRequest": "Please wait to check request"
+  "checkRequest": "Please wait to check request",
+  "aBirdInHand": "A bird in the hand is better than two on the tree.",
+  "permissionDenied": "Permission denied",
+  "contacts": "Contacts",
+  "pleaseLoginRegisterToEnjoyTheApp":"Please Login, Register to enjoy the app",
+  "noChatsUntilNow": "No Chats until now",
+  "unarchive": "Unarchive"
 }

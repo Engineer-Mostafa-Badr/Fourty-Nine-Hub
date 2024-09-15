@@ -360,5 +360,11 @@ abstract class  LocaleKeys {
   static const complete = 'complete';
   static const yearsLast = 'yearsLast';
   static const checkRequest = 'checkRequest';
+  static const aBirdInHand = 'aBirdInHand';
+  static const permissionDenied = 'permissionDenied';
+  static const contacts = 'contacts';
+  static const pleaseLoginRegisterToEnjoyTheApp = 'pleaseLoginRegisterToEnjoyTheApp';
+  static const noChatsUntilNow = 'noChatsUntilNow';
+  static const unarchive = 'unarchive';
 
 }

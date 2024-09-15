@@ -375,7 +375,13 @@ class CodegenLoader extends AssetLoader{
   "requestWithdrawal": "تم إرسال طلب السحب الخاص بك بنجاح في انتظار موافقة الإدارة",
   "complete": "تم إكماله",
   "yearsLast": "سنوات مضت",
-  "checkRequest": "يرجى الانتظار للتحقق من الطلب"
+  "checkRequest": "يرجى الانتظار للتحقق من الطلب",
+  "aBirdInHand": "عصفور في اليد خير من عشرة على الشجرة",
+  "permissionDenied": "تم رفض الصلاحيات",
+  "contacts": "جهات الاتصال",
+  "pleaseLoginRegisterToEnjoyTheApp": "من فضلك قم بتسجيل الدخول او التسجيل للتفاعل معنا",
+  "noChatsUntilNow": "لا توجد محادثات حتى الآن",
+  "unarchive": "إلغاء الأرشفة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -740,7 +746,13 @@ static const Map<String,dynamic> en = {
   "requestWithdrawal": "Your request withdrawal sent successfully waiting for administration approval",
   "complete": "Complete",
   "yearsLast": "years last",
-  "checkRequest": "Please wait to check request"
+  "checkRequest": "Please wait to check request",
+  "aBirdInHand": "A bird in the hand is better than two on the tree.",
+  "permissionDenied": "Permission denied",
+  "contacts": "Contacts",
+  "pleaseLoginRegisterToEnjoyTheApp": "Please Login, Register to enjoy the app",
+  "noChatsUntilNow": "No Chats until now",
+  "unarchive": "Unarchive"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

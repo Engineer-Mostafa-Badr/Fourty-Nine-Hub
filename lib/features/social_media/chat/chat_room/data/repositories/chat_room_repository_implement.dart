@@ -5,9 +5,9 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasour
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasources/remote/chat_message_remote_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 
 class ChatRoomRepositoryImplementation extends ChatRoomRepository {
@@ -16,15 +16,6 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
 
   ChatRoomRepositoryImplementation(
       this._chatRemoteDataSource, this._chatLocalDataSource);
-
-  @override
-  Future<Either<Failure, bool>> deleteChatMessage(
-      DeleteMessageParams deleteMessageParams) {
-    return _chatRemoteDataSource.deleteMessage(
-      chatId: deleteMessageParams.chatId!,
-      messageId: deleteMessageParams.messageId!,
-    );
-  }
 
   @override
   Future<Either<Failure, List<MessageEntity>>> getMessages(
@@ -70,5 +61,10 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   @override
   void stopListenToDeliveredStatus() {
     _chatRemoteDataSource.stopListenToDeliveredStatus();
+  }
+
+  @override
+  Future<Either<Failure, bool>> markMessageAsDelivered(MarkMessagesAsDeliveredParams params) {
+    return _chatRemoteDataSource.markMessageAsDelivered(params);
   }
 }
