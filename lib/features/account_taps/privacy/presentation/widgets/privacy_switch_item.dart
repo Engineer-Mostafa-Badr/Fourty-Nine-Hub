@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../domain/entities/privacy_status_enum.dart';
 
@@ -23,7 +24,7 @@ class PrivacySwitchItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 5),
         child: Row(
           children: [
             Expanded(
@@ -32,13 +33,16 @@ class PrivacySwitchItem extends StatelessWidget {
               style: Styles.mediumText(),
             )),
             Label(
-              text: (privacy == PrivacyStatus.public ? 'On' : 'Off'),
+              text: (privacy? 'On' : 'Off'),
               style: Styles.mediumText(),
             ),
             Switch(
-              value: privacy == PrivacyStatus.public,
+              value: privacy,
               onChanged: onPress,
               activeColor: Colors.red,
+              inactiveThumbColor: Colors.black,
+              activeTrackColor: AppColors.GREY_NORMAL_COLOR,
+              inactiveTrackColor: AppColors.GREY_NORMAL_COLOR,
             ),
           ],
         ),

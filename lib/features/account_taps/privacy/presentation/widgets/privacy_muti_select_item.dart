@@ -71,17 +71,17 @@ class PrivacyMultiSelectItem extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Label(text: privacy),
+                  Label(text: getPrivacyName(privacyToPrivacyStatus(privacy))),
                   const SizedBox(
                     width: 10,
                   ),
                   Icon(
-                    getPrivacyIcon(),
+                    getPrivacyIcon(privacyToPrivacyStatus(privacy)),
                     color: Theme.of(context).primaryColor,
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 width: 15,
               ),
             ],
@@ -91,27 +91,50 @@ class PrivacyMultiSelectItem extends StatelessWidget {
     );
   }
 
-  String getPrivacyName() {
-    return privacy == PrivacyStatus.onlyMe
-        ? 'Only Me'
-        : privacy == PrivacyStatus.public
-            ? 'Public'
-            : privacy == PrivacyStatus.friends
-                ? 'Friends'
-                : privacy == PrivacyStatus.followers
-                    ? 'Followers'
-                    : 'Friends / Followers';
+  PrivacyStatus privacyToPrivacyStatus(String privacy) {
+    switch (privacy) {
+      case 'only-me':
+        return PrivacyStatus.onlyMe;
+      case 'public':
+        return PrivacyStatus.public;
+      case 'friends':
+        return PrivacyStatus.friends;
+      case 'followers':
+        return PrivacyStatus.followers;
+      case 'friends/followers':
+        return PrivacyStatus.friendsAndFollowers;
+      default:
+        return PrivacyStatus.public; // Default to a known status
+    }
+}
+  String getPrivacyName(PrivacyStatus status) {
+    switch (status){
+      case PrivacyStatus.onlyMe:
+        return 'Only Me';
+      case PrivacyStatus.public:
+        return 'Public';
+      case PrivacyStatus.friends:
+        return 'Friends';
+      case PrivacyStatus.followers:
+        return 'Followers'; // Adjust if needed
+      case PrivacyStatus.friendsAndFollowers:
+        return 'Friends / Followers';
+
+    }
   }
 
-  IconData getPrivacyIcon() {
-    return privacy == PrivacyStatus.onlyMe
-        ? Icons.lock
-        : privacy == PrivacyStatus.friendsAndFollowers
-            ? Icons.supervised_user_circle_outlined
-            : privacy == PrivacyStatus.friends
-                ? Icons.accessibility_sharp
-                : privacy == PrivacyStatus.followers
-                    ? Icons.family_restroom
-                    : Icons.language;
+  IconData getPrivacyIcon(PrivacyStatus status) {
+    switch (status) {
+      case PrivacyStatus.onlyMe:
+        return Icons.lock;
+      case PrivacyStatus.public:
+        return Icons.language;
+      case PrivacyStatus.friends:
+        return Icons.family_restroom;
+      case PrivacyStatus.followers:
+        return Icons.accessibility_sharp; // Adjust if needed
+      case PrivacyStatus.friendsAndFollowers:
+        return Icons.supervised_user_circle_outlined;
+    }
   }
 }

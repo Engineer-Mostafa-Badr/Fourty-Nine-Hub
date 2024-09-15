@@ -34,7 +34,7 @@ class PrivacyDataSourceImpl extends PrivacyDataSource {
       UpdatePrivacyParams params) async {
     var response = await _apiConsumer.put(
       EndPoints.privacy,
-      queryParameters: params.toJson(),
+      data: params.toJson(),
     );
     return response.fold(
       (failure)=>Left(failure),

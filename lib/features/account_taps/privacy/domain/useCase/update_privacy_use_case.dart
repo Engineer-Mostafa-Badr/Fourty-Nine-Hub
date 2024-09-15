@@ -4,8 +4,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/privacy_entity.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/repository/privacy_repository.dart';
 
-import '../entities/privacy_status_enum.dart';
-
 class UpdatePrivacyUseCase extends UseCase<PrivacyEntity, UpdatePrivacyParams> {
  final PrivacyRepository _privacyRepository;
 
@@ -17,21 +15,21 @@ class UpdatePrivacyUseCase extends UseCase<PrivacyEntity, UpdatePrivacyParams> {
 }
 
 class UpdatePrivacyParams {
-  final PrivacyStatus? privacyCountry;
-  final PrivacyStatus? privacyPhone;
-  final PrivacyStatus? privacyEmail;
-  final PrivacyStatus? privacyBirthDay;
-  final PrivacyStatus? privacySocialStatus;
-  final PrivacyStatus? privacyJob;
-  final PrivacyStatus? privacyCity;
-  final PrivacyStatus? privacyIsMale;
-  final PrivacyStatus? privacyLanguage;
-  final PrivacyStatus? privacyReceiveMessages;
-  final PrivacyStatus? privacyLastSeen;
-  final PrivacyStatus? privacyFriendList;
-  final PrivacyStatus? privacyFollowerList;
-  final PrivacyStatus? privacyActivity;
-  final PrivacyStatus? privacyCall;
+  final String? privacyCountry;
+  final String? privacyPhone;
+  final String? privacyEmail;
+  final String? privacyBirthDay;
+  final String? privacySocialStatus;
+  final String? privacyJob;
+  final String? privacyCity;
+  final String? privacyIsMale;
+  final String? privacyLanguage;
+  final String? privacyReceiveMessages;
+  final String? privacyLastSeen;
+  final String? privacyFriendList;
+  final String? privacyFollowerList;
+  final String? privacyActivity;
+  final String? privacyCall;
   final bool? privacyFriendRequest;
   final bool? privacyFollowRequest;
 
@@ -56,23 +54,22 @@ class UpdatePrivacyParams {
 
 
   Map<String, dynamic> toJson() => {
-    'privacyCountry': privacyCountry?.name,  // Serialize the enum as a string
-    'privacyPhone': privacyPhone?.name,
-    'privacyEmail': privacyEmail?.name,
-    'privacyBirthDay': privacyBirthDay?.name,
-    'privacySocialStatus': privacySocialStatus?.name,
-    'privacyJob': privacyJob?.name,
-    'privacyCity': privacyCity?.name,
-    'privacyIsMale': privacyIsMale?.name,
-    'privacyLanguage': privacyLanguage?.name,
-    'privacyReceiveMessages': privacyReceiveMessages?.name,
-    'privacyLastSeen': privacyLastSeen?.name,
-    'privacyFriendList': privacyFriendList?.name,
-    'privacyFollowerList': privacyFollowerList?.name,
-    'privacyActivity': privacyActivity?.name,
-    'privacyCall': privacyCall?.name,
-    'privacyFriendRequest': privacyFriendRequest,  // Booleans don't need conversion
+    'privacyCountry': privacyCountry,
+    'privacyPhone': privacyPhone,
+    'privacyEmail': privacyEmail,
+    'privacyBirthDay': privacyBirthDay,
+    'privacySocialStatus': privacySocialStatus,
+    'privacyJob': privacyJob,
+    'privacyCity': privacyCity,
+    'privacyIsMale': privacyIsMale,
+    'privacyLanguage': privacyLanguage,
+    'privacyReceiveMessages': privacyReceiveMessages,
+    'privacyLastSeen': privacyLastSeen,
+    'privacyFriendList': privacyFriendList,
+    'privacyFollowerList': privacyFollowerList,
+    'privacyActivity': privacyActivity,
+    'privacyCall': privacyCall,
+    'privacyFriendRequest': privacyFriendRequest,
     'privacyFollowRequest': privacyFollowRequest,
   };
-
 }

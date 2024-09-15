@@ -32,7 +32,7 @@ class PrivacyCubit extends Cubit<PrivacyState>{
     response.fold((l) {
       emit(state.copyWith(failure: l, status: PrivacyStates.error));
     }, (data) {
-      emit(state.copyWith(privacy: data , status: PrivacyStates.success));
+      emit(state.copyWith(privacy: data));
       fetchDataPrivacy();
     });
   }

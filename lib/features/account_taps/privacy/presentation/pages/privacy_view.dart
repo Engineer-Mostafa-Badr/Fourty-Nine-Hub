@@ -37,123 +37,457 @@ class PrivacyView extends StatelessWidget {
                             context.read<PrivacyCubit>().updateDataPrivacy(
                                 params:
                                     UpdatePrivacyParams(
-                                        privacyCountry: value,
-                                      privacyActivity: PrivacyStatus.public,
-                                      privacyBirthDay: PrivacyStatus.public,
-                                      privacyCall: PrivacyStatus.public,
-                                      privacyCity: PrivacyStatus.public,
-                                      privacyEmail: PrivacyStatus.public,
-                                      privacyFollowerList:PrivacyStatus.public ,
-                                      privacyFollowRequest:true ,
-                                      privacyFriendList:PrivacyStatus.public ,
-                                      privacyFriendRequest:true ,
-                                      privacyIsMale:PrivacyStatus.public ,
-                                      privacyJob:PrivacyStatus.public ,
-                                      privacyLanguage:PrivacyStatus.public ,
-                                      privacyLastSeen:PrivacyStatus.public ,
-                                      privacyPhone:PrivacyStatus.public ,
-                                      privacyReceiveMessages:PrivacyStatus.public ,
-                                      privacySocialStatus:PrivacyStatus.public ,
-
+                                        privacyCountry:mapPrivacyStatusToString(value),
+                                      privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                      privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                      privacyPhone: state.privacy?.privacyPhone ?? '',
+                                      privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                      privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                      privacyJob: state.privacy?.privacyJob ?? '',
+                                      privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                      privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                      privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                      privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                      privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                      privacyEmail: state.privacy?.privacyEmail ?? '',
+                                      privacyCity: state.privacy?.privacyCity ?? '',
+                                      privacyCall: state.privacy?.privacyCall ?? '',
+                                      privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                      privacyActivity: state.privacy?.privacyActivity ?? '',
                                     ));
                           },
                         ),
                         PrivacyMultiSelectItem(
                           label: 'Phone',
                           privacy: state.privacy?.privacyPhone ?? '',
-                          onChoose: (PrivacyStatus value) {},
+                          onChoose: (PrivacyStatus value) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                  privacyCountry:state.privacy?.privacyCountry ?? '',
+                                  privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                  privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                  privacyPhone: mapPrivacyStatusToString(value),
+                                  privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                  privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                  privacyJob: state.privacy?.privacyJob ?? '',
+                                  privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                  privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                  privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                  privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                  privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                  privacyEmail: state.privacy?.privacyEmail ?? '',
+                                  privacyCity: state.privacy?.privacyCity ?? '',
+                                  privacyCall: state.privacy?.privacyCall ?? '',
+                                  privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                  privacyActivity: state.privacy?.privacyActivity ?? '',
+                                ));
+                          },
                         ),
                         PrivacyMultiSelectItem(
                           label: 'Email',
                           privacy: state.privacy?.privacyEmail ?? '',
-                          onChoose: (PrivacyStatus value) {},
+                          onChoose: (PrivacyStatus value) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                  privacyCountry:state.privacy?.privacyCountry ?? '',
+                                  privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                  privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                  privacyPhone: state.privacy?.privacyPhone ?? '',
+                                  privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                  privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                  privacyJob: state.privacy?.privacyJob ?? '',
+                                  privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                  privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                  privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                  privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                  privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                  privacyEmail: mapPrivacyStatusToString(value),
+                                  privacyCity: state.privacy?.privacyCity ?? '',
+                                  privacyCall: state.privacy?.privacyCall ?? '',
+                                  privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                  privacyActivity: state.privacy?.privacyActivity ?? '',
+                                ));
+                          },
                         ),
                         PrivacyMultiSelectItem(
                           label: 'Birth Date',
                           privacy: state.privacy?.privacyBirthDay ?? '',
-                          onChoose: (PrivacyStatus value) {},
+                          onChoose: (PrivacyStatus value) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                  privacyCountry:state.privacy?.privacyCountry ?? '',
+                                  privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                  privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                  privacyPhone: state.privacy?.privacyPhone ?? '',
+                                  privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                  privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                  privacyJob: state.privacy?.privacyJob ?? '',
+                                  privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                  privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                  privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                  privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                  privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                  privacyEmail: state.privacy?.privacyEmail ?? '',
+                                  privacyCity: state.privacy?.privacyCity ?? '',
+                                  privacyCall: state.privacy?.privacyCall ?? '',
+                                  privacyBirthDay: mapPrivacyStatusToString(value),
+                                  privacyActivity: state.privacy?.privacyActivity ?? '',
+                                ));
+                          },
                         ),
                         PrivacyMultiSelectItem(
                           label: 'Social Status',
                           privacy: state.privacy?.privacySocialStatus ?? '',
-                          onChoose: (PrivacyStatus value) {},
+                          onChoose: (PrivacyStatus value) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                  privacyCountry:state.privacy?.privacyCountry ?? '',
+                                  privacySocialStatus: mapPrivacyStatusToString(value),
+                                  privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                  privacyPhone: state.privacy?.privacyPhone ?? '',
+                                  privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                  privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                  privacyJob: state.privacy?.privacyJob ?? '',
+                                  privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                  privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                  privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                  privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                  privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                  privacyEmail: state.privacy?.privacyEmail ?? '',
+                                  privacyCity: state.privacy?.privacyCity ?? '',
+                                  privacyCall: state.privacy?.privacyCall ?? '',
+                                  privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                  privacyActivity: state.privacy?.privacyActivity ?? '',
+                                ));
+                          },
                         ),
                         PrivacyMultiSelectItem(
                           label: 'Job',
                           privacy: state.privacy?.privacyJob ?? '',
-                          onChoose: (PrivacyStatus value) {},
+                          onChoose: (PrivacyStatus value) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                  privacyCountry:state.privacy?.privacyCountry ?? '',
+                                  privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                  privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                  privacyPhone: state.privacy?.privacyPhone ?? '',
+                                  privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                  privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                  privacyJob: mapPrivacyStatusToString(value),
+                                  privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                  privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                  privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                  privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                  privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                  privacyEmail: state.privacy?.privacyEmail ?? '',
+                                  privacyCity: state.privacy?.privacyCity ?? '',
+                                  privacyCall: state.privacy?.privacyCall ?? '',
+                                  privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                  privacyActivity: state.privacy?.privacyActivity ?? '',
+                                ));
+                          },
                         ),
                         PrivacyMultiSelectItem(
                           label: 'City',
                           privacy: state.privacy?.privacyCity ?? '',
-                          onChoose: (PrivacyStatus value) {},
+                          onChoose: (PrivacyStatus value) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                  privacyCountry:state.privacy?.privacyCountry ?? '',
+                                  privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                  privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                  privacyPhone: state.privacy?.privacyPhone ?? '',
+                                  privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                  privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                  privacyJob: state.privacy?.privacyJob ?? '',
+                                  privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                  privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                  privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                  privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                  privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                  privacyEmail: state.privacy?.privacyEmail ?? '',
+                                  privacyCity: mapPrivacyStatusToString(value),
+                                  privacyCall: state.privacy?.privacyCall ?? '',
+                                  privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                  privacyActivity: state.privacy?.privacyActivity ?? '',
+                                ));
+                          },
                         ),
                         PrivacyMultiSelectItem(
                           label: 'Gender',
                           privacy: state.privacy?.privacyIsMale ?? '',
-                          onChoose: (PrivacyStatus value) {},
+                          onChoose: (PrivacyStatus value) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                  privacyCountry:state.privacy?.privacyCountry ?? '',
+                                  privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                  privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                  privacyPhone: state.privacy?.privacyPhone ?? '',
+                                  privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                  privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                  privacyJob: state.privacy?.privacyJob ?? '',
+                                  privacyIsMale: mapPrivacyStatusToString(value),
+                                  privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                  privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                  privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                  privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                  privacyEmail: state.privacy?.privacyEmail ?? '',
+                                  privacyCity: state.privacy?.privacyCity ?? '',
+                                  privacyCall: state.privacy?.privacyCall ?? '',
+                                  privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                  privacyActivity: state.privacy?.privacyActivity ?? '',
+                                ));
+                          },
                         ),
                         PrivacyMultiSelectItem(
                           label: 'Language',
                           privacy: state.privacy?.privacyLanguage ?? '',
-                          onChoose: (PrivacyStatus value) {},
+                          onChoose: (PrivacyStatus value) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                  privacyCountry:state.privacy?.privacyCountry ?? '',
+                                  privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                  privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                  privacyPhone: state.privacy?.privacyPhone ?? '',
+                                  privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                  privacyLanguage: mapPrivacyStatusToString(value),
+                                  privacyJob: state.privacy?.privacyJob ?? '',
+                                  privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                  privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                  privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                  privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                  privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                  privacyEmail: state.privacy?.privacyEmail ?? '',
+                                  privacyCity: state.privacy?.privacyCity ?? '',
+                                  privacyCall: state.privacy?.privacyCall ?? '',
+                                  privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                  privacyActivity: state.privacy?.privacyActivity ?? '',
+                                ));
+                          },
                         ),
                         PrivacyMultiSelectItem(
                           label: 'Receive Messages',
                           privacy: state.privacy?.privacyReceiveMessages ?? '',
-                          onChoose: (PrivacyStatus value) {},
+                          onChoose: (PrivacyStatus value) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                  privacyCountry:state.privacy?.privacyCountry ?? '',
+                                  privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                  privacyReceiveMessages: mapPrivacyStatusToString(value),
+                                  privacyPhone: state.privacy?.privacyPhone ?? '',
+                                  privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                  privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                  privacyJob: state.privacy?.privacyJob ?? '',
+                                  privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                  privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                  privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                  privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                  privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                  privacyEmail: state.privacy?.privacyEmail ?? '',
+                                  privacyCity: state.privacy?.privacyCity ?? '',
+                                  privacyCall: state.privacy?.privacyCall ?? '',
+                                  privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                  privacyActivity: state.privacy?.privacyActivity ?? '',
+                                ));
+                          },
                         ),
                         PrivacyMultiSelectItem(
                           label: 'Last Seen',
                           privacy: state.privacy?.privacyLastSeen ?? '',
-                          onChoose: (PrivacyStatus value) {},
+                          onChoose: (PrivacyStatus value) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                  privacyCountry:state.privacy?.privacyCountry ?? '',
+                                  privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                  privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                  privacyPhone: state.privacy?.privacyPhone ?? '',
+                                  privacyLastSeen: mapPrivacyStatusToString(value),
+                                  privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                  privacyJob: state.privacy?.privacyJob ?? '',
+                                  privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                  privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                  privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                  privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                  privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                  privacyEmail: state.privacy?.privacyEmail ?? '',
+                                  privacyCity: state.privacy?.privacyCity ?? '',
+                                  privacyCall: state.privacy?.privacyCall ?? '',
+                                  privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                  privacyActivity: state.privacy?.privacyActivity ?? '',
+                                ));
+                          },
                         ),
                         PrivacyMultiSelectItem(
                           label: 'Friends List',
                           privacy: state.privacy?.privacyFriendList ?? '',
-                          onChoose: (PrivacyStatus value) {},
+                          onChoose: (PrivacyStatus value) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                  privacyCountry:state.privacy?.privacyCountry ?? '',
+                                  privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                  privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                  privacyPhone: state.privacy?.privacyPhone ?? '',
+                                  privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                  privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                  privacyJob: state.privacy?.privacyJob ?? '',
+                                  privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                  privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                  privacyFriendList: mapPrivacyStatusToString(value),
+                                  privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                  privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                  privacyEmail: state.privacy?.privacyEmail ?? '',
+                                  privacyCity: state.privacy?.privacyCity ?? '',
+                                  privacyCall: state.privacy?.privacyCall ?? '',
+                                  privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                  privacyActivity: state.privacy?.privacyActivity ?? '',
+                                ));
+                          },
                         ),
                         PrivacyMultiSelectItem(
                           label: 'Followers List',
                           privacy: state.privacy?.privacyFollowerList ?? '',
-                          onChoose: (PrivacyStatus value) {},
+                          onChoose: (PrivacyStatus value) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                  privacyCountry:state.privacy?.privacyCountry ?? '',
+                                  privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                  privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                  privacyPhone: state.privacy?.privacyPhone ?? '',
+                                  privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                  privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                  privacyJob: state.privacy?.privacyJob ?? '',
+                                  privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                  privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                  privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                  privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                  privacyFollowerList: mapPrivacyStatusToString(value),
+                                  privacyEmail: state.privacy?.privacyEmail ?? '',
+                                  privacyCity: state.privacy?.privacyCity ?? '',
+                                  privacyCall: state.privacy?.privacyCall ?? '',
+                                  privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                  privacyActivity: state.privacy?.privacyActivity ?? '',
+                                ));
+                          },
                         ),
                         PrivacyMultiSelectItem(
                           label: 'Activity',
                           privacy: state.privacy?.privacyActivity ?? '',
-                          onChoose: (PrivacyStatus value) {},
+                          onChoose: (PrivacyStatus value) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                  privacyCountry:state.privacy?.privacyCountry ?? '',
+                                  privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                  privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                  privacyPhone: state.privacy?.privacyPhone ?? '',
+                                  privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                  privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                  privacyJob: state.privacy?.privacyJob ?? '',
+                                  privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                  privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                  privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                  privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                  privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                  privacyEmail: state.privacy?.privacyEmail ?? '',
+                                  privacyCity: state.privacy?.privacyCity ?? '',
+                                  privacyCall: state.privacy?.privacyCall ?? '',
+                                  privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                  privacyActivity:  mapPrivacyStatusToString(value),
+                                ));
+                          },
                         ),
-                        // PrivacyMultiSelectItem(
-                        //   label: 'Friend Request',
-                        //   privacy: state.privacy?.privacyFriendRequest ??'',
-                        //   onChoose: (PrivacyStatus value) {},
-                        //   isFriendEnable: false,
-                        // ),
-                        // PrivacyMultiSelectItem(
-                        //   label: 'Follow',
-                        //   privacy: state.privacy?.privacyFollowRequest ??'',
-                        //   onChoose: (PrivacyStatus value) {},
-                        //   isFriendEnable: false,
-                        // ),
                         PrivacyMultiSelectItem(
                           label: 'Call',
                           privacy: state.privacy?.privacyCall ?? '',
-                          onChoose: (PrivacyStatus value) {},
+                          onChoose: (PrivacyStatus value) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                  privacyCountry:state.privacy?.privacyCountry ?? '',
+                                  privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                  privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                  privacyPhone: state.privacy?.privacyPhone ?? '',
+                                  privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                  privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                  privacyJob: state.privacy?.privacyJob ?? '',
+                                  privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                  privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                  privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                  privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                  privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                  privacyEmail: state.privacy?.privacyEmail ?? '',
+                                  privacyCity: state.privacy?.privacyCity ?? '',
+                                  privacyCall:mapPrivacyStatusToString(value),
+                                  privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                  privacyActivity: state.privacy?.privacyActivity ?? '',
+                                ));
+                          },
                         ),
-                        // PrivacySwitchItem(
-                        //   label: 'Random Appearance',
-                        //   privacy: PrivacyStatus.public,
-                        //   onPress: (v) {},
-                        // ),
                         PrivacySwitchItem(
                           label: 'Friend Request',
                           privacy: state.privacy?.privacyFriendRequest ?? false,
-                          onPress: (v) {},
+                          onPress: (v) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                  privacyCountry:state.privacy?.privacyCountry ?? '',
+                                  privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                  privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                  privacyPhone: state.privacy?.privacyPhone ?? '',
+                                  privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                  privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                  privacyJob: state.privacy?.privacyJob ?? '',
+                                  privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                  privacyFriendRequest: v,
+                                  privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                  privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                  privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                  privacyEmail: state.privacy?.privacyEmail ?? '',
+                                  privacyCity: state.privacy?.privacyCity ?? '',
+                                  privacyCall:state.privacy?.privacyCall ?? '',
+                                  privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                  privacyActivity: state.privacy?.privacyActivity ?? '',
+                                ));
+                          },
                         ),
                         PrivacySwitchItem(
                           label: 'Follow',
                           privacy: state.privacy?.privacyFollowRequest ?? true,
-                          onPress: (v) {},
+                          onPress: (v) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                  privacyCountry:state.privacy?.privacyCountry ?? '',
+                                  privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                  privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                  privacyPhone: state.privacy?.privacyPhone ?? '',
+                                  privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                  privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                  privacyJob: state.privacy?.privacyJob ?? '',
+                                  privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                  privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                  privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                  privacyFollowRequest: v,
+                                  privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                  privacyEmail: state.privacy?.privacyEmail ?? '',
+                                  privacyCity: state.privacy?.privacyCity ?? '',
+                                  privacyCall:state.privacy?.privacyCall ?? '',
+                                  privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                  privacyActivity: state.privacy?.privacyActivity ?? '',
+                                ));
+                          },
                         ),
                       ],
                     ),
@@ -165,4 +499,5 @@ class PrivacyView extends StatelessWidget {
           ),
         ));
   }
+
 }

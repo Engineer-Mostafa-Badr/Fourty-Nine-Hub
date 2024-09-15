@@ -90,6 +90,7 @@ class SettingsView extends StatelessWidget {
                         value: ThemeCubit.get(context).isDarkTheme,
                         activeColor: AppColors.SECONDARY_COLOR,
                         activeTrackColor: AppColors.AUTH_CONTAINER_COLOR,
+                        inactiveTrackColor: AppColors.AUTH_CONTAINER_COLOR,
                         onChanged: (value) {
                           if (theme is LightThemeModeStates) {
                             ThemeCubit.get(context).darkThemeMode();
