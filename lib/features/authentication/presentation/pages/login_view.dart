@@ -212,7 +212,7 @@ class _LoginViewState extends State<LoginView> {
                               width: double.infinity,
                               onPressed: () {
                                 if (registerCubit.accept) {
-                                  registerCubit.register(formKey);
+                                  registerCubit.register();
                                 } else {
                                   showErrorMessage(
                                       context,
