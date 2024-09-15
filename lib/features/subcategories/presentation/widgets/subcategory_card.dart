@@ -98,7 +98,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                         Label(
                           text:
                               '${widget.item.numberOfContent} ${LocaleKeys.ads.localize}',
-                          style: Styles.smallText(fontSize: 25.sp),
+                          style: Styles.smallText(fontSize: 25),
                         )
                       ],
                     ),

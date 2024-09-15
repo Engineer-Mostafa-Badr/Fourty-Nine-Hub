@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_reply_card.dart';
@@ -15,7 +17,6 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -60,7 +61,7 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
             iconTheme: const IconThemeData(color: Colors.grey),
             title: Label(
                 text:
-                    '${controller.repliesPagingController.itemList?.length ?? 0} Replies',
+                    '${controller.repliesPagingController.itemList?.length ?? 0} ${LocaleKeys.replies.localize}',
                 style: Styles.mediumText()),
             leading: IconButton(
                 onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
@@ -83,10 +84,10 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
                             padding: const EdgeInsets.only(top: 200),
                             child: Center(
                               child: Text(
-                                "No Replies",
+                                LocaleKeys.noReplied.localize,
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 18.sp,
+                                  fontSize: 18,
                                 ),
                               ),
                             ));
@@ -140,11 +141,11 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
                         onChanged: (v) {
                           setState(() {});
                         },
-                        style: Styles.headerText(fontSize: 26.sp),
+                        style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
                           fillColor: Colors.white,
                           contentPadding: const EdgeInsets.all(5),
-                          hintText: 'Type your reply ....',
+                          hintText: '${LocaleKeys.typeYourReply.localize} ....',
                           hintStyle: Styles.mediumText(),
                         ),
                       )),

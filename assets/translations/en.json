@@ -332,7 +332,7 @@
   "newGroup": "New Group",
   "newBroadcast": "New Broadcast",
   "linkedDevice": "Linked Device",
-  "starredMessages" : "Starred Messages",
+  "starredMessages": "Starred Messages",
   "profile": "Profile",
   "about": "About",
   "phone": "Phone",
@@ -463,6 +463,49 @@
   "following": "Following",
   "livesIn": "Lives in",
   "work": "Work",
+  "noReels": "No Reels",
+  "noTweets": "No Tweets",
+  "documentation": "Documentation",
+  "userName": "User Name",
+  "typeYourName": "Type Your Name",
+  "personalPhoto": "Personal Photo",
+  "id": "ID",
+  "front": "Front",
+  "back": "Back",
+  "requestVerification": "Request Verification",
+  "documentSuccessfully": "You have successfully uploaded your document. It is now awaiting administration review and approval.",
+  "noReportCategoriesAvailable": "No report categories available",
+  "Type report reason": "Type Report Reason",
+  "pleaseSelectReason": "Please select a reason!",
+  "reportSentSuccessfully": "Report sent successfully",
+  "play": "Play",
+  "showComments": "Show Comments",
+  "suggestedForYou": "Suggested For You",
+  "hours": "H",
+  "minute": "Min",
+  "tinder": {
+    "header": "Tinder",
+    "favorites": "Favorites",
+    "noData": "No Data Available",
+    "find": "Find"
+  },
+  "chat_alert_dialog": {
+    "pick_chat_type": "Pick a Chat Type:",
+    "anonymous": "Anonymous",
+    "regular": "Regular",
+    "error": {
+      "starting_anonymous": "Error starting anonymous chat: {error}",
+      "starting_normal": "Error starting normal chat: {error}",
+      "chat_id_empty": "Chat ID is empty."
+    }
+  },
+  "user_info": {
+    "date_of_birth": "Date of Birth",
+    "gender": "Gender",
+    "followers": "Followers",
+    "following": "Following",
+    "friends": "Friends"
+  },
   "google": "Google",
   "facebook": "Facebook",
   "orContinueWith": "Or Continue with"

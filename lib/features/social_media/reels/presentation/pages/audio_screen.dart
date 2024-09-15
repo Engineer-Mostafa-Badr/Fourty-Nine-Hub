@@ -348,6 +348,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
@@ -1101,11 +1102,17 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
                 ],
               ),
             ),
-            Positioned(
-              right: 8,
-              bottom: 0,
-              child: _buildActionButtons(),
-            ),
+            context.isArabic
+                ? Positioned(
+                    left: 8,
+                    bottom: 0,
+                    child: _buildActionButtons(),
+                  )
+                : Positioned(
+                    right: 8,
+                    bottom: 0,
+                    child: _buildActionButtons(),
+                  ),
           ],
         ),
       ),

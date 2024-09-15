@@ -841,6 +841,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     if (lastSeenModel != null) {
       emit(state.copyWith(
           lastSeenModel: lastSeenModel, lastSeenModelState: DataState.success));
+      // print(lastSeenModel.data!.first.status.toString()+"sssssssssssssssssssssssssssssssss");
     } else {
       emit(state.copyWith(lastSeenModelState: DataState.failure));
     }

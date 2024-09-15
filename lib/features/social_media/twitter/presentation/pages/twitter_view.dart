@@ -6,6 +6,8 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.d
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
@@ -82,7 +84,7 @@ class _TwitterViewState extends State<TwitterView> {
     return Padding(
       padding: EdgeInsets.all(10),
       child: Label(
-        text: 'Tweets',
+        text: LocaleKeys.Tweets.localize,
         style: Styles.headerText(),
       ),
     );
@@ -124,10 +126,10 @@ class _TwitterViewState extends State<TwitterView> {
                   noItemsFoundIndicatorBuilder: (context) {
                     return Center(
                       child: Text(
-                        "No Posts",
+                        LocaleKeys.noPosts.localize,
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 18.sp,
+                          fontSize: 18,
                         ),
                       ),
                     );
@@ -175,7 +177,7 @@ class _TwitterViewState extends State<TwitterView> {
                         );
                         if (state.shareSuccess == true) {
                           showSuccessMessage(
-                              context, "Post shared successfully");
+                              context, LocaleKeys.postSharedSuccessfully.localize);
                         }
                         setState(() {});
                       },
@@ -209,12 +211,6 @@ class _TwitterViewState extends State<TwitterView> {
                               },
                               onGetReplies: (String id,
                                   TwitterPostCommentEntity comment) async {
-                                // getCommentReplies(
-                                //   context: context,
-                                //   commentId: id,
-                                //   comment: comment,
-                                //   postId: postId, userData: userData,
-                                // );
                               },
                               newCommentId: '',
                               state: state,
@@ -243,9 +239,6 @@ class _TwitterViewState extends State<TwitterView> {
                       },
                       deletePost: (String id) {
                         controller.deletePost(context: context, postId: id);
-                        // setState(() {
-                        //
-                        // });
                       },
                       hidePost: (String id) {
                         controller.hidePost(context: context, postId: id);
@@ -295,10 +288,6 @@ class _TwitterViewState extends State<TwitterView> {
           onRefresh: () async => controller.onGlobalRefresh(),
           child: CustomScrollView(
             slivers: [
-              // _buildTwitterTitle(),
-              // const BuildTwitterDocumentCard(),
-              // Expanded(child: TwitterGlobalPosts(userData: userData!,)),
-
               SliverToBoxAdapter(
                 child: _buildTwitterTitle(),
               ),
@@ -311,10 +300,10 @@ class _TwitterViewState extends State<TwitterView> {
                   noItemsFoundIndicatorBuilder: (context) {
                     return Center(
                       child: Text(
-                        "No Posts",
+                        LocaleKeys.noPosts.localize,
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 18.sp,
+                          fontSize: 18,
                         ),
                       ),
                     );
@@ -367,7 +356,7 @@ class _TwitterViewState extends State<TwitterView> {
                         );
                         if (state.shareSuccess == true) {
                           showSuccessMessage(
-                              context, "Post shared successfully");
+                              context, LocaleKeys.postSharedSuccessfully.localize);
                         }
                         setState(() {});
                       },
@@ -401,12 +390,6 @@ class _TwitterViewState extends State<TwitterView> {
                               },
                               onGetReplies: (String id,
                                   TwitterPostCommentEntity comment) async {
-                                // getCommentReplies(
-                                //   context: context,
-                                //   commentId: id,
-                                //   comment: comment,
-                                //   postId: postId, userData: userData,
-                                // );
                               },
                               newCommentId: '',
                               state: state,
@@ -437,9 +420,6 @@ class _TwitterViewState extends State<TwitterView> {
                       },
                       deletePost: (String id) {
                         controller.deletePost(context: context, postId: id);
-                        // setState(() {
-                        //
-                        // });
                       },
                       hidePost: (String id) {
                         controller.hidePost(context: context, postId: id);

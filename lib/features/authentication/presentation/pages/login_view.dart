@@ -46,12 +46,15 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   // AuthType selectedAuth = AuthType.LOGIN;
   ScrollController scrollController = ScrollController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     scrollController.dispose();
-    log(widget.authType.toString(), name: "lllllllllllllllllllllllllllllllllllll");
+    log(widget.authType.toString(),
+        name: "lllllllllllllllllllllllllllllllllllll");
     // wid, required AuthType authTypeget.authType = widget.authType;
     // log(widget.authType.toString(), name: "lllllllllllllllllllllllllllllllllllll");
   }
@@ -64,7 +67,8 @@ class _LoginViewState extends State<LoginView> {
       log("lllllllllllllllllllllllllll");
       scrollController.jumpTo(409);
     }
-    log(MediaQuery.of(context).viewInsets.bottom.toString(), name: "OpenKeyboard");
+    log(MediaQuery.of(context).viewInsets.bottom.toString(),
+        name: "OpenKeyboard");
     return BlocListener<RegisterCubit, RegisterState>(
       listener: (context, state) async {
         if (state is RegisterError) {
@@ -126,8 +130,8 @@ class _LoginViewState extends State<LoginView> {
             child: Padding(
               padding: EdgeInsets.all(16.0.w),
               child: Form(
-                  key: loginCubit.formKey,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  key: formKey,
+                  // autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     children: [
                       Image.asset(
@@ -197,13 +201,13 @@ class _LoginViewState extends State<LoginView> {
                       widget.authType == AuthType.REGISTER
                           ? DefaultButton(
                               labelStyle: TextStyle(
-                                  fontSize: 50.sp.h,
+                                  fontSize: 35.sp,
                                   color: AppColors.AUTH_CONTAINER_COLOR),
                               label: LocaleKeys.register.localize,
                               width: double.infinity,
                               onPressed: () {
                                 if (registerCubit.accept) {
-                                  registerCubit.register();
+                                  registerCubit.register(formKey);
                                 } else {
                                   showErrorMessage(context,
                                       getFailureMessage(ServerFailure(message: LocaleKeys.terms.localize), context));
@@ -214,9 +218,9 @@ class _LoginViewState extends State<LoginView> {
                               width: double.infinity,
                               label: LocaleKeys.login.localize,
                               labelStyle: TextStyle(
-                                  fontSize: 50.sp.h,
+                                  fontSize: 35.sp,
                                   color: AppColors.AUTH_CONTAINER_COLOR),
-                              onPressed: loginCubit.login,
+                              onPressed: () => loginCubit.login(formKey),
                             ),
                     ],
                   )),
@@ -228,7 +232,10 @@ class _LoginViewState extends State<LoginView> {
   }
 
   chooseAuthWidget(
-      {required bool active, required String text, required BorderRadius borderRadius, void Function()? onTap}) {
+      {required bool active,
+      required String text,
+      required BorderRadius borderRadius,
+      void Function()? onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -241,7 +248,8 @@ class _LoginViewState extends State<LoginView> {
         child: Center(
           child: Text(
             text,
-            style: Styles.mediumText(color: active ? Colors.white : Colors.black),
+            style:
+                Styles.mediumText(color: active ? Colors.white : Colors.black),
           ),
         ),
       ),
@@ -262,14 +270,14 @@ class LoginWidget extends StatefulWidget {
 class _LoginWidgetState extends State<LoginWidget> {
   bool obsecure = false;
   @override
-  Widget build(BuildContext  context) {
+  Widget build(BuildContext context) {
     return Column(
       children: [
         FormTextField(
           constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.r),
-          style: const TextStyle(color: AppColors.QUANTITY_COLOR),
+          style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
           controller: widget.loginCubit.emailTextController,
           // label: 'E-mail or phone number',
           hint: LocaleKeys.emailOrPhone.localize,
@@ -285,7 +293,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.r),
-          style: const TextStyle( color: AppColors.QUANTITY_COLOR),
+          style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
           controller: widget.loginCubit.passwordTextController,
           // label: 'Password',
           hint: LocaleKeys.password.localize,
@@ -405,6 +413,8 @@ class RegisterWidget extends StatefulWidget {
 
 class _RegisterWidgetState extends State<RegisterWidget> {
   bool obsecure = true;
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final registerCubit = context.read<RegisterCubit>();
@@ -413,8 +423,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       child: Padding(
         padding: EdgeInsets.all(8.0.w),
         child: Form(
-          key: registerCubit.formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+          key: formKey,
+          // autovalidateMode: AutovalidateMode.onUserInteraction,
           child: SingleChildScrollView(
             child: Column(
               children: [
