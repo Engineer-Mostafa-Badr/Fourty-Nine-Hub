@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../core/localization/locale_keys.g.dart';
 import 'sheet_vertical_item.dart';
 
 class CustomVerticalSheetItem {
@@ -20,7 +22,7 @@ class CustomVerticalSheetItem {
       builder: (context) {
         return CupertinoActionSheet(
           cancelButton: CupertinoActionSheetAction(
-            child: Text("Cancel",
+            child: Text(LocaleKeys.cancel.localize,
             style: Styles.headerText(),
             ),
             onPressed: () {
@@ -60,7 +62,7 @@ class CustomVerticalSheetItem {
                         SizedBox.shrink(),
                       Label(
                         text: e.text,
-                        style: Styles.headerText( fontWeight: FontWeight.w400),
+                        style: Styles.headerText( fontWeight: FontWeight.w400,color: Theme.of(context).primaryColor),
                       ),
                     ],
                   ),

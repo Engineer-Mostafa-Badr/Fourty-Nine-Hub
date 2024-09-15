@@ -370,5 +370,22 @@ abstract class  LocaleKeys {
   static const newPassword = 'newPassword';
   static const createNewPassword = 'createNewPassword';
   static const passwordChangedSuccessfully = 'passwordChangedSuccessfully';
+  static const country = 'country';
+  static const birthDate = 'birthDate';
+  static const socialStatus = 'socialStatus';
+  static const job = 'job';
+  static const language = 'language';
+  static const receiveMessages = 'receiveMessages';
+  static const lastSeen = 'lastSeen';
+  static const friendsList = 'friendsList';
+  static const followerList = 'followerList';
+  static const friendRequest = 'friendRequest';
+  static const followRequest = 'followRequest';
+  static const public = 'public';
+  static const followers = 'followers';
+  static const onlyMe = 'onlyMe';
+  static const on = 'on';
+  static const off = 'off';
+  static const activity = 'activity';
 
 }

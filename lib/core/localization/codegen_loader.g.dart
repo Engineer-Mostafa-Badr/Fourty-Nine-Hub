@@ -385,7 +385,24 @@ class CodegenLoader extends AssetLoader{
   "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
   "newPassword": "كلمة مرور جديدة",
   "createNewPassword": "إنشاء كلمة مرور جديدة",
-  "passwordChangedSuccessfully": "تم تغيير كلمة المرور بنجاح"
+  "passwordChangedSuccessfully": "تم تغيير كلمة المرور بنجاح",
+  "country": "الدولة",
+  "birthDate": "تاريخ الميلاد",
+  "socialStatus": "الحالة الاجتماعية",
+  "job": "الوظيفة",
+  "language": "اللغة",
+  "receiveMessages": "استقبال الرسائل",
+  "lastSeen": "آخر ظهور",
+  "friendsList": "قائمة الأصدقاء",
+  "followerList": "قائمة المتابعين",
+  "friendRequest": "طلب الصداقة",
+  "followRequest": "طلب المتابعة",
+  "public": "عام",
+  "followers": "المتابعون",
+  "onlyMe": "أنا فقط",
+  "on": "تشغيل",
+  "off": "إيقاف",
+  "activity": "نشاط"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -760,7 +777,24 @@ static const Map<String,dynamic> en = {
   "confirmNewPassword": "Confirm New Password",
   "newPassword": "New Password",
   "createNewPassword": "Create New Password",
-  "passwordChangedSuccessfully": "Password Changed Successfully"
+  "passwordChangedSuccessfully": "Password Changed Successfully",
+  "country": "Country",
+  "birthDate": "Birth Date",
+  "socialStatus": "Social Status",
+  "job": "Job",
+  "language": "Language",
+  "receiveMessages": "Receive Messages",
+  "lastSeen": "Last Seen",
+  "friendsList": "Friends List",
+  "followerList": "Followers List",
+  "friendRequest": "Friend Request",
+  "followRequest": "Follow Request",
+  "public": "Public",
+  "followers": "Followers",
+  "onlyMe": "Only Me",
+  "on": "ON",
+  "off": "Off",
+  "activity": "Activity"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

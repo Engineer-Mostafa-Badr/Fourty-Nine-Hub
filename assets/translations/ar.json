@@ -370,5 +370,22 @@
   "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
   "newPassword": "كلمة مرور جديدة",
   "createNewPassword": "إنشاء كلمة مرور جديدة",
-  "passwordChangedSuccessfully": "تم تغيير كلمة المرور بنجاح"
+  "passwordChangedSuccessfully": "تم تغيير كلمة المرور بنجاح",
+  "country": "الدولة",
+  "birthDate": "تاريخ الميلاد",
+  "socialStatus": "الحالة الاجتماعية",
+  "job": "الوظيفة",
+  "language": "اللغة",
+  "receiveMessages": "استقبال الرسائل",
+  "lastSeen": "آخر ظهور",
+  "friendsList": "قائمة الأصدقاء",
+  "followerList": "قائمة المتابعين",
+  "friendRequest": "طلب الصداقة",
+  "followRequest": "طلب المتابعة",
+  "public": "عام",
+  "followers": "المتابعون",
+  "onlyMe": "أنا فقط",
+  "on": "تشغيل",
+  "off": "إيقاف",
+  "activity": "نشاط"
 }

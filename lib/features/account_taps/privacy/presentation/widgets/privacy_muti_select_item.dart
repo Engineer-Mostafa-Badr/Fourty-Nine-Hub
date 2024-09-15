@@ -1,8 +1,13 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import '../../../../../common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
 import '../../../../../common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../res/style/app_colors.dart';
 import '../../domain/entities/privacy_status_enum.dart';
 
 class PrivacyMultiSelectItem extends StatelessWidget {
@@ -21,73 +26,84 @@ class PrivacyMultiSelectItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(10),
-        onTap: () async {
-          final res =
-              await CustomVerticalSheetItem.normal<PrivacyStatus>(context, [
-            CustomSheetModel(
-              text: "Public",
-              value: PrivacyStatus.public,
-              iconData: Icons.language,
-            ),
-            CustomSheetModel(
-              text: "Friends",
-              value: PrivacyStatus.friends,
-              iconData: Icons.family_restroom,
-            ),
-            CustomSheetModel(
-              text: "Followers",
-              value: PrivacyStatus.followers,
-              iconData: Icons.accessibility_sharp,
-            ),
-            CustomSheetModel(
-              text: "Friends / Followers",
-              value: PrivacyStatus.friendsAndFollowers,
-              iconData: Icons.supervised_user_circle_outlined,
-            ),
-            CustomSheetModel(
-              text: "Only Me",
-              value: PrivacyStatus.onlyMe,
-              iconData: Icons.lock,
-            ),
-          ]);
-          if (res != null) {
-            onChoose(res);
-            log(res.toString());
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Label(text: label),
-              ),
-              Row(
+    return Column(
+      children: [
+        Sizer(),
+        Card(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.r),
+          ),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(10.r),
+            onTap: () async {
+              final res =
+                  await CustomVerticalSheetItem.normal<PrivacyStatus>(context, [
+                CustomSheetModel(
+                  text: LocaleKeys.public.localize,
+                  value: PrivacyStatus.public,
+                  iconData: Icons.language,
+                ),
+                CustomSheetModel(
+                  text: LocaleKeys.friends.localize,
+                  value: PrivacyStatus.friends,
+                  iconData: Icons.family_restroom,
+                ),
+                CustomSheetModel(
+                  text: LocaleKeys.followers.localize,
+                  value: PrivacyStatus.followers,
+                  iconData: Icons.accessibility_sharp,
+                ),
+                CustomSheetModel(
+                  text: "${LocaleKeys.friends.localize} / ${LocaleKeys.followers.localize}",
+                  value: PrivacyStatus.friendsAndFollowers,
+                  iconData: Icons.supervised_user_circle_outlined,
+                ),
+                CustomSheetModel(
+                  text: LocaleKeys.onlyMe.localize,
+                  value: PrivacyStatus.onlyMe,
+                  iconData: Icons.lock,
+                ),
+              ]);
+              if (res != null) {
+                onChoose(res);
+                log(res.toString());
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
                 children: [
-                  Label(text: getPrivacyName(privacyToPrivacyStatus(privacy))),
-                  const SizedBox(
-                    width: 10,
+                  Expanded(
+                    child: Label(
+                      text: label,
+                      style: TextStyle(fontSize: 35.sp),
+                    ),
                   ),
-                  Icon(
-                    getPrivacyIcon(privacyToPrivacyStatus(privacy)),
-                    color: Theme.of(context).primaryColor,
+                  Row(
+                    children: [
+                      Label(
+                        text: getPrivacyName(privacyToPrivacyStatus(privacy)),
+                        style: TextStyle(fontSize: 30.sp,color: AppColors.GREY_DARK_COLOR),
+                      ),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      Icon(
+                        getPrivacyIcon(privacyToPrivacyStatus(privacy)),
+                        color: AppColors.GREY_DARK_COLOR,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 15.w,
                   ),
                 ],
               ),
-              const SizedBox(
-                width: 15,
-              ),
-            ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 
@@ -106,20 +122,20 @@ class PrivacyMultiSelectItem extends StatelessWidget {
       default:
         return PrivacyStatus.public; // Default to a known status
     }
-}
-  String getPrivacyName(PrivacyStatus status) {
-    switch (status){
-      case PrivacyStatus.onlyMe:
-        return 'Only Me';
-      case PrivacyStatus.public:
-        return 'Public';
-      case PrivacyStatus.friends:
-        return 'Friends';
-      case PrivacyStatus.followers:
-        return 'Followers'; // Adjust if needed
-      case PrivacyStatus.friendsAndFollowers:
-        return 'Friends / Followers';
+  }
 
+  String getPrivacyName(PrivacyStatus status) {
+    switch (status) {
+      case PrivacyStatus.onlyMe:
+        return LocaleKeys.onlyMe.localize;
+      case PrivacyStatus.public:
+        return LocaleKeys.public.localize;
+      case PrivacyStatus.friends:
+        return LocaleKeys.friends.localize;
+      case PrivacyStatus.followers:
+        return LocaleKeys.followers.localize; // Adjust if needed
+      case PrivacyStatus.friendsAndFollowers:
+        return '${LocaleKeys.friends.localize} / ${LocaleKeys.followers.localize}';
     }
   }
 

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/useCase/update_privacy_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/cubit/privacy_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/cubit/privacy_state.dart';
-import '../../../../../res/strings/labels.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../domain/entities/privacy_status_enum.dart';
 import '../widgets/privacy_muti_select_item.dart';
@@ -17,8 +17,8 @@ class PrivacyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BackAppBar(
-          label: Labels.privacy,
+        appBar:  BackAppBar(
+          label: LocaleKeys.privacy.localize,
         ),
         body: BlocProvider<PrivacyCubit>(
           create: (BuildContext context) => serviceLocator()..loadData(),
@@ -31,7 +31,7 @@ class PrivacyView extends StatelessWidget {
                     child: Column(
                       children: [
                         PrivacyMultiSelectItem(
-                          label: 'Country',
+                          label: LocaleKeys.country.localize,
                           privacy: state.privacy?.privacyCountry ?? '',
                           onChoose: (PrivacyStatus value) {
                             context.read<PrivacyCubit>().updateDataPrivacy(
@@ -58,7 +58,7 @@ class PrivacyView extends StatelessWidget {
                           },
                         ),
                         PrivacyMultiSelectItem(
-                          label: 'Phone',
+                          label: LocaleKeys.phone.localize,
                           privacy: state.privacy?.privacyPhone ?? '',
                           onChoose: (PrivacyStatus value) {
                             context.read<PrivacyCubit>().updateDataPrivacy(
@@ -85,7 +85,7 @@ class PrivacyView extends StatelessWidget {
                           },
                         ),
                         PrivacyMultiSelectItem(
-                          label: 'Email',
+                          label: LocaleKeys.email.localize,
                           privacy: state.privacy?.privacyEmail ?? '',
                           onChoose: (PrivacyStatus value) {
                             context.read<PrivacyCubit>().updateDataPrivacy(
@@ -112,7 +112,7 @@ class PrivacyView extends StatelessWidget {
                           },
                         ),
                         PrivacyMultiSelectItem(
-                          label: 'Birth Date',
+                          label: LocaleKeys.birthDate.localize,
                           privacy: state.privacy?.privacyBirthDay ?? '',
                           onChoose: (PrivacyStatus value) {
                             context.read<PrivacyCubit>().updateDataPrivacy(
@@ -139,7 +139,7 @@ class PrivacyView extends StatelessWidget {
                           },
                         ),
                         PrivacyMultiSelectItem(
-                          label: 'Social Status',
+                          label: LocaleKeys.socialStatus.localize,
                           privacy: state.privacy?.privacySocialStatus ?? '',
                           onChoose: (PrivacyStatus value) {
                             context.read<PrivacyCubit>().updateDataPrivacy(
@@ -166,7 +166,7 @@ class PrivacyView extends StatelessWidget {
                           },
                         ),
                         PrivacyMultiSelectItem(
-                          label: 'Job',
+                          label: LocaleKeys.job.localize,
                           privacy: state.privacy?.privacyJob ?? '',
                           onChoose: (PrivacyStatus value) {
                             context.read<PrivacyCubit>().updateDataPrivacy(
@@ -193,7 +193,7 @@ class PrivacyView extends StatelessWidget {
                           },
                         ),
                         PrivacyMultiSelectItem(
-                          label: 'City',
+                          label: LocaleKeys.city.localize,
                           privacy: state.privacy?.privacyCity ?? '',
                           onChoose: (PrivacyStatus value) {
                             context.read<PrivacyCubit>().updateDataPrivacy(
@@ -220,7 +220,7 @@ class PrivacyView extends StatelessWidget {
                           },
                         ),
                         PrivacyMultiSelectItem(
-                          label: 'Gender',
+                          label: LocaleKeys.gender.localize,
                           privacy: state.privacy?.privacyIsMale ?? '',
                           onChoose: (PrivacyStatus value) {
                             context.read<PrivacyCubit>().updateDataPrivacy(
@@ -247,7 +247,7 @@ class PrivacyView extends StatelessWidget {
                           },
                         ),
                         PrivacyMultiSelectItem(
-                          label: 'Language',
+                          label: LocaleKeys.language.localize,
                           privacy: state.privacy?.privacyLanguage ?? '',
                           onChoose: (PrivacyStatus value) {
                             context.read<PrivacyCubit>().updateDataPrivacy(
@@ -274,7 +274,7 @@ class PrivacyView extends StatelessWidget {
                           },
                         ),
                         PrivacyMultiSelectItem(
-                          label: 'Receive Messages',
+                          label: LocaleKeys.receiveMessages.localize,
                           privacy: state.privacy?.privacyReceiveMessages ?? '',
                           onChoose: (PrivacyStatus value) {
                             context.read<PrivacyCubit>().updateDataPrivacy(
@@ -301,7 +301,7 @@ class PrivacyView extends StatelessWidget {
                           },
                         ),
                         PrivacyMultiSelectItem(
-                          label: 'Last Seen',
+                          label: LocaleKeys.lastSeen.localize,
                           privacy: state.privacy?.privacyLastSeen ?? '',
                           onChoose: (PrivacyStatus value) {
                             context.read<PrivacyCubit>().updateDataPrivacy(
@@ -328,7 +328,7 @@ class PrivacyView extends StatelessWidget {
                           },
                         ),
                         PrivacyMultiSelectItem(
-                          label: 'Friends List',
+                          label: LocaleKeys.friendsList.localize,
                           privacy: state.privacy?.privacyFriendList ?? '',
                           onChoose: (PrivacyStatus value) {
                             context.read<PrivacyCubit>().updateDataPrivacy(
@@ -355,7 +355,7 @@ class PrivacyView extends StatelessWidget {
                           },
                         ),
                         PrivacyMultiSelectItem(
-                          label: 'Followers List',
+                          label: LocaleKeys.followerList.localize,
                           privacy: state.privacy?.privacyFollowerList ?? '',
                           onChoose: (PrivacyStatus value) {
                             context.read<PrivacyCubit>().updateDataPrivacy(
@@ -382,7 +382,7 @@ class PrivacyView extends StatelessWidget {
                           },
                         ),
                         PrivacyMultiSelectItem(
-                          label: 'Activity',
+                          label: LocaleKeys.activity.localize,
                           privacy: state.privacy?.privacyActivity ?? '',
                           onChoose: (PrivacyStatus value) {
                             context.read<PrivacyCubit>().updateDataPrivacy(
@@ -409,7 +409,7 @@ class PrivacyView extends StatelessWidget {
                           },
                         ),
                         PrivacyMultiSelectItem(
-                          label: 'Call',
+                          label: LocaleKeys.call.localize,
                           privacy: state.privacy?.privacyCall ?? '',
                           onChoose: (PrivacyStatus value) {
                             context.read<PrivacyCubit>().updateDataPrivacy(
@@ -436,7 +436,7 @@ class PrivacyView extends StatelessWidget {
                           },
                         ),
                         PrivacySwitchItem(
-                          label: 'Friend Request',
+                          label: LocaleKeys.friendRequest.localize,
                           privacy: state.privacy?.privacyFriendRequest ?? false,
                           onPress: (v) {
                             context.read<PrivacyCubit>().updateDataPrivacy(
@@ -463,7 +463,7 @@ class PrivacyView extends StatelessWidget {
                           },
                         ),
                         PrivacySwitchItem(
-                          label: 'Follow',
+                          label: LocaleKeys.followRequest.localize,
                           privacy: state.privacy?.privacyFollowRequest ?? true,
                           onPress: (v) {
                             context.read<PrivacyCubit>().updateDataPrivacy(

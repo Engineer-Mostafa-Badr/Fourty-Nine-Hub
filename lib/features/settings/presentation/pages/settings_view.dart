@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/settings/domain/entities/disable_entity.dart';
 import 'package:fourtyninehub/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:fourtyninehub/features/settings/presentation/cubit/settings_state.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -17,7 +15,6 @@ import '../../../../common/theme/cubit/cubit.dart';
 import '../../../../common/theme/cubit/states.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../res/style/styles.dart';
 
@@ -49,22 +46,6 @@ class SettingsView extends StatelessWidget {
               print('Account isDisabled status: ${state.able?.isDisabled}');
               return Column(
                 children: [
-                  listTileWidget(
-                    image: Assets.notification,
-                    trailing: FutureBuilder(
-                        future: Permission.notification.isGranted,
-                        builder: (context, snap) {
-                          final isGranted = snap.data ?? false;
-                          return Switch(
-                              activeColor: AppColors.SECONDARY_COLOR,
-                              activeTrackColor: Colors.grey,
-                              value: isGranted,
-                              onChanged: (v) async =>
-                                  await Permission.notification.request());
-                        }),
-                    label: LocaleKeys.enableNotifications.localize,
-                    onTap: () async => await Permission.notification.request(),
-                  ),
                   BlocBuilder<ThemeCubit, ThemeStates>(
                     builder: (BuildContext context, theme) {
                       return SwitchListTile(
