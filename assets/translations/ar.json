@@ -110,7 +110,7 @@
   "tweet": "تغريدة",
   "reels": "ريلز",
   "chat": "دردشة",
-  "find": "ايجاد",
+  "find": "اكتشف",
   "health": "صحه",
   "ship": "تحميله",
   "ride": "توصيله",
@@ -365,6 +365,29 @@
   "contacts": "جهات الاتصال",
   "pleaseLoginRegisterToEnjoyTheApp": "من فضلك قم بتسجيل الدخول او التسجيل للتفاعل معنا",
   "noChatsUntilNow": "لا توجد محادثات حتى الآن",
+  "tinder": {
+    "header": "تيندر",
+    "favorites": "المفضلة",
+    "noData": "لا توجد بيانات متاحة",
+    "find": "ابحث"
+  },
+  "chat_alert_dialog": {
+    "pick_chat_type": "اختر نوع الدردشة:",
+    "anonymous": "مجهول",
+    "regular": "عادي",
+    "error": {
+      "starting_anonymous": "حدث خطأ أثناء بدء الدردشة المجهولة: {error}",
+      "starting_normal": "حدث خطأ أثناء بدء الدردشة العادية: {error}",
+      "chat_id_empty": "معرف الدردشة فارغ."
+    }
+  },
+  "user_info": {
+    "date_of_birth": "تاريخ الميلاد",
+    "gender": "الجنس",
+    "followers": "المتابعين",
+    "following": "المتابَعون",
+    "friends": "الأصدقاء"
+  },
   "unarchive": "إلغاء الأرشفة",
   "checkRequest": "يرجى الانتظار للتحقق من الطلب",
 
