@@ -79,7 +79,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                             text: "No friends suggested",
                                             style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 18.sp,
+                                              fontSize: 18,
                                             ),
                                           ),
                                         ));
@@ -109,7 +109,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                         ),
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                              CrossAxisAlignment.center,
                                           children: [
                                             Align(
                                               alignment:
@@ -140,8 +140,8 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                             Expanded(
                                               child: ImageFromInternet(
                                                 image: item.profilePicture,
-                                                // height: 220.h,
-                                                // width: 300,
+                                                height: 120.h,
+                                                width: 120.w,
                                                 isCircle: true,
                                               ),
                                             ),
@@ -150,7 +150,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                   horizontal: 8.0),
                                               child: Column(
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                    CrossAxisAlignment.center,
                                                 children: [
                                                   SizedBox(
                                                     height: 10.h,
@@ -177,7 +177,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                       FontWeight
                                                                           .bold,
                                                                   fontSize:
-                                                                      14.sp),
+                                                                      14),
                                                         )
                                                       : Row(
                                                           children: [
@@ -304,7 +304,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                               : "Send Greet Message",
                                                                           style: Styles.mediumText(
                                                                               color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
-                                                                              fontSize: 22.sp,
+                                                                              fontSize: 22,
                                                                               fontWeight: FontWeight.bold),
                                                                         ),
                                                                       ),

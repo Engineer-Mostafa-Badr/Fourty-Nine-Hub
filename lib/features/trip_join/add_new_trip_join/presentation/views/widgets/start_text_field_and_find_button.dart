@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class StartTextFieldAndFindButon extends StatefulWidget {
   const StartTextFieldAndFindButon({
     super.key,
   });
 
   @override
-  State<StartTextFieldAndFindButon> createState() =>
-      _StartTextFieldAndFindButonState();
+  State<StartTextFieldAndFindButon> createState() => _StartTextFieldAndFindButonState();
 }
 
-class _StartTextFieldAndFindButonState
-    extends State<StartTextFieldAndFindButon> {
+class _StartTextFieldAndFindButonState extends State<StartTextFieldAndFindButon> {
   late TextEditingController startingController;
   late final StartingLocationCubit startingLocationCubit;
   final formKey = GlobalKey<FormState>();
@@ -39,7 +38,7 @@ class _StartTextFieldAndFindButonState
     return Form(
       key: formKey,
       child: SizedBox(
-        // height: 45.h,
+        height: 80.h,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -57,15 +56,14 @@ class _StartTextFieldAndFindButonState
                 },
               ),
             ),
-            Sizer(width: 5),
+            const Sizer(width: 5),
             CustomButton(
               onTap: () {
                 if (formKey.currentState!.validate()) {
-                  startingLocationCubit.getStartingLocation(
-                      address: startingController.text);
+                  startingLocationCubit.getStartingLocation(address: startingController.text);
                 }
               },
-              height: 45.h,
+              height: double.infinity,
             ),
           ],
         ),
@@ -85,7 +83,7 @@ class _StartTextFieldAndFindButonState
       return SizedBox(
         width: 10,
         height: 10.h,
-        child: Center(
+        child: const Center(
           child: CircularProgressIndicator(
             color: AppColors.PRIMARY_COLOR,
             strokeWidth: 3,

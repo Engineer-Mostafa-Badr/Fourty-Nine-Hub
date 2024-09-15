@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 
 class SendMessageUseCase extends UseCase<bool, SendMessageParams> {
 
@@ -20,29 +22,23 @@ class SendMessageUseCase extends UseCase<bool, SendMessageParams> {
 
 class SendMessageParams {
   final String message;
-  final String chatId;
+  final ChatEntity chat;
   final String? replyMessageId;
-  List<String> mediaIds;
-  final String? groupId;
+  List<File> media;
   final bool oneTimeView;
 
   SendMessageParams({
     required this.message,
     this.replyMessageId,
-    required this.chatId,
-    required this.mediaIds,
-    this.groupId,
+    required this.chat,
+    required this.media,
     required this.oneTimeView,
   });
 
-  String toSocketParams() {
-    return json.encode({
-      "chatId": chatId,
-      "type": 1,
-      "mediaIds": mediaIds,
-      "text": message,
-      "groupId": null,
-      // if (replyMessageId != null) "replyMessageId": replyMessageId
-    });
+
+ @override
+  String toString() {
+    return "message: $message, chat: ${chat.id}, replyMessageId: $replyMessageId, media: $media, oneTimeView: $oneTimeView";
   }
+
 }

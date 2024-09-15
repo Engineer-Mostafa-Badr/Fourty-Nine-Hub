@@ -26,7 +26,6 @@ import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
-import '../../../../../../res/style/const.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 import '../../../domain/usecases/post_react_usecase.dart';
@@ -393,7 +392,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   Widget _buildPostOptions(
       {required bool fromDetails, required PostEntity post}) {
     return SizedBox(
-      height: widget.isMyPost ? 150 : 150,
+      height: widget.isMyPost ? 270.h : 270.h,
       child: Column(
         children: [
           if (!widget.isMyPost)
@@ -652,7 +651,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             images!.isEmpty
         ? Container(
             width: double.infinity,
-            height: 220.h,
+            height: 260.h,
             alignment: Alignment.center,
             margin: EdgeInsets.symmetric(vertical: 10.h),
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
@@ -663,7 +662,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               text: content,
               style: Styles.headerText(
                   color: Colors.black,
-                  fontSize: 30.sp,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold),
             ),
           )
@@ -775,7 +774,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             FaIcon(
               icon,
               color: AppColors.GREY_DARK_COLOR,
-              size: 20,
+              size: 20.w,
             ),
           Label(text: label, style: Styles.mediumText(color: Colors.grey))
         ],
@@ -788,9 +787,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           children: [
             if (image != null)
               Image.asset(
-                image ?? '',
-                width: 22,
-                height: 22.h,
+                image,
+                width: 40.w,
+                height: 40.h,
               ),
             if (image == null)
               FaIcon(

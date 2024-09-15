@@ -5,7 +5,7 @@ class Sizer extends StatelessWidget {
   final double? height;
   final double? width;
 
-  Sizer({
+  const Sizer({
     super.key,
     this.height = 10,
     this.width = 10,

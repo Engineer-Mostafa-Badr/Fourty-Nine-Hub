@@ -26,7 +26,7 @@ ThemeData darkTheme() {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.AUTH_CONTAINER_COLOR,
+      fillColor: AppColors.GREY_DARK_COLOR,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8.0),
         borderSide: const BorderSide(
@@ -40,11 +40,14 @@ ThemeData darkTheme() {
       secondary: AppColors.AUTH_CONTAINER_COLOR,
     ),
     drawerTheme:
-        const DrawerThemeData(backgroundColor: AppColors.QUANTITY_COLOR),
+        const DrawerThemeData(backgroundColor: AppColors.QUANTITY_COLOR,),
     actionIconTheme: const ActionIconThemeData(),
     bottomAppBarTheme: const BottomAppBarTheme(),
     canvasColor: Colors.black38,
     bannerTheme: const MaterialBannerThemeData(),
+    switchTheme: const SwitchThemeData(
+      trackColor: MaterialStatePropertyAll<Color>(Colors.grey),
+    ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(),
     cardColor: Colors.white,
     dialogTheme: const DialogTheme(),

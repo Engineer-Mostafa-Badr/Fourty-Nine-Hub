@@ -460,7 +460,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 250.h,
+            height: 350.h,
             child: Stack(
               children: [
                 Positioned.fill(
@@ -558,7 +558,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           ? 'unFollow'
                                           : 'Follow',
                                       style: Styles.mediumText(
-                                          color: Colors.white, fontSize: 24.sp),
+                                          color: Colors.white, fontSize: 24),
                                       onPressed: () {
                                         onFollow();
                                       }),
@@ -620,7 +620,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                                     : null,
                                             style: Styles.mediumText(
                                                 color: Colors.white,
-                                                fontSize: 24.sp),
+                                                fontSize: 24),
                                             label: user.isSenTRequest == true
                                                 ? 'Accept Request'
                                                 : user.areFriends == true
@@ -753,7 +753,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                       text: '\t(${user.job})',
                                       style: Styles.headerText(
                                           color: Colors.black,
-                                          fontSize: 26.sp)),
+                                          fontSize: 26)),
                               ])),
                     ),
                     if (loginUser?.id != widget.userId)
@@ -841,7 +841,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             Label(
                                 text: 'Lives in',
                                 style: Styles.headerText(
-                                    color: Colors.grey, fontSize: 30.sp)),
+                                    color: Colors.grey, fontSize: 30)),
                             Sizer(
                               height: 5.h,
                             ),
@@ -849,7 +849,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               child: Label(
                                 text: user.city,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30.sp),
+                                    color: Colors.black, fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -872,7 +872,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             Label(
                                 text: 'From',
                                 style: Styles.headerText(
-                                    color: Colors.grey, fontSize: 30.sp)),
+                                    color: Colors.grey, fontSize: 30)),
                             Sizer(
                               height: 5.h,
                             ),
@@ -880,7 +880,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               child: Label(
                                 text: user.country,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30.sp),
+                                    color: Colors.black, fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -903,7 +903,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             Label(
                                 text: 'Work',
                                 style: Styles.headerText(
-                                    color: Colors.grey, fontSize: 30.sp)),
+                                    color: Colors.grey, fontSize: 30)),
                             Sizer(
                               height: 5.h,
                             ),
@@ -911,7 +911,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               child: Label(
                                 text: user.job,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30.sp),
+                                    color: Colors.black, fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -934,13 +934,13 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             Label(
                                 text: 'Phone',
                                 style: Styles.headerText(
-                                    color: Colors.grey, fontSize: 30.sp)),
+                                    color: Colors.grey, fontSize: 30)),
                             Sizer(),
                             Expanded(
                               child: Label(
                                 text: user.phone,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30.sp),
+                                    color: Colors.black, fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -964,7 +964,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               child: Label(
                                 text: user.maritalStatus,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30.sp),
+                                    color: Colors.black, fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),

@@ -30,7 +30,7 @@ class SubscriptionInterceptor extends Interceptor {
           .map((e) => (e as String).toWalletType)
           .toList();
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-          subCategoryId: err.response?.data['subCategoryId'], wallets: wallets);
+          subCategoryId: err.response?.data['subCategoryId'],wallets: wallets);
     }
     super.onError(err, handler);
   }

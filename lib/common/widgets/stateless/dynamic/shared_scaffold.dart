@@ -9,13 +9,16 @@ class SharedScaffold extends StatelessWidget {
   final bool extendBody;
   final bool isWithBackArrow;
   final Color? backgroundColor;
-  const SharedScaffold(
-      {super.key,
-      required this.mainCategoryId,
-      this.extendBody = false,
-      this.isWithBackArrow = true,
-      required this.body,
-      this.backgroundColor});
+  final Widget? floatingActionButton;
+  const SharedScaffold({
+    super.key,
+    required this.mainCategoryId,
+    this.extendBody = false,
+    this.isWithBackArrow = true,
+    required this.body,
+    this.backgroundColor,
+    this.floatingActionButton,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +30,7 @@ class SharedScaffold extends StatelessWidget {
       appBar: HomeAppbar(
         isWithBackArrow: isWithBackArrow,
       ),
+      floatingActionButton: floatingActionButton,
     );
   }
 }

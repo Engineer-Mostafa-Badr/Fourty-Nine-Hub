@@ -7,9 +7,11 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/subscripe/domain/usecases/subscribe_usecase.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -39,15 +41,37 @@ class SubscriptionPlansWidget extends StatefulWidget {
 class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
   bool _isPremium = true;
 
+  WalletTypes? selectedWallet;
+
+  @override
+  void initState() {
+    selectedWallet=widget.paymentMenthods?[0];
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WalletCubit, WalletState>(
+    return BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
       builder: (BuildContext context, state) {
         return Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: ListView(
             children: [
               SizedBox(height: 20.h),
+          DropdownMenu<WalletTypes>(
+              hintText: "Select Wallet",
+              expandedInsets: const EdgeInsets.only(),
+              dropdownMenuEntries: widget.paymentMenthods
+                  !.map((e) => DropdownMenuEntry<WalletTypes>(
+                  value: e, label: e.translatedName))
+                  .toList(),
+              initialSelection: selectedWallet,
+              onSelected: (value) {
+                selectedWallet = value;
+                print(selectedWallet);
+                setState(() {});
+                // context.read<WalletCubit>().onSelectWallet(value!);
+              }),
               Text(
                 widget.title ?? "",
                 textAlign: TextAlign.center,
@@ -131,33 +155,41 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
 
                   if (selectedIndex != -1 && selectedIndex < list.length) {
                     final selectedPlanPrice = list[selectedIndex];
-                    final walletPrice = state.wallet?.realAmount ?? 0;
-
+                    print('selectedWallet$selectedWallet');
+                    final walletPrice = selectedWallet?.name=='mainWallet'?state.wallet?.realAmount ?? 0:selectedWallet?.name=='balance'?state.balance?.balance??0:state.gift?.giftWallet.amount??0;
+                    print(walletPrice);
+                    print(state.gift?.giftWallet.amount);
+                    print(state.wallet?.realAmount);
+                    print(state.balance?.balance);
                     // print(walletPrice);
                     // print(selectedPlanPrice);
                     // print(_groupValue);
 
-                    if (selectedPlanPrice <= walletPrice) {
+                    if (selectedPlanPrice < walletPrice) {
+                      print('selectedWallet${selectedWallet!.name}');
                       showLoadingDialog(context);
                       await context.read<WalletCubit>().addSubscription(
                             params: AddSubscriptionParams(
                               subCategoryId: widget.subCategoryId,
-                              paymentMethod: 'mainWallet',
+                              paymentMethod: selectedWallet!.name,
                               isPremium: _isPremium,
                               period: _groupValue,
                               periodType: 'days',
                             ),
                           );
                       if (context.mounted) {
-                        context.pop();
+                        context.go(Routes.HOME);
+                        // context.pushReplacement(Routes.HOME);
+                        context.read<MainCategoriesCubit>()..loadData();
+                        // Phoenix.rebirth(context);
                       }
-                      context.pop();
+                      // context.pop();
                     } else {
                       await serviceLocator<SubscriptionController>().subscribe(
                         subscribeParams: SubscribeParams(
                           subCategoryId: widget.subCategoryId,
                           isPremium: _isPremium,
-                          walletType: WalletTypes.mainWallet,
+                          walletType: selectedWallet!,
                           days: _groupValue,
                         ),
                       );
@@ -224,7 +256,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
     required int value,
   }) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Row(
         children: [
           Radio<int>(

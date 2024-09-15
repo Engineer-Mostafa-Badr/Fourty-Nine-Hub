@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/main_category_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/delete_subscription_use_case.dart';
@@ -48,6 +49,10 @@ class WalletCubit extends Cubit<WalletState> {
     return da!;
   }
 
+
+  onSelectWallet(WalletTypes wallet){
+    emit(state.copyWith(selectedWallet: wallet,));
+  }
   Future<List<WalletHistoryEntity>> fetchWalletHistory({required PaginationParams paginationParams}) async {
     final response = await _walletHistoryUseCase(
       WalletHistoryParams(paginationParams: paginationParams),

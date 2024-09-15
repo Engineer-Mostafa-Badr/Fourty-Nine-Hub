@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class AvaialbleTripsButton extends StatelessWidget {
   const AvaialbleTripsButton({
     super.key,
@@ -31,13 +32,11 @@ class AvaialbleTripsButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            icon != null
-                ? Icon(icon, color: Colors.white, size: 20)
-                : SizedBox(),
-            Sizer(width: 5),
+            icon != null ? Icon(icon, color: Colors.white, size: 20) : const SizedBox(),
+            const Sizer(width: 5),
             Text(
               title,
-              style: Styles.headerText(color: Colors.white, fontSize: 30.sp),
+              style: Styles.headerText(color: Colors.white, fontSize: 30),
               textAlign: TextAlign.center,
             ),
           ],

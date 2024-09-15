@@ -36,7 +36,7 @@ class FacebookTweetCard extends StatelessWidget {
           Label(
             text: "@Tweet",
             style: Styles.headerText(
-              fontSize: 22.sp,
+              fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
           ),

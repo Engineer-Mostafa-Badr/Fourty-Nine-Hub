@@ -2,6 +2,7 @@
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // Package imports:
 
@@ -113,8 +114,8 @@ class _ZegoLiveStreamingInRoomMessageInputBoardButtonState
                 }
               : null,
           icon: buttonIcon,
-          iconSize: widget.iconSize ?? Size(72.zR, 72.zR),
-          buttonSize: widget.buttonSize ?? Size(96.zR, 96.zR),
+          iconSize: widget.iconSize ?? Size(72.w, 72.h),
+          buttonSize: widget.buttonSize ?? Size(96.w, 96.h),
         );
       },
     );

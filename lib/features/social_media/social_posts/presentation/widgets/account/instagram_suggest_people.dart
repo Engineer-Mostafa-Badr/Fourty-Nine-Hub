@@ -59,7 +59,7 @@ class _InstagramProfileSuggestPeopleState
                       ),
                       Container(
                         alignment: AlignmentDirectional.topStart,
-                        height: 200.h,
+                        height: 240.h,
                         child: PagedListView<int, SuggestUserEntity>(
                           scrollDirection: Axis.horizontal,
                           padding: EdgeInsets.symmetric(
@@ -81,7 +81,7 @@ class _InstagramProfileSuggestPeopleState
                                             text: "No friends suggested",
                                             style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 18.sp,
+                                              fontSize: 18,
                                             ),
                                           ),
                                         ));
@@ -111,7 +111,7 @@ class _InstagramProfileSuggestPeopleState
                                         ),
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                              CrossAxisAlignment.center,
                                           children: [
                                             Align(
                                               alignment:
@@ -143,6 +143,8 @@ class _InstagramProfileSuggestPeopleState
                                               child: ImageFromInternet(
                                                 image: item.profilePicture,
                                                 // height: 220.h,
+                                                width: 120.w,
+                                                height: 120.h,
                                                 isCircle: true,
                                               ),
                                             ),
@@ -151,7 +153,7 @@ class _InstagramProfileSuggestPeopleState
                                                   horizontal: 8.0),
                                               child: Column(
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                    CrossAxisAlignment.center,
                                                 children: [
                                                   SizedBox(
                                                     height: 10.h,
@@ -178,7 +180,7 @@ class _InstagramProfileSuggestPeopleState
                                                                       FontWeight
                                                                           .bold,
                                                                   fontSize:
-                                                                      14.sp),
+                                                                      14),
                                                         )
                                                       : Row(
                                                           children: [
@@ -308,7 +310,7 @@ class _InstagramProfileSuggestPeopleState
                                                                               : "Send Greet Message",
                                                                           style: Styles.mediumText(
                                                                               color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
-                                                                              fontSize: 22.sp,
+                                                                              fontSize: 22,
                                                                               fontWeight: FontWeight.bold),
                                                                         ),
                                                                       ),

@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_state.dart';
-import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_dialogue.dart';
+import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_sheet.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -84,12 +84,12 @@ class ClubHouseHome extends StatelessWidget {
       shrinkWrap: true,
       builderDelegate: PagedChildBuilderDelegate(
         noItemsFoundIndicatorBuilder: (context) {
-          return  Center(
+          return Center(
             child: Text(
               "No Rooms",
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 18.sp,
+                fontSize: 25.sp,
               ),
             ),
           );

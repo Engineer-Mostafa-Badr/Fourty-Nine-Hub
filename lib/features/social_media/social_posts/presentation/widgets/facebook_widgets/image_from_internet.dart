@@ -74,7 +74,7 @@ class ImageFromInternet extends StatelessWidget {
           shape: isCircle==true?BoxShape.circle:BoxShape.rectangle,
           image: DecorationImage(
             image: AssetImage(Assets.logo),
-            fit: BoxFit.contain,
+            fit: BoxFit.fill,
           ),
         ),
       ),
