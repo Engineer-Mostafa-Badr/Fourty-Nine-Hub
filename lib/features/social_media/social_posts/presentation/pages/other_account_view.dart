@@ -7,6 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
@@ -66,7 +68,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         SliverToBoxAdapter(
                             child: Container(
                                 width: double.infinity,
-                                padding: EdgeInsetsDirectional.only(
+                                padding: const EdgeInsetsDirectional.only(
                                     top: 35, end: 10, start: 10),
                                 child: Row(
                                     mainAxisAlignment:
@@ -93,7 +95,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                                     state.profileData?.id)
                                                   PopupMenuItem<int>(
                                                     value: 4,
-                                                    child: const Text("Report"),
+                                                    child: Text(LocaleKeys.report.localize),
                                                     onTap: () {
                                                       bottomSheet(
                                                           context: context,
@@ -112,8 +114,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                                                 .profileData
                                                                 ?.isBlock ==
                                                             true
-                                                        ? 'UnBlock'
-                                                        : 'Block'),
+                                                        ? LocaleKeys.unBlock.localize
+                                                        : LocaleKeys.block.localize),
                                                     onTap: () async {
                                                       // context.pop();
                                                       var result =
@@ -133,13 +135,13 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                                               ?.isBlock = true;
                                                           showSuccessMessage(
                                                               context,
-                                                              'Blocked user successfully.');
+                                                              LocaleKeys.blockedSuccessfully.localize);
                                                         } else {
                                                           state.profileData
                                                               ?.isBlock = false;
                                                           showSuccessMessage(
                                                               context,
-                                                              'Unblocked user successfully.');
+                                                              LocaleKeys.unBlockedSuccessfully.localize);
                                                         }
                                                       }
                                                     },
@@ -148,8 +150,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                                     state.profileData?.id)
                                                   PopupMenuItem<int>(
                                                     value: 5,
-                                                    child: const Text(
-                                                        'Edit Profile'),
+                                                    child: Text(
+                                                        LocaleKeys.editProfile.localize),
                                                     onTap: () async {
                                                       await context.push(
                                                           Routes.EDITPROFILE);
@@ -293,7 +295,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                             ListTile(
                                               leading: const Icon(
                                                   Icons.photo_library),
-                                              title: const Text('Gallery'),
+                                              title: Text(LocaleKeys.gallery.localize),
                                               onTap: () async {
                                                 Navigator.pop(context);
                                                 await controller.uploadPhoto(
@@ -304,7 +306,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                             ListTile(
                                               leading:
                                                   const Icon(Icons.camera_alt),
-                                              title: const Text('Camera'),
+                                              title: Text(LocaleKeys.camera.localize),
                                               onTap: () async {
                                                 Navigator.pop(context);
                                                 await controller.uploadPhoto(
@@ -326,7 +328,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                             ListTile(
                                               leading: const Icon(
                                                   Icons.photo_library),
-                                              title: const Text('Gallery'),
+                                              title: Text(LocaleKeys.gallery.localize),
                                               onTap: () async {
                                                 Navigator.pop(context);
                                                 await controller
@@ -338,7 +340,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                             ListTile(
                                               leading:
                                                   const Icon(Icons.camera_alt),
-                                              title: const Text('Camera'),
+                                              title: Text(LocaleKeys.camera.localize),
                                               onTap: () async {
                                                 Navigator.pop(context);
                                                 await controller
@@ -357,7 +359,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 8.0, vertical: 6.h),
                                   child: AppButton(
-                                    label: 'Edit Profile',
+                                    label: LocaleKeys.editProfile.localize,
                                     onPressed: () async {
                                       await context.push(Routes.EDITPROFILE);
                                       controller.getUserProfile(
@@ -382,14 +384,14 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           controller.changeUserPage(i);
                                         },
                                         tabs: [
-                                          const Tab(
-                                            text: 'Posts',
+                                          Tab(
+                                            text: LocaleKeys.posts.localize,
                                           ),
-                                          const Tab(
-                                            text: 'Tweets',
+                                          Tab(
+                                            text: LocaleKeys.Tweets.localize,
                                           ),
-                                          const Tab(
-                                            text: 'Reels',
+                                          Tab(
+                                            text: LocaleKeys.reels.localize,
                                           ),
                                           if (context
                                                   .read<UserCubit>()
@@ -397,18 +399,18 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                                   .data
                                                   ?.id ==
                                               widget.userId)
-                                            const Tab(
-                                              text: 'Saved Reels',
+                                            Tab(
+                                              text: LocaleKeys.savedReels.localize,
                                             ),
                                         ]),
                                     // _buildAccountPages(state.profileData!),
                                   ],
                                 )
-                              : const Center(
+                              :  Center(
                                   child: Padding(
-                                    padding: EdgeInsets.only(top: 25.0),
+                                    padding: const EdgeInsets.only(top: 25.0),
                                     child: Label(
-                                      text: 'You have blocked this user.',
+                                      text: LocaleKeys.youHaveBlockedThisUser.localize,
                                     ),
                                   ),
                                 ),
@@ -524,7 +526,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 selectCoverImage();
                               },
                               child: Container(
-                                  padding: EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(5),
                                   decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: AppColors.PRIMARY_COLOR),
@@ -539,7 +541,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     Expanded(
                         child: Padding(
                       padding:
-                          EdgeInsetsDirectional.only(top: 3.0, end: 10),
+                          const EdgeInsetsDirectional.only(top: 3.0, end: 10),
                       child: loginUser?.id == user.id
                           ? Container()
                           : Row(
@@ -555,15 +557,15 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           ? AppColors.PRIMARY_COLOR
                                           : null,
                                       label: user.isFollowed == true
-                                          ? 'unFollow'
-                                          : 'Follow',
+                                          ? LocaleKeys.unFollow.localize
+                                          : LocaleKeys.follow.localize,
                                       style: Styles.mediumText(
                                           color: Colors.white, fontSize: 24),
                                       onPressed: () {
                                         onFollow();
                                       }),
                                 ),
-                                Sizer(),
+                                const Sizer(),
                                 (user.areFriends == true ||
                                         user.isSenTRequest == true)
                                     ? PopupMenuButton(
@@ -573,12 +575,12 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                             if (user.isSenTRequest == true) ...[
                                               PopupMenuItem<int>(
                                                 value: 0,
-                                                child: const Text("Accept"),
+                                                child: Text(LocaleKeys.Accept.localize),
                                                 onTap: () => onAcceptFriend(),
                                               ),
                                               PopupMenuItem<int>(
                                                 value: 1,
-                                                child: const Text("Reject"),
+                                                child: Text(LocaleKeys.reject.localize),
                                                 onTap: () => onRejectFriend(),
                                               ),
                                             ],
@@ -586,14 +588,14 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                               PopupMenuItem<int>(
                                                 value: 0,
                                                 child:
-                                                    const Text("Delete Friend"),
+                                                Text(LocaleKeys.deleteFriend.localize),
                                                 onTap: () => onDeleteFriend(),
                                               ),
                                           ];
                                         },
                                         child: Container(
                                             alignment: Alignment.center,
-                                            padding: EdgeInsets.symmetric(
+                                            padding: const EdgeInsets.symmetric(
                                                 horizontal: 10),
                                             decoration: BoxDecoration(
                                               borderRadius:
@@ -602,9 +604,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                             ),
                                             child: Text(
                                               user.isSenTRequest == true
-                                                  ? 'Accept Request'
+                                                  ? LocaleKeys.acceptRequest.localize
                                                   : user.areFriends == true
-                                                      ? 'Friends'
+                                                      ? LocaleKeys.friends.localize
                                                       : '',
                                               style: Styles.mediumText(
                                                   color: Colors.white),
@@ -622,13 +624,13 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                                 color: Colors.white,
                                                 fontSize: 24),
                                             label: user.isSenTRequest == true
-                                                ? 'Accept Request'
+                                                ? LocaleKeys.acceptRequest.localize
                                                 : user.areFriends == true
-                                                    ? 'Friends'
+                                                    ? LocaleKeys.friends.localize
                                                     : user.sentFriendRequest ==
                                                             true
-                                                        ? 'Remove Request'
-                                                        : 'Add Friend',
+                                                        ? LocaleKeys.removeRequest.localize
+                                                        : LocaleKeys.addFriend.localize,
                                             onPressed: () {
                                               onAddFriend();
                                             }),
@@ -698,7 +700,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               selectImageGallary();
                             },
                             child: Container(
-                                padding: EdgeInsets.all(5),
+                                padding: const EdgeInsets.all(5),
                                 decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: AppColors.PRIMARY_COLOR),
@@ -713,11 +715,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Sizer(),
+                const Sizer(),
                 Row(
                   children: [
                     Expanded(
@@ -729,7 +731,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                     style: Styles.headerText(
                                         fontWeight: FontWeight.w600,
                                         color: Colors.black)),
-                                Sizer(
+                                const Sizer(
                                   width: 5,
                                 ),
                                 const Icon(
@@ -767,18 +769,18 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   borderRadius: BorderRadius.circular(5),
                                   color: AppColors.SECONDARY_COLOR),
                               child: Text(
-                                'Message',
+                                LocaleKeys.message.localize,
                                 style: Styles.mediumText(color: Colors.white),
                               )),
                           itemBuilder: (context) {
-                            return const [
+                            return [
                               PopupMenuItem<int>(
                                 value: 0,
-                                child: Text("Normal"),
+                                child: Text(LocaleKeys.normal.localize),
                               ),
                               PopupMenuItem<int>(
                                 value: 1,
-                                child: Text("Anonymous"),
+                                child: Text(LocaleKeys.anonymous.localize),
                               ),
                             ];
                           },
@@ -802,17 +804,17 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   children: [
                     _buildCounter(
                       value: '${user.friendsCount} ',
-                      label: 'Friends',
+                      label: LocaleKeys.friends.localize,
                     ),
-                    Sizer(),
+                    const Sizer(),
                     _buildCounter(
                       value: '${user.followersCount} ',
-                      label: 'Follower',
+                      label: LocaleKeys.follower.localize,
                     ),
-                    Sizer(),
+                    const Sizer(),
                     _buildCounter(
                       value: '${user.followingCount} ',
-                      label: 'Following',
+                      label: LocaleKeys.following.localize,
                     ),
                   ],
                 ),
@@ -835,11 +837,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               Icons.home_rounded,
                               size: 24,
                             ),
-                            Sizer(
+                            const Sizer(
                               width: 5,
                             ),
                             Label(
-                                text: 'Lives in',
+                                text: LocaleKeys.livesIn.localize,
                                 style: Styles.headerText(
                                     color: Colors.grey, fontSize: 30)),
                             Sizer(
@@ -866,11 +868,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               Icons.location_on,
                               size: 24,
                             ),
-                            Sizer(
+                            const Sizer(
                               width: 5,
                             ),
                             Label(
-                                text: 'From',
+                                text: LocaleKeys.from.localize,
                                 style: Styles.headerText(
                                     color: Colors.grey, fontSize: 30)),
                             Sizer(
@@ -897,11 +899,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               Icons.home_repair_service,
                               size: 24,
                             ),
-                            Sizer(
+                            const Sizer(
                               width: 5,
                             ),
                             Label(
-                                text: 'Work',
+                                text: LocaleKeys.work.localize,
                                 style: Styles.headerText(
                                     color: Colors.grey, fontSize: 30)),
                             Sizer(
@@ -928,14 +930,14 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               Icons.phone_android,
                               size: 24,
                             ),
-                            Sizer(
+                            const Sizer(
                               width: 5,
                             ),
                             Label(
-                                text: 'Phone',
+                                text: LocaleKeys.phone.localize,
                                 style: Styles.headerText(
                                     color: Colors.grey, fontSize: 30)),
-                            Sizer(),
+                            const Sizer(),
                             Expanded(
                               child: Label(
                                 text: user.phone,
@@ -957,7 +959,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               Icons.favorite,
                               size: 24,
                             ),
-                            Sizer(
+                            const Sizer(
                               width: 5,
                             ),
                             Expanded(

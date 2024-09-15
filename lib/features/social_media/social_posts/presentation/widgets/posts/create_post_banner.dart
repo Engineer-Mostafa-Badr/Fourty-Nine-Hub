@@ -4,6 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -50,7 +52,7 @@ class CreatePostBanner extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Label(
-                text: 'What do you think about?',
+                text: LocaleKeys.whatDoYouThink.localize,
                 style: Styles.mediumText(color: Colors.grey),
               ),
             ),
@@ -71,7 +73,7 @@ class CreatePostBanner extends StatelessWidget {
                   height: 3.h,
                 ),
                 Label(
-                  text: 'Reel',
+                  text: LocaleKeys.reels.localize,
                   style: Styles.smallText(),
                 ),
               ],

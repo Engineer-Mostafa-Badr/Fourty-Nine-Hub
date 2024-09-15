@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
@@ -19,6 +18,10 @@ import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/comment_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+
+
 class CommentCard extends StatefulWidget {
   final Color textColor;
   final String from;
@@ -130,7 +133,7 @@ class _CommentCardState extends State<CommentCard> {
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     contentPadding: EdgeInsets.all(5),
-                    hintText: 'Type your comment ....',
+                    hintText: '${LocaleKeys.typeYourComment.localize} ....',
                     hintStyle: Styles.mediumText(),
                   ),
                 )),
@@ -164,7 +167,7 @@ class _CommentCardState extends State<CommentCard> {
             Sizer(),
             TextAppButton(
                 style: Styles.mediumText(),
-                label: 'Reply',
+                label: LocaleKeys.reply.localize,
                 onPressed: () {
                   bottomSheet(
                       context: context,
@@ -203,8 +206,8 @@ class _CommentCardState extends State<CommentCard> {
             listTile(
                 icon: Icons.report,
                 iconColor: Colors.red,
-                title: 'Report post',
-                subTitle: 'Your well reports this post.',
+                title: LocaleKeys.typeYourComment.localize,
+                subTitle: LocaleKeys.youWillReportComment.localize,
                 onTap: () async {
                   Future.delayed(const Duration(milliseconds: 200), () {
                     bottomSheet(
@@ -218,17 +221,17 @@ class _CommentCardState extends State<CommentCard> {
           if (isMyComment)
             listTile(
                 icon: Icons.delete,
-                title: 'Delete Post',
+                title: LocaleKeys.deleteComment.localize,
                 subTitle:
-                    'Your comment will be deleted, and you cannot get it again',
+                LocaleKeys.youWillDeleteComment.localize,
                 onTap: () {
                   widget.onDeleteComment(widget.comment.id);
                 }),
           if (isMyComment)
             listTile(
                 icon: Icons.visibility_off,
-                title: 'Edit Comment',
-                subTitle: 'Your Will Edit Your Comment.',
+                title: LocaleKeys.editComment.localize,
+                subTitle: LocaleKeys.youWillEditComment.localize,
                 onTap: () {
                   widget.comment.edit = !widget.comment.edit!;
                   editTextController.text = widget.comment.content;
