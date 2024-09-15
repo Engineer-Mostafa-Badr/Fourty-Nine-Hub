@@ -136,7 +136,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                     "No Comments",
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 18.sp,
+                                      fontSize: 18,
                                     ),
                                   ),
                                 );
@@ -216,7 +216,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                         onChanged: (v) {
                           setState(() {});
                         },
-                        style: Styles.headerText(fontSize: 26.sp),
+                        style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
                           fillColor: Colors.white,
                           contentPadding: EdgeInsets.all(5),

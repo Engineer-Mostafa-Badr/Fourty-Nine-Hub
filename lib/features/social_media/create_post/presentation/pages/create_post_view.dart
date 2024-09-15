@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
@@ -58,9 +60,9 @@ class _CreatePostViewState extends State<CreatePostView> {
         return Stack(
           children: [
             Scaffold(
-              appBar: BackAppBar(label: 'Create Post', actions: [
+              appBar: BackAppBar(label: LocaleKeys.createPost.localize, actions: [
                 TextButton(
-                    child: const Label(text: 'Post'),
+                    child: Label(text: LocaleKeys.post.localize),
                     onPressed: () => controller.createPost(
                         context: context, type: widget.social)),
               ]),
@@ -141,7 +143,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                                                 : 'Public',
                                 style: Styles.mediumText(
                                     color: AppColors.PRIMARY_COLOR,
-                                    fontSize: 24.sp),
+                                    fontSize: 24),
                               ),
                               Sizer(),
                               const Icon(
@@ -196,14 +198,14 @@ class _CreatePostViewState extends State<CreatePostView> {
                                             Text(
                                               'Feeling ',
                                               style: Styles.headerText(
-                                                  fontSize: 24.sp),
+                                                  fontSize: 24),
                                             ),
                                             Text(
                                               state.selectedFeeling!.name,
                                               style: Styles.mediumText(
                                                   color:
                                                       AppColors.PRIMARY_COLOR,
-                                                  fontSize: 24.sp),
+                                                  fontSize: 24),
                                             ),
                                           ],
                                         ),
@@ -248,7 +250,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                                           state.selectedActivity!.name,
                                           style: Styles.mediumText(
                                               color: AppColors.PRIMARY_COLOR,
-                                              fontSize: 24.sp),
+                                              fontSize: 24),
                                         ),
                                       )),
                                 ],
@@ -554,7 +556,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                     Text(
                       'Photo',
                       style: Styles.mediumText(
-                          fontSize: 34.sp, fontWeight: FontWeight.w500),
+                          fontSize: 34, fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -587,7 +589,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                       Text(
                         'Activity',
                         style: Styles.mediumText(
-                            fontSize: 34.sp, fontWeight: FontWeight.w500),
+                            fontSize: 34, fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
@@ -621,7 +623,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                       Text(
                         'Feeling',
                         style: Styles.mediumText(
-                            fontSize: 34.sp, fontWeight: FontWeight.w500),
+                            fontSize: 34, fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
@@ -655,7 +657,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                       Text(
                         'Tag People',
                         style: Styles.mediumText(
-                            fontSize: 34.sp, fontWeight: FontWeight.w500),
+                            fontSize: 34, fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),

@@ -118,7 +118,6 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildAccountHeader(context: context, post: myPost),
-                if (myPost.content!.isNotEmpty)
                   _buildContentWidget(
                       content: myPost.content ?? '',
                       backgroundColor: myPost.backgroundColor,
@@ -378,10 +377,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       children: [
         Image.asset(
           image,
-          height: 20.h,
-        ),
-        const Sizer(
-          width: 5,
+          height: 35.w,
         ),
         Label(
           text: value.toString(),
@@ -567,7 +563,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     Expanded(
                         child: Label(
                       text: post.location?.place ?? '',
-                      style: Styles.mediumText(fontSize: 14.sp),
+                      style: Styles.mediumText(fontSize: 14),
                     ))
                   ],
                 ),

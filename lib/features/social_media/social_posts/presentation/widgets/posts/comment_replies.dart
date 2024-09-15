@@ -86,7 +86,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                               LocaleKeys.noReplied.localize,
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 18.sp,
+                                fontSize: 18,
                               ),
                             ),
                           ));
@@ -133,7 +133,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                       onChanged: (v) {
                         setState(() {});
                       },
-                      style: Styles.headerText(fontSize: 26.sp),
+                      style: Styles.headerText(fontSize: 26),
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         contentPadding: const EdgeInsets.all(5),

@@ -444,6 +444,26 @@
   "follower": "Follower",
   "following": "Following",
   "livesIn": "Lives in",
-  "work": "Work"
+  "work": "Work",
+  "noReels": "No Reels",
+  "noTweets": "No Tweets",
+  "documentation": "Documentation",
+  "userName": "User Name",
+  "typeYourName": "Type Your Name",
+  "personalPhoto": "Personal Photo",
+  "id": "ID",
+  "front": "Front",
+  "back": "Back",
+  "requestVerification": "Request Verification",
+  "documentSuccessfully": "You have successfully uploaded your document. It is now awaiting administration review and approval.",
+  "noReportCategoriesAvailable": "No report categories available",
+  "Type report reason": "Type Report Reason",
+  "pleaseSelectReason": "Please select a reason!",
+  "reportSentSuccessfully": "Report sent successfully",
+  "play": "Play",
+  "showComments": "Show Comments",
+  "suggestedForYou": "Suggested For You",
+  "hours": "H",
+  "minute": "Min"
 
 }

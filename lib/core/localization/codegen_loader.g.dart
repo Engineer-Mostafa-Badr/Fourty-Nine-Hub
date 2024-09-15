@@ -454,7 +454,27 @@ class CodegenLoader extends AssetLoader{
   "follower": "متابع",
   "following": "يتابع",
   "livesIn": "يقيم في",
-  "work": "يعمل"
+  "work": "يعمل",
+  "noReels": "لا يوجد مقاطع فيديو",
+  "noTweets": "لا يوجد تغريدات",
+  "documentation": "توثيق",
+  "userName": "اسم المستخدم",
+  "typeYourName": "أدخل اسمك",
+  "personalPhoto": "الصورة الشخصية",
+  "id": "الهوية",
+  "front": "الوجه",
+  "back": "الخلف",
+  "requestVerification": "طلب التحقق",
+  "documentSuccessfully": "لقد قمت بتحميل المستند الخاص بك بنجاح. وهو الآن في انتظار مراجعة الإدارة وموافقتها.",
+  "noReportCategoriesAvailable": "لا توجد فئات تقرير متاحة",
+  "typeReportReason": "اكتب سبب الابلاغ",
+  "pleaseSelectReason": "برجاء اختار السبب!",
+  "reportSentSuccessfully": "تم ارسال الابلاغ بنجاح",
+  "play": "ابدء",
+  "showComments": "عرض التعليقات",
+  "suggestedForYou": "مقترح لك",
+  "hours": "ساعة",
+  "minute": "دقيقة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -897,7 +917,27 @@ static const Map<String,dynamic> en = {
   "follower": "Follower",
   "following": "Following",
   "livesIn": "Lives in",
-  "work": "Work"
+  "work": "Work",
+  "noReels": "No Reels",
+  "noTweets": "No Tweets",
+  "documentation": "Documentation",
+  "userName": "User Name",
+  "typeYourName": "Type Your Name",
+  "personalPhoto": "Personal Photo",
+  "id": "ID",
+  "front": "Front",
+  "back": "Back",
+  "requestVerification": "Request Verification",
+  "documentSuccessfully": "You have successfully uploaded your document. It is now awaiting administration review and approval.",
+  "noReportCategoriesAvailable": "No report categories available",
+  "Type report reason": "Type Report Reason",
+  "pleaseSelectReason": "Please select a reason!",
+  "reportSentSuccessfully": "Report sent successfully",
+  "play": "Play",
+  "showComments": "Show Comments",
+  "suggestedForYou": "Suggested For You",
+  "hours": "H",
+  "minute": "Min"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

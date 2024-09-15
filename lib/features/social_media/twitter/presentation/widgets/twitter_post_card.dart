@@ -4,6 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
@@ -416,9 +418,9 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           if (isMyPost)
             listTile(
                 icon: Icons.delete,
-                title: 'Delete Post',
+                title: LocaleKeys.deletePost.localize,
                 subTitle:
-                    'Your post will be deleted, and you cannot get it again',
+                LocaleKeys.youWillDeletePost.localize,
                 onTap: () {
                   widget.deletePost(widget.post.id);
                   // context.pop();
@@ -428,8 +430,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 }),
           listTile(
               icon: Icons.visibility_off,
-              title: 'Hide Post',
-              subTitle: 'Your post will be hidden, you can get it again',
+              title: LocaleKeys.hidePost.localize,
+              subTitle: LocaleKeys.youWillHidePost.localize,
               onTap: () {
                 widget.hidePost(widget.post.id);
                 // context.pop();

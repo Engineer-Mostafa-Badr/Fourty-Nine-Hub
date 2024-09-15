@@ -439,5 +439,25 @@ abstract class  LocaleKeys {
   static const following = 'following';
   static const livesIn = 'livesIn';
   static const work = 'work';
+  static const noReels = 'noReels';
+  static const noTweets = 'noTweets';
+  static const documentation = 'documentation';
+  static const userName = 'userName';
+  static const typeYourName = 'typeYourName';
+  static const personalPhoto = 'personalPhoto';
+  static const id = 'id';
+  static const front = 'front';
+  static const back = 'back';
+  static const requestVerification = 'requestVerification';
+  static const documentSuccessfully = 'documentSuccessfully';
+  static const noReportCategoriesAvailable = 'noReportCategoriesAvailable';
+  static const typeReportReason = 'typeReportReason';
+  static const pleaseSelectReason = 'pleaseSelectReason';
+  static const reportSentSuccessfully = 'reportSentSuccessfully';
+  static const play = 'play';
+  static const showComments = 'showComments';
+  static const suggestedForYou = 'suggestedForYou';
+  static const hours = 'hours';
+  static const minute = 'minute';
 
 }

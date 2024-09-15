@@ -86,9 +86,9 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                           child: Center(
                             child: Text(
                               LocaleKeys.noComments.localize,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black,
-                                fontSize: 18.sp,
+                                fontSize: 18,
                               ),
                             ),
                           ));
@@ -137,7 +137,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                         onChanged: (v) {
                           setState(() {});
                         },
-                        style: Styles.headerText(fontSize: 26.sp),
+                        style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
                           fillColor: Colors.white,
                           contentPadding: const EdgeInsets.all(5),

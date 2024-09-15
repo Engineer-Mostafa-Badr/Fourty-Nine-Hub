@@ -370,7 +370,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                   child:
                                                                       Label(
                                                                     text:
-                                                                        'Remove',
+                                                                    LocaleKeys.remove.localize,
                                                                     style: Styles.mediumText(
                                                                         color: Colors
                                                                             .black,

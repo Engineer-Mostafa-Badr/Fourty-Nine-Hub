@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_comment_replies.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
@@ -110,11 +111,11 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                   onChanged: (v) {
                     setState(() {});
                   },
-                  style: Styles.headerText(fontSize: 26.sp),
+                  style: Styles.headerText(fontSize: 26),
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     contentPadding: const EdgeInsets.all(5),
-                    hintText: 'Type your comment ....',
+                    hintText: '${LocaleKeys.typeYourComment.localize} ....',
                     hintStyle: Styles.mediumText(),
                   ),
                 )),
@@ -171,7 +172,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
             Sizer(),
             TextAppButton(
                 style: Styles.mediumText(),
-                label: 'Reply',
+                label: LocaleKeys.reply.localize,
                 onPressed: () {
                   bottomSheet(
                       context: context,
@@ -205,8 +206,8 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
             listTile(
                 icon: Icons.report,
                 iconColor: Colors.red,
-                title: 'Report post',
-                subTitle: 'Your well reports this post.',
+                title: LocaleKeys.reportComment.localize,
+                subTitle: LocaleKeys.youWillReportReply.localize,
                 onTap: () async {
                   Future.delayed(const Duration(milliseconds: 200), () {
                     bottomSheet(
@@ -220,17 +221,17 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
           if (isMyComment)
             listTile(
                 icon: Icons.delete,
-                title: 'Delete Comment',
+                title: LocaleKeys.deleteComment.localize,
                 subTitle:
-                    'Your comment will be deleted, and you cannot get it again',
+                LocaleKeys.youWillDeleteComment.localize,
                 onTap: () {
                   widget.onDeleteComment(widget.comment.id);
                 }),
           if (isMyComment)
             listTile(
                 icon: Icons.edit,
-                title: 'Edit Comment',
-                subTitle: 'Your Will Edit Your Comment.',
+                title: LocaleKeys.editComment.localize,
+                subTitle: LocaleKeys.youWillEditComment.localize,
                 onTap: () {
                   widget.comment.edit = !widget.comment.edit!;
                   editTextController.text = widget.comment.content;
