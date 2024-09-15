@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
@@ -40,7 +41,7 @@ class DrawerWidget extends StatelessWidget {
         builder: (context, state) {
           context.read<GetWalletCubit>();
           return Drawer(
-            width: 600.h,
+            width: context.screenWidth*0.8,
             child: SafeArea(
               child: SingleChildScrollView(
                 child: Column(

@@ -59,12 +59,11 @@ class MyApp extends StatelessWidget {
           create: (context) => serviceLocator<UserCubit>(),
         ),
         BlocProvider(
-          create: (BuildContext context) =>serviceLocator<WalletCubit>(),
-
+          create: (BuildContext context) => serviceLocator<WalletCubit>(),
         ),
         BlocProvider(
-          create: (BuildContext context) =>serviceLocator<MainCategoriesCubit>()..loadData(),
-
+          create: (BuildContext context) =>
+              serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
         // BlocProvider(
         //   create: (context) => serviceLocator<RiderequestCubit>(),

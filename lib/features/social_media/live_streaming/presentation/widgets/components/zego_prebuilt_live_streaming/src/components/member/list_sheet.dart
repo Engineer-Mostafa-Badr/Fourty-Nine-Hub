@@ -10,6 +10,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 // Project imports:
 import '../../../../../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../../../../../res/style/const.dart';
 import '../../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../zego_uikit/src/components/defines.dart';
 import '../../../../zego_uikit/src/components/functions.dart';
@@ -178,7 +179,7 @@ class _ZegoLiveStreamingMemberListSheetState
                     margin: EdgeInsets.only(bottom: 36.zR),
                     child: Row(
                       children: [
-                        avatarItem(context, user, widget.avatarBuilder),
+                        // avatarItem(context, user, widget.avatarBuilder),
                         SizedBox(width: 24.zR),
                         userNameItem(user),
                         const Expanded(child: SizedBox()),
@@ -232,6 +233,7 @@ class _ZegoLiveStreamingMemberListSheetState
   }
 
   Widget userNameItem(ZegoUIKitUser user) {
+    print('profile pic ${UserCubit.to.state.data?.profilePicture}' ?? '');
     return ValueListenableBuilder<ZegoUIKitUser?>(
       valueListenable: widget.hostManager.notifier,
       builder: (context, host, _) {
@@ -262,6 +264,29 @@ class _ZegoLiveStreamingMemberListSheetState
 
         return Row(
           children: [
+            CachedNetworkImage(
+              imageUrl: UserCubit.to.state.data?.profilePicture ??
+                  UIConst.imagePlaceHolder,
+              imageBuilder: (context, imageProvider) => Container( 
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  CircularProgressIndicator(value: downloadProgress.progress),
+              errorWidget: (context, url, error) {
+                ZegoLoggerService.logInfo(
+                  '$user avatar url is invalid',
+                  tag: 'audio-room',
+                  subTag: 'live page',
+                );
+                return textAvatar(user);
+              },
+            ),
             ConstrainedBox(
               constraints: BoxConstraints.loose(nameConstraintSize),
               child: Text(
@@ -483,35 +508,33 @@ class _ZegoLiveStreamingMemberListSheetState
   ) {
     final avatarURL = UserCubit.to.state.data?.profilePicture ?? '';
 
-    return  CachedNetworkImage(
-                imageUrl: avatarURL,
-                imageBuilder: (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    CircularProgressIndicator(value: downloadProgress.progress),
-                errorWidget: (context, url, error) {
-                  ZegoLoggerService.logInfo(
-                    '$user avatar url is invalid',
-                    tag: 'audio-room',
-                    subTag: 'live page',
-                  );
-                  return textAvatar(user);
-                },
-              )
-            ;
+    return CachedNetworkImage(
+      imageUrl: avatarURL,
+      imageBuilder: (context, imageProvider) => Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: imageProvider,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+      progressIndicatorBuilder: (context, url, downloadProgress) =>
+          CircularProgressIndicator(value: downloadProgress.progress),
+      errorWidget: (context, url, error) {
+        ZegoLoggerService.logInfo(
+          '$user avatar url is invalid',
+          tag: 'audio-room',
+          subTag: 'live page',
+        );
+        return textAvatar(user);
+      },
+    );
   }
-   Widget textAvatar(ZegoUIKitUser user) {
+
+  Widget textAvatar(ZegoUIKitUser user) {
     return Text(
-      (user.name.isNotEmpty)
-          ? user.name.characters.first
-          : '',
+      (user.name.isNotEmpty) ? user.name.characters.first : '',
       style: TextStyle(
         fontSize: 32.0.zR,
         color: const Color(0xff222222),
