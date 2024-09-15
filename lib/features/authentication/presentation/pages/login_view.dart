@@ -47,6 +47,8 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   // AuthType selectedAuth = AuthType.LOGIN;
   ScrollController scrollController = ScrollController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -133,8 +135,8 @@ class _LoginViewState extends State<LoginView> {
             child: Padding(
               padding: EdgeInsets.all(16.0.w),
               child: Form(
-                  key: loginCubit.formKey,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  key: formKey,
+                  // autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     children: [
                       Image.asset(
@@ -210,7 +212,7 @@ class _LoginViewState extends State<LoginView> {
                               width: double.infinity,
                               onPressed: () {
                                 if (registerCubit.accept) {
-                                  registerCubit.register();
+                                  registerCubit.register(formKey);
                                 } else {
                                   showErrorMessage(
                                       context,
@@ -228,7 +230,7 @@ class _LoginViewState extends State<LoginView> {
                               labelStyle: TextStyle(
                                   fontSize: 35.sp.h,
                                   color: AppColors.AUTH_CONTAINER_COLOR),
-                              onPressed: loginCubit.login,
+                              onPressed: () => loginCubit.login(formKey),
                             ),
                     ],
                   )),
@@ -422,6 +424,8 @@ class RegisterWidget extends StatefulWidget {
 
 class _RegisterWidgetState extends State<RegisterWidget> {
   bool obsecure = true;
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final registerCubit = context.read<RegisterCubit>();
@@ -430,8 +434,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       child: Padding(
         padding: EdgeInsets.all(8.0.w),
         child: Form(
-          key: registerCubit.formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+          key: formKey,
+          // autovalidateMode: AutovalidateMode.onUserInteraction,
           child: SingleChildScrollView(
             child: Column(
               children: [
