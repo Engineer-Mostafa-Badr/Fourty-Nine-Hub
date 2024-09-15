@@ -23,6 +23,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   final FacebookSignInUseCase _facebookSignInUseCase;
   final SaveTokensUseCase _saveTokens;
   final AttachTokenUseCase _attachToken;
+  final formKey = GlobalKey<FormState>();
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailTextController = TextEditingController();
@@ -47,7 +48,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     this._facebookSignInUseCase,
   ) : super(RegisterInitial());
 
-  Future<void> register(formKey) async {
+  Future<void> register() async {
     String? token = await FirebaseMessaging.instance.getToken();
     log("message");
     if (state is RegisterLoading) return;
