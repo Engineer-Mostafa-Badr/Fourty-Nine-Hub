@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
@@ -70,6 +72,7 @@ class _ViewAllTripJoinCardBuilderState
                 requestOnTap: () {
                   showBottomSheet(
                     context: context,
+                    
                     builder: (BuildContext context) {
                       return RequstTripJoinBottomSheet(
                           tripJoinCardEntity: tripJoinCardEntity);

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -11,7 +12,6 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/all_not
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/assets/assets.dart';
 
@@ -43,7 +43,7 @@ class _NotificationCardState extends State<NotificationCard> {
             setState(() {});
           },
           child: Container(
-            padding: EdgeInsets.all(5),
+            padding: EdgeInsets.all(5.w),
             child: Dismissible(
               key: UniqueKey(),
               direction: DismissDirection.startToEnd,
@@ -54,8 +54,7 @@ class _NotificationCardState extends State<NotificationCard> {
                   context: context,
                   builder: (context) {
                     return Container(
-                      padding: EdgeInsets.only(
-                          top: 20, right: 10, left: 10, bottom: 20),
+                      padding: EdgeInsets.only(top: 20.h, right: 10.w, left: 10.w, bottom: 20.h),
                       child: AreYouSure(
                         title: LocaleKeys.alert.localize,
                         subTitle: LocaleKeys.clearNoti.localize,
@@ -72,7 +71,7 @@ class _NotificationCardState extends State<NotificationCard> {
                 return confirmDelete;
               },
               background: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 color: Colors.red,
                 alignment: Alignment.centerLeft,
                 child: const Icon(
@@ -81,9 +80,7 @@ class _NotificationCardState extends State<NotificationCard> {
                 ),
               ),
               child: NotificationCustomContainer(
-                color: widget.notificationEntity.read!
-                    ? Colors.transparent
-                    : AppColors.PRIMARY_COLOR.withOpacity(0.1),
+                color: widget.notificationEntity.read! ? Colors.transparent : AppColors.PRIMARY_COLOR.withOpacity(0.1),
                 child: Row(
                   children: [
                     SizedBox(
@@ -152,14 +149,12 @@ class _NotificationCardState extends State<NotificationCard> {
     if (widget.notificationEntity.createdAt == null) {
       return '';
     }
-    return DateFormat('dd MMM, hh:mm aaa')
-        .format(widget.notificationEntity.createdAt!);
+    return DateFormat('dd MMM, hh:mm aaa').format(widget.notificationEntity.createdAt!);
   }
 }
 
 class NotificationCustomContainer extends StatelessWidget {
-  const NotificationCustomContainer(
-      {super.key, required this.color, required this.child});
+  const NotificationCustomContainer({super.key, required this.color, required this.child});
   final Color color;
   final Widget child;
   @override

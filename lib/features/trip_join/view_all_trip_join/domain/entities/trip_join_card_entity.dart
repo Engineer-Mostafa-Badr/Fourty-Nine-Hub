@@ -2,6 +2,7 @@
 class TripJoinCardEntity {
   String? id;
   String? userId;
+  String? requestOwnerFirstName;
   String? categoryId;
   String? brand;
   String? model;
@@ -16,9 +17,12 @@ class TripJoinCardEntity {
   bool? isApproved;
   int? publishDate;
   String? phone;
+  String? gender;
+
   TripJoinCardEntity({
     this.id,
     this.userId,
+    this.requestOwnerFirstName,
     this.categoryId,
     this.brand,
     this.model,
@@ -33,12 +37,14 @@ class TripJoinCardEntity {
     this.isApproved,
     this.publishDate,
     this.phone,
+    this.gender,
   });
 
   TripJoinCardEntity copyWith({
     String? id,
     String? userId,
     String? categoryId,
+    String? requestOwnerFirstName,
     String? brand,
     String? model,
     num? journeyPrice,
@@ -52,6 +58,7 @@ class TripJoinCardEntity {
     bool? isApproved,
     int? publishDate,
     String? phone,
+    String? gender,
   }) {
     return TripJoinCardEntity(
       id: id ?? this.id,
@@ -70,11 +77,13 @@ class TripJoinCardEntity {
       isApproved: isApproved ?? this.isApproved,
       publishDate: publishDate ?? this.publishDate,
       phone: phone ?? this.phone,
+      gender: gender ?? this.gender,
+      requestOwnerFirstName: requestOwnerFirstName ?? this.requestOwnerFirstName,
     );
   }
 
   @override
   String toString() {
-    return 'TripJoinCardEntity(id: $id, userId: $userId, categoryId: $categoryId, brand: $brand, model: $model, journeyPrice: $journeyPrice, status: $status, seatNumber: $seatNumber, isRepeated: $isRepeated, startingAddressAr: $startingAddressAr, destinationAddressAr: $destinationAddressAr, startingAddressEn: $startingAddressEn, destinationAddressEn: $destinationAddressEn, isApproved: $isApproved, publishDate: $publishDate, phone: $phone)';
+    return 'TripJoinCardEntity(id: $id, userId: $userId, requestOwnerFirstName: $requestOwnerFirstName ,  categoryId: $categoryId, brand: $brand, model: $model, journeyPrice: $journeyPrice, status: $status, seatNumber: $seatNumber, isRepeated: $isRepeated, startingAddressAr: $startingAddressAr, destinationAddressAr: $destinationAddressAr, startingAddressEn: $startingAddressEn, destinationAddressEn: $destinationAddressEn, isApproved: $isApproved, publishDate: $publishDate, phone: $phone , gender: $gender)';
   }
 }

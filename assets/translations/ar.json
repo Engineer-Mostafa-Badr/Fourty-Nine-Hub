@@ -9,7 +9,7 @@
   "startDateBeginValidation": "يجب أن تكون تاريخ البدء قبل تاريخ الانتهاء",
   "startDateTimeValidation": "يجب أن يكون تاريخ البدء في المستقبل",
   "pleaseFillAllFields": "اكمل البيانات من فضلك",
-
+  "availableTrips": "الرحلات المتاحه",
   "done": "تم",
   "date": "التاريخ",
   "selectADate": "اختر تاريخًا",
@@ -363,7 +363,7 @@
   "aBirdInHand": "عصفور في اليد خير من عشرة على الشجرة",
   "permissionDenied": "تم رفض الصلاحيات",
   "contacts": "جهات الاتصال",
-  "pleaseLoginRegisterToEnjoyTheApp":"من فضلك قم بتسجيل الدخول او التسجيل للتفاعل معنا",
+  "pleaseLoginRegisterToEnjoyTheApp": "من فضلك قم بتسجيل الدخول او التسجيل للتفاعل معنا",
   "noChatsUntilNow": "لا توجد محادثات حتى الآن",
   "unarchive": "إلغاء الأرشفة",
   "checkRequest": "يرجى الانتظار للتحقق من الطلب",
