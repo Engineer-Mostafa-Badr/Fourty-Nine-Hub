@@ -40,7 +40,7 @@ ThemeData darkTheme() {
       secondary: AppColors.AUTH_CONTAINER_COLOR,
     ),
     drawerTheme:
-        const DrawerThemeData(backgroundColor: AppColors.QUANTITY_COLOR),
+        const DrawerThemeData(backgroundColor: AppColors.QUANTITY_COLOR,),
     actionIconTheme: const ActionIconThemeData(),
     bottomAppBarTheme: const BottomAppBarTheme(),
     canvasColor: Colors.black38,
