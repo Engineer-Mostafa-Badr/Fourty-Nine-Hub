@@ -51,7 +51,7 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
               width: double.infinity,
               label: LocaleKeys.verify.localize,
               labelStyle: TextStyle(
-                  fontSize: 35.sp.w, color: AppColors.AUTH_CONTAINER_COLOR),
+                  fontSize: 35.sp, color: AppColors.AUTH_CONTAINER_COLOR),
               onPressed: () => cubit.verifyOtp(email),
             ),
           ),
