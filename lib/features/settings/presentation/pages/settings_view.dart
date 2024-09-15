@@ -46,43 +46,6 @@ class SettingsView extends StatelessWidget {
               print('Account isDisabled status: ${state.able?.isDisabled}');
               return Column(
                 children: [
-                  BlocBuilder<ThemeCubit, ThemeStates>(
-                    builder: (BuildContext context, theme) {
-                      return SwitchListTile(
-                        secondary: Image.asset(
-                          Assets.theme,
-                          width: 50.h,
-                          height: 50.h,
-                          fit: BoxFit.cover,
-                        ),
-                        title: theme is DarkThemeModeStates
-                            ? Text(
-                                LocaleKeys.lightMode.localize,
-                                style: Styles.mediumText(
-                                    fontSize: 65.sp,
-                                    fontWeight: FontWeight.w400),
-                              )
-                            : Text(
-                                LocaleKeys.darkMode.localize,
-                                style: Styles.mediumText(
-                                    fontSize: 65.sp,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                        value: ThemeCubit.get(context).isDarkTheme,
-                        activeColor: AppColors.SECONDARY_COLOR,
-                        activeTrackColor: AppColors.AUTH_CONTAINER_COLOR,
-                        inactiveTrackColor: AppColors.AUTH_CONTAINER_COLOR,
-                        onChanged: (value) {
-                          if (theme is LightThemeModeStates) {
-                            ThemeCubit.get(context).darkThemeMode();
-                          }
-                          if (theme is DarkThemeModeStates) {
-                            ThemeCubit.get(context).lightThemeMode();
-                          }
-                        },
-                      );
-                    },
-                  ),
                   listTileWidget(
                       image: Assets.password,
                       trailing:
@@ -119,6 +82,44 @@ class SettingsView extends StatelessWidget {
                             context.read<SettingCubit>().deleteAccount();
                           },
                           context: context)),
+
+                  BlocBuilder<ThemeCubit, ThemeStates>(
+                    builder: (BuildContext context, theme) {
+                      return SwitchListTile(
+                        secondary: Image.asset(
+                          Assets.theme,
+                          width: 50.h,
+                          height: 50.h,
+                          fit: BoxFit.cover,
+                        ),
+                        title: theme is DarkThemeModeStates
+                            ? Text(
+                          LocaleKeys.lightMode.localize,
+                          style: Styles.mediumText(
+                              fontSize: 65.sp,
+                              fontWeight: FontWeight.w400),
+                        )
+                            : Text(
+                          LocaleKeys.darkMode.localize,
+                          style: Styles.mediumText(
+                              fontSize: 65.sp,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        value: ThemeCubit.get(context).isDarkTheme,
+                        activeColor: AppColors.SECONDARY_COLOR,
+                        activeTrackColor: AppColors.AUTH_CONTAINER_COLOR,
+                        inactiveTrackColor: AppColors.AUTH_CONTAINER_COLOR,
+                        onChanged: (value) {
+                          if (theme is LightThemeModeStates) {
+                            ThemeCubit.get(context).darkThemeMode();
+                          }
+                          if (theme is DarkThemeModeStates) {
+                            ThemeCubit.get(context).lightThemeMode();
+                          }
+                        },
+                      );
+                    },
+                  ),
                 ],
               );
             },
