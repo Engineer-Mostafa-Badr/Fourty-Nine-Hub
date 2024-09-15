@@ -8,6 +8,7 @@
   "scheduleAMeeting": "Schedule a Meeting",
   "startDateBeginValidation": "Start Date must be before End Date",
   "startDateTimeValidation": "Start Date must be in the future",
+  "pleaseFillAllFields": "Please fill all fields",
   "done": "Done",
   "date": "Date",
   "selectADate": "Select date",

@@ -8,6 +8,8 @@
   "scheduleAMeeting": "جدولة اجتماع",
   "startDateBeginValidation": "يجب أن تكون تاريخ البدء قبل تاريخ الانتهاء",
   "startDateTimeValidation": "يجب أن يكون تاريخ البدء في المستقبل",
+  "pleaseFillAllFields": "اكمل البيانات من فضلك",
+
   "done": "تم",
   "date": "التاريخ",
   "selectADate": "اختر تاريخًا",

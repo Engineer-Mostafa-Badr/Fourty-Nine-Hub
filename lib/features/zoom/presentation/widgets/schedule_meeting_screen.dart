@@ -149,13 +149,13 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                           _endTime != null) {
                         if (_endTime!.isBefore(_startTime!)) {
                           showErrorMessage(
-                              context, 'Start Date must be before End Date');
+                              context, LocaleKeys.startDateTimeValidation.localize);
 
                           return;
                         }
                         if (_startTime!.isBefore(TimeOfDay.now())) {
                           showErrorMessage(
-                              context, 'Start Date must be in the future');
+                              context, LocaleKeys.startDateBeginValidation.localize);
 
                           return;
                         }
@@ -175,11 +175,11 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                           context.pushReplacementNamed(Routes.ZOOM);
                         }
                       } else {
-                        showErrorMessage(context, 'Please fill all fields');
+                        showErrorMessage(context, LocaleKeys.pleaseFillAllFields.localize );
                       }
                     },
                     child: Text(
-                      "Done",
+                      LocaleKeys.done.localize,
                       style: TextStyle(
                         color: context.isDarkMode
                             ? Colors.white
