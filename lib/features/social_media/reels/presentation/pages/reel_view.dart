@@ -3477,6 +3477,8 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
             ),
 
             context.isArabic
+
+
                 ? Positioned(
                     left: 8,
                     bottom: 0,
