@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 
 class AvailableTripCard extends StatelessWidget {
   const AvailableTripCard({
@@ -180,9 +181,10 @@ class AvailableTripCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Positioned(
+              Positioned.directional(
                 top: 5,
-                right: 20,
+                end: 20,
+                textDirection: context.isArabic?TextDirection.rtl:TextDirection.ltr,
                 child: Column(
                   children: [
                     Text(tripJoinCardEntity.journeyPrice?.toStringAsFixed(0) ?? '',
@@ -218,6 +220,6 @@ class AvailableTripCard extends StatelessWidget {
     if (tripJoinCardEntity.publishDate == null) {
       return '';
     }
-    return DateFormat('dd MMM, hh:mm aaa').format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate!));
+    return intl.DateFormat('dd MMM, hh:mm aaa').format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate!));
   }
 }

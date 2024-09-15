@@ -25,6 +25,7 @@ class CodegenLoader extends AssetLoader{
   "startDateBeginValidation": "يجب أن تكون تاريخ البدء قبل تاريخ الانتهاء",
   "startDateTimeValidation": "يجب أن يكون تاريخ البدء في المستقبل",
   "pleaseFillAllFields": "اكمل البيانات من فضلك",
+  "availableTrips": "الرحلات المتاحه",
   "done": "تم",
   "date": "التاريخ",
   "selectADate": "اختر تاريخًا",
@@ -752,7 +753,8 @@ static const Map<String,dynamic> en = {
   "contacts": "Contacts",
   "pleaseLoginRegisterToEnjoyTheApp": "Please Login, Register to enjoy the app",
   "noChatsUntilNow": "No Chats until now",
-  "unarchive": "Unarchive"
+  "unarchive": "Unarchive",
+  "availableTrips": "Available Trips"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

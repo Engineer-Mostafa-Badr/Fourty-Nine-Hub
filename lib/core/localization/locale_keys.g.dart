@@ -11,6 +11,7 @@ abstract class  LocaleKeys {
   static const startDateBeginValidation = 'startDateBeginValidation';
   static const startDateTimeValidation = 'startDateTimeValidation';
   static const pleaseFillAllFields = 'pleaseFillAllFields';
+  static const availableTrips = 'availableTrips';
   static const done = 'done';
   static const date = 'date';
   static const selectADate = 'selectADate';
