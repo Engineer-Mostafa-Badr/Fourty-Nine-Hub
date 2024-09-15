@@ -1,12 +1,18 @@
 class DisableEntity {
-  final String id;
-  final String firstName;
-  final String username;
-  final String isDisabled;
+  final String? id;
+  final String? firstName;
+  final String? username;
+  final bool isDisabled;
 
   DisableEntity(
-      {required this.id,
-      required this.firstName,
-      required this.username,
+      { this.id,
+       this.firstName,
+       this.username,
       required this.isDisabled});
+
+  DisableEntity copyWith({bool? isDisabled}) {
+    return DisableEntity(
+      isDisabled: isDisabled ?? this.isDisabled,
+    );
+  }
 }

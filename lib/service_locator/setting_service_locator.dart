@@ -5,6 +5,9 @@ import 'package:fourtyninehub/features/settings/domain/useCase/delete_account_us
 import 'package:fourtyninehub/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/settings/domain/useCase/disable_account_use_case.dart';
+import '../features/settings/domain/useCase/enable_account_use_case.dart';
+
 class SettingServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<SettingRemoteDataSource>(
@@ -20,8 +23,20 @@ class SettingServiceLocator {
       serviceLocator(),
     ));
 
+    serviceLocator
+        .registerLazySingleton<DisableAccountUseCase>(() => DisableAccountUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<EnableAccountUseCase>(() => EnableAccountUseCase(
+      serviceLocator(),
+    ));
+
     serviceLocator.registerFactory<SettingCubit>(
             () => SettingCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
         ));
   }

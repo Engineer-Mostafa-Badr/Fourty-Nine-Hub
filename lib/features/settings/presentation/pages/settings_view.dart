@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/settings/domain/entities/disable_entity.dart';
 import 'package:fourtyninehub/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:fourtyninehub/features/settings/presentation/cubit/settings_state.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -34,14 +35,18 @@ class SettingsView extends StatelessWidget {
           child: BlocConsumer<SettingCubit, SettingState>(
             listener: (BuildContext context, SettingState state) {
               if (state.status == SettingStates.success) {
-                showSuccessMessage(
-                  context,
-                  LocaleKeys.deleteSuccessfully.localize,
-                );
+                // showSuccessMessage(
+                //   context,
+                //   LocaleKeys.deleteSuccessfully.localize,
+                // );
+                print('77777777777777777777777777777');
+                print(state.able?.isDisabled );
+                print('77777777777777777777777777777');
                 context.push(Routes.HOME);
               }
             },
             builder: (BuildContext context, state) {
+              print('Account isDisabled status: ${state.able?.isDisabled}');
               return Column(
                 children: [
                   listTileWidget(
@@ -73,11 +78,13 @@ class SettingsView extends StatelessWidget {
                             ? Text(
                                 LocaleKeys.lightMode.localize,
                                 style: Styles.mediumText(
+                                    fontSize: 65.sp,
                                     fontWeight: FontWeight.w400),
                               )
                             : Text(
                                 LocaleKeys.darkMode.localize,
                                 style: Styles.mediumText(
+                                    fontSize: 65.sp,
                                     fontWeight: FontWeight.w400),
                               ),
                         value: ThemeCubit.get(context).isDarkTheme,
@@ -104,11 +111,17 @@ class SettingsView extends StatelessWidget {
                       image: Assets.noPerson,
                       trailing:
                           Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
-                      label: LocaleKeys.disableAccount.localize,
+                      label:state.able?.isDisabled == true? 'Enable Account':LocaleKeys.disableAccount.localize,
                       onTap: () => showAreYouSure(
                           title: LocaleKeys.alert.localize,
-                          subTitle: LocaleKeys.disable.localize,
-                          action: () => context.go(Routes.LOGIN),
+                          subTitle:LocaleKeys.disable.localize,
+                          action: () {
+                            if (state.able?.isDisabled == true) {
+                              context.read<SettingCubit>().enableAccount();
+                            } else {
+                              context.read<SettingCubit>().disableAccount();
+                            }
+                          },
                           context: context)),
                   listTileWidget(
                       image: Assets.person,
@@ -143,7 +156,7 @@ class SettingsView extends StatelessWidget {
         height: 50.h,
       ),
       title: Label(
-          text: label, style: Styles.mediumText(fontWeight: FontWeight.w400)),
+          text: label, style: Styles.mediumText(fontSize: 65.sp,fontWeight: FontWeight.w400)),
       onTap: () => onTap(),
       trailing: trailing,
     );

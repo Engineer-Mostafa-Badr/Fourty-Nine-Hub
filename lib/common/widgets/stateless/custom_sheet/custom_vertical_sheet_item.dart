@@ -20,7 +20,9 @@ class CustomVerticalSheetItem {
       builder: (context) {
         return CupertinoActionSheet(
           cancelButton: CupertinoActionSheetAction(
-            child: const Text("Cancel"),
+            child: Text("Cancel",
+            style: Styles.headerText(),
+            ),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -36,7 +38,7 @@ class CustomVerticalSheetItem {
                     children: [
                       if (e.iconData != null)
                         Padding(
-                          padding: EdgeInsets.only(right: 15, left: 5),
+                          padding: EdgeInsets.only(right: 15.w, left: 5.w),
                           child: Icon(
                             e.iconData,
                             color: selectedItem == e.value ? Colors.red : null,
@@ -58,8 +60,7 @@ class CustomVerticalSheetItem {
                         SizedBox.shrink(),
                       Label(
                         text: e.text,
-                        style: Styles.headerText(
-                            color: Colors.black, fontWeight: FontWeight.w400),
+                        style: Styles.headerText( fontWeight: FontWeight.w400),
                       ),
                     ],
                   ),

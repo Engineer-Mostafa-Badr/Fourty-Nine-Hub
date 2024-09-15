@@ -5,6 +5,8 @@ import 'package:fourtyninehub/features/account_taps/privacy/domain/useCase/fetch
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/cubit/privacy_cubit.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/account_taps/privacy/domain/useCase/update_privacy_use_case.dart';
+
 class PrivacyServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<PrivacyDataSource>(
@@ -19,9 +21,14 @@ class PrivacyServiceLocator {
         .registerLazySingleton<FetchPrivacyUseCase>(() => FetchPrivacyUseCase(
       serviceLocator(),
     ));
+    serviceLocator
+        .registerLazySingleton<UpdatePrivacyUseCase>(() => UpdatePrivacyUseCase(
+      serviceLocator(),
+    ));
 
     serviceLocator.registerFactory<PrivacyCubit>(
             () => PrivacyCubit(
+          serviceLocator(),
           serviceLocator(),
         )..loadData());
   }

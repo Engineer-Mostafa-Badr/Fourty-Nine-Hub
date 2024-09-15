@@ -5,9 +5,13 @@ import 'package:fourtyninehub/features/account_taps/privacy/data/models/privacy_
 
 import '../../../../../core/error/failure.dart';
 import '../../domain/entities/privacy_entity.dart';
+import '../../domain/useCase/update_privacy_use_case.dart';
 
 abstract class PrivacyDataSource {
   Future<Either<Failure, PrivacyEntity>> fetchDataPrivacy();
+
+  Future<Either<Failure, PrivacyEntity>> updateDataPrivacy(
+      UpdatePrivacyParams params);
 }
 
 class PrivacyDataSourceImpl extends PrivacyDataSource {
@@ -19,6 +23,19 @@ class PrivacyDataSourceImpl extends PrivacyDataSource {
   Future<Either<Failure, PrivacyEntity>> fetchDataPrivacy() async {
     var response = await _apiConsumer.get(EndPoints.privacy);
 
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(PrivacyModel.fromJson(response['data'])),
+    );
+  }
+
+  @override
+  Future<Either<Failure, PrivacyEntity>> updateDataPrivacy(
+      UpdatePrivacyParams params) async {
+    var response = await _apiConsumer.put(
+      EndPoints.privacy,
+      queryParameters: params.toJson(),
+    );
     return response.fold(
       (failure)=>Left(failure),
       (response)=>Right(PrivacyModel.fromJson(response['data'])),
