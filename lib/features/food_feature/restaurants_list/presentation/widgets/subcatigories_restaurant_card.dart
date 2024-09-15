@@ -24,12 +24,12 @@ class SubCatigoriesRestaurantCard extends StatelessWidget {
   Widget _buildVerticalCard() {
     return SizedBox(
       width: kToolbarHeight * 2.5,
-      height: kToolbarHeight * 3,
+      // height: kToolbarHeight * 3,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-              flex: 2,
+              flex: 1,
               child: Stack(
                 children: [
                   Positioned.fill(

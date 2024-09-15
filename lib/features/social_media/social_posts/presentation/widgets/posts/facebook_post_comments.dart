@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/comment_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
@@ -8,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/cu
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
@@ -17,7 +21,6 @@ import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/comment_entity.dart';
 import '../../../domain/usecases/post_comment_usecase.dart';
 import 'comment_card.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FacebookPostComments extends StatefulWidget {
   // final List<CommentEntity> comments;
@@ -48,8 +51,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SocialPostsCubit, SocialPostsState>(
-        builder: (context, state) {
+    return BlocBuilder<SocialPostsCubit, SocialPostsState>(builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
       final user = context.read<UserCubit>().state.data;
       return Scaffold(
@@ -58,11 +60,9 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.grey),
           title: Label(
-              text:
-                  '${controller.commentsPagingController.itemList?.length ?? 0} Comments',
+              text: '${controller.commentsPagingController.itemList?.length ?? 0} ${LocaleKeys.comments.localize}',
               style: Styles.mediumText()),
-          leading: IconButton(
-              onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
+          leading: IconButton(onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
           centerTitle: true,
         ),
         body: Column(
@@ -72,17 +72,15 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                 padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
                 pagingController: controller.commentsPagingController,
                 shrinkWrap: true,
-                physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
+                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                 builderDelegate: PagedChildBuilderDelegate<CommentEntity>(
                     noItemsFoundIndicatorBuilder: (context) {
-                      print(
-                          controller.commentsPagingController.itemList?.length);
+                      print(controller.commentsPagingController.itemList?.length);
                       return Padding(
-                          padding: EdgeInsets.only(top: 200),
+                          padding: const EdgeInsets.only(top: 200),
                           child: Center(
                             child: Text(
-                              "No Comments",
+                              LocaleKeys.noComments.localize,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 18.sp,
@@ -92,13 +90,11 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                     },
                     itemBuilder: (context, item, index) {
                       return _buildCommentCard(
-                        comment: controller
-                            .commentsPagingController.itemList![index],
+                        comment: controller.commentsPagingController.itemList![index],
                         onDeleteComment: (String id) async {
                           var result = await widget.onDeleteComment(id);
                           if (result == true) {
-                            controller.commentsPagingController.itemList
-                                ?.removeWhere((e) => e.id == id);
+                            controller.commentsPagingController.itemList?.removeWhere((e) => e.id == id);
                             setState(() {});
                           }
                         },
@@ -106,11 +102,9 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                       );
                     },
                     noMoreItemsIndicatorBuilder: (context) => Container(),
-                    firstPageProgressIndicatorBuilder: (context) => Container(
-                        margin: EdgeInsets.only(top: 150),
-                        child: const CupertinoActivityIndicator()),
-                    newPageProgressIndicatorBuilder: (context) =>
-                        const CupertinoActivityIndicator()),
+                    firstPageProgressIndicatorBuilder: (context) =>
+                        Container(margin: const EdgeInsets.only(top: 150), child: const CupertinoActivityIndicator()),
+                    newPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator()),
               ),
             ),
             Container(
@@ -126,7 +120,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                       imageURL: user?.profilePicture,
                       userId: '',
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Expanded(
                       child: TextFormField(
                         maxLines: null,
@@ -137,13 +131,13 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                         style: Styles.headerText(fontSize: 26.sp),
                         decoration: InputDecoration(
                           fillColor: Colors.white,
-                          contentPadding: EdgeInsets.all(5),
-                          hintText: 'Type your comment ....',
+                          contentPadding: const EdgeInsets.all(5),
+                          hintText: '${LocaleKeys.typeYourComment.localize} ....',
                           hintStyle: Styles.mediumText(),
                         ),
                       ),
                     ),
-                    Sizer(),
+                    const Sizer(),
                     if (commentTextController.text.isNotEmpty)
                       IconAppButton(
                           icon: Icons.send,
@@ -151,11 +145,8 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                           isCircle: true,
                           onPressed: () async {
                             CommentEntity data = await widget.onAddComment(
-                                PostCommentParams(
-                                    postId: widget.postId,
-                                    content: commentTextController.text));
-                            controller.commentsPagingController.itemList
-                                ?.insert(
+                                PostCommentParams(postId: widget.postId, content: commentTextController.text));
+                            controller.commentsPagingController.itemList?.insert(
                               0,
                               CommentModel(
                                 id: data.id,
@@ -205,19 +196,17 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
       children: [
         CommentCard(
           comment: comment,
-          onAddReply: (ReplyOnCommentParams params) =>
-              widget.onCommentReply(params),
+          onAddReply: (ReplyOnCommentParams params) => widget.onCommentReply(params),
           onDeleteComment: (String id) => onDeleteComment(id),
           onDeleteReply: (String id) => onDeleteReply(id),
           from: widget.from,
-          onEditComment: (PostCommentParams params) =>
-              widget.onEditComment(params),
+          onEditComment: (PostCommentParams params) => widget.onEditComment(params),
         ),
         if (comment.repliesCount != 0)
           Container(
-              margin: EdgeInsets.only(left: 30),
+              margin: const EdgeInsets.only(left: 30),
               child: TextAppButton(
-                  label: 'show ${comment.repliesCount} replies',
+                  label: '${LocaleKeys.show.localize} ${comment.repliesCount} ${LocaleKeys.replies.localize}',
                   onPressed: () {}))
       ],
     );

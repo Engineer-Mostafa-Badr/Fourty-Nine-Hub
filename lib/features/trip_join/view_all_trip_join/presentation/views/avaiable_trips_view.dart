@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trips_floating_action_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/avilable_trips_body.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+
+import '../../../../../core/localization/locale_keys.g.dart';
 
 class AvailableTripsView extends StatelessWidget {
   const AvailableTripsView({super.key});
@@ -16,7 +19,7 @@ class AvailableTripsView extends StatelessWidget {
           title: Transform(
             transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
             child: Text(
-              'Available Trips',
+              LocaleKeys.availableTrips.localize,
               style: Styles.headerText(),
             ),
           ),

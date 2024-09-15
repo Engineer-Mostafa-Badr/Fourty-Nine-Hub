@@ -4,6 +4,8 @@ import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
@@ -161,7 +163,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                                 ),
                                 Sizer(),
                                 Label(
-                                  text: "This content is not available now.",
+                                  text: LocaleKeys.thisContentIsNotAvailableNow.localize,
                                   style: Styles.headerText(
                                     color: Colors.black,
                                   ),
@@ -208,7 +210,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                             width: 5,
                           ),
                           Label(
-                            text: 'Comments',
+                            text: LocaleKeys.comments.localize,
                             style: Styles.mediumText(),
                           )
                         ],
@@ -238,7 +240,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                               ),
                               if (widget.from == 'posts') ...[
                                 Label(
-                                    text: 'Like',
+                                    text: LocaleKeys.like.localize,
                                     style:
                                         Styles.mediumText(color: Colors.grey)),
                               ],
@@ -249,7 +251,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                       Expanded(
                         child: _buildReactionPlaceHolder(
                             icon: FontAwesomeIcons.message,
-                            label: 'Comment',
+                            label: LocaleKeys.comment.localize,
                             onTap: () {
                               context.push(Routes.LOGIN);
                             }),
@@ -257,7 +259,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                       Expanded(
                         child: _buildReactionPlaceHolder(
                             icon: FontAwesomeIcons.share,
-                            label: 'Share',
+                            label: LocaleKeys.share.localize,
                             onTap: () async {
                               context.push(Routes.LOGIN);
                             }),
@@ -322,7 +324,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                           width: 5,
                         ),
                         Label(
-                          text: 'Comments',
+                          text: LocaleKeys.comments.localize,
                           style: Styles.mediumText(),
                         )
                       ],
@@ -346,7 +348,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                       Expanded(
                         child: _buildReactionPlaceHolder(
                             icon: FontAwesomeIcons.message,
-                            label: 'Comment',
+                            label: LocaleKeys.comment.localize,
                             onTap: () {
                               context.push(Routes.LOGIN);
                             }),
@@ -354,7 +356,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                     Expanded(
                       child: _buildReactionPlaceHolder(
                           icon: FontAwesomeIcons.share,
-                          label: 'Share',
+                          label: LocaleKeys.share.localize,
                           onTap: () async {
                             context.push(Routes.LOGIN);
                           }),
@@ -743,7 +745,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
         children: [
           if (post.feeling != null || post.activity != null) ...[
             Text(
-              'feeling ${post.feeling != null ? post.feeling?.name ?? '' : ''}${post.activity != null ? ', ${post.activity?.name}' : ''}',
+              '${LocaleKeys.feeling.localize} ${post.feeling != null ? post.feeling?.name ?? '' : ''}${post.activity != null ? ', ${post.activity?.name}' : ''}',
               style: Styles.mediumText(),
             ),
             SizedBox(
@@ -754,7 +756,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
             Row(
               children: [
                 Label(
-                  text: 'with: ',
+                  text: '${LocaleKeys.withKey.localize}: ',
                   style: Styles.mediumText(),
                 ),
                 GestureDetector(

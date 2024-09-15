@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/comment_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
@@ -58,7 +60,7 @@ class _CommentRepliesState extends State<CommentReplies> {
           iconTheme: const IconThemeData(color: Colors.grey),
           title: Label(
               text:
-                  '${controller.repliesPagingController.itemList?.length ?? 0} Replies',
+                  '${controller.repliesPagingController.itemList?.length ?? 0} ${LocaleKeys.replies.localize}',
               style: Styles.mediumText()),
           leading: IconButton(
               onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
@@ -81,7 +83,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                           padding: EdgeInsets.only(top: 200),
                           child: Center(
                             child: Text(
-                              "No Replies",
+                              LocaleKeys.noReplied.localize,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 18.sp,
@@ -135,7 +137,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         contentPadding: const EdgeInsets.all(5),
-                        hintText: 'Type your reply ....',
+                        hintText: '${LocaleKeys.typeYourReply.localize} ....',
                         hintStyle: Styles.mediumText(),
                       ),
                     )),

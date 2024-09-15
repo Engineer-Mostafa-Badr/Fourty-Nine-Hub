@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
@@ -85,7 +87,7 @@ class FacebookBody extends StatelessWidget {
                       noItemsFoundIndicatorBuilder: (context) {
                         return Center(
                           child: Text(
-                            "No Posts",
+                            LocaleKeys.noPosts.localize,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 18.sp,
