@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -9,14 +10,13 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/extensions/map_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/deleteMessage_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_request.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_delivered_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_seen_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_delivered_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_seen_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -24,35 +24,39 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 part 'chat_room_state.dart';
 
 class ChatRoomCubit extends Cubit<ChatRoomState> {
-  final DeleteChatMessageUseCase _deleteChatMessageUseCase;
   final SendMessageUseCase _sendMessageUseCase;
   final GetMessagesUseCase _getMessagesUseCase;
   final MarkMessageAsSeenUseCase _markMessageAsSeenUseCase;
   final ListenToSeenMessagesUseCase _listenToSeenMessagesUseCase;
   final StopListenToSeenMessagesUseCase _stopListenToSeenMessagesUseCase;
+  final ListenToDeliveredMessagesUseCase _listenToDeliveredMessagesUseCase;
+  final StopListenToDeliveredMessagesUseCase
+      _stopListenToDeliveredMessagesUseCase;
   final ScrollController scrollController = ScrollController();
   final TextEditingController messageTextController = TextEditingController();
   final FilePicker _filePicker = FilePicker.platform;
-
+  final List<File> _media = [];
   Map<String, MessageEntity> _messages = {};
   MessageEntity? _replayMessage;
   late ChatEntity _chat;
 
   ChatRoomCubit(
-    this._deleteChatMessageUseCase,
     this._sendMessageUseCase,
     this._getMessagesUseCase,
     this._markMessageAsSeenUseCase,
     this._listenToSeenMessagesUseCase,
     this._stopListenToSeenMessagesUseCase,
+    this._listenToDeliveredMessagesUseCase,
+    this._stopListenToDeliveredMessagesUseCase,
   ) : super(const ChatRoomState()) {
+    _listenToDeliveredMessages();
+
     _listenToSeenMessages();
   }
 
   Future<void> init({required ChatEntity chat}) async {
     _chat = chat;
     await _getMessages();
-    _markMessageAsSeen();
   }
 
 // =========================================== get messages ===========================================
@@ -93,14 +97,15 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     final result = await _sendMessageUseCase(SendMessageParams(
         replyMessageId: _replayMessage?.id,
         message: messageTextController.text,
-        chatId: _chat.id,
-        mediaIds: [],
+        chat: _chat,
+        media: _media,
         oneTimeView: false));
     result.fold(
         (l) => emit(state.copyWith(failure: l, status: ChatRoomStates.error)),
         (r) {
       cancelReplay();
       messageTextController.text = '';
+      _media.clear();
     });
   }
 
@@ -112,15 +117,6 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   void cancelReplay() {
     _replayMessage = null;
     emit(state.copyWith(replayedMessage: _replayMessage));
-  }
-
-  // =========================================== delete message ===========================================
-
-  deleteMessage({required String chatId, required String messageId}) async {
-    DeleteMessageParams deleteMessageParams =
-        DeleteMessageParams(chatId: chatId, messageId: messageId);
-    await _deleteChatMessageUseCase.call(deleteMessageParams);
-    // getMessages();
   }
 
   // =========================================== seen ============================================
@@ -140,6 +136,17 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     });
   }
 
+  void _listenToDeliveredMessages() async {
+    _listenToDeliveredMessagesUseCase.call((messages) {
+      for (final message in messages) {
+        if (message.chatId == _chat.id) {
+          _messages[message.id]?.markAsDelivered();
+          emit(state.copyWith(messages: _messages.values.toList()));
+        }
+      }
+    });
+  }
+
   // =========================================== pick attachments ===========================================
   Future<void> pickDocuments() async {
     try {
@@ -151,10 +158,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       if (result != null) {
         for (var file in result.files) {
-          debugPrint('Picked file: ${file.name}');
+          _media.add(File(file.path!));
         }
-      } else {
-        debugPrint('File picking canceled');
       }
     } catch (e) {
       CliLogger.error('Error picking file: $e');
@@ -173,10 +178,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       if (result != null) {
         for (var file in result.files) {
-          debugPrint('Picked file: ${file.name}');
+          _media.add(File(file.path!));
         }
-      } else {
-        debugPrint('File picking canceled');
       }
     } catch (e) {
       CliLogger.error('Error picking file: $e');
@@ -195,10 +198,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       if (result != null) {
         for (var file in result.files) {
-          debugPrint('Picked file: ${file.name}');
+          _media.add(File(file.path!));
         }
-      } else {
-        debugPrint('File picking canceled');
       }
     } catch (e) {
       CliLogger.error('Error picking file: $e');
@@ -216,6 +217,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   @override
   Future<void> close() {
     _stopListenToSeenMessagesUseCase(const NoParams());
+    _stopListenToDeliveredMessagesUseCase(const NoParams());
     return super.close();
   }
 }

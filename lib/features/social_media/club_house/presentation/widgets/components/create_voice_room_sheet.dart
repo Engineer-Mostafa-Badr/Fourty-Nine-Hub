@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -62,6 +63,7 @@ void showVoiceLiveBottomSheet({
                   child: TextField(
                     controller: roomSubjectController,
                     keyboardType: TextInputType.text,
+                    textAlign: TextAlign.center,
                     decoration: InputDecoration(
                       // labelText: 'Room Subject',
                       hintText: LocaleKeys.enterRoomSubject.localize,
@@ -70,7 +72,6 @@ void showVoiceLiveBottomSheet({
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       ),
                       filled: true,
-                      fillColor: Colors.grey[200],
                     ),
                   ),
                 ),
@@ -83,12 +84,14 @@ void showVoiceLiveBottomSheet({
                     children: <Widget>[
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.PRIMARY_COLOR),
+                            backgroundColor: context.isDarkMode
+                                ? AppColors.SECONDARY_COLOR
+                                : AppColors.PRIMARY_COLOR),
                         onPressed: () async {
                           String roomSub = roomSubjectController.text.trim();
                           if (roomSub.isEmpty) {
-                            showErrorMessage(
-                                context, LocaleKeys.roomSubjectValidation.localize);
+                            showErrorMessage(context,
+                                LocaleKeys.roomSubjectValidation.localize);
                             return;
                           } else {
                             await addRoom(cubit, roomSub);
@@ -122,8 +125,7 @@ void showVoiceLiveBottomSheet({
                         },
                         child: Text(
                           LocaleKeys.cancel.localize,
-                          style:
-                              const TextStyle(color: AppColors.SECONDARY_COLOR),
+                          style: const TextStyle(color: Colors.blue),
                         ),
                       ),
                     ],

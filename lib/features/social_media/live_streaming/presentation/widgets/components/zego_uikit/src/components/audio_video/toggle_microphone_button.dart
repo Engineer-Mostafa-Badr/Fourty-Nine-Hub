@@ -8,7 +8,6 @@ import 'package:permission_handler/permission_handler.dart';
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
-
 /// button used to open/close microphone
 class ZegoToggleMicrophoneButton extends StatefulWidget {
   const ZegoToggleMicrophoneButton({
@@ -79,6 +78,7 @@ class _ZegoToggleMicrophoneButtonState
                       controlBarButtonCheckedBackgroundColor
                   : widget.offIcon?.backgroundColor ??
                       controlBarButtonBackgroundColor,
+              shape: BoxShape.circle,
             ),
             child: SizedBox.fromSize(
               size: sizeBoxSize,

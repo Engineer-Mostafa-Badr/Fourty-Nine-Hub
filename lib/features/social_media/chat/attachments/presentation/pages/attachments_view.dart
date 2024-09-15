@@ -53,7 +53,7 @@ class AttachementsViewState extends State<AttachementsView> {
             },
             icon: Icon(
               Icons.arrow_back,
-              size: 40.zW,
+              size: 26,
               color: AppColors.BACKGROUND_COLOR,
             ),
           ),

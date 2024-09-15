@@ -52,8 +52,9 @@ class MeetingView extends StatelessWidget {
                   children: [
                     _buildMeetingItem(
                       color: AppColors.SECONDARY_COLOR,
-                      label:context.isArabic?
-                          '${LocaleKeys.meeting.localize} \n ${LocaleKeys.nnew.localize}':'${LocaleKeys.nnew.localize} \n ${LocaleKeys.meeting.localize}',
+                      label: context.isArabic
+                          ? '${LocaleKeys.meeting.localize} \n ${LocaleKeys.nnew.localize}'
+                          : '${LocaleKeys.nnew.localize} \n ${LocaleKeys.meeting.localize}',
                       icon: Icons.video_call,
                       twoLines: true,
                       onTap: () async {
@@ -79,7 +80,7 @@ class MeetingView extends StatelessWidget {
                     ),
                     _buildMeetingItem(
                         color: AppColors.PRIMARY_COLOR,
-                        label: 'join'.tr(),
+                        label: LocaleKeys.join.localize,
                         icon: Icons.add_box_rounded,
                         onTap: () {
                           // join meeting
@@ -90,8 +91,7 @@ class MeetingView extends StatelessWidget {
                         }),
                     _buildMeetingItem(
                       color: AppColors.PRIMARY_COLOR,
-                      label:
-                          LocaleKeys.schedule.localize,
+                      label: LocaleKeys.schedule.localize,
                       icon: Icons.calendar_today_outlined,
                       onTap: () async {
                         _scheduleAMeeting(context);
@@ -127,7 +127,9 @@ class MeetingView extends StatelessWidget {
                 child: Text(
                   LocaleKeys.addAcalender.localize,
                   style: TextStyle(
-                      color: AppColors.PRIMARY_COLOR,
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR,
                       fontSize: 32.sp,
                       fontWeight: FontWeight.w600),
                 ),
@@ -184,16 +186,22 @@ class MeetingView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          color: Colors.grey[400],
+                          color: context.isDarkMode
+                              ? Colors.black87
+                              : Colors.grey[400],
                           width: double.maxFinite,
-                          padding: EdgeInsets.only(
-                            left: 30.w,
+                          padding: EdgeInsetsDirectional.only(
+                            start: 30.w,
                             top: 5.h,
                             bottom: 5.h,
                           ),
                           child: Label(
                             text: formatDateString(scheduledMeeting.startDate),
-                            style: Styles.headerText(fontSize: 25),
+                            style: Styles.headerText(
+                                fontSize: 25,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.grey),
                           ),
                         ),
                         Padding(
@@ -206,12 +214,18 @@ class MeetingView extends StatelessWidget {
                                   Label(
                                     text: getHour(scheduledMeeting.startDate),
                                     style: Styles.headerText(
-                                        fontSize: 25, color: Colors.grey[600]),
+                                        fontSize: 25,
+                                        color: context.isDarkMode
+                                            ? Colors.white
+                                            : Colors.grey[600]),
                                   ),
                                   Label(
                                     text: getPeriod(scheduledMeeting.startDate),
                                     style: Styles.headerText(
-                                        fontSize: 18, color: Colors.grey[600]),
+                                        fontSize: 18,
+                                        color: context.isDarkMode
+                                            ? Colors.white
+                                            : Colors.grey[600]),
                                   ),
                                 ],
                               ),
@@ -220,14 +234,21 @@ class MeetingView extends StatelessWidget {
                                   SizedBox(height: 5.h),
                                   Label(
                                     text: scheduledMeeting.title,
-                                    style: Styles.headerText(fontSize: 25),
+                                    style: Styles.headerText(
+                                        fontSize: 25,
+                                        color: context.isDarkMode
+                                            ? Colors.white
+                                            : Colors.grey[600]),
                                   ),
                                   SizedBox(height: 5.h),
                                   Label(
                                     text:
-                                        '${LocaleKeys.meetingId.localize}: ${scheduledMeeting.roomId}',
+                                        '${LocaleKeys.meetingId.localize} ${scheduledMeeting.roomId}',
                                     style: Styles.headerText(
-                                        fontSize: 20, color: Colors.grey[600]),
+                                        fontSize: 20,
+                                        color: context.isDarkMode
+                                            ? Colors.white
+                                            : Colors.grey[600]),
                                   ),
                                 ],
                               ),

@@ -10,6 +10,7 @@ abstract class  LocaleKeys {
   static const scheduleAMeeting = 'scheduleAMeeting';
   static const startDateBeginValidation = 'startDateBeginValidation';
   static const startDateTimeValidation = 'startDateTimeValidation';
+  static const pleaseFillAllFields = 'pleaseFillAllFields';
   static const done = 'done';
   static const date = 'date';
   static const selectADate = 'selectADate';
@@ -56,6 +57,7 @@ abstract class  LocaleKeys {
   static const audience = 'audience';
   static const voiceChanging = 'voiceChanging';
   static const reverb = 'reverb';
+  static const meetingTitle = 'meetingTitle';
   static const audioEffects = 'audioEffects';
   static const arabic = 'arabic';
   static const english = 'english';
@@ -358,6 +360,12 @@ abstract class  LocaleKeys {
   static const complete = 'complete';
   static const yearsLast = 'yearsLast';
   static const checkRequest = 'checkRequest';
+  static const aBirdInHand = 'aBirdInHand';
+  static const permissionDenied = 'permissionDenied';
+  static const contacts = 'contacts';
+  static const pleaseLoginRegisterToEnjoyTheApp = 'pleaseLoginRegisterToEnjoyTheApp';
+  static const noChatsUntilNow = 'noChatsUntilNow';
+  static const unarchive = 'unarchive';
   static const whatDoYouThink = 'whatDoYouThink';
   static const peopleYouMayKnow = 'peopleYouMayKnow';
   static const noFriendsSuggested = 'noFriendsSuggested';

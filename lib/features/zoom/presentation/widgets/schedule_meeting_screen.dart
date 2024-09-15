@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/time_of_day_helper.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
@@ -119,8 +120,8 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
         child: Padding(
-          padding:
-              EdgeInsets.all(8.0).add(EdgeInsets.symmetric(vertical: 25.h)),
+          padding: const EdgeInsets.all(8.0)
+              .add(EdgeInsets.symmetric(vertical: 25.h)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -130,18 +131,16 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                 children: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child:  Text(
+                    child: Text(
                       LocaleKeys.cancel.localize,
-                      style: TextStyle(color: AppColors.SECONDARY_COLOR),
+                      style: const TextStyle(color: Colors.blue),
                     ),
                   ),
-                  Text(
-                    LocaleKeys.scheduleAMeeting.localize,
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: AppColors.PRIMARY_COLOR,
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
+                  Text(LocaleKeys.scheduleAMeeting.localize,
+                      style: TextStyle(
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR)),
                   TextButton(
                     onPressed: () async {
                       final title = _titleController.text;
@@ -150,13 +149,13 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                           _endTime != null) {
                         if (_endTime!.isBefore(_startTime!)) {
                           showErrorMessage(
-                              context, 'Start Date must be before End Date');
+                              context, LocaleKeys.startDateTimeValidation.localize);
 
                           return;
                         }
                         if (_startTime!.isBefore(TimeOfDay.now())) {
                           showErrorMessage(
-                              context, 'Start Date must be in the future');
+                              context, LocaleKeys.startDateBeginValidation.localize);
 
                           return;
                         }
@@ -176,13 +175,15 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                           context.pushReplacementNamed(Routes.ZOOM);
                         }
                       } else {
-                        showErrorMessage(context, 'Please fill all fields');
+                        showErrorMessage(context, LocaleKeys.pleaseFillAllFields.localize );
                       }
                     },
-                    child: const Text(
-                      "Done",
+                    child: Text(
+                      LocaleKeys.done.localize,
                       style: TextStyle(
-                        color: AppColors.PRIMARY_COLOR,
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
                       ),
                     ),
                   ),
@@ -193,16 +194,20 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
               TextField(
                 focusNode: _focusNode,
                 controller: _titleController,
-                decoration: const InputDecoration(
-                  labelText: 'Meeting Title',
-                  border: OutlineInputBorder(),
-                  fillColor: Colors.white,
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  // labelText: 'Meeting Title',
+                  hintText: LocaleKeys.meetingTitle.localize,
+                  border: const OutlineInputBorder(),
+                  fillColor: context.isDarkMode
+                      ? AppColors.GREY_DARK_COLOR
+                      : AppColors.GREY_LIGHT_COLOR,
                 ),
               ),
               SizedBox(height: 16.h),
               // Date Picker
               _buildDateTimeSelection(
-                title: 'Date',
+                title: LocaleKeys.date.localize,
                 content: _selectedDate != null
                     ? _dateFormat.format(_selectedDate!)
                     : 'Select date',
@@ -211,16 +216,16 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
               SizedBox(height: 16.h),
               // Start Time Picker
               _buildDateTimeSelection(
-                title: 'From',
+                title: LocaleKeys.from.localize,
                 content: _startTime != null
                     ? _startTime!.format(context)
-                    : 'Select start time',
+                    : LocaleKeys.selectADate.localize,
                 onTap: () => _selectTime(context, true),
               ),
               SizedBox(height: 16.h),
               // End Time Picker
               _buildDateTimeSelection(
-                title: 'To',
+                title: LocaleKeys.to.localize,
                 content: _endTime != null
                     ? _endTime!.format(context)
                     : 'Select end time',
@@ -251,8 +256,9 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: context.isDarkMode ? Colors.white : Colors.black,
+                      fontWeight: FontWeight.bold),
                 ),
                 Expanded(
                   child: Container(),
@@ -261,12 +267,12 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                   content,
                   style: TextStyle(
                     fontSize: 20.sp,
-                    color: Colors.black54,
+                    color: context.isDarkMode ? Colors.white70 : Colors.black54,
                   ),
                 ),
-                const Icon(
+                Icon(
                   Icons.arrow_forward_ios_rounded,
-                  color: Colors.black54,
+                  color: context.isDarkMode ? Colors.white70 : Colors.black54,
                   size: 15,
                 )
               ],

@@ -6,6 +6,7 @@ extension ContextExtensions on BuildContext {
       ? ThemeMode.dark
       : ThemeMode.light;
 
+  bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
   // Get the current screen height
   double get screenHeight => MediaQuery.of(this).size.height;
 

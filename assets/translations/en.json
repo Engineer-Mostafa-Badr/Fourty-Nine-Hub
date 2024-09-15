@@ -8,6 +8,7 @@
   "scheduleAMeeting": "Schedule a Meeting",
   "startDateBeginValidation": "Start Date must be before End Date",
   "startDateTimeValidation": "Start Date must be in the future",
+  "pleaseFillAllFields": "Please fill all fields",
   "done": "Done",
   "date": "Date",
   "selectADate": "Select date",
@@ -55,7 +56,8 @@
   "voiceChanging":"Voice Changing",
   "audioEffects":"Audio Effects",
   "reverb":"Reverb",
-  
+  "meetingTitle":"Meeting Title",
+
   "arabic": "Arabic",
   "english": "English",
   "meal": "Meal",
@@ -360,6 +362,12 @@
   "requestWithdrawal": "Your request withdrawal sent successfully waiting for administration approval",
   "complete": "Complete",
   "yearsLast": "years last",
+  "aBirdInHand": "A bird in the hand is better than two on the tree.",
+  "permissionDenied": "Permission denied",
+  "contacts": "Contacts",
+  "pleaseLoginRegisterToEnjoyTheApp":"Please Login, Register to enjoy the app",
+  "noChatsUntilNow": "No Chats until now",
+  "unarchive": "Unarchive",
   "checkRequest": "Please wait to check request",
 
 
