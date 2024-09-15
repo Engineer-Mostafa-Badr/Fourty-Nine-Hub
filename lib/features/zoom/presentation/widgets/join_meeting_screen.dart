@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
@@ -11,6 +12,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../routes/routes.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../bloc/meeting_state.dart';
@@ -47,12 +49,12 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
       RegExp regExp = RegExp(r'^[0-9]*$');
 
       if (value == null || value.isEmpty) {
-        return 'Please enter some text';
+        return LocaleKeys.emptyFieldNotValid.localize;
       } else if (!regExp.hasMatch(value)) {
-        return 'Invalid input: Only numbers, /, and . are allowed';
+        return LocaleKeys.invalidInputValidator.localize;
       }
       if (value.length < 8) {
-        return 'Meeting ID must be 8 numbers';
+        return LocaleKeys.meetingMustBe8Characters.localize;
       }
       return null; // Input is valid
     }
@@ -78,7 +80,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
           leading: IconButton(
               onPressed: () => context.pop(),
               icon: const Icon(Icons.arrow_back_ios)),
-          title:  const Text('Join Meeting'),
+          title:   Text(LocaleKeys.joinMeeting.localize),
 
             // 'Join a meeting',
             // style: TextStyle(
@@ -102,7 +104,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
               children: <Widget>[
                 if (widget.shareScreen)
                   Label(
-                    text: 'Join a Meeting with Share screen',
+                    text: LocaleKeys.joinMeetingWithShareScreen.localize,
                     style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
                   ),
                 Padding(
@@ -114,13 +116,13 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                     validator: validateInput,
                     maxLength: 8,
                     onChanged: onTextChanged,
-                    decoration: const InputDecoration(
-                      hintText: 'Meeting ID',
+                    decoration:  InputDecoration(
+                      hintText: LocaleKeys.meetingId.localize,
                       // errorText: _errorMessage,
                       counterText: '',
-                      labelStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
-                      hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
-                      border: OutlineInputBorder(
+                      labelStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
+                      hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
+                      border: const OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.all(
                           Radius.circular(10.0),
@@ -179,7 +181,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                     );
                     showSuccessMessage(
                       context,
-                      'Joining meeting with ID: $meetingId',
+                      '${LocaleKeys.joinMeetingWithId.localize} $meetingId',
                     );
                   } else if (state.isFailure) {}
                 }, builder: (context, state) {
@@ -207,8 +209,8 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                         minimumSize: Size(context.screenWidth * 0.8, 50),
                         backgroundColor: AppColors.PRIMARY_COLOR,
                       ),
-                      child: const Label(
-                        text: 'Join Meeting',
+                      child:  Label(
+                        text: LocaleKeys.joinMeeting.localize,
                         color: Colors.white,
                       ),
                     ),

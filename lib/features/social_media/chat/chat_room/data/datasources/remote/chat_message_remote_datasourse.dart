@@ -177,9 +177,9 @@ class MessagesRemoteDataSourceImplementation
       _socket.connect();
       _socket.on(SocketIOListeners.messageDelivered, (data) {
         CliLogger.info("messageDelivered :  $data");
-        params((jsonDecode(data) as List)
-            .map((e) => MessageModel.fromJson(e))
-            .toList());
+        // params((jsonDecode(data) as List)
+        //     .map((e) => MessageModel.fromJson(e))
+        //     .toList());
       });
     } catch (e) {
       CliLogger.info("can't listen to delivered messages error $e");

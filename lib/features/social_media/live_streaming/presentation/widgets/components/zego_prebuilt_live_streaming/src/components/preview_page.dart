@@ -4,7 +4,9 @@ import 'dart:core';
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/effects/beauty_effect_button.dart';
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/utils/permissions.dart';
@@ -17,7 +19,10 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
+import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../../../res/style/const.dart';
+import '../../../../../../../../../res/style/styles.dart';
 import '../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../liveview/gifts/simple_gifts_sheet.dart';
@@ -137,7 +142,7 @@ class _ZegoLiveStreamingPreviewPageState
 
   Positioned _liveInfo(BoxConstraints constraints) {
     return Positioned(
-        top: 90,
+        top: 150.h,
         right: constraints.maxWidth / 8,
         left: constraints.maxWidth / 8,
         child: Column(
@@ -154,8 +159,8 @@ class _ZegoLiveStreamingPreviewPageState
                     image:
                         context.read<UserCubit>().state.data?.profilePicture ??
                             UIConst.profilePlaceHolder,
-                    height: 70,
-                    width: 70,
+                    height: 100.h,
+                    width: 100.w,
                     borderRadius: BorderRadius.circular(15),
                     isCircle: false,
                   ),
@@ -166,11 +171,12 @@ class _ZegoLiveStreamingPreviewPageState
                       textAlign: TextAlign.center,
                       // validator: validateInput,
                       maxLength: 50,
+                      style: Styles.mediumText(color: Colors.white),
                       maxLines: null,
                       // onChanged: onTextChanged,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.edit),
-                        
+
                         // errorText: _errorMessage,
                         counterText: '',
                         labelStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
@@ -211,12 +217,13 @@ class _ZegoLiveStreamingPreviewPageState
                         const SizedBox(
                           width: 5,
                         ),
-                        const Text('Add topic',
-                            style: TextStyle(color: Colors.white)),
+                        Text(LocaleKeys.addTopic.localize,
+                            style: const TextStyle(color: Colors.white)),
                       ],
                     ),
                   ),
                 ),
+                Sizer(),
                 Expanded(
                   child: InkWell(
                     onTap: () {
@@ -239,9 +246,9 @@ class _ZegoLiveStreamingPreviewPageState
                           const SizedBox(
                             width: 5,
                           ),
-                          const Text(
-                            'Add a LIVE goal',
-                            style: TextStyle(color: Colors.white),
+                          Text(
+                            LocaleKeys.addLiveGoal.localize,
+                            style: const TextStyle(color: Colors.white),
                           ),
                         ],
                       ),
@@ -269,14 +276,14 @@ class _ZegoLiveStreamingPreviewPageState
               rootNavigator: widget.config.rootNavigator,
             ).pop();
           },
-          child: const Text(
-            'Cancel',
-            style: TextStyle(color: Colors.blue),
+          child: Text(
+            LocaleKeys.cancel.localize,
+            style: const TextStyle(color: Colors.blue),
           ),
         ),
-        title: const Text(
-          'Start a meeting',
-          style: TextStyle(
+        title: Text(
+          LocaleKeys.startAMeeting.localize,
+          style: const TextStyle(
               color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
@@ -575,7 +582,7 @@ class _ZegoLiveStreamingPreviewPageState
             child: Align(
               alignment: Alignment.center,
               child: Text(
-                'Go LIVE',
+                LocaleKeys.goLive.localize,
                 style: TextStyle(
                   fontSize: 32.zR,
                   decoration: TextDecoration.underline,
@@ -658,9 +665,9 @@ class _ZegoLiveStreamingPreviewPageState
                       .getCameraStateNotifier(ZegoUIKit().getLocalUser().id),
                   builder: (context, videoOn, child) {
                     return SwitchListTile(
-                      title: const Text(
-                        "Video on",
-                        style: TextStyle(
+                      title: Text(
+                        LocaleKeys.videoOn.localize,
+                        style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       value: videoOn,
@@ -682,12 +689,12 @@ class _ZegoLiveStreamingPreviewPageState
                 valueListenable: usePersonalIdNotifier,
                 builder: (BuildContext context, bool value, Widget? child) {
                   return SwitchListTile(
-                    title: const Text(
-                      "Use personal meeting ID (PMI)",
-                      maxLines: 1,
+                    title: Text(
+                      "${LocaleKeys.usePersonalMeetingId.localize} (PMI)",
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
                       widget.liveID,
@@ -786,7 +793,7 @@ class _ZegoLiveStreamingPreviewPageState
             child: Align(
               alignment: Alignment.center,
               child: Text(
-                'Start a Meeting',
+                LocaleKeys.startAMeeting.localize,
                 style: TextStyle(
                   fontSize: 32.zR,
                   fontWeight: FontWeight.w600,

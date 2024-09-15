@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
 
 // Project imports:
@@ -176,7 +178,9 @@ class ZoomMicrophoneBuilder extends StatelessWidget {
                   buttonSize: Size(40.zW, 40.zH),
                   iconSize: const Size(100, 100),
                   normalIcon: ButtonIcon(
-                    icon: Image.asset('assets/49-New-icons/mic.png'),
+                    icon: Image.asset(
+                      'assets/49-New-icons/mic.png',
+                    ),
                     backgroundColor: Colors.transparent,
                   ),
                   offIcon: ButtonIcon(
@@ -184,7 +188,9 @@ class ZoomMicrophoneBuilder extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/49-New-icons/mic_off.png')
+                        Image.asset(
+                          'assets/49-New-icons/mic_off.png',
+                        )
                       ],
                     ),
                     backgroundColor: Colors.transparent,
@@ -193,7 +199,7 @@ class ZoomMicrophoneBuilder extends StatelessWidget {
                   muteMode: micDefaultOn,
                 ),
                 Text(
-                  micState.value ? 'Mute' : 'Unmute',
+                  micState.value ? LocaleKeys.mute.localize : LocaleKeys.unmute.localize,
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w400,
@@ -254,7 +260,7 @@ class ZoomCameraBuilder extends StatelessWidget {
                   defaultOn: cameraDefaultOn,
                 ),
                 Text(
-                  cameraState.value ? 'Start Video' : 'Stop Video',
+                  cameraState.value ? LocaleKeys.startVideo.localize : LocaleKeys.stopVideo.localize,
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w400,
@@ -303,7 +309,7 @@ class ZoomParticipantsBuilder extends StatelessWidget {
             itemBuilder: widget.config.memberList.itemBuilder,
           ),
           Text(
-            'Participants',
+            LocaleKeys.participants.localize,
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w400,
@@ -350,7 +356,7 @@ class ZoomChatBuilder extends StatelessWidget {
               bottom: 8.zH,
               right: 5,
               child: Text(
-                'Chat',
+                LocaleKeys.chat.localize,
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w400,
@@ -402,7 +408,7 @@ class ZoomSharescreenBuilder extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(top: 5.zH),
                   child: Text(
-                    !screenShareOn ? 'Share' : 'Stop Share',
+                    !screenShareOn ? LocaleKeys.share.localize : LocaleKeys.stopVideo.localize,
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w400,
@@ -434,8 +440,8 @@ class ZoomShareCodeButton extends StatelessWidget {
             color: Colors.white,
           ),
           onPressed: () => Clipboard.setData(ClipboardData(text: liveId)).then(
-              (value) => showSuccessMessage(
-                  context, 'Room Code \'$liveId copied successfully')),
+              (value) => showSuccessMessage(context,
+                  '${LocaleKeys.roomCode.localize} \'$liveId ${LocaleKeys.copiedSuccessfully.localize}')),
         )),
       ),
     );
@@ -462,7 +468,7 @@ class ZoomWhiteBoardButton extends StatelessWidget {
               await context.read<MeetingCubit>().openWhiteBoard();
             }),
         Text(
-          'WhiteBoard',
+          LocaleKeys.whiteBoard.localize,
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w400,

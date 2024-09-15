@@ -1,9 +1,12 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 // Package imports:
 
 // Project imports:
+import '../../../../../../../../../../core/localization/locale_keys.g.dart';
 import '../../inner_text.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
@@ -58,11 +61,11 @@ class ZegoLiveStreamingInRoomMessageInputBoard extends ModalRoute<String> {
             ),
           ),
           ZegoInRoomMessageInput(
-            placeHolder: translationText.messageEmptyToast,
+            placeHolder: LocaleKeys.saySomthing.localize,
             payloadAttributes: payloadAttributes,
             // to change text field text color
-            textColor: Colors.white,
-            textHintColor: Colors.white,
+            textColor: Colors.black,
+            textHintColor: Colors.grey,
             onSubmit: () {
               Navigator.of(
                 context,

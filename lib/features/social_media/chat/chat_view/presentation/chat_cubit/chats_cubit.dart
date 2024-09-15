@@ -18,7 +18,6 @@ part 'chats_state.dart';
 class ChatsCubit extends Cubit<ChatsState> {
   final ListenToNewMessageUseCase _listenToNewMessageUseCase;
   final StopListenToMessagesUseCase _stopListenToMessagesUseCase;
-  final MarkMessagesAsDeliveredUseCase _markMessagesAsDeliveredUseCase;
   final GetChatsUseCase _getChatsUseCase;
   final Map<String, ChatEntity> _chats = {};
   ChatCategories _selectedChatCategory = ChatCategories.values.first;
@@ -29,10 +28,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._getChatsUseCase,
     this._listenToNewMessageUseCase,
     this._stopListenToMessagesUseCase,
-    this._markMessagesAsDeliveredUseCase,
-  ) : super(const ChatsState()){
-    _markMessagesAsDeliveredUseCase(MarkMessagesAsDeliveredParams(chatId: ''));
-  }
+  ) : super(const ChatsState());
 
   // Selected Chats
   void addChatToSelectedChats({required ChatEntity chat}) {
@@ -151,8 +147,7 @@ class ChatsCubit extends Cubit<ChatsState> {
       if (!message.byMe &&
           message.chatId != null &&
           message.chatId!.isNotEmpty) {
-        _markMessagesAsDeliveredUseCase(
-            MarkMessagesAsDeliveredParams(chatId: message.chatId!));
+
       }
       emit(state.copyWith(newMessage: message, status: ChatsStates.newMessage));
       getChatsByCategory(_selectedChatCategory);
