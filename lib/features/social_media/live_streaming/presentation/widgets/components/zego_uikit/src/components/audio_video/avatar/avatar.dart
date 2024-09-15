@@ -8,13 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/services/internal/core/core.dart';
 
+import '../../../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../defines.dart';
 import 'ripple_avatar.dart';
 // import 'package:zego_uikit/src/services/defines/user.dart' as zego_package;
 import '../../../services/defines/user.dart' as zego_local;
 import '../../../services/uikit_service.dart';
 // Project imports:
-
 
 class ZegoAvatar extends StatelessWidget {
   final Size avatarSize;
@@ -78,7 +78,7 @@ class ZegoAvatar extends StatelessWidget {
         user ?? zego_local.ZegoUIKitUser.empty(),
       ),
       builder: (context, _, __) {
-        final avatarURL = user?.inRoomAttributes.value.avatarURL ?? '';
+        final avatarURL = UserCubit.to.state.data?.profilePicture ?? '';
         return avatarBuilder?.call(
               context,
               size,
@@ -115,7 +115,8 @@ class ZegoAvatar extends StatelessWidget {
     );
   }
 
-  Widget circleName(BuildContext context, Size size, zego_local.ZegoUIKitUser? user) {
+  Widget circleName(
+      BuildContext context, Size size, zego_local.ZegoUIKitUser? user) {
     final userName = user?.name ?? '';
     return Container(
       decoration: const BoxDecoration(

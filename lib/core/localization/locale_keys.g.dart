@@ -1,7 +1,64 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
 abstract class  LocaleKeys {
+  static const nnew = 'nnew';
+  static const today = 'today';
+  static const tommorow = 'tommorow';
+  static const meeting = 'meeting';
   static const join = 'join';
+  static const schedule = 'schedule';
+  static const scheduleAMeeting = 'scheduleAMeeting';
+  static const startDateBeginValidation = 'startDateBeginValidation';
+  static const startDateTimeValidation = 'startDateTimeValidation';
+  static const pleaseFillAllFields = 'pleaseFillAllFields';
+  static const done = 'done';
+  static const date = 'date';
+  static const selectADate = 'selectADate';
+  static const from = 'from';
+  static const to = 'to';
+  static const share = 'share';
+  static const screen = 'screen';
+  static const addAcalender = 'addAcalender';
+  static const meetingId = 'meetingId';
+  static const startNow = 'startNow';
+  static const emptyMeetingIdValidator = 'emptyMeetingIdValidator';
+  static const invalidInputValidator = 'invalidInputValidator';
+  static const meetingMustBe8Characters = 'meetingMustBe8Characters';
+  static const joinMeeting = 'joinMeeting';
+  static const joinMeetingWithShareScreen = 'joinMeetingWithShareScreen';
+  static const joinMeetingWithId = 'joinMeetingWithId';
+  static const addTopic = 'addTopic';
+  static const addLiveGoal = 'addLiveGoal';
+  static const startAMeeting = 'startAMeeting';
+  static const faceBeautification = 'faceBeautification';
+  static const goLive = 'goLive';
+  static const usePersonalMeetingId = 'usePersonalMeetingId';
+  static const videoOn = 'videoOn';
+  static const mute = 'mute';
+  static const unmute = 'unmute';
+  static const startVideo = 'startVideo';
+  static const stopVideo = 'stopVideo';
+  static const participants = 'participants';
+  static const whiteBoard = 'whiteBoard';
+  static const roomCode = 'roomCode';
+  static const copiedSuccessfully = 'copiedSuccessfully';
+  static const saySomthing = 'saySomthing';
+  static const end = 'end';
+  static const leave = 'leave';
+  static const EndMeetingForAll = 'EndMeetingForAll';
+  static const leaveMeeting = 'leaveMeeting';
+  static const live = 'live';
+  static const clubVoice = 'clubVoice';
+  static const roomSubject = 'roomSubject';
+  static const pleaseEnterSimpleSubject = 'pleaseEnterSimpleSubject';
+  static const enterRoomSubject = 'enterRoomSubject';
+  static const roomSubjectValidation = 'roomSubjectValidation';
+  static const createRoom = 'createRoom';
+  static const audience = 'audience';
+  static const voiceChanging = 'voiceChanging';
+  static const reverb = 'reverb';
+  static const meetingTitle = 'meetingTitle';
+  static const audioEffects = 'audioEffects';
   static const arabic = 'arabic';
   static const english = 'english';
   static const newMeeting = 'newMeeting';
@@ -55,7 +112,6 @@ abstract class  LocaleKeys {
   static const reels = 'reels';
   static const chat = 'chat';
   static const find = 'find';
-  static const live = 'live';
   static const health = 'health';
   static const ship = 'ship';
   static const ride = 'ride';
@@ -231,7 +287,6 @@ abstract class  LocaleKeys {
   static const disappearingMessages = 'disappearingMessages';
   static const more = 'more';
   static const edit = 'edit';
-  static const share = 'share';
   static const report = 'report';
   static const block = 'block';
   static const clearChat = 'clearChat';
@@ -305,5 +360,11 @@ abstract class  LocaleKeys {
   static const complete = 'complete';
   static const yearsLast = 'yearsLast';
   static const checkRequest = 'checkRequest';
+  static const aBirdInHand = 'aBirdInHand';
+  static const permissionDenied = 'permissionDenied';
+  static const contacts = 'contacts';
+  static const pleaseLoginRegisterToEnjoyTheApp = 'pleaseLoginRegisterToEnjoyTheApp';
+  static const noChatsUntilNow = 'noChatsUntilNow';
+  static const unarchive = 'unarchive';
 
 }

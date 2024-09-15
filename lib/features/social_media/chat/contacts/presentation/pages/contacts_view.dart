@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -55,7 +57,7 @@ class ContactsViewState extends State<ContactsView> {
           )
         ],
         title: Text(
-          "Contacts",
+          LocaleKeys.contacts.tr(),
           style: Styles.headerText(color: Colors.white),
         ),
       ),
@@ -65,7 +67,7 @@ class ContactsViewState extends State<ContactsView> {
 
   Widget _body() {
     if (_permissionDenied) {
-      return const Center(child: Text('Permission denied'));
+      return  Center(child: Text(LocaleKeys.permissionDenied.tr()));
     }
     if (_contacts == null) {
       return const Center(child: CircularProgressIndicator());
@@ -103,7 +105,7 @@ class ContactsViewState extends State<ContactsView> {
                       style: Styles.mediumText(fontWeight: FontWeight.w600),
                     ),
                     Text(
-                      "A bird in the hand is better than two on the tree.",
+                      LocaleKeys.aBirdInHand.tr(),
                       overflow: TextOverflow.ellipsis,
                       style:
                           Styles.smallText(color: AppColors.LIGHT_GRAY_COLOR2),

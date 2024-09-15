@@ -6,6 +6,7 @@ class WalletState {
   final WalletStates status;
   final Failure? failure;
   final WalletEntity? wallet;
+  final WalletTypes? selectedWallet;
   final List<WalletHistoryEntity>? history;
   final List<WalletSubscriptionEntity>? subscription;
   final List<MainCategoryWalletEntity>? mainCategory;
@@ -15,6 +16,7 @@ class WalletState {
     this.failure,
     this.history,
     this.wallet,
+    this.selectedWallet,
     this.subscription,
     this.mainCategory,
   });
@@ -23,6 +25,7 @@ class WalletState {
     Failure? failure,
     List<WalletHistoryEntity>? history,
     WalletEntity? wallet,
+    WalletTypes? selectedWallet,
     List<WalletSubscriptionEntity>? subscription,
     List<MainCategoryWalletEntity>? mainCategory
   }) {
@@ -31,6 +34,7 @@ class WalletState {
       failure: failure ?? this.failure,
       history: history ?? this.history,
       wallet: wallet ?? this.wallet,
+      selectedWallet: selectedWallet ?? this.selectedWallet,
       subscription: subscription ?? this.subscription,
       mainCategory: mainCategory ?? this.mainCategory,
     );

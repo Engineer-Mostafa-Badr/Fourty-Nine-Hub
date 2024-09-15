@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
@@ -14,7 +15,6 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_entit
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -41,7 +41,7 @@ class DrawerWidget extends StatelessWidget {
         builder: (context, state) {
           context.read<GetWalletCubit>();
           return Drawer(
-            width: 600.h,
+            width: context.screenWidth*0.8,
             child: SafeArea(
               child: SingleChildScrollView(
                 child: Column(
@@ -76,7 +76,7 @@ class DrawerWidget extends StatelessWidget {
                         requireLogin: true,
                         onTap: () async {
                           await context.push(Routes.FAVOURITECATEGORIES);
-                          context.read<MainCategoriesCubit>().loadData(context);
+                          context.read<MainCategoriesCubit>().loadData();
                         }),
 
                     drawerListTile(

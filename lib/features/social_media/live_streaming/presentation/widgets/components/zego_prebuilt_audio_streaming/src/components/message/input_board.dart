@@ -1,10 +1,13 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 // Package imports:
 
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
+
+import '../../../../../../../../../../core/localization/locale_keys.g.dart';
 
 /// @nodoc
 class ZegoLiveAudioRoomInRoomMessageInputBoard extends ModalRoute<String> {
@@ -55,12 +58,12 @@ class ZegoLiveAudioRoomInRoomMessageInputBoard extends ModalRoute<String> {
             ),
           ),
           ZegoInRoomMessageInput(
-            placeHolder: innerText.messageEmptyToast,
+            placeHolder: LocaleKeys.saySomthing.localize,
             backgroundColor: Colors.white,
-            inputBackgroundColor: const Color(0xffF7F7F8),
-            textColor: const Color(0xff1B1B1B),
-            textHintColor: const Color(0xff1B1B1B).withOpacity(0.5),
-            buttonColor: const Color(0xff0055FF),
+            // inputBackgroundColor: const Color(0xffF7F7F8),
+            // textColor: Colors.white,
+            // textHintColor: const Color(0xff1B1B1B).withOpacity(0.5),
+            // buttonColor: Colors.white,
             onSubmit: () {
               Navigator.of(
                 context,

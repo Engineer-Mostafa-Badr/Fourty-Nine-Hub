@@ -1,11 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/select_contacts_to_share_cart.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
@@ -82,7 +80,7 @@ class _SelectContactsToShareViewState extends State<SelectContactsToShareView> {
 
   Widget _body() {
     if (_permissionDenied) {
-      return const Center(child: Text('Permission denied'));
+      return  Center(child: Text(LocaleKeys.permissionDenied.tr()));
     }
     if (_contacts == null) {
       return const Center(child: CircularProgressIndicator());

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -19,8 +23,8 @@ void showVoiceLiveBottomSheet({
       isDismissible: true,
       isScrollControlled: true,
       useSafeArea: true,
-      shape:  const RoundedRectangleBorder(
-        borderRadius:  BorderRadius.vertical(top: Radius.circular(20)),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (BuildContext context) {
         return BlocProvider(
@@ -35,21 +39,21 @@ void showVoiceLiveBottomSheet({
             child: Column(
               // mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                 Text(
-                  'Room Subject',
+                Text(
+                  LocaleKeys.roomSubject.localize,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 18.sp,
+                    fontSize: 32.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(height: 10.h),
-                 Align(
+                Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Please enter a simple description',
+                    LocaleKeys.pleaseEnterSimpleSubject.localize,
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: 25.sp,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -59,15 +63,15 @@ void showVoiceLiveBottomSheet({
                   child: TextField(
                     controller: roomSubjectController,
                     keyboardType: TextInputType.text,
+                    textAlign: TextAlign.center,
                     decoration: InputDecoration(
                       // labelText: 'Room Subject',
-                      hintText: 'Enter room subject',
-                      prefixIcon:  const Icon(Icons.headset_mic_rounded),
-                      border:  const OutlineInputBorder(
+                      hintText: LocaleKeys.enterRoomSubject.localize,
+                      prefixIcon: const Icon(Icons.headset_mic_rounded),
+                      border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       ),
                       filled: true,
-                      fillColor: Colors.grey[200],
                     ),
                   ),
                 ),
@@ -80,15 +84,14 @@ void showVoiceLiveBottomSheet({
                     children: <Widget>[
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.PRIMARY_COLOR),
+                            backgroundColor: context.isDarkMode
+                                ? AppColors.SECONDARY_COLOR
+                                : AppColors.PRIMARY_COLOR),
                         onPressed: () async {
                           String roomSub = roomSubjectController.text.trim();
                           if (roomSub.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                               const SnackBar(
-                                content: Text('Room subject cannot be empty'),
-                              ),
-                            );
+                            showErrorMessage(context,
+                                LocaleKeys.roomSubjectValidation.localize);
                             return;
                           } else {
                             await addRoom(cubit, roomSub);
@@ -111,8 +114,8 @@ void showVoiceLiveBottomSheet({
                             }
                           }
                         },
-                        child:  const Label(
-                          text: 'Create Room',
+                        child: Label(
+                          text: LocaleKeys.createRoom.localize,
                           color: Colors.white,
                         ),
                       ),
@@ -120,9 +123,9 @@ void showVoiceLiveBottomSheet({
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child:  const Text(
-                          'Cancel',
-                          style: TextStyle(color: AppColors.SECONDARY_COLOR),
+                        child: Text(
+                          LocaleKeys.cancel.localize,
+                          style: const TextStyle(color: Colors.blue),
                         ),
                       ),
                     ],
