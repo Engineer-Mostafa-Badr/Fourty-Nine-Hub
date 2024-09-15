@@ -366,5 +366,24 @@ abstract class  LocaleKeys {
   static const pleaseLoginRegisterToEnjoyTheApp = 'pleaseLoginRegisterToEnjoyTheApp';
   static const noChatsUntilNow = 'noChatsUntilNow';
   static const unarchive = 'unarchive';
+  static const tinder_header = 'tinder.header';
+  static const tinder_favorites = 'tinder.favorites';
+  static const tinder_noData = 'tinder.noData';
+  static const tinder_find = 'tinder.find';
+  static const tinder = 'tinder';
+  static const chat_alert_dialog_pick_chat_type = 'chat_alert_dialog.pick_chat_type';
+  static const chat_alert_dialog_anonymous = 'chat_alert_dialog.anonymous';
+  static const chat_alert_dialog_regular = 'chat_alert_dialog.regular';
+  static const chat_alert_dialog_error_starting_anonymous = 'chat_alert_dialog.error.starting_anonymous';
+  static const chat_alert_dialog_error_starting_normal = 'chat_alert_dialog.error.starting_normal';
+  static const chat_alert_dialog_error_chat_id_empty = 'chat_alert_dialog.error.chat_id_empty';
+  static const chat_alert_dialog_error = 'chat_alert_dialog.error';
+  static const chat_alert_dialog = 'chat_alert_dialog';
+  static const user_info_date_of_birth = 'user_info.date_of_birth';
+  static const user_info_gender = 'user_info.gender';
+  static const user_info_followers = 'user_info.followers';
+  static const user_info_following = 'user_info.following';
+  static const user_info_friends = 'user_info.friends';
+  static const user_info = 'user_info';
 
 }
