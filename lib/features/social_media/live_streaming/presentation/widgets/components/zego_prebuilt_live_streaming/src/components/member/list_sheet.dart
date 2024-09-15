@@ -267,7 +267,7 @@ class _ZegoLiveStreamingMemberListSheetState
             CachedNetworkImage(
               imageUrl: UserCubit.to.state.data?.profilePicture ??
                   UIConst.imagePlaceHolder,
-              imageBuilder: (context, imageProvider) => Container( 
+              imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(

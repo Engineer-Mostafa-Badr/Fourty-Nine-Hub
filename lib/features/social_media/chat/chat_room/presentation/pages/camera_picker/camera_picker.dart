@@ -31,7 +31,7 @@ part 'media_slider.dart';
 class CameraPickerView extends StatelessWidget {
   final void Function(List<XFile> media)? onDone;
 
-   const CameraPickerView({super.key, this.onDone});
+  const CameraPickerView({super.key, this.onDone});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class CameraPickerView extends StatelessWidget {
 class _CamView extends StatefulWidget {
   final void Function(List<XFile> media)? onDone;
 
-   _CamView({required this.onDone});
+  _CamView({required this.onDone});
 
   @override
   State<_CamView> createState() => _CamViewState();
@@ -81,7 +81,7 @@ class _CamViewState extends State<_CamView> {
                 return _permissionButton(
                     LocaleKeys.allowAccessToYourMicrophone.tr());
               } else {
-                return  const Icon(Icons.camera,
+                return const Icon(Icons.camera,
                     color: AppColors.GREY_DARK_COLOR, size: 150);
               }
             },
@@ -92,7 +92,7 @@ class _CamViewState extends State<_CamView> {
           right: 0,
           left: 0,
           child: Padding(
-            padding:  const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -105,7 +105,7 @@ class _CamViewState extends State<_CamView> {
                         onTap: () => context.pop(),
                       );
                     } else {
-                      return  const SizedBox.shrink();
+                      return const SizedBox.shrink();
                     }
                   },
                 ),
@@ -116,7 +116,7 @@ class _CamViewState extends State<_CamView> {
                     } else if (state.pickMode == PickMode.video &&
                         state.controller != null) {
                       return Container(
-                        padding:  const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           color: AppColors.GREY_DARK_COLOR.withOpacity(0.5),
                           borderRadius: BorderRadius.circular(20),
@@ -127,7 +127,7 @@ class _CamViewState extends State<_CamView> {
                         ),
                       );
                     } else {
-                      return  const SizedBox.shrink();
+                      return const SizedBox.shrink();
                     }
                   },
                 ),
@@ -142,7 +142,7 @@ class _CamViewState extends State<_CamView> {
                         onTap: () => controller.toggleFlashMode(),
                       );
                     } else {
-                      return  const SizedBox.shrink();
+                      return const SizedBox.shrink();
                     }
                   },
                 ),
@@ -155,7 +155,7 @@ class _CamViewState extends State<_CamView> {
           right: 0,
           left: 0,
           child: Padding(
-            padding:  const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -183,7 +183,7 @@ class _CamViewState extends State<_CamView> {
                         },
                       );
                     } else {
-                      return  const SizedBox.shrink();
+                      return const SizedBox.shrink();
                     }
                   },
                 ),
@@ -209,7 +209,7 @@ class _CamViewState extends State<_CamView> {
                             children: [
                               _VideoCircularIndicator(
                                   duration: controller.maxVideoLength),
-                               const Icon(
+                              const Icon(
                                 Icons.square_rounded,
                                 color: AppColors.SECONDARY_COLOR,
                                 size: 60,
@@ -226,7 +226,7 @@ class _CamViewState extends State<_CamView> {
                         );
                       }
                     } else {
-                      return  const SizedBox.shrink();
+                      return const SizedBox.shrink();
                     }
                   },
                 ),
@@ -242,7 +242,7 @@ class _CamViewState extends State<_CamView> {
                         icon: Icons.rotate_left_rounded,
                       );
                     } else {
-                      return  const SizedBox.shrink();
+                      return const SizedBox.shrink();
                     }
                   },
                 ),
@@ -268,7 +268,7 @@ class _CamViewState extends State<_CamView> {
   }
 
   Widget get _pickIcon =>
-       const Icon(Icons.circle, size: 80, color: Colors.white);
+      const Icon(Icons.circle, size: 80, color: Colors.white);
 
   Widget _permissionButton(String label) {
     return InkWell(
@@ -291,7 +291,7 @@ class _BaseIcon extends StatelessWidget {
   final double? iconSize;
   final void Function()? onTap;
 
-   _BaseIcon(
+  _BaseIcon(
       {super.key, this.color, required this.icon, this.onTap, this.iconSize});
 
   @override
@@ -324,7 +324,7 @@ class _ImagesListState extends State<_ImagesList> {
   Widget build(BuildContext context) {
     final controller = context.read<CameraPickerCubit>();
     return Padding(
-      padding:  EdgeInsets.symmetric(horizontal: 5, vertical: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -337,7 +337,7 @@ class _ImagesListState extends State<_ImagesList> {
                       current.status == CameraPickerStatus.updateMediaList,
                   builder: (context, state) {
                     return ListView.separated(
-                      padding:  EdgeInsets.symmetric(vertical: 5.h),
+                      padding: EdgeInsets.symmetric(vertical: 5.h),
                       scrollDirection: Axis.horizontal,
                       itemCount: state.mediaList?.length ?? 0,
                       separatorBuilder: (context, index) => Sizer(),
@@ -460,7 +460,7 @@ class _ImagesListState extends State<_ImagesList> {
           image: DecorationImage(image: image, fit: BoxFit.cover),
         ),
         child: !isPhoto
-            ?  const Center(
+            ? const Center(
                 child: Icon(
                   Icons.play_arrow_rounded,
                   color: Colors.white,
@@ -475,7 +475,7 @@ class _ImagesListState extends State<_ImagesList> {
 class _VideoTimer extends StatefulWidget {
   final Duration duration;
 
-   _VideoTimer({required this.duration});
+  _VideoTimer({required this.duration});
 
   @override
   State<_VideoTimer> createState() => __VideoTimerState();
@@ -492,7 +492,7 @@ class __VideoTimerState extends State<_VideoTimer> {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic( const Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (timer.tick <= widget.duration.inSeconds) {
         int minutes = (timer.tick ~/ 60);
         int seconds = (timer.tick % 60);
@@ -514,7 +514,7 @@ class __VideoTimerState extends State<_VideoTimer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding:  const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: AppColors.SECONDARY_COLOR.withOpacity(0.5),
         borderRadius: BorderRadius.circular(20),
@@ -530,7 +530,7 @@ class __VideoTimerState extends State<_VideoTimer> {
 class _VideoCircularIndicator extends StatefulWidget {
   final Duration duration;
 
-   _VideoCircularIndicator({required this.duration});
+  _VideoCircularIndicator({required this.duration});
 
   @override
   State<_VideoCircularIndicator> createState() =>
@@ -548,7 +548,7 @@ class __VideoCircularIndicatorState extends State<_VideoCircularIndicator> {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic( const Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (timer.tick <= widget.duration.inSeconds) {
         setState(() {
           _time = timer.tick;
@@ -570,7 +570,7 @@ class __VideoCircularIndicatorState extends State<_VideoCircularIndicator> {
       width: 80,
       child: CircularProgressIndicator(
         value: 1 - (_time / widget.duration.inSeconds),
-        valueColor:  const AlwaysStoppedAnimation<Color>(Colors.white),
+        valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
         backgroundColor: AppColors.SECONDARY_COLOR,
       ),
     );

@@ -38,7 +38,7 @@ class NotificationCardLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin:  EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
+      margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
       child: NotificationCustomContainer(
         color: AppColors.PRIMARY_COLOR.withOpacity(0.1),
         child: Row(
@@ -82,7 +82,7 @@ class CustomGrayContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
+      padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
       child: Row(children: [
         Expanded(
             flex: flex,

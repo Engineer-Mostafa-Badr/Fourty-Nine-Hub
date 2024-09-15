@@ -17,7 +17,6 @@ ThemeData lightTheme() {
     ),
     switchTheme: const SwitchThemeData(
       trackColor: MaterialStatePropertyAll<Color>(Colors.green),
-      
     ),
     textTheme: const TextTheme(
       displayMedium: TextStyle(color: AppColors.QUANTITY_COLOR),

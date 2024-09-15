@@ -6,10 +6,10 @@ class InstapayModel extends InstaPayResponseEntity {
     required String message,
     required InstaPaytDataModel data,
   }) : super(
-    status: status,
-    message: message,
-    data: data,
-  );
+          status: status,
+          message: message,
+          data: data,
+        );
 
   factory InstapayModel.fromJson(Map<String, dynamic> json) {
     return InstapayModel(
@@ -25,14 +25,15 @@ class InstaPaytDataModel extends InstaPaytData {
     required String receiptURL,
     required TransactionModel transaction,
   }) : super(
-    receiptURL: receiptURL,
-    transaction: transaction,
-  );
+          receiptURL: receiptURL,
+          transaction: transaction,
+        );
 
   factory InstaPaytDataModel.fromJson(Map<String, dynamic> json) {
     return InstaPaytDataModel(
       receiptURL: json['receiptURL'] as String? ?? '',
-      transaction: TransactionModel.fromJson(json['transaction'] as Map<String, dynamic>),
+      transaction: TransactionModel.fromJson(
+          json['transaction'] as Map<String, dynamic>),
     );
   }
 }
@@ -53,20 +54,20 @@ class TransactionModel extends Transaction {
     required String id,
     required int version,
   }) : super(
-    userId: userId,
-    subCategoryId: subCategoryId,
-    paymentProviderId: paymentProviderId,
-    taxPrice: taxPrice,
-    receiptKey: receiptKey,
-    amountId: amountId,
-    transactionAmount: transactionAmount,
-    transactionPurpose: transactionPurpose,
-    currency: currency,
-    isPaid: isPaid,
-    status: status,
-    id: id,
-    version: version,
-  );
+          userId: userId,
+          subCategoryId: subCategoryId,
+          paymentProviderId: paymentProviderId,
+          taxPrice: taxPrice,
+          receiptKey: receiptKey,
+          amountId: amountId,
+          transactionAmount: transactionAmount,
+          transactionPurpose: transactionPurpose,
+          currency: currency,
+          isPaid: isPaid,
+          status: status,
+          id: id,
+          version: version,
+        );
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
     return TransactionModel(

@@ -19,7 +19,8 @@ abstract class AuthRemoteDataSource {
 
   Future<Either<Failure, UserTokensModel>> login(LoginParams loginParams);
 
-  Future<Either<Failure, UserTokensModel>> socialLogin(SocialLoginParams params);
+  Future<Either<Failure, UserTokensModel>> socialLogin(
+      SocialLoginParams params);
 
   Future<Either<Failure, void>> register(RegisterParams registerParams);
 

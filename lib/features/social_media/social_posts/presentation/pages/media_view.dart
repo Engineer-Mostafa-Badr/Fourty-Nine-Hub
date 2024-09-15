@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class MediaView extends StatefulWidget {
   const MediaView({super.key, required this.userId});
   final String userId;
@@ -44,7 +45,7 @@ class _MediaViewState extends State<MediaView> {
           builderDelegate: PagedChildBuilderDelegate<PostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.mediaPagingController.itemList?.length);
-                return  Center(
+                return Center(
                   child: Text(
                     "No Media",
                     style: TextStyle(

@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=C:\flutter\3.19.1
-FLUTTER_APPLICATION_PATH=C:\Users\mohamed allam\Desktop\49-mobile-app
+FLUTTER_ROOT=C:\src\3.19.6\flutter
+FLUTTER_APPLICATION_PATH=D:\Studio Projects\49-mobile-app
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.4

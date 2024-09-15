@@ -104,7 +104,8 @@ class CameraPickerCubit extends Cubit<CameraPickerState> {
 
   Future<void> stopVideoRecording() async {
     try {
-      if (_recordingManualCompleter != null && !_recordingManualCompleter!.isCompleted) {
+      if (_recordingManualCompleter != null &&
+          !_recordingManualCompleter!.isCompleted) {
         _recordingManualCompleter!
             .complete(); // Signal that the recording has been stopped
       }

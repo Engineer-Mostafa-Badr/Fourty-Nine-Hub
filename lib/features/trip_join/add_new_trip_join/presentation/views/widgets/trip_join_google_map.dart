@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class TripJoinGoogleMap extends StatefulWidget {
   const TripJoinGoogleMap({super.key});
 

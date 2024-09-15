@@ -18,6 +18,7 @@ class MainCategoryBanner extends StatefulWidget {
   final Function()? onRegister;
   final Function() onFavorite;
   bool? isFavorite;
+
   MainCategoryBanner({
     super.key,
     this.canRegister = false,
@@ -93,14 +94,15 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                               });
                             }
                           },
-                          child: Icon(
-                            widget.category.isFavorite == true
-                                ? Icons.favorite
-                                : Icons.favorite_border,
+                          child: IconButton(
                             color: AppColors.SECONDARY_COLOR,
+                            onPressed: () async => await widget.onFavorite(),
+                            icon: Icon(widget.category.isFavorite == true
+                                ? Icons.favorite
+                                : Icons.favorite_border),
                           ),
                         )
-                      : SizedBox.shrink(),
+                      : const SizedBox.shrink(),
                   Sizer(
                     height: 15.h,
                   ),
@@ -168,7 +170,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                             color: AppColors.SECONDARY_COLOR,
                           ),
                         )
-                      : SizedBox.shrink(),
+                      : const SizedBox.shrink(),
                   Sizer(
                     height: 15.h,
                   ),
@@ -197,7 +199,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 color: Colors.white, fontWeight: FontWeight.bold)),
       );
     } else {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
   }
 }

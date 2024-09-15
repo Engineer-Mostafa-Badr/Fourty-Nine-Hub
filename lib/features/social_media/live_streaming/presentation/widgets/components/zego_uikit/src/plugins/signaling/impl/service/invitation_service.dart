@@ -7,8 +7,6 @@ import 'package:flutter/services.dart';
 // Package imports:
 import 'package:zego_plugin_adapter/zego_plugin_adapter.dart';
 
-
-
 import '../../../../services/defines/user.dart';
 import '../../../../services/uikit_service.dart';
 import '../../defines.dart';

@@ -54,7 +54,10 @@ class YoutubeVideoCard extends StatelessWidget {
           padding: EdgeInsets.all(8.0),
           child: Row(
             children: [
-              const ProfileImage(accountId: 0, userId: '',),
+              const ProfileImage(
+                accountId: 0,
+                userId: '',
+              ),
               Sizer(),
               Expanded(
                   child: Column(

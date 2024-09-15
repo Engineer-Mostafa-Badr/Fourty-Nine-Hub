@@ -16,7 +16,6 @@ import 'defines.dart';
 
 // Package imports:
 
-
 /// @nodoc
 class ZegoLiveAudioRoomAudienceConnectButton extends StatefulWidget {
   const ZegoLiveAudioRoomAudienceConnectButton({

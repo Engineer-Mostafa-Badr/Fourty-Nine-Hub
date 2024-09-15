@@ -58,7 +58,7 @@ class AppButton extends StatelessWidget {
                       color: textColor ?? Colors.white,
                     ),
                   if (icon != null)
-                     Sizer(
+                    Sizer(
                       width: 3,
                     ),
                   Label(

@@ -72,7 +72,7 @@ class ShowMneu extends StatelessWidget {
                                     e.foodName ?? "",
                                     style: Styles.headerText(color: Colors.red),
                                   ),
-                                   Sizer(height: 50.h),
+                                  Sizer(height: 50.h),
                                   Text(
                                     "${e.price ?? ""}",
                                     style: Styles.headerText(color: Colors.red),

@@ -665,10 +665,8 @@ class EndPoints {
   }
 
   static String buttonAvailable = '/global/click';
-
   static String getSubscriptionPlans(String subcategoryId) =>
       '/subscription/plans/$subcategoryId';
-
   static String checkUserSubscription(String id) {
     return '/subscription/subcategory/$id';
   }

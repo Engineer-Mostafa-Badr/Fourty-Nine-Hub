@@ -15,7 +15,6 @@ class ProfileImage extends StatelessWidget {
   final int accountId;
   final String userId;
 
-
   const ProfileImage(
       {super.key,
       required this.accountId,
@@ -31,9 +30,8 @@ class ProfileImage extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (fromProfile == false && userId.isNotEmpty) {
-          context.push(Routes.OTHERSACCOUNT,extra:userId);
+          context.push(Routes.OTHERSACCOUNT, extra: userId);
         }
-
       },
       child: CircleAvatar(
         radius: withBorder ? size + 2 : size,

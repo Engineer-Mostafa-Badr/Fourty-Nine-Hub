@@ -131,7 +131,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                             builderDelegate:
                                 PagedChildBuilderDelegate<CommentEntity>(
                               noItemsFoundIndicatorBuilder: (context) {
-                                return  Center(
+                                return Center(
                                   child: Text(
                                     "No Comments",
                                     style: TextStyle(

@@ -90,7 +90,8 @@ class _ZegoLiveStreamingBeautyEffectSheetState
               selectIcon: ButtonIcon(
                 icon: ColorFiltered(
                   colorFilter: ColorFilter.mode(
-                    widget.config.selectedIconColor ?? AppColors.SECONDARY_COLOR,
+                    widget.config.selectedIconColor ??
+                        AppColors.SECONDARY_COLOR,
                     BlendMode.srcATop,
                   ),
                   child: ZegoLiveStreamingImage.asset(

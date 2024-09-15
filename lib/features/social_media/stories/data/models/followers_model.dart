@@ -28,7 +28,7 @@ class Data {
   factory Data.fromJson(Map<String, dynamic> json) {
     var followersList = json['followers'] as List;
     List<Follower> followers =
-    followersList.map((follower) => Follower.fromJson(follower)).toList();
+        followersList.map((follower) => Follower.fromJson(follower)).toList();
 
     return Data(
       followers: followers,

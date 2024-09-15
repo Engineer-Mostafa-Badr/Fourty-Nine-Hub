@@ -9,7 +9,7 @@ class SubCategoryEntity {
     required this.id,
     required this.name,
     required this.image,
-    this.isFavorite=false,
+    this.isFavorite = false,
     this.numberOfContent,
   });
 }

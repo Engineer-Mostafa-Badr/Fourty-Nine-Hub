@@ -11,7 +11,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 
 import '../core/live_duration_manager.dart';
 
-
 /// @nodoc
 class ZegoLiveAudioRoomColoredText extends StatelessWidget {
   final String text;

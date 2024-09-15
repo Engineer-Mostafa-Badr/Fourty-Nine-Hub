@@ -1615,7 +1615,7 @@ class ReactionWidget extends StatelessWidget {
               },
               cursorColor: Colors.white,
               cursorErrorColor: Colors.red,
-              decoration:  InputDecoration(
+              decoration: InputDecoration(
                 fillColor: Colors.transparent,
                 hintText: 'Send message...',
                 hintStyle: TextStyle(
@@ -2000,12 +2000,12 @@ class _UserInfoBarState extends State<UserInfoBar> {
         Text(
           capitalizeAndSplit2Only(
               '${widget.userStory.user?.firstName ?? ''} ${widget.userStory.user?.lastName ?? ''}'),
-          style:  TextStyle(fontSize: 18.sp, color: Colors.white),
+          style: TextStyle(fontSize: 18.sp, color: Colors.white),
         ),
         SizedBox(height: 4.h),
         Text(
           DateFormat('hh:mm a').format(widget.createdAt),
-          style:  TextStyle(fontSize: 12.sp, color: Colors.white70),
+          style: TextStyle(fontSize: 12.sp, color: Colors.white70),
         ),
       ],
     );

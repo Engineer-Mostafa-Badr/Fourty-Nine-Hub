@@ -6,21 +6,20 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balan
 import '../../../../../common/models/public/pagination_params.dart';
 import '../repositories/balance_repository.dart';
 
-class GetBalanceHistoryUseCase extends UseCase<List<BalanceHistoryEntity>, BalanceHistoryParams>{
+class GetBalanceHistoryUseCase
+    extends UseCase<List<BalanceHistoryEntity>, BalanceHistoryParams> {
   final BalanceRepository _balanceRepository;
 
   GetBalanceHistoryUseCase(this._balanceRepository);
   @override
-  Future<Either<Failure, List<BalanceHistoryEntity>>> call(BalanceHistoryParams params) async{
+  Future<Either<Failure, List<BalanceHistoryEntity>>> call(
+      BalanceHistoryParams params) async {
     return await _balanceRepository.fetchHistoryBalance(params);
   }
-
 }
-
 
 class BalanceHistoryParams {
   PaginationParams paginationParams;
 
   BalanceHistoryParams({required this.paginationParams});
-
 }

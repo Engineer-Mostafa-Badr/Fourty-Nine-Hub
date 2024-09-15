@@ -14,8 +14,6 @@ class GetCompanyAddUseCases extends UseCase<CompanyAdOptionEntity,CompanyAddPara
   Future<Either<Failure, CompanyAdOptionEntity>> call(CompanyAddParams params)async {
    return await _advertiseRepository.addCompanyAd(params);
   }
-
-
 }
 
 class CompanyAddParams {
@@ -32,7 +30,6 @@ class CompanyAddParams {
     this.description,
     this.post,
   });
-
 
   Map<String, dynamic> toJson() => {
     'post': post,

@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 // Project imports:
 import '../../../../zego_uikit.dart';
 
-
-
 /// container of media,
 class ZegoUIKitMediaContainer extends StatefulWidget {
   const ZegoUIKitMediaContainer({

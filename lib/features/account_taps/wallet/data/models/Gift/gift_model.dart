@@ -10,11 +10,12 @@ class GiftModelModel extends GiftEntity {
 
   factory GiftModelModel.fromJson(Map<String, dynamic> json) {
     return GiftModelModel(
-      giftWallet:  GiftWalletModel.fromJson(json['giftWallet']),
+      giftWallet: GiftWalletModel.fromJson(json['giftWallet']),
       competitionsWallet: json['competitionsWallet'] != null
           ? (json['competitionsWallet'] as List)
-          .map((e) => CompetitionsWalletModel.fromJson(e as Map<String, dynamic>))
-          .toList()
+              .map((e) =>
+                  CompetitionsWalletModel.fromJson(e as Map<String, dynamic>))
+              .toList()
           : [],
     );
   }

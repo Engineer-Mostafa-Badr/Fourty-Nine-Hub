@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 // Project imports:
 import '../../../zego_uikit.dart';
 
-
 /// monitor the camera status changes,
 /// when the status changes, the corresponding icon is automatically switched
 class ZegoCameraStateIcon extends ZegoServiceValueIcon {

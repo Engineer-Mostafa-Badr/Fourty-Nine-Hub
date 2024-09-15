@@ -58,27 +58,26 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
           child: ListView(
             children: [
               SizedBox(height: 20.h),
-          DropdownMenu<WalletTypes>(
-              hintText: "Select Wallet",
-              expandedInsets: const EdgeInsets.only(),
-              dropdownMenuEntries: widget.paymentMenthods
-                  !.map((e) => DropdownMenuEntry<WalletTypes>(
-                  value: e, label: e.translatedName))
-                  .toList(),
-              initialSelection: selectedWallet,
-              onSelected: (value) {
-                selectedWallet = value;
-                print(selectedWallet);
-                setState(() {});
-                // context.read<WalletCubit>().onSelectWallet(value!);
-              }),
               Text(
                 widget.title ?? "",
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                    color: AppColors.PRIMARY_COLOR_LIGHT,
-                    fontWeight: FontWeight.bold),
+                style: const TextStyle(color: AppColors.PRIMARY_COLOR_LIGHT, fontWeight: FontWeight.bold),
               ),
+              SizedBox(height: 20.h),
+              DropdownMenu<WalletTypes>(
+                  hintText: "Select Wallet",
+                  expandedInsets: const EdgeInsets.only(),
+                  dropdownMenuEntries: widget.paymentMenthods!
+                      .map((e) => DropdownMenuEntry<WalletTypes>(value: e, label: e.translatedName))
+                      .toList(),
+                  initialSelection: selectedWallet,
+                  onSelected: (value) {
+                    selectedWallet = value;
+                    print(selectedWallet);
+                    setState(() {});
+                    // context.read<WalletCubit>().onSelectWallet(value!);
+                  }),
+
               SizedBox(height: 20.h),
               // SizedBox(height: 20.h),
               Row(
@@ -89,18 +88,14 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         decoration: BoxDecoration(
-                          color: !_isPremium
-                              ? AppColors.PRIMARY_COLOR
-                              : Colors.transparent,
+                          color: !_isPremium ? AppColors.PRIMARY_COLOR : Colors.transparent,
                           borderRadius: BorderRadius.circular(25),
                         ),
                         child: Text(
                           LocaleKeys.regular.localize,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: !_isPremium
-                                ? AppColors.AUTH_CONTAINER_COLOR
-                                : Theme.of(context).primaryColor,
+                            color: !_isPremium ? AppColors.AUTH_CONTAINER_COLOR : Theme.of(context).primaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -156,7 +151,11 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                   if (selectedIndex != -1 && selectedIndex < list.length) {
                     final selectedPlanPrice = list[selectedIndex];
                     print('selectedWallet$selectedWallet');
-                    final walletPrice = selectedWallet?.name=='mainWallet'?state.wallet?.realAmount ?? 0:selectedWallet?.name=='balance'?state.balance?.balance??0:state.gift?.giftWallet.amount??0;
+                    final walletPrice = selectedWallet?.name == 'mainWallet'
+                        ? state.wallet?.realAmount ?? 0
+                        : selectedWallet?.name == 'balance'
+                            ? state.balance?.balance ?? 0
+                            : state.gift?.giftWallet.amount ?? 0;
                     print(walletPrice);
                     print(state.gift?.giftWallet.amount);
                     print(state.wallet?.realAmount);
@@ -179,6 +178,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                           );
                       if (context.mounted) {
                         context.push(Routes.HOME);
+                        // context.pushReplacement(Routes.HOME);
+                        context.read<MainCategoriesCubit>().loadData();
+                        // Phoenix.rebirth(context);
                       }
                       // context.pop();
                     } else {
@@ -275,7 +277,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               ),
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: ElevatedAppButton(
               label: '$price',

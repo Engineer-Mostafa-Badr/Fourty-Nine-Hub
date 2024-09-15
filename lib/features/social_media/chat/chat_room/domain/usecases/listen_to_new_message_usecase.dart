@@ -7,8 +7,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/reposi
 
 import '../entities/message_entity.dart';
 
-class ListenToNewMessageUseCase extends NormalUseCase<void,
-    Function(MessageEntity)> {
+class ListenToNewMessageUseCase
+    extends NormalUseCase<void, Function(MessageEntity)> {
   final ChatRoomRepository _chatRoomRepository;
 
   ListenToNewMessageUseCase(this._chatRoomRepository);

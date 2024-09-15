@@ -76,8 +76,9 @@ class NotificationModel extends NotificationEntity {
     return NotificationModel(
       id: json['_id'] as String?,
       userId: json['userId'] as dynamic,
-      receiverInfo:
-          json['receiverInfo'] == null ? null : ReceiverInfo.fromJson(json['receiverInfo'] as Map<String, dynamic>),
+      receiverInfo: json['receiverInfo'] == null
+          ? null
+          : ReceiverInfo.fromJson(json['receiverInfo'] as Map<String, dynamic>),
       filterType: json['filterType'] as String?,
       subcategoryId: json['subcategoryId'] as String?,
       mainCategoryId: json['mainCategoryId'] as String?,
@@ -85,12 +86,20 @@ class NotificationModel extends NotificationEntity {
       titleTranslationCode: json['titleTranslationCode'] as String?,
       bodyTranslationCode: json['bodyTranslationCode'] as String?,
       path: json['path'] as String?,
-      payload: json['metadata'] == null ? null : json['metadata'] as Map<String, dynamic>,
+      payload: json['metadata'] == null
+          ? null
+          : json['metadata'] as Map<String, dynamic>,
       time: json['time'] as int?,
-      createdAt: json['createdAt'] == null ? null : DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null ? null : DateTime.parse(json['updatedAt'] as String),
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt'] as String),
       v: json['__v'] as int?,
-      userImageUrl: json['userInfo']?['image'] == null ? null : json['userInfo']?['image'] as String,
+      userImageUrl: json['userInfo']?['image'] == null
+          ? null
+          : json['userInfo']?['image'] as String,
     );
   }
 

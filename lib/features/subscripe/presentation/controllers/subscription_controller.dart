@@ -16,13 +16,18 @@ import '../widgets/subscription_plans.dart';
 
 class SubscriptionController {
   //to pass current context
-  final BuildContext context = AppPages.router.configuration.navigatorKey.currentContext!;
+  final BuildContext context =
+      AppPages.router.configuration.navigatorKey.currentContext!;
   final CheckIfUserSubscribedUseCase _checkIfUserSubscribedUseCase;
   final GetSubscriptionPlansUseCase _getSubscriptionPlansUseCase;
   final SubscribeUseCase _subscribeUseCase;
-  final GetActiveSubscriptionAmountsUseCase _getActiveSubscriptionAmountsUseCase;
+  final GetActiveSubscriptionAmountsUseCase
+      _getActiveSubscriptionAmountsUseCase;
 
-  SubscriptionController(this._checkIfUserSubscribedUseCase, this._getSubscriptionPlansUseCase, this._subscribeUseCase,
+  SubscriptionController(
+      this._checkIfUserSubscribedUseCase,
+      this._getSubscriptionPlansUseCase,
+      this._subscribeUseCase,
       this._getActiveSubscriptionAmountsUseCase);
 
   void checkIfUserSubscribed({
@@ -46,69 +51,35 @@ class SubscriptionController {
     });
   }
 
-  // Future<void> showSubscriptionPlans({List<WalletTypes>? wallets, required String subCategoryId, String? title}) async {
-  //    showLoadingDialog(context);
-  //    Navigator.of(context).pop();
-  //   final plansResponse = await _getSubscriptionPlansUseCase(subCategoryId);
-  //   // AppPages.router.pop();
-  //   plansResponse.fold(
-  //       (l) {
-  //         showErrorMessage(
-  //             context,
-  //             Labels.errorHappened,
-  //           );
-  //       }, (plans) {
-  //     bottomSheet(
-  //         context: context,
-  //         backColor: Theme.of(context).scaffoldBackgroundColor,
-  //         widget: SubscriptionPlansWidget(
-  //           title: title,
-  //           subscribePlans: plans,
-  //           subCategoryId: subCategoryId,
-  //           paymentMenthods: wallets,
-  //         ));
-  //   });
-  // }
-  bool _isBottomSheetShown = false;
-
-  Future<void> showSubscriptionPlans({List<WalletTypes>? wallets, required String subCategoryId, String? title}) async {
-    if (!_isBottomSheetShown) {
-      _isBottomSheetShown = true;
-
-      // Example wallets data or pass in your actual wallet list
-      List<WalletTypes> wallets = [];
-
-      showLoadingDialog(context);
-      Navigator.of(context).pop(); // Close loading dialog
-
-      final plansResponse = await _getSubscriptionPlansUseCase(subCategoryId);
-      plansResponse.fold(
-              (l) {
-            showErrorMessage(context, Labels.errorHappened);
-            _isBottomSheetShown = false; // Reset flag on error
-          },
-              (plans) {
-            bottomSheet(
-              context: context,
-              backColor: Theme.of(context).scaffoldBackgroundColor,
-              widget: SubscriptionPlansWidget(
-                title: title,
-                subscribePlans: plans,
-                subCategoryId: subCategoryId,
-                paymentMenthods: wallets,
-              ),
-            );
-          }
-      );
-
-      _isBottomSheetShown = false; // Reset flag after bottom sheet is shown
-    }
+  Future<void> showSubscriptionPlans(
+      {List<WalletTypes>? wallets,
+      required String subCategoryId,
+      String? title}) async {
+    showLoadingDialog(context);
+    final plansResponse = await _getSubscriptionPlansUseCase(subCategoryId);
+    AppPages.router.pop();
+    plansResponse.fold(
+        (l) => showErrorMessage(
+              context,
+              Labels.errorHappened,
+            ), (plans) {
+      bottomSheet(
+          context: context,
+          backColor: Theme.of(context).scaffoldBackgroundColor,
+          widget: SubscriptionPlansWidget(
+            title: title,
+            subscribePlans: plans,
+            subCategoryId: subCategoryId,
+            paymentMenthods: wallets,
+          ));
+    });
   }
 
-
-  Future<void> showActiveSubscriptionAmounts({required WalletTypes walletType}) async {
-    final response = await _getActiveSubscriptionAmountsUseCase(const NoParams());
-     response.fold(
+  Future<void> showActiveSubscriptionAmounts(
+      {required WalletTypes walletType}) async {
+    final response =
+        await _getActiveSubscriptionAmountsUseCase(const NoParams());
+    response.fold(
       (l) => showErrorMessage(
         context,
         Labels.errorHappened,

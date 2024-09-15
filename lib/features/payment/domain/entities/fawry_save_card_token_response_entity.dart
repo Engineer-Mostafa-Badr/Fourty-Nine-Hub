@@ -17,6 +17,7 @@ class FawrySaveCardTokenResponseEntity {
     );
   }
 }
+
 class PaymentData {
   final String type;
   final String? referenceNumber;
@@ -104,7 +105,6 @@ class PaymentData {
     };
   }
 }
-
 
 class NextAction {
   final String type;

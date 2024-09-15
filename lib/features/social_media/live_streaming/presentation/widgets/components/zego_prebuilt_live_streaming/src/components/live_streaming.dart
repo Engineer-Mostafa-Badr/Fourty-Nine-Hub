@@ -425,9 +425,9 @@ class _ZegoUIKitPrebuiltLiveStreamingState extends State<ZegoLiveStreamingPage>
         ZegoUIKitTrafficControlProperty.adaptiveResolution,
         ZegoUIKitTrafficControlProperty.adaptiveFPS,
       ],
-      minimizeVideoConfig:  ZegoUIKitVideoConfig.preset360P(),
+      minimizeVideoConfig: ZegoUIKitVideoConfig.preset360P(),
       isFocusOnRemote: false,
-      streamType:  ZegoStreamType.main,
+      streamType: ZegoStreamType.main,
     );
 
     await ZegoUIKit().setVideoConfig(

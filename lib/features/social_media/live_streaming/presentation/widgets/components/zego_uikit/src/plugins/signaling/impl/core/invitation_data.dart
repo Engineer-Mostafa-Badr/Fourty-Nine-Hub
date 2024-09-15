@@ -12,7 +12,6 @@ import 'defines.dart';
 
 // Project imports:
 
-
 /// @nodoc
 class InvitationData {
   InvitationData({

@@ -16,7 +16,6 @@ class GetInstagramUserMediaUseCase
   }
 }
 
-
 class InstagramUserMediaParams {
   final int page;
   final int limit;
@@ -27,8 +26,8 @@ class InstagramUserMediaParams {
     required this.userId,
   });
   Map<String, dynamic> toJson() => {
-    'page': page,
-    'limit': limit,
-    // 'subCategory':'66b77e77bb35968b535dc944'
-  };
+        'page': page,
+        'limit': limit,
+        // 'subCategory':'66b77e77bb35968b535dc944'
+      };
 }

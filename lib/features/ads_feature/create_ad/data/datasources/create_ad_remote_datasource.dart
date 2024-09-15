@@ -6,7 +6,6 @@ import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/models/ad_property_model.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
 
-
 abstract class CreateAdRemoteDatasource {
   Future<Either<Failure, List<AdPropertiesEntity>>> getAdProperties({
     required String subCategoryId,

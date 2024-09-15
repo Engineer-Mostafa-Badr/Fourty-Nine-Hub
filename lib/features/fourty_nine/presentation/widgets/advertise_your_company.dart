@@ -17,7 +17,7 @@ class AdvertiseYourCompany extends StatelessWidget {
     return InkWell(
       onTap: () => context.push(Routes.CREATECOMPANYAD),
       child: Container(
-        margin:  EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
+        margin: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
@@ -38,7 +38,7 @@ class AdvertiseYourCompany extends StatelessWidget {
                   style: Styles.mediumText(
                       color: Colors.white, fontWeight: FontWeight.bold),
                 ),
-                 Sizer(
+                Sizer(
                   height: 5.h,
                 ),
                 Label(

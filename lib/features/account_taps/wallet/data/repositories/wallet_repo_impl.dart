@@ -18,32 +18,37 @@ class WalletRepoImpl implements WalletRepo {
 
   @override
   Future<Either<Failure, WalletModel>> getWallet() {
-   return _remoteDataSource.getWallet();
+    return _remoteDataSource.getWallet();
   }
 
   @override
-  Future<Either<Failure, List<WalletHistoryEntity>>> fetchHistoryWallet(WalletHistoryParams params) {
+  Future<Either<Failure, List<WalletHistoryEntity>>> fetchHistoryWallet(
+      WalletHistoryParams params) {
     return _remoteDataSource.fetchHistoryWallet(params);
   }
 
   @override
-  Future<Either<Failure, List<WalletSubscriptionEntity>>> fetchSubscriptionWallet() {
+  Future<Either<Failure, List<WalletSubscriptionEntity>>>
+      fetchSubscriptionWallet() {
     return _remoteDataSource.fetchSubscriptionWallet();
   }
 
   @override
-  Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchMainCategory(MainCategoryParams params) {
+  Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchMainCategory(
+      MainCategoryParams params) {
     return _remoteDataSource.fetchMainCategory(params);
   }
 
   @override
-  Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchSubCategory(MainCategoryParams params) {
-   return _remoteDataSource.fetchSubCategory(params);
+  Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchSubCategory(
+      MainCategoryParams params) {
+    return _remoteDataSource.fetchSubCategory(params);
   }
 
   @override
-  Future<Either<Failure, bool>> deleteSubscription(DeleteSubscriptionParams params) {
-   return _remoteDataSource.deleteSubscription(params);
+  Future<Either<Failure, bool>> deleteSubscription(
+      DeleteSubscriptionParams params) {
+    return _remoteDataSource.deleteSubscription(params);
   }
 
   @override

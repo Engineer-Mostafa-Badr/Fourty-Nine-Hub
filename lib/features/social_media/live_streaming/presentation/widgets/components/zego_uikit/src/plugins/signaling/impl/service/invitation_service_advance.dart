@@ -16,7 +16,6 @@ import '../core/defines.dart';
 
 // Project imports:
 
-
 /// @nodoc
 mixin ZegoPluginInvitationServiceAdvance {
   /// send invitation to one or more specified users

@@ -1,6 +1,5 @@
 // Project imports:
 
-
 import '../../../../services/defines/user.dart';
 
 class ZegoUIKitAdvanceInvitationSendProtocol {

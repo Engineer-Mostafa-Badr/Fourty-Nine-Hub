@@ -111,7 +111,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
             FittedBox(
               child: Text(
                 '${gift.value ?? 0} 💰',
-                style:  Styles.mediumText(color: Colors.white),
+                style: Styles.mediumText(color: Colors.white),
               ),
             ),
           ],

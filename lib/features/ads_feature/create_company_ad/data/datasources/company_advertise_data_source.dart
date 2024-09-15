@@ -86,10 +86,10 @@ class CompanyAdvertiseDataSourceImpl implements CompanyAdvertiseDataSource {
         await _apiConsumer.get(EndPoints.getPostsCompanyAd(params));
 
     return response.fold(
-      (failure)=>Left(failure),
-      (response)=>Right((response['data']['advertises'] as List)
-                .map((e) => CompanyAdModel.fromJson(e))
-                .toList()),
+      (failure) => Left(failure),
+      (response) => Right((response['data']['advertises'] as List)
+          .map((e) => CompanyAdModel.fromJson(e))
+          .toList()),
     );
   }
 }
