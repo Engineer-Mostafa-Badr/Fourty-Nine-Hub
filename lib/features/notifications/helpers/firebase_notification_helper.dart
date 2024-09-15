@@ -64,7 +64,8 @@ class FirebaseHelper {
   }
 
   Future<void> setupInteractedMessage() async {
-    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
       _handleMessage(initialMessage);
@@ -76,15 +77,19 @@ class FirebaseHelper {
   void _handleMessage(RemoteMessage message) {
     // pr(message.data);
     // pr(message.data.runtimeType);
-    FirebaseNotificationEntitiy firebaseNotificationEntitiy = FirebaseNotificationEntitiy.fromMap(message.data);
+    FirebaseNotificationEntitiy firebaseNotificationEntitiy =
+        FirebaseNotificationEntitiy.fromMap(message.data);
     // pr(firebaseNotificationEntitiy);
-    if (firebaseNotificationEntitiy.status == 'success' && !notificationPageLoaded) {
+    if (firebaseNotificationEntitiy.status == 'success' &&
+        !notificationPageLoaded) {
       notificationPageLoaded = true;
-      Future.delayed(const Duration(seconds: 3)).then((value) => notificationPageLoaded = false);
+      Future.delayed(const Duration(seconds: 3))
+          .then((value) => notificationPageLoaded = false);
       // pr('status is success ');
       pr(firebaseNotificationEntitiy.path);
       pr(firebaseNotificationEntitiy.payload);
-      context.push(firebaseNotificationEntitiy.path ?? '', extra: firebaseNotificationEntitiy.payload);
+      context.push(firebaseNotificationEntitiy.path ?? '',
+          extra: firebaseNotificationEntitiy.payload);
     }
   }
 }

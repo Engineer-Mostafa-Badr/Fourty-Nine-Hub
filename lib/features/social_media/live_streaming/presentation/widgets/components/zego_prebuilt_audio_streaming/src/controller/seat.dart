@@ -259,7 +259,8 @@ class ZegoLiveAudioRoomControllerSeatHostImpl
       tag: 'audio-room',
       subTag: 'controller.seat',
     );
-/// after [adding] express engine error shoukd be solved
+
+    /// after [adding] express engine error shoukd be solved
     return ZegoUIKit()
         .getSignalingPlugin()
         .acceptInvitation(inviterID: audienceUserID, data: '')

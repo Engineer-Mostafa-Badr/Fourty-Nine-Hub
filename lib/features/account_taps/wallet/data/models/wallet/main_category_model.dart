@@ -6,9 +6,9 @@ class MainCategoryWalletModel extends MainCategoryWalletEntity {
 
   factory MainCategoryWalletModel.fromJson(Map<String, dynamic> json) {
     return MainCategoryWalletModel(
-      id: json['_id'] ??'',
-      nameAr: json['nameAr'] ??'',
-      nameEn: json['nameEn'] ??'',
+      id: json['_id'] ?? '',
+      nameAr: json['nameAr'] ?? '',
+      nameEn: json['nameEn'] ?? '',
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class TinderSharedUtils {
   static String _token = '';
   static List<String>? favListIds;
@@ -127,7 +128,7 @@ class TinderSharedUtils {
         ),
         Text(
           "${gift.nameEn} gift $message",
-          style:  TextStyle(fontSize: 16.sp, color: Colors.black87),
+          style: TextStyle(fontSize: 16.sp, color: Colors.black87),
           textAlign: TextAlign.left,
         ),
       ],
@@ -137,7 +138,7 @@ class TinderSharedUtils {
   static Widget _buildMessageContent(String message) {
     return Text(
       message,
-      style:  TextStyle(fontSize: 16.sp, color: Colors.black87),
+      style: TextStyle(fontSize: 16.sp, color: Colors.black87),
       textAlign: TextAlign.left,
     );
   }
@@ -153,7 +154,7 @@ class TinderSharedUtils {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         ),
-        child:  Text('OK', style: TextStyle(fontSize: 16.sp)),
+        child: Text('OK', style: TextStyle(fontSize: 16.sp)),
       ),
       if (isError)
         TextButton(

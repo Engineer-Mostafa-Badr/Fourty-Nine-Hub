@@ -14,8 +14,10 @@ part 'main_categories_taps_state.dart';
 
 class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
   final GetSubCategoriesUseCase _getSubCategoriesUseCase;
-  final ToggleSubCategoryToFavoritesUseCase _toggleSubCategoryToFavoritesUseCase;
-  MainCategoriesTapsCubit(this._getSubCategoriesUseCase, this._toggleSubCategoryToFavoritesUseCase)
+  final ToggleSubCategoryToFavoritesUseCase
+      _toggleSubCategoryToFavoritesUseCase;
+  MainCategoriesTapsCubit(
+      this._getSubCategoriesUseCase, this._toggleSubCategoryToFavoritesUseCase)
       : super(MainCategoriesTapsState()) {
     scrollController.addListener(() {
       if (scrollController.position.maxScrollExtent ==
@@ -48,7 +50,8 @@ class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
     final user = UserCubit.to.state.data?.id;
     final result = await _getSubCategoriesUseCase(GetSubCategoriesParams(
       mainCategoryId: selectedCategory.id,
-      paginationParams: _paginationParams, userId: user??'',
+      paginationParams: _paginationParams,
+      userId: user ?? '',
     ));
     result.fold(
         (l) => emit(state.copyWith(status: StateStatus.error, failure: l)),
@@ -71,17 +74,16 @@ class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
     return super.close();
   }
 
-
   Future<bool> toggleSubCategoryToFavorites(String subcategoryId) async {
     final response = await _toggleSubCategoryToFavoritesUseCase(subcategoryId);
     bool result = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (data) {
-          result=data;
-          emit(state.copyWith(status:StateStatus.success));
-        });
+        (data) {
+      result = data;
+      emit(state.copyWith(status: StateStatus.success));
+    });
     return result;
   }
 }

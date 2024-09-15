@@ -1,5 +1,3 @@
-
-
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_delete_card_entity.dart';
 
 class DeleteCardResponseModel extends DeleteCardResponse {
@@ -8,10 +6,10 @@ class DeleteCardResponseModel extends DeleteCardResponse {
     required String message,
     required DeleteCardDataModel data,
   }) : super(
-    status: status,
-    message: message,
-    data: data,
-  );
+          status: status,
+          message: message,
+          data: data,
+        );
 
   factory DeleteCardResponseModel.fromJson(Map<String, dynamic> json) {
     return DeleteCardResponseModel(
@@ -29,6 +27,7 @@ class DeleteCardResponseModel extends DeleteCardResponse {
     };
   }
 }
+
 class DeleteCardDataModel extends DeleteCardData {
   DeleteCardDataModel({
     required String type,
@@ -36,11 +35,11 @@ class DeleteCardDataModel extends DeleteCardData {
     required String statusDescription,
     required bool basketPayment,
   }) : super(
-    type: type,
-    statusCode: statusCode,
-    statusDescription: statusDescription,
-    basketPayment: basketPayment,
-  );
+          type: type,
+          statusCode: statusCode,
+          statusDescription: statusDescription,
+          basketPayment: basketPayment,
+        );
 
   factory DeleteCardDataModel.fromJson(Map<String, dynamic> json) {
     return DeleteCardDataModel(

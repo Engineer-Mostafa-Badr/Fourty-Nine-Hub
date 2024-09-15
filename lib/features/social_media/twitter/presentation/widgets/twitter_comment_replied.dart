@@ -20,6 +20,7 @@ import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class TwitterCommentReplies extends StatefulWidget {
   final List<TwitterCommentReplyEntity> replies;
   final String commentId;
@@ -70,8 +71,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
           children: [
             Expanded(
               child: PagedListView<int, TwitterCommentReplyEntity>(
-                padding:
-                    EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
+                padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
                 pagingController: controller.repliesPagingController,
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(
@@ -81,7 +81,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                     noItemsFoundIndicatorBuilder: (context) {
                       print(
                           controller.repliesPagingController.itemList?.length);
-                      return  Padding(
+                      return Padding(
                           padding: EdgeInsets.only(top: 200),
                           child: Center(
                             child: Text(

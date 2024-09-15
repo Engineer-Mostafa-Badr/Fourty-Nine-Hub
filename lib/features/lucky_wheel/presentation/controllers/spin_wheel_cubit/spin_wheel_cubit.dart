@@ -69,7 +69,7 @@ class SpinWheelCubit extends Cubit<BasicState<WheelItemEntity>> {
                     prize.type == WheelItemTypes.point
                         ? '${prize.value} Points'
                         : '${prize.value} L.E',
-                    style:  TextStyle(fontSize: 22.sp),
+                    style: TextStyle(fontSize: 22.sp),
                   ),
                   ElevatedAppButton(
                     label: 'back',

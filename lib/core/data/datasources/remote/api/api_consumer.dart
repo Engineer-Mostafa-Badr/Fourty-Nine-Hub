@@ -33,7 +33,6 @@ abstract class ApiConsumer {
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
-
   });
 
   Future<Either<Failure, Map<String, dynamic>>> delete(
@@ -184,19 +183,15 @@ class BaseApiConsumer extends ApiConsumer {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> put(
-    String url, {
-    Map<String, dynamic>? data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers
-  }) async {
+  Future<Either<Failure, Map<String, dynamic>>> put(String url,
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) async {
     try {
-      final result = await _dio.put(
-        url,
-        data: data,
-        queryParameters: queryParameters,
-         options: Options(headers: headers)
-      );
+      final result = await _dio.put(url,
+          data: data,
+          queryParameters: queryParameters,
+          options: Options(headers: headers));
       log(result.data.toString(), name: "url");
       if (result.data['status']) {
         log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
@@ -205,7 +200,7 @@ class BaseApiConsumer extends ApiConsumer {
         } else {
           return Right({"data": result.data});
         }
-      } else {  
+      } else {
         return Left(ValidationFailure(
             result.data['message'] ?? result.data['error']['message']));
       }
@@ -264,7 +259,7 @@ class BaseApiConsumer extends ApiConsumer {
         );
       }
     }
-    return   UnknownFailure(e);
+    return UnknownFailure(e);
   }
 
   Future<void> refreshToken() async {

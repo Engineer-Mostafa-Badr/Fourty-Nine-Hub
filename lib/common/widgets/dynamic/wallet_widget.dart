@@ -62,8 +62,7 @@ class WalletWidget extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) => const BalanceWalletView()));
-              }, LocaleKeys.balance.tr(),
-                  '${state.balance?.balance ?? ''}'),
+              }, LocaleKeys.balance.tr(), '${state.balance?.balance ?? ''}'),
               Container(
                 width: 2.h,
                 margin: EdgeInsets.symmetric(horizontal: 5.w),
@@ -75,17 +74,17 @@ class WalletWidget extends StatelessWidget {
                 backgroundColor: AppColors.SECONDARY_COLOR,
               ),
               Sizer(),
-                buildItem(
-                      () {
-                    //context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const GiftWalletView()));
-                  },
-                  LocaleKeys.gift.tr(),
-                  '${state.gift?.giftWallet.amount ?? ''}',
-                ),
+              buildItem(
+                () {
+                  //context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const GiftWalletView()));
+                },
+                LocaleKeys.gift.tr(),
+                '${state.gift?.giftWallet.amount ?? ''}',
+              ),
               Container(
                 width: 2.h,
                 margin: EdgeInsets.symmetric(horizontal: 5.w),

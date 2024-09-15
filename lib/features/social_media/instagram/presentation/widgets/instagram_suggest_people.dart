@@ -74,8 +74,9 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                   noItemsFoundIndicatorBuilder: (context) {
                                     print(controller.suggestUserPagingController
                                         .itemList?.length);
-                                    return  Padding(
-                                        padding: const EdgeInsets.only(top: 200),
+                                    return Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 200),
                                         child: Center(
                                           child: Label(
                                             text: LocaleKeys.noFriendsSuggested.localize,
@@ -100,9 +101,11 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                       },
                                       child: Container(
                                         width: 200,
-                                        padding: const EdgeInsets.only(bottom: 10),
+                                        padding:
+                                            const EdgeInsets.only(bottom: 10),
                                         margin:
-                                            const EdgeInsetsDirectional.only(end: 10),
+                                            const EdgeInsetsDirectional.only(
+                                                end: 10),
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(4),
@@ -148,8 +151,9 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8.0),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8.0),
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.center,
@@ -178,8 +182,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
-                                                                  fontSize:
-                                                                      14),
+                                                                  fontSize: 14),
                                                         )
                                                       : Row(
                                                           children: [

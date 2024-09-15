@@ -39,8 +39,9 @@ ThemeData darkTheme() {
       primary: AppColors.AUTH_CONTAINER_COLOR,
       secondary: AppColors.AUTH_CONTAINER_COLOR,
     ),
-    drawerTheme:
-        const DrawerThemeData(backgroundColor: AppColors.QUANTITY_COLOR,),
+    drawerTheme: const DrawerThemeData(
+      backgroundColor: AppColors.QUANTITY_COLOR,
+    ),
     actionIconTheme: const ActionIconThemeData(),
     bottomAppBarTheme: const BottomAppBarTheme(),
     canvasColor: Colors.black38,

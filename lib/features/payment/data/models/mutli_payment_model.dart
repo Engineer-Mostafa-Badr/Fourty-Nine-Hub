@@ -1,5 +1,3 @@
-
-
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_multi_payment_entity.dart';
 
 class MutliPaymentEntityModel extends MutliPaymentEntity {
@@ -8,10 +6,10 @@ class MutliPaymentEntityModel extends MutliPaymentEntity {
     required String providerId,
     required String paymentMethod,
   }) : super(
-    amountId: amountId,
-    providerId: providerId,
-    paymentMethod: paymentMethod,
-  );
+          amountId: amountId,
+          providerId: providerId,
+          paymentMethod: paymentMethod,
+        );
 
   factory MutliPaymentEntityModel.fromJson(Map<String, dynamic> json) {
     return MutliPaymentEntityModel(

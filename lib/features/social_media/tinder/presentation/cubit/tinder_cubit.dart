@@ -855,7 +855,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     final response =
         await tinderRepository.sendGift(receiverId, giftId, subCategoryId);
     if (response != null) {
-      log(response.toString()+"--------------------------------------");
+      log(response.toString() + "--------------------------------------");
       emit(state.copyWith(sendGiftErrorDataState: DataState.success));
       return response;
     } else {

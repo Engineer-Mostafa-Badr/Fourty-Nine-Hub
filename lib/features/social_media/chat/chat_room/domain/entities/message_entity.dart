@@ -37,13 +37,12 @@ class MessageEntity {
       required this.time,
       required this.isDeleted});
 
-
-  void markAsSeen(){
+  void markAsSeen() {
     seen = true;
     delivered = true;
   }
 
-  void markAsDelivered(){
+  void markAsDelivered() {
     delivered = true;
     seen = false;
   }

@@ -69,8 +69,7 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
           children: [
             Expanded(
               child: PagedListView<int, CommentEntity>(
-                padding:
-                    EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
+                padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
                 pagingController: controller.commentsPagingController,
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(
@@ -79,8 +78,8 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                     noItemsFoundIndicatorBuilder: (context) {
                       print(
                           controller.commentsPagingController.itemList?.length);
-                      return  Padding(
-                          padding:const  EdgeInsets.only(top: 200),
+                      return Padding(
+                          padding: const EdgeInsets.only(top: 200),
                           child: Center(
                             child: Text(
                               LocaleKeys.noComments.localize,

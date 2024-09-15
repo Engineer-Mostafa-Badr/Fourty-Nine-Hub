@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class UserReels extends StatefulWidget {
   const UserReels({super.key, required this.userData});
   final UserProfileEntity userData;

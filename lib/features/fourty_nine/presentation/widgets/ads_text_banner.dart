@@ -11,9 +11,9 @@ class AdsTextBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin:  EdgeInsets.symmetric(vertical: 5.h),
+      margin: EdgeInsets.symmetric(vertical: 5.h),
       decoration: const BoxDecoration(color: AppColors.SECONDARY_COLOR),
-      child:  MarqueeText(
+      child: MarqueeText(
         text: const TextSpan(
           text: UIConst.placeholderText,
         ),

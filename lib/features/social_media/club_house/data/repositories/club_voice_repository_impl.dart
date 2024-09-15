@@ -26,7 +26,8 @@ class ClubVoiceRepositoryImpl extends ClubVoiceRepository {
   }
 
   @override
-  Future<Either<Failure, List<ClubVoiceRoomEntity>>> getRooms(PaginationParams params) {
+  Future<Either<Failure, List<ClubVoiceRoomEntity>>> getRooms(
+      PaginationParams params) {
     return clubVoiceDataSource.getRooms(params);
   }
 

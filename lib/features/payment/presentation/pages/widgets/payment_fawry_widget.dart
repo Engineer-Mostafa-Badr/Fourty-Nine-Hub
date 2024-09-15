@@ -22,9 +22,10 @@ class FawryPayment extends StatefulWidget {
   final num amount;
 
   const FawryPayment(
-      {Key? key, required this.amountId,
-        required this.providerId
-        ,required this.amount})
+      {Key? key,
+      required this.amountId,
+      required this.providerId,
+      required this.amount})
       : super(key: key);
 
   @override
@@ -83,40 +84,46 @@ class _FawryPaymentState extends State<FawryPayment> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-            Expanded(child:   _paymentOptionButton(
-              onTap: () {
-                setState(() {
-                  _isCardSelected = !_isCardSelected;
-                  _showQrCode = false;
-                  _showLink = false;
-                  _showNumber = false;
-                });
-              },
-              icon: Icons.credit_card,
-              text: "Card",
-              isSelected: _isCardSelected,
-            ),),
-           Sizer(width: 10.w,),
-           Expanded(child:    _paymentOptionButton(
-             onTap: () {
-               setState(() {
-                 _showQrCode = !_showQrCode;
-                 _isCardSelected = false;
-                 _showLink = false;
-                 _showNumber = false;
-                 if (_showQrCode == true) {
-                   paymentCubit.makeMultiPayment(
-                     amountId: widget.amountId,
-                     providerId: widget.providerId,
-                     paymentMethod: "MWALLET",
-                   );
-                 }
-               });
-             },
-             icon: Icons.qr_code_scanner,
-             text: "QR Code",
-             isSelected: _showQrCode,
-           ),),
+              Expanded(
+                child: _paymentOptionButton(
+                  onTap: () {
+                    setState(() {
+                      _isCardSelected = !_isCardSelected;
+                      _showQrCode = false;
+                      _showLink = false;
+                      _showNumber = false;
+                    });
+                  },
+                  icon: Icons.credit_card,
+                  text: "Card",
+                  isSelected: _isCardSelected,
+                ),
+              ),
+              Sizer(
+                width: 10.w,
+              ),
+              Expanded(
+                child: _paymentOptionButton(
+                  onTap: () {
+                    setState(() {
+                      _showQrCode = !_showQrCode;
+                      _isCardSelected = false;
+                      _showLink = false;
+                      _showNumber = false;
+                      if (_showQrCode == true) {
+                        paymentCubit.makeMultiPayment(
+                          amountId: widget.amountId,
+                          providerId: widget.providerId,
+                          paymentMethod: "MWALLET",
+                        );
+                      }
+                    });
+                  },
+                  icon: Icons.qr_code_scanner,
+                  text: "QR Code",
+                  isSelected: _showQrCode,
+                ),
+              ),
             ],
           ),
         ),
@@ -147,7 +154,9 @@ class _FawryPaymentState extends State<FawryPayment> {
                   isSelected: _showLink,
                 ),
               ),
-              Sizer(width: 10,),
+              Sizer(
+                width: 10,
+              ),
               Expanded(
                 child: _paymentOptionButton(
                   onTap: () {
@@ -176,11 +185,13 @@ class _FawryPaymentState extends State<FawryPayment> {
       ],
     );
   }
-  Widget _buildSavedCardsList(PaymentCubit paymentCubit, List<CardEntity> savedCards) {
+
+  Widget _buildSavedCardsList(
+      PaymentCubit paymentCubit, List<CardEntity> savedCards) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-         Text(
+        Text(
           'Saved Cards',
           style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
         ),
@@ -188,10 +199,12 @@ class _FawryPaymentState extends State<FawryPayment> {
         ...savedCards.map((card) {
           return Card(
             elevation: 4,
-            margin:  EdgeInsets.symmetric(vertical: 8.h),
+            margin: EdgeInsets.symmetric(vertical: 8.h),
             child: ListTile(
-              title: Text(card.cardAlias.isNotEmpty ? card.cardAlias : 'No alias'),
-              subtitle: Text('**** **** **** ${card.lastFourDigits} - Exp: ${card.updatedAt.year.toString().substring(2)}'),
+              title:
+                  Text(card.cardAlias.isNotEmpty ? card.cardAlias : 'No alias'),
+              subtitle: Text(
+                  '**** **** **** ${card.lastFourDigits} - Exp: ${card.updatedAt.year.toString().substring(2)}'),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -204,7 +217,8 @@ class _FawryPaymentState extends State<FawryPayment> {
                         builder: (context) {
                           return AlertDialog(
                             title: const Text('Confirm Deletion'),
-                            content: const Text('Are you sure you want to delete this card?'),
+                            content: const Text(
+                                'Are you sure you want to delete this card?'),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () {
@@ -232,11 +246,13 @@ class _FawryPaymentState extends State<FawryPayment> {
                         final state = context.read<PaymentCubit>().state;
                         if (state.status == StateStatus.success) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Card deleted successfully')),
+                            const SnackBar(
+                                content: Text('Card deleted successfully')),
                           );
                         } else if (state.status == StateStatus.error) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Failed to delete card:')),
+                            const SnackBar(
+                                content: Text('Failed to delete card:')),
                           );
                         }
                       }
@@ -263,11 +279,10 @@ class _FawryPaymentState extends State<FawryPayment> {
   Widget _creditCardPayment() {
     final paymentCubit = BlocProvider.of<PaymentCubit>(context);
 
-    void _updateCreditCard(){
-      setState(() {
-
-      });
+    void _updateCreditCard() {
+      setState(() {});
     }
+
     void _initializeListeners() {
       _cardNumberController.addListener(_updateCreditCard);
       _expiryMonthController.addListener(_updateCreditCard);
@@ -275,14 +290,17 @@ class _FawryPaymentState extends State<FawryPayment> {
       _cvvController.addListener(_updateCreditCard);
       _cardAlias.addListener(_updateCreditCard);
     }
+
     _initializeListeners();
 
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          if (paymentCubit.state.savedCardsData != null && paymentCubit.state.savedCardsData!.isNotEmpty)
-            _buildSavedCardsList(paymentCubit, paymentCubit.state.savedCardsData!),
+          if (paymentCubit.state.savedCardsData != null &&
+              paymentCubit.state.savedCardsData!.isNotEmpty)
+            _buildSavedCardsList(
+                paymentCubit, paymentCubit.state.savedCardsData!),
           SizedBox(height: 16.h),
           if (paymentCubit.selectedCard != null)
             ElevatedButton(
@@ -295,10 +313,13 @@ class _FawryPaymentState extends State<FawryPayment> {
                   print("Selected Card Data:");
                   print("Card Alias: ${card.cardAlias}");
                   print("Last Four Digits: ${card.lastFourDigits}");
-                  print("Expiry Date: ${card.updatedAt.year.toString().substring(2)}");
-                  paymentCubit.payWithToken(cardId: card.id,amountId: widget.amountId,cvv: card.cvv.toString());
+                  print(
+                      "Expiry Date: ${card.updatedAt.year.toString().substring(2)}");
+                  paymentCubit.payWithToken(
+                      cardId: card.id,
+                      amountId: widget.amountId,
+                      cvv: card.cvv.toString());
                 }
-
               },
               child: const Text(
                 "Pay Now",
@@ -309,20 +330,20 @@ class _FawryPaymentState extends State<FawryPayment> {
           AppButton(
             height: 50.h,
             color: AppColors.LIGHT_COLOR,
-            label:    _isAddingNewCard ? 'Hide Card Form' : 'Add New Card',
+            label: _isAddingNewCard ? 'Hide Card Form' : 'Add New Card',
             backColor: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () {
               setState(() {
                 _isAddingNewCard = !_isAddingNewCard;
               });
             },
-
           ),
           if (_isAddingNewCard) ...[
             CreditCardWidget(
               cardBgColor: Colors.black,
               cardNumber: _cardNumberController.text,
-              expiryDate: '${_expiryMonthController.text}/${_expiryYearController.text}',
+              expiryDate:
+                  '${_expiryMonthController.text}/${_expiryYearController.text}',
               cardHolderName: _cardAlias.text,
               cvvCode: _cvvController.text,
               showBackView: _cvvFocusNode.hasFocus,
@@ -383,15 +404,12 @@ class _FawryPaymentState extends State<FawryPayment> {
               ),
               maxLength: 16,
               keyboardType: TextInputType.text,
-
             ),
-
             SizedBox(height: 16.h),
             Row(
               children: [
                 Expanded(
-                  child:
-                  TextFormField(
+                  child: TextFormField(
                     controller: _expiryMonthController,
                     decoration: InputDecoration(
                       labelText: 'Expiry Month',
@@ -418,7 +436,6 @@ class _FawryPaymentState extends State<FawryPayment> {
                       LengthLimitingTextInputFormatter(2),
                     ],
                   ),
-
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -449,7 +466,6 @@ class _FawryPaymentState extends State<FawryPayment> {
                       LengthLimitingTextInputFormatter(2),
                     ],
                   ),
-
                 ),
               ],
             ),
@@ -482,103 +498,117 @@ class _FawryPaymentState extends State<FawryPayment> {
               ],
               obscureText: true,
             ),
-
             SizedBox(height: 16.h),
-          Row(
-            children: [
-              Expanded(child:  AppButton(
-                  height: 50.h,
-                  color: AppColors.LIGHT_COLOR,
-                  label: "Pay With Card",
-                  backColor: AppColors.PRIMARY_COLOR,
-                  onPressed: () {
-                    print("Ok");
-                    _handlePayWithCard();
-                  }),),
-              Sizer(width: 5,),
-              Expanded(child:  AppButton(
-                  height: 50.h,
-                  color: AppColors.LIGHT_COLOR,
-                  label:   "Save Card",
-                  backColor: AppColors.PRIMARY_COLOR,
-                onPressed: () async {
-                  print("Yes");
+            Row(
+              children: [
+                Expanded(
+                  child: AppButton(
+                      height: 50.h,
+                      color: AppColors.LIGHT_COLOR,
+                      label: "Pay With Card",
+                      backColor: AppColors.PRIMARY_COLOR,
+                      onPressed: () {
+                        print("Ok");
+                        _handlePayWithCard();
+                      }),
+                ),
+                Sizer(
+                  width: 5,
+                ),
+                Expanded(
+                  child: AppButton(
+                    height: 50.h,
+                    color: AppColors.LIGHT_COLOR,
+                    label: "Save Card",
+                    backColor: AppColors.PRIMARY_COLOR,
+                    onPressed: () async {
+                      print("Yes");
 
-                  // Call the method to save the card token
-                  await paymentCubit.saveCardToken(
-                    cardNumber: _cardNumberController.text,
-                    cardExpiryYear: _expiryYearController.text,
-                    cardExpiryMonth: _expiryMonthController.text,
-                    cardAlias: _cardAlias.text,
-                    cvv: _cvvController.text,
-                  );
-                  paymentCubit.getSavedCards();
-                  await Future.delayed(const Duration(milliseconds: 500));
+                      // Call the method to save the card token
+                      await paymentCubit.saveCardToken(
+                        cardNumber: _cardNumberController.text,
+                        cardExpiryYear: _expiryYearController.text,
+                        cardExpiryMonth: _expiryMonthController.text,
+                        cardAlias: _cardAlias.text,
+                        cvv: _cvvController.text,
+                      );
+                      paymentCubit.getSavedCards();
+                      await Future.delayed(const Duration(milliseconds: 500));
 
-                  final state = context.read<PaymentCubit>().state;
+                      final state = context.read<PaymentCubit>().state;
 
-                  if (state.status == StateStatus.success && state.fawryCardTokenResponseData != null) {
-                    final message = state.fawryCardTokenResponseData?.message ?? 'No message available';
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text('Success'),
-                          content: Text('Payment was successful: $message'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
+                      if (state.status == StateStatus.success &&
+                          state.fawryCardTokenResponseData != null) {
+                        final message =
+                            state.fawryCardTokenResponseData?.message ??
+                                'No message available';
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Success'),
+                              content: Text('Payment was successful: $message'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
                         );
-                      },
-                    );
-                  } else if (state.status == StateStatus.error) {
-                    final message = state.fawryCardTokenResponseData?.message ?? 'No error message available';
-                    final statusDescription = state.fawryCardTokenResponseData?.data.statusDescription ?? 'No description available';
+                      } else if (state.status == StateStatus.error) {
+                        final message =
+                            state.fawryCardTokenResponseData?.message ??
+                                'No error message available';
+                        final statusDescription = state
+                                .fawryCardTokenResponseData
+                                ?.data
+                                .statusDescription ??
+                            'No description available';
 
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text('Error'),
-                          content: Text('Payment failed: $message\nStatus Description: $statusDescription'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Error'),
+                              content: Text(
+                                  'Payment failed: $message\nStatus Description: $statusDescription'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
                         );
-                      },
-                    );
-                  }
-                },
-
-                  ),),
-
-             Sizer(width: 5,),
-              Expanded(child:
-              AppButton(
-                height: 50.h,
-                color: AppColors.LIGHT_COLOR,
-                label:   "Cancel",
-                backColor: AppColors.PRIMARY_COLOR_DARK,
-                onPressed: () {
-                  setState(() {
-                    _isAddingNewCard = false;
-                  });
-                },
-
-              ),
-              ),
-            ],
-          ),
+                      }
+                    },
+                  ),
+                ),
+                Sizer(
+                  width: 5,
+                ),
+                Expanded(
+                  child: AppButton(
+                    height: 50.h,
+                    color: AppColors.LIGHT_COLOR,
+                    label: "Cancel",
+                    backColor: AppColors.PRIMARY_COLOR_DARK,
+                    onPressed: () {
+                      setState(() {
+                        _isAddingNewCard = false;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
           ],
         ],
       ),
@@ -592,7 +622,6 @@ class _FawryPaymentState extends State<FawryPayment> {
     final cardExpiryMonth = _expiryMonthController.text;
     final cardExpiryYear = _expiryYearController.text;
     final cvv = _cvvController.text;
-
 
     await cubit.chargeWithCard(
       cardNumber: cardNumber,
@@ -614,7 +643,8 @@ class _FawryPaymentState extends State<FawryPayment> {
         builder: (context) {
           return AlertDialog(
             title: const Text('Success'),
-            content: Text('Payment was successful: ${state.fawryPayWithCardData?.message ?? ''}'),
+            content: Text(
+                'Payment was successful: ${state.fawryPayWithCardData?.message ?? ''}'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -662,7 +692,8 @@ class _FawryPaymentState extends State<FawryPayment> {
         padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
-          color: isSelected ? AppColors.PRIMARY_COLOR : AppColors.LIGHT_GRAY_COLOR,
+          color:
+              isSelected ? AppColors.PRIMARY_COLOR : AppColors.LIGHT_GRAY_COLOR,
         ),
         child: Center(
           child: Row(
@@ -704,10 +735,11 @@ class _FawryPaymentState extends State<FawryPayment> {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        padding:  EdgeInsets.symmetric(horizontal: 30, vertical: 15.h),
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
-          color:  isSelected ? AppColors.PRIMARY_COLOR : AppColors.LIGHT_GRAY_COLOR,
+          color:
+              isSelected ? AppColors.PRIMARY_COLOR : AppColors.LIGHT_GRAY_COLOR,
         ),
         child: Row(
           children: [
@@ -733,21 +765,22 @@ class _FawryPaymentState extends State<FawryPayment> {
 
   Widget _paymentNumber(PaymentData paymentData) {
     return Padding(
-      padding:  const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-           const Text("Payment Number:"),
+          const Text("Payment Number:"),
           SizedBox(height: 10.h),
-          Text(paymentData.referenceNumber ?? 'No number available',style:  TextStyle(
-            fontSize: 30.sp,
-            fontWeight: FontWeight.bold,
-            color: AppColors.PRIMARY_COLOR_DARK
-          ),),
+          Text(
+            paymentData.referenceNumber ?? 'No number available',
+            style: TextStyle(
+                fontSize: 30.sp,
+                fontWeight: FontWeight.bold,
+                color: AppColors.PRIMARY_COLOR_DARK),
+          ),
         ],
       ),
     );
   }
-
 
   Widget _paymentLink(PaymentData paymentData) {
     return Padding(
@@ -760,13 +793,13 @@ class _FawryPaymentState extends State<FawryPayment> {
           InkWell(
             onTap: () async {
               final url = paymentData.link;
-              if(url != null) {
+              if (url != null) {
                 await launchUrl(Uri.parse(url));
               }
             },
             child: Text(
               paymentData.link ?? 'No link available',
-              style:  TextStyle(
+              style: TextStyle(
                 fontSize: 25.sp,
                 color: Colors.blue,
                 decoration: TextDecoration.underline,
@@ -778,12 +811,11 @@ class _FawryPaymentState extends State<FawryPayment> {
     );
   }
 
-
   Widget _qrCode(PaymentCubit paymentCubit) {
     final qrCodeBase64 =
         paymentCubit.state.mutliPaymentResponse?.data?.walletQr;
     if (qrCodeBase64 == null || qrCodeBase64.isEmpty) {
-      return  Padding(
+      return Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
@@ -799,7 +831,7 @@ class _FawryPaymentState extends State<FawryPayment> {
     try {
       imageBytes = _decodeBase64Image(qrCodeBase64);
     } catch (e) {
-      return  Padding(
+      return Padding(
         padding: EdgeInsets.all(16),
         child: Column(
           children: [

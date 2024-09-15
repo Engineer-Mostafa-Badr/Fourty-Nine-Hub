@@ -170,8 +170,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                 subCategoryId: widget.categorization.subCategory.id),
             child: Container(
               height: kToolbarHeight * 3,
-              padding:
-                   EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(5)),

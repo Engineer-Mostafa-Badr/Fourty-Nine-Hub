@@ -38,7 +38,7 @@ class CommentWidget extends StatelessWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                   Text(
+                  Text(
                     '150',
                     style: TextStyle(color: Colors.grey, fontSize: 14.sp),
                   ),
@@ -53,7 +53,7 @@ class CommentWidget extends StatelessWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                   Text(
+                  Text(
                     '122',
                     style: TextStyle(color: Colors.grey, fontSize: 14.sp),
                   ),
@@ -181,7 +181,7 @@ class CommentWidget extends StatelessWidget {
                               color: const Color(0xfff3f3f3),
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            child:  Column(
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
@@ -249,7 +249,7 @@ class CommentWidget extends StatelessWidget {
                       child: TextField(
                         controller: commentController,
                         textAlignVertical: TextAlignVertical.bottom,
-                        style:  TextStyle(
+                        style: TextStyle(
                           color: Colors.black,
                           fontSize: 12.sp,
                         ),
@@ -259,7 +259,7 @@ class CommentWidget extends StatelessWidget {
                             Icons.send,
                             color: AppColors.PRIMARY_COLOR,
                           ),
-                          hintStyle:  TextStyle(
+                          hintStyle: TextStyle(
                             color: Colors.grey,
                             fontSize: 12.sp,
                           ),

@@ -13,10 +13,12 @@ class UnreadNotificationsBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        final getUnreadNotificationsCountCubit = context.watch<GetUnreadNotificationsCountCubit>();
+        final getUnreadNotificationsCountCubit =
+            context.watch<GetUnreadNotificationsCountCubit>();
 
         return IconWithViewCount(
-          icon: Icon(Icons.notifications, size: 45.w, color: Colors.black.withOpacity(0.8)),
+          icon: Icon(Icons.notifications,
+              size: 45.w, color: Colors.black.withOpacity(0.8)),
           // icon: Image.asset(
           //   Assets.notification,
           //   width: 30.h,
@@ -24,7 +26,9 @@ class UnreadNotificationsBuilder extends StatelessWidget {
           //   fit: BoxFit.cover,
           // ),
           spaceBetween: 0,
-          unreadCount: getUnreadNotificationsCountCubit.unreadNotificationsCountEntity?.total ?? 0,
+          unreadCount: getUnreadNotificationsCountCubit
+                  .unreadNotificationsCountEntity?.total ??
+              0,
         );
       },
     );

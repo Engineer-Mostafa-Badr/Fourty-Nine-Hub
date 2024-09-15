@@ -26,7 +26,7 @@ import '../../../../../common/widgets/stateful/maps/map_picker.dart';
 import '../../../../ride/RideRequest/domain/entity/address_search_params_entity.dart';
 
 class CreateShippingView extends StatefulWidget {
-   CreateShippingView({super.key});
+  CreateShippingView({super.key});
   @override
   State<CreateShippingView> createState() => _CreateShippingViewState();
 }
@@ -50,7 +50,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
       body: Form(
         key: formKey,
         child: Padding(
-          padding:  const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -69,12 +69,12 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   },
                 ),
                 Sizer(),
-                 const DashboardBanner(
+                const DashboardBanner(
                   title: Labels.driverDashboard,
                   subTitle: Labels.driverDashboardBannerDiscription,
                   route: Routes.DOCTORDASHBOARD,
                 ),
-                 SizedBox(
+                SizedBox(
                   height: 30.h,
                 ),
                 FormField(
@@ -126,7 +126,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                               if (field.hasError)
                                 Column(
                                   children: [
-                                     SizedBox(
+                                    SizedBox(
                                       height: 8.h,
                                     ),
                                     Text(
@@ -145,7 +145,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                     );
                   },
                 ),
-                 SizedBox(
+                SizedBox(
                   height: 30.h,
                 ),
                 DefaultTextFormField(
@@ -159,7 +159,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   currentFocusNode: FocusNode(),
                   hint: Labels.receiptPoint,
                 ),
-                 SizedBox(
+                SizedBox(
                   height: 20.h,
                 ),
                 DefaultTextFormField(
@@ -173,7 +173,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   currentFocusNode: FocusNode(),
                   hint: Labels.deliveryPoint,
                 ),
-                 SizedBox(
+                SizedBox(
                   height: 20.h,
                 ),
                 DefaultTextFormField(
@@ -190,7 +190,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   // hint: "نقطة الاستلام",
                   hint: Labels.time,
                 ),
-                 SizedBox(
+                SizedBox(
                   height: 20.h,
                 ),
 
@@ -205,7 +205,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   minLines: 6,
                   maxLines: 6,
                   maxLength: 100,
-                  style:  const TextStyle(color: AppColors.QUANTITY_COLOR),
+                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                   decoration: InputDecoration(
                       fillColor: AppColors.AUTH_CONTAINER_COLOR,
                       border: OutlineInputBorder(
@@ -221,10 +221,10 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12)),
                       hintText: Labels.description,
-                      hintStyle:  TextStyle(
+                      hintStyle: TextStyle(
                           fontSize: 12.sp, color: AppColors.QUANTITY_COLOR)),
                 ),
-                 SizedBox(
+                SizedBox(
                   height: 20.h,
                 ),
                 //  CustomTextField(hint: "عرض سعر"),
@@ -242,7 +242,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   // hint: "نقطة الاستلام",
                   hint: Labels.offerPrice,
                 ),
-                 SizedBox(
+                SizedBox(
                   height: 20.h,
                 ),
                 //  CustomTextField(hint: "المحمول"),
@@ -258,7 +258,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   // hint: "نقطة الاستلام",
                   hint: Labels.phone,
                 ),
-                 SizedBox(
+                SizedBox(
                   height: 20.h,
                 ),
                 Row(
@@ -271,8 +271,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       width: 25,
                       height: 25.h,
                     )),
-                     const SizedBox(width: 10),
-                     Flexible(
+                    const SizedBox(width: 10),
+                    Flexible(
                         flex: 3,
                         child: Text(Labels.theApplicationDoesNot,
                             textAlign: TextAlign.start,
@@ -280,7 +280,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                 fontSize: 20.sp, fontWeight: FontWeight.bold))),
                   ],
                 ),
-                 SizedBox(height: 30.h),
+                SizedBox(height: 30.h),
                 //  Gap(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -292,10 +292,10 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       width: 25,
                       height: 25.h,
                     )),
-                     const SizedBox(width: 10),
+                    const SizedBox(width: 10),
 
                     //  Gap(10),
-                     Flexible(
+                    Flexible(
                         flex: 3,
                         child: Text(
                           Labels.thePremiumPackageGivesYou,
@@ -305,7 +305,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                         )),
                   ],
                 ),
-                 SizedBox(height: 30.h),
+                SizedBox(height: 30.h),
                 //  Gap(30),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,8 +318,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       height: 25.h,
                     )),
                     //  Gap(10),
-                     const SizedBox(width: 10),
-                     Flexible(
+                    const SizedBox(width: 10),
+                    Flexible(
                       flex: 3,
                       child: Text(
                         Labels.freeCancellation,
@@ -332,7 +332,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                     ),
                   ],
                 ),
-                 SizedBox(height: 50.h),
+                SizedBox(height: 50.h),
                 //  Gap(50),
                 Row(
                   children: [
@@ -344,11 +344,11 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                           onPressed: () {}),
                     ),
                     //  Gap(6),
-                     const SizedBox(width: 6),
+                    const SizedBox(width: 6),
                     Flexible(
                       child: AppButton(
                           height: 60.h,
-                          backColor:  const Color(0xFF0B1135),
+                          backColor: const Color(0xFF0B1135),
                           label: Labels.request,
                           style: Styles.headerText(color: Colors.white),
                           onPressed: () async {
@@ -361,7 +361,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                   ],
                 ),
                 //  Gap(100),
-                 SizedBox(height: 100.h),
+                SizedBox(height: 100.h),
               ],
             ),
           ),
@@ -430,7 +430,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
 }
 
 class CustomTextField extends StatelessWidget {
-   CustomTextField(
+  CustomTextField(
       {super.key,
       required this.hint,
       this.prefixIcon,
@@ -451,21 +451,21 @@ class CustomTextField extends StatelessWidget {
       decoration: InputDecoration(
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide:  const BorderSide(color: Colors.red)),
+            borderSide: const BorderSide(color: Colors.red)),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide:  const BorderSide(color: Colors.red)),
+            borderSide: const BorderSide(color: Colors.red)),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide:  const BorderSide(color: Colors.red)),
+            borderSide: const BorderSide(color: Colors.red)),
         disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide:  const BorderSide(color: Colors.red)),
+            borderSide: const BorderSide(color: Colors.red)),
         fillColor: Colors.grey.shade300,
         filled: true,
         prefixIcon: prefixIcon,
         hintText: hint,
-        hintStyle:  TextStyle(
+        hintStyle: TextStyle(
           fontSize: 18.sp,
         ),
       ),

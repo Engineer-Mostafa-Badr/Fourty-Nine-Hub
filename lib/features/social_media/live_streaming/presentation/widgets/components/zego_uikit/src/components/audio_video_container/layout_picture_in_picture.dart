@@ -6,7 +6,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'picture_in_picture/layout_pip_small_item.dart';
 import 'picture_in_picture/layout_pip_small_item_list.dart';
 
-
 /// layout config of picture in picture
 class ZegoLayoutPictureInPictureConfig extends ZegoLayout {
   /// small video view is draggable if set true in one-on-one mode

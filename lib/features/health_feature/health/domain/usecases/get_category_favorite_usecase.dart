@@ -11,7 +11,8 @@ class GetCategoryFavoriteUseCase
   GetCategoryFavoriteUseCase(this._repo);
 
   @override
-  Future<Either<Failure, List<FavoriteCategoryBannersEntity>>> call(NoParams params) {
+  Future<Either<Failure, List<FavoriteCategoryBannersEntity>>> call(
+      NoParams params) {
     return _repo.getCategoryFavorite();
   }
 }

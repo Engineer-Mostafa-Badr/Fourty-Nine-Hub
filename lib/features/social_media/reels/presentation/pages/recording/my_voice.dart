@@ -741,6 +741,7 @@ import '../../controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'recording_shared.dart';
 import '../../shared/filter_utiles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class MyVoiceVideoRecordingScreen extends StatefulWidget {
   final String? comeFrom;
   final String? totalPrice;
@@ -1053,7 +1054,7 @@ class MyVoiceVideoRecordingScreenState
           ),
           child: Text(
             'Recording stops in $_secondsRemaining seconds',
-            style:  TextStyle(color: Colors.white, fontSize: 18.sp),
+            style: TextStyle(color: Colors.white, fontSize: 18.sp),
           ),
         ),
       ),

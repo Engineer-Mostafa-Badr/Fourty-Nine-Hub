@@ -15,38 +15,36 @@ import 'package:get_it/get_it.dart';
 
 class PaymentProviderServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
-    serviceLocator.registerLazySingleton<PaymentProviderRemoteDataSource>(() =>
-        PaymentProviderRemoteDataSourceImpl(serviceLocator(),));
-
+    serviceLocator.registerLazySingleton<PaymentProviderRemoteDataSource>(
+        () => PaymentProviderRemoteDataSourceImpl(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<PaymentProviderRepository>(
-            () => PaymentProviderRepositoryImpl(serviceLocator()));
-
+        () => PaymentProviderRepositoryImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<GetPaymentProviderUseCase>(
-            () => GetPaymentProviderUseCase(serviceLocator()));
+        () => GetPaymentProviderUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<PaymobUseCase>(
-            () => PaymobUseCase(serviceLocator()));
+        () => PaymobUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<FawryCardUseCase>(
-            () => FawryCardUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<FawrySaveCardTokenUseCase >(
-            () => FawrySaveCardTokenUseCase (serviceLocator()));
+        () => FawryCardUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<FawrySaveCardTokenUseCase>(
+        () => FawrySaveCardTokenUseCase(serviceLocator()));
 
-    serviceLocator.registerLazySingleton<GetSavedCardsUseCase >(
-            () => GetSavedCardsUseCase (serviceLocator()));
+    serviceLocator.registerLazySingleton<GetSavedCardsUseCase>(
+        () => GetSavedCardsUseCase(serviceLocator()));
 
-    serviceLocator.registerLazySingleton<DeleteCardUseCase >(
-            () => DeleteCardUseCase (serviceLocator()));
-    serviceLocator.registerLazySingleton<MutliPaymentUseCase >(
-            () => MutliPaymentUseCase (serviceLocator()));
-    serviceLocator.registerLazySingleton<InstaPayUseCase >(
-            () => InstaPayUseCase (serviceLocator()));
-    serviceLocator.registerLazySingleton<PayWithTokenseCase >(
-            () => PayWithTokenseCase (serviceLocator()));
+    serviceLocator.registerLazySingleton<DeleteCardUseCase>(
+        () => DeleteCardUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<MutliPaymentUseCase>(
+        () => MutliPaymentUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<InstaPayUseCase>(
+        () => InstaPayUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<PayWithTokenseCase>(
+        () => PayWithTokenseCase(serviceLocator()));
 
-
-    serviceLocator.registerFactory<PaymentCubit>(() =>
-        PaymentCubit(
+    serviceLocator.registerFactory<PaymentCubit>(() => PaymentCubit(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

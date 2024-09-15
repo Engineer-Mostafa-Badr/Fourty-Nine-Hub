@@ -112,7 +112,8 @@ class TwitterRepoImpl implements TwitterRepo {
   }
 
   @override
-  Future<Either<Failure, List<TwitterPostEntity>>> getGlobalFeed({required TwitterFeedParams params}) {
+  Future<Either<Failure, List<TwitterPostEntity>>> getGlobalFeed(
+      {required TwitterFeedParams params}) {
     return _remoteDataSource.getGlobalFeed(params: params);
   }
 }

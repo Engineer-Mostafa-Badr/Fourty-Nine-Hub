@@ -13,7 +13,6 @@ import 'audio_room_layout.dart';
 
 // Project imports:
 
-
 /// @nodoc
 /// container of seat
 class ZegoLiveAudioRoomSeatContainer extends StatefulWidget {

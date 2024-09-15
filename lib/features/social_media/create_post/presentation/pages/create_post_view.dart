@@ -164,7 +164,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                           if (state.selectedFeeling != null &&
                               state.selectedFeeling!.name.isNotEmpty)
                             Container(
-                              margin: const EdgeInsetsDirectional.only(start: 10),
+                              margin:
+                                  const EdgeInsetsDirectional.only(start: 10),
                               padding: EdgeInsets.symmetric(
                                   horizontal: 5, vertical: 5.h),
                               decoration: BoxDecoration(
@@ -191,8 +192,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                                       alignment:
                                           AlignmentDirectional.bottomStart,
                                       child: Padding(
-                                        padding:
-                                            const EdgeInsets.symmetric(horizontal: 6),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 6),
                                         child: Row(
                                           children: [
                                             Text(
@@ -217,7 +218,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                           if (state.selectedActivity != null &&
                               state.selectedActivity!.name.isNotEmpty)
                             Container(
-                              margin: const EdgeInsetsDirectional.only(start: 10),
+                              margin:
+                                  const EdgeInsetsDirectional.only(start: 10),
                               padding: EdgeInsets.symmetric(
                                   horizontal: 5, vertical: 5.h),
                               decoration: BoxDecoration(
@@ -438,8 +440,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                     Stack(
                       children: [
                         Container(
-                          margin:
-                              const EdgeInsetsDirectional.only(end: 10, bottom: 10),
+                          margin: const EdgeInsetsDirectional.only(
+                              end: 10, bottom: 10),
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
@@ -453,8 +455,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                         ),
                         if (index == 3 && state.images!.length > 4)
                           Container(
-                            margin:
-                                const EdgeInsetsDirectional.only(end: 10, bottom: 10),
+                            margin: const EdgeInsetsDirectional.only(
+                                end: 10, bottom: 10),
                             // padding: EdgeInsets.all(10),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(

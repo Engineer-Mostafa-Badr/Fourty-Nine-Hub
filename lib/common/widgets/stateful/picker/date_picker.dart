@@ -47,7 +47,7 @@ class _DatePickerFieldState extends State<DatePickerField> {
         }
       },
       child: Container(
-        padding:  EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
         decoration: BoxDecoration(
           border:
               Border.all(width: .5, color: widget.borderColor ?? Colors.black),

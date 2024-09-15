@@ -7,7 +7,8 @@ import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../repositories/club_voice_repository.dart';
 
-class GetClubVoiceUseCase extends UseCase<List<ClubVoiceRoomEntity>, PaginationParams> {
+class GetClubVoiceUseCase
+    extends UseCase<List<ClubVoiceRoomEntity>, PaginationParams> {
   final ClubVoiceRepository clubVoiceRepository;
 
   GetClubVoiceUseCase(this.clubVoiceRepository);

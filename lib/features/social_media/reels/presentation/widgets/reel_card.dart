@@ -187,7 +187,7 @@ class _ControlsOverlay extends StatelessWidget {
                   )
               ];
             },
-            child:  Padding(
+            child: Padding(
               padding: EdgeInsets.symmetric(
                 // Using less vertical padding as the text is also longer
                 // horizontally, so it feels like it would need more spacing

@@ -84,8 +84,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
           children: [
             Expanded(
               child: PagedListView<int, TwitterPostCommentEntity>(
-                padding:
-                    EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
+                padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
                 pagingController: controller.commentsPagingController,
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(
@@ -95,7 +94,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                     noItemsFoundIndicatorBuilder: (context) {
                       print(
                           controller.commentsPagingController.itemList?.length);
-                      return  Padding(
+                      return Padding(
                           padding: const EdgeInsets.only(top: 200),
                           child: Center(
                             child: Text(

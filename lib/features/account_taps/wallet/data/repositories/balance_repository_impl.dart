@@ -7,18 +7,18 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balan
 import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/balance_repository.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_balance_history_use_case.dart';
 
-
-class BalanceRepositoryImpl extends BalanceRepository{
+class BalanceRepositoryImpl extends BalanceRepository {
   final BalanceRemoteDataSource _balanceRemoteDataSource;
 
   BalanceRepositoryImpl(this._balanceRemoteDataSource);
   @override
   Future<Either<Failure, BalanceDataEntity>> fetchBalance() {
-  return _balanceRemoteDataSource.fetchBalance();
+    return _balanceRemoteDataSource.fetchBalance();
   }
 
   @override
-  Future<Either<Failure, List<BalanceHistoryEntity>>> fetchHistoryBalance(BalanceHistoryParams params) {
+  Future<Either<Failure, List<BalanceHistoryEntity>>> fetchHistoryBalance(
+      BalanceHistoryParams params) {
     return _balanceRemoteDataSource.fetchHistoryBalance(params);
   }
 
@@ -41,5 +41,4 @@ class BalanceRepositoryImpl extends BalanceRepository{
   Future<Either<Failure, RequestWithdrawEntity>> checkRequestWithdrawBalance() {
     return _balanceRemoteDataSource.checkRequestWithdrawBalance();
   }
-
 }

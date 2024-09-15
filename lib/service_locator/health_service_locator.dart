@@ -94,8 +94,8 @@ class HealthServiceLocator {
     //   ),
     // );
 
-    serviceLocator
-        .registerLazySingleton<CreateDoctorRemoteDataSource>(() => CreateDoctorRemoteDataSourceImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<CreateDoctorRemoteDataSource>(
+        () => CreateDoctorRemoteDataSourceImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<HealthEmergencyRemoteDataSource>(
         () => HealthEmergencyRemoteDataSourceImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<BookAppointmentRemoteDataSource>(
@@ -119,11 +119,15 @@ class HealthServiceLocator {
       ),
     );
 
-    serviceLocator.registerLazySingleton<CreateDoctorRepo>(() => CreateDoctorRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<CreateDoctorRepo>(
+        () => CreateDoctorRepoImpl(serviceLocator()));
 
-    serviceLocator.registerLazySingleton<HealthEmergencyRepo>(() => HealthEmergencyRepoImpl(serviceLocator()));
-    serviceLocator.registerLazySingleton<BookAppointmentRepo>(() => BookAppointmentRepoImpl(serviceLocator()));
-    serviceLocator.registerLazySingleton<DoctorDashboardRepo>(() => DoctorDashboardRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<HealthEmergencyRepo>(
+        () => HealthEmergencyRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<BookAppointmentRepo>(
+        () => BookAppointmentRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<DoctorDashboardRepo>(
+        () => DoctorDashboardRepoImpl(serviceLocator()));
     // -------------------UseCases ----------------------
     serviceLocator.registerLazySingleton<GetDoctorDetailsUseCase>(
       () => GetDoctorDetailsUseCase(
@@ -136,69 +140,80 @@ class HealthServiceLocator {
       ),
     );
 
-    serviceLocator.registerLazySingleton<GetMyAppointmentBookingsHistoryUseCase>(
+    serviceLocator
+        .registerLazySingleton<GetMyAppointmentBookingsHistoryUseCase>(
       () => GetMyAppointmentBookingsHistoryUseCase(
         serviceLocator(),
       ),
     );
 
-    serviceLocator.registerLazySingleton<GetCitiesUseCase>(() => GetCitiesUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<CreateDoctorUseCase>(() => CreateDoctorUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<GetGovernoratesUseCase>(() => GetGovernoratesUseCase(serviceLocator()));
-    serviceLocator
-        .registerLazySingleton<BookHealthEmergencyUseCase>(() => BookHealthEmergencyUseCase(serviceLocator()));
-    serviceLocator
-        .registerLazySingleton<BookRegularAppointmentUseCase>(() => BookRegularAppointmentUseCase(serviceLocator()));
-    serviceLocator
-        .registerLazySingleton<GetUserDoctorRatessUseCase>(() => GetUserDoctorRatessUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetCitiesUseCase>(
+        () => GetCitiesUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<CreateDoctorUseCase>(
+        () => CreateDoctorUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetGovernoratesUseCase>(
+        () => GetGovernoratesUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<BookHealthEmergencyUseCase>(
+        () => BookHealthEmergencyUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<BookRegularAppointmentUseCase>(
+        () => BookRegularAppointmentUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetUserDoctorRatessUseCase>(
+        () => GetUserDoctorRatessUseCase(serviceLocator()));
 
     serviceLocator.registerLazySingleton<GetUserUpcomingAppointmentsUseCase>(
         () => GetUserUpcomingAppointmentsUseCase(serviceLocator()));
-    serviceLocator
-        .registerLazySingleton<BookPremiumAppointmentUseCase>(() => BookPremiumAppointmentUseCase(serviceLocator()));
-    serviceLocator
-        .registerLazySingleton<GetHealthSubcategoriesUseCase>(() => GetHealthSubcategoriesUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<BookPremiumAppointmentUseCase>(
+        () => BookPremiumAppointmentUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetHealthSubcategoriesUseCase>(
+        () => GetHealthSubcategoriesUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetMedicalServicesUseCase>(
       () => GetMedicalServicesUseCase(serviceLocator()),
     );
     serviceLocator.registerLazySingleton<ToggleFavoriteSubcategoryUseCase>(
         () => ToggleFavoriteSubcategoryUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<GetDoctorSubscriptionRemainingDaysUseCase>(
-        () => GetDoctorSubscriptionRemainingDaysUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<GetDoctorPracticingRemainingDaysUseCase>(
-        () => GetDoctorPracticingRemainingDaysUseCase(serviceLocator()));
+    serviceLocator
+        .registerLazySingleton<GetDoctorSubscriptionRemainingDaysUseCase>(
+            () => GetDoctorSubscriptionRemainingDaysUseCase(serviceLocator()));
+    serviceLocator
+        .registerLazySingleton<GetDoctorPracticingRemainingDaysUseCase>(
+            () => GetDoctorPracticingRemainingDaysUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetDoctorIDRemainingDaysUseCase>(
         () => GetDoctorIDRemainingDaysUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetDoctorAppointmentsByDayUseCase>(
         () => GetDoctorAppointmentsByDayUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetDoctorUnhandledAppointmentsUseCase>(
         () => GetDoctorUnhandledAppointmentsUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<IsDoctorUsecase>(() => IsDoctorUsecase(serviceLocator()));
-    serviceLocator
-        .registerLazySingleton<DoctorRejectAppointmentUsecase>(() => DoctorRejectAppointmentUsecase(serviceLocator()));
-    serviceLocator
-        .registerLazySingleton<DoctorAcceptAppointmentUsecase>(() => DoctorAcceptAppointmentUsecase(serviceLocator()));
-    serviceLocator
-        .registerLazySingleton<GetDoctorStatisticsUsecase>(() => GetDoctorStatisticsUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<IsDoctorUsecase>(
+        () => IsDoctorUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<DoctorRejectAppointmentUsecase>(
+        () => DoctorRejectAppointmentUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<DoctorAcceptAppointmentUsecase>(
+        () => DoctorAcceptAppointmentUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetDoctorStatisticsUsecase>(
+        () => GetDoctorStatisticsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetAllDoctorReservationsUsecase>(
         () => GetAllDoctorReservationsUsecase(serviceLocator()));
-    serviceLocator.registerLazySingleton<GetDoctorProfileUseCase>(() => GetDoctorProfileUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<UpdateDoctorIDUsecase>(() => UpdateDoctorIDUsecase(serviceLocator()));
-    serviceLocator.registerLazySingleton<UpdateDoctorPracticingCirtificateUsecase>(
-        () => UpdateDoctorPracticingCirtificateUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetDoctorProfileUseCase>(
+        () => GetDoctorProfileUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<UpdateDoctorIDUsecase>(
+        () => UpdateDoctorIDUsecase(serviceLocator()));
+    serviceLocator
+        .registerLazySingleton<UpdateDoctorPracticingCirtificateUsecase>(
+            () => UpdateDoctorPracticingCirtificateUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<UpdateDoctorProfilePhotoUsecase>(
         () => UpdateDoctorProfilePhotoUsecase(serviceLocator()));
-    serviceLocator
-        .registerLazySingleton<DeleteDoctorAccountUseCase>(() => DeleteDoctorAccountUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<IsDoctorApprovalUsecase>(() => IsDoctorApprovalUsecase(serviceLocator()));
-    serviceLocator
-        .registerLazySingleton<ToggleFavoriteCategoryUseCase>(() => ToggleFavoriteCategoryUseCase(serviceLocator()));
-    serviceLocator
-        .registerLazySingleton<DeleteFavoriteCategoryUseCase>(() => DeleteFavoriteCategoryUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<DeleteDoctorAccountUseCase>(
+        () => DeleteDoctorAccountUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<IsDoctorApprovalUsecase>(
+        () => IsDoctorApprovalUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<ToggleFavoriteCategoryUseCase>(
+        () => ToggleFavoriteCategoryUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<DeleteFavoriteCategoryUseCase>(
+        () => DeleteFavoriteCategoryUseCase(serviceLocator()));
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());
-    serviceLocator.registerFactory<DoctorDetailsCubit>(
-        () => DoctorDetailsCubit(serviceLocator(), serviceLocator(), serviceLocator()));
+    serviceLocator.registerFactory<DoctorDetailsCubit>(() => DoctorDetailsCubit(
+        serviceLocator(), serviceLocator(), serviceLocator()));
     serviceLocator.registerFactory<DoctorsListCubit>(() => DoctorsListCubit(
           serviceLocator(),
           serviceLocator(),
@@ -226,55 +241,67 @@ class HealthServiceLocator {
       )..loadData(),
     );
 
-    serviceLocator.registerFactory<DoctorSubcategoryFilterCubit>(() => DoctorSubcategoryFilterCubit(
-          serviceLocator(),
-          serviceLocator(),
-        )..loadData());
+    serviceLocator.registerFactory<DoctorSubcategoryFilterCubit>(
+        () => DoctorSubcategoryFilterCubit(
+              serviceLocator(),
+              serviceLocator(),
+            )..loadData());
 
-    serviceLocator.registerFactory<HealthEmergencyCubit>(
-        () => HealthEmergencyCubit(serviceLocator(), serviceLocator(), serviceLocator())..loadData());
+    serviceLocator.registerFactory<HealthEmergencyCubit>(() =>
+        HealthEmergencyCubit(
+            serviceLocator(), serviceLocator(), serviceLocator())
+          ..loadData());
 
-    serviceLocator.registerFactory(() => DoctorGovernorateFilterCubit(serviceLocator(), serviceLocator())..loadData());
-    serviceLocator.registerFactory(() => DoctorCityFilterCubit(serviceLocator()));
+    serviceLocator.registerFactory(() =>
+        DoctorGovernorateFilterCubit(serviceLocator(), serviceLocator())
+          ..loadData());
+    serviceLocator
+        .registerFactory(() => DoctorCityFilterCubit(serviceLocator()));
 
-    serviceLocator.registerFactory<BookDoctorAppointmentCubit>(() => BookDoctorAppointmentCubit(
-          serviceLocator(),
-          serviceLocator(),
-        ));
-
-    serviceLocator.registerFactory<DoctorDashboardCubit>(() => DoctorDashboardCubit(
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-        )..loadData());
-
-    serviceLocator.registerFactory<DoctorTodayAppointmentsCubit>(() => DoctorTodayAppointmentsCubit(
-          serviceLocator(),
-        )..loadData());
-
-    serviceLocator.registerFactory<DoctorUnhandledAppointmentsCubit>(() => DoctorUnhandledAppointmentsCubit(
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-        )..loadData());
-
-    serviceLocator.registerFactory<DoctorStatisticsCubit>(() => DoctorStatisticsCubit(
-          serviceLocator(),
-        )..loadData());
+    serviceLocator.registerFactory<BookDoctorAppointmentCubit>(
+        () => BookDoctorAppointmentCubit(
+              serviceLocator(),
+              serviceLocator(),
+            ));
 
     serviceLocator
-        .registerFactory<AllDoctorReservationsCubit>(() => AllDoctorReservationsCubit(serviceLocator())..loadData());
+        .registerFactory<DoctorDashboardCubit>(() => DoctorDashboardCubit(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+            )..loadData());
 
-    serviceLocator.registerFactory<EditDoctorProfileCubit>(() => EditDoctorProfileCubit(
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-        )..loadData());
+    serviceLocator.registerFactory<DoctorTodayAppointmentsCubit>(
+        () => DoctorTodayAppointmentsCubit(
+              serviceLocator(),
+            )..loadData());
+
+    serviceLocator.registerFactory<DoctorUnhandledAppointmentsCubit>(
+        () => DoctorUnhandledAppointmentsCubit(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+            )..loadData());
+
+    serviceLocator
+        .registerFactory<DoctorStatisticsCubit>(() => DoctorStatisticsCubit(
+              serviceLocator(),
+            )..loadData());
+
+    serviceLocator.registerFactory<AllDoctorReservationsCubit>(
+        () => AllDoctorReservationsCubit(serviceLocator())..loadData());
+
+    serviceLocator
+        .registerFactory<EditDoctorProfileCubit>(() => EditDoctorProfileCubit(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+            )..loadData());
   }
 }

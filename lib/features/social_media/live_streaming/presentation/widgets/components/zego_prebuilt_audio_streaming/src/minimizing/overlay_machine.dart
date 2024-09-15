@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 
 import '../core/core_managers.dart';
 
-
 /// @nodoc
 typedef LiveAudioRoomMiniOverlayMachineStateChanged = void Function(
   ZegoLiveAudioRoomMiniOverlayPageState,

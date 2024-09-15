@@ -22,7 +22,7 @@ class EditDoctorProfileCard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding:  EdgeInsets.symmetric(vertical: 20.h, horizontal: 10),
+        padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Colors.white,

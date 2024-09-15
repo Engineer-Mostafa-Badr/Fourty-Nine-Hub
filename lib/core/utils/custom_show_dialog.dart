@@ -22,7 +22,7 @@ Future customShowDialog(context) => showDialog(
               'Choose option',
               style: Styles.headerText(),
             ),
-             SizedBox(
+            SizedBox(
               height: 20.h,
             ),
             buildMaterial(
@@ -33,7 +33,7 @@ Future customShowDialog(context) => showDialog(
                 Navigator.pop(context);
               },
             ),
-             SizedBox(
+            SizedBox(
               height: 5.h,
             ),
             buildMaterial(
@@ -65,7 +65,7 @@ Widget buildMaterial({
           Icon(
             iconData,
           ),
-           SizedBox(
+          SizedBox(
             width: 10.w,
           ),
           Text(

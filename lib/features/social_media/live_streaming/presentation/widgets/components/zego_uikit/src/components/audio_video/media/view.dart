@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import '../../../../zego_uikit.dart';
 import 'wave.dart';
 
-
 /// display user media view,
 /// and z order of widget(from bottom to top) is:
 /// 1. background view

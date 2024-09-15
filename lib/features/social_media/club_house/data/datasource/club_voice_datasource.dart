@@ -45,11 +45,11 @@ class ClubVoiceDataSourceImpl extends ClubVoiceDataSource {
   }
 
   @override
-  Future<Either<Failure, List<ClubVoiceRoomModel>>> getRooms(PaginationParams params) async {
+  Future<Either<Failure, List<ClubVoiceRoomModel>>> getRooms(
+      PaginationParams params) async {
     try {
-      final result = await apiConsumer.get(
-        EndPoints.allClubVoiceRooms,queryParameters:params.toJson()
-      );
+      final result = await apiConsumer.get(EndPoints.allClubVoiceRooms,
+          queryParameters: params.toJson());
       // print('list is  ${rooms.toString()}');
       return result.fold((l) => Left(l), (r) => Right(_returnListOfRooms(r)));
     } catch (e) {

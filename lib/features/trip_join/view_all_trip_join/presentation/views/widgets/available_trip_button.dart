@@ -32,7 +32,9 @@ class AvaialbleTripsButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            icon != null ? Icon(icon, color: Colors.white, size: 20) : const SizedBox(),
+            icon != null
+                ? Icon(icon, color: Colors.white, size: 20)
+                : const SizedBox(),
             const Sizer(width: 5),
             Text(
               title,

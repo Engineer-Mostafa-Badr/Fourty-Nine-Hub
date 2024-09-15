@@ -10,7 +10,8 @@ class FawryCardUseCase extends UseCase<FawryPayWithCardEntity, FawryParams> {
   FawryCardUseCase(this._repo);
 
   @override
-  Future<Either<Failure, FawryPayWithCardEntity>> call(FawryParams params) async {
+  Future<Either<Failure, FawryPayWithCardEntity>> call(
+      FawryParams params) async {
     return await _repo.chargeWithCard(params);
   }
 }

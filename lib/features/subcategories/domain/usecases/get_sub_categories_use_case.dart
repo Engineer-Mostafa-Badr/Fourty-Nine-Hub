@@ -23,5 +23,7 @@ class GetSubCategoriesParams {
   PaginationParams paginationParams;
 
   GetSubCategoriesParams(
-      {required this.mainCategoryId, required this.paginationParams,required this.userId});
+      {required this.mainCategoryId,
+      required this.paginationParams,
+      required this.userId});
 }

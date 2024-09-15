@@ -66,7 +66,7 @@ class CreateShippingRemoteDataSourceImpl
 
       return Right(list);
     } catch (e) {
-      return  Left(UnknownFailure(''));
+      return Left(UnknownFailure(''));
     }
   }
 

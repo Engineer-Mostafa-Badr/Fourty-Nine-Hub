@@ -16,19 +16,19 @@ class CompanyAdModel extends CompanyAdEntity {
 
   factory CompanyAdModel.fromJson(Map<String, dynamic> json) {
     return CompanyAdModel(
-        sId: json['_id'] ??'',
+        sId: json['_id'] ?? '',
         media: json['media'] != null
             ? (json['media'] as List)
-            .map((e) => MediaModel.fromJson(e as Map<String, dynamic>))
-            .toList()
+                .map((e) => MediaModel.fromJson(e as Map<String, dynamic>))
+                .toList()
             : [],
         views: json['views'],
-        advertisementType: json['advertisement_type'] ??'',
-        post: json['post'] ??'',
-        totalPrice: json['totalPrice'] ??0,
-        isApproved: json['isApproved'] ??'',
-        type: json['type']??'',
-        createdAt: json['createdAt']??'',
-        viewCount: json['viewCount'] ??0);
+        advertisementType: json['advertisement_type'] ?? '',
+        post: json['post'] ?? '',
+        totalPrice: json['totalPrice'] ?? 0,
+        isApproved: json['isApproved'] ?? '',
+        type: json['type'] ?? '',
+        createdAt: json['createdAt'] ?? '',
+        viewCount: json['viewCount'] ?? 0);
   }
 }

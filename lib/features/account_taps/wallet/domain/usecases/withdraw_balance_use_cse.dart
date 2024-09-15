@@ -4,14 +4,13 @@ import 'package:fourtyninehub/core/error/failure.dart';
 
 import '../repositories/balance_repository.dart';
 
-class RequestWithdrawBalanceUseCase extends UseCase<bool,NoParams>{
+class RequestWithdrawBalanceUseCase extends UseCase<bool, NoParams> {
   final BalanceRepository _balanceRepository;
 
   RequestWithdrawBalanceUseCase(this._balanceRepository);
 
   @override
-  Future<Either<Failure, bool>> call(NoParams params)async {
+  Future<Either<Failure, bool>> call(NoParams params) async {
     return await _balanceRepository.requestWithdrawBalance();
   }
-
 }
