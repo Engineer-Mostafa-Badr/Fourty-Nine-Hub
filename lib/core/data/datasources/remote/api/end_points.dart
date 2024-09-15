@@ -27,19 +27,26 @@ class EndPoints {
   static const socialLogin = '/auth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
   static const refreshToken = '/auth/refresh/token';
+
   static String friendsList(TwitterFeedParams params) =>
       '/friends/allFriends?search=${params.search}&page=${params.page}&limit=${params.limit}';
+
   static String searchUsers(TwitterFeedParams params) =>
       '/search/users/${params.search}?page=${params.page}&limit=${params.limit}&subCategory=${Constants.facebookSubCategory}';
+
   static String friendRequestsList(TwitterFeedParams params) =>
       '/friends/FriendRequests?search=${params.search}&page=${params.page}&limit=${params.limit}';
+
   static String blockedUsersList(TwitterFeedParams params) =>
       '/users/blocked?search=${params.search}&page=${params.page}&limit=${params.limit}';
+
   static String followersList(TwitterFeedParams params) =>
       '/follow/followers?search=${params.search}&page=${params.page}&limit=${params.limit}';
+
   static const getParentMainCategories = '/category/parent';
   static const getMainCategories = '/category/parent/get-all-main';
   static String favouriteCategories = '/favorite-category';
+
   static String getBannerByID({required String id}) => '/categories/main/$id';
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
 
@@ -50,6 +57,7 @@ class EndPoints {
 
   static String deleteMainCategoryFromFavorite(String id) =>
       '/favorite-category/$id';
+
   static String toggleSubCategoryToFavorites(String id) =>
       '/favorite-sub-category/$id';
 
@@ -85,12 +93,15 @@ class EndPoints {
   }
 
   static String getPostsCompanyAd(FetchPostCompanyAdvertiseParams params) {
-    return '/advertisementCompany/my-advertisement?page=${params.paginationParams.page}&filter=${params.filter}&limit=${params.paginationParams.limit}';
+    return '/advertisementCompany/my-advertisement?page=${params.paginationParams.page}&filter=${params.filter}&limit=${params.paginationParams.limit}&subCategory=66adecd7aa2ff24015872e9f';
+  }
+
+  static String postCompanyAd() {
+    return '/advertisementCompany?subCategory=66adecd7aa2ff24015872e9f';
   }
 
   static const getWallet = '/main-wallet/user-wallet';
   static const getPrice = '/advertisementCompany/price';
-  static const postCompanyAd = '/advertisementCompany';
   static const getSubscription = '/subscription';
   static const transferFiveBalance = '/main-wallet/transfer-five-years';
   static const transferTenBalance = '/main-wallet/transfer-ten-years';
@@ -107,9 +118,16 @@ class EndPoints {
   static const createNewForgetPassword = '/auth/reset-password';
   static const notifications = '/notifications';
   static const unreadNotificationsCount = '/notifications/unread/count';
+  static const privacy = '/users/privacy';
+  static const deleteAccount = '/users/settings/delete-account';
+  static const disableAccount = '/users/settings/disable-account';
+  static const enableAccount = '/users/settings/enable-account';
+
   static String notificationsSeen(String id) => '/notifications/$id';
+
   static String deleteNotification(String id) => '/notifications/$id';
   static const deleteAllNotification = '/notifications/all';
+
   // static const report = '/report?subCategory=66a3583454e6e337915514db';
   static String report({required String subCategoryId}) =>
       '/report?subCategory=$subCategoryId';
@@ -156,6 +174,7 @@ class EndPoints {
 
   static String getDoctorDetails(String doctorId) =>
       '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
+
   static String toggleFavoriteCategory(String subCategoryId) =>
       '/favorite-category/$subCategoryId';
   static const getHealthSubcategories = '/health/subCategories-health-with-ads';
@@ -172,6 +191,7 @@ class EndPoints {
   static const remainingDaysOfDoctorSubscription =
       '/health/dashboard/remaining-days-of-doctor-subscription';
   static const String getPaymentProvider = '/payment-provider/active';
+
   // static const String getPaymentProvider = '/dashboard/payment-provider';
   static const String getPaymob = '/paymob/paynow';
   static const String postInstaPay = '/manual-payment/create';
@@ -676,6 +696,7 @@ class EndPoints {
   // gecoding google api url
   static String geocodingUrl =
       'https://maps.googleapis.com/maps/api/geocode/json';
+
   // trip join
   static String tripJoinExpectedPrice =
       "/ride/come-with-you/trip/expectedPrice";
@@ -685,6 +706,7 @@ class EndPoints {
   static String publishTripJoin = "/ride/come-with-you";
 
   static String getAllTripJoin = '/ride/come-with-you/get-all';
+
   static String makeTripJoinRequest(String addId) {
     return '/ride/come-with-you/request/$addId?subCategory=62ea00e269ea29c91dfc390c';
   }
