@@ -438,6 +438,7 @@ abstract class  LocaleKeys {
   static const follower = 'follower';
   static const following = 'following';
   static const livesIn = 'livesIn';
+  static const reportSentSuccess = 'reportSentSuccess';
   static const work = 'work';
 
 }

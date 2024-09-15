@@ -454,6 +454,7 @@ class CodegenLoader extends AssetLoader{
   "follower": "متابع",
   "following": "يتابع",
   "livesIn": "يقيم في",
+  "reportSentSuccess": "تم ارسال الابلاغ",
   "work": "يعمل"
 };
 static const Map<String,dynamic> en = {
@@ -829,6 +830,7 @@ static const Map<String,dynamic> en = {
   "unarchive": "Unarchive",
   "availableTrips": "Available Trips",
   "checkRequest": "Please wait to check request",
+  "reportSentSuccess": "Report sent successfully",
   "whatDoYouThink": "What do you think about?",
   "peopleYouMayKnow": "People You May Know",
   "noFriendsSuggested": "No Friends Suggested",
