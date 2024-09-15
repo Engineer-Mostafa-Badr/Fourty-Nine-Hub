@@ -28,7 +28,9 @@ class _ChatRoomViewState extends State<ChatRoomView> {
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: widget.chatsCubit),
-        BlocProvider(create: (context) => serviceLocator<ChatRoomCubit>()..init(chat: widget.chatsCubit.selectedChat)),
+        BlocProvider(
+            create: (context) => serviceLocator<ChatRoomCubit>()
+              ..init(chat: widget.chatsCubit.selectedChat)),
       ],
       child: Scaffold(
         backgroundColor: AppColors.BACKGROUND_COLOR,

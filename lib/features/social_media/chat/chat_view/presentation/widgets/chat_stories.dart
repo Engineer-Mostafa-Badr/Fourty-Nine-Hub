@@ -197,7 +197,9 @@ class ChatStories extends StatelessWidget {
         child: Row(
           children: [
             _createMyStory(context),
-            Sizer(width: 8,),
+            Sizer(
+              width: 8,
+            ),
             BlocBuilder<StoryCubit, StoryState>(
               builder: (context, state) {
                 if (state.users.isEmpty) {
@@ -211,7 +213,9 @@ class ChatStories extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return _buildStoryItem(context, state, index);
                   },
-                  separatorBuilder: (context, index) => Sizer(width: 8,),
+                  separatorBuilder: (context, index) => Sizer(
+                    width: 8,
+                  ),
                   itemCount: state.users.length,
                 );
               },

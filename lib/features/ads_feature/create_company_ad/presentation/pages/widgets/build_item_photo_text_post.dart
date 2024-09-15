@@ -12,14 +12,18 @@ import '../../../domain/entities/company_ad_entity.dart';
 import '../../cubit/create_company_ad_cubit.dart';
 
 class BuildItemPhotoTextPost extends StatelessWidget {
-  const BuildItemPhotoTextPost({super.key, required this.length, required this.advertises, required this.onDeleteItem});
+  const BuildItemPhotoTextPost(
+      {super.key,
+      required this.length,
+      required this.advertises,
+      required this.onDeleteItem});
   final int length;
   final CompanyAdEntity advertises;
   final Function(String) onDeleteItem;
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CreateCompanyAdCubit,CreateCompanyAdState>(
+    return BlocConsumer<CreateCompanyAdCubit, CreateCompanyAdState>(
       listener: (BuildContext context, state) {
         if (state.status == StateStatus.success) {
           showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
@@ -31,8 +35,17 @@ class BuildItemPhotoTextPost extends StatelessWidget {
           children: [
             Column(
               children: [
-                BuildItemPhotoPost(length: length, advertises: advertises,isPhoto: false, onDeleteItem: (String ) {  },),
-                BuildItemTextPost(advertises: advertises,isScalable: false, onDeleteItem: (String ) {  },),
+                BuildItemPhotoPost(
+                  length: length,
+                  advertises: advertises,
+                  isPhoto: false,
+                  onDeleteItem: (String) {},
+                ),
+                BuildItemTextPost(
+                  advertises: advertises,
+                  isScalable: false,
+                  onDeleteItem: (String) {},
+                ),
               ],
             ),
             IconButton(

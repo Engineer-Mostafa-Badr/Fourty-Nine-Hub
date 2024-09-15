@@ -6,20 +6,20 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/w
 import '../../../../../common/models/public/pagination_params.dart';
 import '../entities/wallet/wallet_history_entity.dart';
 
-class GetWalletHistoryUseCase extends UseCase<List<WalletHistoryEntity>, WalletHistoryParams>{
+class GetWalletHistoryUseCase
+    extends UseCase<List<WalletHistoryEntity>, WalletHistoryParams> {
   final WalletRepo _walletRepo;
 
   GetWalletHistoryUseCase(this._walletRepo);
   @override
-  Future<Either<Failure, List<WalletHistoryEntity>>> call(WalletHistoryParams params) async{
+  Future<Either<Failure, List<WalletHistoryEntity>>> call(
+      WalletHistoryParams params) async {
     return await _walletRepo.fetchHistoryWallet(params);
   }
-
 }
 
-
 class WalletHistoryParams {
- final PaginationParams paginationParams;
+  final PaginationParams paginationParams;
 
   WalletHistoryParams({required this.paginationParams});
 }

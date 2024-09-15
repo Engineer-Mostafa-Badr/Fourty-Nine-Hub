@@ -98,7 +98,7 @@ class RestaurantsListsView extends StatelessWidget {
                                   },
                                   child: Container(
                                       alignment: Alignment.centerLeft,
-                                      padding:  EdgeInsets.symmetric(
+                                      padding: EdgeInsets.symmetric(
                                           horizontal: 10.w),
                                       height: 36.h,
                                       decoration: BoxDecoration(

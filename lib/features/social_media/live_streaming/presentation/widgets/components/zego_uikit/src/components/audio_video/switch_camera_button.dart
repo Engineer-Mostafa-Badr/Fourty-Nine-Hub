@@ -5,7 +5,6 @@ import 'package:flutter/scheduler.dart';
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
-
 /// switch cameras
 class ZegoSwitchCameraButton extends StatefulWidget {
   const ZegoSwitchCameraButton({

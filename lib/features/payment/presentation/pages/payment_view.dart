@@ -15,7 +15,6 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class PaymobLink {
   final String amountId;
   final num amount;
@@ -50,7 +49,7 @@ class _PaymentViewState extends State<PaymentView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text('Payment Options'),
+        title: Text('Payment Options'),
       ),
       body: BlocBuilder<PaymentCubit, PaymentState>(
         builder: (context, state) {
@@ -167,7 +166,7 @@ class _PaymentViewState extends State<PaymentView> {
               color: color.withOpacity(0.3),
               spreadRadius: 2,
               blurRadius: 8,
-              offset:  Offset(0, 4),
+              offset: Offset(0, 4),
             ),
           ],
         ),
@@ -175,7 +174,7 @@ class _PaymentViewState extends State<PaymentView> {
           mainAxisSize: MainAxisSize.min,
           children: [
             icon,
-             Spacer(),
+            Spacer(),
             Text(
               title,
               style: TextStyle(
@@ -205,7 +204,7 @@ class _PaymentViewState extends State<PaymentView> {
       case 'InstaPay':
         return _bankTransferPayment();
       default:
-        return  Center(
+        return Center(
           child: Text('Please select a payment method.'),
         );
     }
@@ -241,7 +240,7 @@ class _PaymentViewState extends State<PaymentView> {
       child: Column(
         children: [
           DropdownButtonFormField<String>(
-            decoration:  InputDecoration(
+            decoration: InputDecoration(
               fillColor: Colors.white,
               labelText: 'Select Phone Number',
             ),
@@ -266,8 +265,7 @@ class _PaymentViewState extends State<PaymentView> {
             onPressed: () {},
             child: Text(
               "${widget.amount}",
-              style:  TextStyle(
-                  color: AppColors.LIGHT_COLOR, fontSize: 20.sp),
+              style: TextStyle(color: AppColors.LIGHT_COLOR, fontSize: 20.sp),
             ),
           ),
           Column(
@@ -290,12 +288,12 @@ class _PaymentViewState extends State<PaymentView> {
                       previous.uploadStatus != current.uploadStatus,
                   builder: (context, state) {
                     if (state.uploadStatus == StateStatus.loading) {
-                      return  Center(child: CircularProgressIndicator());
+                      return Center(child: CircularProgressIndicator());
                     } else if (state.uploadStatus == StateStatus.success &&
                         state.uploadedImage != null) {
                       return Image.file(state.uploadedImage!);
                     }
-                    return  ImagePickerPlaceholder();
+                    return ImagePickerPlaceholder();
                   },
                 ),
               ),
@@ -326,7 +324,7 @@ class _PaymentViewState extends State<PaymentView> {
                     },
                     child: Text(
                       "Send for review and approval",
-                      style:  TextStyle(
+                      style: TextStyle(
                           color: AppColors.LIGHT_COLOR, fontSize: 20.sp),
                     ),
                   );

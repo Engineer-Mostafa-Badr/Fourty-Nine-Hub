@@ -1,4 +1,3 @@
-
 class FavouriteCategoryEntity {
   final String id;
   final String banner;
@@ -7,6 +6,11 @@ class FavouriteCategoryEntity {
   final num numberOfAds;
   bool? isFavorite;
 
-  FavouriteCategoryEntity({required this.id, required this.banner, required this.cover, required this.name, required this.numberOfAds,this.isFavorite=false});
-
+  FavouriteCategoryEntity(
+      {required this.id,
+      required this.banner,
+      required this.cover,
+      required this.name,
+      required this.numberOfAds,
+      this.isFavorite = false});
 }

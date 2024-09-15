@@ -15,14 +15,17 @@ class SocialIconBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
-      final getUnreadNotificationsCountCubit = context.watch<GetUnreadNotificationsCountCubit>();
+      final getUnreadNotificationsCountCubit =
+          context.watch<GetUnreadNotificationsCountCubit>();
       return IconWithViewCount(
         icon: SvgPicture.asset(
           Assets.social,
           height: 30.h,
           semanticsLabel: 'social',
         ),
-        unreadCount: getUnreadNotificationsCountCubit.unreadNotificationsCountEntity?.socialCount ?? 0,
+        unreadCount: getUnreadNotificationsCountCubit
+                .unreadNotificationsCountEntity?.socialCount ??
+            0,
       );
     });
   }

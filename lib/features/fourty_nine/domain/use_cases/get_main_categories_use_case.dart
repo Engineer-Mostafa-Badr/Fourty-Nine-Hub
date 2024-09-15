@@ -14,22 +14,22 @@ class GetMainCategoriesUseCase
 
   @override
   Future<Either<Failure, List<MainCategoryEntity>>> call(
-      MainCategoriesParams params,
+    MainCategoriesParams params,
   ) {
     return _fourtyNineRepository.getMainCategories(params);
   }
 }
 
-
-class MainCategoriesParams{
+class MainCategoriesParams {
   final int page;
   final int limit;
   final String userId;
 
-  MainCategoriesParams({required this.page, required this.limit, required this.userId});
+  MainCategoriesParams(
+      {required this.page, required this.limit, required this.userId});
   Map<String, dynamic> toJson() => {
-    'page': page,
-    'limit': limit,
-    if(userId.isNotEmpty)'userId': userId,
-  };
+        'page': page,
+        'limit': limit,
+        if (userId.isNotEmpty) 'userId': userId,
+      };
 }

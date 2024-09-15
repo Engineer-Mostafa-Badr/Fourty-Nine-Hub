@@ -6,20 +6,20 @@ import 'package:fourtyninehub/features/competition/data/repository/competition_r
 import '../../../../../core/error/failure.dart';
 import 'competition_state.dart';
 
-
 class CompetitionCubit extends Cubit<CompetitionState> {
   CompetitionCubit(this.competitionRepo) : super(CompetitionInitial());
 
- final CompetitionRepo competitionRepo;
-  static CompetitionCubit get(context)=>BlocProvider.of(context);
+  final CompetitionRepo competitionRepo;
+  static CompetitionCubit get(context) => BlocProvider.of(context);
 
   //Timer? _pollingTimer;
 
-  void fetchCompetition(context)async{
+  void fetchCompetition(context) async {
     emit(CompetitionLoadingState());
-    var result =await competitionRepo.fetchCompetition();
+    var result = await competitionRepo.fetchCompetition();
     result.fold((failure) {
-      emit(CompetitionErrorState(errMessage: getFailureMessage(failure, context)));
+      emit(CompetitionErrorState(
+          errMessage: getFailureMessage(failure, context)));
       print(getFailureMessage(failure, context));
     }, (competition) {
       emit(CompetitionSuccessState(competitionModel: competition));

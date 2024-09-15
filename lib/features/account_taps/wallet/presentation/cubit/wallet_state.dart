@@ -20,15 +20,14 @@ class WalletState {
     this.subscription,
     this.mainCategory,
   });
-  WalletState copyWith({
-    WalletStates? status,
-    Failure? failure,
-    List<WalletHistoryEntity>? history,
-    WalletEntity? wallet,
-    WalletTypes? selectedWallet,
-    List<WalletSubscriptionEntity>? subscription,
-    List<MainCategoryWalletEntity>? mainCategory
-  }) {
+  WalletState copyWith(
+      {WalletStates? status,
+      Failure? failure,
+      List<WalletHistoryEntity>? history,
+      WalletEntity? wallet,
+      WalletTypes? selectedWallet,
+      List<WalletSubscriptionEntity>? subscription,
+      List<MainCategoryWalletEntity>? mainCategory}) {
     return WalletState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

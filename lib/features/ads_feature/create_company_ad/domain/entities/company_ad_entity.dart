@@ -1,6 +1,5 @@
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/entities/media_entity.dart';
 
-
 class CompanyAdEntity {
   final String? sId;
   final List<MediaEntity>? media; // Updated type

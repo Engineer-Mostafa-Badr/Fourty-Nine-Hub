@@ -28,10 +28,10 @@ class Data {
 
   Data(
       {this.sId,
-        this.advertisementPhotoPrice,
-        this.advertisementPostPrice,
-        this.advertisementPostAndPhotoPrice,
-        this.advertisementReelPrice});
+      this.advertisementPhotoPrice,
+      this.advertisementPostPrice,
+      this.advertisementPostAndPhotoPrice,
+      this.advertisementReelPrice});
 
   Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];

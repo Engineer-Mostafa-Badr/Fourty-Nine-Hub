@@ -75,7 +75,7 @@ class HealthSubCategoryCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                 Row(
+                Row(
                   children: [
                     Expanded(
                       child: Sizer(

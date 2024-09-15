@@ -11,10 +11,15 @@ import '../usecases/main_category_use_case.dart';
 
 abstract class WalletRepo {
   Future<Either<Failure, WalletEntity>> getWallet();
-  Future<Either<Failure,List<WalletHistoryEntity>>>fetchHistoryWallet(WalletHistoryParams params);
-  Future<Either<Failure,List<WalletSubscriptionEntity>>>fetchSubscriptionWallet();
-  Future<Either<Failure,List<MainCategoryWalletEntity>>>fetchMainCategory(MainCategoryParams params);
-  Future<Either<Failure,List<MainCategoryWalletEntity>>>fetchSubCategory(MainCategoryParams params);
-  Future<Either<Failure, bool>>deleteSubscription(DeleteSubscriptionParams params);
-  Future<Either<Failure, bool>>addSubscription(AddSubscriptionParams params);
+  Future<Either<Failure, List<WalletHistoryEntity>>> fetchHistoryWallet(
+      WalletHistoryParams params);
+  Future<Either<Failure, List<WalletSubscriptionEntity>>>
+      fetchSubscriptionWallet();
+  Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchMainCategory(
+      MainCategoryParams params);
+  Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchSubCategory(
+      MainCategoryParams params);
+  Future<Either<Failure, bool>> deleteSubscription(
+      DeleteSubscriptionParams params);
+  Future<Either<Failure, bool>> addSubscription(AddSubscriptionParams params);
 }

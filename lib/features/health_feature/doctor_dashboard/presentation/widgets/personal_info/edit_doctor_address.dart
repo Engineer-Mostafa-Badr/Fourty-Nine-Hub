@@ -21,7 +21,7 @@ class EditDoctorAddressField extends StatelessWidget {
             if (value != null) {}
           },
         ),
-         Sizer(
+        Sizer(
           height: 20.h,
         ),
         DropdownMenu(
@@ -32,7 +32,7 @@ class EditDoctorAddressField extends StatelessWidget {
             if (value != null) {}
           },
         ),
-         Sizer(
+        Sizer(
           height: 20.h,
         ),
         DefaultTextFormField(

@@ -11,7 +11,6 @@ import 'defines.dart';
 
 // Package imports:
 
-
 /// @nodoc
 const layoutGridItemIndexKey = 'index';
 

@@ -133,8 +133,7 @@ class _LiveCardState extends State<LiveCard> {
         children: [
           Expanded(
             child: Container(
-              padding:
-                  EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
               margin: EdgeInsets.symmetric(vertical: 10.h),
               decoration: BoxDecoration(
                   color: AppColors.LIGHT_GRAY_COLOR,

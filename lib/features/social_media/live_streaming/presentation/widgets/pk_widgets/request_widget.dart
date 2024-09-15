@@ -29,7 +29,7 @@ class _PKRequestWidgetState extends State<PKRequestWidget> {
       children: [
         Container(
           decoration: const BoxDecoration(color: Colors.white),
-          child:  Text(
+          child: Text(
             'Auto Accept:',
             style: TextStyle(fontSize: 15.sp),
           ),
@@ -80,7 +80,7 @@ class _PKRequestWidgetState extends State<PKRequestWidget> {
                             hostIDTextController.text.trim(),
                           );
                         },
-                  child:  Text(
+                  child: Text(
                     'Request',
                     style: TextStyle(fontSize: 15.sp, color: Colors.white),
                   ),

@@ -93,9 +93,9 @@ class BalanceRemoteDataSourceImpl extends BalanceRemoteDataSource {
     final response =
         await _apiConsumer.get(EndPoints.checkRequestWithdrawBalance);
 
-  return response.fold(
-      (failure)=>Left(failure),
-      (response)=>Right(RequestWithdrawModel.fromJson(response)),
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(RequestWithdrawModel.fromJson(response)),
     );
   }
 }

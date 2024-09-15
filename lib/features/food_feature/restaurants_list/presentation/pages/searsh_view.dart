@@ -68,8 +68,8 @@ class SearchRestaurantView extends StatelessWidget {
                 decoration: InputDecoration(
                   hintText: LocaleKeys.search.tr(),
                   prefixIcon: const Icon(Icons.search),
-                  contentPadding:  EdgeInsets.symmetric(
-                      horizontal: 10.0, vertical: 10.h),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.h),
                   filled: false,
                 ),
               ),

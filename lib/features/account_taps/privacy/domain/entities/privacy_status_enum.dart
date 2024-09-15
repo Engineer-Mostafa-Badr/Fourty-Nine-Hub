@@ -6,12 +6,9 @@ enum PrivacyStatus {
   friendsAndFollowers,
 }
 
-
 enum MaritalStatus {
   single,
   married,
   divorced,
   widowed,
 }
-
-

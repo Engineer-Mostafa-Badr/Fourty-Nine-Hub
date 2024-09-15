@@ -5,11 +5,13 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/lists_repo.dart';
 
-class GetBlockedUseCase extends UseCase<List<UserFriendEntity>, TwitterFeedParams> {
+class GetBlockedUseCase
+    extends UseCase<List<UserFriendEntity>, TwitterFeedParams> {
   final ListsRepo _repo;
   GetBlockedUseCase(this._repo);
   @override
-  Future<Either<Failure, List<UserFriendEntity>>> call(TwitterFeedParams params) async {
+  Future<Either<Failure, List<UserFriendEntity>>> call(
+      TwitterFeedParams params) async {
     return await _repo.getBlockedUsers(params: params);
   }
 }

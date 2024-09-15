@@ -6,7 +6,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 
 import 'chat_view_item.dart';
 
-
 class ZegoInRoomChatView extends StatefulWidget {
   final ZegoAvatarBuilder? avatarBuilder;
   final ZegoInRoomMessageItemBuilder? itemBuilder;

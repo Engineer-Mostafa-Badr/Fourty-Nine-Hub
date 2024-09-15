@@ -11,21 +11,22 @@ class WalletSubscriptionModel extends WalletSubscriptionEntity {
       required super.expirePremium,
       required super.expireSubscription,
       required super.isActive,
-      required super.createdAt, required super.picture});
+      required super.createdAt,
+      required super.picture});
 
   factory WalletSubscriptionModel.fromJson(Map<String, dynamic> json) {
-      return WalletSubscriptionModel(
-          id: json['_id'] ??'',
-          userId: json['userId'] ??'',
-          subCategoryId: json['subCategoryId']['_id'] ??'',
-          picture: json['subCategoryId']['picture'] ??'',
-          nameAr: json['subCategoryId']['nameAr'] ??0,
-          nameEn: json['subCategoryId']['nameEn'] ??0,
-          isPremium: json['isPremium'] ??false,
-          expirePremium: json['expirePremium'],
-          expireSubscription: json['ExpireSubscription'],
-          isActive: json['isActive'] ??false,
-          createdAt: json['createdAt'] ??'',
-      );
+    return WalletSubscriptionModel(
+      id: json['_id'] ?? '',
+      userId: json['userId'] ?? '',
+      subCategoryId: json['subCategoryId']['_id'] ?? '',
+      picture: json['subCategoryId']['picture'] ?? '',
+      nameAr: json['subCategoryId']['nameAr'] ?? 0,
+      nameEn: json['subCategoryId']['nameEn'] ?? 0,
+      isPremium: json['isPremium'] ?? false,
+      expirePremium: json['expirePremium'],
+      expireSubscription: json['ExpireSubscription'],
+      isActive: json['isActive'] ?? false,
+      createdAt: json['createdAt'] ?? '',
+    );
   }
 }

@@ -252,7 +252,9 @@ class ReelsRepository {
       throw Exception('Failed to load reels');
     }
   }
-  Future<ReelsResponse> fetchReelsForFollowers({int page = 1, int limit = 3}) async {
+
+  Future<ReelsResponse> fetchReelsForFollowers(
+      {int page = 1, int limit = 3}) async {
     final url =
         'https://49dev.com/api/v1/reels/followers?page=$page&limit=$limit';
     final response = await _makeGetRequest(url: url, fromMethod: 'fetchReels');

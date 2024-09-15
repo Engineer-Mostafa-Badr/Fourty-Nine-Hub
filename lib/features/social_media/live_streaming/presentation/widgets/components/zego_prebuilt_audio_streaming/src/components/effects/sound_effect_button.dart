@@ -10,7 +10,6 @@ import '../defines.dart';
 import '../pop_up_manager.dart';
 import 'sound_effect_sheet.dart';
 
-
 /// @nodoc
 class ZegoLiveAudioRoomSoundEffectButton extends StatefulWidget {
   final ZegoUIKitPrebuiltLiveAudioRoomInnerText innerText;

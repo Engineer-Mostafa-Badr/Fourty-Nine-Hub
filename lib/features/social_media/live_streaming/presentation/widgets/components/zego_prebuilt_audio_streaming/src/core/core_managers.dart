@@ -14,8 +14,6 @@ import 'live_duration_manager.dart';
 import 'seat/plugins.dart';
 import 'seat/seat_manager.dart';
 
-
-
 /// @nodoc
 class ZegoLiveAudioRoomManagers {
   factory ZegoLiveAudioRoomManagers() => _instance;

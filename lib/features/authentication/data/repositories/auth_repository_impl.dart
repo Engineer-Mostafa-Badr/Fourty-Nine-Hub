@@ -1,4 +1,3 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -35,7 +34,8 @@ class AuthRepositoryImpl extends AuthRepository {
     return result.fold(
       (failure) => Left(failure),
       (token) {
-        serviceLocator<Socket>().io.options?['extraHeaders']?['authorization'] = token.accessToken;
+        serviceLocator<Socket>().io.options?['extraHeaders']?['authorization'] =
+            token.accessToken;
         return Right(token);
       },
     );

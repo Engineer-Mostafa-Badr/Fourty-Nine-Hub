@@ -45,9 +45,8 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
         child: Column(
           children: [
             Container(
-              padding:
-                   EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
-              decoration:  const BoxDecoration(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
+              decoration: const BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [
                     AppColors.YELLOW_COLOR,
@@ -57,15 +56,15 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
               ),
               child: Row(
                 children: <Widget>[
-                   const Icon(
+                  const Icon(
                     Icons.workspace_premium_outlined,
                     color: Colors.black,
                     size: 25,
                   ),
-                   Sizer(),
+                  Sizer(),
                   Text(
                     LocaleKeys.premium.tr(),
-                    style:  TextStyle(
+                    style: TextStyle(
                         color: Colors.black,
                         fontSize: 18.sp,
                         fontWeight: FontWeight.bold),
@@ -80,8 +79,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
             ),
             Container(
               color: Colors.white,
-              padding:
-                   EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,

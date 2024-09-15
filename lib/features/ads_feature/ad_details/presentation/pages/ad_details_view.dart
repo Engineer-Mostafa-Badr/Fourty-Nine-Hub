@@ -316,8 +316,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             itemBuilder: (context, index) {
               final detail = ad.details[index];
               return Container(
-                padding:
-                     EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
+                padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
                 decoration: BoxDecoration(
                     color: index.isEven
                         ? AppColors.LIGHT_GRAY_COLOR

@@ -90,8 +90,6 @@ class StyleIconUrls {
   static const String iconScreenShareStop =
       'assets/icons/share_screen_stop.png';
 
-  static const String iconVideoViewFullScreenClose =
-      'assets/icons/resize.png';
-  static const String iconVideoViewFullScreenOpen =
-      'assets/icons/resize.png';
+  static const String iconVideoViewFullScreenClose = 'assets/icons/resize.png';
+  static const String iconVideoViewFullScreenOpen = 'assets/icons/resize.png';
 }

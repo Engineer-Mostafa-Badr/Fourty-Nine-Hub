@@ -7,7 +7,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import '../defines.dart';
 import 'input_board.dart';
 
-
 /// @nodoc
 class ZegoLiveAudioRoomInRoomMessageInputBoardButton extends StatefulWidget {
   final Size? iconSize;

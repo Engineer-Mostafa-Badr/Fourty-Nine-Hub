@@ -21,13 +21,17 @@ class BalanceCubit extends Cubit<BalanceState> {
 
   BalanceCubit(
     this._balanceUseCases,
-    this._balanceHistoryUseCase, this._transferFiveBalanceUseCase, this._transferTenBalanceUseCase, this._withdrawBalanceUseCase, this._checkRequestWithdrawUseCase,
+    this._balanceHistoryUseCase,
+    this._transferFiveBalanceUseCase,
+    this._transferTenBalanceUseCase,
+    this._withdrawBalanceUseCase,
+    this._checkRequestWithdrawUseCase,
   ) : super(const BalanceState());
 
   void loadData() async {
     await fetchBalanceWallet();
     await checkRequestWithdrawBalance();
-   // await fetchBalanceHistory();
+    // await fetchBalanceHistory();
   }
 
   Future<void> fetchBalanceWallet() async {
@@ -39,37 +43,38 @@ class BalanceCubit extends Cubit<BalanceState> {
     });
   }
 
-  Future<List<BalanceHistoryEntity>> fetchBalanceHistory({required PaginationParams paginationParams,}) async {
+  Future<List<BalanceHistoryEntity>> fetchBalanceHistory({
+    required PaginationParams paginationParams,
+  }) async {
     List<BalanceHistoryEntity> history = [];
 
     final response = await _balanceHistoryUseCase(
-      BalanceHistoryParams(
-        paginationParams: paginationParams
-      ),
+      BalanceHistoryParams(paginationParams: paginationParams),
     );
     response.fold((l) {
       emit(state.copyWith(failure: l, status: BalanceStates.error));
     }, (data) {
-      history=data;
+      history = data;
       // print('///////////////////////////////////////');
       // print(data.giftWallet.userId);
       // print('///////////////////////////////////////');
-   //   emit(state.copyWith(history: data));
+      //   emit(state.copyWith(history: data));
     });
     return history;
   }
-   transferFiveBalance() async {
-     final response=   await _transferFiveBalanceUseCase(const NoParams());
-      response.fold((l) {
-       emit(state.copyWith(failure: l, status: BalanceStates.error));
-     }, (data) {
-       fetchBalanceWallet();
-       emit(state.copyWith(status: BalanceStates.successFive));
-     });
 
+  transferFiveBalance() async {
+    final response = await _transferFiveBalanceUseCase(const NoParams());
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: BalanceStates.error));
+    }, (data) {
+      fetchBalanceWallet();
+      emit(state.copyWith(status: BalanceStates.successFive));
+    });
   }
+
   transferTenBalance() async {
-    final response=  await _transferTenBalanceUseCase(const NoParams());
+    final response = await _transferTenBalanceUseCase(const NoParams());
     response.fold((l) {
       emit(state.copyWith(failure: l, status: BalanceStates.error));
     }, (data) {
@@ -77,23 +82,24 @@ class BalanceCubit extends Cubit<BalanceState> {
       emit(state.copyWith(status: BalanceStates.successTen));
     });
   }
-  requestWithdrawBalance() async {
-    final response= await _withdrawBalanceUseCase(const NoParams());
-     response.fold((l) {
-       emit(state.copyWith(failure: l, status: BalanceStates.error));
-     }, (data) {
-       emit(state.copyWith(status: BalanceStates.initial));
-     });
-  }
 
-   checkRequestWithdrawBalance() async {
-  final response=   await _checkRequestWithdrawUseCase.call(const NoParams());
-     return  response.fold((l) {
+  requestWithdrawBalance() async {
+    final response = await _withdrawBalanceUseCase(const NoParams());
+    response.fold((l) {
       emit(state.copyWith(failure: l, status: BalanceStates.error));
     }, (data) {
-      emit(state.copyWith(withdraw: data,));
+      emit(state.copyWith(status: BalanceStates.initial));
     });
   }
 
-
+  checkRequestWithdrawBalance() async {
+    final response = await _checkRequestWithdrawUseCase.call(const NoParams());
+    return response.fold((l) {
+      emit(state.copyWith(failure: l, status: BalanceStates.error));
+    }, (data) {
+      emit(state.copyWith(
+        withdraw: data,
+      ));
+    });
+  }
 }

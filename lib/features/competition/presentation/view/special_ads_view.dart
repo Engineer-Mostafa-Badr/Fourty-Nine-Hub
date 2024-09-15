@@ -28,7 +28,7 @@ class SpecialAdsView extends StatelessWidget {
             },
             child: Text(
               '${LocaleKeys.winners.localize} 🏆',
-              style:  TextStyle(fontSize: 17.sp, color: Colors.red),
+              style: TextStyle(fontSize: 17.sp, color: Colors.red),
             ),
           ),
         ],

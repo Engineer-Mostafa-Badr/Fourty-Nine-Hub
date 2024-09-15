@@ -6,7 +6,6 @@ import '../core.dart';
 
 // Project imports:
 
-
 mixin ZegoUIKitCoreDataUser {
   ZegoUIKitCoreUser localUser = ZegoUIKitCoreUser.localDefault();
 

@@ -5,25 +5,25 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/repo
 
 import '../entities/company_ad_option_entity.dart';
 
-class GetCompanyAddUseCases extends UseCase<List<CompanyAdOptionEntity>,CompanyAddParams>{
+class GetCompanyAddUseCases
+    extends UseCase<List<CompanyAdOptionEntity>, CompanyAddParams> {
   final CompanyAdvertiseRepository _advertiseRepository;
 
   GetCompanyAddUseCases(this._advertiseRepository);
 
   @override
-  Future<Either<Failure, List<CompanyAdOptionEntity>>> call(CompanyAddParams params)async {
-   return await _advertiseRepository.addCompanyAd(params);
+  Future<Either<Failure, List<CompanyAdOptionEntity>>> call(
+      CompanyAddParams params) async {
+    return await _advertiseRepository.addCompanyAd(params);
   }
-
-
 }
 
 class CompanyAddParams {
-   String? post;
+  String? post;
   final String advertisementType;
-   String? description;
+  String? description;
   final int totalPrice;
-   List<String>? media;
+  List<String>? media;
 
   CompanyAddParams({
     required this.advertisementType,
@@ -33,12 +33,11 @@ class CompanyAddParams {
     this.post,
   });
 
-
   Map<String, dynamic> toJson() => {
-    'post': post,
-    'advertisement_type': advertisementType,
-    'description': description,
-    'totalPrice': totalPrice,
-    'media': media,
-  };
+        'post': post,
+        'advertisement_type': advertisementType,
+        'description': description,
+        'totalPrice': totalPrice,
+        'media': media,
+      };
 }

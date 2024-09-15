@@ -1,4 +1,4 @@
-class RequestWithdrawEntity{
+class RequestWithdrawEntity {
   final bool? status;
   final bool? data;
 
