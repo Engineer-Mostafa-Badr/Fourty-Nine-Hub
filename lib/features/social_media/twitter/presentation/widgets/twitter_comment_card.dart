@@ -15,6 +15,7 @@ import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class TwitterCommentCard extends StatefulWidget {
   final Color textColor;
   final TwitterPostCommentEntity comment;
@@ -105,22 +106,20 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
             child: Row(
               children: [
                 Expanded(
-                    child:
-                TextFormField(
-                maxLines: null,
-                controller: editTextController,
-                onChanged: (v) {
-                setState(() {});
-                },
-                style: Styles.headerText(fontSize: 26.sp),
-                decoration: InputDecoration(
-                fillColor: Colors.white,
-                contentPadding: EdgeInsets.all(5),
-                hintText: 'Type your comment ....',
-                hintStyle: Styles.mediumText(),
-                ),
-                )
-                    ),
+                    child: TextFormField(
+                  maxLines: null,
+                  controller: editTextController,
+                  onChanged: (v) {
+                    setState(() {});
+                  },
+                  style: Styles.headerText(fontSize: 26.sp),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    contentPadding: EdgeInsets.all(5),
+                    hintText: 'Type your comment ....',
+                    hintStyle: Styles.mediumText(),
+                  ),
+                )),
                 Sizer(),
                 if (editTextController.text.isNotEmpty)
                   IconAppButton(
@@ -141,7 +140,9 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
               ],
             ),
           ),
-        Sizer(height: 5.h,),
+        Sizer(
+          height: 5.h,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -175,7 +176,9 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                 onPressed: widget.onCommentReply)
           ],
         ),
-        Sizer(height: 5.h,),
+        Sizer(
+          height: 5.h,
+        ),
       ],
     );
   }
@@ -207,7 +210,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                 icon: Icons.delete,
                 title: 'Delete Post',
                 subTitle:
-                'Your comment will be deleted, and you cannot get it again',
+                    'Your comment will be deleted, and you cannot get it again',
                 onTap: () {
                   widget.onDeleteComment(widget.comment.id);
                 }),
@@ -218,7 +221,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                 subTitle: 'Your Will Edit Your Comment.',
                 onTap: () {
                   widget.comment.edit = !widget.comment.edit!;
-                  editTextController.text = widget.comment.content??'';
+                  editTextController.text = widget.comment.content ?? '';
                   setState(() {});
                 }),
         ],
@@ -228,10 +231,10 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
 
   Widget listTile(
       {required IconData icon,
-        Color? iconColor,
-        required String title,
-        required String subTitle,
-        required Function onTap}) {
+      Color? iconColor,
+      required String title,
+      required String subTitle,
+      required Function onTap}) {
     return ListTile(
       title: Label(text: title),
       onTap: () {
@@ -248,6 +251,4 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
       ),
     );
   }
-
-
 }

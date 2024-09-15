@@ -20,6 +20,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class FacebookGlobalBody extends StatelessWidget {
   const FacebookGlobalBody({super.key, required this.scrollController});
   final ScrollController scrollController;
@@ -55,7 +56,7 @@ class FacebookGlobalBody extends StatelessWidget {
                         noItemsFoundIndicatorBuilder: (context) {
                           print(controller
                               .globalFeedPagingController.itemList?.length);
-                          return  Padding(
+                          return Padding(
                               padding: EdgeInsets.only(top: 200),
                               child: Center(
                                 child: Text(

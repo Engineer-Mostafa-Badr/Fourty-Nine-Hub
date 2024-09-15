@@ -39,7 +39,7 @@ class SavedReelsView extends StatelessWidget {
           builderDelegate: PagedChildBuilderDelegate<PostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.savedReelsPagingController.itemList?.length);
-                return  Center(
+                return Center(
                   child: Text(
                     "No Reels",
                     style: TextStyle(

@@ -350,7 +350,7 @@ class OtherVoiceVideoRecordingScreenState
           ),
           child: Text(
             'Recording stops in $_secondsRemaining seconds',
-            style:  TextStyle(color: Colors.white, fontSize: 18.sp),
+            style: TextStyle(color: Colors.white, fontSize: 18.sp),
           ),
         ),
       ),

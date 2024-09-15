@@ -49,7 +49,7 @@ class _UserPostsState extends State<UserPosts> {
           builderDelegate: PagedChildBuilderDelegate<PostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.userPostsPagingController.itemList?.length);
-                return  Padding(
+                return Padding(
                     padding: const EdgeInsets.only(top: 200),
                     child: Center(
                       child: Text(

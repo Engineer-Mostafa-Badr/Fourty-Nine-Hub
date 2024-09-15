@@ -5,7 +5,8 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/social_posts_repo.dart';
 
-class GetGlobalFeedUseCase extends UseCase<List<PostEntity>, TwitterFeedParams> {
+class GetGlobalFeedUseCase
+    extends UseCase<List<PostEntity>, TwitterFeedParams> {
   final SocialPostsRepo _repo;
   GetGlobalFeedUseCase(this._repo);
   @override

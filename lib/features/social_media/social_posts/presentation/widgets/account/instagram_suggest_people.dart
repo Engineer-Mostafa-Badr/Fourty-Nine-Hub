@@ -74,7 +74,7 @@ class _InstagramProfileSuggestPeopleState
                                   noItemsFoundIndicatorBuilder: (context) {
                                     print(controller.suggestUserPagingController
                                         .itemList?.length);
-                                    return  Padding(
+                                    return Padding(
                                         padding: EdgeInsets.only(top: 200),
                                         child: Center(
                                           child: Label(
@@ -179,8 +179,7 @@ class _InstagramProfileSuggestPeopleState
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
-                                                                  fontSize:
-                                                                      14),
+                                                                  fontSize: 14),
                                                         )
                                                       : Row(
                                                           children: [

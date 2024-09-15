@@ -16,7 +16,8 @@ class DistanceAndPricePerPersonV2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FetchPriceDistanceCubit, FetchPriceDistanceState>(
       builder: (context, state) {
-        FetchPriceDistanceCubit fetchPriceDistanceCubit = context.read<FetchPriceDistanceCubit>();
+        FetchPriceDistanceCubit fetchPriceDistanceCubit =
+            context.read<FetchPriceDistanceCubit>();
         double distance = fetchPriceDistanceCubit.tripInfoEntity?.distance ?? 0;
         String distanceFormated = '${(distance / 1000).toStringAsFixed(1)} KM';
         double price = fetchPriceDistanceCubit.tripInfoEntity?.price ?? 0;

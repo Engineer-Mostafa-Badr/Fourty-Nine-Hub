@@ -39,24 +39,31 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   boxShadow: [
-                    BoxShadow(color: Colors.grey[300]!, offset: const Offset(3, 3)),
+                    BoxShadow(
+                        color: Colors.grey[300]!, offset: const Offset(3, 3)),
                   ],
                 ),
                 clipBehavior: Clip.hardEdge,
                 child: Image.asset(
-                  tripJoinCardEntity.gender == 'female' ? Assets.femaleImagePlacehlder : Assets.maleImagePlaceholder,
+                  tripJoinCardEntity.gender == 'female'
+                      ? Assets.femaleImagePlacehlder
+                      : Assets.maleImagePlaceholder,
                   fit: BoxFit.cover,
                 ),
               ),
               Sizer(width: 20.w),
-              Text(tripJoinCardEntity.requestOwnerFirstName ?? 'Unknown', style: Styles.headerText()),
+              Text(tripJoinCardEntity.requestOwnerFirstName ?? 'Unknown',
+                  style: Styles.headerText()),
               const Spacer(),
               Column(
                 children: [
-                  Text(tripJoinCardEntity.journeyPrice?.toStringAsFixed(0) ?? '',
-                      style: Styles.headerText(fontSize: 70, color: Colors.green[600])),
+                  Text(
+                      tripJoinCardEntity.journeyPrice?.toStringAsFixed(0) ?? '',
+                      style: Styles.headerText(
+                          fontSize: 70, color: Colors.green[600])),
                   Text(tripJoinCardEntity.status ?? '',
-                      style: Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR)),
+                      style: Styles.headerText(
+                          fontSize: 30, color: AppColors.SECONDARY_COLOR)),
                 ],
               )
             ],
@@ -83,7 +90,8 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
             children: [
               const Icon(Icons.calendar_month),
               const Sizer(),
-              Text(_formatDate(tripJoinCardEntity.publishDate ?? 0), style: Styles.headerText()),
+              Text(_formatDate(tripJoinCardEntity.publishDate ?? 0),
+                  style: Styles.headerText()),
             ],
           ),
           const Sizer(),
@@ -92,12 +100,15 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
             children: [
               const Icon(Icons.airline_seat_recline_extra_rounded),
               const Sizer(),
-              Text('${tripJoinCardEntity.seatNumber ?? 1} Seat', style: Styles.headerText()),
+              Text('${tripJoinCardEntity.seatNumber ?? 1} Seat',
+                  style: Styles.headerText()),
               const Spacer(),
               Visibility(
                 visible: tripJoinCardEntity.isRepeated ?? false,
                 child: Icon(
-                  (tripJoinCardEntity.isRepeated ?? false) ? Icons.check_box : Icons.check_box_outline_blank,
+                  (tripJoinCardEntity.isRepeated ?? false)
+                      ? Icons.check_box
+                      : Icons.check_box_outline_blank,
                   color: AppColors.PRIMARY_COLOR,
                 ),
               ),
@@ -113,7 +124,8 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.trip_origin, color: AppColors.LIGHT_BLUE, size: 20),
+              const Icon(Icons.trip_origin,
+                  color: AppColors.LIGHT_BLUE, size: 20),
               const Sizer(width: 13),
               Flexible(
                 child: Text(
@@ -129,7 +141,8 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Icon(Icons.trip_origin, color: AppColors.CHECK_MARK_COLOR, size: 20),
+              const Icon(Icons.trip_origin,
+                  color: AppColors.CHECK_MARK_COLOR, size: 20),
               const Sizer(width: 13),
               Flexible(
                 child: Text(
@@ -149,7 +162,9 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
                 flex: 3,
                 child: AvaialbleTripsButton(
                   title: 'Call',
-                  color: (tripJoinCardEntity.isApproved ?? false) ? AppColors.PRIMARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                  color: (tripJoinCardEntity.isApproved ?? false)
+                      ? AppColors.PRIMARY_COLOR
+                      : AppColors.DARK_GRAY_COLOR,
                   icon: Icons.call,
                   onTap: callOnTap,
                 ),
@@ -159,7 +174,9 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
                 flex: 3,
                 child: AvaialbleTripsButton(
                   title: 'Message',
-                  color: (tripJoinCardEntity.isApproved ?? false) ? AppColors.PRIMARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                  color: (tripJoinCardEntity.isApproved ?? false)
+                      ? AppColors.PRIMARY_COLOR
+                      : AppColors.DARK_GRAY_COLOR,
                   icon: Icons.email,
                   onTap: messageOnTap,
                 ),
@@ -202,6 +219,7 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
   }
 
   String _formatDate(int timestamp) {
-    return DateFormat('dd MMM, hh:mm aaa').format(DateTime.fromMicrosecondsSinceEpoch(timestamp));
+    return DateFormat('dd MMM, hh:mm aaa')
+        .format(DateTime.fromMicrosecondsSinceEpoch(timestamp));
   }
 }

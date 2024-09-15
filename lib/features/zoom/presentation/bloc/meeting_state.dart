@@ -27,7 +27,7 @@ class MeetingState extends Equatable {
   final MeetingStates? status;
   final List<ScheduledMeeting>? scheduledMeeting;
   final String? errorMessage;
-  final Failure? failure; 
+  final Failure? failure;
   const MeetingState({
     this.status = MeetingStates.initial,
     this.errorMessage,
@@ -44,8 +44,8 @@ class MeetingState extends Equatable {
       MeetingState(
         status: status,
         errorMessage: errorMessage ?? this.errorMessage,
-        failure: failure?? this.failure,
-        scheduledMeeting: scheduledMeetings?? scheduledMeeting,
+        failure: failure ?? this.failure,
+        scheduledMeeting: scheduledMeetings ?? scheduledMeeting,
       );
 
   @override

@@ -78,7 +78,8 @@ class TripJoinCardEntity {
       publishDate: publishDate ?? this.publishDate,
       phone: phone ?? this.phone,
       gender: gender ?? this.gender,
-      requestOwnerFirstName: requestOwnerFirstName ?? this.requestOwnerFirstName,
+      requestOwnerFirstName:
+          requestOwnerFirstName ?? this.requestOwnerFirstName,
     );
   }
 

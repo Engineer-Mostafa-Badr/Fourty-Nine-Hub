@@ -6,6 +6,7 @@ import '../../../../../core/utils/shared_pref.dart';
 import '../models/followers_model.dart';
 import '../models/friends_stories_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 enum StoryType { text, image, video }
 
 class StoryData {
@@ -164,7 +165,7 @@ class StoryRepository {
       caption: story.caption,
       backgroundColor: type == StoryType.text ? Colors.black : null,
       textStyle: type == StoryType.text
-          ?  TextStyle(color: Colors.white, fontSize: 20.sp)
+          ? TextStyle(color: Colors.white, fontSize: 20.sp)
           : null,
     );
   }

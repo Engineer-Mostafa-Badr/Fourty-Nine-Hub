@@ -27,6 +27,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class TwitterView extends StatefulWidget {
   const TwitterView({super.key});
   @override
@@ -121,7 +122,7 @@ class _TwitterViewState extends State<TwitterView> {
                 pagingController: controller.postsPagingController,
                 builderDelegate: PagedChildBuilderDelegate<TwitterPostEntity>(
                   noItemsFoundIndicatorBuilder: (context) {
-                    return  Center(
+                    return Center(
                       child: Text(
                         "No Posts",
                         style: TextStyle(
@@ -308,7 +309,7 @@ class _TwitterViewState extends State<TwitterView> {
                 pagingController: controller.globalPostsPagingController,
                 builderDelegate: PagedChildBuilderDelegate<TwitterPostEntity>(
                   noItemsFoundIndicatorBuilder: (context) {
-                    return  Center(
+                    return Center(
                       child: Text(
                         "No Posts",
                         style: TextStyle(

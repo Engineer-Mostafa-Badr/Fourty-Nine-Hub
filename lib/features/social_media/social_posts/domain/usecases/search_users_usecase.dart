@@ -10,7 +10,8 @@ class SearchUsersUsecase
   final SocialPostsRepo _repo;
   SearchUsersUsecase(this._repo);
   @override
-  Future<Either<Failure, List<UserFriendEntity>>> call(TwitterFeedParams params) async {
+  Future<Either<Failure, List<UserFriendEntity>>> call(
+      TwitterFeedParams params) async {
     return await _repo.searchUsers(params: params);
   }
 }

@@ -18,6 +18,7 @@ import '../../../domain/entities/comment_entity.dart';
 import '../../../domain/usecases/post_comment_usecase.dart';
 import 'comment_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class FacebookPostComments extends StatefulWidget {
   // final List<CommentEntity> comments;
   final String postId;
@@ -68,8 +69,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
           children: [
             Expanded(
               child: PagedListView<int, CommentEntity>(
-                padding:
-                    EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
+                padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
                 pagingController: controller.commentsPagingController,
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(
@@ -78,7 +78,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                     noItemsFoundIndicatorBuilder: (context) {
                       print(
                           controller.commentsPagingController.itemList?.length);
-                      return  Padding(
+                      return Padding(
                           padding: EdgeInsets.only(top: 200),
                           child: Center(
                             child: Text(

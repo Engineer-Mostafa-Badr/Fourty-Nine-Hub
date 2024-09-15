@@ -496,12 +496,13 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Privacy Settings Help'),
-        content:  SingleChildScrollView(
+        content: SingleChildScrollView(
           child: ListBody(
             children: [
               const Text('Choose who can see your status updates:'),
               SizedBox(height: 8.h),
-              const Text('• My contacts: All your contacts can see your status.'),
+              const Text(
+                  '• My contacts: All your contacts can see your status.'),
               const Text(
                   '• My contacts except...: Select contacts who won\'t see your status.'),
               const Text(

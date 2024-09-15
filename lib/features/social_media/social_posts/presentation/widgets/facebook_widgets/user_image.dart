@@ -30,7 +30,7 @@ class UserProfileImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if (fromProfile == false&&context.read<UserCubit>().isLoggedIn) {
+        if (fromProfile == false && context.read<UserCubit>().isLoggedIn) {
           context.push(Routes.OTHERSACCOUNT, extra: userId);
         }
       },

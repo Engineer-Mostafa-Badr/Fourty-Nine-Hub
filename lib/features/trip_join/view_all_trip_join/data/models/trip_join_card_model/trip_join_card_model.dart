@@ -29,6 +29,7 @@ class TripJoinCardModel extends TripJoinCardEntity {
   bool? isRepeat;
   DateTime? createdAt;
   DateTime? updatedAt;
+  String? allowStatus;
 
   TripJoinCardModel({
     this.id,
@@ -51,6 +52,7 @@ class TripJoinCardModel extends TripJoinCardEntity {
     this.createdAt,
     this.updatedAt,
     this.status,
+    this.allowStatus,
   }) : super(
           id: id,
           userId: userId,
@@ -65,13 +67,13 @@ class TripJoinCardModel extends TripJoinCardEntity {
           destinationAddressAr: toAr,
           startingAddressEn: fromEn,
           destinationAddressEn: toEn,
-          isApproved: isApproved,
+          isApproved: allowStatus == 'enable',
           publishDate: time,
         );
 
   @override
   String toString() {
-    return 'TripJoinCardModel(id: $id, userId: $userId, categoryId: $categoryId, vehicleId: $vehicleId, fromAr: $fromAr, toAr: $toAr, fromEn: $fromEn, toEn: $toEn, distance: $distance, duration: $duration, passengers: $passengers, price: $price, phone: $phone, time: $time, countryCode: $countryCode, isApproved: $isApproved, isRepeat: $isRepeat, createdAt: $createdAt, updatedAt: $updatedAt , status: $status)';
+    return 'TripJoinCardModel(id: $id, userId: $userId, categoryId: $categoryId, vehicleId: $vehicleId, fromAr: $fromAr, toAr: $toAr, fromEn: $fromEn, toEn: $toEn, distance: $distance, duration: $duration, passengers: $passengers, price: $price, phone: $phone, time: $time, countryCode: $countryCode, isApproved: $isApproved, isRepeat: $isRepeat, createdAt: $createdAt, updatedAt: $updatedAt , status: $status, allowStatus: $allowStatus)';
   }
 
   factory TripJoinCardModel.fromJson(Map<String, dynamic> json) {
@@ -79,9 +81,7 @@ class TripJoinCardModel extends TripJoinCardEntity {
       id: json['_id'] as String?,
       userId: json['userId'] as String?,
       categoryId: json['categoryId'] as String?,
-      vehicleId: json['vehicleId'] == null
-          ? null
-          : VehicleId.fromJson(json['vehicleId'] as Map<String, dynamic>),
+      vehicleId: json['vehicleId'] == null ? null : VehicleId.fromJson(json['vehicleId'] as Map<String, dynamic>),
       fromAr: json['fromAr'] as String?,
       toAr: json['toAr'] as String?,
       fromEn: json['fromEn'] as String?,
@@ -96,12 +96,9 @@ class TripJoinCardModel extends TripJoinCardEntity {
       countryCode: json['countryCode'] as String?,
       isApproved: json['isApproved'] as bool?,
       isRepeat: json['isRepeat'] as bool?,
-      createdAt: json['createdAt'] == null
-          ? null
-          : DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null
-          ? null
-          : DateTime.parse(json['updatedAt'] as String),
+      createdAt: json['createdAt'] == null ? null : DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null ? null : DateTime.parse(json['updatedAt'] as String),
+      allowStatus: json['allowStatus'] as String?,
     );
   }
 
@@ -126,5 +123,6 @@ class TripJoinCardModel extends TripJoinCardEntity {
         'isRepeat': isRepeat,
         'createdAt': createdAt?.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
+        'allowStatus': allowStatus,
       };
 }

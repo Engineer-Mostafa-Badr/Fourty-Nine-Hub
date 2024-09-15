@@ -538,8 +538,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     ),
                     Expanded(
                         child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.only(top: 3.0, end: 10),
+                      padding: EdgeInsetsDirectional.only(top: 3.0, end: 10),
                       child: loginUser?.id == user.id
                           ? Container()
                           : Row(
@@ -752,8 +751,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   TextSpan(
                                       text: '\t(${user.job})',
                                       style: Styles.headerText(
-                                          color: Colors.black,
-                                          fontSize: 26)),
+                                          color: Colors.black, fontSize: 26)),
                               ])),
                     ),
                     if (loginUser?.id != widget.userId)

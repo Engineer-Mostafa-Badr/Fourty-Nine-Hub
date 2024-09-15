@@ -12,6 +12,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class CreatePostBanner extends StatelessWidget {
   const CreatePostBanner({super.key});
 

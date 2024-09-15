@@ -113,11 +113,14 @@ class PostModel extends PostEntity {
         comments: json['comments'] == null
             ? null
             : json['comments'] is List<String>
-            ? json['comments'] as List<String>
-            : (json['comments'] as List).map((e) => e is String
-            ? e
-            : InstagramPostModel.fromJson(e)).toList(),
-        firstComment:json['firstComment']!=null?InstagramPostModel.fromJson(json['firstComment']):null,
+                ? json['comments'] as List<String>
+                : (json['comments'] as List)
+                    .map(
+                        (e) => e is String ? e : InstagramPostModel.fromJson(e))
+                    .toList(),
+        firstComment: json['firstComment'] != null
+            ? InstagramPostModel.fromJson(json['firstComment'])
+            : null,
         love: json['love'] == null
             ? null
             : (json['love'] as List)

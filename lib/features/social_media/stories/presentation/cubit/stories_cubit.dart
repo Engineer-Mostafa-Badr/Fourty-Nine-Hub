@@ -85,7 +85,8 @@ class StoryCubit extends Cubit<StoryState> {
     try {
       emit(state.copyWith(isLoading: true)); // Set loading state
 
-      final followers = await storyRepository.getAllFollowers('62ef7cf658c90d4a7ed48120');
+      final followers =
+          await storyRepository.getAllFollowers('62ef7cf658c90d4a7ed48120');
 
       emit(state.copyWith(followers: followers, isLoading: false));
     } catch (e) {

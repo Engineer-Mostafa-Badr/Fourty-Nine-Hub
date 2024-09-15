@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key});
 
@@ -208,7 +209,7 @@ class UserProfilePageState extends State<UserProfilePage> {
       children: [
         Text(
           count,
-          style:  TextStyle(
+          style: TextStyle(
             fontSize: 22.sp,
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -217,7 +218,7 @@ class UserProfilePageState extends State<UserProfilePage> {
         SizedBox(height: 5.h),
         Text(
           label,
-          style:  TextStyle(fontSize: 16.sp, color: Colors.white70),
+          style: TextStyle(fontSize: 16.sp, color: Colors.white70),
         ),
       ],
     );

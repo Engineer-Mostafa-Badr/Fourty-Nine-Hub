@@ -29,6 +29,7 @@ import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 import '../../../domain/usecases/post_react_usecase.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class FacebookGlobalPostCard extends StatefulWidget {
   final PostEntity post;
   final int index;
@@ -422,28 +423,28 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             InkWell(
-              onTap: () {
-                if (widget.fromProfile == false &&
-                    context.read<UserCubit>().isLoggedIn) {
-                  context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-                } else {
-                  context.push(Routes.LOGIN);
-                }
-              },
-              child: ImageFromInternet(
-              image: (post.user.image!=null)?post.user.image:'',
-                height: 45,
-                width: 45,
-                isCircle: true,
-              )
+                onTap: () {
+                  if (widget.fromProfile == false &&
+                      context.read<UserCubit>().isLoggedIn) {
+                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                  } else {
+                    context.push(Routes.LOGIN);
+                  }
+                },
+                child: ImageFromInternet(
+                  image: (post.user.image != null) ? post.user.image : '',
+                  height: 45,
+                  width: 45,
+                  isCircle: true,
+                )
 
-              // CircleAvatar(
-              //   backgroundColor: Colors.white,
-              //   backgroundImage: NetworkImage((post.user.image!=null)
-              //       ? post.user.image??''
-              //       : UIConst.profilePlaceHolder),
-              // ),
-            ),
+                // CircleAvatar(
+                //   backgroundColor: Colors.white,
+                //   backgroundImage: NetworkImage((post.user.image!=null)
+                //       ? post.user.image??''
+                //       : UIConst.profilePlaceHolder),
+                // ),
+                ),
             Sizer(),
             Expanded(
               child: Row(

@@ -18,6 +18,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class FacebookTweetCard extends StatelessWidget {
   const FacebookTweetCard({super.key, required this.post});
   final PostEntity post;

@@ -485,8 +485,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
           ),
           if (user.followers != null && user.followers!.isNotEmpty)
             Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.h),
+              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.h),
               child: Row(
                 children: [
                   SizedBox(

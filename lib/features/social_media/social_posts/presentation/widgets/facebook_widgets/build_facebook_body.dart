@@ -83,7 +83,7 @@ class FacebookBody extends StatelessWidget {
                     pagingController: controller.feedPagingController,
                     builderDelegate: PagedChildBuilderDelegate<PostEntity>(
                       noItemsFoundIndicatorBuilder: (context) {
-                        return  Center(
+                        return Center(
                           child: Text(
                             "No Posts",
                             style: TextStyle(

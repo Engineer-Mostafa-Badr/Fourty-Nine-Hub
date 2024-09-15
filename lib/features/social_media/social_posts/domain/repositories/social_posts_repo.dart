@@ -35,8 +35,7 @@ abstract class SocialPostsRepo {
       {required PostCommentParams params});
   Future<Either<Failure, UserProfileEntity>> getUserProfile(
       {required String params});
-  Future<Either<Failure, bool>> viewProfile(
-      {required String params});
+  Future<Either<Failure, bool>> viewProfile({required String params});
   Future<Either<Failure, CommentEntity>> replyOnComment(
       {required ReplyOnCommentParams params});
   Future<Either<Failure, bool>> editComment(

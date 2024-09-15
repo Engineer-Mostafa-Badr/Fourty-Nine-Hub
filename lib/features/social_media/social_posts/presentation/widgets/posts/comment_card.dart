@@ -19,6 +19,7 @@ import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/comment_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class CommentCard extends StatefulWidget {
   final Color textColor;
   final String from;
