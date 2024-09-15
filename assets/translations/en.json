@@ -462,6 +462,8 @@
   "follower": "Follower",
   "following": "Following",
   "livesIn": "Lives in",
-  "work": "Work"
-
+  "work": "Work",
+  "google": "Google",
+  "facebook": "Facebook",
+  "orContinueWith": "Or Continue with"
 }

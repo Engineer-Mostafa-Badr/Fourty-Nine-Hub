@@ -461,5 +461,8 @@
   "onlyMe": "أنا فقط",
   "on": "تشغيل",
   "off": "إيقاف",
-  "activity": "نشاط"
+  "activity": "نشاط",
+  "google": "جوجل",
+  "facebook": "فيسبوك",
+  "orContinueWith": "او استمر باستخدام"
 }

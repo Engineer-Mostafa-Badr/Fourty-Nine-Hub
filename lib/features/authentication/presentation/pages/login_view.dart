@@ -325,7 +325,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         //   children: [
         const Sizer(),
         Label(
-          text: 'Or Continue with',
+          text: LocaleKeys.orContinueWith.localize,
           style: Styles.mediumText(color: Colors.grey),
         ),
         const Sizer(),
@@ -333,7 +333,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           children: [
             Expanded(
               child: AppButton(
-                label: 'Google',
+                label: LocaleKeys.google.localize,
                 backColor: AppColors.LIGHT_GRAY_COLOR,
                 textColor: Colors.black,
                 icon: FontAwesomeIcons.google,
@@ -343,7 +343,7 @@ class _LoginWidgetState extends State<LoginWidget> {
             const Sizer(),
             Expanded(
               child: AppButton(
-                label: 'Facebook',
+                label: LocaleKeys.facebook.localize,
                 backColor: AppColors.LIGHT_GRAY_COLOR,
                 textColor: Colors.black,
                 icon: FontAwesomeIcons.facebook,
