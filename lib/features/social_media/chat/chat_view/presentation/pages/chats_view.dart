@@ -641,6 +641,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       case ChatCategories.unread:
       case ChatCategories.archived:
       case ChatCategories.anonymous:
+      case ChatCategories.greet:
         return _buildCategoryChats();
       case ChatCategories.socialCalls:
       case ChatCategories.serviceCalls:
@@ -649,56 +650,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
         return _buildCategoryChats(isSecret: true);
       case ChatCategories.broadcast:
         return buildBroadcast();
-      case ChatCategories.greet:
-        return _buildGreet();
     }
-  }
-
-  Widget _buildGreet() {
-    final List<FriendRequest> requests = [
-      FriendRequest(
-        name: 'Kerollos Nabil',
-        mutualFriends: 5,
-        profileImageUrl:
-            'https://example.com/profile1.jpg', // Replace with actual URLs
-      ),
-      FriendRequest(
-        name: 'Amr Hossam',
-        mutualFriends: 101,
-        profileImageUrl:
-            'https://example.com/profile2.jpg', // Replace with actual URLs
-      ),
-      FriendRequest(
-        name: 'Omar Mohammad Adel',
-        mutualFriends: 3,
-        profileImageUrl:
-            'https://example.com/profile3.jpg', // Replace with actual URLs
-      ),
-      FriendRequest(
-        name: 'Ahmed Ameen',
-        mutualFriends: 6,
-        profileImageUrl:
-            'https://example.com/profile4.jpg', // Replace with actual URLs
-      ),
-      FriendRequest(
-        name: 'Karam Karim',
-        mutualFriends: 28,
-        profileImageUrl:
-            'https://example.com/profile5.jpg', // Replace with actual URLs
-      ),
-      FriendRequest(
-        name: 'Karam Reda',
-        mutualFriends: 4,
-        profileImageUrl:
-            'https://example.com/profile6.jpg', // Replace with actual URLs
-      ),
-    ];
-    return ListView.builder(
-      itemCount: requests.length,
-      itemBuilder: (context, index) {
-        return FriendRequestItem(request: requests[index]);
-      },
-    );
   }
 
   Widget _buildCategoryChats({bool isSecret = false}) {
