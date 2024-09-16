@@ -12,12 +12,13 @@ import '../../../domain/entities/favourite_subcategory_entity.dart';
 
 part 'favourite_sub_categories_state.dart';
 
-class FavouriteSubCategoryCubit
-    extends Cubit<FavouriteSubCategoryState> {
+class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
   final GetFavouriteSubCategoriesUseCase _getFavouriteSubCategoriesUseCase;
-  final ToggleSubCategoryToFavoritesUseCase _toggleSubCategoryToFavoritesUseCase;
+  final ToggleSubCategoryToFavoritesUseCase
+      _toggleSubCategoryToFavoritesUseCase;
 
-  FavouriteSubCategoryCubit(this._getFavouriteSubCategoriesUseCase, this._toggleSubCategoryToFavoritesUseCase)
+  FavouriteSubCategoryCubit(this._getFavouriteSubCategoriesUseCase,
+      this._toggleSubCategoryToFavoritesUseCase)
       : super(
           const FavouriteSubCategoryState(),
         );
@@ -40,7 +41,6 @@ class FavouriteSubCategoryCubit
     );
   }
 
-
   Future<List<FavouriteSubcategoryEntity>> getSubcategories(
       {required PaginationParams paginationParams}) async {
     List<FavouriteSubcategoryEntity> data = [];
@@ -50,9 +50,9 @@ class FavouriteSubCategoryCubit
     print('useeeerId===>$user}');
     final response = await _getFavouriteSubCategoriesUseCase(const NoParams());
     response.fold(
-            (failure) => emit(state.copyWith(
-            failure: failure, status: StateStatus.error)),
-            (r) => data = r);
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: StateStatus.error)),
+        (r) => data = r);
 
     return data;
   }
@@ -61,12 +61,12 @@ class FavouriteSubCategoryCubit
     final response = await _toggleSubCategoryToFavoritesUseCase(subcategoryId);
     bool result = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (data) {
-          result=data;
-          emit(state.copyWith(status:StateStatus.success));
-        });
+        (data) {
+      result = data;
+      emit(state.copyWith(status: StateStatus.success));
+    });
     return result;
   }
 }

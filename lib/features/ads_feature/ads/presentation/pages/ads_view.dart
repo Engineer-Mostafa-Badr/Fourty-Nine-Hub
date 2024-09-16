@@ -48,14 +48,20 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
       appBar: const HomeAppbar(),
       body: Column(
         children: [
-          Sizer(),
-          MainCategoryBanner(category: widget.params.mainCategory, onFavorite: () {  },),
-          Sizer(),
+          const Sizer(),
+          SizedBox(
+              width: double.infinity,
+              child: MainCategoryBanner(
+                category: widget.params.mainCategory,
+                onFavorite: () {},
+                isFavorite: widget.params.mainCategory.isFavorite,
+              )),
+          const Sizer(),
           Label(
             text: widget.params.subCategory.name,
             style: Styles.headerText(),
           ),
-          Sizer(),
+          const Sizer(),
           TabBar(
             controller: _tabController,
             labelColor: AppColors.SECONDARY_COLOR,
@@ -78,7 +84,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                       return ListView.separated(
                         shrinkWrap: true,
                         padding: const EdgeInsets.all(8.0),
-                        separatorBuilder: (context, index) => Sizer(),
+                        separatorBuilder: (context, index) => const Sizer(),
                         itemCount: state.ads?.length ?? 0,
                         itemBuilder: (context, index) {
                           return AdCard(
@@ -97,7 +103,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                       return ListView.separated(
                         shrinkWrap: true,
                         padding: const EdgeInsets.all(8.0),
-                        separatorBuilder: (context, index) => Sizer(),
+                        separatorBuilder: (context, index) => const Sizer(),
                         itemCount: state.ads?.length ?? 0,
                         itemBuilder: (context, index) {
                           return AdCard(

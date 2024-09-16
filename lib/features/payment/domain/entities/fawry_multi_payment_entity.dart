@@ -8,6 +8,4 @@ class MutliPaymentEntity {
     required this.providerId,
     required this.paymentMethod,
   });
-
-
 }

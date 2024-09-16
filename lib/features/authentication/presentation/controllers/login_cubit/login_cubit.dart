@@ -21,7 +21,6 @@ class LoginCubit extends Cubit<LoginState> {
   final FacebookSignInUseCase _facebookSignInUseCase;
   final SaveTokensUseCase _saveTokens;
   final AttachTokenUseCase _attachToken;
-  final formKey = GlobalKey<FormState>();
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final emailFocusNode = FocusNode();
@@ -38,14 +37,15 @@ class LoginCubit extends Cubit<LoginState> {
 
   String? token;
 
-  Future<void> login() async {
+  Future<void> login(formKey) async {
     String? token = await FirebaseMessaging.instance.getToken();
     if (formKey.currentState!.validate()) {
       emit(LoginLoading());
       final result = await _loginUseCase(
         LoginParams(
           email: emailTextController.text.trim(),
-          password: passwordTextController.text.trim(), token: token!,
+          password: passwordTextController.text.trim(),
+          token: token!,
         ),
       );
 

@@ -75,7 +75,9 @@ class AudioStreamScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.redAccent),
                         child: Text(
-                          isHost ? LocaleKeys.cancel.localize : LocaleKeys.leave.localize,
+                          isHost
+                              ? LocaleKeys.cancel.localize
+                              : LocaleKeys.leave.localize,
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,

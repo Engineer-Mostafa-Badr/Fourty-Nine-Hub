@@ -13,7 +13,6 @@ import '../defines.dart';
 import '../pop_up_manager.dart';
 import 'effect_grid.dart';
 
-
 /// @nodoc
 class ZegoLiveAudioRoomSoundEffectSheet extends StatefulWidget {
   final ZegoUIKitPrebuiltLiveAudioRoomInnerText innerText;

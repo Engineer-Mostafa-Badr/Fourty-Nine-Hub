@@ -37,74 +37,68 @@ import '../features/account_taps/wallet/domain/usecases/sub_category_use_case.da
 class AccountServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<AccountRemoteDataSource>(
-            () => AccountRemoteDataSourceImpl(serviceLocator()));
+        () => AccountRemoteDataSourceImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<GiftRemoteDataSource>(
-            () => GiftRemoteDataSourceImpl(serviceLocator()));
+        () => GiftRemoteDataSourceImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<WalletRemoteDataSource>(
-            () => WalletRemoteDataSourceImpl(serviceLocator()));
+        () => WalletRemoteDataSourceImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<ListsRemoteDataSource>(
-            () => ListsRemoteDataSourceImpl(serviceLocator()));
+        () => ListsRemoteDataSourceImpl(serviceLocator()));
     // AccountRepo
     serviceLocator.registerLazySingleton<ListsRepo>(
-            () => ListsRepoImpl(serviceLocator()));
+        () => ListsRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<WalletRepo>(
-            () => WalletRepoImpl(serviceLocator()));
+        () => WalletRepoImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<GiftRepository>(
-            () => GiftRepositoryImpl(serviceLocator()));
+        () => GiftRepositoryImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<AccountRepo>(
-            () => AccountRepoImpl(serviceLocator()));
+        () => AccountRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<GetFavouriteAdsUsecase>(
-            () => GetFavouriteAdsUsecase(serviceLocator()));
+        () => GetFavouriteAdsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetFavouriteCategoriesUseCase>(
-            () => GetFavouriteCategoriesUseCase(serviceLocator()));
+        () => GetFavouriteCategoriesUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetFavouriteSubCategoriesUseCase>(
-            () => GetFavouriteSubCategoriesUseCase(serviceLocator()));
+        () => GetFavouriteSubCategoriesUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetFriendsUsecase>(
-            () => GetFriendsUsecase(serviceLocator()));
+        () => GetFriendsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetFollowersUseCase>(
-            () => GetFollowersUseCase(serviceLocator()));
+        () => GetFollowersUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetFriendRequestsUsecase>(
-            () => GetFriendRequestsUsecase(serviceLocator()));
+        () => GetFriendRequestsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetBlockedUseCase>(
-            () => GetBlockedUseCase(serviceLocator()));
+        () => GetBlockedUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetWalletHistoryUseCase>(
-            () => GetWalletHistoryUseCase(serviceLocator()));
+        () => GetWalletHistoryUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetSubscriptionWalletUseCase>(
-            () => GetSubscriptionWalletUseCase(serviceLocator()));
+        () => GetSubscriptionWalletUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetWalletUseCase>(
-            () => GetWalletUseCase(serviceLocator()));
+        () => GetWalletUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetWalletGiftsUseCase>(
-            () => GetWalletGiftsUseCase(serviceLocator()));
+        () => GetWalletGiftsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<MainCategoryUseCase>(
-            () => MainCategoryUseCase(serviceLocator()));
+        () => MainCategoryUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<SubCategoryUseCase>(
-            () => SubCategoryUseCase(serviceLocator()));
+        () => SubCategoryUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<DeleteSubscriptionUseCase>(
-            () => DeleteSubscriptionUseCase(serviceLocator()));
+        () => DeleteSubscriptionUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<AddSubscriptionUseCase>(
-            () => AddSubscriptionUseCase(serviceLocator()));
+        () => AddSubscriptionUseCase(serviceLocator()));
 
     serviceLocator.registerFactory<FavouriteAdsCubit>(
-            () =>
-        FavouriteAdsCubit(serviceLocator())
-          ..loadData());
+        () => FavouriteAdsCubit(serviceLocator())..loadData());
 
-    serviceLocator.registerFactory<FavouriteSubCategoryCubit>(
-            () =>
-            FavouriteSubCategoryCubit(serviceLocator(),serviceLocator())
+    serviceLocator.registerFactory<FavouriteSubCategoryCubit>(() =>
+        FavouriteSubCategoryCubit(serviceLocator(), serviceLocator())
           ..loadData());
-    serviceLocator.registerFactory<FavouriteCategoryCubit>(
-            () =>
-        FavouriteCategoryCubit(serviceLocator(),serviceLocator())
-          ..loadData());
+    serviceLocator.registerFactory<FavouriteCategoryCubit>(() =>
+        FavouriteCategoryCubit(serviceLocator(), serviceLocator())..loadData());
     serviceLocator.registerFactory<ShareAppCubit>(() => ShareAppCubit());
 
-    serviceLocator.registerFactory<ListsCubit>(() =>
-        ListsCubit(
+    serviceLocator.registerFactory<ListsCubit>(() => ListsCubit(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
@@ -114,17 +108,15 @@ class AccountServiceLocator {
           serviceLocator(),
           serviceLocator(),
         ));
-    serviceLocator.registerFactory<WalletCubit>(() =>
-    WalletCubit(
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-    )
-      ..loadData());
+    serviceLocator.registerFactory<WalletCubit>(() => WalletCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        )..loadData());
 
     serviceLocator.registerFactory<GiftCubit>(() => GiftCubit(
           serviceLocator(),

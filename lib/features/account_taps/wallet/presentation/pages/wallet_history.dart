@@ -94,10 +94,10 @@ class WalletHistory extends StatelessWidget {
       required Function onTap,
       required IconData icon}) {
     return ListTile(
-      title: Label(text: title, style: Styles.mediumText(fontSize: 12.sp)),
+      title: Label(text: title, style: Styles.mediumText(fontSize: 12)),
       subtitle: Label(
         text: subTitle,
-        style: Styles.mediumText(fontSize: 10.sp),
+        style: Styles.mediumText(fontSize: 10),
       ),
       leading: Container(
           height: kToolbarHeight * .7,

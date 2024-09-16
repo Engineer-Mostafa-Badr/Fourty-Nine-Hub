@@ -6,7 +6,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 
 import 'gallery/layout_gallery_last_item.dart';
 
-
 /// layout config of gallery
 class ZegoLayoutGalleryConfig extends ZegoLayout {
   /// true: show audio video view only open camera or microphone

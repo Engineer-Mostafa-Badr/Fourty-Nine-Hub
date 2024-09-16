@@ -15,7 +15,6 @@ import '../core.dart';
 
 // Project imports:
 
-
 mixin ZegoUIKitCoreDataScreenSharing {
   StreamController<List<ZegoUIKitCoreUser>>? screenSharingListStreamCtrl;
 

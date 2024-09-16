@@ -4,6 +4,8 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dar
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/reports_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -59,10 +61,10 @@ class _ReportViewState extends State<ReportView> {
                       _buildHeader(context, screenWidth),
                       SizedBox(height: 10.h),
                       if (reports.isEmpty)
-                        const Center(
+                        Center(
                           child: Text(
-                            'No report categories available',
-                            style: TextStyle(color: Colors.grey),
+                            LocaleKeys.noReportCategoriesAvailable.localize,
+                            style: const TextStyle(color: Colors.grey),
                           ),
                         )
                       else
@@ -108,14 +110,14 @@ class _ReportViewState extends State<ReportView> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Label(
-          text: "Report",
+          text: LocaleKeys.report.localize,
           style: Styles.headerText(
             fontSize: screenWidth * 0.1,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         const Icon(
           Icons.report_gmailerrorred_rounded,
           color: AppColors.SECONDARY_COLOR,
@@ -199,7 +201,7 @@ class _ReportViewState extends State<ReportView> {
                 vertical: MediaQuery.of(context).size.height * 0.02,
                 horizontal: 16.0,
               ),
-              hintText: 'Type report reason...',
+              hintText: '${LocaleKeys.typeReportReason.localize}...',
               hintStyle: TextStyle(
                 fontSize: screenWidth * 0.04,
                 color: AppColors.DARK_GRAY_COLOR,
@@ -215,7 +217,7 @@ class _ReportViewState extends State<ReportView> {
             ),
           ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         AnimatedOpacity(
           opacity: reportTextController.text.isNotEmpty ? 1.0 : 0.5,
           duration: const Duration(milliseconds: 300),
@@ -227,7 +229,7 @@ class _ReportViewState extends State<ReportView> {
             onPressed: reportTextController.text.isNotEmpty
                 ? () async {
                     if (selectedReport == null) {
-                      showErrorMessage(context, "Please select a reason!");
+                      showErrorMessage(context, LocaleKeys.pleaseSelectReason.localize);
                       context.pop();
                     } else {
                       var response = await controller.onReport(
@@ -241,7 +243,7 @@ class _ReportViewState extends State<ReportView> {
                       );
 
                       if (response == true) {
-                        showSuccessMessage(context, "Report sent successfully");
+                        showSuccessMessage(context, LocaleKeys.reportSentSuccessfully.localize);
                         context.pop();
                       } else {
                         showErrorMessage(

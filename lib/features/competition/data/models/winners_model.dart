@@ -45,7 +45,8 @@ class DataWinners {
     return DataWinners(
       id: json['_id'] as String?,
       competitionId: json['competition_id'] != null
-          ? CompetitionId.fromJson(json['competition_id'] as Map<String, dynamic>)
+          ? CompetitionId.fromJson(
+              json['competition_id'] as Map<String, dynamic>)
           : null,
       userId: json['user_id'] != null
           ? UserId.fromJson(json['user_id'] as Map<String, dynamic>)
@@ -149,7 +150,8 @@ class UserProfile {
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
       profilePictureKey: json['profilePictureKey'] != null
-          ? ProfilePictureKey.fromJson(json['profilePictureKey'] as Map<String, dynamic>)
+          ? ProfilePictureKey.fromJson(
+              json['profilePictureKey'] as Map<String, dynamic>)
           : null,
     );
   }

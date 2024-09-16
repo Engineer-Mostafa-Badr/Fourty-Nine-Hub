@@ -35,8 +35,7 @@ class DoctorUnhandledAppointmentsView extends StatelessWidget {
               if (state.appointments.isNotEmpty) {
                 return ListView.separated(
                   shrinkWrap: true,
-                  padding:  EdgeInsets.symmetric(
-                      horizontal: 15, vertical: 20.h),
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20.h),
                   controller: context
                       .read<DoctorUnhandledAppointmentsCubit>()
                       .scrollController,
@@ -54,7 +53,7 @@ class DoctorUnhandledAppointmentsView extends StatelessWidget {
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) =>
-                       Divider(
+                      Divider(
                     height: 60.h,
                   ),
                 );

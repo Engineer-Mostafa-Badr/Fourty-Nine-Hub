@@ -50,8 +50,7 @@ class MazadatView extends StatelessWidget {
                                       item: state.auctionList![index],
                                       isVertical: false,
                                     ),
-                                separatorBuilder: (context, index) =>
-                                    Sizer(),
+                                separatorBuilder: (context, index) => Sizer(),
                                 itemCount: state.auctionList?.length ?? 0),
                   )),
                 ],
@@ -65,7 +64,7 @@ class MazadatView extends StatelessWidget {
     return BlocBuilder<AuctionListCubit, AuctionListState>(
         builder: (context, state) {
       return Container(
-        margin:  EdgeInsets.symmetric(vertical: 10.h, horizontal: 10),
+        margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10),
         width: kToolbarHeight * 2,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),

@@ -87,7 +87,6 @@ dependencies:
   #  video_trimmer: ^3.0.1
   visibility_detector: ^0.3.3
   webview_flutter: ^4.8.0
-  win32: ^5.4.0
   zego_uikit_prebuilt_live_audio_room: ^3.7.5
   zego_uikit_signaling_plugin: ^2.8.2
   image_filter_pro: ^0.1.11

@@ -49,12 +49,6 @@ class _InstagramViewState extends State<InstagramView> {
     });
   }
 
-  // @override
-  // void dispose() {
-  //   scrollController.dispose();
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -105,7 +99,7 @@ class _InstagramViewState extends State<InstagramView> {
   Widget _buildTabBar(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: List.generate(

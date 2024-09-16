@@ -108,7 +108,7 @@ class MessagesRemoteDataSourceImplementation
       CliLogger.info('you send message : ${params.toString()}');
       List<String> mediaIds = [];
       for (var file in params.media) {
-       final id = await UploadFile.uploadPickedFile(
+        final id = await UploadFile.uploadPickedFile(
             file: file, subCategoryId: params.chat.categoryId);
         if (id != null) {
           mediaIds.add(id);
@@ -122,6 +122,7 @@ class MessagesRemoteDataSourceImplementation
             "mediaIds": mediaIds,
             "text": params.message,
             "groupId": null,
+            "replyMessageId": params.replyMessageId,
             "oneTimeView": params.oneTimeView,
           }));
       return const Right(true);

@@ -34,7 +34,9 @@ class DriverRegisterCubit extends Cubit<DriverRegisterState> {
       final user = UserCubit.to.state.data?.id;
       final subCategories = await _getSubCategoriesUseCase.call(
           GetSubCategoriesParams(
-              mainCategoryId: id, paginationParams: PaginationParams.basic(), userId: user??''));
+              mainCategoryId: id,
+              paginationParams: PaginationParams.basic(),
+              userId: user ?? ''));
       subCategories.fold((failure) {
         emit(state.copyWith(
           failure: failure,

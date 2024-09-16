@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/select_seat_and_repeat_v2.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/total_price_v2.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class TripAndCarInformationV2 extends StatefulWidget {
   const TripAndCarInformationV2({super.key});
 

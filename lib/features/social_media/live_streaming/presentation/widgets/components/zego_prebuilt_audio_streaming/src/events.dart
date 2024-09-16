@@ -10,7 +10,6 @@ import 'events.defines.dart';
 
 // Package imports:
 
-
 /// You can listen to events that you are interested in here, such as Co-hosting
 class ZegoUIKitPrebuiltLiveAudioRoomEvents {
   /// events about seat

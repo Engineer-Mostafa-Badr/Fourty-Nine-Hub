@@ -20,26 +20,28 @@ class HealthSubCategories extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HealthCubit, HealthState>(builder: (context, state) {
       if (state.subCategories != null && state.subCategories!.isNotEmpty) {
-        return SizedBox(
-          height: 200.h,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Label(
-                text: LocaleKeys.specialities.localize,
-                style: Styles.headerText(),
-              ),
-              Sizer(),
-              Expanded(
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => Sizer(),
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => HealthSubCategoryCard(
-                      subCategory: state.subCategories![index]),
-                  itemCount: state.subCategories!.length,
+        return Card(elevation: 1,
+          child: SizedBox(
+            height: 250,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Label(
+                  text: LocaleKeys.specialities.localize,
+                  style: Styles.headerText(),
                 ),
-              ),
-            ],
+                Sizer(),
+                Expanded(
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) => Sizer(),
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) => HealthSubCategoryCard(
+                        subCategory: state.subCategories![index]),
+                    itemCount: state.subCategories!.length,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       } else {

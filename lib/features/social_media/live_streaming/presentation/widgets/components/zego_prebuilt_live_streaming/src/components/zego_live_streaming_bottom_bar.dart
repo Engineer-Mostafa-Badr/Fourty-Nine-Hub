@@ -199,7 +199,9 @@ class ZoomMicrophoneBuilder extends StatelessWidget {
                   muteMode: micDefaultOn,
                 ),
                 Text(
-                  micState.value ? LocaleKeys.mute.localize : LocaleKeys.unmute.localize,
+                  micState.value
+                      ? LocaleKeys.mute.localize
+                      : LocaleKeys.unmute.localize,
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w400,
@@ -260,7 +262,9 @@ class ZoomCameraBuilder extends StatelessWidget {
                   defaultOn: cameraDefaultOn,
                 ),
                 Text(
-                  cameraState.value ? LocaleKeys.startVideo.localize : LocaleKeys.stopVideo.localize,
+                  cameraState.value
+                      ? LocaleKeys.startVideo.localize
+                      : LocaleKeys.stopVideo.localize,
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w400,
@@ -408,7 +412,9 @@ class ZoomSharescreenBuilder extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(top: 5.zH),
                   child: Text(
-                    !screenShareOn ? LocaleKeys.share.localize : LocaleKeys.stopVideo.localize,
+                    !screenShareOn
+                        ? LocaleKeys.share.localize
+                        : LocaleKeys.stopVideo.localize,
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w400,

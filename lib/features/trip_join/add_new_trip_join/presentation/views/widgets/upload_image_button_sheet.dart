@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/upload_image_popup.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class UploadImageButtonSheet extends StatelessWidget {
   const UploadImageButtonSheet({
     super.key,

@@ -18,8 +18,6 @@ import '../../defines/user.dart';
 import '../../uikit_service.dart';
 import 'core.dart';
 
-
-
 /// @nodoc
 mixin ZegoUIKitCoreEventHandler {
   final _eventHandlerImpl = ZegoUIKitCoreEventHandlerImpl();

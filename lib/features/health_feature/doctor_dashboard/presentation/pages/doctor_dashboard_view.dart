@@ -45,7 +45,7 @@ class DoctorDashboardView extends StatelessWidget {
           ],
         ),
         body: ListView(
-          padding:  EdgeInsets.all(18),
+          padding: EdgeInsets.all(18),
           children: [
             DoctorRenewDayCountWidget(),
             Sizer(),

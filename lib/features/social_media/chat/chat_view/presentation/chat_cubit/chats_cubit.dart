@@ -146,9 +146,7 @@ class ChatsCubit extends Cubit<ChatsState> {
       _chats[message.chatId]?.lastMessage = message;
       if (!message.byMe &&
           message.chatId != null &&
-          message.chatId!.isNotEmpty) {
-
-      }
+          message.chatId!.isNotEmpty) {}
       emit(state.copyWith(newMessage: message, status: ChatsStates.newMessage));
       getChatsByCategory(_selectedChatCategory);
     });

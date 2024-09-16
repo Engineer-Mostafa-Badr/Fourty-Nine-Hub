@@ -8,7 +8,7 @@ import '../../../../../res/style/styles.dart';
 class DonutChartPainter extends CustomPainter {
   final BuildContext context;
   final int count; // The current count
-  final int max;   // The maximum value
+  final int max; // The maximum value
 
   DonutChartPainter({
     required this.context,
@@ -19,7 +19,8 @@ class DonutChartPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final double outerRadius = size.width / 4.5;
-    final double innerRadius = outerRadius - 45; // Adjust this to fit your design
+    final double innerRadius =
+        outerRadius - 45; // Adjust this to fit your design
 
     final Paint outerPaint = Paint()
       ..style = PaintingStyle.stroke
@@ -36,11 +37,15 @@ class DonutChartPainter extends CustomPainter {
     // Define the sections (current progress and remaining)
     final List<Map<String, dynamic>> sections = [
       {'value': percentage.toDouble(), 'color': AppColors.SECONDARY_COLOR},
-      {'value': 100 - percentage.toDouble(), 'color': Theme.of(context).primaryColor},
+      {
+        'value': 100 - percentage.toDouble(),
+        'color': Theme.of(context).primaryColor
+      },
     ];
 
     // Calculate total value (which will be 100 as it's a percentage)
-    double total = sections.fold(0, (sum, item) => sum + (item['value'] as num).toDouble());
+    double total = sections.fold(
+        0, (sum, item) => sum + (item['value'] as num).toDouble());
 
     // Draw the full donut chart
     double startAngle = -pi / 2;
@@ -48,7 +53,9 @@ class DonutChartPainter extends CustomPainter {
       final double sweepAngle = (section['value'] as num) / total * 2 * pi;
       innerPaint.color = section['color'] as Color;
       canvas.drawArc(
-        Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: outerRadius),
+        Rect.fromCircle(
+            center: Offset(size.width / 2, size.height / 2),
+            radius: outerRadius),
         startAngle,
         sweepAngle,
         false,
@@ -61,7 +68,8 @@ class DonutChartPainter extends CustomPainter {
     final textPainter = TextPainter(
       text: TextSpan(
         text: '$percentage%', // Display percentage as an integer
-        style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
+        style:
+            Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
       ),
       textDirection: TextDirection.ltr,
     );

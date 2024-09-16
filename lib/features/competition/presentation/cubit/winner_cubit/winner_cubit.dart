@@ -6,25 +6,23 @@ import 'package:fourtyninehub/features/competition/presentation/cubit/winner_cub
 
 import '../../../../../core/error/failure.dart';
 
-
 class WinnerCubit extends Cubit<WinnerState> {
   WinnerCubit(this.competitionRepo) : super(WinnerInitial());
 
- final CompetitionRepo competitionRepo;
-  static WinnerCubit get(context)=>BlocProvider.of(context);
+  final CompetitionRepo competitionRepo;
+  static WinnerCubit get(context) => BlocProvider.of(context);
 
   //Timer? _pollingTimer;
 
-  void fetchWinners(context)async{
+  void fetchWinners(context) async {
     emit(WinnersLoadingState());
-    var result =await competitionRepo.fetchWinners();
+    var result = await competitionRepo.fetchWinners();
 
     result.fold((failure) {
       emit(WinnersErrorState(errMessage: getFailureMessage(failure, context)));
     }, (winner) {
       emit(WinnersSuccessState(winnersModel: winner));
     });
-
   }
 
   // void _startPollingCompetition(context) {
@@ -49,5 +47,4 @@ class WinnerCubit extends Cubit<WinnerState> {
   //     });
   //   });
   // }
-
 }

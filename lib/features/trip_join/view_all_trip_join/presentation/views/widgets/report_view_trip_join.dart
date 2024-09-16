@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class ReportViewTripJoin extends StatefulWidget {
   const ReportViewTripJoin({
     super.key,

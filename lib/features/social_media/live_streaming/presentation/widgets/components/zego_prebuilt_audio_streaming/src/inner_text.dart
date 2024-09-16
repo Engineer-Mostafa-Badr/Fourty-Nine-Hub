@@ -329,7 +329,8 @@ class ZegoUIKitPrebuiltLiveAudioRoomInnerText {
               confirmButtonName: 'Agree',
             ),
         audioEffectTitle = audioEffectTitle ?? 'Audio effects',
-        audioEffectReverbTitle = audioEffectReverbTitle ?? LocaleKeys.reverb.localize,
+        audioEffectReverbTitle =
+            audioEffectReverbTitle ?? LocaleKeys.reverb.localize,
         audioEffectVoiceChangingTitle =
             audioEffectVoiceChangingTitle ?? LocaleKeys.voiceChanging.localize,
         voiceChangerNoneTitle = voiceChangerNoneTitle ?? 'None',

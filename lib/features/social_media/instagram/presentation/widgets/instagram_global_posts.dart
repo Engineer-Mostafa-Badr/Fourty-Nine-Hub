@@ -11,6 +11,8 @@ import 'package:fourtyninehub/common/widgets/stateless/images/social_image_viewe
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
@@ -75,9 +77,9 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                     noItemsFoundIndicatorBuilder: (context) {
                       print(controller
                           .globalFeedPagingController.itemList?.length);
-                      return  Center(
+                      return Center(
                         child: Text(
-                          "No Posts",
+                          LocaleKeys.noPosts.localize,
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 18.sp,
@@ -106,12 +108,12 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Sizer(),
+                              const Sizer(),
                               _buildMainAccountHeader(
                                   post: controller.globalFeedPagingController
                                       .itemList![index],
                                   context: context),
-                              Sizer(),
+                              const Sizer(),
                               SizedBox(
                                 height: kToolbarHeight * 5,
                                 child: PageView.builder(
@@ -167,7 +169,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                             .images!
                                             .length,
                                         separatorBuilder: (context, index) =>
-                                            Sizer(
+                                            const Sizer(
                                               width: 3,
                                             ),
                                         itemBuilder: (context, index) {
@@ -186,7 +188,8 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                 ),
                               ],
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -266,7 +269,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                 : Colors.grey,
                                             size: 25,
                                           ),
-                                          Sizer(
+                                          const Sizer(
                                             width: 5,
                                           ),
                                           Label(
@@ -279,7 +282,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                             style: Styles.mediumText(
                                                 fontWeight: FontWeight.bold),
                                           ),
-                                          Sizer(),
+                                          const Sizer(),
                                           IconAppButton(
                                             icon: Icons
                                                 .chat_bubble_outline_rounded,
@@ -394,7 +397,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                             color: Colors.grey,
                                             size: 25,
                                           ),
-                                          Sizer(
+                                          const Sizer(
                                             width: 5,
                                           ),
                                           Label(
@@ -433,7 +436,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                   .itemList![index].content!.isEmpty) ...[
                                 InkWell(
                                     onTap: () => context.push(Routes.LOGIN),
-                                    child: const Label(text: 'Show Comments'))
+                                    child: Label(text: LocaleKeys.showComments.localize))
                               ],
                               if (controller.globalFeedPagingController
                                       .itemList![index].content!.isEmpty &&
@@ -537,7 +540,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                 : UIConst.profilePlaceHolder),
           ),
         ),
-        Sizer(),
+        const Sizer(),
         Expanded(
             child: Row(
           children: [

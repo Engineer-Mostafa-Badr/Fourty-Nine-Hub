@@ -41,7 +41,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     this._getWalletUseCase,
     this._balanceUseCases,
     this._listenToNewMessageUseCase,
-    this._stopListenToNewMessagesUseCase, this._markMessagesAsDeliveredUseCase,
+    this._stopListenToNewMessagesUseCase,
+    this._markMessagesAsDeliveredUseCase,
   ) : super(MainCategoriesState()) {
     _markMessagesAsDelivered();
   }
@@ -102,8 +103,9 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   _markMessagesAsDelivered() {
-    _listenToNewMessageUseCase((message){
-      _markMessagesAsDeliveredUseCase(MarkMessagesAsDeliveredParams(chatId: 'chatId'));
+    _listenToNewMessageUseCase((message) {
+      _markMessagesAsDeliveredUseCase(
+          MarkMessagesAsDeliveredParams(chatId: 'chatId'));
     });
   }
 
@@ -162,6 +164,4 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       emit(state.copyWith(balance: data));
     });
   }
-
-
 }

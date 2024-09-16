@@ -42,8 +42,8 @@ class RestaurantCard extends StatelessWidget {
                       top: 10,
                       left: 10,
                       child: Container(
-                        padding:  EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 2.h),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 2.h),
                         decoration: BoxDecoration(
                             color: AppColors.SECONDARY_COLOR,
                             borderRadius: BorderRadius.circular(5)),

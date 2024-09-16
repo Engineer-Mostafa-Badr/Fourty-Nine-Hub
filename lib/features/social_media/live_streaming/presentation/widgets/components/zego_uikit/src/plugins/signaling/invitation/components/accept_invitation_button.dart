@@ -6,7 +6,6 @@ import '../../../../components/defines.dart';
 import '../../../../components/widgets/text_icon_button.dart';
 import '../../../../services/uikit_service.dart';
 
-
 // Project imports:
 
 /// @nodoc

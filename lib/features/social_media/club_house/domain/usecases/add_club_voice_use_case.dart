@@ -9,8 +9,6 @@ import '../../data/model/create_voice_room_model.dart';
 import '../repositories/club_voice_repository.dart';
 
 class AddClubVoiceUseCase extends UseCase<ZegoResponseModel, AddRoomParams> {
-
-  
   final ClubVoiceRepository clubVoiceRepository;
 
   AddClubVoiceUseCase(this.clubVoiceRepository);

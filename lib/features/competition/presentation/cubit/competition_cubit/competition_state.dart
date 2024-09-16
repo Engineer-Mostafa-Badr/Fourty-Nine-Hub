@@ -1,6 +1,5 @@
 import 'package:fourtyninehub/features/competition/data/models/competion_model.dart';
 
-
 abstract class CompetitionState {}
 
 class CompetitionInitial extends CompetitionState {}

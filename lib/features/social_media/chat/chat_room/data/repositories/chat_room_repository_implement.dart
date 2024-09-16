@@ -39,8 +39,9 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> markMessageAsSeen(MarkMessageAsSeenParams params) {
- return _chatRemoteDataSource.markMessageAsSeen(params);
+  Future<Either<Failure, bool>> markMessageAsSeen(
+      MarkMessageAsSeenParams params) {
+    return _chatRemoteDataSource.markMessageAsSeen(params);
   }
 
   @override
@@ -64,7 +65,8 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> markMessageAsDelivered(MarkMessagesAsDeliveredParams params) {
+  Future<Either<Failure, bool>> markMessageAsDelivered(
+      MarkMessagesAsDeliveredParams params) {
     return _chatRemoteDataSource.markMessageAsDelivered(params);
   }
 }

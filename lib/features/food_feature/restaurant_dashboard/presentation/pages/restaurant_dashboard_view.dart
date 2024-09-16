@@ -33,7 +33,7 @@ class RestaurantDashboardView extends StatelessWidget {
                           style: Styles.headerText(),
                         )),
                         if (state.connected)
-                           SizedBox(
+                          SizedBox(
                             height: 15.h,
                             width: 15.w,
                             child: const CircularProgressIndicator.adaptive(),
@@ -53,8 +53,7 @@ class RestaurantDashboardView extends StatelessWidget {
                               itemBuilder: (context, index) =>
                                   RestaurantOrderCard(
                                       item: state.orders![index]),
-                              separatorBuilder: (context, index) =>
-                                  Sizer(),
+                              separatorBuilder: (context, index) => Sizer(),
                               itemCount: state.orders?.length ?? 0),
                     ),
                   ],

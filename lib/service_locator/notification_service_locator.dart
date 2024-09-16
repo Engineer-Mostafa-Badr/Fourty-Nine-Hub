@@ -30,7 +30,8 @@ class NotificationsServiceLocator {
         notificationRemoteDataSource: serviceLocator(),
       ),
     );
-    serviceLocator.registerLazySingleton<SetInterceptedNotificationMessageUseCase>(
+    serviceLocator
+        .registerLazySingleton<SetInterceptedNotificationMessageUseCase>(
       () => SetInterceptedNotificationMessageUseCase(
         notificationRepo: serviceLocator(),
       ),
@@ -48,7 +49,8 @@ class NotificationsServiceLocator {
       () => NotificationListenerUseCase(notificationRepo: serviceLocator()),
     );
     serviceLocator.registerLazySingleton<GetUnreadNotificationsCountUseCase>(
-      () => GetUnreadNotificationsCountUseCase(notificationRepo: serviceLocator()),
+      () => GetUnreadNotificationsCountUseCase(
+          notificationRepo: serviceLocator()),
     );
     serviceLocator.registerLazySingleton<NotificationSeenUseCase>(
       () => NotificationSeenUseCase(notificationRepo: serviceLocator()),

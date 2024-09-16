@@ -33,10 +33,12 @@ class UserProfileModel extends UserProfileEntity {
   factory UserProfileModel.fromJson(Map<String, dynamic> json) {
     return UserProfileModel(
       id: json['userId']['_id'],
-      firstName:
-          json['userId']['firstName'][0].toUpperCase() + json['userId']['firstName'].substring(1).toLowerCase() ?? '',
-      lastName:
-          json['userId']['lastName'][0].toUpperCase() + json['userId']['lastName'].substring(1).toLowerCase() ?? '',
+      firstName: json['userId']['firstName'][0].toUpperCase() +
+              json['userId']['firstName'].substring(1).toLowerCase() ??
+          '',
+      lastName: json['userId']['lastName'][0].toUpperCase() +
+              json['userId']['lastName'].substring(1).toLowerCase() ??
+          '',
       bio: json['userId']['bio'] ?? '',
       city: json['userId']['city'] ?? '',
       phone: json['userId']['phone'] ?? '',
@@ -60,7 +62,9 @@ class UserProfileModel extends UserProfileEntity {
       isSenTRequest: json['isSenTRequest'] ?? false,
       followers: json['followedByUser'] == null
           ? null
-          : (json['followedByUser'] as List).map((e) => UserProfileFollowersModel.fromJson(e)).toList(),
+          : (json['followedByUser'] as List)
+              .map((e) => UserProfileFollowersModel.fromJson(e))
+              .toList(),
     );
   }
 }

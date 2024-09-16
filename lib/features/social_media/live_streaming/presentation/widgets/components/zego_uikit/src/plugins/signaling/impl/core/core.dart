@@ -11,7 +11,6 @@ import 'package:zego_plugin_adapter/zego_plugin_adapter.dart';
 
 // Project imports:
 
-
 /// @nodoc
 class ZegoSignalingPluginCore with ZegoSignalingPluginCoreEvent {
   ZegoSignalingPluginCore._internal();

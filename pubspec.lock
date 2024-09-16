@@ -53,10 +53,10 @@ packages:
     dependency: transitive
     description:
       name: asn1lib
-      sha256: "58082b3f0dca697204dbab0ef9ff208bfaea7767ea771076af9a343488428dda"
+      sha256: "2ca377ad4d677bbadca278e0ba4da4e057b80a10b927bfc8f7d8bda8fe2ceb75"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.3"
+    version: "1.5.4"
   async:
     dependency: transitive
     description:
@@ -1057,10 +1057,10 @@ packages:
     dependency: transitive
     description:
       name: google_maps_flutter_platform_interface
-      sha256: "8ba5daee8b5d2230fea17a7903047ce4dc45fb1f0726356a1d8eb541e30c7d05"
+      sha256: "099874463dc4c9bff04fe4b2b8cf7284d2455c2deead8f9a59a87e1b9f028c69"
       url: "https://pub.dev"
     source: hosted
-    version: "2.9.1"
+    version: "2.9.2"
   google_maps_flutter_web:
     dependency: transitive
     description:
@@ -2443,7 +2443,7 @@ packages:
     source: hosted
     version: "3.14.0"
   win32:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: win32
       sha256: "0eaf06e3446824099858367950a813472af675116bf63f008a4c2a75ae13e9cb"

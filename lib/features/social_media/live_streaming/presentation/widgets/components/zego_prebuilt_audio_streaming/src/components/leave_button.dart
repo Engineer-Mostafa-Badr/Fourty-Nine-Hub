@@ -6,7 +6,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 
 import '../core/seat/seat_manager.dart';
 
-
 /// @nodoc
 class ZegoLiveAudioRoomLeaveButton extends StatefulWidget {
   final ButtonIcon? icon;

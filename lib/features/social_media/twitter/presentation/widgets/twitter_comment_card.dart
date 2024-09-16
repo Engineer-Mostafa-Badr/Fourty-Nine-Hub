@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
@@ -112,11 +113,11 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                 onChanged: (v) {
                 setState(() {});
                 },
-                style: Styles.headerText(fontSize: 26.sp),
+                style: Styles.headerText(fontSize: 26),
                 decoration: InputDecoration(
                 fillColor: Colors.white,
                 contentPadding: EdgeInsets.all(5),
-                hintText: 'Type your comment ....',
+                hintText: '${LocaleKeys.typeYourComment.localize} ....',
                 hintStyle: Styles.mediumText(),
                 ),
                 )
@@ -171,7 +172,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
             Sizer(),
             TextAppButton(
                 style: Styles.mediumText(),
-                label: 'Reply',
+                label: LocaleKeys.reply.localize,
                 onPressed: widget.onCommentReply)
           ],
         ),
@@ -190,8 +191,8 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
             listTile(
                 icon: Icons.report,
                 iconColor: Colors.red,
-                title: 'Report post',
-                subTitle: 'Your well reports this post.',
+                title: LocaleKeys.reportComment.localize,
+                subTitle: LocaleKeys.youWillReportComment.localize,
                 onTap: () async {
                   Future.delayed(const Duration(milliseconds: 200), () {
                     bottomSheet(
@@ -205,17 +206,17 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
           if (isMyComment)
             listTile(
                 icon: Icons.delete,
-                title: 'Delete Post',
+                title: LocaleKeys.deleteComment.localize,
                 subTitle:
-                'Your comment will be deleted, and you cannot get it again',
+                LocaleKeys.youWillDeleteComment.localize,
                 onTap: () {
                   widget.onDeleteComment(widget.comment.id);
                 }),
           if (isMyComment)
             listTile(
                 icon: Icons.visibility_off,
-                title: 'Edit Comment',
-                subTitle: 'Your Will Edit Your Comment.',
+                title: LocaleKeys.editComment.localize,
+                subTitle: LocaleKeys.youWillEditComment.localize,
                 onTap: () {
                   widget.comment.edit = !widget.comment.edit!;
                   editTextController.text = widget.comment.content??'';

@@ -5,8 +5,8 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
 
-class GetMessagesUseCase extends UseCase<List<MessageEntity>, GetMessagesParams> {
-
+class GetMessagesUseCase
+    extends UseCase<List<MessageEntity>, GetMessagesParams> {
   final ChatRoomRepository _chatRoomRepository;
 
   GetMessagesUseCase(this._chatRoomRepository);
@@ -15,7 +15,6 @@ class GetMessagesUseCase extends UseCase<List<MessageEntity>, GetMessagesParams>
   Future<Either<Failure, List<MessageEntity>>> call(GetMessagesParams params) {
     return _chatRoomRepository.getMessages(params);
   }
-
 }
 
 class GetMessagesParams {

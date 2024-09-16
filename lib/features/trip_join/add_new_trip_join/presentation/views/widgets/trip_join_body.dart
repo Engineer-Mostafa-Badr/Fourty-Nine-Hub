@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
@@ -8,7 +9,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/trip_and_car_information_v2.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/trip_join_google_map.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/welcome_text.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class TripJoinBody extends StatefulWidget {
   const TripJoinBody({
     super.key,
@@ -39,7 +40,7 @@ class _TripJoinBodyState extends State<TripJoinBody> {
             children: [
               ...welcomeText(),
               // Sizer(),
-              Sizer(),
+              const Sizer(),
               const TripJoinGoogleMap(),
               Sizer(height: 20.h),
               // Text('Starting Point', style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),

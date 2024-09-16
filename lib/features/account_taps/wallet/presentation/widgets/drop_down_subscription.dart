@@ -31,15 +31,16 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
           _showCategoryDialog();
         },
         child: Container(
-          padding:  EdgeInsets.symmetric(vertical: 12.h),
+          padding:  EdgeInsets.symmetric(vertical: 22.h),
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(20.r),
           ),
           child: Center(
             child: Text(
               LocaleKeys.addSubcategoryToSubscribe.localize,
               style: TextStyle(
+                fontSize: 25.sp,
                 color: Theme.of(context).scaffoldBackgroundColor,
               ),
             ),
@@ -57,10 +58,10 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
           title: Text(LocaleKeys.selectCategory.localize),
           content: ConstrainedBox(
             constraints:  BoxConstraints(
-              maxHeight: 300.0.h, // Limits height to show only 4 items
+              maxHeight: 400.0.h, // Limits height to show only 4 items
             ),
             child: SizedBox(
-              height: 200.h,
+              height: 300.h,
               child: PaginationView<MainCategoryWalletEntity>(
                 build: (ScrollController scrollController,
                     List<MainCategoryWalletEntity> data) {
@@ -108,10 +109,10 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
           title: Text(LocaleKeys.selecteSubcategory.localize),
           content: ConstrainedBox(
             constraints:  BoxConstraints(
-              maxHeight: 300.0.h, // Limits height to show only 4 items
+              maxHeight: 400.0.h, // Limits height to show only 4 items
             ),
             child: SizedBox(
-              height: 200.h,
+              height: 300.h,
               child: PaginationView<MainCategoryWalletEntity>(
                 build: (ScrollController scrollController,
                     List<MainCategoryWalletEntity> data) {

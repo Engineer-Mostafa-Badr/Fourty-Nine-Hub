@@ -94,9 +94,11 @@ class ClubVoiceCubit extends Cubit<ClubVoiceState> {
       getAllRooms(pageKey);
     });
   }
+
   void refreshRooms() {
     roomsPagingController.refresh();
   }
+
   Future<void> getAllRooms(int page) async {
     emit(state.copyWith(requestState: ZegoRequestState.loading));
     getClubVoiceUseCase(PaginationParams(page: page, limit: pageSize))

@@ -348,6 +348,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
@@ -367,6 +368,7 @@ import '../../data/models/new_reels_model.dart';
 import '../controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import '../widgets/comments.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class InstagramAudioScreen extends StatefulWidget {
   final Audio audio;
   final Reel reel;
@@ -542,7 +544,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                       Text(
                         capitalizeAndSplit(widget.audio.audioName),
                         softWrap: true,
-                        style:  const TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -1100,11 +1102,17 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
                 ],
               ),
             ),
-            Positioned(
-              right: 8,
-              bottom: 0,
-              child: _buildActionButtons(),
-            ),
+            context.isArabic
+                ? Positioned(
+                    left: 8,
+                    bottom: 0,
+                    child: _buildActionButtons(),
+                  )
+                : Positioned(
+                    right: 8,
+                    bottom: 0,
+                    child: _buildActionButtons(),
+                  ),
           ],
         ),
       ),
@@ -1147,7 +1155,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
         Text(
           capitalizeAndSplit(
               '${widget.reel.user.firstName} ${widget.reel.user.lastName}'),
-          style:  const TextStyle(
+          style: const TextStyle(
             fontSize: 26,
             decoration: TextDecoration.none,
             color: Colors.white,
@@ -1176,7 +1184,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
               widget.reel.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style:  const TextStyle(
+              style: const TextStyle(
                 color: AppColors.DARK_GRAY_COLOR,
                 decoration: TextDecoration.none,
                 fontSize: 18,
@@ -1192,7 +1200,7 @@ class ReelItemFromAudioState extends State<ReelItemFromAudio>
           const SizedBox(width: 8),
           Text(
             widget.reel.viewCount.toString(),
-            style:  const TextStyle(
+            style: const TextStyle(
               color: AppColors.DARK_GRAY_COLOR,
               fontSize: 18,
               decoration: TextDecoration.none,

@@ -17,24 +17,23 @@ class PaymentState {
   final InstaPayResponseEntity? instaPayResponseData;
   final PayWithTokenResponseEntity? payWithTokenResponseData;
 
-  PaymentState(
-      {
-      this.status,
-      this.failure,
-      this.data,
-      this.paymobData,
-        this.fawryPayWithCardData,
-        this.fawryCardTokenResponseData,
-        this.savedCardsData,
-        this.deleteCardResponse,
-        this.mutliPaymentResponse,
-        this.uploadedImage,
-        this.uploadStatus,
-        this.selectedImage,
-        this.imageMediaId,
-        this.instaPayResponseData,
-        this.payWithTokenResponseData,
-      });
+  PaymentState({
+    this.status,
+    this.failure,
+    this.data,
+    this.paymobData,
+    this.fawryPayWithCardData,
+    this.fawryCardTokenResponseData,
+    this.savedCardsData,
+    this.deleteCardResponse,
+    this.mutliPaymentResponse,
+    this.uploadedImage,
+    this.uploadStatus,
+    this.selectedImage,
+    this.imageMediaId,
+    this.instaPayResponseData,
+    this.payWithTokenResponseData,
+  });
 
   PaymentState copyWith({
     StateStatus? status,
@@ -59,7 +58,8 @@ class PaymentState {
       data: data ?? this.data,
       paymobData: paymobData ?? this.paymobData,
       fawryPayWithCardData: fawryPayWithCardData ?? this.fawryPayWithCardData,
-      fawryCardTokenResponseData: fawryCardTokenResponseData ?? this.fawryCardTokenResponseData,
+      fawryCardTokenResponseData:
+          fawryCardTokenResponseData ?? this.fawryCardTokenResponseData,
       savedCardsData: savedCardsData ?? this.savedCardsData,
       deleteCardResponse: deleteCardResponse ?? this.deleteCardResponse,
       mutliPaymentResponse: mutliPaymentResponse ?? this.mutliPaymentResponse,
@@ -68,7 +68,8 @@ class PaymentState {
       selectedImage: selectedImage ?? this.selectedImage,
       imageMediaId: imageMediaId ?? this.imageMediaId,
       instaPayResponseData: instaPayResponseData ?? this.instaPayResponseData,
-      payWithTokenResponseData: payWithTokenResponseData ?? this.payWithTokenResponseData,
+      payWithTokenResponseData:
+          payWithTokenResponseData ?? this.payWithTokenResponseData,
     );
   }
 }

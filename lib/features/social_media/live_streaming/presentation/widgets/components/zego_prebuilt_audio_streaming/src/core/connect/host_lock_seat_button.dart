@@ -5,7 +5,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import '../../components/defines.dart';
 import '../seat/seat_manager.dart';
 
-
 /// @nodoc
 class ZegoLiveAudioRoomHostLockSeatButton extends StatefulWidget {
   final Size? iconSize;

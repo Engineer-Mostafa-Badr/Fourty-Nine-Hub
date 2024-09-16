@@ -587,7 +587,7 @@ class MixVoiceVideoRecordingScreenState
 
   Widget _buildFilterSelector() {
     return SizedBox(
-      height: 100.h,
+      height: 100,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: filters.length,
@@ -678,7 +678,7 @@ class MixVoiceVideoRecordingScreenState
           ),
           child: Text(
             'Recording stops in $_secondsRemaining seconds',
-            style:  TextStyle(color: Colors.white, fontSize: 18.sp),
+            style: TextStyle(color: Colors.white, fontSize: 18.sp),
           ),
         ),
       ),

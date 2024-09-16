@@ -32,6 +32,7 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
+import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../widgets/announce_widget.dart';
 
 
@@ -116,9 +117,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           children: [
             //carousel slider
             const AnnounceWidget(),
-            // Sizer(),
+               !context.read<UserCubit>().isLoggedIn?  Sizer():const SizedBox.shrink(),
             //wallet
-            const WalletWidget(),
+              context.read<UserCubit>().isLoggedIn? const WalletWidget():const SizedBox.shrink(),
             //    Sizer(),
             //admob
             //   const GoogleAddsBanner(),
@@ -328,7 +329,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       child: InkWell(
         onTap: () => context.go(Routes.MAZADAT),
         child: SizedBox(
-          height: kToolbarHeight * .8.h,
+          height: kToolbarHeight * .9.h,
           child: Stack(
             children: [
               Positioned.fill(
@@ -419,19 +420,19 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
+              padding:  EdgeInsets.symmetric(horizontal: 10.w),
               child: Row(
                 children: [
                   Label(
                     text: service.title(),
                     style: Styles.mediumText(
                       color: AppColors.AUTH_CONTAINER_COLOR,
-                      fontSize: 34.sp,
+                      fontSize: 65.sp,
                     ),
                   ),
                   const Spacer(),
                   Padding(
-                    padding:  EdgeInsets.symmetric(vertical: 2.h),
+                    padding:  EdgeInsets.symmetric(vertical: 5.h),
                     child: Column(
                       children: [
                         InkWell(
@@ -445,7 +446,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         const Spacer(),
                         Label(
                           text: '4 ${LocaleKeys.ads.tr()}',
-                          style: Styles.smallText(
+                          style: Styles.mediumText(
                             color: Colors.white,
                           ),
                         ),

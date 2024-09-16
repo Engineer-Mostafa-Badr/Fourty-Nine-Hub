@@ -34,11 +34,8 @@ class RiderequestCubit extends Cubit<RiderequestState> {
   final GetSubCategoriesUseCase _getSubCategoriesUseCase;
   final AddRideRequestUseCase _addNormalRequest;
 
-  RiderequestCubit(
-      this._nearByPlacesUseCase,
-      this._expectedPriceUseCase,
-      this._getSubCategoriesUseCase,
-      this._addNormalRequest)
+  RiderequestCubit(this._nearByPlacesUseCase, this._expectedPriceUseCase,
+      this._getSubCategoriesUseCase, this._addNormalRequest)
       : super(const RiderequestState());
 
 // get required initial data
@@ -49,7 +46,8 @@ class RiderequestCubit extends Cubit<RiderequestState> {
     final subCategories = await _getSubCategoriesUseCase.call(
         GetSubCategoriesParams(
             mainCategoryId: service.id,
-            paginationParams: PaginationParams.basic(), userId: user??''));
+            paginationParams: PaginationParams.basic(),
+            userId: user ?? ''));
     subCategories.fold((failure) {
       emit(state.copyWith(
         failure: failure,

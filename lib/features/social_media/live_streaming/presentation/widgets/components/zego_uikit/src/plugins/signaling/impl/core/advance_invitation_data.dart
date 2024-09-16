@@ -11,7 +11,6 @@ import 'advance_invitation_protocol.dart';
 import 'core.dart';
 import 'defines.dart';
 
-
 extension AdvanceInvitationStateExtension on AdvanceInvitationState {
   static AdvanceInvitationState fromSignalingPluginInvitationUserState(
       ZegoSignalingPluginInvitationUserState state) {

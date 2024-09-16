@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/custom_fading_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class AvailableTripCardLoadingList extends StatelessWidget {
   const AvailableTripCardLoadingList({super.key});
 
