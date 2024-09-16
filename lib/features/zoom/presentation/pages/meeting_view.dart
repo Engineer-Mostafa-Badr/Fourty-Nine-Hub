@@ -165,9 +165,7 @@ class MeetingView extends StatelessWidget {
             CliLogger.warning('WARNING state is updated${state.status}');
             if (state.isLoading) {
               // print('data is loading');
-              return const Center(
-                child: CircularProgressIndicator.adaptive(),
-              );
+              return Container();
             }
             if (state.scheduledMeeting == null) {
               // print('data is null');

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
@@ -15,7 +14,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../res/style/styles.dart';
 import '../../../account_taps/wallet/domain/usecases/add_subscribe_use_case.dart';
 import '../../domain/entities/subscription_plans_entity.dart';
@@ -35,7 +34,8 @@ class SubscriptionPlansWidget extends StatefulWidget {
   });
 
   @override
-  State<SubscriptionPlansWidget> createState() => _SubscriptionPlansWidgetState();
+  State<SubscriptionPlansWidget> createState() =>
+      _SubscriptionPlansWidgetState();
 }
 
 class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
@@ -45,7 +45,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
 
   @override
   void initState() {
-    selectedWallet = widget.paymentMenthods?[0];
+    selectedWallet=widget.paymentMenthods?[0];
     super.initState();
   }
 
@@ -116,7 +116,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                           LocaleKeys.premium.localize,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: _isPremium ? AppColors.AUTH_CONTAINER_COLOR : Theme.of(context).primaryColor,
+                            color: _isPremium
+                                ? AppColors.AUTH_CONTAINER_COLOR
+                                : Theme.of(context).primaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -133,9 +135,12 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               ),
               ElevatedAppButton(
                 label: LocaleKeys.confirm.localize,
-                textStyle: Styles.mediumText(color: AppColors.AUTH_CONTAINER_COLOR),
+                textStyle:
+                    Styles.mediumText(color: AppColors.AUTH_CONTAINER_COLOR),
                 onPressed: () async {
-                  List<num> list = _isPremium ? widget.subscribePlans.premiumPlans : widget.subscribePlans.regularPlans;
+                  List<num> list = _isPremium
+                      ? widget.subscribePlans.premiumPlans
+                      : widget.subscribePlans.regularPlans;
 
                   // Days corresponding to plans (must match the premium/regular plans)
                   final List<int> days = [1, 7, 30, 365];
@@ -172,7 +177,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                             ),
                           );
                       if (context.mounted) {
-                        context.go(Routes.HOME);
+                        context.push(Routes.HOME);
                         // context.pushReplacement(Routes.HOME);
                         context.read<MainCategoriesCubit>().loadData();
                         // Phoenix.rebirth(context);
@@ -210,7 +215,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
   int _groupValue = 1;
 
   Widget _buildList() {
-    List<num> list = _isPremium ? widget.subscribePlans.premiumPlans : widget.subscribePlans.regularPlans;
+    List<num> list = _isPremium
+        ? widget.subscribePlans.premiumPlans
+        : widget.subscribePlans.regularPlans;
 
     if (list.isEmpty) {
       return Text(LocaleKeys.noSubscriptionPlans.localize);
@@ -221,7 +228,8 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
     return Column(
       children: [
         for (int i = 0; i < days.length; i++)
-          _pricingItem(period: getPeriodLabel(days[i]), price: list[i], value: days[i]),
+          _pricingItem(
+              period: getPeriodLabel(days[i]), price: list[i], value: days[i]),
       ],
     );
   }
@@ -263,7 +271,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               onPressed: () {},
               backColor: _isPremium ? Colors.red : AppColors.PRIMARY_COLOR,
               textStyle: Styles.mediumText(
-                color: _isPremium ? AppColors.AUTH_CONTAINER_COLOR : AppColors.AUTH_CONTAINER_COLOR,
+                color: _isPremium
+                    ? AppColors.AUTH_CONTAINER_COLOR
+                    : AppColors.AUTH_CONTAINER_COLOR,
               ),
             ),
           ),
@@ -274,7 +284,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               onPressed: () {},
               backColor: _isPremium ? Colors.red : AppColors.PRIMARY_COLOR,
               textStyle: Styles.mediumText(
-                color: _isPremium ? AppColors.AUTH_CONTAINER_COLOR : AppColors.AUTH_CONTAINER_COLOR,
+                color: _isPremium
+                    ? AppColors.AUTH_CONTAINER_COLOR
+                    : AppColors.AUTH_CONTAINER_COLOR,
               ),
             ),
           ),

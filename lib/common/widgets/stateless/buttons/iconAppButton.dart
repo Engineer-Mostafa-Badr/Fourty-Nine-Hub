@@ -47,6 +47,7 @@ class IconAppButton extends StatelessWidget {
       return widget!;
     } else if (isCircle) {
       return CircleAvatar(
+        radius: 50.r,
         child: Icon(
           icon,
           size: size ?? 50.h,
