@@ -11,13 +11,16 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 part 'chats_state.dart';
 
 class ChatsCubit extends Cubit<ChatsState> {
   final ListenToNewMessageUseCase _listenToNewMessageUseCase;
   final StopListenToMessagesUseCase _stopListenToMessagesUseCase;
+  final MarkMessagesAsDeliveredUseCase _markMeesagesAsDeliveredUseCase;
   final GetChatsUseCase _getChatsUseCase;
   final Map<String, ChatEntity> _chats = {};
   ChatCategories _selectedChatCategory = ChatCategories.values.first;
@@ -28,7 +31,11 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._getChatsUseCase,
     this._listenToNewMessageUseCase,
     this._stopListenToMessagesUseCase,
-  ) : super(const ChatsState());
+    this._markMeesagesAsDeliveredUseCase,
+  ) : super(const ChatsState()) {
+    serviceLocator<Socket>()
+        .on('getRooms', (data) => CliLogger.warning('get rooms : $data'));
+  }
 
   // Selected Chats
   void addChatToSelectedChats({required ChatEntity chat}) {
@@ -144,9 +151,9 @@ class ChatsCubit extends Cubit<ChatsState> {
   _listenToNewMessages() {
     _listenToNewMessageUseCase((message) {
       _chats[message.chatId]?.lastMessage = message;
-      if (!message.byMe &&
-          message.chatId != null &&
-          message.chatId!.isNotEmpty) {}
+      if (!message.byMe && message.chatId != null) {
+        _markMeesagesAsDeliveredUseCase(MarkMessagesAsDeliveredParams(chatId: message.chatId!));
+      }
       emit(state.copyWith(newMessage: message, status: ChatsStates.newMessage));
       getChatsByCategory(_selectedChatCategory);
     });

@@ -43,8 +43,10 @@ class MessageEntity {
   }
 
   void markAsDelivered() {
-    delivered = true;
-    seen = false;
+    if (!seen) {
+      delivered = true;
+      seen = false;
+    }
   }
 
   @override
