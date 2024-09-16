@@ -30,6 +30,7 @@ class TripJoinCardModel extends TripJoinCardEntity {
   DateTime? createdAt;
   DateTime? updatedAt;
   String? allowStatus;
+  String? paymentMethods;
 
   TripJoinCardModel({
     this.id,
@@ -53,6 +54,7 @@ class TripJoinCardModel extends TripJoinCardEntity {
     this.updatedAt,
     this.status,
     this.allowStatus,
+    this.paymentMethods,
   }) : super(
           id: id,
           userId: userId,
@@ -69,11 +71,12 @@ class TripJoinCardModel extends TripJoinCardEntity {
           destinationAddressEn: toEn,
           isApproved: allowStatus == 'enable',
           publishDate: time,
+          paymentMethod: paymentMethods,
         );
 
   @override
   String toString() {
-    return 'TripJoinCardModel(id: $id, userId: $userId, categoryId: $categoryId, vehicleId: $vehicleId, fromAr: $fromAr, toAr: $toAr, fromEn: $fromEn, toEn: $toEn, distance: $distance, duration: $duration, passengers: $passengers, price: $price, phone: $phone, time: $time, countryCode: $countryCode, isApproved: $isApproved, isRepeat: $isRepeat, createdAt: $createdAt, updatedAt: $updatedAt , status: $status, allowStatus: $allowStatus)';
+    return 'TripJoinCardModel(id: $id, userId: $userId, categoryId: $categoryId, vehicleId: $vehicleId, fromAr: $fromAr, toAr: $toAr, fromEn: $fromEn, toEn: $toEn, distance: $distance, duration: $duration, passengers: $passengers, price: $price, phone: $phone, time: $time, countryCode: $countryCode, isApproved: $isApproved, isRepeat: $isRepeat, createdAt: $createdAt, updatedAt: $updatedAt , status: $status, allowStatus: $allowStatus , paymentMethod: $paymentMethods)';
   }
 
   factory TripJoinCardModel.fromJson(Map<String, dynamic> json) {
@@ -99,6 +102,7 @@ class TripJoinCardModel extends TripJoinCardEntity {
       createdAt: json['createdAt'] == null ? null : DateTime.parse(json['createdAt'] as String),
       updatedAt: json['updatedAt'] == null ? null : DateTime.parse(json['updatedAt'] as String),
       allowStatus: json['allowStatus'] as String?,
+      paymentMethods: json['paymentMethods'] as String?,
     );
   }
 
@@ -124,5 +128,6 @@ class TripJoinCardModel extends TripJoinCardEntity {
         'createdAt': createdAt?.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
         'allowStatus': allowStatus,
+        'paymentMethds': paymentMethods,
       };
 }

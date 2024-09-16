@@ -22,8 +22,7 @@ abstract class ViewAllTripJoinRemoteDataSource {
   });
 }
 
-class ViewAllTripJoinRemoteDataSourceImp
-    implements ViewAllTripJoinRemoteDataSource {
+class ViewAllTripJoinRemoteDataSourceImp implements ViewAllTripJoinRemoteDataSource {
   final ApiConsumer apiConsumer;
 
   ViewAllTripJoinRemoteDataSourceImp({required this.apiConsumer});
@@ -52,10 +51,9 @@ class ViewAllTripJoinRemoteDataSourceImp
           // pr('No data found');
           return const Right([]);
         }
-        List<TripJoinCardEntity> allCards = rawData
-            .map<TripJoinCardEntity>((e) => TripJoinCardModel.fromJson(e))
-            .toList();
-        // pr(allCards[0]);
+        List<TripJoinCardEntity> allCards =
+            rawData.map<TripJoinCardEntity>((e) => TripJoinCardModel.fromJson(e)).toList();
+        // pr(allCards, 'trip join remote datasource');
         return Right(allCards);
       },
     );

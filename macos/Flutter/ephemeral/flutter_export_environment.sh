@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=C:\src\3.22.2\flutter"
-export "FLUTTER_APPLICATION_PATH=D:\Studio Projects\49-mobile-app"
+export "FLUTTER_ROOT=E:\mobileDevolpment\flutterSdk\flutter_windows_3.13.9-stable\flutter"
+export "FLUTTER_APPLICATION_PATH=E:\mobileDevolpment\MyGitHub\49-mobile-app-new\49-mobile-app"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.4"

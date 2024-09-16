@@ -12,6 +12,7 @@ class TripJoinRequestModel extends TripJoinCardEntity {
   String? brand;
   @override
   String? model;
+  String? paymentMethods;
 
   TripJoinRequestModel({
     this.firstName,
@@ -20,6 +21,7 @@ class TripJoinRequestModel extends TripJoinCardEntity {
     this.allowStatus,
     this.brand,
     this.model,
+    this.paymentMethods,
   }) : super(
           id: tripInfo?.id,
           userId: tripInfo?.userId,
@@ -39,11 +41,12 @@ class TripJoinRequestModel extends TripJoinCardEntity {
           publishDate: tripInfo?.time,
           phone: tripInfo?.phone,
           gender: gender,
+          paymentMethod: paymentMethods,
         );
 
   @override
   String toString() {
-    return 'TripJoinRequestModel(firstName: $firstName, gender: $gender, tripInfo: $tripInfo, allowStatus: $allowStatus , brand: $brand ,  model: $model)';
+    return 'TripJoinRequestModel(firstName: $firstName, gender: $gender, tripInfo: $tripInfo, allowStatus: $allowStatus , brand: $brand ,  model: $model , paymentMethods: $paymentMethods)';
   }
 
   factory TripJoinRequestModel.fromJson(Map<String, dynamic> json) {
@@ -52,8 +55,9 @@ class TripJoinRequestModel extends TripJoinCardEntity {
       gender: json['gender'] as String?,
       tripInfo: json['tripInfo'] == null ? null : TripInfo.fromJson(json['tripInfo'] as Map<String, dynamic>),
       allowStatus: json['allowStatus'] as String?,
-      brand: json['vehicleId']['brand'] as String?,
-      model: json['vehicleId']['model'] as String?,
+      brand: json['brand'] as String?,
+      model: json['model'] as String?,
+      paymentMethods: json['paymentMethods'] as String?,
     );
   }
 

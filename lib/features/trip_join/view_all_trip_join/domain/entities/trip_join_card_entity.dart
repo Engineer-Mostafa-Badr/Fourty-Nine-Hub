@@ -18,6 +18,7 @@ class TripJoinCardEntity {
   int? publishDate;
   String? phone;
   String? gender;
+  String? paymentMethod;
 
   TripJoinCardEntity({
     this.id,
@@ -38,6 +39,7 @@ class TripJoinCardEntity {
     this.publishDate,
     this.phone,
     this.gender,
+    this.paymentMethod,
   });
 
   TripJoinCardEntity copyWith({
@@ -59,6 +61,7 @@ class TripJoinCardEntity {
     int? publishDate,
     String? phone,
     String? gender,
+    String? paymentMethod,
   }) {
     return TripJoinCardEntity(
       id: id ?? this.id,
@@ -78,13 +81,13 @@ class TripJoinCardEntity {
       publishDate: publishDate ?? this.publishDate,
       phone: phone ?? this.phone,
       gender: gender ?? this.gender,
-      requestOwnerFirstName:
-          requestOwnerFirstName ?? this.requestOwnerFirstName,
+      requestOwnerFirstName: requestOwnerFirstName ?? this.requestOwnerFirstName,
+      paymentMethod: paymentMethod ?? this.paymentMethod,
     );
   }
 
   @override
   String toString() {
-    return 'TripJoinCardEntity(id: $id, userId: $userId, requestOwnerFirstName: $requestOwnerFirstName ,  categoryId: $categoryId, brand: $brand, model: $model, journeyPrice: $journeyPrice, status: $status, seatNumber: $seatNumber, isRepeated: $isRepeated, startingAddressAr: $startingAddressAr, destinationAddressAr: $destinationAddressAr, startingAddressEn: $startingAddressEn, destinationAddressEn: $destinationAddressEn, isApproved: $isApproved, publishDate: $publishDate, phone: $phone , gender: $gender)';
+    return 'TripJoinCardEntity(id: $id, userId: $userId, requestOwnerFirstName: $requestOwnerFirstName ,  categoryId: $categoryId, brand: $brand, model: $model, journeyPrice: $journeyPrice, status: $status, seatNumber: $seatNumber, isRepeated: $isRepeated, startingAddressAr: $startingAddressAr, destinationAddressAr: $destinationAddressAr, startingAddressEn: $startingAddressEn, destinationAddressEn: $destinationAddressEn, isApproved: $isApproved, publishDate: $publishDate, phone: $phone , gender: $gender , paymentMethod: $paymentMethod)';
   }
 }

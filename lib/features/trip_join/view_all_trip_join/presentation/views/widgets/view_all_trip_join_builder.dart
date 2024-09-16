@@ -116,7 +116,7 @@ class _ViewAllTripJoinCardBuilderState extends State<ViewAllTripJoinCardBuilder>
   Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity, String subCategoryId, String title) async {
     if (tripJoinCardEntity.isApproved == null || tripJoinCardEntity.isApproved == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-        wallets: [WalletTypes.balance],
+        wallets: [tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance],
         subCategoryId: subCategoryId,
         title: title,
       );

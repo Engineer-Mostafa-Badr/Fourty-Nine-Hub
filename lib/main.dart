@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
@@ -21,7 +22,6 @@ import 'core/themes/light_theme.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'routes/pages.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,8 +62,7 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
         ),
         BlocProvider(
-          create: (BuildContext context) =>
-              serviceLocator<MainCategoriesCubit>()..loadData(),
+          create: (BuildContext context) => serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
         // BlocProvider(
         //   create: (context) => serviceLocator<RiderequestCubit>(),
@@ -112,30 +111,29 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: ScreenUtilInit(
-          designSize: const Size(750, 1334),
-          minTextAdapt: true,
-          splitScreenMode: true,
-          builder: (context, child) {
-            return BlocBuilder<ThemeCubit, ThemeStates>(
-              builder: (BuildContext context, state) {
-                return MaterialApp.router(
-                  themeMode: context.read<ThemeCubit>().isDarkTheme
-                      ? ThemeMode.dark
-                      : ThemeMode.light,
-                  theme: lightTheme(),
-                  darkTheme: darkTheme(),
-                  title: '49',
-                  debugShowCheckedModeBanner: false,
-                  routerConfig: AppPages.router,
-                  localizationsDelegates: context.localizationDelegates,
-                  supportedLocales: context.supportedLocales,
-                  locale: context.locale,
-                  // for device preview package
-                  // builder: DevicePreview.appBuilder,
-                );
-              },
-            );
-          }),
+        designSize: const Size(750, 1334),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (context, child) {
+          return BlocBuilder<ThemeCubit, ThemeStates>(
+            builder: (BuildContext context, state) {
+              return MaterialApp.router(
+                themeMode: context.read<ThemeCubit>().isDarkTheme ? ThemeMode.dark : ThemeMode.light,
+                theme: lightTheme(),
+                darkTheme: darkTheme(),
+                title: '49',
+                debugShowCheckedModeBanner: false,
+                routerConfig: AppPages.router,
+                localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
+                locale: context.locale,
+                // for device preview package
+                // builder: DevicePreview.appBuilder,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
