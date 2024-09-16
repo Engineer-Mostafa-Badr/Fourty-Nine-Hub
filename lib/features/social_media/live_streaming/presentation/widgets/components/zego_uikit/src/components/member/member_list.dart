@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
 
-import '../../services/defines/user.dart'  as user;
+import '../../services/defines/user.dart' as user;
 // import 'package:zego_uikit/zego_uikit.dart' show zego_uikit;
 
 import '../../services/defines/user.dart';
@@ -17,7 +17,6 @@ import '../defines.dart';
 import '../internal/icon_defines.dart';
 
 // Project imports:
-
 
 /// Type definition for builder of custom member list item view.
 typedef ZegoMemberListItemBuilder = Widget Function(
@@ -118,7 +117,8 @@ class _ZegoCallMemberListState extends State<ZegoMemberList> {
     );
   }
 
-  Widget listItem(BuildContext context, Size itemSize,  user.ZegoUIKitUser user) {
+  Widget listItem(
+      BuildContext context, Size itemSize, user.ZegoUIKitUser user) {
     final userName = ZegoUIKit().getLocalUser().id == user.id
         ? '${user.name} (You)'
         : user.name;

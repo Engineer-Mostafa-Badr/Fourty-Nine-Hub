@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 
-
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 
 import '../../../../../core/error/failure.dart';
@@ -16,13 +15,15 @@ abstract class DoctorListRemoteDataSource {
 
 class DoctorListRemoteDataSourceImpl implements DoctorListRemoteDataSource {
   final ApiConsumer _apiConsumer;
+
   DoctorListRemoteDataSourceImpl(this._apiConsumer);
 
   @override
   Future<Either<Failure, List<DoctorEntity>>> getDoctorsList(
       {required DoctorSearchParams params}) async {
-    final response =
-        await _apiConsumer.get(EndPoints.doctorSearch, data: params.toJson());
+    final response = await _apiConsumer.get(EndPoints.doctorSearch,
+        data: params.toJson(),
+        queryParameters: {'subCategory': params.subCategory.id});
 
     return response.fold(
         (failure) => Left(failure),

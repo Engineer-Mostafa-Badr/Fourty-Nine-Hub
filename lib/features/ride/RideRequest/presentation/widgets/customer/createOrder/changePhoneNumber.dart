@@ -39,7 +39,7 @@ class RideContactPhoneNumber extends StatelessWidget {
                   hint: 'Phone',
                   type: TextInputType.number,
                   initialValue: state.phone ?? '',
-                  style:  TextStyle(
+                  style: TextStyle(
                       fontSize: 20.sp,
                       color: Colors.grey,
                       fontWeight: FontWeight.bold),

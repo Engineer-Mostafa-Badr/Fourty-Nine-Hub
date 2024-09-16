@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 
 // Project imports:
 
-
 import '../../../../zego_prebuilt_live_streaming/src/components/utils/dialogs.dart';
 import '../../../../zego_prebuilt_live_streaming/src/components/utils/toast.dart';
 import '../../../../zego_uikit/src/services/defines/user.dart';

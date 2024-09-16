@@ -17,13 +17,13 @@ class InstagramRepoImpl implements InstagramRepo {
     return _remoteDataSource.getFeed(params: params);
   }
 
- @override
+  @override
   Future<Either<Failure, List<PostEntity>>> getUserMedia(
       {required InstagramUserMediaParams params}) {
     return _remoteDataSource.getUserMedia(params: params);
   }
 
- @override
+  @override
   Future<Either<Failure, List<PostEntity>>> getGlobalFeed(
       {required TwitterFeedParams params}) {
     return _remoteDataSource.getGlobalFeed(params: params);

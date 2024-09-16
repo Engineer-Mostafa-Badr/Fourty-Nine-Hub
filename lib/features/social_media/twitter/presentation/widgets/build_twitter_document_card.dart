@@ -4,6 +4,8 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
@@ -14,6 +16,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class BuildTwitterDocumentCard extends StatefulWidget {
   const BuildTwitterDocumentCard({super.key});
 
@@ -55,7 +58,7 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
         child: Container(
           height: 120.h,
           width: double.infinity,
-          margin: EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
           alignment: Alignment.center,
           decoration: BoxDecoration(
               color: AppColors.PRIMARY_COLOR_LIGHT,
@@ -70,11 +73,11 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
                   height: 60.h,
                 ),
                 Label(
-                  text: "Documentation",
+                  text: LocaleKeys.documentation.localize,
                   style:
-                      Styles.headerText(fontSize: 20.sp, color: Colors.white),
+                      Styles.headerText(fontSize: 20, color: Colors.white),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 const Icon(

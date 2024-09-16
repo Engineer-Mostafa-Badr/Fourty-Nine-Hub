@@ -45,7 +45,9 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
             },
             child: bottomSheetItem(
               context: context,
-              title: widget.ChatCategoryEntity.locked ? "Unlock chat" : "Lock chat",
+              title: widget.ChatCategoryEntity.locked
+                  ? "Unlock chat"
+                  : "Lock chat",
               icon: Icons.lock,
             ),
           ),
@@ -98,7 +100,7 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
             height: 8.h,
           ),
           if (withUnderLine)
-             Divider(
+            Divider(
               height: 1.h,
             ),
         ],

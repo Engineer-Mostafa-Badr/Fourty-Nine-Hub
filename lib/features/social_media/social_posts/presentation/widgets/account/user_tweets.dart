@@ -4,6 +4,8 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
@@ -20,6 +22,7 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class UserTweets extends StatefulWidget {
   const UserTweets({super.key, required this.userData});
   final UserProfileEntity userData;
@@ -53,11 +56,11 @@ class _UserTweetsState extends State<UserTweets> {
           builderDelegate: PagedChildBuilderDelegate<TwitterPostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.userTweetsPagingController.itemList?.length);
-                return  Padding(
+                return Padding(
                     padding: const EdgeInsets.only(top: 200),
                     child: Center(
                       child: Text(
-                        "No Posts",
+                        LocaleKeys.noTweets.localize,
                         style: TextStyle(
                           fontSize: 18.sp,
                         ),

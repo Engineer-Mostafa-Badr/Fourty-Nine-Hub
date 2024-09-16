@@ -19,7 +19,9 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_delivered_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_seen_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 part 'chat_room_state.dart';
 
@@ -50,8 +52,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     this._stopListenToDeliveredMessagesUseCase,
   ) : super(const ChatRoomState()) {
     _listenToDeliveredMessages();
-
     _listenToSeenMessages();
+    serviceLocator<Socket>().emit('Chat:getRooms');
   }
 
   Future<void> init({required ChatEntity chat}) async {
@@ -137,12 +139,17 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   }
 
   void _listenToDeliveredMessages() async {
-    _listenToDeliveredMessagesUseCase.call((messages) {
-      for (final message in messages) {
-        if (message.chatId == _chat.id) {
-          _messages[message.id]?.markAsDelivered();
-          emit(state.copyWith(messages: _messages.values.toList()));
+    List<MessageEntity> messagesList = [];
+    _listenToDeliveredMessagesUseCase.call((chatId) {
+      if (chatId == _chat.id) {
+        messagesList = _messages.values.toList();
+
+        for (int i = messagesList.length - 1;
+            i >= 0 && !(messagesList[i].seen);
+            i--) {
+          messagesList[i].markAsDelivered();
         }
+        emit(state.copyWith(messages: messagesList));
       }
     });
   }

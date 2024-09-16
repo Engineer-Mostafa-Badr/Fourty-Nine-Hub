@@ -1,16 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
@@ -42,12 +37,11 @@ abstract class MessagesRemoteDataSource {
 
   void stopListenToSeenStatus();
 
-  void listenToDeliveredStatus(Function(List<MessageEntity> messages) params);
+  void listenToDeliveredStatus(Function(String chatId) params);
 
   void stopListenToDeliveredStatus();
 
-  Future<Either<Failure, bool>> markMessageAsDelivered(
-      MarkMessagesAsDeliveredParams params);
+  Future<Either<Failure, bool>> markMessageAsDelivered(MarkMessagesAsDeliveredParams params);
 }
 
 class MessagesRemoteDataSourceImplementation
@@ -108,7 +102,7 @@ class MessagesRemoteDataSourceImplementation
       CliLogger.info('you send message : ${params.toString()}');
       List<String> mediaIds = [];
       for (var file in params.media) {
-       final id = await UploadFile.uploadPickedFile(
+        final id = await UploadFile.uploadPickedFile(
             file: file, subCategoryId: params.chat.categoryId);
         if (id != null) {
           mediaIds.add(id);
@@ -122,6 +116,7 @@ class MessagesRemoteDataSourceImplementation
             "mediaIds": mediaIds,
             "text": params.message,
             "groupId": null,
+            "replyMessageId": params.replyMessageId,
             "oneTimeView": params.oneTimeView,
           }));
       return const Right(true);
@@ -172,14 +167,19 @@ class MessagesRemoteDataSourceImplementation
   }
 
   @override
-  void listenToDeliveredStatus(Function(List<MessageEntity> messages) params) {
+  void listenToDeliveredStatus(Function(String chatId) params) {
     try {
       _socket.connect();
       _socket.on(SocketIOListeners.messageDelivered, (data) {
+        final decodedData = jsonDecode(data);
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
         CliLogger.info("messageDelivered :  $data");
-        params((jsonDecode(data) as List)
-            .map((e) => MessageModel.fromJson(e))
-            .toList());
+        String chatId =data['chatId'];
+        params(chatId);
       });
     } catch (e) {
       CliLogger.info("can't listen to delivered messages error $e");
@@ -212,18 +212,11 @@ class MessagesRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> markMessageAsDelivered(
-      MarkMessagesAsDeliveredParams params) async {
+  Future<Either<Failure, bool>> markMessageAsDelivered(MarkMessagesAsDeliveredParams params) async {
     try {
       _socket.connect();
-      CliLogger.info(
-          "you mark messages as delivered : chatId ${params.chatId}");
-      _socket.emit(
-        SocketIOEvents.markMessageAsDelivered,
-        // jsonEncode({
-        //   "chatId": params.chatId,
-        // }),
-      );
+      CliLogger.info("you mark messages as delivered");
+      _socket.emit(SocketIOEvents.markMessageAsDelivered,jsonEncode({"chatId":params.chatId}));
       return const Right(true);
     } catch (e) {
       CliLogger.info("can't mark message as delivered error $e");

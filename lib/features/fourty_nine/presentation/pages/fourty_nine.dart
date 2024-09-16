@@ -9,8 +9,6 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
@@ -34,8 +32,9 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
+import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../widgets/announce_widget.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
@@ -80,8 +79,6 @@ class _FourtyNineViewState extends State<FourtyNineView> {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.read<UserCubit>().state.data;
-    print('userId111111111${user?.id ?? ''}');
     return BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
       listener: (context, state) {
         if (state is NotificationSocketIoNewNotification) {
@@ -120,9 +117,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           children: [
             //carousel slider
             const AnnounceWidget(),
-            // Sizer(),
+               !context.read<UserCubit>().isLoggedIn?  Sizer():const SizedBox.shrink(),
             //wallet
-            const WalletWidget(),
+              context.read<UserCubit>().isLoggedIn? const WalletWidget():const SizedBox.shrink(),
             //    Sizer(),
             //admob
             //   const GoogleAddsBanner(),
@@ -137,11 +134,10 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             _buildMainCategoriesViews(),
             Sizer(),
             //main cats
-            BlocBuilder<MainCategoriesCubit,
-                BasicState<List<MainCategoryEntity>>>(
+            BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
               builder: (context, state) {
                 final controller = context.read<MainCategoriesCubit>();
-                if (state.isLoading) {
+                if (state.status == StateStatus.loading) {
                   return Shimmer.fromColors(
                     baseColor: Colors.grey[100]!,
                     highlightColor: Colors.white24,
@@ -168,7 +164,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     ),
                   );
                 }
-                if (state.isSuccess && state.data != null) {
+                if (state.status==StateStatus.success && state.data != null) {
                   return ListView.separated(
                     itemCount: state.data?.length ?? 0,
                     physics: const NeverScrollableScrollPhysics(),
@@ -333,7 +329,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       child: InkWell(
         onTap: () => context.go(Routes.MAZADAT),
         child: SizedBox(
-          height: kToolbarHeight * .8.h,
+          height: kToolbarHeight * .9.h,
           child: Stack(
             children: [
               Positioned.fill(
@@ -424,19 +420,19 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
+              padding:  EdgeInsets.symmetric(horizontal: 10.w),
               child: Row(
                 children: [
                   Label(
                     text: service.title(),
                     style: Styles.mediumText(
                       color: AppColors.AUTH_CONTAINER_COLOR,
-                      fontSize: 34.sp,
+                      fontSize: 65.sp,
                     ),
                   ),
                   const Spacer(),
                   Padding(
-                    padding:  EdgeInsets.symmetric(vertical: 2.h),
+                    padding:  EdgeInsets.symmetric(vertical: 5.h),
                     child: Column(
                       children: [
                         InkWell(
@@ -450,7 +446,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         const Spacer(),
                         Label(
                           text: '4 ${LocaleKeys.ads.tr()}',
-                          style: Styles.smallText(
+                          style: Styles.mediumText(
                             color: Colors.white,
                           ),
                         ),

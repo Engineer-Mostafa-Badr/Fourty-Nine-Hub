@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
@@ -12,6 +14,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class UserReels extends StatefulWidget {
   const UserReels({super.key, required this.userData});
   final UserProfileEntity userData;
@@ -48,7 +51,7 @@ class _UserReelsState extends State<UserReels> {
                 print(controller.userReelsPagingController.itemList?.length);
                 return Center(
                   child: Text(
-                    "No Reels",
+                    LocaleKeys.noTweets.localize,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 18.sp,

@@ -1,4 +1,3 @@
-
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
@@ -8,7 +7,6 @@ import 'defines.dart';
 import 'internal/icon_defines.dart';
 
 // Project imports:
-
 
 /// quit room/channel/group
 class ZegoLeaveButton extends StatelessWidget {

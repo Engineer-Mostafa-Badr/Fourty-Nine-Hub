@@ -15,7 +15,6 @@ import '../core/core_managers.dart';
 import 'data.dart';
 import 'overlay_machine.dart';
 
-
 /// The page can be minimized within the app
 ///
 /// To support the minimize functionality in the app:

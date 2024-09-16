@@ -10,7 +10,7 @@ import '../usecases/get_company_add_use_case.dart';
 
 abstract class CompanyAdvertiseRepository{
   Future<Either<Failure,PriceEntity>>getPrice();
-  Future<Either<Failure,List<CompanyAdOptionEntity>>>addCompanyAd(CompanyAddParams params);
+  Future<Either<Failure,CompanyAdOptionEntity>>addCompanyAd(CompanyAddParams params);
   Future<Either<Failure,bool>>deleteCompanyAd(DeleteCompanyAdParams params);
   Future<Either<Failure,List<CompanyAdEntity>>>getPostCompanyAd(FetchPostCompanyAdvertiseParams params);
 }

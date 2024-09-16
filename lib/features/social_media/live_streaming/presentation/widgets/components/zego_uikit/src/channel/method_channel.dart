@@ -10,7 +10,6 @@ import 'platform_interface.dart';
 
 // Project imports:
 
-
 /// @nodoc
 /// An implementation of [ZegoUIKitPluginPlatform] that uses method channels.
 class MethodChannelZegoUIKitPlugin extends ZegoUIKitPluginPlatform {

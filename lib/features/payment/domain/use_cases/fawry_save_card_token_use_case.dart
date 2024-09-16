@@ -4,16 +4,19 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_card_token_response_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/repositories/payment_provider_repository.dart';
 
-class FawrySaveCardTokenUseCase extends UseCase<FawryCardTokenResponseEntity, FawrySaveCardTokenParams> {
+class FawrySaveCardTokenUseCase
+    extends UseCase<FawryCardTokenResponseEntity, FawrySaveCardTokenParams> {
   final PaymentProviderRepository _repo;
 
   FawrySaveCardTokenUseCase(this._repo);
 
   @override
-  Future<Either<Failure, FawryCardTokenResponseEntity>> call(FawrySaveCardTokenParams params) async {
+  Future<Either<Failure, FawryCardTokenResponseEntity>> call(
+      FawrySaveCardTokenParams params) async {
     return await _repo.saveCardToken(params);
   }
 }
+
 class FawrySaveCardTokenParams {
   final String cardNumber;
   final String cardExpiryYear;

@@ -5,7 +5,7 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
 class GetSavedCardsUseCase extends UseCase<List<CardEntity>, NoParams> {
-  final PaymentProviderRepository  _repository;
+  final PaymentProviderRepository _repository;
 
   GetSavedCardsUseCase(this._repository);
 

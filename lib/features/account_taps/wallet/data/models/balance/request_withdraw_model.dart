@@ -5,8 +5,8 @@ class RequestWithdrawModel extends RequestWithdrawEntity {
 
   factory RequestWithdrawModel.fromJson(Map<String, dynamic> json) {
     return RequestWithdrawModel(
-      status: json['status'] ??false,
-      data: json['data'] ??false,
+      status: json['status'] ?? false,
+      data: json['data'] ?? false,
     );
   }
 }

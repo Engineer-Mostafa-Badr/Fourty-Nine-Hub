@@ -1,10 +1,30 @@
-part of 'settings_cubit.dart';
 
-abstract class SettingsState extends Equatable {
-  const SettingsState();
+import 'package:fourtyninehub/features/settings/domain/entities/disable_entity.dart';
 
-  @override
-  List<Object> get props => [];
+import '../../../../../core/error/failure.dart';
+
+
+enum SettingStates { loading, initial, error,success }
+
+class SettingState {
+  final SettingStates status;
+  final Failure? failure;
+  final DisableEntity? able;
+
+  const SettingState({
+    this.status = SettingStates.loading,
+    this.failure,
+    this.able,
+  });
+  SettingState copyWith({
+    SettingStates? status,
+    Failure? failure,
+    DisableEntity? able
+  }) {
+    return SettingState(
+      status: status ?? this.status,
+      failure: failure ?? this.failure,
+      able: able ?? this.able,
+    );
+  }
 }
-
-class SettingsInitial extends SettingsState {}

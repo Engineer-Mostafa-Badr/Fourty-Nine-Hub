@@ -36,7 +36,9 @@ class LocationModel extends LocationEntity {
             ?.map((e) => AddressComponent.fromMap(e as Map<String, dynamic>))
             .toList(),
         formattedAddress: data['formatted_address'] as String?,
-        geometry: data['geometry'] == null ? null : Geometry.fromMap(data['geometry'] as Map<String, dynamic>),
+        geometry: data['geometry'] == null
+            ? null
+            : Geometry.fromMap(data['geometry'] as Map<String, dynamic>),
         partialMatch: data['partial_match'] as bool?,
         placeId: data['place_id'] as String?,
         types: data['types'] as List<dynamic>?,

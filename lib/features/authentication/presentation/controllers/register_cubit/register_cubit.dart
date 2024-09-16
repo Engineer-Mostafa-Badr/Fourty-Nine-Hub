@@ -61,7 +61,8 @@ class RegisterCubit extends Cubit<RegisterState> {
           email: emailTextController.text.trim(),
           password: passwordTextController.text.trim(),
           confirmPassword: confirmPasswordTextController.text.trim(),
-          isMale: isMale, token: token!,
+          isMale: isMale,
+          token: token!,
         ),
       );
       emit(

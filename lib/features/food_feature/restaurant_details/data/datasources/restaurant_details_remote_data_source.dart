@@ -6,7 +6,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
 
-
 abstract class RestaurantRemoteDataSource {
   Future<Either<Failure, List<RestaurantMneuModel>>> getMeals(
       {required String restaurantId});

@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
 
-
 /// Configuration for initializing the Live Audio Room.
 /// This class is used as the [config] parameter for the constructor of [ZegoUIKitPrebuiltLiveAudioRoom].
 class ZegoUIKitPrebuiltLiveAudioRoomConfig {

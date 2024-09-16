@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Project imports:
 // import 'package:zego_uikit/src/services/defines/user.dart' as zego_package;
 import '../services/defines/user.dart' as zego_local;
+
 /// Describes the icon resources for Zego UIKit.
 class ButtonIcon {
   /// The icon widget, which can be any widget.

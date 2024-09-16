@@ -10,7 +10,8 @@ class InstaPayUseCase extends UseCase<InstaPayResponseEntity, InstaPayParams> {
   InstaPayUseCase(this._repo);
 
   @override
-  Future<Either<Failure, InstaPayResponseEntity>> call(InstaPayParams params) async {
+  Future<Either<Failure, InstaPayResponseEntity>> call(
+      InstaPayParams params) async {
     return await _repo.postInstaPay(params);
   }
 }

@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
@@ -52,7 +54,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Label(
-                        text: "Suggested For You",
+                        text: LocaleKeys.suggestedForYou.localize,
                         style: Styles.headerText(),
                       ),
                       Container(
@@ -72,11 +74,12 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                   noItemsFoundIndicatorBuilder: (context) {
                                     print(controller.suggestUserPagingController
                                         .itemList?.length);
-                                    return  Padding(
-                                        padding: const EdgeInsets.only(top: 200),
+                                    return Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 200),
                                         child: Center(
                                           child: Label(
-                                            text: "No friends suggested",
+                                            text: LocaleKeys.noFriendsSuggested.localize,
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 18,
@@ -98,9 +101,11 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                       },
                                       child: Container(
                                         width: 200,
-                                        padding: const EdgeInsets.only(bottom: 10),
+                                        padding:
+                                            const EdgeInsets.only(bottom: 10),
                                         margin:
-                                            const EdgeInsetsDirectional.only(end: 10),
+                                            const EdgeInsetsDirectional.only(
+                                                end: 10),
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(4),
@@ -146,8 +151,9 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8.0),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8.0),
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.center,
@@ -168,7 +174,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                           true
                                                       ? Label(
                                                           text:
-                                                              "Message sent successfully",
+                                                          LocaleKeys.messageSentSuccessfully.localize,
                                                           style:
                                                               Styles.mediumText(
                                                                   color: Colors
@@ -176,8 +182,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
-                                                                  fontSize:
-                                                                      14),
+                                                                  fontSize: 14),
                                                         )
                                                       : Row(
                                                           children: [
@@ -216,7 +221,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                           title:
                                                                               Label(
                                                                             text:
-                                                                                'Enter Greet Message',
+                                                                            LocaleKeys.enterGreetMessage.localize,
                                                                             style:
                                                                                 Styles.headerText(),
                                                                           ),
@@ -232,7 +237,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                             controller:
                                                                                 messageController,
                                                                             decoration: InputDecoration(
-                                                                                hintText: "Greet Message",
+                                                                                hintText: LocaleKeys.greetMessage.localize,
                                                                                 fillColor: Colors.white,
                                                                                 hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
                                                                           ),
@@ -242,7 +247,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                                 Navigator.of(context).pop(); // Close the dialog
                                                                               },
                                                                               child: Label(
-                                                                                text: 'Cancel',
+                                                                                text: LocaleKeys.cancel.localize,
                                                                                 style: Styles.headerText(),
                                                                               ),
                                                                             ),
@@ -251,7 +256,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                                 if (messageController.text.isNotEmpty) {
                                                                                   await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
                                                                                   controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
-                                                                                  showSuccessMessage(context, 'Message send successfully');
+                                                                                  showSuccessMessage(context, LocaleKeys.messageSentSuccessfully.localize);
                                                                                   Navigator.of(context).pop();
                                                                                   setState(() {});
                                                                                 }
@@ -262,7 +267,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                                 decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(15)),
                                                                                 alignment: Alignment.center,
                                                                                 child: Label(
-                                                                                  text: 'Send',
+                                                                                  text: LocaleKeys.send.localize,
                                                                                   style: Styles.headerText(color: Colors.white),
                                                                                 ),
                                                                               ),
@@ -277,7 +282,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                         true
                                                                     ? Label(
                                                                         text:
-                                                                            'Message send successfully',
+                                                                        LocaleKeys.messageSentSuccessfully.localize,
                                                                         style: Styles
                                                                             .headerText(),
                                                                       )
@@ -300,8 +305,8 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                         child:
                                                                             Label(
                                                                           text: item.followSuccessfully == false
-                                                                              ? 'Follow'
-                                                                              : "Send Greet Message",
+                                                                              ? LocaleKeys.follow.localize
+                                                                              : LocaleKeys.sendGreetMessage.localize,
                                                                           style: Styles.mediumText(
                                                                               color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
                                                                               fontSize: 22,

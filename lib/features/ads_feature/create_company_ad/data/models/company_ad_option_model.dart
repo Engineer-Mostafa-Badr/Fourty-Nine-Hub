@@ -14,15 +14,15 @@ class CompanyAdOptionModel extends CompanyAdOptionEntity {
 
   factory CompanyAdOptionModel.fromJson(Map<String, dynamic> json) {
     return CompanyAdOptionModel(
-      userId: json['userId'] ??'',
-      advertisementType: json['advertisement_type'] ??'',
-      post: json['post'] ??'',
-      totalPrice: json['totalPrice'] ??0,
-      isApproved: json['isApproved'] ??false,
-      endAt: json['endAt'] ??'',
-      type: json['type'] ??'',
-      id: json['_id'] ??'',
-      createdAt: json['createdAt'] ??'',
+      userId: json['userId'] ?? '',
+      advertisementType: json['advertisement_type'] ?? '',
+      post: json['post'] ?? '',
+      totalPrice: json['totalPrice'] ?? 0,
+      isApproved: json['isApproved'] ?? false,
+      endAt: json['endAt'] ?? '',
+      type: json['type'] ?? '',
+      id: json['_id'] ?? '',
+      createdAt: json['createdAt'] ?? '',
     );
   }
 }

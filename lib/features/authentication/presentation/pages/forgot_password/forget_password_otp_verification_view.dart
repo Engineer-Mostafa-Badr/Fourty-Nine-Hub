@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -51,72 +49,78 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
               width: double.infinity,
               label: LocaleKeys.verify.localize,
               labelStyle: TextStyle(
-                  fontSize: 35.sp.w, color: AppColors.AUTH_CONTAINER_COLOR),
+                  fontSize: 60.sp.w, color: AppColors.AUTH_CONTAINER_COLOR),
               onPressed: () => cubit.verifyOtp(email),
             ),
           ),
-          body: Column(
-            children: [
-              Label(
-                text: LocaleKeys.emailOtp.localize,
-              ),
-              Label(
-                text: LocaleKeys.verification.localize,
-              ),
-              Label(
-                text: '${LocaleKeys.checkVerification.localize} ($email)',
-              ),
-              Sizer(),
-              PinCodeTextField(
-                appContext: context,
-                pastedTextStyle: TextStyle(
-                  color: Colors.green.shade600,
-                  fontWeight: FontWeight.bold,
+          body: Padding(
+            padding:  EdgeInsets.symmetric(horizontal: 20.w),
+            child: Column(
+              children: [
+                Label(
+                  text: LocaleKeys.emailOtp.localize,
                 ),
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                length: 6,
-                obscureText: false,
-                blinkWhenObscuring: true,
-                animationType: AnimationType.fade,
-                pinTheme: PinTheme(
-                  shape: PinCodeFieldShape.box,
-                  borderRadius: BorderRadius.circular(4),
-                  fieldHeight: 50.h,
-                  fieldWidth: 50.w,
-                  activeFillColor: Colors.white,
-                  selectedFillColor: Colors.white,
-                  inactiveFillColor: Colors.white,
-                  inactiveColor: Theme.of(context).primaryColor,
-                  activeColor: Theme.of(context).primaryColor,
-                  selectedColor: Theme.of(context).primaryColor,
-                  disabledColor: Colors.grey[100],
-                  errorBorderColor: Colors.red,
-                  activeBorderWidth: 1,
-                  selectedBorderWidth: 1,
-                  inactiveBorderWidth: 1,
-                  disabledBorderWidth: 1,
-                  errorBorderWidth: 1,
-                  borderWidth: 1,
+                Sizer(height: 10.h,),
+                Label(
+                  text: LocaleKeys.verification.localize,
                 ),
-                cursorColor: Colors.black,
-                animationDuration: const Duration(milliseconds: 300),
-                enableActiveFill: true,
-                onChanged: (v) => cubit.otp = v,
-                keyboardType: TextInputType.number,
-                boxShadows: const [
-                  BoxShadow(
-                    offset: Offset(0, 1),
-                    color: Colors.black12,
-                    blurRadius: 10,
-                  )
-                ],
-                onCompleted: (v) => cubit.verifyOtp(email),
-                beforeTextPaste: (text) {
-                  return true;
-                },
-              ),
-              Sizer(),
-            ],
+                Sizer(height: 10.h,),
+                Label(
+                  text: '${LocaleKeys.checkVerification.localize} ($email)',
+                ),
+                 Sizer(height: 60.h,),
+                PinCodeTextField(
+                  appContext: context,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  pastedTextStyle: TextStyle(
+                    color: Colors.green.shade600,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  length: 6,
+                  obscureText: false,
+                  blinkWhenObscuring: true,
+                  animationType: AnimationType.fade,
+                  pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.box,
+                    borderRadius: BorderRadius.circular(4),
+                    fieldHeight: 50.h,
+                    fieldWidth: 50.w,
+                    activeFillColor: Colors.white,
+                    selectedFillColor: Colors.white,
+                    inactiveFillColor: Colors.white,
+                    inactiveColor: Theme.of(context).primaryColor,
+                    activeColor: Theme.of(context).primaryColor,
+                    selectedColor: Theme.of(context).primaryColor,
+                    disabledColor: Colors.grey[100],
+                    errorBorderColor: Colors.red,
+                    activeBorderWidth: 1,
+                    selectedBorderWidth: 1,
+                    inactiveBorderWidth: 1,
+                    disabledBorderWidth: 1,
+                    errorBorderWidth: 1,
+                    borderWidth: 1,
+                  ),
+                  cursorColor: Colors.black,
+                  animationDuration: const Duration(milliseconds: 300),
+                  enableActiveFill: true,
+                  onChanged: (v) => cubit.otp = v,
+                  keyboardType: TextInputType.number,
+                  boxShadows: const [
+                    BoxShadow(
+                      offset: Offset(0, 1),
+                      color: Colors.black12,
+                      blurRadius: 10,
+                    )
+                  ],
+                  onCompleted: (v) => cubit.verifyOtp(email),
+                  beforeTextPaste: (text) {
+                    return true;
+                  },
+                ),
+                Sizer(),
+              ],
+            ),
           ),
         );
       },

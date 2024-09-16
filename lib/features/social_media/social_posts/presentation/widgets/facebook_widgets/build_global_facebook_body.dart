@@ -5,6 +5,8 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
@@ -15,11 +17,11 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/cu
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/post_details_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_global_post_card.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_comments.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/pages/facebook_stories.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class FacebookGlobalBody extends StatelessWidget {
   const FacebookGlobalBody({super.key, required this.scrollController});
   final ScrollController scrollController;
@@ -55,11 +57,11 @@ class FacebookGlobalBody extends StatelessWidget {
                         noItemsFoundIndicatorBuilder: (context) {
                           print(controller
                               .globalFeedPagingController.itemList?.length);
-                          return  Padding(
+                          return Padding(
                               padding: EdgeInsets.only(top: 200),
                               child: Center(
                                 child: Text(
-                                  "No Media",
+                                  LocaleKeys.noPosts.localize,
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 18.sp,

@@ -47,7 +47,8 @@ class EditProfileState {
       selectedPhonePrivacy: selectedPhonePrivacy ?? this.selectedPhonePrivacy,
       selectedJobPrivacy: selectedJobPrivacy ?? this.selectedJobPrivacy,
       selectedStatus: selectedStatus ?? this.selectedStatus,
-      selectedStatusPrivacy: selectedStatusPrivacy ?? this.selectedStatusPrivacy,
+      selectedStatusPrivacy:
+          selectedStatusPrivacy ?? this.selectedStatusPrivacy,
       selectedCountryPrivacy:
           selectedCountryPrivacy ?? this.selectedCountryPrivacy,
     );

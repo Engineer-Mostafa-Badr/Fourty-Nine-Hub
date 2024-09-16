@@ -9,7 +9,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MainCategoriesGridView extends StatefulWidget {
-   MainCategoriesGridView({super.key});
+  MainCategoriesGridView({super.key});
 
   @override
   State<MainCategoriesGridView> createState() => _MainCategoriesGridViewState();
@@ -21,13 +21,13 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
   Widget build(BuildContext context) {
     final controller = context.read<MainCategoriesTapsCubit>();
     return Scaffold(
-      appBar:  const BackAppBar(),
+      appBar: const BackAppBar(),
       body: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
         child: Column(
           children: [
             //  WalletWidget(),
-             SizedBox(height: 10.h),
+            SizedBox(height: 10.h),
             // SizedBox(
             //   height: 30.h,
             //   child:
@@ -86,7 +86,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                       controller.selectMainCategory(i);
                     },
                     padding: EdgeInsets.zero,
-                    labelPadding:  const EdgeInsetsDirectional.only(end: 10),
+                    labelPadding: const EdgeInsetsDirectional.only(end: 10),
                     indicatorColor: Colors.transparent,
                     dividerColor: Colors.transparent,
                     tabAlignment: TabAlignment.start,
@@ -99,7 +99,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                         // constraints:  BoxConstraints(
                         //   minWidth: 120,
                         // ),
-                        padding:  const EdgeInsets.symmetric(horizontal: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: index == state.selectedIndex
@@ -124,7 +124,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                     })),
               );
             }),
-             Sizer(),
+            Sizer(),
             BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
               builder: (context, state) {
                 if (state.subCategories != null &&
@@ -135,7 +135,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                       itemCount: state.subCategories?.length ?? 0,
                       controller: controller.scrollController,
                       gridDelegate:
-                           const SliverGridDelegateWithFixedCrossAxisCount(
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2, childAspectRatio: 1),
                       itemBuilder: (context, index) {
                         final subCategory = state.subCategories![index];
@@ -152,7 +152,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                     ),
                   );
                 } else {
-                  return  const SizedBox.shrink();
+                  return const SizedBox.shrink();
                 }
               },
             ),

@@ -42,11 +42,10 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
     });
   }
 
- @override
+  @override
   Future<Either<Failure, List<PostEntity>>> getUserMedia(
       {required InstagramUserMediaParams params}) async {
-    final response =
-        await _apiConsumer.get(EndPoints.getUserMedia(params));
+    final response = await _apiConsumer.get(EndPoints.getUserMedia(params));
 
     return response.fold((l) {
       return Left(l);
@@ -57,7 +56,6 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
       return Right(list);
     });
   }
-
 
   @override
   Future<Either<Failure, List<PostEntity>>> getGlobalFeed(

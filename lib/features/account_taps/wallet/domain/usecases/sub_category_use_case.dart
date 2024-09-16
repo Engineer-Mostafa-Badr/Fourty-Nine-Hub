@@ -5,14 +5,15 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/walle
 import '../repositories/wallet_repo.dart';
 import 'main_category_use_case.dart';
 
-class SubCategoryUseCase extends UseCase<List<MainCategoryWalletEntity>,MainCategoryParams>{
+class SubCategoryUseCase
+    extends UseCase<List<MainCategoryWalletEntity>, MainCategoryParams> {
   final WalletRepo _walletRepo;
 
   SubCategoryUseCase(this._walletRepo);
 
   @override
-  Future<Either<Failure, List<MainCategoryWalletEntity>>> call(MainCategoryParams params)async {
+  Future<Either<Failure, List<MainCategoryWalletEntity>>> call(
+      MainCategoryParams params) async {
     return await _walletRepo.fetchSubCategory(params);
   }
-
 }

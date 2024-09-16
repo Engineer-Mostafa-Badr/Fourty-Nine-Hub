@@ -43,12 +43,11 @@ class HealthRepoImpl implements HealthRepo {
   @override
   Future<Either<Failure, bool>> isDoctorApproval() {
     return _remoteDataSource.isDoctorApproval();
-
   }
 
   @override
-  Future<Either<Failure, List<FavoriteCategoryBannersEntity>>> getCategoryFavorite() {
+  Future<Either<Failure, List<FavoriteCategoryBannersEntity>>>
+      getCategoryFavorite() {
     return _remoteDataSource.getFavoriteCategory();
-
   }
 }

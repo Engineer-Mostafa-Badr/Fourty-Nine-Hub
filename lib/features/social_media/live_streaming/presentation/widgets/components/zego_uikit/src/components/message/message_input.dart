@@ -1,6 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
@@ -78,29 +79,33 @@ class _ZegoInRoomMessageInputState extends State<ZegoInRoomMessageInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15.zR, vertical: 15.zR),
-      color: widget.backgroundColor ?? const Color(0xff222222).withOpacity(0.8),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: 90.zR,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(width: 10.zR),
-            messageInput(),
-            SizedBox(width: 10.zR),
-            sendButton(),
-            SizedBox(width: 10.zR),
-          ],
+    return Directionality(
+      textDirection: !context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 15.zR, vertical: 15.zR),
+        color:
+            widget.backgroundColor ?? const Color(0xff222222).withOpacity(0.8),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: 90.zR,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(width: 10.zR),
+              messageInput(),
+              SizedBox(width: 10.zR),
+              sendButton(),
+              SizedBox(width: 10.zR),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget messageInput() {
-    final messageSendBgColor = widget.buttonColor ?? const Color(0xff3e3e3d);
+    final messageSendBgColor = widget.buttonColor ?? Colors.white;
     final messageSendCursorColor =
         widget.cursorColor ?? AppColors.SECONDARY_COLOR;
     final messageSendHintStyle = TextStyle(
@@ -109,8 +114,10 @@ class _ZegoInRoomMessageInputState extends State<ZegoInRoomMessageInput> {
       fontWeight: FontWeight.w400,
     );
     final messageSendInputStyle = TextStyle(
-      color: widget.textColor ?? Colors.white,
+      color: widget.textColor ?? Colors.black,
       fontSize: 28.zR,
+      decoration: TextDecoration.none,
+      decorationThickness: 0,
       fontWeight: FontWeight.w400,
     );
 
@@ -126,6 +133,7 @@ class _ZegoInRoomMessageInputState extends State<ZegoInRoomMessageInput> {
           keyboardType: TextInputType.multiline,
           minLines: 1,
           maxLines: null,
+          textAlign: TextAlign.center,
           autofocus: widget.autofocus,
           focusNode: focusNode,
           inputFormatters: <TextInputFormatter>[
@@ -147,6 +155,8 @@ class _ZegoInRoomMessageInputState extends State<ZegoInRoomMessageInput> {
           cursorWidth: 3.zR,
           style: messageSendInputStyle,
           decoration: InputDecoration(
+            filled: false,
+            fillColor: Colors.purple,
             hintText: widget.placeHolder,
             hintStyle: messageSendHintStyle,
             contentPadding: EdgeInsets.only(
@@ -168,6 +178,7 @@ class _ZegoInRoomMessageInputState extends State<ZegoInRoomMessageInput> {
       valueListenable: isEmptyNotifier,
       builder: (context, bool isEmpty, Widget? child) {
         return ZegoTextIconButton(
+          unclickableBackgroundColor: Colors.white,
           onPressed: () {
             if (!isEmpty) send();
           },

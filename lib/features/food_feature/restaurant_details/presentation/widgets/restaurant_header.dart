@@ -16,7 +16,7 @@ class RestaurantHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: kToolbarHeight * 5.5,
+      // height: kToolbarHeight,
       width: double.infinity,
       child: Stack(
         children: [

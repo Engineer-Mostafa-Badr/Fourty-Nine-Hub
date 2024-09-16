@@ -24,6 +24,5 @@ class WalletHistoryEntity {
       required this.isPaid,
       required this.status,
       required this.createdAt,
-        required this.received
-      });
+      required this.received});
 }

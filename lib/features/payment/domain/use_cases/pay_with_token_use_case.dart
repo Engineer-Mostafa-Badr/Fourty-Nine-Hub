@@ -9,16 +9,17 @@ class PayWithTokenseCase
   final PaymentProviderRepository _repo;
   PayWithTokenseCase(this._repo);
   @override
-
-  Future<Either<Failure, PayWithTokenResponseEntity>> call(PayWithTokenParams params) async {
+  Future<Either<Failure, PayWithTokenResponseEntity>> call(
+      PayWithTokenParams params) async {
     return await _repo.payWithToken(params);
   }
 }
 
-class PayWithTokenParams{
+class PayWithTokenParams {
   final String cardId;
   final String amountId;
   final String cvv;
 
-  PayWithTokenParams({required this.cardId, required this.amountId, required this.cvv});
+  PayWithTokenParams(
+      {required this.cardId, required this.amountId, required this.cvv});
 }

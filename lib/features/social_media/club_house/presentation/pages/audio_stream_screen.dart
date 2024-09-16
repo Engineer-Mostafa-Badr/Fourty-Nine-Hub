@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/zego_audio_room_widget.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/services/uikit_service.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../../../core/localization/locale_keys.g.dart';
 
 class AudioStreamScreen extends StatelessWidget {
   final String liveId;
@@ -72,7 +75,9 @@ class AudioStreamScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.redAccent),
                         child: Text(
-                          isHost ? 'End' : 'Leave',
+                          isHost
+                              ? LocaleKeys.cancel.localize
+                              : LocaleKeys.leave.localize,
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
@@ -93,9 +98,9 @@ class AudioStreamScreen extends StatelessWidget {
                       Expanded(
                         child: Text(
                           roomSubject,
-                          style:  TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20.sp,
+                            fontSize: 32.sp,
                           ),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,

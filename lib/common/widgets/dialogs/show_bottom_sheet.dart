@@ -20,7 +20,7 @@ void bottomSheet(
               topLeft: Radius.circular(20.r),
               topRight: Radius.circular(20.r),
             ),
-            color: backColor ?? Theme.of(context).dialogBackgroundColor,
+            color: backColor ?? Theme.of(context).scaffoldBackgroundColor,
           ),
           child: widget,
         );

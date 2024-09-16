@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 
 abstract class ChatRoomRepository {
-
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params);
 
   Future<Either<Failure, List<MessageEntity>>> getMessages(
@@ -22,14 +21,13 @@ abstract class ChatRoomRepository {
   Future<Either<Failure, bool>> markMessageAsSeen(
       MarkMessageAsSeenParams params);
 
-  Future<Either<Failure, bool>> markMessageAsDelivered(
-      MarkMessagesAsDeliveredParams params);
+  Future<Either<Failure, bool>> markMessageAsDelivered(MarkMessagesAsDeliveredParams params);
 
   void listenToSeenStatus(Function(List<MessageEntity> messages) params);
 
   void stopListenToSeenStatus();
 
-  void listenToDeliveredStatus(Function(List<MessageEntity> messages) params);
+  void listenToDeliveredStatus(Function(String chatId) params);
 
   void stopListenToDeliveredStatus();
 }

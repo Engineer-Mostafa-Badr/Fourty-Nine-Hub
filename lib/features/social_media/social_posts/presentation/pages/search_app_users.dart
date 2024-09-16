@@ -86,7 +86,7 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
       builderDelegate: PagedChildBuilderDelegate<UserFriendEntity>(
           noItemsFoundIndicatorBuilder: (context) {
             print(controller.itemList?.length);
-            return  Padding(
+            return Padding(
                 padding: const EdgeInsets.only(top: 200),
                 child: Center(
                   child: Text(

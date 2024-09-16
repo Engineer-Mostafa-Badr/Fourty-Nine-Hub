@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/pages/meeting_view.dart';
 
@@ -21,6 +22,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/minimizing/mini_button.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import '../../../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../../../res/assets/assets.dart';
 import '../../../../../../../../../res/style/app_colors.dart';
 
@@ -154,15 +156,15 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.grey[800],
                               ),
-                              child: const Text(
-                                'Cancel',
-                                style: TextStyle(color: Colors.white),
+                              child: Text(
+                                LocaleKeys.cancel.localize,
+                                style: const TextStyle(color: Colors.white),
                               ),
                             ),
                           ),
                         ],
                       ),
-                       Sizer(
+                      const Sizer(
                         height: 15,
                       ),
                       if (widget.config.role == ZegoLiveStreamingRole.host)
@@ -187,10 +189,10 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                               borderRadius: BorderRadius.circular(15.0),
                               color: Colors.redAccent,
                             ),
-                            child: const Center(
+                            child: Center(
                               child: Text(
-                                'End meeting for all',
-                                style: TextStyle(
+                                LocaleKeys.EndMeetingForAll.localize,
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold),
@@ -199,7 +201,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                             ),
                           ),
                         ),
-                       Sizer(
+                      const Sizer(
                         height: 15,
                       ),
                       InkWell(
@@ -215,10 +217,10 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                             borderRadius: BorderRadius.circular(15.0),
                             color: AppColors.BARRIER_COLOR,
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Text(
-                              'Leave meeting',
-                              style: TextStyle(
+                              LocaleKeys.leaveMeeting.localize,
+                              style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold),
@@ -255,8 +257,8 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
               icon: Center(
                 child: Text(
                   widget.config.role == ZegoLiveStreamingRole.host
-                      ? 'End'
-                      : 'Leave',
+                      ? LocaleKeys.end.localize
+                      : LocaleKeys.leave.localize,
                   style: const TextStyle(color: Colors.white),
                 ),
               ),
@@ -336,62 +338,61 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
     });
   }
 }
-  // Positioned(
-  //                   top: 100,
-  //                   right: 50,
-  //                   left: 50,
-  //                   child: Column(
-  //                     crossAxisAlignment: CrossAxisAlignment.stretch,
-  //                     children: [
-  //                       Container(
-  //                         width: double.infinity,
-  //                         height: 100,
-  //                         decoration: BoxDecoration(
-  //                           color: Colors.grey.withOpacity(0.7),
-  //                           borderRadius: BorderRadius.all(
-  //                             Radius.circular(10.0.zR),
-  //                           ),
-  //                         ),
-  //                         child: Row(
-  //                           children: [
-  //                             ImageFromInternet(
-  //                               image:
-  //                                   UserCubit.to.state.data!.profilePicture ??
-  //                                       '',
-  //                               isCircle: false,
-  //                             ),
-  //                             Expanded(
-  //                               child: Container(),
-  //                             )
-  //                           ],
-  //                         ),
-  //                       ),
-  //                       const Sizer(),
-  //                       Container(
-  //                         width: double.infinity,
-  //                         height: 100,
-  //                         decoration: BoxDecoration(
-  //                           color: Colors.grey.withOpacity(0.7),
-  //                           borderRadius: BorderRadius.all(
-  //                             Radius.circular(10.0.zR),
-  //                           ),
-  //                         ),
-  //                         child: const Row(
-  //                           children: [
-  //                             Expanded(
-  //                               child: Text(
-  //                                 'Ali Mazen',
-  //                               ),
-  //                             ),
-  //                             Expanded(
-  //                               child: Text(
-  //                                 'Helwan University',
-  //                               ),
-  //                             )
-  //                           ],
-  //                         ),
-  //                       )
-  //                     ],
-  //                   ),
-  //                 ),
-                
+// Positioned(
+//                   top: 100,
+//                   right: 50,
+//                   left: 50,
+//                   child: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.stretch,
+//                     children: [
+//                       Container(
+//                         width: double.infinity,
+//                         height: 100,
+//                         decoration: BoxDecoration(
+//                           color: Colors.grey.withOpacity(0.7),
+//                           borderRadius: BorderRadius.all(
+//                             Radius.circular(10.0.zR),
+//                           ),
+//                         ),
+//                         child: Row(
+//                           children: [
+//                             ImageFromInternet(
+//                               image:
+//                                   UserCubit.to.state.data!.profilePicture ??
+//                                       '',
+//                               isCircle: false,
+//                             ),
+//                             Expanded(
+//                               child: Container(),
+//                             )
+//                           ],
+//                         ),
+//                       ),
+//                       const Sizer(),
+//                       Container(
+//                         width: double.infinity,
+//                         height: 100,
+//                         decoration: BoxDecoration(
+//                           color: Colors.grey.withOpacity(0.7),
+//                           borderRadius: BorderRadius.all(
+//                             Radius.circular(10.0.zR),
+//                           ),
+//                         ),
+//                         child: const Row(
+//                           children: [
+//                             Expanded(
+//                               child: Text(
+//                                 'Ali Mazen',
+//                               ),
+//                             ),
+//                             Expanded(
+//                               child: Text(
+//                                 'Helwan University',
+//                               ),
+//                             )
+//                           ],
+//                         ),
+//                       )
+//                     ],
+//                   ),
+//                 ),

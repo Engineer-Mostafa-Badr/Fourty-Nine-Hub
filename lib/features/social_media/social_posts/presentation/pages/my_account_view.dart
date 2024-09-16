@@ -8,6 +8,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class MyAccountView extends StatelessWidget {
   const MyAccountView({super.key});
 

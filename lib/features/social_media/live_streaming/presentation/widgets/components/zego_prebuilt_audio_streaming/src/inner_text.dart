@@ -1,5 +1,8 @@
 // Project imports:
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
+
+import '../../../../../../../../core/localization/locale_keys.g.dart';
 
 /// Control the text on the UI.
 /// Modify the values of the corresponding properties to modify the text on the UI.
@@ -326,9 +329,10 @@ class ZegoUIKitPrebuiltLiveAudioRoomInnerText {
               confirmButtonName: 'Agree',
             ),
         audioEffectTitle = audioEffectTitle ?? 'Audio effects',
-        audioEffectReverbTitle = audioEffectReverbTitle ?? 'Reverb',
+        audioEffectReverbTitle =
+            audioEffectReverbTitle ?? LocaleKeys.reverb.localize,
         audioEffectVoiceChangingTitle =
-            audioEffectVoiceChangingTitle ?? 'Voice changing',
+            audioEffectVoiceChangingTitle ?? LocaleKeys.voiceChanging.localize,
         voiceChangerNoneTitle = voiceChangerNoneTitle ?? 'None',
         voiceChangerLittleBoyTitle = voiceChangerLittleBoyTitle ?? 'Little boy',
         voiceChangerLittleGirlTitle =

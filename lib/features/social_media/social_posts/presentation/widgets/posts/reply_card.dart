@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
@@ -15,6 +16,7 @@ import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class ReplyCard extends StatefulWidget {
   final Color textColor;
   final CommentEntity reply;
@@ -104,11 +106,11 @@ class _ReplyCardState extends State<ReplyCard> {
                   onChanged: (v) {
                     setState(() {});
                   },
-                  style: Styles.headerText(fontSize: 26.sp),
+                  style: Styles.headerText(fontSize: 26),
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     contentPadding: EdgeInsets.all(5),
-                    hintText: 'Type your reply ....',
+                    hintText: '${LocaleKeys.typeYourReply.localize} ....',
                     hintStyle: Styles.mediumText(),
                   ),
                 )),
@@ -159,8 +161,8 @@ class _ReplyCardState extends State<ReplyCard> {
             listTile(
                 icon: Icons.report,
                 iconColor: Colors.red,
-                title: 'Report post',
-                subTitle: 'Your well reports this post.',
+                title: LocaleKeys.reportReply.localize,
+                subTitle: LocaleKeys.youWillReportReply.localize,
                 onTap: () async {
                   Future.delayed(const Duration(milliseconds: 200), () {
                     bottomSheet(
@@ -174,17 +176,17 @@ class _ReplyCardState extends State<ReplyCard> {
           if (isMyComment)
             listTile(
                 icon: Icons.delete,
-                title: 'Delete Post',
+                title: LocaleKeys.deleteReply.localize,
                 subTitle:
-                    'Your comment will be deleted, and you cannot get it again',
+                LocaleKeys.youWillDeleteReply.localize,
                 onTap: () {
                   widget.onDeleteReply(widget.reply.id);
                 }),
           if (isMyComment)
             listTile(
                 icon: Icons.visibility_off,
-                title: 'Edit Comment',
-                subTitle: 'Your Will Edit Your Comment.',
+                title: LocaleKeys.editReply.localize,
+                subTitle: LocaleKeys.youWillEditReply.localize,
                 onTap: () {
                   widget.reply.edit = !widget.reply.edit!;
                   editTextController.text = widget.reply.content;

@@ -17,10 +17,12 @@ class DestinationLocationCubit extends Cubit<DestinationLocationState> {
 
   Future<void> getDestinationLocation({required String address}) async {
     emit(DestinationLocationLoading());
-    final response = await fetchLocationCordinatesUseCase.call(address: address);
+    final response =
+        await fetchLocationCordinatesUseCase.call(address: address);
     response.fold(
       (Failure failure) => emit(
-        DestinationLocationFailed(errorMessage: _getErrorMessageFromFailure(failure)),
+        DestinationLocationFailed(
+            errorMessage: _getErrorMessageFromFailure(failure)),
       ),
       (LocationEntity location) {
         destinationLocation = location;

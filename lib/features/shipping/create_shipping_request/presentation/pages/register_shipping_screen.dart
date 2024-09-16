@@ -33,7 +33,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RegisterShippingScreen extends StatefulWidget {
-   RegisterShippingScreen({super.key});
+  RegisterShippingScreen({super.key});
 
   @override
   State<RegisterShippingScreen> createState() => _RegisterShippingScreenState();
@@ -61,14 +61,14 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
     return SharedScaffold(
       mainCategoryId: 1,
       body: Padding(
-        padding:  const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Form(
           key: formKey,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                 SizedBox(
+                SizedBox(
                   height: 30.h,
                 ),
                 //  Gap(30),
@@ -79,7 +79,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     color: AppColors.PRIMARY_COLOR_DARK,
                   ),
                 ),
-                 SizedBox(
+                SizedBox(
                   height: 40.h,
                 ),
                 //  Gap(40),
@@ -93,7 +93,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // Gap(8),
-                             SizedBox(
+                            SizedBox(
                               height: 8.h,
                             ),
                             FormField(
@@ -161,7 +161,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           }
                                         }),
                                     // Gap(8),
-                                     SizedBox(
+                                    SizedBox(
                                       height: 8.h,
                                     ),
                                     if (field.hasError)
@@ -183,7 +183,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   ),
                 ),
                 // Gap(35),
-                 SizedBox(
+                SizedBox(
                   height: 35.h,
                 ),
                 Row(
@@ -207,7 +207,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   ],
                 ),
                 //  Gap(30),
-                 SizedBox(
+                SizedBox(
                   height: 30.h,
                 ),
                 // CreateDoctorProfilePhotoPicker(),
@@ -224,7 +224,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                 ),
                 //  CreateDoctorPhoneField(),
                 //  Gap(30),
-                 SizedBox(
+                SizedBox(
                   height: 30.h,
                 ),
                 Text(
@@ -235,7 +235,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   ),
                 ),
                 //  Gap(20),
-                 SizedBox(
+                SizedBox(
                   height: 20.h,
                 ),
                 Column(
@@ -274,7 +274,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       ],
                     ),
                     // Gap(20),
-                     SizedBox(
+                    SizedBox(
                       height: 20.h,
                     ),
                     Row(
@@ -314,7 +314,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   ],
                 ),
                 //  Gap(30),
-                 SizedBox(height: 30.h),
+                SizedBox(height: 30.h),
                 // Container(
                 //   width: double.infinity,
                 //   padding:  EdgeInsets.all(20),
@@ -420,7 +420,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   ],
                 ),
                 //  Gap(20),
-                 SizedBox(
+                SizedBox(
                   height: 20.h,
                 ),
                 CreateDoctorIDExpiryDatePicker(
@@ -434,7 +434,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   },
                 ),
                 //  Gap(40),
-                 SizedBox(
+                SizedBox(
                   height: 40.h,
                 ),
                 // Container(
@@ -544,7 +544,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   ],
                 ),
                 //  Gap(20),
-                 SizedBox(
+                SizedBox(
                   height: 20.h,
                 ),
                 CreateDoctorIDExpiryDatePicker(
@@ -559,7 +559,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   },
                 ),
                 //  Gap(40),
-                 SizedBox(
+                SizedBox(
                   height: 40.h,
                 ),
                 // Container(
@@ -662,7 +662,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     ),
                   ],
                 ),
-                 SizedBox(
+                SizedBox(
                   height: 20.h,
                 ),
                 CreateDoctorIDExpiryDatePicker(
@@ -677,7 +677,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   },
                 ),
                 //  Gap(40),
-                 SizedBox(
+                SizedBox(
                   height: 40.h,
                 ),
                 DefaultTextFormField(
@@ -692,13 +692,13 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     currentController: TextEditingController(),
                     hint: Labels.model),
                 //  Gap(30),
-                 SizedBox(
+                SizedBox(
                   height: 30.h,
                 ),
                 // DefaultTextFormField(currentFocusNode: FocusNode(), currentController: TextEditingController(), hint: Labels.phone),
 
                 //  Gap(50),
-                 SizedBox(
+                SizedBox(
                   height: 50.h,
                 ),
                 Center(
@@ -722,7 +722,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                 ),
 
                 Sizer(height: 20.h),
-                 const CreateDoctorCitiesDropdowns(),
+                const CreateDoctorCitiesDropdowns(),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -734,10 +734,10 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       height: 25.h,
                     )),
                     //  Gap(10),
-                     const SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
-                     Flexible(
+                    Flexible(
                         flex: 3,
                         child: Text(Labels.theApplicationDoesNot,
                             textAlign: TextAlign.start,
@@ -746,7 +746,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   ],
                 ),
                 //  Gap(30),
-                 SizedBox(
+                SizedBox(
                   height: 30.h,
                 ),
                 Row(
@@ -759,11 +759,11 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       width: 25,
                       height: 25.h,
                     )),
-                     const SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     //  Gap(10),
-                     Flexible(
+                    Flexible(
                         flex: 3,
                         child: Text(
                           Labels.youWillGetPounds,
@@ -773,7 +773,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                         )),
                   ],
                 ),
-                 SizedBox(
+                SizedBox(
                   height: 30.h,
                 ),
                 //  Gap(30),
@@ -804,7 +804,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   // ),
                 ),
                 //  Gap(100)
-                 SizedBox(
+                SizedBox(
                   height: 100.h,
                 ),
               ],
@@ -817,7 +817,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
 }
 
 class PickImageShippingCard extends StatefulWidget {
-   PickImageShippingCard(
+  PickImageShippingCard(
       {super.key,
       required this.text,
       this.borderRadius,
@@ -864,17 +864,17 @@ class _PickImageShippingCardState extends State<PickImageShippingCard> {
                     fit: BoxFit.cover)
                 : null),
         child: image != null
-            ?  const SizedBox()
+            ? const SizedBox()
             : Center(
                 child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                   const Icon(
+                  const Icon(
                     Icons.camera_alt,
                     color: Colors.grey,
                     size: 30,
                   ),
-                   SizedBox(height: 10.h),
+                  SizedBox(height: 10.h),
                   Text(
                     widget.text,
                     style: Styles.headerText(),

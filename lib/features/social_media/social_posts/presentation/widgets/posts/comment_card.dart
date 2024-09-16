@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
@@ -12,13 +14,14 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/comment_entity.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class CommentCard extends StatefulWidget {
   final Color textColor;
   final String from;
@@ -57,23 +60,18 @@ class _CommentCardState extends State<CommentCard> {
             UserProfileImage(
               accountId: 0,
               withBorder: false,
-              imageURL: widget.comment.user.image.isNotEmpty
-                  ? widget.comment.user.image
-                  : null,
+              imageURL: widget.comment.user.image.isNotEmpty ? widget.comment.user.image : null,
               userId: widget.comment.user.id,
             ),
-            Sizer(),
+            const Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
                     text: widget.comment.user.firstName,
-                    style: Styles.mediumText(
-                        fontWeight: FontWeight.bold, color: widget.textColor)),
-                Label(
-                    text: widget.comment.sinceTime,
-                    style: Styles.mediumText(color: widget.textColor)),
+                    style: Styles.mediumText(fontWeight: FontWeight.bold, color: widget.textColor)),
+                Label(text: widget.comment.sinceTime, style: Styles.mediumText(color: widget.textColor)),
               ],
             )),
             if (widget.comment.user.id != user?.id)
@@ -90,7 +88,7 @@ class _CommentCardState extends State<CommentCard> {
                     Icons.more_vert,
                     color: widget.textColor,
                   )),
-            Sizer(),
+            const Sizer(),
             GestureDetector(
               onTap: () {
                 bottomSheet(
@@ -109,7 +107,7 @@ class _CommentCardState extends State<CommentCard> {
             ),
           ],
         ),
-        Sizer(),
+        const Sizer(),
         Text(
           widget.comment.content,
           style: Styles.mediumText(color: widget.textColor),
@@ -126,15 +124,15 @@ class _CommentCardState extends State<CommentCard> {
                   onChanged: (v) {
                     setState(() {});
                   },
-                  style: Styles.headerText(fontSize: 26.sp),
+                  style: Styles.headerText(fontSize: 26),
                   decoration: InputDecoration(
                     fillColor: Colors.white,
-                    contentPadding: EdgeInsets.all(5),
-                    hintText: 'Type your comment ....',
+                    contentPadding: const EdgeInsets.all(5),
+                    hintText: '${LocaleKeys.typeYourComment.localize} ....',
                     hintStyle: Styles.mediumText(),
                   ),
                 )),
-                Sizer(),
+                const Sizer(),
                 if (editTextController.text.isNotEmpty)
                   IconAppButton(
                       icon: Icons.send,
@@ -142,9 +140,7 @@ class _CommentCardState extends State<CommentCard> {
                       size: 20,
                       onPressed: () async {
                         var result = await widget.onEditComment(
-                            PostCommentParams(
-                                postId: widget.comment.id,
-                                content: editTextController.text));
+                            PostCommentParams(postId: widget.comment.id, content: editTextController.text));
                         if (result == true) {
                           widget.comment.content = editTextController.text;
                           widget.comment.edit = false;
@@ -161,40 +157,35 @@ class _CommentCardState extends State<CommentCard> {
               post: widget.comment,
               from: 'comments',
             ),
-            Sizer(),
+            const Sizer(),
             TextAppButton(
                 style: Styles.mediumText(),
-                label: 'Reply',
+                label: LocaleKeys.reply.localize,
                 onPressed: () {
                   bottomSheet(
                       context: context,
                       isScrollControlled: true,
                       widget: BlocProvider.value(
-                        value: serviceLocator<SocialPostsCubit>()
-                          ..loadReplies(context, widget.comment.id),
+                        value: serviceLocator<SocialPostsCubit>()..loadReplies(context, widget.comment.id),
                         child: CommentReplies(
                           replies: const [],
                           postId: widget.comment.post,
                           commentId: widget.comment.id,
-                          onAddReply: (ReplyOnCommentParams params) =>
-                              widget.onAddReply(params),
-                          onDeleteReply: (String id) =>
-                              widget.onDeleteReply(id),
+                          onAddReply: (ReplyOnCommentParams params) => widget.onAddReply(params),
+                          onDeleteReply: (String id) => widget.onDeleteReply(id),
                           from: widget.from,
-                          onEditComment: (PostCommentParams params) =>
-                              widget.onEditComment(params),
+                          onEditComment: (PostCommentParams params) => widget.onEditComment(params),
                         ),
                       ));
                 })
           ],
         ),
-        Sizer(),
+        const Sizer(),
       ],
     );
   }
 
-  Widget _buildPostOptions(
-      {required bool isMyComment, required CommentEntity post}) {
+  Widget _buildPostOptions({required bool isMyComment, required CommentEntity post}) {
     return SizedBox(
       height: isMyComment ? 160 : 80,
       child: Column(
@@ -203,8 +194,8 @@ class _CommentCardState extends State<CommentCard> {
             listTile(
                 icon: Icons.report,
                 iconColor: Colors.red,
-                title: 'Report post',
-                subTitle: 'Your well reports this post.',
+                title: LocaleKeys.typeYourComment.localize,
+                subTitle: LocaleKeys.youWillReportComment.localize,
                 onTap: () async {
                   Future.delayed(const Duration(milliseconds: 200), () {
                     bottomSheet(
@@ -218,17 +209,16 @@ class _CommentCardState extends State<CommentCard> {
           if (isMyComment)
             listTile(
                 icon: Icons.delete,
-                title: 'Delete Post',
-                subTitle:
-                    'Your comment will be deleted, and you cannot get it again',
+                title: LocaleKeys.deleteComment.localize,
+                subTitle: LocaleKeys.youWillDeleteComment.localize,
                 onTap: () {
                   widget.onDeleteComment(widget.comment.id);
                 }),
           if (isMyComment)
             listTile(
                 icon: Icons.visibility_off,
-                title: 'Edit Comment',
-                subTitle: 'Your Will Edit Your Comment.',
+                title: LocaleKeys.editComment.localize,
+                subTitle: LocaleKeys.youWillEditComment.localize,
                 onTap: () {
                   widget.comment.edit = !widget.comment.edit!;
                   editTextController.text = widget.comment.content;

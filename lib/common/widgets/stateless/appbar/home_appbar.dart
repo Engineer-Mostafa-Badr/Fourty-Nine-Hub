@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/widgets/unread_notifications_builder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
@@ -47,24 +48,26 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Row(
-        children: [
-          if (isShowLogo)
-            InkWell(
-              onTap: () {},
-              child: SizedBox(
-                height: 50.h,
-                width: 50.h,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(5.r),
-                  child: Image(
-                    image: AssetImage(Assets.icon),
-                    fit: BoxFit.cover,
+      title: Container(
+        margin: const EdgeInsets.only(top: 10),
+        child: Row(
+          children: [
+            if (isShowLogo)
+              InkWell(
+                onTap: () {},
+                child: SizedBox(
+                  height: 50.h,
+                  width: 50.h,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5.r),
+                    child: Image(
+                      image: AssetImage(Assets.icon),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
-            ),
-          // if (showLanguage)
+            // if (showLanguage)
 
           if (isWithBackArrow) SizedBox(width: 20.w),
           if (isWithBackArrow)
@@ -126,13 +129,14 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             onTap: () {
               context.push(Routes.NOTIFICATIONS);
             },
+
             child: const UnreadNotificationsBuilder(),
           ),
           SizedBox(
             width: 10.h,
           ),
         ],
-      ),
+      )),
       elevation: 0,
       titleSpacing: 0,
       //systemOverlayStyle: SystemUiOverlayStyle.light,

@@ -3,8 +3,8 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
 
-class MarkMessagesAsDeliveredUseCase extends UseCase<void, MarkMessagesAsDeliveredParams> {
-
+class MarkMessagesAsDeliveredUseCase
+    extends UseCase<void, MarkMessagesAsDeliveredParams> {
   final ChatRoomRepository _chatRoomRepository;
 
   MarkMessagesAsDeliveredUseCase(this._chatRoomRepository);
@@ -15,7 +15,7 @@ class MarkMessagesAsDeliveredUseCase extends UseCase<void, MarkMessagesAsDeliver
   }
 }
 
-class MarkMessagesAsDeliveredParams {
+class MarkMessagesAsDeliveredParams{
   String chatId;
 
   MarkMessagesAsDeliveredParams({required this.chatId});

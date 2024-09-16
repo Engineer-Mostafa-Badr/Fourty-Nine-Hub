@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class CustomButton extends StatelessWidget {
   const CustomButton({
     super.key,
     this.onTap,
-    this.height = double.infinity,
+    this.height = 60,
     this.title = 'Find',
   });
   final void Function()? onTap;

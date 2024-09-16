@@ -1,5 +1,3 @@
-
-
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_multi_payment_response.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_save_card_token_response_entity.dart';
 
@@ -9,10 +7,10 @@ class MutliPaymentResponseModel extends MutliPaymentResponse {
     required String message,
     required PaymentDataModel data,
   }) : super(
-    status: status,
-    message: message,
-    data: data,
-  );
+          status: status,
+          message: message,
+          data: data,
+        );
 
   factory MutliPaymentResponseModel.fromJson(Map<String, dynamic> json) {
     return MutliPaymentResponseModel(
@@ -30,8 +28,6 @@ class MutliPaymentResponseModel extends MutliPaymentResponse {
     };
   }
 }
-
-
 
 class PaymentDataModel extends PaymentData {
   PaymentDataModel({
@@ -54,25 +50,25 @@ class PaymentDataModel extends PaymentData {
     bool? basketPayment,
     String? link,
   }) : super(
-    type: type,
-    referenceNumber: referenceNumber,
-    merchantRefNumber: merchantRefNumber,
-    orderAmount: orderAmount,
-    paymentAmount: paymentAmount,
-    fawryFees: fawryFees,
-    orderStatus: orderStatus,
-    paymentMethod: paymentMethod,
-    customerName: customerName,
-    customerProfileId: customerProfileId,
-    signature: signature,
-    walletQr: walletQr,
-    expirationTime: expirationTime,
-    taxes: taxes,
-    statusCode: statusCode,
-    statusDescription: statusDescription,
-    basketPayment: basketPayment,
-    link: link,
-  );
+          type: type,
+          referenceNumber: referenceNumber,
+          merchantRefNumber: merchantRefNumber,
+          orderAmount: orderAmount,
+          paymentAmount: paymentAmount,
+          fawryFees: fawryFees,
+          orderStatus: orderStatus,
+          paymentMethod: paymentMethod,
+          customerName: customerName,
+          customerProfileId: customerProfileId,
+          signature: signature,
+          walletQr: walletQr,
+          expirationTime: expirationTime,
+          taxes: taxes,
+          statusCode: statusCode,
+          statusDescription: statusDescription,
+          basketPayment: basketPayment,
+          link: link,
+        );
 
   factory PaymentDataModel.fromJson(Map<String, dynamic> json) {
     return PaymentDataModel(

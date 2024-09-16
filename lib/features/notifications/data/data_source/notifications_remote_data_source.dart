@@ -19,16 +19,19 @@ abstract class NotificationsRemoteDataSource {
     required int page,
     int limit = 10,
   });
-  Future<void> notificationListener({required Function(Map<String, dynamic> data) notificationCallback});
+  Future<void> notificationListener(
+      {required Function(Map<String, dynamic> data) notificationCallback});
 
-  Future<Either<Failure, UnreadNotificationsCountEntity>> getUnreadNotificationsCount();
+  Future<Either<Failure, UnreadNotificationsCountEntity>>
+      getUnreadNotificationsCount();
   Future<Either<Failure, bool>> notificationSeen({required String id});
   Future<Either<Failure, bool>> allNotificationSeen({required String type});
   Future<Either<Failure, bool>> deleteNotification({required String id});
   Future<Either<Failure, bool>> deleteAllNotifications({required String type});
 }
 
-class NotificationsRemoteDataSourceImp implements NotificationsRemoteDataSource {
+class NotificationsRemoteDataSourceImp
+    implements NotificationsRemoteDataSource {
   final FirebaseHelper firebaseHelper;
   final ApiConsumer apiConsumer;
   final WebSocketHelper webSocketHelper;
@@ -64,7 +67,8 @@ class NotificationsRemoteDataSourceImp implements NotificationsRemoteDataSource 
       (failure) => Left(pr(failure)),
       (data) {
         pr(data);
-        List<NotificationEntity> notifications = (data['data']['docs'] as List).map<NotificationModel>((json) {
+        List<NotificationEntity> notifications =
+            (data['data']['docs'] as List).map<NotificationModel>((json) {
           NotificationModel notification = NotificationModel.fromJson(json);
           notification.hasNextPage = hasNextPage(data);
           notification.nextPageNumber = nextPageNumber(data);
@@ -85,12 +89,15 @@ class NotificationsRemoteDataSourceImp implements NotificationsRemoteDataSource 
   }
 
   @override
-  Future<void> notificationListener({required Function(Map<String, dynamic> data) notificationCallback}) async {
+  Future<void> notificationListener(
+      {required Function(Map<String, dynamic> data)
+          notificationCallback}) async {
     webSocketHelper.notificationListener(notificationCallback);
   }
 
   @override
-  Future<Either<Failure, UnreadNotificationsCountEntity>> getUnreadNotificationsCount() async {
+  Future<Either<Failure, UnreadNotificationsCountEntity>>
+      getUnreadNotificationsCount() async {
     final response = await apiConsumer.get(EndPoints.unreadNotificationsCount);
 
     return response.fold(
@@ -119,7 +126,8 @@ class NotificationsRemoteDataSourceImp implements NotificationsRemoteDataSource 
   }
 
   @override
-  Future<Either<Failure, bool>> allNotificationSeen({required String type}) async {
+  Future<Either<Failure, bool>> allNotificationSeen(
+      {required String type}) async {
     final response = await apiConsumer.put(
       EndPoints.notifications,
       queryParameters: {'type': type},
@@ -150,7 +158,8 @@ class NotificationsRemoteDataSourceImp implements NotificationsRemoteDataSource 
   }
 
   @override
-  Future<Either<Failure, bool>> deleteAllNotifications({required String type}) async {
+  Future<Either<Failure, bool>> deleteAllNotifications(
+      {required String type}) async {
     final response = await apiConsumer.delete(
       EndPoints.deleteAllNotification,
       queryParameters: {

@@ -20,24 +20,23 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
   final DeleteCompanyAddUseCases _deleteCompanyAddUseCases;
   final GetPostsCompanyAdUseCase _getPostsCompanyAdUseCase;
 
-  CreateCompanyAdCubit(this._getPriceUseCases,
-      this._companyAddUseCases,
-      this._deleteCompanyAddUseCases,
-      this._getPostsCompanyAdUseCase,) : super(const CreateCompanyAdState());
-
+  CreateCompanyAdCubit(
+    this._getPriceUseCases,
+    this._companyAddUseCases,
+    this._deleteCompanyAddUseCases,
+    this._getPostsCompanyAdUseCase,
+  ) : super(const CreateCompanyAdState());
 
   void loadData() async {
     await getCompanyAdPrice();
   }
 
-
-
   Future<void> getCompanyAdPrice() async {
     emit(state.copyWith(status: StateStatus.loading));
     final response = await _getPriceUseCases.call(const NoParams());
     response.fold(
-          (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-          (data) => emit(state.copyWith(price: data)),
+      (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+      (data) => emit(state.copyWith(price: data)),
     );
   }
 
@@ -49,8 +48,8 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
     );
 
     response.fold(
-          (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-          (data) {
+      (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+      (data) {
         company = data;
       },
     );
@@ -61,7 +60,7 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
     String? post,
     required String type,
     String? description,
-    required int totalPrice,
+    required num totalPrice,
     List<String>? mediaIds,
   }) async {
     emit(state.copyWith(status: StateStatus.loading));
@@ -75,8 +74,8 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
       ),
     );
     return response.fold(
-          (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-          (data) {
+      (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+      (data) {
         emit(state.copyWith(advertise: data, status: StateStatus.success));
         mediaIds?.clear();
         print('Media IDs cleared after successful post.');
@@ -89,15 +88,15 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
     final response = await _deleteCompanyAddUseCases(
       DeleteCompanyAdParams(id: id),
     );
-    bool result=false;
+    bool result = false;
 
     response.fold(
-          (failure) =>
+      (failure) =>
           emit(state.copyWith(failure: failure, status: StateStatus.error)),
-          (success) {
-            result=success;
-            emit(state.copyWith(status: StateStatus.success));
-          },
+      (success) {
+        result = success;
+        emit(state.copyWith(status: StateStatus.success));
+      },
     );
     return result;
   }

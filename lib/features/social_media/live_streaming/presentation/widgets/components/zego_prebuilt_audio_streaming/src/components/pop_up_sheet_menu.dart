@@ -11,7 +11,6 @@ import '../core/seat/seat_manager.dart';
 import 'defines.dart';
 import 'pop_up_manager.dart';
 
-
 /// @nodoc
 class ZegoLiveAudioRoomPopUpSheetMenu extends StatefulWidget {
   const ZegoLiveAudioRoomPopUpSheetMenu({

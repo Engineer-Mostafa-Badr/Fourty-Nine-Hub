@@ -41,7 +41,8 @@ class CompetitionData {
     return CompetitionData(
       competitionId: json['competition_id'] == null
           ? null
-          : CompetitionId.fromJson(json['competition_id'] as Map<String, dynamic>),
+          : CompetitionId.fromJson(
+              json['competition_id'] as Map<String, dynamic>),
       countOfRequest: json['countOfRequest'] as int?,
     );
   }

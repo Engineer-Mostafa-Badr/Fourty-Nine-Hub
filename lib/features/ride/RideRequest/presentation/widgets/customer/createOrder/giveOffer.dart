@@ -39,7 +39,7 @@ class GiveOffer extends StatelessWidget {
                   hint: 'EGP',
                   type: TextInputType.number,
                   initialValue: state.offerPrice.toString(),
-                  style:  TextStyle(
+                  style: TextStyle(
                       fontSize: 20.sp,
                       color: Colors.grey,
                       fontWeight: FontWeight.bold),

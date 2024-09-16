@@ -240,7 +240,8 @@ class BalanceWalletView extends StatelessWidget {
                               },
                               itemCount: data.length)
                               :  Center(
-                              child: Label(text: LocaleKeys.noHistoryAvailable.localize));
+                              child: Label(
+                                  text: LocaleKeys.noHistoryAvailable.localize));
                         },
                         fetchData: (PaginationParams paginationParams) {
                           return context

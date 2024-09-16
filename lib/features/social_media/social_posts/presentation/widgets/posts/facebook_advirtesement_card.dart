@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
@@ -9,6 +11,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class FacebookAdvertisementCard extends StatelessWidget {
   const FacebookAdvertisementCard({super.key, required this.post});
   final PostEntity post;
@@ -125,7 +128,7 @@ class FacebookAdvertisementCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Label(
-                text: 'Send Message',
+                text: LocaleKeys.sendMessage.localize,
                 style: Styles.headerText(
                   color: Colors.white,
                 ),

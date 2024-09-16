@@ -1,5 +1,8 @@
 // Project imports:
 
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+
+import '../../../../../../../../core/localization/locale_keys.g.dart';
 import 'defines.dart';
 
 /// Control the text on the UI.
@@ -457,10 +460,12 @@ class ZegoUIKitPrebuiltLiveStreamingInnerText {
               message: 'Do you want to end the cohosting?',
             ),
         audioEffectTitle = audioEffectTitle ?? 'Audio effect',
-        audioEffectReverbTitle = audioEffectReverbTitle ?? 'Reverb',
+        audioEffectReverbTitle =
+            audioEffectReverbTitle ?? LocaleKeys.reverb.localize,
         audioEffectVoiceChangingTitle =
-            audioEffectVoiceChangingTitle ?? 'Voice changing',
-        beautyEffectTitle = beautyEffectTitle ?? 'Face beautification',
+            audioEffectVoiceChangingTitle ?? LocaleKeys.voiceChanging.localize,
+        beautyEffectTitle =
+            beautyEffectTitle ?? LocaleKeys.faceBeautification.localize,
         voiceChangerNoneTitle = voiceChangerNoneTitle ?? 'None',
         voiceChangerLittleBoyTitle = voiceChangerLittleBoyTitle ?? 'Little boy',
         voiceChangerLittleGirlTitle =

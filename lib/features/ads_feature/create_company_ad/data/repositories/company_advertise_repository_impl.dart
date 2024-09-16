@@ -19,7 +19,7 @@ class CompanyAdvertiseRepositoryImpl implements CompanyAdvertiseRepository{
   }
 
   @override
-  Future<Either<Failure, List<CompanyAdOptionEntity>>> addCompanyAd(CompanyAddParams params) {
+  Future<Either<Failure, CompanyAdOptionEntity>> addCompanyAd(CompanyAddParams params) {
     return _advertiseDataSource.addCompanyAd(params);
   }
 
