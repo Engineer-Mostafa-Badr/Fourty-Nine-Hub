@@ -55,7 +55,7 @@ class AdCard extends StatelessWidget {
                 Expanded(
                   child: Label(
                     text:
-                        '${NumbersHelper.formatThousands(number: item.price)} L.E',
+                        '${NumbersHelper.formatThousands(number: item.price??0)} L.E',
                     style: Styles.mediumText(
                         fontWeight: FontWeight.bold,
                         color: AppColors.SECONDARY_COLOR),

@@ -503,5 +503,31 @@ abstract class  LocaleKeys {
   static const google = 'google';
   static const facebook = 'facebook';
   static const orContinueWith = 'orContinueWith';
+  static const bio = 'bio';
+  static const friendsAndFollowers = 'friendsAndFollowers';
+  static const maritalStatus = 'maritalStatus';
+  static const single = 'single';
+  static const married = 'married';
+  static const divorced = 'divorced';
+  static const widowed = 'widowed';
+  static const maleUser = 'maleUser';
+  static const femaleUser = 'femaleUser';
+  static const requests = 'requests';
+  static const blocked = 'blocked';
+  static const searchWithName = 'searchWithName';
+  static const acceptRequestSuccessfully = 'acceptRequestSuccessfully';
+  static const removeRequestSuccessfully = 'removeRequestSuccessfully';
+  static const unFollowSuccessfully = 'unFollowSuccessfully';
+  static const tagPeople = 'tagPeople';
+  static const selectFeeling = 'selectFeeling';
+  static const selectActivity = 'selectActivity';
+  static const user = 'user';
+  static const provider = 'provider';
+  static const createAd = 'createAd';
+  static const title = 'title';
+  static const desc = 'desc';
+  static const publish = 'publish';
+  static const addImages = 'addImages';
+  static const addImagesDesc = 'addImagesDesc';
 
 }

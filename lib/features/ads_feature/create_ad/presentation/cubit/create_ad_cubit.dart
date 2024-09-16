@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/detail_entity.dart';
 
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
@@ -28,7 +29,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   final formState = GlobalKey<FormState>();
 
   CreateAdCubit(this._getAdPropertiesUsecase, this._createAdUseCase)
-      : super(const CreateAdState());
+      : super( CreateAdState());
 
   void loadData({required String subCategoryId}) async {
     getAdProperties(subCategoryId: subCategoryId);
@@ -75,6 +76,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     emit(state.copyWith(images: images));
   }
 
+  final user = UserCubit.to.state.data?.id;
   void createAd(
       {required CategorizationEntity categorize,
       required BuildContext context}) async {
@@ -90,14 +92,17 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       final response = await _createAdUseCase(AdModel(
           id: 'id',
           title: title ?? '',
+          isUser: state.isUser,
           description: description ?? '',
-          phone: phone ?? '',
+          // phone: phone ?? '',
           images: state.images?.map((e) => e.mediaId).toList() ?? [],
-          price: num.parse(price ?? ''),
+          // price: num.parse(price ?? ''),
           active: true,
           createdAt: DateTime.now(),
           details: details,
-          subCategoryId: categorize.subCategory.id));
+          subCategoryId: categorize.subCategory.id,
+          mainCategoryId: categorize.mainCategory.id,
+      ));
 
       response.fold(
           (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),

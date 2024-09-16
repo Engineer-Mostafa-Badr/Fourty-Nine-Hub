@@ -53,10 +53,6 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     getWallet();
     fetchGiftWallet();
     fetchBalanceWallet();
-    // context.read<SliderCubit>().loadData();
-    // context.read<WalletCubit>().loadData();
-    // context.read<BalanceCubit>().loadData();
-    // context.read<GiftCubit>().loadData();
     if (_fourtyNineSharedData.mainCategories.isEmpty) {
       final user = UserCubit.to.state.data?.id;
       print('userId1$user');
