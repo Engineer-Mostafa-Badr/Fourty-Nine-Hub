@@ -73,6 +73,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
               'can\'t load main categories there is an error ${failure.toString()}');
         },
         (r) {
+          
           _fourtyNineSharedData.mainCategories = r;
           CliLogger.info('main categories loaded : ${r.length}');
           // emit(state.copyWith(status: StateStatus.loading));

@@ -20,6 +20,7 @@ class HealthEmergencyRemoteDataSourceImpl
     final response = await _apiConsumer.post(
       EndPoints.bookEmergency,
       data: params.toJson(),
+      queryParameters: {'subCategory': params.subCategoryId},
     );
 
     return response.fold((l) => Left(l), (r) => Right(r['status'] as bool));
