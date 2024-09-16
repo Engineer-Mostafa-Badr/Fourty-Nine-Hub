@@ -64,21 +64,12 @@ class TransferMoneyView extends StatelessWidget {
               ),
             ),
           ),
-          Sizer(),
+          const Sizer(),
           FormTextField(
             hint: 'Amount',
             type: TextInputType.number,
-            suffix: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Label(
-                  text: Labels.currency,
-                  style: Styles.mediumText(fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
           ),
-          Sizer(),
+          const Sizer(),
           AppButton(
               label: 'Confirm', onPressed: () => context.push(Routes.PAYMENT)),
         ],

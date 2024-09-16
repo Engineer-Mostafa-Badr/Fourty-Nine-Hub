@@ -261,6 +261,7 @@ abstract class  LocaleKeys {
   static const noTextPosts = 'noTextPosts';
   static const noPhotoPosts = 'noPhotoPosts';
   static const noPosts = 'noPosts';
+  static const noReel = 'noReel';
   static const transferMoney = 'transferMoney';
   static const yourBalance = 'yourBalance';
   static const yourGift = 'yourGift';
@@ -503,5 +504,7 @@ abstract class  LocaleKeys {
   static const google = 'google';
   static const facebook = 'facebook';
   static const orContinueWith = 'orContinueWith';
+  static const postSubmitted = 'postSubmitted';
+  static const imageNotSelected = 'imageNotSelected';
 
 }

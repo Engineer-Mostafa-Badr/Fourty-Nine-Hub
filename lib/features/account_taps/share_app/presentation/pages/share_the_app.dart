@@ -120,7 +120,7 @@ class ShareTheApp extends StatelessWidget {
               child: _buildStatisticsItem(
                   color: AppColors.PRIMARY_COLOR,
                   title: 'Balance',
-                  subTitle: '1500 ${Labels.currency}')),
+                  subTitle: '1500')),
         ],
       ),
     );

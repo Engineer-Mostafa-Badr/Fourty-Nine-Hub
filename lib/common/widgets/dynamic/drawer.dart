@@ -19,7 +19,11 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
+import '../../../features/competition/data/repository/competition_repo_impl.dart';
+import '../../../features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
+import '../../../features/competition/presentation/cubit/competition_cubit/competition_state.dart';
 import '../../../features/competition/presentation/view/special_ads_view.dart';
+import '../../../features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/const.dart';
@@ -209,6 +213,7 @@ class DrawerWidget extends StatelessWidget {
     required BuildContext context,
     required UserEntity? user,
   }) {
+
     log(user?.id.toString() ?? "UserId", name: "UserId");
     return Column(
       children: [
@@ -216,40 +221,59 @@ class DrawerWidget extends StatelessWidget {
         const Divider(
           color: Colors.grey,
         ),
-        Row(
-          children: [
-            counterItem(
-                icon: Icons.ads_click,
-                label: LocaleKeys.specialAds.localize,
-                value: '13',
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SpecialAdsView()));
-                },
-                context: context),
-            counterItem(
-                icon: Icons.person_add,
-                label: LocaleKeys.friends.localize,
-                value: '+110',
-                onTap: () {},
-                context: context),
-            counterItem(
-              icon: FontAwesomeIcons.car,
-              label: LocaleKeys.ride.localize,
-              value: '+5',
-              context: context,
-              onTap: () {},
-            ),
-            counterItem(
-              icon: Icons.more_horiz,
-              label: LocaleKeys.more.localize,
-              value: '+1K',
-              onTap: () => context.go(Routes.COMPETITIONS),
-              context: context,
-            ),
-          ],
+        BlocProvider(
+          create: (BuildContext context) =>
+              CompetitionCubit(serviceLocator.get<CompetitionRepoImpl>())
+                ..fetchCompetition(context),
+          child: BlocBuilder<CompetitionCubit, CompetitionState>(
+            builder: (BuildContext context, state) {
+              if(state is CompetitionSuccessState) {
+                int calculateSumOfRequests() {
+                  List<int> indicesToSum = [1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13];
+
+                  return indicesToSum.fold(0, (sum, index) {
+                    return sum + (state.competitionModel.data![index].countOfRequest ?? 0);
+                  });
+                }
+                return Row(
+                children: [
+                  counterItem(
+                      icon: Icons.ads_click,
+                      label: LocaleKeys.specialAds.localize,
+                      value: '${state.competitionModel.data![10].countOfRequest}',
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SpecialAdsView()));
+                      },
+                      context: context),
+                  counterItem(
+                      icon: Icons.person_add,
+                      label: LocaleKeys.friends.localize,
+                      value: '${state.competitionModel.data![0].countOfRequest}',
+                      onTap: () {},
+                      context: context),
+                  counterItem(
+                    icon: FontAwesomeIcons.car,
+                    label: LocaleKeys.ride.localize,
+                    value: '${state.competitionModel.data![9].countOfRequest}',
+                    context: context,
+                    onTap: () {},
+                  ),
+                  counterItem(
+                    icon: Icons.more_horiz,
+                    label: LocaleKeys.more.localize,
+                    value: '${calculateSumOfRequests()}',
+                    onTap: () => context.go(Routes.COMPETITIONS),
+                    context: context,
+                  ),
+                ],
+              );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
         ),
       ],
     );
@@ -478,11 +502,9 @@ class DrawerWidget extends StatelessWidget {
                           ),
                         );
                       }
-                      return CircleAvatar(
-                        // backgroundColor: Colors.transparent,
-                        backgroundImage: CachedNetworkImageProvider(
-                          user?.profilePicture ?? UIConst.profilePlaceHolder,
-                        ),
+                      return ImageFromInternet(
+                        isCircle: true,
+                        image: user?.profilePicture ?? UIConst.profilePlaceHolder,
                       );
                     },
                   ),
@@ -534,7 +556,7 @@ class DrawerWidget extends StatelessWidget {
               ],
             ),
           ),
-          Sizer(),
+          const Sizer(),
           Expanded(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

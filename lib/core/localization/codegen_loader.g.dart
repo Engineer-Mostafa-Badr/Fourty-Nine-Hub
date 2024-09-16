@@ -277,6 +277,7 @@ class CodegenLoader extends AssetLoader{
   "noTextPosts": "لا توجد منشورات نصية في الوقت الحالي.",
   "noPhotoPosts": "لا توجد منشورات صور في الوقت الحالي.",
   "noPosts": "لا توجد منشورات في الوقت الحالي.",
+  "noReel": "لا توجد منشورات ريلز في الوقت الحالي.",
   "transferMoney": "تحويل اموال",
   "yourBalance": "رصيدك",
   "yourGift": "هديتك",
@@ -522,7 +523,9 @@ class CodegenLoader extends AssetLoader{
   "activity": "نشاط",
   "google": "جوجل",
   "facebook": "فيسبوك",
-  "orContinueWith": "او استمر باستخدام"
+  "orContinueWith": "او استمر باستخدام",
+  "postSubmitted": "تم إرسال منشورك بنجاح، انتظر موافقة الإدارة",
+  "imageNotSelected": "الصورة غير محددة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -789,6 +792,7 @@ static const Map<String,dynamic> en = {
   "noTextPosts": "There are no text posts at the moment.",
   "noPhotoPosts": "There are no photo posts at the moment.",
   "noPosts": "There are no posts at the moment.",
+  "noReel": "There are no reel posts at the moment.",
   "transferMoney": "Transfer Money",
   "yourBalance": "Your Balance is",
   "yourGift": "Your Gift is",
@@ -1033,7 +1037,9 @@ static const Map<String,dynamic> en = {
   },
   "google": "Google",
   "facebook": "Facebook",
-  "orContinueWith": "Or Continue with"
+  "orContinueWith": "Or Continue with",
+  "postSubmitted": "Your post submitted successfully wait for administration approved",
+  "imageNotSelected": "Image not selected"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

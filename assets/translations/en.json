@@ -264,6 +264,7 @@
   "noTextPosts": "There are no text posts at the moment.",
   "noPhotoPosts": "There are no photo posts at the moment.",
   "noPosts": "There are no posts at the moment.",
+  "noReel": "There are no reel posts at the moment.",
   "transferMoney": "Transfer Money",
   "yourBalance": "Your Balance is",
   "yourGift": "Your Gift is",
@@ -508,5 +509,7 @@
   },
   "google": "Google",
   "facebook": "Facebook",
-  "orContinueWith": "Or Continue with"
+  "orContinueWith": "Or Continue with",
+  "postSubmitted": "Your post submitted successfully wait for administration approved",
+  "imageNotSelected": "Image not selected"
 }
