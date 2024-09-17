@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -92,33 +93,24 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                     balance: '${state.wallet?.realAmount ?? ''}',
                     type: WalletTypes.mainWallet,
                   ),
-                  Sizer(),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.info_outline,
-                        color: Colors.grey,
-                      ),
-                      Sizer(),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Label(
-                              text: LocaleKeys.minimum.localize,
-                              style: Styles.mediumText(color: Colors.grey),
-                            ),
-                            Label(
-                              text: '500 ',
-                              style: Styles.mediumText(color: Colors.grey),
-                            ),
-                            Label(
-                              text: LocaleKeys.transaction.localize,
-                              style: Styles.mediumText(color: Colors.grey),
-                            ),
-                          ],
+                  const Sizer(),
+                  Padding(
+                    padding:  EdgeInsets.only(right: 5.w),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.info_outline,
+                          color: Colors.grey,
                         ),
-                      ),
-                    ],
+                        const Sizer(),
+                        Expanded(
+                          child: Label(
+                            text: '${LocaleKeys.minimum.localize}500 ${LocaleKeys.transaction.localize}',
+                            style: Styles.mediumText(color: Colors.grey),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Sizer(),
                   state.wallet?.realAmount != null &&

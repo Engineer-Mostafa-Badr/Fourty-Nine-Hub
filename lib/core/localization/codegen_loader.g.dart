@@ -525,7 +525,11 @@ class CodegenLoader extends AssetLoader{
   "facebook": "فيسبوك",
   "orContinueWith": "او استمر باستخدام",
   "postSubmitted": "تم إرسال منشورك بنجاح، انتظر موافقة الإدارة",
-  "imageNotSelected": "الصورة غير محددة"
+  "imageNotSelected": "الصورة غير محددة",
+  "randomAppearance": "المظهر العشوائي",
+  "messageSuccessfully": "تم ارسال الرسالة بنجاح سوف يتم التواصل معك باقرب وقت.",
+  "phoneOptional": "الهاتف (اختياري)",
+  "TeamHelp": "فريق 49Hub جاهز للمساعدة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1039,7 +1043,11 @@ static const Map<String,dynamic> en = {
   "facebook": "Facebook",
   "orContinueWith": "Or Continue with",
   "postSubmitted": "Your post submitted successfully wait for administration approved",
-  "imageNotSelected": "Image not selected"
+  "imageNotSelected": "Image not selected",
+  "randomAppearance": "Random Appearance",
+  "messageSuccessfully": "The message has been sent successfully. You will be contacted as soon as possible.",
+  "phoneOptional": "Phone (Optional)",
+  "TeamHelp": "49Hub Team is ready to help"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

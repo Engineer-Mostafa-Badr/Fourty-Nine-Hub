@@ -506,5 +506,9 @@ abstract class  LocaleKeys {
   static const orContinueWith = 'orContinueWith';
   static const postSubmitted = 'postSubmitted';
   static const imageNotSelected = 'imageNotSelected';
+  static const randomAppearance = 'randomAppearance';
+  static const messageSuccessfully = 'messageSuccessfully';
+  static const phoneOptional = 'phoneOptional';
+  static const TeamHelp = 'TeamHelp';
 
 }

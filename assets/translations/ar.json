@@ -510,5 +510,9 @@
   "facebook": "فيسبوك",
   "orContinueWith": "او استمر باستخدام",
   "postSubmitted": "تم إرسال منشورك بنجاح، انتظر موافقة الإدارة",
-  "imageNotSelected": "الصورة غير محددة"
+  "imageNotSelected": "الصورة غير محددة",
+  "randomAppearance": "المظهر العشوائي",
+  "messageSuccessfully": "تم ارسال الرسالة بنجاح سوف يتم التواصل معك باقرب وقت.",
+  "phoneOptional":"الهاتف (اختياري)",
+  "TeamHelp":"فريق 49Hub جاهز للمساعدة"
 }

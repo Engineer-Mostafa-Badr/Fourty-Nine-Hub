@@ -620,6 +620,7 @@ class EndPoints {
 
   // contact us
   static const helpMessages = '/help';
+  static const contactUs = '/email/contact-us';
   static String mediaUrl = '/media/signed-url';
 
   static String confirmUpload(String mediaId) {
