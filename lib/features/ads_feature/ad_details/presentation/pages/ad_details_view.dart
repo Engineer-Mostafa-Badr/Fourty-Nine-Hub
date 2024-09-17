@@ -238,52 +238,6 @@ class _AdDetailsViewState extends State<AdDetailsView> {
     });
   }
 
-  Widget _buildLocationWidget({required AddressEntity address}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(
-          text: 'Address',
-          style: Styles.mediumText(fontWeight: FontWeight.bold),
-        ),
-        InkWell(
-          onTap: () => LaunchURLHelper().openLocation(
-              lat: address.coordinates[0], lng: address.coordinates[1]),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(Icons.location_on_outlined),
-              const Sizer(),
-              Expanded(child: Label(text: address.address)),
-            ],
-          ),
-        ),
-        const Sizer(),
-        SizedBox(
-            height: kToolbarHeight * 2,
-            width: double.infinity,
-            child: Stack(
-              children: [
-                const Positioned.fill(
-                    child: SquareImage(
-                        radius: 10,
-                        source: NetworkImage(UIConst.mapPlaceHolderImage))),
-                Positioned.fill(
-                  child: Center(
-                    child: AppButton(
-                      label: 'Open Location',
-                      width: kToolbarHeight * 2,
-                      onPressed: () => LaunchURLHelper().openLocation(
-                          lat: address.coordinates[0],
-                          lng: address.coordinates[1]),
-                    ),
-                  ),
-                ),
-              ],
-            ))
-      ],
-    );
-  }
 
   Widget _buildAdInfoWidget({required AdModel ad}) {
     return Column(
@@ -341,7 +295,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(
-          text: 'Details',
+          text: LocaleKeys.details.localize,
           style: Styles.mediumText(fontWeight: FontWeight.bold),
         ),
         ListView.builder(
