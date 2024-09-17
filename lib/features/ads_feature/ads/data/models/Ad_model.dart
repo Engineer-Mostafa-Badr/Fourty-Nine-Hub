@@ -26,7 +26,7 @@ class AdModel extends AdEntity {
     List<String> images = [];
     try {
       images =
-          (json['images'] as List).map((e) => e['mediaKey'] as String).toList();
+          (json['images'] as List).map((e) => e['photo'] as String).toList();
     } catch (e) {}
     UserModel? user;
     try {

@@ -526,8 +526,10 @@ abstract class  LocaleKeys {
   static const createAd = 'createAd';
   static const title = 'title';
   static const desc = 'desc';
+  static const details = 'details';
   static const publish = 'publish';
   static const addImages = 'addImages';
   static const addImagesDesc = 'addImagesDesc';
+  static const noAds = 'noAds';
 
 }

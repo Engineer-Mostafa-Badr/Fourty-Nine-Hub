@@ -1,3 +1,5 @@
+import 'package:card_swiper/card_swiper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
@@ -9,10 +11,13 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/address_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -20,7 +25,6 @@ import 'package:go_router/go_router.dart';
 
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 
-import '../../../../../common/widgets/stateless/dynamic/carousel_slider.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/strings/labels.dart';
@@ -75,14 +79,14 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                   child: ListView(
                     children: [
                       _buildAdInfoWidget(ad: state.ad!),
-                      Sizer(),
+                      const Sizer(),
                       // const GoogleAddsBanner(
                       //   margin: 0,
                       // ),
-                      Sizer(),
+                      const Sizer(),
                       _buildDetailsWidget(ad: state.ad!),
-                      _buildLocationWidget(address: state.ad!.address!),
-                      Sizer(),
+                      // _buildLocationWidget(address: state.ad!.address!),
+                      const Sizer(),
                       _buildRelevantAdsWidget(),
                     ],
                   ),
@@ -113,7 +117,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) =>
                     AdCard(item: state.relevantAds![index]),
-                separatorBuilder: (context, index) => Sizer(),
+                separatorBuilder: (context, index) => const Sizer(),
                 itemCount: state.relevantAds?.length ?? 0),
           ),
         ],
@@ -143,7 +147,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                                 icon: Icons.chat_bubble_outline,
                                 onPressed: () =>
                                     context.push(Routes.CHATROOM))),
-                        Sizer(
+                        const Sizer(
                           width: 5,
                         ),
                         Expanded(
@@ -154,10 +158,31 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                                     .call(phone: state.ad?.phone ?? ''))),
                       ],
                     );
+                  }else{
+                    return Row(
+                      children: [
+                        Expanded(
+                            child: AppButton(
+                                label: 'Chat',
+                                icon: Icons.chat_bubble_outline,
+                                backColor: AppColors.GREY_DARK_COLOR,
+                                color: Colors.white,
+                                onPressed: () {})),
+                        const Sizer(
+                          width: 5,
+                        ),
+                        Expanded(
+                            child: AppButton(
+                                label: 'Call',
+                                icon: Icons.call,
+                                backColor: AppColors.GREY_DARK_COLOR,
+                                color: Colors.white,
+                                onPressed: () {})),
+                      ],
+                    );
                   }
-                  return const SizedBox();
                 }),
-            Sizer(),
+            const Sizer(),
             Row(
               children: [
                 Expanded(
@@ -184,7 +209,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                                   subCategoryId: state.ad?.subCategoryId ??
                                       '62c8ba9f8e28a58a3edf57eb');
                         })),
-                Sizer(
+                const Sizer(
                   width: 5,
                 ),
                 Expanded(
@@ -228,12 +253,12 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Icon(Icons.location_on_outlined),
-              Sizer(),
+              const Sizer(),
               Expanded(child: Label(text: address.address)),
             ],
           ),
         ),
-        Sizer(),
+        const Sizer(),
         SizedBox(
             height: kToolbarHeight * 2,
             width: double.infinity,
@@ -264,37 +289,47 @@ class _AdDetailsViewState extends State<AdDetailsView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CarouselSliderWidget(
-          height: kToolbarHeight * 2,
-          widgets: ad.images.map((e) {
-            return SquareImage(
-              source: NetworkImage(e),
-              fit: BoxFit.cover,
-            );
-          }).toList(),
-        ),
-        Label(
-          text: ad.title,
-          style: Styles.mediumText(fontWeight: FontWeight.bold),
-        ),
-        InkWell(
-          onTap: () => LaunchURLHelper().openLocation(
-              lat: ad.address!.coordinates[0], lng: ad.address!.coordinates[1]),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(Icons.location_on_outlined),
-              Sizer(),
-              Expanded(child: Label(text: ad.address?.address ?? "")),
-              Sizer(),
-              Label(text: ad.formatedDate)
-            ],
+        SizedBox(
+          height: kToolbarHeight * 4,
+          child: Swiper(
+            itemCount: ad.images.length,
+            onIndexChanged: (i) {},
+            outer: true,
+            physics:ad.images.length>1?null:const NeverScrollableScrollPhysics() ,
+            itemBuilder: (context, index) => Padding(
+              padding: EdgeInsets.only(bottom: 5.h),
+              child: ImageFromInternet(image: ad.images[index],defaultLogo: true,),
+            ),
+            pagination: SwiperPagination(
+                builder: SwiperCustomPagination(builder: (context, config) {
+                  return const DotSwiperPaginationBuilder(color: AppColors.GREY_DARK_COLOR, activeColor: AppColors.SECONDARY_COLOR, size: 10.0, activeSize: 10.0)
+                      .build(context, config);
+                })),
           ),
         ),
-        Sizer(),
+        Row(
+          children: [
+            Label(
+              text: "${LocaleKeys.title.localize} : ",
+              style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR),
+            ),
+            Label(
+              text: ad.title,
+              style: Styles.mediumText(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Label(text: ad.formatedDate)
+          ],
+        ),
+        const Sizer(),
         Label(
-          text: 'Description',
-          style: Styles.mediumText(fontWeight: FontWeight.bold),
+          text: "${LocaleKeys.desc.localize} : ",
+          style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR),
         ),
         Label(text: ad.description),
       ],
@@ -323,7 +358,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         : Colors.white),
                 child: Row(
                   children: [
-                    Expanded(child: Label(text: detail.label)),
+                    Expanded(child: Label(text: "${detail.label} : ",style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR))),
                     Expanded(child: Label(text: detail.value)),
                   ],
                 ),

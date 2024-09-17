@@ -258,8 +258,8 @@ class AppPages {
                 GoRoute(
                     path: Paths.ADS,
                     name: Routes.ADS,
-                    builder: (context, state) => BlocProvider.value(
-                          value: serviceLocator<AdsCubit>(),
+                    builder: (context, state) => BlocProvider(
+                          create:(_)=> serviceLocator<AdvertisementCubit>(),
                           child: AdsView(
                             params: state.extra as AdsViewParams,
                           ),

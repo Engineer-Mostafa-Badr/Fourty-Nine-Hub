@@ -107,7 +107,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       response.fold(
           (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
           (r) {
-        context.go(Routes.MYADDS);
+        context.pushReplacement(Routes.MYADDS);
       });
     }
   }

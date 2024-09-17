@@ -544,11 +544,13 @@ class CodegenLoader extends AssetLoader{
   "user": "مستخدم عادي",
   "provider": "مقدم خدمة",
   "createAd": "إضافة إعلان",
-  "title": "عنوان",
-  "desc": "وصف",
+  "title": "العنوان",
+  "desc": "الوصف",
+  "details": "التفاصيل",
   "publish": "نشر",
   "addImages": "إضافة صور",
-  "addImagesDesc": "الحد الأقصى لحجم الملف 5 ميجابايت مقبول بالتنسيقات التالية: jpg، Jpeg، png، gif"
+  "addImagesDesc": "الحد الأقصى لحجم الملف 5 ميجابايت مقبول بالتنسيقات التالية: jpg، Jpeg، png، gif",
+  "noAds": "لا توجد إعلانات في الوقت الحالي."
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1083,9 +1085,11 @@ static const Map<String,dynamic> en = {
   "createAd": "Create Ad",
   "title": "Title",
   "desc": "Description",
+  "details": "Details",
   "publish": "Publish",
   "addImages": "Add Images",
-  "addImagesDesc": "5MB maximum file size accepted in the following formats: jpg, Jpeg, png, gif"
+  "addImagesDesc": "5MB maximum file size accepted in the following formats: jpg, Jpeg, png, gif",
+  "noAds": "There are no Ads at the moment."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
