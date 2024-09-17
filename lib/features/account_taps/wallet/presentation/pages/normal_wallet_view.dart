@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/payment_view.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -19,6 +20,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import '../../domain/entities/wallet/wallet_history_entity.dart';
 import '../cubit/wallet_cubit.dart';
 import '../widgets/drop_down_subscription.dart';
@@ -44,19 +46,10 @@ class _NormalWalletViewState extends State<NormalWalletView> {
       bottomNavigationBar: Container(
         margin: const EdgeInsets.all(10),
         child: MaterialButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BlocProvider<PaymentCubit>(
-                  create: (BuildContext context) => serviceLocator(),
-                  child: PaymentView(
-                    amountId: '',
-                    amount: 500,
-                  ),
-                ),
-              ),
-            );
+          onPressed: ()  async {
+           // if (await LocalAuth().checkBiometrics()) {
+              context.push(Routes.TRANSFERMONEY);
+          //  }
           },
           color: AppColors.SECONDARY_COLOR,
           textColor: AppColors.AUTH_CONTAINER_COLOR,

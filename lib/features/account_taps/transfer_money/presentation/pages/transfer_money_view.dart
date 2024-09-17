@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -11,9 +12,21 @@ import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../payment/presentation/cubit/payment_cubit.dart';
+import '../../../../payment/presentation/pages/payment_view.dart';
 
-class TransferMoneyView extends StatelessWidget {
+class TransferMoneyView extends StatefulWidget {
   const TransferMoneyView({super.key});
+
+  @override
+  State<TransferMoneyView> createState() => _TransferMoneyViewState();
+}
+
+class _TransferMoneyViewState extends State<TransferMoneyView> {
+  var paymentController=TextEditingController();
+
+  var amountController=TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +56,7 @@ class TransferMoneyView extends StatelessWidget {
             style: Styles.mediumText(
                 color: AppColors.PRIMARY_COLOR, fontWeight: FontWeight.bold),
           ),
-          Sizer(),
+          const Sizer(),
           FormTextField(
             hint: 'Payment Address',
             action: (v) {},
@@ -54,7 +67,7 @@ class TransferMoneyView extends StatelessWidget {
                   Label(
                       text: '@49hub',
                       style: Styles.mediumText(fontWeight: FontWeight.bold)),
-                  Sizer(
+                  const Sizer(
                     width: 5,
                   ),
                   IconAppButton(
@@ -68,10 +81,26 @@ class TransferMoneyView extends StatelessWidget {
           FormTextField(
             hint: 'Amount',
             type: TextInputType.number,
+            controller: amountController,
           ),
           const Sizer(),
           AppButton(
-              label: 'Confirm', onPressed: () => context.push(Routes.PAYMENT)),
+              label: 'Confirm',
+              color: AppColors.AUTH_CONTAINER_COLOR,
+              onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BlocProvider<PaymentCubit>(
+                  create: (BuildContext context) => serviceLocator(),
+                  child: PaymentView(
+                    amountId: '',
+                    amount: 600,
+                  ),
+                ),
+              ),
+            );
+              }),
         ],
       ),
     );
