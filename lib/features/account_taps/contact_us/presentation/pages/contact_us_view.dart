@@ -11,7 +11,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
+
 import '../../../../../res/strings/labels.dart';
+import '../../../../../res/style/styles.dart';
 import '../cubit/contact_us_cubit.dart';
 
 class ContactUsView extends StatelessWidget {
@@ -37,9 +39,10 @@ class ContactUsView extends StatelessWidget {
             key: controller.formKey,
             child: ListView(
               children: [
-                const Label(text: '49Hub Team is ready to help'),
-                Sizer(),
+                 Label(text: '49Hub Team is ready to help',style: Styles.mediumText(),),
+                const Sizer(),
                 FormTextField(
+
                   textStyle: TextStyle(color: Theme.of(context).primaryColor),
                   label: 'Phone (Optional)',
                   required: false,
