@@ -13,6 +13,8 @@ class TripJoinRequestModel extends TripJoinCardEntity {
   @override
   String? model;
   String? paymentMethods;
+  @override
+  bool? subscribedPremium;
 
   TripJoinRequestModel({
     this.firstName,
@@ -22,6 +24,7 @@ class TripJoinRequestModel extends TripJoinCardEntity {
     this.brand,
     this.model,
     this.paymentMethods,
+    this.subscribedPremium,
   }) : super(
           id: tripInfo?.id,
           userId: tripInfo?.userId,
@@ -42,11 +45,12 @@ class TripJoinRequestModel extends TripJoinCardEntity {
           phone: tripInfo?.phone,
           gender: gender,
           paymentMethod: paymentMethods,
+          subscribedPremium: subscribedPremium,
         );
 
   @override
   String toString() {
-    return 'TripJoinRequestModel(firstName: $firstName, gender: $gender, tripInfo: $tripInfo, allowStatus: $allowStatus , brand: $brand ,  model: $model , paymentMethods: $paymentMethods)';
+    return 'TripJoinRequestModel(firstName: $firstName, gender: $gender, tripInfo: $tripInfo, allowStatus: $allowStatus , brand: $brand ,  model: $model , paymentMethods: $paymentMethods , subscribedPremium: $subscribedPremium)';
   }
 
   factory TripJoinRequestModel.fromJson(Map<String, dynamic> json) {
@@ -58,6 +62,7 @@ class TripJoinRequestModel extends TripJoinCardEntity {
       brand: json['brand'] as String?,
       model: json['model'] as String?,
       paymentMethods: json['paymentMethods'] as String?,
+      subscribedPremium: json['subscribedPremium'] as bool?,
     );
   }
 

@@ -31,31 +31,34 @@ class TripJoinCardModel extends TripJoinCardEntity {
   DateTime? updatedAt;
   String? allowStatus;
   String? paymentMethods;
+  @override
+  bool? subscribedPremium;
 
-  TripJoinCardModel({
-    this.id,
-    this.userId,
-    this.categoryId,
-    this.vehicleId,
-    this.fromAr,
-    this.toAr,
-    this.fromEn,
-    this.toEn,
-    this.distance,
-    this.duration,
-    this.passengers,
-    this.price,
-    this.phone,
-    this.time,
-    this.countryCode,
-    this.isApproved,
-    this.isRepeat,
-    this.createdAt,
-    this.updatedAt,
-    this.status,
-    this.allowStatus,
-    this.paymentMethods,
-  }) : super(
+  TripJoinCardModel(
+      {this.id,
+      this.userId,
+      this.categoryId,
+      this.vehicleId,
+      this.fromAr,
+      this.toAr,
+      this.fromEn,
+      this.toEn,
+      this.distance,
+      this.duration,
+      this.passengers,
+      this.price,
+      this.phone,
+      this.time,
+      this.countryCode,
+      this.isApproved,
+      this.isRepeat,
+      this.createdAt,
+      this.updatedAt,
+      this.status,
+      this.allowStatus,
+      this.paymentMethods,
+      this.subscribedPremium})
+      : super(
           id: id,
           userId: userId,
           categoryId: categoryId,
@@ -72,11 +75,12 @@ class TripJoinCardModel extends TripJoinCardEntity {
           isApproved: allowStatus == 'enable',
           publishDate: time,
           paymentMethod: paymentMethods,
+          subscribedPremium: subscribedPremium,
         );
 
   @override
   String toString() {
-    return 'TripJoinCardModel(id: $id, userId: $userId, categoryId: $categoryId, vehicleId: $vehicleId, fromAr: $fromAr, toAr: $toAr, fromEn: $fromEn, toEn: $toEn, distance: $distance, duration: $duration, passengers: $passengers, price: $price, phone: $phone, time: $time, countryCode: $countryCode, isApproved: $isApproved, isRepeat: $isRepeat, createdAt: $createdAt, updatedAt: $updatedAt , status: $status, allowStatus: $allowStatus , paymentMethod: $paymentMethods)';
+    return 'TripJoinCardModel(id: $id, userId: $userId, categoryId: $categoryId, vehicleId: $vehicleId, fromAr: $fromAr, toAr: $toAr, fromEn: $fromEn, toEn: $toEn, distance: $distance, duration: $duration, passengers: $passengers, price: $price, phone: $phone, time: $time, countryCode: $countryCode, isApproved: $isApproved, isRepeat: $isRepeat, createdAt: $createdAt, updatedAt: $updatedAt , status: $status, allowStatus: $allowStatus , paymentMethod: $paymentMethods , subscribedPremium : $subscribedPremium)';
   }
 
   factory TripJoinCardModel.fromJson(Map<String, dynamic> json) {

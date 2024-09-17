@@ -78,7 +78,7 @@ class _RequestTripJoinNotificationViewState extends State<RequestTripJoinNotific
               _reportOnTap(context, tripJoinCardEntity);
             },
             subscribeCallback: () async {
-              if (await _userApproved(
+              if (await _isPremuim(
                 tripJoinCardEntity,
                 tripJoinCardEntity.categoryId ?? '',
                 'Trip Join Subscription',
@@ -89,6 +89,18 @@ class _RequestTripJoinNotificationViewState extends State<RequestTripJoinNotific
         ),
       ),
     );
+  }
+
+  Future<bool> _isPremuim(TripJoinCardEntity tripJoinCardEntity, String subCategoryId, String title) async {
+    if (tripJoinCardEntity.subscribedPremium == null || tripJoinCardEntity.subscribedPremium == false) {
+      await serviceLocator<SubscriptionController>().showSubscriptionPlans(
+        wallets: [tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance],
+        subCategoryId: subCategoryId,
+        title: title,
+      );
+      return false;
+    }
+    return false;
   }
 
   Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity, String subCategoryId, String title) async {

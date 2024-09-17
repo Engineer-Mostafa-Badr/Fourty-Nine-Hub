@@ -46,13 +46,18 @@ class ViewAllTripJoinRemoteDataSourceImp implements ViewAllTripJoinRemoteDataSou
         return Left(failure);
       },
       (data) {
-        List rawData = data['data'];
+        List rawData = data['data']['updatedTrips'];
         if (rawData.isEmpty) {
           // pr('No data found');
           return const Right([]);
         }
-        List<TripJoinCardEntity> allCards =
-            rawData.map<TripJoinCardEntity>((e) => TripJoinCardModel.fromJson(e)).toList();
+        List<TripJoinCardEntity> allCards = rawData.map<TripJoinCardEntity>(
+          (e) {
+            final tripJoinCardModel = TripJoinCardModel.fromJson(e);
+            tripJoinCardModel.subscribedPremium = data['data']['subscribedPremium'] as bool?;
+            return tripJoinCardModel;
+          },
+        ).toList();
         // pr(allCards, 'trip join remote datasource');
         return Right(allCards);
       },

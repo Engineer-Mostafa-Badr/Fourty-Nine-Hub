@@ -103,7 +103,7 @@ class AvailableTripCard extends StatelessWidget {
                   ),
                   const Sizer(),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Icon(Icons.trip_origin, color: AppColors.CHECK_MARK_COLOR, size: 20),
                       const Sizer(width: 13),
@@ -221,6 +221,6 @@ class AvailableTripCard extends StatelessWidget {
       return '';
     }
     return intl.DateFormat('dd MMM, hh:mm aaa')
-        .format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate!));
+        .format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate! * 1000));
   }
 }
