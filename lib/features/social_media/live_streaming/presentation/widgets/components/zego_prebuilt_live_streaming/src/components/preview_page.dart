@@ -20,6 +20,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../../../res/style/const.dart';
 import '../../../../../../../../../res/style/styles.dart';
@@ -276,18 +277,18 @@ class _ZegoLiveStreamingPreviewPageState
               rootNavigator: widget.config.rootNavigator,
             ).pop();
           },
-          child: Text(
-            LocaleKeys.cancel.localize,
-            style: TextStyle(
-                color: context.isDarkMode ? Colors.white : Colors.blue),
+          child: Label(
+            text: LocaleKeys.cancel.localize,
+            style: Styles.headerText(
+                fontSize: 25, color: AppColors.SECONDARY_COLOR),
           ),
         ),
-        title: Text(
-          LocaleKeys.startAMeeting.localize,
-          style: TextStyle(
+        title: Label(
+          text: LocaleKeys.startAMeeting.localize,
+          style: Styles.headerText(
               color:
                   context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-              fontSize: 18,
+              fontSize: 35,
               fontWeight: FontWeight.bold),
         ),
       ),
@@ -669,10 +670,10 @@ class _ZegoLiveStreamingPreviewPageState
                       .getCameraStateNotifier(ZegoUIKit().getLocalUser().id),
                   builder: (context, videoOn, child) {
                     return SwitchListTile(
-                      title: Text(
-                        LocaleKeys.videoOn.localize,
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                      title: Label(
+                        text: LocaleKeys.videoOn.localize,
+                        style: Styles.headerText(
+                            fontSize: 25, fontWeight: FontWeight.bold),
                       ),
                       value: videoOn,
                       onChanged: (v) {
@@ -680,9 +681,8 @@ class _ZegoLiveStreamingPreviewPageState
                         _toggleCamera(v);
                       },
                       activeColor: Colors.white,
-                      activeTrackColor: context.isDarkMode
-                          ? AppColors.SECONDARY_COLOR
-                          : Colors.green,
+                      activeTrackColor: AppColors.SECONDARY_COLOR,
+                      inactiveTrackColor: AppColors.GREY_BORDER_COLOR,
                     );
                   }),
               Container(
@@ -695,18 +695,18 @@ class _ZegoLiveStreamingPreviewPageState
                 valueListenable: usePersonalIdNotifier,
                 builder: (BuildContext context, bool value, Widget? child) {
                   return SwitchListTile(
-                    title: Text(
-                      "${LocaleKeys.usePersonalMeetingId.localize} (PMI)",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
+                    title: Label(
+                      text: "${LocaleKeys.usePersonalMeetingId.localize} (PMI)",
+                      // maxLines: 3,
+                      // overflow: TextOverflow.ellipsis,
+                      style: Styles.headerText(
+                          fontSize: 25, fontWeight: FontWeight.bold),
                     ),
-                    subtitle: Text(
-                      widget.liveID,
-                      style: const TextStyle(
+                    subtitle: Label(
+                      text: widget.liveID,
+                      style: Styles.headerText(
                           color: Colors.grey,
-                          fontSize: 16,
+                          fontSize: 25,
                           fontWeight: FontWeight.bold),
                     ),
                     value: value,
@@ -715,9 +715,8 @@ class _ZegoLiveStreamingPreviewPageState
                       print('use id notifier ${usePersonalIdNotifier.value}');
                     },
                     activeColor: Colors.white,
-                    activeTrackColor: context.isDarkMode
-                        ? AppColors.SECONDARY_COLOR
-                        : Colors.green,
+                    activeTrackColor: AppColors.SECONDARY_COLOR,
+                    inactiveTrackColor: AppColors.GREY_BORDER_COLOR,
                   );
                 },
               ),

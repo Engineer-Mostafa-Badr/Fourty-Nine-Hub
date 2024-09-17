@@ -67,6 +67,8 @@
   "voice": "صوت",
   "meet": "زوم",
   "cast": "سرعة",
+  "noRooms": "لا توجد غرف صوتيه",
+
   "restaurantName": "إسم المطعم",
   "theCommercialRegister": "السجل التجاري",
   "theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider": "التطبيق لا يخصم اي نسبه من مزود الخدمة",

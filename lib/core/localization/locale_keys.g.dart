@@ -69,6 +69,7 @@ abstract class  LocaleKeys {
   static const voice = 'voice';
   static const meet = 'meet';
   static const cast = 'cast';
+  static const noRooms = 'noRooms';
   static const restaurantName = 'restaurantName';
   static const theCommercialRegister = 'theCommercialRegister';
   static const theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider = 'theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider';

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
 
+import '../../../../../../../../../res/style/app_colors.dart';
 import '../core/live_duration_manager.dart';
 
 /// @nodoc
@@ -143,7 +144,7 @@ class _CallDurationTimeBoardState extends State<LiveDurationTimeBoard> {
                     child: ZegoLiveAudioRoomColoredText(
                       text: durationFormatString(elapsedTime),
                       fontSize: widget.fontSize ?? 25.zR,
-                      backgroundColor: Colors.black.withOpacity(0.2),
+                      backgroundColor: AppColors.PRIMARY_COLOR,
                       horizontalPadding: 20.zR,
                       verticalPadding: 5.zR,
                     ),

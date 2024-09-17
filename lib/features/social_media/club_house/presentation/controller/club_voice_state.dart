@@ -16,18 +16,22 @@ extension MeetingStateX on ClubVoiceState {
 class ClubVoiceState {
   final ZegoRequestState status;
   final List<ClubVoiceRoomEntity> roomsList;
+  final String roomId;
   ClubVoiceState copyWith({
     ZegoRequestState? requestState,
     List<ClubVoiceRoomEntity>? roomsList,
+    String? roomId,
   }) {
     return ClubVoiceState(
       roomsList: roomsList ?? this.roomsList,
       status: requestState ?? status,
+      roomId: roomId ?? this.roomId,
     );
   }
 
   const ClubVoiceState({
     this.status = ZegoRequestState.initial,
     this.roomsList = const [],
+    this.roomId = '',
   });
 }

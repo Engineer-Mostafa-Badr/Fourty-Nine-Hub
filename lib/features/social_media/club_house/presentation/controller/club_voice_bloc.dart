@@ -20,6 +20,7 @@ class ClubVoiceCubit extends Cubit<ClubVoiceState> {
   final LeaveClubVoiceUseCase leaveClubVoiceUseCase;
   final JoinClubVoiceUseCase joinClubVoiceUseCase;
   final SearchClubVoiceUseCase searchClubVoiceUseCase;
+
   ClubVoiceCubit(
     this.addClubVoiceUseCase,
     this.getClubVoiceUseCase,
@@ -29,7 +30,6 @@ class ClubVoiceCubit extends Cubit<ClubVoiceState> {
     this.searchClubVoiceUseCase,
   ) : super(const ClubVoiceState());
 
-  String roomId = '';
   Future<void> addRoom(String subject) async {
     emit(state.copyWith(requestState: ZegoRequestState.loading));
     if (!isClosed) {
@@ -37,8 +37,8 @@ class ClubVoiceCubit extends Cubit<ClubVoiceState> {
         value.fold((l) {
           emit(state.copyWith(requestState: ZegoRequestState.failure));
         }, (r) {
-          roomId = r.roomId;
-          emit(state.copyWith(requestState: ZegoRequestState.success));
+          emit(state.copyWith(
+              requestState: ZegoRequestState.success, roomId: r.roomId));
         });
       }).catchError((onError) {
         print('error $onError');
@@ -68,11 +68,16 @@ class ClubVoiceCubit extends Cubit<ClubVoiceState> {
     endClubVoiceUseCase(RoomMetaParams(roomId: roomId))
         .then((value) =>
             emit(state.copyWith(requestState: ZegoRequestState.success)))
-        .catchError((onError) =>
-            emit(state.copyWith(requestState: ZegoRequestState.failure)));
+        .catchError((onError) {
+      print('error is ${onError.toString()}');
+      if (!isClosed) {
+        emit(state.copyWith(requestState: ZegoRequestState.failure));
+      }
+    });
   }
 
   List<ClubVoiceRoomEntity> searchedRooms = [];
+
   void searchRoom(String roomSubject) {
     searchClubVoiceUseCase(SearchParams(roomSubject: roomSubject))
         .then((value) {
@@ -87,6 +92,7 @@ class ClubVoiceCubit extends Cubit<ClubVoiceState> {
   int pageSize = 10;
   int roomsLength = 0;
   List<ClubVoiceRoomEntity> rooms = [];
+
   void loadData() async {
     await getAllRooms(1);
     roomsPagingController.addPageRequestListener((pageKey) {
@@ -126,11 +132,11 @@ class ClubVoiceCubit extends Cubit<ClubVoiceState> {
         CliLogger.success('there is an success', level: CliLoggerLevel.two);
         rooms = r;
         roomsLength = r.length;
-        emit(
-          state
-              .copyWith(requestState: ZegoRequestState.success)
-              .copyWith(roomsList: r),
-        );
+        // emit(
+        //   state
+        //       .copyWith(requestState: ZegoRequestState.success,roomsList: r)
+
+        // );
       });
     }).catchError((onError) {
       CliLogger.error('there is an error from catch',

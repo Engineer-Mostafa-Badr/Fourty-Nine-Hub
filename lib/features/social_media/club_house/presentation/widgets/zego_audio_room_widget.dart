@@ -43,7 +43,7 @@ class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(20.0),
