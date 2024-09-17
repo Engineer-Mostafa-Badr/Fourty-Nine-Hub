@@ -1,4 +1,3 @@
-import '../../../../authentication/data/models/user_model.dart';
 import '../../domain/entities/contact_us_entity.dart';
 
 class ContactUsModel extends ContactUsEntity {
