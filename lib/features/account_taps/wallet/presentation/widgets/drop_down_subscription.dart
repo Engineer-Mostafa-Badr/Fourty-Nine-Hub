@@ -7,10 +7,8 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/main_category_entity.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
-import '../../../../../common/widgets/stateful/dynamic/pagination_view.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/localization/locales.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../cubit/wallet_cubit.dart';
