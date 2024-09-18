@@ -15,19 +15,16 @@ class TransferMoneyUseCase extends UseCase<bool, TransferMoneyParams> {
 }
 
 class TransferMoneyParams {
-  final String receiverUserId;
-  final String senderUserId;
+  final String receiverUsername;
   final int amount;
 
   TransferMoneyParams(
-      {required this.receiverUserId,
-      required this.senderUserId,
+      {required this.receiverUsername,
       required this.amount});
 
   Map<String,dynamic> toJson(){
     return {
-      "receiverUserId":receiverUserId,
-      "senderUserId":senderUserId,
+      "receiverUsername":receiverUsername,
       "amount":amount,
     };
   }

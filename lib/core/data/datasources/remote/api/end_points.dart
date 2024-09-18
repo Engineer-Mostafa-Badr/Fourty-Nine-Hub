@@ -102,6 +102,7 @@ class EndPoints {
 
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';
+  static const fetchUsers = '/users/all-usernames';
   static const getPrice = '/advertisementCompany/price';
   static const getSubscription = '/subscription';
   static const transferFiveBalance = '/main-wallet/transfer-five-years';
