@@ -167,7 +167,7 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
 
                           return;
                         }
-                        await context.read<MeetingCubit>().createNewMeeting(
+                        await context.read<StreamCubit>().createNewMeeting(
                               startTime: _combineDateAndTime(
                                 _selectedDate!,
                                 _startTime!,

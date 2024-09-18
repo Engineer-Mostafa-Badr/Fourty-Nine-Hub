@@ -231,7 +231,7 @@ class ZegoLiveStreamingCentralAudioVideoViewState
                                 ZegoUIKit().getAudioVideoList(),
                                 audioVideoViewCreator,
                               ) ??
-                              BlocBuilder<MeetingCubit, MeetingState>(
+                              BlocBuilder<StreamCubit, StreamState>(
                                 builder: (context, state) {
                                   if (state.isOpenWhiteBoard &&
                                       ZegoUIKit()
@@ -248,7 +248,7 @@ class ZegoLiveStreamingCentralAudioVideoViewState
                       );
                     },
                   )
-                : BlocBuilder<MeetingCubit, MeetingState>(
+                : BlocBuilder<StreamCubit, StreamState>(
                     builder: (context, state) {
                       print('loggggg ${state.status}');
                       if (state.isOpenWhiteBoard &&

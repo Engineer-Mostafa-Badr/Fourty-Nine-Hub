@@ -158,26 +158,11 @@ class _ZegoLiveStreamingLivePageState extends State<ZegoLiveStreamingLivePage>
           }
           return canLeave;
         },
-        child: widget.isLiveStream ? _tiktokLivePage() : _zoomLivePage(),
+        child: _zoomLivePage(),
       ),
     );
   }
 
-  Container _tiktokLivePage() {
-    return Container(
-      height: double.infinity,
-      color: Colors.purple,
-      child: Center(
-          child: ElevatedButton(
-        child: const Text(
-          'Demo Press To Get Back',
-          // ignore: unnecessary_const
-          style: const TextStyle(color: Colors.white),
-        ),
-        onPressed: () => Navigator.pop(context),
-      )),
-    );
-  }
 
   ZegoScreenUtilInit _zoomLivePage() {
     return ZegoScreenUtilInit(

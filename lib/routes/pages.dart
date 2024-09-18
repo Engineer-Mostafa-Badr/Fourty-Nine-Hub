@@ -65,13 +65,16 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
 import 'package:fourtyninehub/features/social_media/chat/attachments/presentation/pages/attachments_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/pages/broadcast_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_profile/presentation/pages/chat_profile_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/select_contacts_to_share_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/viewcontact_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/pages/see_all_broadcasts.dart';
 import 'package:fourtyninehub/features/social_media/chat/contacts/presentation/pages/contacts_view.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_sheet.dart';
@@ -231,6 +234,16 @@ class AppPages {
             path: Paths.CONTACTS_VIEW,
             name: Routes.CONTACTSVIEW,
             builder: (context, state) => const ContactsView(),
+          ),
+          GoRoute(
+            path: Paths.BROADCAST,
+            name: Routes.BROADCAST,
+            builder: (context, state) => const BroadcastView(),
+          ),
+          GoRoute(
+            path: Paths.SEEALLBROADCASTS,
+            name: Routes.SEEALLBROADCASTS,
+            builder: (context, state) => const SeeAllBroadcasts(),
           ),
           GoRoute(
             path: Paths.CHATPROFILEVIEW,
@@ -702,9 +715,12 @@ class AppPages {
                           name: Routes.LIVEView,
                           builder: (context, state) {
                             var extras = state.extra as ZegoArgs;
-                            return LiveStreamView(
-                              isHost: extras.isHost,
-                              liveID: extras.liveId,
+                            return BlocProvider.value(
+                              value: serviceLocator<StreamCubit>(),
+                              child: LiveStreamView(
+                                isHost: extras.isHost,
+                                liveID: extras.liveId,
+                              ),
                             );
                           }),
 
@@ -780,7 +796,7 @@ class AppPages {
                   path: Paths.MEDIASLIDER,
                   name: Routes.MEDIASLIDER,
                   builder: (context, state) => MediaSliderView(
-                      params: (state.extra) as MediaSliderViewParams),
+                      chatRoomCubit: (state.extra) as ChatRoomCubit),
                 ),
                 GoRoute(
                   path: Paths.VIEWCONTACT,
@@ -1075,9 +1091,9 @@ class AppPages {
           GoRoute(
               path: Paths.ZOOM,
               name: Routes.ZOOM,
-              builder: (context, state) => BlocProvider<MeetingCubit>(
+              builder: (context, state) => BlocProvider<StreamCubit>(
                     create: (context) =>
-                        serviceLocator<MeetingCubit>()..getScheduledMeetings(),
+                        serviceLocator<StreamCubit>()..getScheduledMeetings(),
                     child: const MeetingView(),
                   ),
               routes: [
