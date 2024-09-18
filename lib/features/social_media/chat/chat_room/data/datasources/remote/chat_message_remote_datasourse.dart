@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
@@ -41,7 +42,8 @@ abstract class MessagesRemoteDataSource {
 
   void stopListenToDeliveredStatus();
 
-  Future<Either<Failure, bool>> markMessageAsDelivered(MarkMessagesAsDeliveredParams params);
+  Future<Either<Failure, bool>> markMessageAsDelivered(
+      MarkMessagesAsDeliveredParams params);
 }
 
 class MessagesRemoteDataSourceImplementation
@@ -95,34 +97,75 @@ class MessagesRemoteDataSourceImplementation
     }
   }
 
+  // @override
+  // Future<Either<Failure, bool>> sendMessage(SendMessageParams params) async {
+  //   try {
+  //     _socket.connect();
+  //     CliLogger.info('you send message : ${params.toString()}');
+  //     List<String> mediaIds = [];
+  //     for (var file in params.media) {
+  //       final id = await UploadFile.uploadPickedFile(
+  //           file: file, subCategoryId: params.chat.categoryId);
+  //       if (id != null) {
+  //         mediaIds.add(id);
+  //       }
+  //     }
+  //     _socket.emit(
+  //         SocketIOEvents.sendMessage,
+  //         jsonEncode({
+  //           "chatId": params.chat.id,
+  //           "type": 1,
+  //           "mediaIds": mediaIds,
+  //           "text": params.message,
+  //           "groupId": null,
+  //           "replyMessageId": params.replyMessageId,
+  //           "oneTimeView": params.oneTimeView,
+  //         }));
+  //     return const Right(true);
+  //   } catch (e) {
+  //     CliLogger.error('can\'t send error $e');
+  //     return const Left(ServerFailure(message: "can't send message "));
+  //   }
+  // }
+
   @override
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params) async {
     try {
       _socket.connect();
-      CliLogger.info('you send message : ${params.toString()}');
+      CliLogger.info('You are sending message: ${params.toString()}');
+
       List<String> mediaIds = [];
       for (var file in params.media) {
         final id = await UploadFile.uploadPickedFile(
-            file: file, subCategoryId: params.chat.categoryId);
+          file: file,
+          subCategoryId: params.chat.categoryId,
+        );
         if (id != null) {
           mediaIds.add(id);
         }
       }
+
+      // if (mediaIds.isNotEmpty) {
+      //   await Future.delayed(const Duration(seconds: 6), () {});
+      // }
+
       _socket.emit(
-          SocketIOEvents.sendMessage,
-          jsonEncode({
-            "chatId": params.chat.id,
-            "type": 1,
-            "mediaIds": mediaIds,
-            "text": params.message,
-            "groupId": null,
-            "replyMessageId": params.replyMessageId,
-            "oneTimeView": params.oneTimeView,
-          }));
+        SocketIOEvents.sendMessage,
+        jsonEncode({
+          "chatId": params.chat.id,
+          "type": 1,
+          "mediaIds": mediaIds,
+          "text": params.message,
+          "groupId": null,
+          "replyMessageId": params.replyMessageId,
+          "oneTimeView": params.oneTimeView,
+        }),
+      );
+
       return const Right(true);
     } catch (e) {
-      CliLogger.error('can\'t send error $e');
-      return const Left(ServerFailure(message: "can't send message "));
+      CliLogger.error('Can\'t send message: $e');
+      return const Left(ServerFailure(message: "Can't send message"));
     }
   }
 
@@ -143,6 +186,8 @@ class MessagesRemoteDataSourceImplementation
 
       for (var element in data['data']) {
         messageModels.add(MessageModel.fromJson(element));
+        // log(MessageModel.fromJson(element).text);
+        // log(element.toString());
       }
       return Right(messageModels);
     });
@@ -178,7 +223,7 @@ class MessagesRemoteDataSourceImplementation
           data = decodedData;
         }
         CliLogger.info("messageDelivered :  $data");
-        String chatId =data['chatId'];
+        String chatId = data['chatId'];
         params(chatId);
       });
     } catch (e) {
@@ -212,11 +257,13 @@ class MessagesRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> markMessageAsDelivered(MarkMessagesAsDeliveredParams params) async {
+  Future<Either<Failure, bool>> markMessageAsDelivered(
+      MarkMessagesAsDeliveredParams params) async {
     try {
       _socket.connect();
       CliLogger.info("you mark messages as delivered");
-      _socket.emit(SocketIOEvents.markMessageAsDelivered,jsonEncode({"chatId":params.chatId}));
+      _socket.emit(SocketIOEvents.markMessageAsDelivered,
+          jsonEncode({"chatId": params.chatId}));
       return const Right(true);
     } catch (e) {
       CliLogger.info("can't mark message as delivered error $e");

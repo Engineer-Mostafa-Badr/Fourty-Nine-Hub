@@ -1,151 +1,236 @@
+// ignore_for_file: use_build_context_synchronously
+
 part of 'camera_picker.dart';
 
-class MediaSliderViewParams {
-  final List<File> media;
-  final int? initialIndex;
-
-  MediaSliderViewParams({required this.media, this.initialIndex});
-}
-
 class MediaSliderView extends StatefulWidget {
-  final MediaSliderViewParams params;
-
-  const MediaSliderView({super.key, required this.params});
+  final ChatRoomCubit chatRoomCubit;
+  const MediaSliderView({super.key, required this.chatRoomCubit});
 
   @override
   State<MediaSliderView> createState() => _MediaSliderViewState();
 }
 
 class _MediaSliderViewState extends State<MediaSliderView> {
-  late int _selectedIndex;
+  int _selectedIndex = 0;
   late PageController _pageController;
-  late List<File> _media;
+  late ScrollController _scrollController;
+  bool isLoading = false;
 
   @override
   void initState() {
-    _selectedIndex = widget.params.initialIndex ?? 0;
-    _media = widget.params.media;
     _pageController = PageController(initialPage: _selectedIndex);
-    // _pageController.addListener(() {
-    //   setState(() {
-    //     _selectedIndex = _pageController.page!.toInt();
-    //   });
-    // });
+    _scrollController = ScrollController();
     super.initState();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  // Function to scroll the horizontal list to the selected thumbnail
+  void _scrollToSelectedThumbnail(int index) {
+    double offset = index * 155.0; // Adjust width + padding/margin here
+    _scrollController.animateTo(
+      offset,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: Builder(builder: (context) {
-          return Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.w),
-                child: Row(
-                  children: [
-                    _BaseIcon(
-                      icon: Icons.close,
-                      onTap: () {
-                        context.pop();
-                      },
-                    ),
-                    const Spacer(),
-                    _BaseIcon(icon: Icons.plus_one_rounded, onTap: () {}),
-                    SizedBox(width: 20.h),
-                    _BaseIcon(
-                      icon: Icons.edit,
-                      onTap: () async {
-                        Uint8List? editedImage;
-                        showDialog(
-                          context: context,
-                          builder: (context) => ProImageEditor.file(
-                            _media[_selectedIndex],
-                            onImageEditingComplete: (Uint8List bytes) async {
-                              editedImage = bytes;
-                              context.pop();
-                            },
-                          ),
-                        ).then((value) async {
-                          if (editedImage != null) {
-                            _media[_selectedIndex] =
-                                await _convertUint8ListToFile(editedImage!);
-                            setState(() {});
-                          }
+      child: BlocProvider.value(
+        value: widget.chatRoomCubit,
+        child: Builder(
+          builder: (context) {
+            return Scaffold(
+              backgroundColor: Colors.black,
+              body: Stack(
+                children: [
+                  // The PageView for media (background layer)
+                  Positioned.fill(
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: context.read<ChatRoomCubit>().media.length,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _selectedIndex = index;
                         });
+                        _scrollToSelectedThumbnail(
+                            index); // Scroll to the thumbnail
+                      },
+                      itemBuilder: (context, index) {
+                        final file = context.read<ChatRoomCubit>().media[index];
+                        if (file.isImage) {
+                          return Image.file(
+                            file,
+                          );
+                        } else {
+                          return _TrimmerView(
+                              file: file, onSave: (editedVideo) {});
+                        }
                       },
                     ),
-                  ],
-                ),
+                  ),
+                  // The overlay containing the top icons, ListView, and TextField
+                  Column(
+                    children: [
+                      // Top Row with icons
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.w),
+                        child: Row(
+                          children: [
+                            _BaseIcon(
+                              icon: Icons.close,
+                              onTap: () {
+                                context.read<ChatRoomCubit>().media.clear();
+                                context.pop();
+                              },
+                            ),
+                            const Spacer(),
+                            _BaseIcon(
+                                icon: Icons.plus_one_rounded, onTap: () {}),
+                            SizedBox(width: 20.h),
+                            _BaseIcon(
+                              icon: Icons.edit,
+                              onTap: () async {
+                                Uint8List? editedImage;
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => ProImageEditor.file(
+                                    context
+                                        .read<ChatRoomCubit>()
+                                        .media[_selectedIndex],
+                                    onImageEditingComplete:
+                                        (Uint8List bytes) async {
+                                      editedImage = bytes;
+                                      context.pop();
+                                    },
+                                  ),
+                                ).then((value) async {
+                                  if (editedImage != null) {
+                                    context
+                                            .read<ChatRoomCubit>()
+                                            .media[_selectedIndex] =
+                                        await _convertUint8ListToFile(
+                                            editedImage!);
+                                    setState(() {});
+                                  }
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Spacer(),
+                      // The ListView for displaying media thumbnails
+                      SizedBox(
+                        height: 100.h,
+                        child: ListView.separated(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          scrollDirection: Axis.horizontal,
+                          controller: _scrollController,
+                          itemCount: context.read<ChatRoomCubit>().media.length,
+                          separatorBuilder: (context, index) => const Sizer(),
+                          itemBuilder: (context, index) {
+                            final file =
+                                context.read<ChatRoomCubit>().media[index];
+                            if (file.isImage) {
+                              return _mediaContainer(
+                                  index: index, image: FileImage(file));
+                            } else {
+                              return FutureBuilder<Uint8List?>(
+                                future: generateThumbnail(path: file.path),
+                                builder: (context,
+                                    AsyncSnapshot<Uint8List?> snapshot) {
+                                  if (snapshot.hasData &&
+                                      snapshot.data != null &&
+                                      snapshot.data!.isNotEmpty) {
+                                    return _mediaContainer(
+                                        index: index,
+                                        image: MemoryImage(snapshot.data!),
+                                        isPhoto: false);
+                                  } else {
+                                    return Shimmer.fromColors(
+                                      baseColor: Colors.grey[300]!,
+                                      highlightColor: Colors.grey[100]!,
+                                      child: Container(
+                                        width: 50.h,
+                                        height: 100.h,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+                      // The TextField for adding captions
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: TextField(
+                          controller: context
+                              .read<ChatRoomCubit>()
+                              .messageTextController,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.grey[850],
+                            prefixIcon: IconButton(
+                              icon: const Icon(Icons.add_photo_alternate,
+                                  color: Colors.grey),
+                              onPressed: () async {
+                                await context.read<ChatRoomCubit>().pickMedia();
+                                setState(() {});
+                              },
+                            ),
+                            hintText: 'Add a caption ...',
+                            hintStyle: const TextStyle(color: Colors.grey),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      SizedBox(height: 150.h),
+                    ],
+                  ),
+                ],
               ),
-              Expanded(
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: _media.length,
-                  itemBuilder: (context, index) {
-                    final file = _media[index];
-                    if (file.isImage) {
-                      return Image.file(file);
-                    } else {
-                      return _TrimmerView(file: file, onSave: (editedVideo) {});
-                    }
-                  },
-                ),
+              // Floating Action Button for sending message
+              floatingActionButton: FloatingActionButton(
+                onPressed: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  await context.read<ChatRoomCubit>().sendMessage();
+                  await Future.delayed(const Duration(seconds: 6), () {});
+                  setState(() {
+                    isLoading = false;
+                  });
+                  context.pop();
+                },
+                backgroundColor: AppColors.BACKGROUND_COLOR,
+                child: isLoading
+                    ? const CircularProgressIndicator(
+                        color: AppColors.PRIMARY_COLOR)
+                    : const Icon(Icons.send, color: AppColors.PRIMARY_COLOR),
               ),
-              SizedBox(
-                height: 150.h,
-                child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _media.length,
-                  separatorBuilder: (context, index) => Sizer(),
-                  itemBuilder: (context, index) {
-                    CliLogger.info('building index: $index');
-                    final file = _media[index];
-                    if (file.isImage) {
-                      return _mediaContainer(
-                          index: index, image: FileImage(file));
-                    } else {
-                      return FutureBuilder<Uint8List?>(
-                        future: generateThumbnail(path: file.path),
-                        builder: (context, AsyncSnapshot<Uint8List?> snapshot) {
-                          if (snapshot.hasData &&
-                              snapshot.data != null &&
-                              snapshot.data!.isNotEmpty) {
-                            return _mediaContainer(
-                                index: index,
-                                image: MemoryImage(snapshot.data!),
-                                isPhoto: false);
-                          } else {
-                            return Shimmer.fromColors(
-                              baseColor: Colors.grey[300]!,
-                              highlightColor: Colors.grey[100]!,
-                              child: Container(
-                                width: 150.h,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
-                                ),
-                              ),
-                            );
-                          }
-                        },
-                      );
-                    }
-                  },
-                ),
-              ),
-            ],
-          );
-        }),
+            );
+          },
+        ),
       ),
     );
   }
@@ -177,20 +262,10 @@ class _MediaSliderViewState extends State<MediaSliderView> {
       {required int index, required ImageProvider image, bool isPhoto = true}) {
     return InkWell(
       onTap: () {
-        if (_selectedIndex == index) {
-          setState(() {
-            _media.removeAt(index);
-            _selectedIndex = 0;
-          });
-          if (_media.isEmpty) {
-            context.pop();
-          }
-        } else {
-          setState(() {
-            _selectedIndex = index;
-          });
+        setState(() {
+          _selectedIndex = index;
           _pageController.jumpToPage(index);
-        }
+        });
       },
       child: Container(
         width: 150.h,
@@ -199,14 +274,38 @@ class _MediaSliderViewState extends State<MediaSliderView> {
               ? Border.all(color: Colors.white, width: 3)
               : null,
           borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(image: image, fit: BoxFit.cover),
+          image: DecorationImage(
+            image: image,
+            fit: BoxFit.cover,
+            colorFilter: _selectedIndex == index
+                ? const ColorFilter.mode(Colors.black54, BlendMode.darken)
+                : null,
+          ),
         ),
         child: isPhoto
             ? index == _selectedIndex
-                ? const Center(
-                    child: Icon(
-                      Icons.delete,
-                      color: Colors.white,
+                ? Center(
+                    child: IconButton(
+                      onPressed: () async {
+                        setState(() {
+                          context.read<ChatRoomCubit>().media.removeAt(index);
+                          // Adjust the selected index after deletion
+                          if (_selectedIndex > 0) {
+                            _selectedIndex--;
+                          }
+
+                          // If no media left, pop back to the previous screen
+                          if (context.read<ChatRoomCubit>().media.isEmpty) {
+                            context.pop();
+                            context.pop();
+                          }
+                        });
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                        size: 26,
+                      ),
                     ),
                   )
                 : null

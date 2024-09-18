@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_media_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/reply_message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_sender_entity.dart';
@@ -26,7 +27,13 @@ class MessageModel extends MessageEntity {
     return MessageModel(
       id: json['_id'] ?? '',
       text: json['text'] ?? '',
-      media: [],
+      media: json['media'] != null
+          ? (json['media'] as List)
+              .whereType<
+                  Map<String, dynamic>>() // Only keep items that are maps
+              .map((e) => MessageMediaModel.fromJson(e))
+              .toList()
+          : [],
       sender: MessageSenderEntity(
         id: json['ownerUserId'] ?? '',
         name: json['username'] ?? '',

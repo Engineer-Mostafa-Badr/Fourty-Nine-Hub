@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,7 +38,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final ScrollController scrollController = ScrollController();
   final TextEditingController messageTextController = TextEditingController();
   final FilePicker _filePicker = FilePicker.platform;
-  final List<File> _media = [];
+  List<File> media = [];
   Map<String, MessageEntity> _messages = {};
   MessageEntity? _replayMessage;
   late ChatEntity _chat;
@@ -82,6 +83,10 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   void addMessage(MessageEntity message) {
     if (message.chatId == _chat.id) {
+      log(message.text);
+      for (var media in message.media) {
+        log(media.url);
+      }
       _messages[message.id] = message;
       emit(state.copyWith(
           messages: _messages.values.toList(), status: ChatRoomStates.success));
@@ -100,14 +105,14 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         replyMessageId: _replayMessage?.id,
         message: messageTextController.text,
         chat: _chat,
-        media: _media,
+        media: media,
         oneTimeView: false));
     result.fold(
         (l) => emit(state.copyWith(failure: l, status: ChatRoomStates.error)),
         (r) {
       cancelReplay();
       messageTextController.text = '';
-      _media.clear();
+      media.clear();
     });
   }
 
@@ -165,7 +170,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       if (result != null) {
         for (var file in result.files) {
-          _media.add(File(file.path!));
+          media.add(File(file.path!));
         }
       }
     } catch (e) {
@@ -185,7 +190,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       if (result != null) {
         for (var file in result.files) {
-          _media.add(File(file.path!));
+          media.add(File(file.path!));
         }
       }
     } catch (e) {
@@ -205,7 +210,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       if (result != null) {
         for (var file in result.files) {
-          _media.add(File(file.path!));
+          media.add(File(file.path!));
         }
       }
     } catch (e) {
