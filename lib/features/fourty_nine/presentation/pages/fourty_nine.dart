@@ -49,16 +49,22 @@ class _FourtyNineViewState extends State<FourtyNineView> {
 
   @override
   void initState() {
-    scrollController;
+    super.initState();
+    _setupScrollController();
+    context.read<FirebaseNotficationsCubit>().setupInterceptedMessage(context: context);
+    context.read<NotificationSocketIoCubit>().notificationListener();
+  }
+
+
+  void _setupScrollController() {
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
         if (!_isScrollingDown) {
           setState(() {
             _isScrollingDown = true;
           });
         }
-      } else {
+      } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
         if (_isScrollingDown) {
           setState(() {
             _isScrollingDown = false;
@@ -66,10 +72,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         }
       }
     });
-    context.read<FirebaseNotficationsCubit>().setupInterceptedMessage(context: context);
-    context.read<NotificationSocketIoCubit>().notificationListener();
-    super.initState();
   }
+
 
   @override
   void dispose() {
