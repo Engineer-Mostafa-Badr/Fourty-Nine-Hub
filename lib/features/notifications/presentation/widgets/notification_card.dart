@@ -20,13 +20,14 @@ class NotificationCard extends StatefulWidget {
   final int index;
   final Function() notificationSeenCallback;
   final Function() notificationDeleteCallback;
-  const NotificationCard({
-    super.key,
-    required this.notificationEntity,
-    required this.index,
-    required this.notificationSeenCallback,
-    required this.notificationDeleteCallback,
-  });
+  final String? type;
+  const NotificationCard(
+      {super.key,
+      required this.notificationEntity,
+      required this.index,
+      required this.notificationSeenCallback,
+      required this.notificationDeleteCallback,
+      this.type});
 
   @override
   State<NotificationCard> createState() => _NotificationCardState();
@@ -54,8 +55,7 @@ class _NotificationCardState extends State<NotificationCard> {
                   context: context,
                   builder: (context) {
                     return Container(
-                      padding: EdgeInsets.only(
-                          top: 20.h, right: 10.w, left: 10.w, bottom: 20.h),
+                      padding: EdgeInsets.only(top: 20.h, right: 10.w, left: 10.w, bottom: 20.h),
                       child: AreYouSure(
                         title: LocaleKeys.alert.localize,
                         subTitle: LocaleKeys.clearNoti.localize,
@@ -81,27 +81,41 @@ class _NotificationCardState extends State<NotificationCard> {
                 ),
               ),
               child: NotificationCustomContainer(
-                color: widget.notificationEntity.read!
-                    ? Colors.transparent
-                    : AppColors.PRIMARY_COLOR.withOpacity(0.1),
+                color: widget.notificationEntity.read! ? Colors.transparent : AppColors.PRIMARY_COLOR.withOpacity(0.1),
                 child: Row(
                   children: [
-                    SizedBox(
-                      height: kToolbarHeight,
-                      width: kToolbarHeight,
-                      child: widget.notificationEntity.userImageUrl == null
-                          ? Image.asset(
-                              Assets.icon,
-                            )
-                          : _networkImage(),
-                    ),
+                    Builder(builder: (context) {
+                      if (widget.type == 'services') {
+                        return Container(
+                            decoration: const BoxDecoration(shape: BoxShape.circle),
+                            clipBehavior: Clip.hardEdge,
+                            margin: EdgeInsets.only(right: 10.w),
+                            height: kToolbarHeight,
+                            width: kToolbarHeight,
+                            child: Image.asset(
+                              widget.notificationEntity.gender == 'male'
+                                  ? Assets.maleImagePlaceholder
+                                  : Assets.femaleImagePlacehlder,
+                              fit: BoxFit.fill,
+                            ));
+                      }
+                      return SizedBox(
+                        height: kToolbarHeight,
+                        width: kToolbarHeight,
+                        child: widget.notificationEntity.userImageUrl == null
+                            ? Image.asset(
+                                Assets.icon,
+                              )
+                            : _networkImage(),
+                      );
+                    }),
                     // Sizer(),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.notificationEntity.title ?? '',
+                            _capitalizeTitle(widget.notificationEntity.title ?? ''),
                             style: Styles.headerText(),
                           ),
                           Sizer(height: 5.h),
@@ -125,6 +139,17 @@ class _NotificationCardState extends State<NotificationCard> {
         );
       },
     );
+  }
+
+  String _capitalizeTitle(String title) {
+    // return title;
+    title = title.trim();
+    List<String> words = title.split(' ');
+    String? result;
+    for (String word in words) {
+      result = '${result == null ? "" : "$result "}${word[0].toUpperCase()}${word.substring(1)}';
+    }
+    return result ?? '';
   }
 
   Container _networkImage() {
@@ -152,14 +177,12 @@ class _NotificationCardState extends State<NotificationCard> {
     if (widget.notificationEntity.createdAt == null) {
       return '';
     }
-    return DateFormat('dd MMM, hh:mm aaa')
-        .format(widget.notificationEntity.createdAt!);
+    return DateFormat('dd MMM, hh:mm aaa').format(widget.notificationEntity.createdAt!);
   }
 }
 
 class NotificationCustomContainer extends StatelessWidget {
-  const NotificationCustomContainer(
-      {super.key, required this.color, required this.child});
+  const NotificationCustomContainer({super.key, required this.color, required this.child});
   final Color color;
   final Widget child;
   @override

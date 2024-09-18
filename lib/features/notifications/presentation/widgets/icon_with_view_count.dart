@@ -26,10 +26,25 @@ class IconWithViewCount extends StatelessWidget {
         ),
         Sizer(width: spaceBetween.w),
         Text(
-          unreadCount == 0 ? '   ' : '($unreadCount)',
+          _formatCount(unreadCount),
           style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
         ),
       ],
     );
+  }
+
+  String _formatCount(int? count) {
+    // count = 1009;
+    if (count == null || count == 0) {
+      return '  ';
+    }
+    if (count < 1000) {
+      return '($count)';
+    }
+    String result = (count / 1000).toStringAsFixed(1);
+    if (result.endsWith('0')) {
+      return "(${result.split('.').first}K)";
+    }
+    return '(${result}K)';
   }
 }

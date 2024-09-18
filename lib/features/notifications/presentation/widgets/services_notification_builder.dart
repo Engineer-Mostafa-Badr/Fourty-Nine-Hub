@@ -92,6 +92,7 @@ class _ServicesNotificationBuilderState extends State<ServicesNotificationBuilde
             if (index < getServicesNotificationsCubit.notifications.length) {
               final NotificationEntity notificationEntity = getServicesNotificationsCubit.notifications[index];
               return NotificationCard(
+                type: 'services',
                 notificationEntity: notificationEntity,
                 index: index,
                 notificationSeenCallback: () {

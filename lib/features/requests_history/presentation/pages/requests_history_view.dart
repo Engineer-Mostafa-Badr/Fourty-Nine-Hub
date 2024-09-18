@@ -21,8 +21,7 @@ class HistoryRequestsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = context.read<RequestHistoryCubit>();
-    return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(
-        builder: (context, state) {
+    return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(builder: (context, state) {
       return DefaultTabController(
         length: 6,
         initialIndex: 0,
@@ -40,34 +39,35 @@ class HistoryRequestsView extends StatelessWidget {
                       )
                     : Column(
                         children: [
-                          TabBar(tabs: [
-                            Tab(
-                              text: 'Ride',
-                              icon: SvgPicture.asset(height: 20.h, Assets.ride),
-                            ),
-                            Tab(
-                              text: 'Shipping',
-                              icon: SvgPicture.asset(
-                                  height: 20.h, Assets.shipping),
-                            ),
-                            Tab(
-                              text: 'Health',
-                              icon:
-                                  SvgPicture.asset(height: 20.h, Assets.health),
-                            ),
-                            Tab(
-                              text: 'Food',
-                              icon: SvgPicture.asset(height: 20.h, Assets.food),
-                            ),
-                            Tab(
-                              text: 'Trip Join ',
-                              icon: Image.asset(height: 20.h, Assets.tripjoin),
-                            ),
-                            Tab(
-                              text: 'Requests',
-                              icon: Image.asset(height: 20.h, Assets.hand),
-                            ),
-                          ]),
+                          TabBar(
+                            isScrollable: true,
+                            tabs: [
+                              Tab(
+                                text: 'Ride',
+                                icon: SvgPicture.asset(height: 20.h, Assets.ride),
+                              ),
+                              Tab(
+                                text: 'Shipping',
+                                icon: SvgPicture.asset(height: 20.h, Assets.shipping),
+                              ),
+                              Tab(
+                                text: 'Health',
+                                icon: SvgPicture.asset(height: 20.h, Assets.health),
+                              ),
+                              Tab(
+                                text: 'Food',
+                                icon: SvgPicture.asset(height: 20.h, Assets.food),
+                              ),
+                              Tab(
+                                text: 'Trip Join ',
+                                icon: Image.asset(height: 20.h, Assets.tripjoin),
+                              ),
+                              Tab(
+                                text: 'Requests',
+                                icon: Image.asset(height: 20.h, Assets.hand),
+                              ),
+                            ],
+                          ),
                           const Sizer(),
                           Expanded(
                               child: TabBarView(children: [
@@ -95,8 +95,7 @@ class HistoryRequestsView extends StatelessWidget {
   }
 
   Widget _buildShippingRequests() {
-    return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(
-        builder: (context, state) {
+    return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(builder: (context, state) {
       return ListView.separated(
           itemCount: state.shippingRequests?.length ?? 0,
           separatorBuilder: (context, index) => const Sizer(),
@@ -107,8 +106,7 @@ class HistoryRequestsView extends StatelessWidget {
   }
 
   Widget _buildHealthBooking() {
-    return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(
-        builder: (context, state) {
+    return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(builder: (context, state) {
       return ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -121,8 +119,7 @@ class HistoryRequestsView extends StatelessWidget {
   }
 
   Widget _buildRideRequests() {
-    return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(
-        builder: (context, state) {
+    return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(builder: (context, state) {
       return ListView.separated(
           itemCount: state.trips?.length ?? 0,
           separatorBuilder: (context, index) => const Sizer(),
@@ -133,8 +130,7 @@ class HistoryRequestsView extends StatelessWidget {
   }
 
   Widget _buildFoodOrders() {
-    return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(
-        builder: (context, state) {
+    return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(builder: (context, state) {
       return ListView.separated(
           itemCount: state.foodOrders?.length ?? 0,
           separatorBuilder: (context, index) => const Sizer(),
