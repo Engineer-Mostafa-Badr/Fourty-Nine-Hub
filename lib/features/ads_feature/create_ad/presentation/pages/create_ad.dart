@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter/material.dart';
@@ -7,17 +8,17 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/labels/badged_label.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/assets/assets.dart';
-import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
@@ -57,8 +58,8 @@ class _CreateAdViewState extends State<CreateAdView> {
     }, builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
       return Scaffold(
-        appBar: const BackAppBar(
-          label: Labels.adDetails,
+        appBar: BackAppBar(
+          label: LocaleKeys.createAd.localize
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -91,27 +92,103 @@ class _CreateAdViewState extends State<CreateAdView> {
                 const Divider(),
                 _buildImagePicker(),
                 Sizer(),
-                FormTextField(
-                  label: 'title',
-                  height: kToolbarHeight * .8,
-                  hint: 'Type here',
-                  action: (v) => controller.title = v,
+                Row(
+                  children: [
+                    Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              state.isUser = true;
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: state.isUser == true
+                                    ? AppColors.PRIMARY_COLOR
+                                    : Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                border:
+                                Border.all(color: AppColors.PRIMARY_COLOR)),
+                            alignment: AlignmentDirectional.center,
+                            child: Text(
+                              LocaleKeys.user.localize,
+                              style: Styles.mediumText(
+                                  color: state.isUser == false
+                                      ? AppColors.PRIMARY_COLOR
+                                      : Colors.white),
+                            ),
+                          ),
+                        )),
+                    const Sizer(),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            state.isUser = false;
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              color: state.isUser == false
+                                  ? AppColors.PRIMARY_COLOR
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                              border:
+                              Border.all(color: AppColors.PRIMARY_COLOR)),
+                          alignment: AlignmentDirectional.center,
+                          child: Text(
+                            LocaleKeys.provider.localize,
+                            style: Styles.mediumText(
+                                color: state.isUser == true
+                                    ? AppColors.PRIMARY_COLOR
+                                    : Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const Sizer(),
+                TextFormField(
+                  maxLines: null,
+                  onChanged: (v) =>controller.title = v,
+                  style: Styles.headerText(fontSize: 26),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.all(5),
+                    hintText: LocaleKeys.title.localize,
+                    hintStyle: Styles.mediumText(),
+                      prefix: Sizer(width: 20.w,)
+                  ),
+                  validator: (value) {
+                    if ((value == null || value.isEmpty)) {
+                      return LocaleKeys.required.localize;
+                    } else {
+                      return null;
+                    }
+                  },
                 ),
                 Sizer(),
-                FormTextField(
-                  label: 'Description',
-                  // height: kToolbarHeight * .8,
-                  hint: 'Type here',
-                  action: (v) => controller.description = v,
-                  maxLines: 3,
-                ),
-                Sizer(),
-                FormTextField(
-                  label: 'Phone',
-                  type: TextInputType.phone,
-                  // height: kToolbarHeight * .8,
-                  hint: 'Type here',
-                  action: (v) => controller.phone = v,
+                TextFormField(
+                  maxLines: null,
+                  onChanged: (v) =>controller.description = v,
+                  style: Styles.headerText(fontSize: 26),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.all(5),
+                    hintText: LocaleKeys.desc.localize,
+                    hintStyle: Styles.mediumText(),
+                      prefix: Sizer(width: 20.w,)
+                  ),
+                  validator: (value) {
+                    if ((value == null || value.isEmpty)) {
+                      return LocaleKeys.required.localize;
+                    } else {
+                      return null;
+                    }
+                  },
                 ),
                 Sizer(),
                 ListView.separated(
@@ -129,24 +206,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                   itemCount: state.adProperties?.length ?? 0,
                 ),
                 Sizer(),
-                FormTextField(
-                  label: 'Price',
-                  type: TextInputType.number,
-                  hint: 'Type here',
-                  prefix: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Label(
-                        text: 'EGP',
-                        style: Styles.mediumText(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  action: (v) => controller.price = v,
-                ),
-                Sizer(),
                 DefaultButton(
-                    label: 'Publish',
+                    label: LocaleKeys.publish.localize,
                     onPressed: () {
                       controller.createAd(
                           categorize: widget.categorization, context: context);
@@ -187,14 +248,16 @@ class _CreateAdViewState extends State<CreateAdView> {
                       ),
                     if (!state.isImageUploading)
                       BadgedLabel(
-                        label: 'Add Images',
+                        label: LocaleKeys.addImages.localize,
                         isBordered: true,
                         style: Styles.smallText(color: Colors.black),
                         color: AppColors.SECONDARY_COLOR,
+                        isCentered: true,
+                        close: false,
                       ),
                     Label(
                       text:
-                          '5MB maximum file size accepted in the following formats: jpg, Jpeg, png, gif',
+                      LocaleKeys.addImagesDesc.localize,
                       style: Styles.mediumText(
                         color: Colors.grey,
                       ),
@@ -214,20 +277,26 @@ class _CreateAdViewState extends State<CreateAdView> {
                   itemBuilder: (context, index) {
                     final image = state.images![index];
                     return SizedBox(
-                      height: kToolbarHeight * 1,
-                      width: kToolbarHeight * 1,
+                      height: kToolbarHeight * 2,
+                      width: kToolbarHeight * 2,
                       child: Stack(
+                        alignment: AlignmentDirectional.topStart,
                         children: [
                           Positioned.fill(
                               child: Image.file(
                             fit: BoxFit.cover,
                             File(image.file.path),
                           )),
-                          Positioned(
+                          PositionedDirectional(
+                            start: 5.w,
+                            top: 0,
                             child: IconAppButton(
+                              width: 35.w,
+                              height: 35.h,
                               icon: Icons.close_sharp,
                               color: Colors.red,
                               backColor: Colors.white,
+                              size: 25.w,
                               isCircle: true,
                               onPressed: () => showAreYouSure(
                                   context: context,

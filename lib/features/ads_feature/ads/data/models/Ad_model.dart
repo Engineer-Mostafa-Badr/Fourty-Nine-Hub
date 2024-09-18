@@ -11,20 +11,22 @@ class AdModel extends AdEntity {
       required super.title,
       required super.description,
       required super.images,
-      required super.price,
+       super.price,
+        super.isUser,
       super.address,
       super.user,
+        super.mainCategoryId,
+        super.userId,
       super.statistics,
       required super.active,
       required super.createdAt,
       required super.details,
-      super.subCategoryId,
-      required super.phone});
+      super.subCategoryId, super.phone});
   factory AdModel.fromJson(Map<String, dynamic> json) {
     List<String> images = [];
     try {
       images =
-          (json['images'] as List).map((e) => e['mediaKey'] as String).toList();
+          (json['images'] as List).map((e) => e['photo'] as String).toList();
     } catch (e) {}
     UserModel? user;
     try {
@@ -43,7 +45,7 @@ class AdModel extends AdEntity {
         price: json['price'] ?? 0,
         subCategoryId: json['subCategoryId'],
         active: json['active'] ?? true,
-        phone: json['phone'] ?? '',
+        // phone: json['phone'] ?? '',
         statistics: json['statistics'] == null
             ? null
             : AdStatisticsModel.fromJson(json['statistics']),
@@ -58,9 +60,12 @@ class AdModel extends AdEntity {
   }
   Map<String, dynamic> toJson() => {
         "desc": description,
-        "phone": phone,
+        // "phone": phone,
         "title": title,
+        "type": isUser==false?"provider":"user",
         "subCategoryId": subCategoryId,
+        "mainCategoryId": mainCategoryId,
+        // "userId": userId,
         "searchText": "testPropsAndAds",
         "images": images,
         "props": details.map((e) {

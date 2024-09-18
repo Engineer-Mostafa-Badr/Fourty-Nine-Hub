@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/repositories/ads_repo.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/trip_entity.dart';
 
 import '../../domain/usecases/request_come_with_me_usecase.dart';
@@ -13,8 +14,8 @@ class AdsRepoImpl implements AdsRepo {
 
   @override
   Future<Either<Failure, List<AdModel>>> getAds(
-      {required String subCategoryId}) async {
-    return await _remoteDataSource.getAds(subCategoryId: subCategoryId);
+      {required GetAdsParams params}) async {
+    return await _remoteDataSource.getAds(params: params);
   }
 
   @override

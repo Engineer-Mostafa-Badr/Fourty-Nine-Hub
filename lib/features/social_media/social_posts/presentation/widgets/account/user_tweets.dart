@@ -21,7 +21,6 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_comments.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UserTweets extends StatefulWidget {
   const UserTweets({super.key, required this.userData});
@@ -61,8 +60,8 @@ class _UserTweetsState extends State<UserTweets> {
                     child: Center(
                       child: Text(
                         LocaleKeys.noTweets.localize,
-                        style: TextStyle(
-                          fontSize: 18.sp,
+                        style: const TextStyle(
+                          fontSize: 18,
                         ),
                       ),
                     ));

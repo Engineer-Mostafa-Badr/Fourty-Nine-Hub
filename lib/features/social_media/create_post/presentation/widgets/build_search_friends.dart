@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -47,7 +49,7 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
                   ),
                   Expanded(
                     child: FormTextField(
-                      hint: 'search ....',
+                      hint: '${LocaleKeys.search.localize} ....',
                       height: kToolbarHeight * .7,
                       action: (v) async {
                         setState(() {});

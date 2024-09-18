@@ -22,7 +22,7 @@ class AdDetailsRemoteDataSourceImpl extends AdDetailsRemoteDataSource {
     final response = await _apiConsumer.get(EndPoints.adDetails(id));
 
     return response.fold((failure) => Left(failure), (data) {
-      final item = AdModel.fromJson(data['data']['adFound']);
+      final item = AdModel.fromJson(data['data']);
       return Right(item);
     });
   }

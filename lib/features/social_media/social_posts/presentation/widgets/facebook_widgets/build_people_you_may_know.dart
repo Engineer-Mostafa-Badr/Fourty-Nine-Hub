@@ -84,7 +84,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                         child: Center(
                                           child: Label(
                                             text: LocaleKeys.noFriendsSuggested.localize,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 18,
                                             ),

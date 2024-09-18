@@ -579,22 +579,27 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 child: ImageFromInternet(
                                   image: user.profilePicture ?? UIConst.profilePlaceHolder,
                                   height: 140.h,
-                                  width: 140,
+                                  width: 160.w,
                                   isCircle: true,
                                 ),
                               ),
                         if (loginUser?.id == user.id)
-                          InkWell(
-                            onTap: () {
-                              selectImageGallary();
-                            },
-                            child: Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.PRIMARY_COLOR),
-                                child: const Icon(
-                                  Icons.camera_alt_outlined,
-                                  color: Colors.white,
-                                )),
+                          PositionedDirectional(
+                            // end: 5.w,
+                            child: InkWell(
+                              onTap: () {
+                                selectImageGallary();
+                              },
+                              child: Container(
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.PRIMARY_COLOR),
+                                  child:  Icon(
+                                    Icons.camera_alt_outlined,
+                                    color: Colors.white,
+                                    size: 35.w
+                                    ,
+                                  )),
+                            ),
                           )
                       ],
                     ))
