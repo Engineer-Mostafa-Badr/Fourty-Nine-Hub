@@ -13,6 +13,42 @@ enum FileTypeEnum {
   unknown,
 }
 
+extension FileTypeEnumExtensionOnString on String {
+  FileTypeEnum getFileTypeEnum() {
+    switch (toLowerCase()) {
+      case 'video':
+      case 'videos':
+        return FileTypeEnum.video;
+      case 'image':
+      case 'images':
+      case 'photos':
+      case 'photo':
+      case 'img':
+        return FileTypeEnum.image;
+      case 'document':
+      case 'docs':
+      case 'documents':
+      case 'doc':
+        return FileTypeEnum.document;
+      case 'audio':
+      case 'audios':
+      case 'music':
+      case 'musics':
+      case 'voice':
+      case 'voices':
+      case 'record':
+      case 'records':
+        return FileTypeEnum.audio;
+      case 'temp':
+      case 'temps':
+      case 'tmp':
+        return FileTypeEnum.temp;
+      default:
+        return FileTypeEnum.unknown;
+    }
+  }
+}
+
 const List<String> docsExtensions = [
   'doc',
   'docx',
