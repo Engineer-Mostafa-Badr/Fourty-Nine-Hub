@@ -4,13 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
 import 'package:fourtyninehub/features/account_taps/lists/presentation/cubit/lists_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/lists/presentation/widgets/list_item_card.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,9 +29,9 @@ class _ListsViewState extends State<ListsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BackAppBar(
+        appBar: BackAppBar(
           centerTitle: false,
-          label: Labels.lists,
+          label: LocaleKeys.lists.localize,
         ),
         body: BlocConsumer<ListsCubit, ListsState>(
             listener: (context, state) {},
@@ -45,22 +46,22 @@ class _ListsViewState extends State<ListsView> {
                       scrollDirection: Axis.horizontal,
                       children: [
                         listItem(
-                            label: Labels.friends,
+                            label: LocaleKeys.friends.localize,
                             icon: Icons.handshake,
                             context: context,
                             type: ListTypes.friends),
                         listItem(
-                            label: Labels.followers,
+                            label: LocaleKeys.followers.localize,
                             icon: Icons.group,
                             context: context,
                             type: ListTypes.followers),
                         listItem(
-                            label: Labels.friendRequests,
+                            label: LocaleKeys.requests.localize,
                             icon: Icons.h_mobiledata,
                             context: context,
                             type: ListTypes.requests),
                         listItem(
-                            label: Labels.blocked,
+                            label: LocaleKeys.blocked.localize,
                             icon: Icons.block,
                             context: context,
                             type: ListTypes.blocked),
@@ -106,7 +107,7 @@ class _ListsViewState extends State<ListsView> {
                                       state.friends?.removeWhere(
                                           (element) => element.id == id);
                                       showSuccessMessage(context,
-                                          'Remove User Block Successfully');
+                                          LocaleKeys.unBlockedSuccessfully.localize);
                                       setState(() {});
                                     }
                                   },
@@ -133,7 +134,7 @@ class _ListsViewState extends State<ListsView> {
                                           state.friends?.removeWhere(
                                               (element) => element.id == id);
                                           showSuccessMessage(context,
-                                              'Unfollow User Successfully');
+                                              LocaleKeys.unFollowSuccessfully.localize);
                                           setState(() {});
                                         }
                                       })
@@ -155,7 +156,7 @@ class _ListsViewState extends State<ListsView> {
                                                       element.id ==
                                                       params.userId);
                                               showSuccessMessage(context,
-                                                  'Remove User Request Successfully');
+                                                  LocaleKeys.removeRequestSuccessfully.localize);
                                               setState(() {});
                                             }
                                           },
@@ -171,7 +172,7 @@ class _ListsViewState extends State<ListsView> {
                                                       element.id ==
                                                       params.userId);
                                               showSuccessMessage(context,
-                                                  'Accept User Request Successfully');
+                                                  LocaleKeys.acceptRequestSuccessfully.localize);
                                               setState(() {});
                                             }
                                           },
@@ -199,7 +200,7 @@ class _ListsViewState extends State<ListsView> {
                                                   (element) =>
                                                       element.id == id);
                                               showSuccessMessage(context,
-                                                  'Unblocked User Successfully');
+                                                  LocaleKeys.unBlockedSuccessfully.localize);
                                               setState(() {});
                                             }
                                           },
@@ -228,7 +229,7 @@ class _ListsViewState extends State<ListsView> {
                   fillColor: Colors.white,
                   contentPadding: const EdgeInsets.all(5),
                   hintStyle: Styles.mediumText(),
-                  hintText: 'Search with name'),
+                  hintText: LocaleKeys.searchWithName.localize),
             ),
           )
         ],
