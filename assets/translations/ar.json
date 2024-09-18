@@ -514,5 +514,8 @@
   "randomAppearance": "المظهر العشوائي",
   "messageSuccessfully": "تم ارسال الرسالة بنجاح سوف يتم التواصل معك باقرب وقت.",
   "phoneOptional":"الهاتف (اختياري)",
-  "TeamHelp":"فريق 49Hub جاهز للمساعدة"
+  "TeamHelp":"فريق 49Hub جاهز للمساعدة",
+  "moneySuccessfully.":"تم إرسال الامول بنجاح.",
+  "paymentAddress":"عنوان الدفع",
+  "amount":"المبلغ"
 }

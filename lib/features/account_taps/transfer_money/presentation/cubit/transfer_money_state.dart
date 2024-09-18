@@ -1,10 +1,21 @@
-part of 'transfer_money_cubit.dart';
+import '../../../../../core/enums/base_status_enum.dart';
+import '../../../../../core/error/failure.dart';
 
-abstract class TransferMoneyState extends Equatable {
-  const TransferMoneyState();
+class TransferMoneyState {
+  final StateStatus status;
+  final Failure? failure;
 
-  @override
-  List<Object> get props => [];
+  const TransferMoneyState({
+    this.status = StateStatus.loading,
+    this.failure,
+  });
+  TransferMoneyState copyWith({
+    StateStatus? status,
+    Failure? failure,
+  }) {
+    return TransferMoneyState(
+      status: status ?? this.status,
+      failure: failure ?? this.failure,
+    );
+  }
 }
-
-class TransferMoneyInitial extends TransferMoneyState {}

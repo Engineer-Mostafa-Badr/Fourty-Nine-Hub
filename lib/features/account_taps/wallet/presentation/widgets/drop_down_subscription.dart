@@ -188,6 +188,9 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
                   selectedSubCategory = newSubCategoryId;
                 });
                 if (newSubCategoryId != null) {
+                  print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+                  print(newSubCategoryId);
+                  print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
                   serviceLocator<SubscriptionController>()
                       .showSubscriptionPlans(
                     subCategoryId: newSubCategoryId,

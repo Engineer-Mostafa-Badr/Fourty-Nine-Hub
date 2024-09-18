@@ -379,7 +379,6 @@ class FourtyNineServiceLocator {
     serviceLocator.registerFactory<ContactUsCubit>(
       () => ContactUsCubit(
         serviceLocator(),
-        serviceLocator(),
       ),
     );
   }

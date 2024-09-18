@@ -515,6 +515,10 @@
   "randomAppearance": "Random Appearance",
   "messageSuccessfully": "The message has been sent successfully. You will be contacted as soon as possible.",
   "phoneOptional":"Phone (Optional)",
-  "TeamHelp":"49Hub Team is ready to help"
+  "TeamHelp":"49Hub Team is ready to help",
+  "moneySuccessfully.":"The money has been sent successfully.",
+  "paymentAddress":"Payment Address",
+  "amount":"Amount"
+
 
 }

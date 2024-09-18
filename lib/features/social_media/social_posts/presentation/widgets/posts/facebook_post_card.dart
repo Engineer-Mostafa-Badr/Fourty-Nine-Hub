@@ -479,7 +479,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   }
                 },
                 child: ImageFromInternet(
-                  image: post.user.image,
+                  image: post.user.image ??'',
                   isCircle: true,
                   width: 40,
                   height: 40.h,

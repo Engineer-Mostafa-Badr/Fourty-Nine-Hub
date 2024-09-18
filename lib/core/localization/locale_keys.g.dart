@@ -510,5 +510,8 @@ abstract class  LocaleKeys {
   static const messageSuccessfully = 'messageSuccessfully';
   static const phoneOptional = 'phoneOptional';
   static const TeamHelp = 'TeamHelp';
+  static const moneySuccessfully = 'moneySuccessfully.';
+  static const paymentAddress = 'paymentAddress';
+  static const amount = 'amount';
 
 }

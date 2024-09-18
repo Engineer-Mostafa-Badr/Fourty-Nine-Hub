@@ -529,7 +529,10 @@ class CodegenLoader extends AssetLoader{
   "randomAppearance": "المظهر العشوائي",
   "messageSuccessfully": "تم ارسال الرسالة بنجاح سوف يتم التواصل معك باقرب وقت.",
   "phoneOptional": "الهاتف (اختياري)",
-  "TeamHelp": "فريق 49Hub جاهز للمساعدة"
+  "TeamHelp": "فريق 49Hub جاهز للمساعدة",
+  "moneySuccessfully.": "تم إرسال الامول بنجاح.",
+  "paymentAddress": "عنوان الدفع",
+  "amount": "المبلغ"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1047,7 +1050,10 @@ static const Map<String,dynamic> en = {
   "randomAppearance": "Random Appearance",
   "messageSuccessfully": "The message has been sent successfully. You will be contacted as soon as possible.",
   "phoneOptional": "Phone (Optional)",
-  "TeamHelp": "49Hub Team is ready to help"
+  "TeamHelp": "49Hub Team is ready to help",
+  "moneySuccessfully.": "The money has been sent successfully.",
+  "paymentAddress": "Payment Address",
+  "amount": "Amount"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
