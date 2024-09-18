@@ -172,7 +172,8 @@ class _ZegoLiveStreamingPreviewPageState
                       textAlign: TextAlign.center,
                       // validator: validateInput,
                       maxLength: 50,
-                      style: Styles.mediumText(color: Colors.white),
+                      style: Styles.mediumText(
+                          color: Colors.white, decorationThickness: 0),
                       maxLines: null,
                       // onChanged: onTextChanged,
                       decoration: const InputDecoration(
@@ -181,11 +182,20 @@ class _ZegoLiveStreamingPreviewPageState
                         // errorText: _errorMessage,
                         counterText: '',
                         labelStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
-                        hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
+                        // hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
+
                         border: OutlineInputBorder(
                           borderSide: BorderSide.none,
                           borderRadius: BorderRadius.all(
                             Radius.circular(10.0),
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
                           ),
                         ),
                         filled: true,

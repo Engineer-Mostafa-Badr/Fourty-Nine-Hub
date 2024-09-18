@@ -382,7 +382,7 @@ class ZoomSharescreenBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log('-------------${context.read<MeetingCubit>().state}');
+    log('-------------${context.read<StreamCubit>().state}');
     return Padding(
       padding: const EdgeInsets.all(10.0).add(EdgeInsets.only(left: 5.zW)),
       child: ValueListenableBuilder<bool>(
@@ -390,7 +390,7 @@ class ZoomSharescreenBuilder extends StatelessWidget {
           builder: (context, screenShareOn, child) {
             log('-------------${screenShareOn}');
             if (!screenShareOn) {
-              context.read<MeetingCubit>().closeWhiteBoard();
+              context.read<StreamCubit>().closeWhiteBoard();
             }
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -471,7 +471,7 @@ class ZoomWhiteBoardButton extends StatelessWidget {
               width: 50.zW,
             ),
             onTap: () async {
-              await context.read<MeetingCubit>().openWhiteBoard();
+              await context.read<StreamCubit>().openWhiteBoard();
             }),
         Text(
           LocaleKeys.whiteBoard.localize,
