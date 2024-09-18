@@ -14,6 +14,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/camera_picker_cubit/camera_picker_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -170,12 +171,12 @@ class _CamViewState extends State<_CamView> {
                           final media =
                               context.read<CameraPickerCubit>().state.mediaList;
                           if (media != null && media.isNotEmpty) {
-                            context
-                                .push(Routes.MEDIASLIDER,
-                                    extra: MediaSliderViewParams(media: media))
-                                .then((value) => context
-                                    .read<CameraPickerCubit>()
-                                    .refreshMediaList());
+                            // context
+                            //     .push(Routes.MEDIASLIDER,
+                            //         extra: MediaSliderViewParams(media: media))
+                            //     .then((value) => context
+                            //         .read<CameraPickerCubit>()
+                            //         .refreshMediaList());
                           } else {
                             showErrorMessage(
                                 context, LocaleKeys.pickPhotoOrVideo);
@@ -445,12 +446,12 @@ class _ImagesListState extends State<_ImagesList> {
         if (mounted &&
             context.read<CameraPickerCubit>().state.status !=
                 CameraPickerStatus.startVideo) {
-          context
-              .push(Routes.MEDIASLIDER,
-                  extra:
-                      MediaSliderViewParams(media: media, initialIndex: index))
-              .then((value) =>
-                  context.read<CameraPickerCubit>().refreshMediaList());
+          // context
+          //     .push(Routes.MEDIASLIDER,
+          //         extra:
+          //             MediaSliderViewParams(media: media, initialIndex: index))
+          //     .then((value) =>
+          //         context.read<CameraPickerCubit>().refreshMediaList());
         }
       },
       child: Container(

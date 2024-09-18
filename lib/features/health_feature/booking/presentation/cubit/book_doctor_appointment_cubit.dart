@@ -31,6 +31,7 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
     _doctor = doctorDetailsCubit.doctor;
     _appointment = doctorDetailsCubit.selectedAppointment;
     _params.appointmentId = _appointment.id;
+    _params.subCategoryId = _doctor.subCategory.id;
   }
 
   BookDoctorAppointmentCubit(

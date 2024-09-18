@@ -272,6 +272,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -283,9 +284,12 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/widgets/my_broadcast_card.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
+import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/widgets/follow_broadcast_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -634,17 +638,18 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       case ChatCategories.social:
       case ChatCategories.service:
       case ChatCategories.groups:
-      case ChatCategories.greet:
       case ChatCategories.unread:
       case ChatCategories.archived:
       case ChatCategories.anonymous:
-      case ChatCategories.broadcast:
+      case ChatCategories.greet:
         return _buildCategoryChats();
       case ChatCategories.socialCalls:
       case ChatCategories.serviceCalls:
         return _buildCallingHistory(isVideo: false);
       case ChatCategories.locked:
         return _buildCategoryChats(isSecret: true);
+      case ChatCategories.broadcast:
+        return buildBroadcast();
     }
   }
 
@@ -723,5 +728,225 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
             ),
         separatorBuilder: (context, index) => const SizedBox(),
         itemCount: 8);
+  }
+
+  Widget buildBroadcast() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Follow Section
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  "Broadcasts",
+                  style: Styles.mediumText(fontWeight: FontWeight.w600),
+                ),
+              ),
+              const Spacer(),
+              TextButton(
+                onPressed: () {
+                  context.push(Routes.SEEALLBROADCASTS);
+                },
+                child: Text(
+                  "See all",
+                  style: Styles.smallText(
+                    color: AppColors.PRIMARY_COLOR_DARK,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 16,
+              )
+            ],
+          ),
+          SizedBox(
+            height: 160, // Set the height for the horizontal list view
+            child: ListView(
+              scrollDirection:
+                  Axis.horizontal, // Makes the list scroll horizontally
+              children: const [
+                FollowBroadcastCard(
+                  'FC Barcelona',
+                  'https://www.hyperakt.com/assets/images/fc-barcelona/Barcelona.jpg',
+                ),
+                FollowBroadcastCard(
+                  'BBC News',
+                  'https://seeklogo.com/images/B/bbc-news-logo-8648ABD044-seeklogo.com.png',
+                ),
+                FollowBroadcastCard(
+                  'Real Madrid FC',
+                  'https://images.alphacoders.com/116/thumb-1920-1163534.jpg',
+                ),
+                FollowBroadcastCard(
+                  'FC Barcelona',
+                  'https://www.hyperakt.com/assets/images/fc-barcelona/Barcelona.jpg',
+                ),
+                FollowBroadcastCard(
+                  'BBC News',
+                  'https://seeklogo.com/images/B/bbc-news-logo-8648ABD044-seeklogo.com.png',
+                ),
+                FollowBroadcastCard(
+                  'Real Madrid FC',
+                  'https://images.alphacoders.com/116/thumb-1920-1163534.jpg',
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, top: 24, right: 16),
+            child: Text(
+              "My Broadcasts",
+              style: Styles.mediumText(fontWeight: FontWeight.w600),
+            ),
+          ),
+          ListView.separated(
+            itemCount: 10,
+            separatorBuilder: (context, index) {
+              return const Divider(
+                color: Colors.grey,
+              );
+            },
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return const MyBroadcastsCard();
+            },
+            physics: const NeverScrollableScrollPhysics(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FriendRequest {
+  final String name;
+  final int mutualFriends;
+  final String profileImageUrl;
+
+  FriendRequest({
+    required this.name,
+    required this.mutualFriends,
+    required this.profileImageUrl,
+  });
+}
+
+class FriendRequestItem extends StatefulWidget {
+  final FriendRequest request;
+
+  const FriendRequestItem({super.key, required this.request});
+
+  @override
+  _FriendRequestItemState createState() => _FriendRequestItemState();
+}
+
+class _FriendRequestItemState extends State<FriendRequestItem> {
+  String buttonText = 'Add Friend';
+  bool isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child: Row(
+        children: [
+          // Profile Image
+          CircleAvatar(
+            radius: 30,
+            backgroundImage: NetworkImage(
+              serviceLocator<UserCubit>().state.data != null
+                  ? serviceLocator<UserCubit>().state.data!.profilePicture!
+                  : UIConst.profilePlaceHolder,
+            ),
+          ),
+          const SizedBox(width: 8),
+
+          // Name and Mutual Friends
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.request.name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  '${widget.request.mutualFriends} mutual friends',
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Confirm Button (Add Friend/Follow/Greet)
+          ElevatedButton(
+            onPressed:
+                isLoading ? null : handleButtonPress, // Disable if loading
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.PRIMARY_COLOR,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            ),
+            child: isLoading
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : Text(
+                    buttonText,
+                    style: const TextStyle(color: Colors.white, fontSize: 11),
+                  ),
+          ),
+          const SizedBox(width: 8),
+
+          // Delete Button
+          ElevatedButton(
+            onPressed: () {
+              // Add delete logic here
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            ),
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: Colors.white, fontSize: 11),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void handleButtonPress() async {
+    // Start showing loading indicator
+    setState(() {
+      isLoading = true;
+    });
+
+    // Simulate 1 second delay (replace with your logic)
+    await Future.delayed(const Duration(seconds: 1));
+
+    // Update the button text based on the current state
+    setState(() {
+      if (buttonText == 'Add Friend') {
+        buttonText = 'Follow';
+      } else if (buttonText == 'Follow') {
+        buttonText = 'Greet';
+      }
+      isLoading = false;
+    });
   }
 }
