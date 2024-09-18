@@ -67,10 +67,12 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/social_media/chat/attachments/presentation/pages/attachments_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/pages/broadcast_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_profile/presentation/pages/chat_profile_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/select_contacts_to_share_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/show_image_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/viewcontact_view.dart';
@@ -241,6 +243,13 @@ class AppPages {
             builder: (context, state) => const BroadcastView(),
           ),
           GoRoute(
+            path: Paths.IMAGESPAGEVIEW,
+            name: Routes.IMAGESPAGEVIEW,
+            builder: (context, state) => ImagesPageView(
+              params: state.extra as ImagesPageViewParams,
+            ),
+          ),
+          GoRoute(
             path: Paths.SEEALLBROADCASTS,
             name: Routes.SEEALLBROADCASTS,
             builder: (context, state) => const SeeAllBroadcasts(),
@@ -272,7 +281,7 @@ class AppPages {
                     path: Paths.ADS,
                     name: Routes.ADS,
                     builder: (context, state) => BlocProvider(
-                          create:(_)=> serviceLocator<AdvertisementCubit>(),
+                          create: (_) => serviceLocator<AdvertisementCubit>(),
                           child: AdsView(
                             params: state.extra as AdsViewParams,
                           ),

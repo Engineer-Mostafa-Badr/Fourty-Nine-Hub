@@ -141,7 +141,11 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                                 context.read<ChatRoomCubit>().media[index];
                             if (file.isImage) {
                               return _mediaContainer(
-                                  index: index, image: FileImage(file));
+                                index: index,
+                                image: FileImage(file),
+                                isPhoto: true,
+                                chatRoomCubit: widget.chatRoomCubit,
+                              );
                             } else {
                               return FutureBuilder<Uint8List?>(
                                 future: generateThumbnail(path: file.path),
@@ -151,9 +155,10 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                                       snapshot.data != null &&
                                       snapshot.data!.isNotEmpty) {
                                     return _mediaContainer(
-                                        index: index,
-                                        image: MemoryImage(snapshot.data!),
-                                        isPhoto: false);
+                                      index: index,
+                                      image: MemoryImage(snapshot.data!),
+                                      chatRoomCubit: widget.chatRoomCubit,
+                                    );
                                   } else {
                                     return Shimmer.fromColors(
                                       baseColor: Colors.grey[300]!,
@@ -259,65 +264,76 @@ class _MediaSliderViewState extends State<MediaSliderView> {
   }
 
   Widget _mediaContainer(
-      {required int index, required ImageProvider image, bool isPhoto = true}) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _selectedIndex = index;
-          _pageController.jumpToPage(index);
-        });
-      },
-      child: Container(
-        width: 150.h,
-        decoration: BoxDecoration(
-          border: _selectedIndex == index
-              ? Border.all(color: Colors.white, width: 3)
-              : null,
-          borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
-            image: image,
-            fit: BoxFit.cover,
-            colorFilter: _selectedIndex == index
-                ? const ColorFilter.mode(Colors.black54, BlendMode.darken)
-                : null,
-          ),
-        ),
-        child: isPhoto
-            ? index == _selectedIndex
-                ? Center(
-                    child: IconButton(
-                      onPressed: () async {
-                        setState(() {
-                          context.read<ChatRoomCubit>().media.removeAt(index);
-                          // Adjust the selected index after deletion
-                          if (_selectedIndex > 0) {
-                            _selectedIndex--;
-                          }
-
-                          // If no media left, pop back to the previous screen
-                          if (context.read<ChatRoomCubit>().media.isEmpty) {
-                            context.pop();
-                            context.pop();
-                          }
-                        });
-                      },
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.white,
-                        size: 26,
-                      ),
-                    ),
-                  )
-                : null
-            : Center(
-                child: Icon(
-                  _selectedIndex == index
-                      ? Icons.delete
-                      : Icons.play_arrow_rounded,
-                  color: Colors.white,
-                ),
+      {required int index,
+      required ImageProvider image,
+      bool isPhoto = true,
+      required ChatRoomCubit chatRoomCubit}) {
+    return BlocProvider.value(
+      value: chatRoomCubit,
+      child: Builder(builder: (context) {
+        return InkWell(
+          onTap: () {
+            setState(() {
+              _selectedIndex = index;
+              _pageController.jumpToPage(index);
+            });
+          },
+          child: Container(
+            width: 150.h,
+            decoration: BoxDecoration(
+              border: _selectedIndex == index
+                  ? Border.all(color: Colors.white, width: 3)
+                  : null,
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: image,
+                fit: BoxFit.cover,
+                colorFilter: _selectedIndex == index
+                    ? const ColorFilter.mode(Colors.black54, BlendMode.darken)
+                    : null,
               ),
-      ),
+            ),
+            child: isPhoto
+                ? index == _selectedIndex
+                    ? Center(
+                        child: IconButton(
+                          onPressed: () async {
+                            setState(() {
+                              context
+                                  .read<ChatRoomCubit>()
+                                  .media
+                                  .removeAt(index);
+                              // Adjust the selected index after deletion
+                              if (_selectedIndex > 0) {
+                                _selectedIndex--;
+                              }
+
+                              // If no media left, pop back to the previous screen
+                              if (context.read<ChatRoomCubit>().media.isEmpty) {
+                                context.pop();
+                                context.pop();
+                              }
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                            size: 26,
+                          ),
+                        ),
+                      )
+                    : null
+                : Center(
+                    child: Icon(
+                      _selectedIndex == index
+                          ? Icons.delete
+                          : Icons.play_arrow_rounded,
+                      color: Colors.white,
+                    ),
+                  ),
+          ),
+        );
+      }),
     );
   }
 }
