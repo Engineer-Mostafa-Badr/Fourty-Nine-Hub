@@ -17,6 +17,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class BuildPeopleYouMayKnow extends StatefulWidget {
   const BuildPeopleYouMayKnow({super.key});
 
@@ -79,11 +80,12 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                   noItemsFoundIndicatorBuilder: (context) {
                                     print(controller.suggestUserPagingController
                                         .itemList?.length);
-                                    return  Padding(
-                                        padding:EdgeInsets.only(top: 200),
+                                    return Padding(
+                                        padding: EdgeInsets.only(top: 200),
                                         child: Center(
                                           child: Label(
-                                            text: LocaleKeys.noFriendsSuggested.localize,
+                                            text: LocaleKeys
+                                                .noFriendsSuggested.localize,
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 18,
@@ -105,9 +107,11 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                       },
                                       child: Container(
                                         width: 400.w,
-                                        padding: const EdgeInsets.only(bottom: 10),
+                                        padding:
+                                            const EdgeInsets.only(bottom: 10),
                                         margin:
-                                            const EdgeInsetsDirectional.only(end: 10),
+                                            const EdgeInsetsDirectional.only(
+                                                end: 10),
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(5),
@@ -130,8 +134,9 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8.0),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8.0),
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
@@ -145,12 +150,15 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                     maxLines: 1,
                                                     style: Styles.mediumText(),
                                                   ),
-                                                  Sizer(height: 10.h,),
+                                                  Sizer(
+                                                    height: 10.h,
+                                                  ),
                                                   item.sendWelcomeSuccessfully ==
                                                           true
                                                       ? Label(
-                                                          text:
-                                                          LocaleKeys.messageSentSuccessfully.localize,
+                                                          text: LocaleKeys
+                                                              .messageSentSuccessfully
+                                                              .localize,
                                                           style:
                                                               Styles.mediumText(
                                                                   color: Colors
@@ -158,8 +166,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
-                                                                  fontSize:
-                                                                      14),
+                                                                  fontSize: 14),
                                                         )
                                                       : Row(
                                                           children: [
@@ -222,7 +229,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                           title:
                                                                               Label(
                                                                             text:
-                                                                            LocaleKeys.enterGreetMessage.localize,
+                                                                                LocaleKeys.enterGreetMessage.localize,
                                                                             style:
                                                                                 Styles.headerText(),
                                                                           ),
@@ -288,8 +295,9 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                 child: item.sendWelcomeSuccessfully ==
                                                                         true
                                                                     ? Label(
-                                                                        text:
-                                                                        LocaleKeys.messageSentSuccessfully.localize,
+                                                                        text: LocaleKeys
+                                                                            .messageSentSuccessfully
+                                                                            .localize,
                                                                         style: Styles
                                                                             .headerText(),
                                                                       )
@@ -337,8 +345,8 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                   bool data = await controller.removeSuggestUser(
                                                                       context:
                                                                           context,
-                                                                      userId:
-                                                                          item.id);
+                                                                      userId: item
+                                                                          .id);
                                                                   if (data ==
                                                                       true) {
                                                                     controller
@@ -353,24 +361,26 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                 },
                                                                 child:
                                                                     Container(
-                                                                      padding: EdgeInsets.symmetric(horizontal: 10.w),
-                                                                  height:
-                                                                      40.h,
+                                                                  padding: EdgeInsets
+                                                                      .symmetric(
+                                                                          horizontal:
+                                                                              10.w),
+                                                                  height: 40.h,
                                                                   alignment:
                                                                       Alignment
                                                                           .center,
                                                                   decoration:
                                                                       BoxDecoration(
                                                                     borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            4),
+                                                                        BorderRadius
+                                                                            .circular(4),
                                                                     color: Colors
                                                                         .grey,
                                                                   ),
-                                                                  child:
-                                                                      Label(
-                                                                    text:
-                                                                    LocaleKeys.remove.localize,
+                                                                  child: Label(
+                                                                    text: LocaleKeys
+                                                                        .remove
+                                                                        .localize,
                                                                     style: Styles.mediumText(
                                                                         color: Colors
                                                                             .black,

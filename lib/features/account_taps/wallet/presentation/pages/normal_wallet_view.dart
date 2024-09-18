@@ -83,8 +83,8 @@ class _NormalWalletViewState extends State<NormalWalletView> {
           builder: (context, state) {
             final visibleSubscriptions = state.subscription?.isNotEmpty == true
                 ? (showMore
-                ? state.subscription
-                : state.subscription!.take(2).toList())
+                    ? state.subscription
+                    : state.subscription!.take(2).toList())
                 : [];
 
             return RefreshIndicator(
@@ -129,32 +129,33 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                   ),
                   Sizer(),
                   state.wallet?.realAmount != null &&
-                      state.wallet!.realAmount! >= 500
+                          state.wallet!.realAmount! >= 500
                       ? AppButton(
-                    label: LocaleKeys.withdraw.localize,
-                    color: AppColors.AUTH_CONTAINER_COLOR,
-                    backColor: AppColors.SECONDARY_COLOR,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BlocProvider<PaymentCubit>(
-                            create: (BuildContext context) =>
-                                serviceLocator(),
-                            child: PaymentView(
-                              amountId: '',
-                              amount: 500,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  )
+                          label: LocaleKeys.withdraw.localize,
+                          color: AppColors.AUTH_CONTAINER_COLOR,
+                          backColor: AppColors.SECONDARY_COLOR,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    BlocProvider<PaymentCubit>(
+                                  create: (BuildContext context) =>
+                                      serviceLocator(),
+                                  child: PaymentView(
+                                    amountId: '',
+                                    amount: 500,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        )
                       : AppButton(
-                    label: LocaleKeys.withdraw.localize,
-                    backColor: AppColors.SECONDARY_COLOR.withOpacity(.5),
-                    onPressed: () {},
-                  ),
+                          label: LocaleKeys.withdraw.localize,
+                          backColor: AppColors.SECONDARY_COLOR.withOpacity(.5),
+                          onPressed: () {},
+                        ),
                   Sizer(),
                   Label(
                     text: LocaleKeys.subscriptions.localize,
@@ -196,40 +197,41 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                   ),
                   PaginationView<WalletHistoryEntity>(
                     loadingWidget: const SizedBox.shrink(),
-                    build: (scrollController, List<WalletHistoryEntity>data) {
+                    build: (scrollController, List<WalletHistoryEntity> data) {
                       return data.isNotEmpty
                           ? ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final item = data[index];
-                          final DateTime createdAt =
-                          DateTime.parse(item.createdAt);
-                          final DateTime egyptTime =
-                          createdAt.toUtc().add(const Duration(hours: 3));
-                          final String formattedDateTime =
-                          DateFormat('dd/MM/yyyy, h:mm a')
-                              .format(egyptTime);
-                          return WalletHistoryCard(
-                            title: '${item.transactionAmount}',
-                            subTitle: formattedDateTime,
-                            amount: item.received == true,
-                            icon: FontAwesomeIcons.check,
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return const SizedBox();
-                        },
-                        itemCount: data.length,
-                      )
-                          :  Center(
-                        child: Label(text: LocaleKeys.noHistoryAvailable.localize),
-                      );
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                final item = data[index];
+                                final DateTime createdAt =
+                                    DateTime.parse(item.createdAt);
+                                final DateTime egyptTime = createdAt
+                                    .toUtc()
+                                    .add(const Duration(hours: 3));
+                                final String formattedDateTime =
+                                    DateFormat('dd/MM/yyyy, h:mm a')
+                                        .format(egyptTime);
+                                return WalletHistoryCard(
+                                  title: '${item.transactionAmount}',
+                                  subTitle: formattedDateTime,
+                                  amount: item.received == true,
+                                  icon: FontAwesomeIcons.check,
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return const SizedBox();
+                              },
+                              itemCount: data.length,
+                            )
+                          : Center(
+                              child: Label(
+                                  text: LocaleKeys.noHistoryAvailable.localize),
+                            );
                     },
                     fetchData: (PaginationParams paginationParams) {
-                      return context
-                          .read<WalletCubit>()
-                          .fetchWalletHistory(paginationParams: paginationParams);
+                      return context.read<WalletCubit>().fetchWalletHistory(
+                          paginationParams: paginationParams);
                     },
                   ),
                 ],

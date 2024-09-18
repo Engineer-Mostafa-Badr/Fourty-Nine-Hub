@@ -42,7 +42,7 @@ class BuildItemListView extends StatelessWidget {
             // ),
           ],
         ),
-         const Sizer(),
+        const Sizer(),
         Row(
           children: [
             Expanded(
@@ -94,7 +94,7 @@ class BuildItemListView extends StatelessWidget {
           height: 20.h, // Space between the text and the row
         ),
         Padding(
-          padding:  EdgeInsets.only(left: 5.w),
+          padding: EdgeInsets.only(left: 5.w),
           child: Text(
             context.locale == Locales.english
                 ? model.competitionId!.descriptionEn!

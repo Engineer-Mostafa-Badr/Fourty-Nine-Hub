@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-class TripJoinRequestEntity {
+class TripJoinMyRequestEntity {
   String? id;
-  String? categoryId;
+  String? categoryMainId;
   String? brand;
   String? model;
   num? journeyPrice;
@@ -16,9 +16,11 @@ class TripJoinRequestEntity {
   int? publishDate;
   String? paymentMethod;
   bool? subscribedPremium;
-  TripJoinRequestEntity({
+  bool? hasNextPage;
+  int? nextPage;
+  TripJoinMyRequestEntity({
     this.id,
-    this.categoryId,
+    this.categoryMainId,
     this.brand,
     this.model,
     this.journeyPrice,
@@ -33,10 +35,12 @@ class TripJoinRequestEntity {
     this.publishDate,
     this.paymentMethod,
     this.subscribedPremium,
+    this.hasNextPage,
+    this.nextPage,
   });
 
   @override
   String toString() {
-    return 'TripjoinRequestEntity(id: $id, categoryId: $categoryId, brand: $brand, model: $model, journeyPrice: $journeyPrice, status: $status, seatNumber: $seatNumber, isRepeated: $isRepeated, startingAddressAr: $startingAddressAr, destinationAddressAr: $destinationAddressAr, startingAddressEn: $startingAddressEn, destinationAddressEn: $destinationAddressEn, subscriptionEndDate: $subscriptionEndDate, publishDate: $publishDate, paymentMethod: $paymentMethod, subscribedPremium: $subscribedPremium)';
+    return 'TripJoinRequestEntity(id: $id, categoryMainId: $categoryMainId, brand: $brand, model: $model, journeyPrice: $journeyPrice, status: $status, seatNumber: $seatNumber, isRepeated: $isRepeated, startingAddressAr: $startingAddressAr, destinationAddressAr: $destinationAddressAr, startingAddressEn: $startingAddressEn, destinationAddressEn: $destinationAddressEn, subscriptionEndDate: $subscriptionEndDate, publishDate: $publishDate, paymentMethod: $paymentMethod, subscribedPremium: $subscribedPremium, hasNextPage: $hasNextPage, nextPage: $nextPage)';
   }
 }

@@ -35,7 +35,6 @@ import '../../../../routes/routes.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../widgets/announce_widget.dart';
 
-
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
 
@@ -66,7 +65,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         }
       }
     });
-    context.read<FirebaseNotficationsCubit>().setupInterceptedMessage(context: context);
+    context
+        .read<FirebaseNotficationsCubit>()
+        .setupInterceptedMessage(context: context);
     context.read<NotificationSocketIoCubit>().notificationListener();
     super.initState();
   }
@@ -117,9 +118,13 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           children: [
             //carousel slider
             const AnnounceWidget(),
-               !context.read<UserCubit>().isLoggedIn?  Sizer():const SizedBox.shrink(),
+            !context.read<UserCubit>().isLoggedIn
+                ? Sizer()
+                : const SizedBox.shrink(),
             //wallet
-              context.read<UserCubit>().isLoggedIn? const WalletWidget():const SizedBox.shrink(),
+            context.read<UserCubit>().isLoggedIn
+                ? const WalletWidget()
+                : const SizedBox.shrink(),
             //    Sizer(),
             //admob
             //   const GoogleAddsBanner(),
@@ -164,7 +169,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     ),
                   );
                 }
-                if (state.status==StateStatus.success && state.data != null) {
+                if (state.status == StateStatus.success && state.data != null) {
                   return ListView.separated(
                     itemCount: state.data?.length ?? 0,
                     physics: const NeverScrollableScrollPhysics(),
@@ -385,7 +390,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       onTap: () => route != null ? context.push(route) : null,
       child: Container(
         height: kToolbarHeight * 2.h,
-        padding:  EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(10.r),
@@ -420,7 +425,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               ),
             ),
             Padding(
-              padding:  EdgeInsets.symmetric(horizontal: 10.w),
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Row(
                 children: [
                   Label(
@@ -432,7 +437,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   ),
                   const Spacer(),
                   Padding(
-                    padding:  EdgeInsets.symmetric(vertical: 5.h),
+                    padding: EdgeInsets.symmetric(vertical: 5.h),
                     child: Column(
                       children: [
                         InkWell(

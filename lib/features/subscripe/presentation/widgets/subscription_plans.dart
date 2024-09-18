@@ -45,7 +45,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
 
   @override
   void initState() {
-    selectedWallet=widget.paymentMenthods?[0];
+    selectedWallet = widget.paymentMenthods?[0];
     super.initState();
   }
 
@@ -61,14 +61,17 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               Text(
                 widget.title ?? "",
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColors.PRIMARY_COLOR_LIGHT, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: AppColors.PRIMARY_COLOR_LIGHT,
+                    fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 20.h),
               DropdownMenu<WalletTypes>(
                   hintText: "Select Wallet",
                   expandedInsets: const EdgeInsets.only(),
                   dropdownMenuEntries: widget.paymentMenthods!
-                      .map((e) => DropdownMenuEntry<WalletTypes>(value: e, label: e.translatedName))
+                      .map((e) => DropdownMenuEntry<WalletTypes>(
+                          value: e, label: e.translatedName))
                       .toList(),
                   initialSelection: selectedWallet,
                   onSelected: (value) {
@@ -88,14 +91,18 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         decoration: BoxDecoration(
-                          color: !_isPremium ? AppColors.PRIMARY_COLOR : Colors.transparent,
+                          color: !_isPremium
+                              ? AppColors.PRIMARY_COLOR
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(25),
                         ),
                         child: Text(
                           LocaleKeys.regular.localize,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: !_isPremium ? AppColors.AUTH_CONTAINER_COLOR : Theme.of(context).primaryColor,
+                            color: !_isPremium
+                                ? AppColors.AUTH_CONTAINER_COLOR
+                                : Theme.of(context).primaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

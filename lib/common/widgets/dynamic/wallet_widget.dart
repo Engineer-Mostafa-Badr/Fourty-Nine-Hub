@@ -39,13 +39,13 @@ class WalletWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<GiftCubit>(
-      create: (BuildContext context) =>serviceLocator(),
+      create: (BuildContext context) => serviceLocator(),
       child: BlocBuilder<GiftCubit, GiftState>(
         builder: (BuildContext context, state) {
           return Container(
             height: 90.h,
-            margin:
-                EdgeInsets.symmetric(vertical: 10.h, horizontal: margin?.w ?? 5.w),
+            margin: EdgeInsets.symmetric(
+                vertical: 10.h, horizontal: margin?.w ?? 5.w),
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
@@ -73,7 +73,8 @@ class WalletWidget extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const BalanceWalletView()));
+                                builder: (context) =>
+                                    const BalanceWalletView()));
                       }, LocaleKeys.balance.tr(),
                           '${state.balance?.balance ?? ''}');
                     },
@@ -90,17 +91,17 @@ class WalletWidget extends StatelessWidget {
                   backgroundColor: AppColors.SECONDARY_COLOR,
                 ),
                 const Sizer(),
-            buildItem(
+                buildItem(
                   () {
-                //context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const GiftWalletView()));
-              },
-              LocaleKeys.gift.tr(),
-              '${state.gift?.giftWallet.amount ?? ''}',
-            ),
+                    //context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const GiftWalletView()));
+                  },
+                  LocaleKeys.gift.tr(),
+                  '${state.gift?.giftWallet.amount ?? ''}',
+                ),
                 Container(
                   width: 2.h,
                   margin: EdgeInsets.symmetric(horizontal: 5.w),
@@ -113,13 +114,13 @@ class WalletWidget extends StatelessWidget {
                 ),
                 const Sizer(),
                 BlocProvider<WalletCubit>(
-                  create: (BuildContext context) =>serviceLocator(),
-                  child: BlocBuilder<WalletCubit,WalletState>(
+                  create: (BuildContext context) => serviceLocator(),
+                  child: BlocBuilder<WalletCubit, WalletState>(
                     builder: (BuildContext context, state) {
                       return buildItem(() {
-                        context.push(Routes.WALLET, extra: WalletTypes.mainWallet);
-                      },
-                          LocaleKeys.wallet.tr(),
+                        context.push(Routes.WALLET,
+                            extra: WalletTypes.mainWallet);
+                      }, LocaleKeys.wallet.tr(),
                           '${state.wallet?.realAmount?.floor() ?? ''}');
                     },
                   ),
@@ -148,7 +149,8 @@ class WalletWidget extends StatelessWidget {
             Label(
                 text: amount,
                 style: Styles.mediumText(
-                    fontWeight: FontWeight.bold,)),
+                  fontWeight: FontWeight.bold,
+                )),
           ],
         ),
       ));

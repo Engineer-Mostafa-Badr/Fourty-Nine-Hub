@@ -79,7 +79,8 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                             const EdgeInsets.only(top: 200),
                                         child: Center(
                                           child: Label(
-                                            text: LocaleKeys.noFriendsSuggested.localize,
+                                            text: LocaleKeys
+                                                .noFriendsSuggested.localize,
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 18,
@@ -173,8 +174,9 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                   item.sendWelcomeSuccessfully ==
                                                           true
                                                       ? Label(
-                                                          text:
-                                                          LocaleKeys.messageSentSuccessfully.localize,
+                                                          text: LocaleKeys
+                                                              .messageSentSuccessfully
+                                                              .localize,
                                                           style:
                                                               Styles.mediumText(
                                                                   color: Colors
@@ -221,7 +223,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                           title:
                                                                               Label(
                                                                             text:
-                                                                            LocaleKeys.enterGreetMessage.localize,
+                                                                                LocaleKeys.enterGreetMessage.localize,
                                                                             style:
                                                                                 Styles.headerText(),
                                                                           ),
@@ -281,8 +283,9 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                 child: item.sendWelcomeSuccessfully ==
                                                                         true
                                                                     ? Label(
-                                                                        text:
-                                                                        LocaleKeys.messageSentSuccessfully.localize,
+                                                                        text: LocaleKeys
+                                                                            .messageSentSuccessfully
+                                                                            .localize,
                                                                         style: Styles
                                                                             .headerText(),
                                                                       )

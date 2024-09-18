@@ -113,7 +113,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                                     builder: (context) => CreatePostCompany(
                                       text: false,
                                       title:
-                                      LocaleKeys.createPicturePost.localize,
+                                          LocaleKeys.createPicturePost.localize,
                                       type: 'photo',
                                       totalPrice: state.price?.photoPrice ?? 0,
                                     ),
@@ -137,7 +137,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                                       title: LocaleKeys.createPost.localize,
                                       type: 'photo_written',
                                       totalPrice:
-                                      state.price?.postAndPhotoPrice ?? 0,
+                                          state.price?.postAndPhotoPrice ?? 0,
                                     ),
                                   ),
                                 );
@@ -158,7 +158,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                                     builder: (context) => ReelsRecordingScreen(
                                       voiceUrl: '',
                                       totalPrice:
-                                      '${state.price?.reelPrice ?? 0}',
+                                          '${state.price?.reelPrice ?? 0}',
                                       advertisementType: 'reel',
                                       comeFromCompany: 'company',
                                     ),
@@ -283,6 +283,4 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
             ),
     );
   }
-
-
 }

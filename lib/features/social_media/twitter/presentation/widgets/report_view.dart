@@ -229,7 +229,8 @@ class _ReportViewState extends State<ReportView> {
             onPressed: reportTextController.text.isNotEmpty
                 ? () async {
                     if (selectedReport == null) {
-                      showErrorMessage(context, LocaleKeys.pleaseSelectReason.localize);
+                      showErrorMessage(
+                          context, LocaleKeys.pleaseSelectReason.localize);
                       context.pop();
                     } else {
                       var response = await controller.onReport(
@@ -243,7 +244,8 @@ class _ReportViewState extends State<ReportView> {
                       );
 
                       if (response == true) {
-                        showSuccessMessage(context, LocaleKeys.reportSentSuccessfully.localize);
+                        showSuccessMessage(context,
+                            LocaleKeys.reportSentSuccessfully.localize);
                         context.pop();
                       } else {
                         showErrorMessage(

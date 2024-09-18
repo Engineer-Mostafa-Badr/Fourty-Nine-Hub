@@ -40,8 +40,7 @@ class SpecialAdsBody extends StatelessWidget {
         builder: (BuildContext context, state) {
           if (state is CompetitionSuccessState) {
             return Padding(
-              padding:
-                   EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+              padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
               child: ListView.separated(
                 itemBuilder: (context, index) => BuildItemListView(
                   model: state.competitionModel.data![index],

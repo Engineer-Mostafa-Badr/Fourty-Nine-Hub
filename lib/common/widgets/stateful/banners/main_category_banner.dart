@@ -110,7 +110,8 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                     height: 15.h,
                   ),
                   Label(
-                    text: '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
+                    text:
+                        '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
                     style: Styles.mediumText(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,

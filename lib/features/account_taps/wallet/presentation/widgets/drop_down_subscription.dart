@@ -31,7 +31,7 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
           _showCategoryDialog();
         },
         child: Container(
-          padding:  EdgeInsets.symmetric(vertical: 22.h),
+          padding: EdgeInsets.symmetric(vertical: 22.h),
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(20.r),
@@ -57,7 +57,7 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
         return AlertDialog(
           title: Text(LocaleKeys.selectCategory.localize),
           content: ConstrainedBox(
-            constraints:  BoxConstraints(
+            constraints: BoxConstraints(
               maxHeight: 400.0.h, // Limits height to show only 4 items
             ),
             child: SizedBox(
@@ -108,7 +108,7 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
         return AlertDialog(
           title: Text(LocaleKeys.selecteSubcategory.localize),
           content: ConstrainedBox(
-            constraints:  BoxConstraints(
+            constraints: BoxConstraints(
               maxHeight: 400.0.h, // Limits height to show only 4 items
             ),
             child: SizedBox(

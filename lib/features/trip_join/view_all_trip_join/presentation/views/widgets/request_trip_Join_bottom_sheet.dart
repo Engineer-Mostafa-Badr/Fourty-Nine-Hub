@@ -15,7 +15,8 @@ class RequstTripJoinBottomSheet extends StatefulWidget {
   });
   final TripJoinCardEntity tripJoinCardEntity;
   @override
-  State<RequstTripJoinBottomSheet> createState() => _RequstTripJoinBottomSheetState();
+  State<RequstTripJoinBottomSheet> createState() =>
+      _RequstTripJoinBottomSheetState();
 }
 
 class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
@@ -24,7 +25,8 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Form(
         key: formKey,
         child: Container(
@@ -45,7 +47,8 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
               TextFormField(
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15)),
                   fillColor: Colors.transparent,
                   label: const Text('Mobile'),
                   isDense: true,
@@ -66,7 +69,8 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                           addId: widget.tripJoinCardEntity.id ?? '',
                           mobile: phoneNumber,
                         );
-                    Future.delayed(const Duration(seconds: 2)).then((value) => context.pop());
+                    Future.delayed(const Duration(seconds: 2))
+                        .then((value) => context.pop());
                   }
                 },
                 child: Stack(
@@ -79,28 +83,33 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                         color: AppColors.PRIMARY_COLOR,
                       ),
                       alignment: Alignment.center,
-                      child: Text('Send Request', style: Styles.headerText(color: Colors.white)),
+                      child: Text('Send Request',
+                          style: Styles.headerText(color: Colors.white)),
                     ),
                     Positioned(
                       top: 5,
                       right: 20,
                       child: SizedBox(
                         height: 40.h,
-                        child: BlocBuilder<RequestTripJoinCubit, RequestTripJoinState>(
+                        child: BlocBuilder<RequestTripJoinCubit,
+                            RequestTripJoinState>(
                           builder: (context, state) {
                             if (state is RequestTripJoinLoading) {
                               return const Center(
-                                child: CircularProgressIndicator(color: Colors.white),
+                                child: CircularProgressIndicator(
+                                    color: Colors.white),
                               );
                             }
                             if (state is RequestTripJoinSuccess) {
                               return Center(
-                                child: Icon(Icons.check, color: Colors.green[400], size: 30),
+                                child: Icon(Icons.check,
+                                    color: Colors.green[400], size: 30),
                               );
                             }
                             if (state is RequestTripJoinFailed) {
                               return Center(
-                                child: Icon(Icons.error, color: Colors.red[400], size: 30),
+                                child: Icon(Icons.error,
+                                    color: Colors.red[400], size: 30),
                               );
                             }
                             return const SizedBox();

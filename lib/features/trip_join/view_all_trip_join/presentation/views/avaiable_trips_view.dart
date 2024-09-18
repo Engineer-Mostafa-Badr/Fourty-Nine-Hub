@@ -37,12 +37,14 @@ class AvailableTripsView extends StatelessWidget {
                 return TabBar(
                   tabs: [
                     TripJoinTabIcon(
-                      icon: Image.asset(Assets.tripjoin, width: size.h, height: size.h, fit: BoxFit.fill),
+                      icon: Image.asset(Assets.tripjoin,
+                          width: size.h, height: size.h, fit: BoxFit.fill),
                       title: 'Car Trips',
                       height: size + 15,
                     ),
                     TripJoinTabIcon(
-                      icon: Image.asset(Assets.autoComplete, width: size.h, height: size.h, fit: BoxFit.fill),
+                      icon: Image.asset(Assets.autoComplete,
+                          width: size.h, height: size.h, fit: BoxFit.fill),
                       title: 'User Trips',
                       height: size + 15,
                     ),
@@ -55,7 +57,8 @@ class AvailableTripsView extends StatelessWidget {
                   children: [
                     Stack(
                       children: [
-                        SizedBox(width: double.infinity, height: double.infinity),
+                        SizedBox(
+                            width: double.infinity, height: double.infinity),
                         AvailableTripsBody(),
                         AvailableTripsFloatingActionButton(),
                       ],

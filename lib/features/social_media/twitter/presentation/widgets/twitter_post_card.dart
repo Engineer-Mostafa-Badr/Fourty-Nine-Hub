@@ -420,8 +420,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             listTile(
                 icon: Icons.delete,
                 title: LocaleKeys.deletePost.localize,
-                subTitle:
-                LocaleKeys.youWillDeletePost.localize,
+                subTitle: LocaleKeys.youWillDeletePost.localize,
                 onTap: () {
                   widget.deletePost(widget.post.id);
                   // context.pop();

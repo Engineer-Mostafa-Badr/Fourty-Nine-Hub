@@ -371,7 +371,7 @@ class TinderRepository {
         url: uri.toString(), fromMethod: 'fetchUserProfile');
     if (response != null) {
       final data = json.decode(response.body);
-      print(response.body+"fetchUserProfile");
+      print(response.body + "fetchUserProfile");
       return ProfileUserModel.fromJson(data);
     }
     return null;
@@ -406,13 +406,12 @@ class TinderRepository {
   }
 
   Future<LastSeenModel?> fetchLastSeen(String userId) async {
-    final url =
-        'https://49dev.com/api/v1/users/last-seen/$userId';
+    final url = 'https://49dev.com/api/v1/users/last-seen/$userId';
     final response =
         await _makeGetRequest(url: url, fromMethod: 'fetchLastSeen');
     if (response != null) {
       final data = json.decode(response.body);
-      print(response.body+"vvvvvvvvvvvvvvvvv");
+      print(response.body + "vvvvvvvvvvvvvvvvv");
       return LastSeenModel.fromJson(data);
     }
     return null;

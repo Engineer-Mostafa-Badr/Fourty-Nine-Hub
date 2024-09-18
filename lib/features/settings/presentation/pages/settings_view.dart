@@ -28,7 +28,7 @@ class SettingsView extends StatelessWidget {
           label: LocaleKeys.settings.localize,
         ),
         body: BlocProvider<SettingCubit>(
-          create: (BuildContext context) =>serviceLocator(),
+          create: (BuildContext context) => serviceLocator(),
           child: BlocConsumer<SettingCubit, SettingState>(
             listener: (BuildContext context, SettingState state) {
               if (state.status == SettingStates.success) {
@@ -37,7 +37,7 @@ class SettingsView extends StatelessWidget {
                 //   LocaleKeys.deleteSuccessfully.localize,
                 // );
                 print('77777777777777777777777777777');
-                print(state.able?.isDisabled );
+                print(state.able?.isDisabled);
                 print('77777777777777777777777777777');
                 context.push(Routes.HOME);
               }
@@ -56,10 +56,12 @@ class SettingsView extends StatelessWidget {
                       image: Assets.noPerson,
                       trailing:
                           Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
-                      label:state.able?.isDisabled == true? 'Enable Account':LocaleKeys.disableAccount.localize,
+                      label: state.able?.isDisabled == true
+                          ? 'Enable Account'
+                          : LocaleKeys.disableAccount.localize,
                       onTap: () => showAreYouSure(
                           title: LocaleKeys.alert.localize,
-                          subTitle:LocaleKeys.disable.localize,
+                          subTitle: LocaleKeys.disable.localize,
                           action: () {
                             if (state.able?.isDisabled == true) {
                               context.read<SettingCubit>().enableAccount();
@@ -82,7 +84,6 @@ class SettingsView extends StatelessWidget {
                             context.read<SettingCubit>().deleteAccount();
                           },
                           context: context)),
-
                   BlocBuilder<ThemeCubit, ThemeStates>(
                     builder: (BuildContext context, theme) {
                       return SwitchListTile(
@@ -94,17 +95,17 @@ class SettingsView extends StatelessWidget {
                         ),
                         title: theme is DarkThemeModeStates
                             ? Text(
-                          LocaleKeys.lightMode.localize,
-                          style: Styles.mediumText(
-                              fontSize: 65.sp,
-                              fontWeight: FontWeight.w400),
-                        )
+                                LocaleKeys.lightMode.localize,
+                                style: Styles.mediumText(
+                                    fontSize: 65.sp,
+                                    fontWeight: FontWeight.w400),
+                              )
                             : Text(
-                          LocaleKeys.darkMode.localize,
-                          style: Styles.mediumText(
-                              fontSize: 65.sp,
-                              fontWeight: FontWeight.w400),
-                        ),
+                                LocaleKeys.darkMode.localize,
+                                style: Styles.mediumText(
+                                    fontSize: 65.sp,
+                                    fontWeight: FontWeight.w400),
+                              ),
                         value: ThemeCubit.get(context).isDarkTheme,
                         activeColor: AppColors.SECONDARY_COLOR,
                         activeTrackColor: AppColors.AUTH_CONTAINER_COLOR,
@@ -139,7 +140,9 @@ class SettingsView extends StatelessWidget {
         height: 50.h,
       ),
       title: Label(
-          text: label, style: Styles.mediumText(fontSize: 65.sp,fontWeight: FontWeight.w400)),
+          text: label,
+          style:
+              Styles.mediumText(fontSize: 65.sp, fontWeight: FontWeight.w400)),
       onTap: () => onTap(),
       trailing: trailing,
     );

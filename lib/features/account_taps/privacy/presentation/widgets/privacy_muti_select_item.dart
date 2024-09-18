@@ -55,7 +55,8 @@ class PrivacyMultiSelectItem extends StatelessWidget {
                   iconData: Icons.accessibility_sharp,
                 ),
                 CustomSheetModel(
-                  text: "${LocaleKeys.friends.localize} / ${LocaleKeys.followers.localize}",
+                  text:
+                      "${LocaleKeys.friends.localize} / ${LocaleKeys.followers.localize}",
                   value: PrivacyStatus.friendsAndFollowers,
                   iconData: Icons.supervised_user_circle_outlined,
                 ),
@@ -84,7 +85,8 @@ class PrivacyMultiSelectItem extends StatelessWidget {
                     children: [
                       Label(
                         text: getPrivacyName(privacyToPrivacyStatus(privacy)),
-                        style: TextStyle(fontSize: 30.sp,color: AppColors.GREY_DARK_COLOR),
+                        style: TextStyle(
+                            fontSize: 30.sp, color: AppColors.GREY_DARK_COLOR),
                       ),
                       SizedBox(
                         width: 10.w,

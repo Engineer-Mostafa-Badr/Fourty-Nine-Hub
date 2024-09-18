@@ -17,10 +17,12 @@ class RequestTripJoinNotificationView extends StatefulWidget {
   const RequestTripJoinNotificationView({super.key, required this.payload});
   final Map<String, dynamic> payload;
   @override
-  State<RequestTripJoinNotificationView> createState() => _RequestTripJoinNotificationViewState();
+  State<RequestTripJoinNotificationView> createState() =>
+      _RequestTripJoinNotificationViewState();
 }
 
-class _RequestTripJoinNotificationViewState extends State<RequestTripJoinNotificationView> {
+class _RequestTripJoinNotificationViewState
+    extends State<RequestTripJoinNotificationView> {
   late final TripJoinCardEntity tripJoinCardEntity;
   @override
   void initState() {
@@ -91,10 +93,14 @@ class _RequestTripJoinNotificationViewState extends State<RequestTripJoinNotific
     );
   }
 
-  Future<bool> _isPremuim(TripJoinCardEntity tripJoinCardEntity, String subCategoryId, String title) async {
-    if (tripJoinCardEntity.subscribedPremium == null || tripJoinCardEntity.subscribedPremium == false) {
+  Future<bool> _isPremuim(TripJoinCardEntity tripJoinCardEntity,
+      String subCategoryId, String title) async {
+    if (tripJoinCardEntity.subscribedPremium == null ||
+        tripJoinCardEntity.subscribedPremium == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-        wallets: [tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance],
+        wallets: [
+          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
+        ],
         subCategoryId: subCategoryId,
         title: title,
       );
@@ -103,10 +109,14 @@ class _RequestTripJoinNotificationViewState extends State<RequestTripJoinNotific
     return false;
   }
 
-  Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity, String subCategoryId, String title) async {
-    if (tripJoinCardEntity.isApproved == null || tripJoinCardEntity.isApproved == false) {
+  Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity,
+      String subCategoryId, String title) async {
+    if (tripJoinCardEntity.isApproved == null ||
+        tripJoinCardEntity.isApproved == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-        wallets: [tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance],
+        wallets: [
+          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
+        ],
         subCategoryId: subCategoryId,
         title: title,
       );
@@ -115,7 +125,8 @@ class _RequestTripJoinNotificationViewState extends State<RequestTripJoinNotific
     return false;
   }
 
-  void _reportOnTap(BuildContext context, TripJoinCardEntity tripJoinCardEntity) {
+  void _reportOnTap(
+      BuildContext context, TripJoinCardEntity tripJoinCardEntity) {
     bottomSheet(
         context: context,
         widget: ReportViewTripJoin(

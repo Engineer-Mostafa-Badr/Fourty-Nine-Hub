@@ -143,7 +143,6 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                         const CupertinoActivityIndicator()),
               ),
             ),
-
             Container(
                 height: kToolbarHeight,
                 decoration: BoxDecoration(

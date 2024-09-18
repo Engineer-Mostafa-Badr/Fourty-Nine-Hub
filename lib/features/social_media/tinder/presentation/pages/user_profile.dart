@@ -210,12 +210,12 @@ class UserProfilePageState extends State<UserProfilePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildStatItem(
-              LocaleKeys.user_info_followers.tr(), profileData?.followersCount.toString() ?? '0'),
-          _buildStatItem(
-              LocaleKeys.user_info_following.tr(), profileData?.followingCount.toString() ?? '0'),
-          _buildStatItem(
-              LocaleKeys.user_info_friends.tr(), profileData?.friendsCount.toString() ?? '0'),
+          _buildStatItem(LocaleKeys.user_info_followers.tr(),
+              profileData?.followersCount.toString() ?? '0'),
+          _buildStatItem(LocaleKeys.user_info_following.tr(),
+              profileData?.followingCount.toString() ?? '0'),
+          _buildStatItem(LocaleKeys.user_info_friends.tr(),
+              profileData?.friendsCount.toString() ?? '0'),
         ],
       ),
     );

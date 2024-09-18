@@ -221,6 +221,6 @@ class AvailableTripCard extends StatelessWidget {
       return '';
     }
     return intl.DateFormat('dd MMM, hh:mm aaa')
-        .format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate! * 1000));
+        .format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate! * 1000000));
   }
 }

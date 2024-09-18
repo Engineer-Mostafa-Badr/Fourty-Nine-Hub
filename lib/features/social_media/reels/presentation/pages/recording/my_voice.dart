@@ -969,8 +969,6 @@ class MyVoiceVideoRecordingScreenState
         itemCount: filters.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-
-
             onTap: () => _applyFilter(filters[index]),
             child: Container(
               width: 80,

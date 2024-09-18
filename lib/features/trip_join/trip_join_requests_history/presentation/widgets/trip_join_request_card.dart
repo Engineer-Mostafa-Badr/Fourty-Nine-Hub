@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
-import 'package:fourtyninehub/features/trip_join/requests_history/domain/entities/tripjoin_request_entity.dart';
+import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/domain/entities/tripjoin_request_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -17,7 +17,7 @@ class TripJoinRequestCard extends StatelessWidget {
     this.deleteRequestOnTap,
     this.subscribeOnTap,
   });
-  final TripJoinRequestEntity tripJoinRequestEntity;
+  final TripJoinMyRequestEntity tripJoinRequestEntity;
   final void Function()? requestHistoryOnTap;
   final void Function()? deleteRequestOnTap;
   final void Function()? subscribeOnTap;
@@ -166,13 +166,13 @@ class TripJoinRequestCard extends StatelessWidget {
     if (timestamp == null) {
       return '';
     }
-    return intl.DateFormat('dd MMM, hh:mm aaa').format(DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000));
+    return intl.DateFormat('dd MMM, hh:mm aaa').format(DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000000));
   }
 
   String _formatSubscriptionDate(int? timestamp) {
     if (timestamp == null) {
       return '';
     }
-    return intl.DateFormat('yMMMMd').format(DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000));
+    return intl.DateFormat('yMMMMd').format(DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000000));
   }
 }

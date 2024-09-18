@@ -37,8 +37,8 @@ class PrivacyDataSourceImpl extends PrivacyDataSource {
       data: params.toJson(),
     );
     return response.fold(
-      (failure)=>Left(failure),
-      (response)=>Right(PrivacyModel.fromJson(response['data'])),
+      (failure) => Left(failure),
+      (response) => Right(PrivacyModel.fromJson(response['data'])),
     );
   }
 }

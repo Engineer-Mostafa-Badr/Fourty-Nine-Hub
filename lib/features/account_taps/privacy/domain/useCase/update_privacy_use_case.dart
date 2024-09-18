@@ -5,11 +5,12 @@ import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/priv
 import 'package:fourtyninehub/features/account_taps/privacy/domain/repository/privacy_repository.dart';
 
 class UpdatePrivacyUseCase extends UseCase<PrivacyEntity, UpdatePrivacyParams> {
- final PrivacyRepository _privacyRepository;
+  final PrivacyRepository _privacyRepository;
 
   UpdatePrivacyUseCase(this._privacyRepository);
   @override
-  Future<Either<Failure, PrivacyEntity>> call(UpdatePrivacyParams params) async{
+  Future<Either<Failure, PrivacyEntity>> call(
+      UpdatePrivacyParams params) async {
     return await _privacyRepository.updateDataPrivacy(params);
   }
 }
@@ -34,42 +35,41 @@ class UpdatePrivacyParams {
   final bool? privacyFollowRequest;
 
   UpdatePrivacyParams(
-      { this.privacyCountry,
-       this.privacyPhone,
-       this.privacyEmail,
-       this.privacyBirthDay,
-       this.privacySocialStatus,
-       this.privacyJob,
-       this.privacyCity,
-       this.privacyIsMale,
-       this.privacyLanguage,
-       this.privacyReceiveMessages,
-       this.privacyLastSeen,
-       this.privacyFriendList,
-       this.privacyFollowerList,
-       this.privacyActivity,
-       this.privacyCall,
-       this.privacyFriendRequest,
-       this.privacyFollowRequest});
-
+      {this.privacyCountry,
+      this.privacyPhone,
+      this.privacyEmail,
+      this.privacyBirthDay,
+      this.privacySocialStatus,
+      this.privacyJob,
+      this.privacyCity,
+      this.privacyIsMale,
+      this.privacyLanguage,
+      this.privacyReceiveMessages,
+      this.privacyLastSeen,
+      this.privacyFriendList,
+      this.privacyFollowerList,
+      this.privacyActivity,
+      this.privacyCall,
+      this.privacyFriendRequest,
+      this.privacyFollowRequest});
 
   Map<String, dynamic> toJson() => {
-    'privacyCountry': privacyCountry,
-    'privacyPhone': privacyPhone,
-    'privacyEmail': privacyEmail,
-    'privacyBirthDay': privacyBirthDay,
-    'privacySocialStatus': privacySocialStatus,
-    'privacyJob': privacyJob,
-    'privacyCity': privacyCity,
-    'privacyIsMale': privacyIsMale,
-    'privacyLanguage': privacyLanguage,
-    'privacyReceiveMessages': privacyReceiveMessages,
-    'privacyLastSeen': privacyLastSeen,
-    'privacyFriendList': privacyFriendList,
-    'privacyFollowerList': privacyFollowerList,
-    'privacyActivity': privacyActivity,
-    'privacyCall': privacyCall,
-    'privacyFriendRequest': privacyFriendRequest,
-    'privacyFollowRequest': privacyFollowRequest,
-  };
+        'privacyCountry': privacyCountry,
+        'privacyPhone': privacyPhone,
+        'privacyEmail': privacyEmail,
+        'privacyBirthDay': privacyBirthDay,
+        'privacySocialStatus': privacySocialStatus,
+        'privacyJob': privacyJob,
+        'privacyCity': privacyCity,
+        'privacyIsMale': privacyIsMale,
+        'privacyLanguage': privacyLanguage,
+        'privacyReceiveMessages': privacyReceiveMessages,
+        'privacyLastSeen': privacyLastSeen,
+        'privacyFriendList': privacyFriendList,
+        'privacyFollowerList': privacyFollowerList,
+        'privacyActivity': privacyActivity,
+        'privacyCall': privacyCall,
+        'privacyFriendRequest': privacyFriendRequest,
+        'privacyFollowRequest': privacyFollowRequest,
+      };
 }

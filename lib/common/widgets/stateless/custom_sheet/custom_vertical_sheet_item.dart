@@ -22,8 +22,9 @@ class CustomVerticalSheetItem {
       builder: (context) {
         return CupertinoActionSheet(
           cancelButton: CupertinoActionSheetAction(
-            child: Text(LocaleKeys.cancel.localize,
-            style: Styles.headerText(),
+            child: Text(
+              LocaleKeys.cancel.localize,
+              style: Styles.headerText(),
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -62,7 +63,9 @@ class CustomVerticalSheetItem {
                         SizedBox.shrink(),
                       Label(
                         text: e.text,
-                        style: Styles.headerText( fontWeight: FontWeight.w400,color: Theme.of(context).primaryColor),
+                        style: Styles.headerText(
+                            fontWeight: FontWeight.w400,
+                            color: Theme.of(context).primaryColor),
                       ),
                     ],
                   ),

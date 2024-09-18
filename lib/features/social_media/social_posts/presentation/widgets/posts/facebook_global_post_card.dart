@@ -163,7 +163,8 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                                 ),
                                 Sizer(),
                                 Label(
-                                  text: LocaleKeys.thisContentIsNotAvailableNow.localize,
+                                  text: LocaleKeys
+                                      .thisContentIsNotAvailableNow.localize,
                                   style: Styles.headerText(
                                     color: Colors.black,
                                   ),

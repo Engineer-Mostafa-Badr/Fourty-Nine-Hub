@@ -197,7 +197,8 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                     scrollDirection: Axis.horizontal,
                                     itemCount: controller.feedPagingController
                                         .itemList![index].images!.length,
-                                    separatorBuilder: (context, index) => const Sizer(
+                                    separatorBuilder: (context, index) =>
+                                        const Sizer(
                                           width: 3,
                                         ),
                                     itemBuilder: (context, index) {
@@ -610,7 +611,8 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                             )),
                                       ),
                                     ),
-                                child: Label(text: LocaleKeys.showComments.localize))
+                                child: Label(
+                                    text: LocaleKeys.showComments.localize))
                           ],
                           if (controller.feedPagingController.itemList![index]
                                   .content!.isEmpty &&

@@ -74,8 +74,7 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
                 ),
                 Label(
                   text: LocaleKeys.documentation.localize,
-                  style:
-                      Styles.headerText(fontSize: 20, color: Colors.white),
+                  style: Styles.headerText(fontSize: 20, color: Colors.white),
                 ),
                 const SizedBox(
                   width: 10,

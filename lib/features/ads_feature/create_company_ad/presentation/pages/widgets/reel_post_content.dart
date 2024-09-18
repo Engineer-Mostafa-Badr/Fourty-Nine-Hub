@@ -83,41 +83,40 @@ class ReelsScreenState extends State<ReelsScreen> {
                     controller: _pageController,
                     scrollDirection: Axis.vertical,
                     itemCount: data.length,
-                    onPageChanged: (index){
-                      _handlePageChange(index,data);
+                    onPageChanged: (index) {
+                      _handlePageChange(index, data);
                     },
-                itemBuilder: (context, index) {
-                  if (index >= data.length) {
-                    return const Center(
-                      child: CupertinoActivityIndicator(radius: 25),
-                    );
-                  }
-
-                  var mediaList = data[index].media;
-                  if (mediaList == null || index >= mediaList.length) {
-                    return const Center(
-                      child: CupertinoActivityIndicator(radius: 25),
-                    );
-                  }
-
-                  var mediaItem = mediaList[index];
-                  return ReelItem(
-                    key: ValueKey(mediaItem.sId),
-                    post: mediaItem,
-                    isVisible: _currentPage == index,
-                    advertises: data[index],
-                    onDeleteItem: (id) async {
-                      var result = await context
-                          .read<CreateCompanyAdCubit>()
-                          .deleteCompanyAd(id: id);
-                      if (result == true) {
-                        data.removeWhere((e) => e.sId == id);
-                        setState(() {});
+                    itemBuilder: (context, index) {
+                      if (index >= data.length) {
+                        return const Center(
+                          child: CupertinoActivityIndicator(radius: 25),
+                        );
                       }
-                    },
-                  );
-                }
-                  )
+
+                      var mediaList = data[index].media;
+                      if (mediaList == null || index >= mediaList.length) {
+                        return const Center(
+                          child: CupertinoActivityIndicator(radius: 25),
+                        );
+                      }
+
+                      var mediaItem = mediaList[index];
+                      return ReelItem(
+                        key: ValueKey(mediaItem.sId),
+                        post: mediaItem,
+                        isVisible: _currentPage == index,
+                        advertises: data[index],
+                        onDeleteItem: (id) async {
+                          var result = await context
+                              .read<CreateCompanyAdCubit>()
+                              .deleteCompanyAd(id: id);
+                          if (result == true) {
+                            data.removeWhere((e) => e.sId == id);
+                            setState(() {});
+                          }
+                        },
+                      );
+                    })
                 : Center(child: Label(text: LocaleKeys.noPosts.localize));
           },
           fetchData: (PaginationParams paginationParams) {
@@ -131,9 +130,7 @@ class ReelsScreenState extends State<ReelsScreen> {
     );
   }
 
-
-
-  void _handlePageChange(index,data) {
+  void _handlePageChange(index, data) {
     setState(() => _currentPage = index);
     final postsCubit = context.read<CreateCompanyAdCubit>();
     if (index == data.length - 1 && mounted) {
@@ -202,7 +199,8 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
   }
 
   Future<void> _initializeVideoController() async {
-    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(widget.post?.photo ?? ''));
+    _videoPlayerController =
+        VideoPlayerController.networkUrl(Uri.parse(widget.post?.photo ?? ''));
     try {
       print('Initializing video controller with URL: ${widget.post?.photo}');
       await _videoPlayerController.initialize();
@@ -214,7 +212,6 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
       }
     }
   }
-
 
   void _setupChewieController() {
     _chewieController = ChewieController(

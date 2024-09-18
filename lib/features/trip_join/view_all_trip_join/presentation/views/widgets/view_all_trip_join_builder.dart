@@ -20,10 +20,12 @@ class ViewAllTripJoinCardBuilder extends StatefulWidget {
   });
 
   @override
-  State<ViewAllTripJoinCardBuilder> createState() => _ViewAllTripJoinCardBuilderState();
+  State<ViewAllTripJoinCardBuilder> createState() =>
+      _ViewAllTripJoinCardBuilderState();
 }
 
-class _ViewAllTripJoinCardBuilderState extends State<ViewAllTripJoinCardBuilder> {
+class _ViewAllTripJoinCardBuilderState
+    extends State<ViewAllTripJoinCardBuilder> {
   late final ViewAllTripJoinCubit viewAllTripJoinCubit;
 
   @override
@@ -38,7 +40,8 @@ class _ViewAllTripJoinCardBuilderState extends State<ViewAllTripJoinCardBuilder>
       // buildWhen: (previous, current) => !viewAllTripJoinCubit.noMoreDataInDatabase,
       builder: (context, state) {
         if (viewAllTripJoinCubit.tripJoinCards.isEmpty &&
-            (state is ViewAllTripJoinSuccess || state is ViewAllTripJoinFailed)) {
+            (state is ViewAllTripJoinSuccess ||
+                state is ViewAllTripJoinFailed)) {
           return Container(
             height: MediaQuery.of(context).size.height * 0.8,
             width: double.infinity,
@@ -52,7 +55,8 @@ class _ViewAllTripJoinCardBuilderState extends State<ViewAllTripJoinCardBuilder>
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) {
             if (index < viewAllTripJoinCubit.tripJoinCards.length) {
-              TripJoinCardEntity tripJoinCardEntity = viewAllTripJoinCubit.tripJoinCards[index];
+              TripJoinCardEntity tripJoinCardEntity =
+                  viewAllTripJoinCubit.tripJoinCards[index];
               return AvailableTripCard(
                 tripJoinCardEntity: tripJoinCardEntity,
                 reportOnTap: () {
@@ -73,7 +77,8 @@ class _ViewAllTripJoinCardBuilderState extends State<ViewAllTripJoinCardBuilder>
                     builder: (_) {
                       return BlocProvider.value(
                           value: BlocProvider.of<RequestTripJoinCubit>(context),
-                          child: RequstTripJoinBottomSheet(tripJoinCardEntity: tripJoinCardEntity));
+                          child: RequstTripJoinBottomSheet(
+                              tripJoinCardEntity: tripJoinCardEntity));
                     },
                   );
                 },
@@ -104,7 +109,8 @@ class _ViewAllTripJoinCardBuilderState extends State<ViewAllTripJoinCardBuilder>
                 },
               );
             }
-            return state is ViewAllTripJoinLoading && !viewAllTripJoinCubit.noMoreDataInDatabase
+            return state is ViewAllTripJoinLoading &&
+                    !viewAllTripJoinCubit.noMoreDataInDatabase
                 ? const AvailableTripCardLoadingList()
                 : const SizedBox();
           },
@@ -113,10 +119,14 @@ class _ViewAllTripJoinCardBuilderState extends State<ViewAllTripJoinCardBuilder>
     );
   }
 
-  Future<bool> _isPremuim(TripJoinCardEntity tripJoinCardEntity, String subCategoryId, String title) async {
-    if (tripJoinCardEntity.subscribedPremium == null || tripJoinCardEntity.subscribedPremium == false) {
+  Future<bool> _isPremuim(TripJoinCardEntity tripJoinCardEntity,
+      String subCategoryId, String title) async {
+    if (tripJoinCardEntity.subscribedPremium == null ||
+        tripJoinCardEntity.subscribedPremium == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-        wallets: [tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance],
+        wallets: [
+          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
+        ],
         subCategoryId: subCategoryId,
         title: title,
       );
@@ -125,10 +135,14 @@ class _ViewAllTripJoinCardBuilderState extends State<ViewAllTripJoinCardBuilder>
     return false;
   }
 
-  Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity, String subCategoryId, String title) async {
-    if (tripJoinCardEntity.isApproved == null || tripJoinCardEntity.isApproved == false) {
+  Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity,
+      String subCategoryId, String title) async {
+    if (tripJoinCardEntity.isApproved == null ||
+        tripJoinCardEntity.isApproved == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-        wallets: [tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance],
+        wallets: [
+          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
+        ],
         subCategoryId: subCategoryId,
         title: title,
       );
@@ -143,7 +157,8 @@ class _ViewAllTripJoinCardBuilderState extends State<ViewAllTripJoinCardBuilder>
         widget: ReportViewTripJoin(
           id: viewAllTripJoinCubit.tripJoinCards[index].userId ?? '',
           cardId: viewAllTripJoinCubit.tripJoinCards[index].id ?? '',
-          categoryId: viewAllTripJoinCubit.tripJoinCards[index].categoryId ?? '',
+          categoryId:
+              viewAllTripJoinCubit.tripJoinCards[index].categoryId ?? '',
         ));
   }
 }

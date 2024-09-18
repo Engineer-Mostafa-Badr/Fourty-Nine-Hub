@@ -123,9 +123,6 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     );
   }
 
-
-
-
   Future<Either<Failure, UserCredential>> signInWithGoogle() async {
     try {
       // Trigger the authentication flow
@@ -133,11 +130,13 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
       // Check if the user is null (i.e., the user canceled the sign-in)
       if (googleUser == null) {
-        return Left(SocialLoginFailure('Google sign-in was canceled by the user.'));
+        return Left(
+            SocialLoginFailure('Google sign-in was canceled by the user.'));
       }
 
       // Obtain the authentication details from the request
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
       // Create a new credential
       final OAuthCredential credential = GoogleAuthProvider.credential(
@@ -146,7 +145,8 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       );
 
       // Sign in to Firebase using the credential
-      final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
 
       // Return the signed-in user's credentials
       return Right(userCredential);
@@ -155,17 +155,17 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     }
   }
 
-
   @override
-  Future<Either<Failure, UserTokensModel>> socialLogin(SocialLoginParams params) async {
+  Future<Either<Failure, UserTokensModel>> socialLogin(
+      SocialLoginParams params) async {
     try {
       // Perform Google sign-in and get the user credentials
       final signInResult = await signInWithGoogle();
 
       // Handle the result
       return signInResult.fold(
-            (failure) => Left(failure), // If the sign-in failed, return the failure
-            (userCredential) async {
+        (failure) => Left(failure), // If the sign-in failed, return the failure
+        (userCredential) async {
           // If sign-in succeeded, obtain the tokens (idToken and accessToken)
           final idToken = await userCredential.user?.getIdToken();
           final accessToken = await userCredential.user?.getIdTokenResult();
@@ -186,8 +186,8 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
           // Handle the API response
           return result.fold(
-                (failure) => Left(failure),
-                (response) {
+            (failure) => Left(failure),
+            (response) {
               final userData = response['data'];
               return Right(UserTokensModel.fromJson(userData));
             },
@@ -198,8 +198,6 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       return Left(ServerFailure(message: 'Social login failed: $e'));
     }
   }
-
-
 
   @override
   Future<Either<Failure, void>> resendOTP(ResendOTPParams params) async {
