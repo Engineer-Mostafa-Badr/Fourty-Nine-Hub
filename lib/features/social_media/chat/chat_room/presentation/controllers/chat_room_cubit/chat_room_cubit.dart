@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -53,11 +54,13 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   ) : super(const ChatRoomState()) {
     _listenToDeliveredMessages();
     _listenToSeenMessages();
-    serviceLocator<Socket>().emit('Chat:getRooms');
   }
 
   Future<void> init({required ChatEntity chat}) async {
     _chat = chat;
+    // tmp to be removed
+    serviceLocator<Socket>().emit('Chat:joinRoom',jsonEncode({"chatId":chat.id}));
+
     await _getMessages();
   }
 
@@ -143,7 +146,6 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     _listenToDeliveredMessagesUseCase.call((chatId) {
       if (chatId == _chat.id) {
         messagesList = _messages.values.toList();
-
         for (int i = messagesList.length - 1;
             i >= 0 && !(messagesList[i].seen);
             i--) {

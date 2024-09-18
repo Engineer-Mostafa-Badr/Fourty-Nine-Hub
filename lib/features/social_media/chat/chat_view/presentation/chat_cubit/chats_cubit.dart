@@ -32,10 +32,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._listenToNewMessageUseCase,
     this._stopListenToMessagesUseCase,
     this._markMeesagesAsDeliveredUseCase,
-  ) : super(const ChatsState()) {
-    serviceLocator<Socket>()
-        .on('getRooms', (data) => CliLogger.warning('get rooms : $data'));
-  }
+  ) : super(const ChatsState());
 
   // Selected Chats
   void addChatToSelectedChats({required ChatEntity chat}) {
@@ -151,9 +148,9 @@ class ChatsCubit extends Cubit<ChatsState> {
   _listenToNewMessages() {
     _listenToNewMessageUseCase((message) {
       _chats[message.chatId]?.lastMessage = message;
-      if (!message.byMe && message.chatId != null) {
-        _markMeesagesAsDeliveredUseCase(MarkMessagesAsDeliveredParams(chatId: message.chatId!));
-      }
+      // if (!message.byMe && message.chatId != null) {
+      //   _markMeesagesAsDeliveredUseCase(MarkMessagesAsDeliveredParams(chatId: message.chatId!));
+      // }
       emit(state.copyWith(newMessage: message, status: ChatsStates.newMessage));
       getChatsByCategory(_selectedChatCategory);
     });

@@ -35,6 +35,8 @@ class WebSocketHelper {
         pr('Connect To Socket successfully ');
       });
 
+      socket.on('getRooms', (data) => pr('get rooms : $data'));
+
       socket.on('NotificationCreated', (data) {
         pr('NotificationCreated Event is recieved and the data is: ');
         pr(data);

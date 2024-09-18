@@ -67,7 +67,8 @@ class MessagesRemoteDataSourceImplementation
   @override
   void listenToNewMessages(Function(MessageEntity message) params) {
     try {
-      _socket.connect();
+      // _socket.connect();
+
       _socket.on(SocketIOListeners.newMessageFromMe, (data) {
         final decodedData = jsonDecode(data);
         if (decodedData is List) {
@@ -98,7 +99,7 @@ class MessagesRemoteDataSourceImplementation
   @override
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params) async {
     try {
-      _socket.connect();
+      // _socket.connect();
       CliLogger.info('you send message : ${params.toString()}');
       List<String> mediaIds = [];
       for (var file in params.media) {
@@ -152,7 +153,7 @@ class MessagesRemoteDataSourceImplementation
   Future<Either<Failure, bool>> markMessageAsSeen(
       MarkMessageAsSeenParams params) async {
     try {
-      _socket.connect();
+      // _socket.connect();
       CliLogger.info("you mark messages as seen : chatId ${params.chatId}");
       _socket.emit(
           SocketIOEvents.markMessageAsSeen,
@@ -169,7 +170,7 @@ class MessagesRemoteDataSourceImplementation
   @override
   void listenToDeliveredStatus(Function(String chatId) params) {
     try {
-      _socket.connect();
+      // _socket.connect();
       _socket.on(SocketIOListeners.messageDelivered, (data) {
         final decodedData = jsonDecode(data);
         if (decodedData is List) {
@@ -189,7 +190,7 @@ class MessagesRemoteDataSourceImplementation
   @override
   void listenToSeenStatus(Function(List<MessageEntity> messages) params) {
     try {
-      _socket.connect();
+      // _socket.connect();
       _socket.on(SocketIOListeners.messageSeen, (data) {
         CliLogger.info("messageSeen :  $data");
         params((jsonDecode(data) as List)
@@ -214,7 +215,7 @@ class MessagesRemoteDataSourceImplementation
   @override
   Future<Either<Failure, bool>> markMessageAsDelivered(MarkMessagesAsDeliveredParams params) async {
     try {
-      _socket.connect();
+      // _socket.connect();
       CliLogger.info("you mark messages as delivered");
       _socket.emit(SocketIOEvents.markMessageAsDelivered,jsonEncode({"chatId":params.chatId}));
       return const Right(true);
