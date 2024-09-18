@@ -7,6 +7,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/c
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_anonymous_chat_use_case.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_normal_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 
 abstract class ChatsRemoteDataSource {
@@ -38,6 +40,11 @@ abstract class ChatsRemoteDataSource {
 
   Future<Either<Failure, List<SeenHistoryModel>>> getSeenHistoryList(
       {required String chatId});
+
+  Future<Either<Failure, bool>> createNormalChat(CreateNormalChatParams params);
+
+  Future<Either<Failure, bool>> createAnonymousChat(
+      CreateAnonymousChatParams params);
 }
 
 class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
@@ -133,5 +140,26 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
         (data) => Right((data['data']['lastSeen'] as List)
             .map((e) => SeenHistoryModel.fromJson(e))
             .toList()));
+  }
+
+  @override
+  Future<Either<Failure, bool>> createNormalChat(
+      CreateNormalChatParams params) async {
+    final response = await _apiConsumer.post(EndPoints.createNormalChat(
+      categoryId: params.categoryId,
+      otherUserId: params.otherUserId,
+    ));
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> createAnonymousChat(
+      CreateAnonymousChatParams params) async {
+    final response = await _apiConsumer
+        .post(EndPoints.createAnonymousChat(params.otherUserId));
+
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
   }
 }
