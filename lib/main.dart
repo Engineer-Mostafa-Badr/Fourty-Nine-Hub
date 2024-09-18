@@ -221,6 +221,13 @@ class MyApp extends StatelessWidget {
             return BlocBuilder<ThemeCubit, ThemeStates>(
               builder: (BuildContext context, state) {
                 return MaterialApp.router(
+                  builder: (context, child) {
+                    return MediaQuery(
+                      data: MediaQuery.of(context)
+                          .copyWith(textScaler: const TextScaler.linear(1.0)),
+                      child: child!,
+                    );
+                  },
                   themeMode: context.read<ThemeCubit>().isDarkTheme
                       ? ThemeMode.dark
                       : ThemeMode.light,

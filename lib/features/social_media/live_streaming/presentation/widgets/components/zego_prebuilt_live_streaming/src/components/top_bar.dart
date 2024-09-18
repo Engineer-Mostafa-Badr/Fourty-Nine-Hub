@@ -176,7 +176,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                             }
                             if (context.mounted) {
                               await context
-                                  .read<MeetingCubit>()
+                                  .read<StreamCubit>()
                                   .endRoom(ZegoUIKit().getRoom().id);
                               Navigator.of(context).pop();
                             }
@@ -325,7 +325,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
   }
 
   void minimizeAndNavigate() {
-    var cubit = context.read<MeetingCubit>();
+    var cubit = context.read<StreamCubit>();
 
     cubit.minimize();
 

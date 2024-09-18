@@ -271,8 +271,8 @@ class AppPages {
                 GoRoute(
                     path: Paths.ADS,
                     name: Routes.ADS,
-                    builder: (context, state) => BlocProvider.value(
-                          value: serviceLocator<AdsCubit>(),
+                    builder: (context, state) => BlocProvider(
+                          create:(_)=> serviceLocator<AdvertisementCubit>(),
                           child: AdsView(
                             params: state.extra as AdsViewParams,
                           ),
@@ -715,9 +715,12 @@ class AppPages {
                           name: Routes.LIVEView,
                           builder: (context, state) {
                             var extras = state.extra as ZegoArgs;
-                            return LiveStreamView(
-                              isHost: extras.isHost,
-                              liveID: extras.liveId,
+                            return BlocProvider.value(
+                              value: serviceLocator<StreamCubit>(),
+                              child: LiveStreamView(
+                                isHost: extras.isHost,
+                                liveID: extras.liveId,
+                              ),
                             );
                           }),
 
@@ -1088,9 +1091,9 @@ class AppPages {
           GoRoute(
               path: Paths.ZOOM,
               name: Routes.ZOOM,
-              builder: (context, state) => BlocProvider<MeetingCubit>(
+              builder: (context, state) => BlocProvider<StreamCubit>(
                     create: (context) =>
-                        serviceLocator<MeetingCubit>()..getScheduledMeetings(),
+                        serviceLocator<StreamCubit>()..getScheduledMeetings(),
                     child: const MeetingView(),
                   ),
               routes: [

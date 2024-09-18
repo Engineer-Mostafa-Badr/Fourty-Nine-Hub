@@ -27,19 +27,19 @@ class AdDetailsCubit extends Cubit<AdDetailsState> {
         (failure) => emit(
             state.copyWith(failure: failure, status: AdDetailsStates.error)),
         (data) {
-      getRelevantAds();
+      // getRelevantAds();
       emit(state.copyWith(ad: data, status: AdDetailsStates.initState));
     });
   }
-
-  Future<void> getRelevantAds() async {
-    final response = await _getAdsUseCase(state.ad?.subCategoryId ?? '');
-    response.fold(
-        (failure) => emit(
-            state.copyWith(failure: failure, status: AdDetailsStates.error)),
-        (data) => emit(state.copyWith(
-            relevantAds: data, status: AdDetailsStates.initState)));
-  }
+  //
+  // Future<void> getRelevantAds() async {
+  //   final response = await _getAdsUseCase(GetAdsParams(subCategoryId: state.ad?.subCategoryId ?? '',filter: 'provider'));
+  //   response.fold(
+  //       (failure) => emit(
+  //           state.copyWith(failure: failure, status: AdDetailsStates.error)),
+  //       (data) => emit(state.copyWith(
+  //           relevantAds: data, status: AdDetailsStates.initState)));
+  // }
 
   void changePhone({
     required String v,

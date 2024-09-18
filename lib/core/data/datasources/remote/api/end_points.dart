@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/core/constants/constants.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
@@ -558,8 +559,8 @@ class EndPoints {
     return '/ads/deleteAd/$id';
   }
 
-  static String subCategoryAds(String id) {
-    return '/ads/subCategoryAds/$id';
+  static String subCategoryAds(GetAdsParams params) {
+    return '/ads/subCategoryAds/${params.subCategoryId}?filter=${params.filter}&page=${params.page}&limit=${params.limit}';
   }
 
   static String createAuction(String id) {

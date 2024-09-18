@@ -100,7 +100,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
   }
 
   Widget get body {
-    return BlocBuilder<MeetingCubit, MeetingState>(
+    return BlocBuilder<StreamCubit, StreamState>(
       builder: (context, state) {
         return LayoutBuilder(builder: (context, constraints) {
           return Stack(

@@ -43,9 +43,9 @@ class MeetingView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 16.h),
-            BlocBuilder<MeetingCubit, MeetingState>(
+            BlocBuilder<StreamCubit, StreamState>(
               builder: (context, state) {
-                var cubit = context.read<MeetingCubit>();
+                var cubit = context.read<StreamCubit>();
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,7 +147,7 @@ class MeetingView extends StatelessWidget {
     return Container(
       constraints:
           const BoxConstraints(maxHeight: double.infinity, minHeight: 400),
-      child: BlocListener<MeetingCubit, MeetingState>(
+      child: BlocListener<StreamCubit, StreamState>(
         listener: (context, state) {
           if (state.isFailure) {
             showErrorMessage(
@@ -159,7 +159,7 @@ class MeetingView extends StatelessWidget {
           }
           if (state.isGotScheduledMeeting) {}
         },
-        child: BlocBuilder<MeetingCubit, MeetingState>(
+        child: BlocBuilder<StreamCubit, StreamState>(
           builder: (context, state) {
             print('schedule state is  ${state.toString()}');
             CliLogger.warning('WARNING state is updated${state.status}');
@@ -254,7 +254,7 @@ class MeetingView extends StatelessWidget {
                               InkWell(
                                 onTap: () {
                                   //to unschedule
-                                  joinRoom(context.read<MeetingCubit>(),
+                                  joinRoom(context.read<StreamCubit>(),
                                       scheduledMeeting.roomId);
                                   if (context.mounted) {
                                     context.go(Routes.MEETINGROOM,
@@ -295,7 +295,7 @@ class MeetingView extends StatelessWidget {
     );
   }
 
-  Future<bool> joinRoom(MeetingCubit cubit, String liveId) async {
+  Future<bool> joinRoom(StreamCubit cubit, String liveId) async {
     return cubit.joinNewMeeting(liveId);
   }
 
@@ -335,14 +335,14 @@ class MeetingView extends StatelessWidget {
     return period;
   }
 
-  Future<void> newMeeting(MeetingCubit cubit) async {
+  Future<void> newMeeting(StreamCubit cubit) async {
     cubit.createNewMeeting();
   }
 
   void _scheduleAMeeting(BuildContext context) {
     Navigator.of(context).push(createCustomTransitionRoute(
         BlocProvider.value(
-          value: serviceLocator<MeetingCubit>(),
+          value: serviceLocator<StreamCubit>(),
           child: const ScheduleMeetingScreen(),
         ),
         TransitionType.bottomToTop));
