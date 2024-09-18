@@ -55,7 +55,7 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   }
 
   @override
-  void listenToDeliveredStatus(Function(List<MessageEntity> messages) params) {
+  void listenToDeliveredStatus(Function(String chatId) params) {
     _chatRemoteDataSource.listenToDeliveredStatus(params);
   }
 
@@ -65,8 +65,7 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> markMessageAsDelivered(
-      MarkMessagesAsDeliveredParams params) {
+  Future<Either<Failure, bool>> markMessageAsDelivered(MarkMessagesAsDeliveredParams params) {
     return _chatRemoteDataSource.markMessageAsDelivered(params);
   }
 }

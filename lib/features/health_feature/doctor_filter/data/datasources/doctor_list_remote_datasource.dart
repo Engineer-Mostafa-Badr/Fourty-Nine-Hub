@@ -15,13 +15,15 @@ abstract class DoctorListRemoteDataSource {
 
 class DoctorListRemoteDataSourceImpl implements DoctorListRemoteDataSource {
   final ApiConsumer _apiConsumer;
+
   DoctorListRemoteDataSourceImpl(this._apiConsumer);
 
   @override
   Future<Either<Failure, List<DoctorEntity>>> getDoctorsList(
       {required DoctorSearchParams params}) async {
-    final response =
-        await _apiConsumer.get(EndPoints.doctorSearch, data: params.toJson());
+    final response = await _apiConsumer.get(EndPoints.doctorSearch,
+        data: params.toJson(),
+        queryParameters: {'subCategory': params.subCategory.id});
 
     return response.fold(
         (failure) => Left(failure),
