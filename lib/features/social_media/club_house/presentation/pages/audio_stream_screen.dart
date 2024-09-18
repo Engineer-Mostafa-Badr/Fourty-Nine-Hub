@@ -24,34 +24,67 @@ class AudioStreamScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     print('live id is $liveId');
     return SafeArea(
-      child: PopScope(
-        onPopInvoked: (pop) async {
-          // Show the confirmation dialog
-          await showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Are you sure?'),
-              content: const Text('Do you want to leave this screen?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: const Text('No'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    isHost
-                        ? _endRoom(context)
-                        : context.read<ClubVoiceCubit>().leaveRoom(liveId);
-                    Navigator.of(context).pop(true);
-                  },
-                  child: const Text('Yes'),
-                ),
-              ],
-            ),
-          );
-        },
-        child: Scaffold(
-          body: SingleChildScrollView(
+      child: Scaffold(
+        body: PopScope(
+          canPop: false,
+          // onPopInvoked: (pop) async {
+          //   await Future.delayed(Duration.zero);
+          //
+          //   // Show the confirmation dialog
+          //   if (context.mounted) {
+          //     bool? result = await showModalBottomSheet<bool>(
+          //       context: context,
+          //       builder: (context) => Container(
+          //         padding: const EdgeInsets.all(16.0),
+          //         child: Column(
+          //           mainAxisSize: MainAxisSize.min,
+          //           children: [
+          //             const Text(
+          //               'Are you sure?',
+          //               style: TextStyle(
+          //                   fontSize: 18, fontWeight: FontWeight.bold),
+          //             ),
+          //             const SizedBox(height: 10),
+          //             const Text('Do you want to leave this screen?'),
+          //             const SizedBox(height: 20),
+          //             Row(
+          //               mainAxisAlignment: MainAxisAlignment.end,
+          //               children: [
+          //                 TextButton(
+          //                   onPressed: () {
+          //                     // context
+          //                     //   .pop(false);
+          //                   }, // Close bottom sheet with "No"
+          //                   child: const Text('No'),
+          //                 ),
+          //                 TextButton(
+          //                   onPressed: () {
+          //                     if (isHost) {
+          //                       _endRoom(context);
+          //                     } else {
+          //                       context
+          //                           .read<ClubVoiceCubit>()
+          //                           .leaveRoom(liveId);
+          //                     }
+          //                     // context
+          //                     //     .pop(true); // Close bottom sheet with "Yes"
+          //                   },
+          //                   child: const Text('Yes'),
+          //                 ),
+          //               ],
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //     );
+          //     if (result == true) {
+          //       print('result is true');
+          //       // context.pop();
+          //     }
+          //     print('result is $result');
+          //   }
+          // },
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 SizedBox(
@@ -76,7 +109,7 @@ class AudioStreamScreen extends StatelessWidget {
                             color: Colors.redAccent),
                         child: Text(
                           isHost
-                              ? LocaleKeys.cancel.localize
+                              ? LocaleKeys.end.localize
                               : LocaleKeys.leave.localize,
                           style: const TextStyle(
                             color: Colors.white,

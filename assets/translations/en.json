@@ -46,7 +46,7 @@
   "EndMeetingForAll":"End meeting for all",
   "leaveMeeting":"Leave meeting",
   "live":"Live",
-  "club":"Club Voice",
+  "clubVoice":"Club Voice",
   "roomSubject":"Room Subject",
   "pleaseEnterSimpleSubject":"Please enter a simple description",
   "enterRoomSubject":"Enter room subject",
@@ -57,6 +57,7 @@
   "audioEffects":"Audio Effects",
   "reverb":"Reverb",
   "meetingTitle":"Meeting Title",
+  "noRooms":"No Rooms",
 
   "arabic": "Arabic",
   "english": "English",

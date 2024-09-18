@@ -10,136 +10,154 @@ import 'package:fourtyninehub/features/social_media/club_house/presentation/cont
 import 'package:fourtyninehub/features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../res/style/styles.dart';
 import '../../../../../../service_locator/service_locator.dart';
+import '../../controller/club_voice_state.dart';
 
-void showVoiceLiveBottomSheet({
-  required BuildContext context,
-  required ClubVoiceCubit cubit,
-}) {
-  TextEditingController roomSubjectController = TextEditingController();
+class CreateRoomScreen extends StatefulWidget {
+  const CreateRoomScreen({super.key});
 
-  showModalBottomSheet(
-      context: context,
-      isDismissible: true,
-      isScrollControlled: true,
-      useSafeArea: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (BuildContext context) {
-        return BlocProvider(
-          create: (context) => serviceLocator<ClubVoiceCubit>(),
-          child: Padding(
-            padding: const EdgeInsets.only(
-              // bottom: MediaQuery.of(context).viewInsets.bottom + 32,
-              left: 16,
-              right: 16,
-              top: 24,
-            ),
-            child: Column(
-              // mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  LocaleKeys.roomSubject.localize,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 32.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 10.h),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    LocaleKeys.pleaseEnterSimpleSubject.localize,
-                    style: TextStyle(
-                      fontSize: 25.sp,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 15.h),
-                  child: TextField(
-                    controller: roomSubjectController,
-                    keyboardType: TextInputType.text,
-                    textAlign: TextAlign.center,
-                    decoration: InputDecoration(
-                      // labelText: 'Room Subject',
-                      hintText: LocaleKeys.enterRoomSubject.localize,
-                      prefixIcon: const Icon(Icons.headset_mic_rounded),
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      filled: true,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(15.0).add(EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  )),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: context.isDarkMode
-                                ? AppColors.SECONDARY_COLOR
-                                : AppColors.PRIMARY_COLOR),
-                        onPressed: () async {
-                          String roomSub = roomSubjectController.text.trim();
-                          if (roomSub.isEmpty) {
-                            showErrorMessage(context,
-                                LocaleKeys.roomSubjectValidation.localize);
-                            return;
-                          } else {
-                            await addRoom(cubit, roomSub);
-                            debugPrint('room id is ${cubit.roomId}');
-                            if (context.mounted) {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (ctx) => BlocProvider.value(
-                                    value: serviceLocator<ClubVoiceCubit>(),
-                                    child: AudioStreamScreen(
-                                      liveId: cubit.roomId,
-                                      roomSubject: roomSub,
-                                      isHost: true,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                          }
-                        },
-                        child: Label(
-                          text: LocaleKeys.createRoom.localize,
-                          color: Colors.white,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(
-                          LocaleKeys.cancel.localize,
-                          style: const TextStyle(color: Colors.blue),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      });
+  @override
+  State<CreateRoomScreen> createState() => _CreateRoomScreenState();
 }
 
-Future<void> addRoom(ClubVoiceCubit cubit, String roomSub) async =>
-    cubit.addRoom(roomSub);
+class _CreateRoomScreenState extends State<CreateRoomScreen> {
+  final TextEditingController roomSubjectController = TextEditingController();
+
+  @override
+  void dispose() {
+    roomSubjectController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Padding(
+      padding: const EdgeInsets.only(
+        // bottom: MediaQuery.of(context).viewInsets.bottom + 32,
+        left: 16,
+        right: 16,
+        top: 24,
+      ),
+      child: Column(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        // mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          // Sizer(height: 50.h),
+          SizedBox(height: 60.h),
+          Label(
+            text: LocaleKeys.roomSubject.localize,
+            textAlign: TextAlign.center,
+            style: Styles.headerText(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 30.h),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Label(
+              text: LocaleKeys.pleaseEnterSimpleSubject.localize,
+              style: Styles.headerText(
+                fontSize: 25,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
+          SizedBox(height: 20.h),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 15.h),
+            child: TextField(
+              cursorColor: AppColors.PRIMARY_COLOR,
+              controller: roomSubjectController,
+              keyboardType: TextInputType.text,
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                // labelText: 'Room Subject',
+                hintText: LocaleKeys.enterRoomSubject.localize,
+                prefixIcon: const Icon(
+                  Icons.headset_mic_rounded,
+                  color: AppColors.PRIMARY_COLOR,
+                ),
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                ),
+                filled: true,
+              ),
+            ),
+          ),
+          BlocListener<ClubVoiceCubit, ClubVoiceState>(
+            listener: (context, state) {
+              // TODO: implement listener
+              if (state.isSuccess) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) => BlocProvider(
+                      create: (_) => serviceLocator<ClubVoiceCubit>(),
+                      child: AudioStreamScreen(
+                        liveId: state.roomId,
+                        roomSubject: roomSubjectController.text.trim(),
+                        isHost: true,
+                      ),
+                    ),
+                  ),
+                );
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: context.isDarkMode
+                            ? AppColors.SECONDARY_COLOR
+                            : AppColors.PRIMARY_COLOR),
+                    onPressed: () async {
+                      String roomSub = roomSubjectController.text.trim();
+                      if (roomSub.isEmpty) {
+                        showErrorMessage(
+                            context, LocaleKeys.roomSubjectValidation.localize);
+                        return;
+                      } else {
+                        await addRoom(context, roomSub);
+                        // debugPrint('room id is ${widget.cubit.roomId}');
+                        if (context.mounted) {
+                          //Navigator.pop(context);
+                        }
+                      }
+                    },
+                    child: Label(
+                      text: LocaleKeys.createRoom.localize,
+                      color: Colors.white,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Label(
+                      text: LocaleKeys.cancel.localize,
+                      style: Styles.headerText(
+                          fontSize: 25, color: AppColors.SECONDARY_COLOR),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ));
+  }
+}
+
+Future<void> addRoom(BuildContext context, String roomSub) async =>
+    context.read<ClubVoiceCubit>().addRoom(roomSub);
 
 //for passing args
 class RoomArgs {
@@ -147,5 +165,6 @@ class RoomArgs {
   final String subject;
   final bool isHost;
   final int usersCount;
+
   RoomArgs(this.liveId, this.subject, this.isHost, this.usersCount);
 }

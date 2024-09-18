@@ -6,12 +6,14 @@ class Label extends StatelessWidget {
   final String text;
   final TextStyle? style;
   final TextAlign? textAlign;
+  final TextOverflow? overflow;
   final int? maxLines;
   final Color? color;
   const Label(
       {super.key,
       required this.text,
       this.style,
+      this.overflow,
       this.textAlign,
       this.maxLines,
       this.color});
@@ -22,7 +24,8 @@ class Label extends StatelessWidget {
       text,
       style: style ?? Styles.mediumText(color: color),
       textAlign: textAlign,
-      // overflow: TextOverflow.ellipsis,
+      maxLines: maxLines,
+      overflow: TextOverflow.ellipsis,
       // maxLines: maxLines,
     );
   }

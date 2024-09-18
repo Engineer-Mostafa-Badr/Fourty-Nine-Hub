@@ -4,6 +4,7 @@ import 'dart:core';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Package imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
@@ -11,6 +12,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
 
+import '../../../../../../../club_house/presentation/controller/club_voice_bloc.dart';
 import '../core/connect/connect_manager.dart';
 import '../core/live_duration_manager.dart';
 import '../core/seat/plugins.dart';
@@ -110,46 +112,31 @@ class _ZegoLiveAudioRoomPageState extends State<ZegoLiveAudioRoomPage>
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: WillPopScope(
-        onWillPop: () async {
-          final endConfirmationEvent = ZegoLiveAudioRoomLeaveConfirmationEvent(
-            context: context,
-          );
-          defaultAction() async {
-            return widget.defaultLeaveConfirmationAction(endConfirmationEvent);
-          }
-
-          return widget.events.onLeaveConfirmation!(
-            endConfirmationEvent,
-            defaultAction,
+      body: ZegoScreenUtilInit(
+        designSize: const Size(750, 1334),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (context, child) {
+          return clickListener(
+            child: LayoutBuilder(builder: (context, constraints) {
+              return Stack(
+                children: [
+                  background(context, constraints.maxHeight),
+                  audioVideoContainer(
+                    constraints.maxWidth,
+                    constraints.maxHeight,
+                  ),
+                  durationTimeBoard(),
+                  topBar(),
+                  bottomBar(),
+                  messageList(),
+                  emptyArea(constraints.maxHeight),
+                  foreground(context, constraints.maxHeight),
+                ],
+              );
+            }),
           );
         },
-        child: ZegoScreenUtilInit(
-          designSize: const Size(750, 1334),
-          minTextAdapt: true,
-          splitScreenMode: true,
-          builder: (context, child) {
-            return clickListener(
-              child: LayoutBuilder(builder: (context, constraints) {
-                return Stack(
-                  children: [
-                    background(context, constraints.maxHeight),
-                    audioVideoContainer(
-                      constraints.maxWidth,
-                      constraints.maxHeight,
-                    ),
-                    durationTimeBoard(),
-                    topBar(),
-                    bottomBar(),
-                    messageList(),
-                    emptyArea(constraints.maxHeight),
-                    foreground(context, constraints.maxHeight),
-                  ],
-                );
-              }),
-            );
-          },
-        ),
       ),
     );
   }

@@ -80,7 +80,10 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
           leading: IconButton(
               onPressed: () => context.pop(),
               icon: const Icon(Icons.arrow_back_ios)),
-          title: Text(LocaleKeys.joinMeeting.localize),
+          title: Label(
+            text: LocaleKeys.joinMeeting.localize,
+            style: Styles.headerText(fontSize: 30, fontWeight: FontWeight.bold),
+          ),
 
           // 'Join a meeting',
           // style: TextStyle(
