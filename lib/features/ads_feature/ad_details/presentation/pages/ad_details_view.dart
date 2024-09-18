@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_c
 import 'package:fourtyninehub/features/requests_history/domain/entities/address_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -116,7 +117,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) =>
-                    AdCard(item: state.relevantAds![index]),
+                    AdCard(item: state.relevantAds![index], onFav: (String ) {  }, onRemoveFav: (String ) {  },),
                 separatorBuilder: (context, index) => const Sizer(),
                 itemCount: state.relevantAds?.length ?? 0),
           ),
@@ -133,104 +134,71 @@ class _AdDetailsViewState extends State<AdDetailsView> {
         margin: const EdgeInsets.all(10),
         child: Column(
           children: [
+            const Sizer(),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: AvaialbleTripsButton(
+                    title: 'Premium Request',
+                    color: AppColors.SECONDARY_COLOR,
+                    onTap: (){},
+                  ),
+                ),
+                const Sizer(width: 5),
+                Expanded(
+                  flex: 3,
+                  child: AvaialbleTripsButton(
+                    title: 'Request',
+                    color: AppColors.PRIMARY_COLOR,
+                    onTap: (){},
+                  ),
+                )
+              ],
+            ),
+            const Sizer(),
             FutureBuilder(
                 future: ButtonAvailability().isShowButton(
                     otherUserId: state.ad?.user?.id ?? '',
                     subcategoryId: state.ad?.subCategoryId ?? ''),
-                builder: (context, snap) {
-                  if (snap.data ?? false) {
-                    return Row(
-                      children: [
-                        Expanded(
-                            child: AppButton(
-                                label: 'Chat',
-                                icon: Icons.chat_bubble_outline,
-                                onPressed: () =>
-                                    context.push(Routes.CHATROOM))),
-                        const Sizer(
-                          width: 5,
+                builder: (context,snap) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: AvaialbleTripsButton(
+                          title: 'Call',
+                          color:  snap.data==true?AppColors.SECONDARY_COLOR:AppColors.DARK_GRAY_COLOR,
+                          icon: Icons.call,
+                          onTap: snap.data==true?(){}:(){},
                         ),
-                        Expanded(
-                            child: AppButton(
-                                label: 'Call',
-                                icon: Icons.call,
-                                onPressed: () => LaunchURLHelper()
-                                    .call(phone: state.ad?.phone ?? ''))),
-                      ],
-                    );
-                  }else{
-                    return Row(
-                      children: [
-                        Expanded(
-                            child: AppButton(
-                                label: 'Chat',
-                                icon: Icons.chat_bubble_outline,
-                                backColor: AppColors.GREY_DARK_COLOR,
-                                color: Colors.white,
-                                onPressed: () {})),
-                        const Sizer(
-                          width: 5,
+                      ),
+                      const Sizer(width: 5),
+                      Expanded(
+                        flex: 3,
+                        child: AvaialbleTripsButton(
+                          title: 'Message',
+                          color: snap.data==true?AppColors.SECONDARY_COLOR:AppColors.DARK_GRAY_COLOR,
+                          icon: Icons.email,
+                          onTap: snap.data==true?(){}:(){},
                         ),
-                        Expanded(
-                            child: AppButton(
-                                label: 'Call',
-                                icon: Icons.call,
-                                backColor: AppColors.GREY_DARK_COLOR,
-                                color: Colors.white,
-                                onPressed: () {})),
-                      ],
-                    );
-                  }
-                }),
-            const Sizer(),
-            Row(
-              children: [
-                Expanded(
-                    child: AppButton(
-                        label: 'Premium Request',
-                        icon: Icons.bookmark,
-                        onPressed: () {
-                          serviceLocator<SubscriptionController>()
-                              .checkIfUserSubscribed(
-                                  onSubscribed: () {
-                                    if (controller.phone == null) {
-                                      bottomSheet(
-                                          context: context,
-                                          widget: RideContactPhoneNumber(
-                                            onChanged: (String v) =>
-                                                controller.changePhone(v: v),
-                                            onSubmit: () => controller
-                                                .makeAdRequest(id: widget.id),
-                                          ));
-                                    } else {
-                                      controller.makeAdRequest(id: widget.id);
-                                    }
-                                  },
-                                  subCategoryId: state.ad?.subCategoryId ??
-                                      '62c8ba9f8e28a58a3edf57eb');
-                        })),
-                const Sizer(
-                  width: 5,
-                ),
-                Expanded(
-                    child: AppButton(
-                        label: 'Request',
-                        icon: Icons.bookmark,
-                        onPressed: () {
-                          if (controller.phone == null) {
-                            bottomSheet(
-                                context: context,
-                                widget: RideContactPhoneNumber(
-                                  onChanged: (String v) =>
-                                      controller.changePhone(v: v),
-                                  onSubmit: () =>
-                                      controller.makeAdRequest(id: widget.id),
-                                ));
-                          } else {
-                            controller.makeAdRequest(id: widget.id);
-                          }
-                        })),
-              ],
+                      ),
+
+                      const Sizer(width: 5),
+                      Expanded(
+                        flex: 3,
+                        child: AvaialbleTripsButton(
+                          title: 'Report',
+                          color: AppColors.SECONDARY_COLOR,
+                          icon: Icons.report,
+                          onTap: (){},
+                        ),
+                      ),
+                    ],
+                  );
+                }
             ),
           ],
         ),

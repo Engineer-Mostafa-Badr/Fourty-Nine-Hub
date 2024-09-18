@@ -31,7 +31,7 @@ class _FavouriteViewState extends State<FavouriteView> {
           padding: EdgeInsets.all(10.0),
           child: GridView.builder(
               itemBuilder: (context, index) => AdCard(
-                    item: state.data![index].item,
+                    item: state.data![index].item, onFav: (String ) {  }, onRemoveFav: (String ) {  },
                   ),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   childAspectRatio: .8,

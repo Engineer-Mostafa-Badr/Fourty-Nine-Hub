@@ -18,9 +18,11 @@ import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/ge
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/make_ad_request_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/datasources/ads_remote_data_source.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/repositories/ads_repo.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/favourite_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_all_comewithme_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_all_pickme_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/remove_favourite_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_come_with_me_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_pick_me_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
@@ -296,6 +298,17 @@ class FourtyNineServiceLocator {
       ),
     );
 
+    serviceLocator.registerLazySingleton<FavouriteAdUseCase>(
+      () => FavouriteAdUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<RemoveFavouriteAdUseCase>(
+      () => RemoveFavouriteAdUseCase(
+        serviceLocator(),
+      ),
+    );
+
     // cubits
 
     serviceLocator.registerSingleton(
@@ -354,6 +367,8 @@ class FourtyNineServiceLocator {
 
     serviceLocator.registerFactory<AdvertisementCubit>(
       () => AdvertisementCubit(
+        serviceLocator(),
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

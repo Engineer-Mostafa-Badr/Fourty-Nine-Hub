@@ -484,8 +484,8 @@
   "play": "ابدء",
   "showComments": "عرض التعليقات",
   "suggestedForYou": "مقترح لك",
-  "hours": "ساعة",
-  "minute": "دقيقة",
+  "hours": "س",
+  "minute": "د",
   "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
   "newPassword": "كلمة مرور جديدة",
   "createNewPassword": "إنشاء كلمة مرور جديدة",
@@ -537,7 +537,7 @@
   "publish": "نشر",
   "addImages": "إضافة صور",
   "addImagesDesc": "الحد الأقصى لحجم الملف 5 ميجابايت مقبول بالتنسيقات التالية: jpg، Jpeg، png، gif",
-  "noAds": "لا توجد إعلانات في الوقت الحالي."
-
+  "noAds": "لا توجد إعلانات في الوقت الحالي.",
+  "currency": "جنيه مصري"
 
 }

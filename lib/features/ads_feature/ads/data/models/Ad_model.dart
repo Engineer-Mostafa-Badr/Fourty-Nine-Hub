@@ -13,6 +13,7 @@ class AdModel extends AdEntity {
       required super.images,
        super.price,
         super.isUser,
+        super.isFavourite,
       super.address,
       super.user,
         super.mainCategoryId,
@@ -45,6 +46,7 @@ class AdModel extends AdEntity {
         price: json['price'] ?? 0,
         subCategoryId: json['subCategoryId'],
         active: json['active'] ?? true,
+        isFavourite: json['isFavorite'] ?? false,
         // phone: json['phone'] ?? '',
         statistics: json['statistics'] == null
             ? null
@@ -65,6 +67,7 @@ class AdModel extends AdEntity {
         "type": isUser==false?"provider":"user",
         "subCategoryId": subCategoryId,
         "mainCategoryId": mainCategoryId,
+    "price":price,
         // "userId": userId,
         "searchText": "testPropsAndAds",
         "images": images,

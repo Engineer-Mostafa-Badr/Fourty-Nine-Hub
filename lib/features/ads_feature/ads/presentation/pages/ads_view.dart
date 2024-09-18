@@ -129,7 +129,14 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                       );
                     },
                     itemBuilder: (context, item, index) {
-                      return AdCard(item: item);
+                      return AdCard(item: item, onFav: (String id) async{
+                        var result = await controller.favouriteAd(id);
+                        return result;
+                      }, onRemoveFav: (String id) async{
+                        var result = await controller.unFavouriteAd(id);
+                        return result;
+
+                      },);
                     },
                     noMoreItemsIndicatorBuilder: (context) => Container(),
                     firstPageProgressIndicatorBuilder: (context) => Container(

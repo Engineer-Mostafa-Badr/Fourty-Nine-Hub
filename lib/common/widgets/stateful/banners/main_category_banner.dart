@@ -83,28 +83,26 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
               child: Column(
                 children: [
                   context.read<UserCubit>().isLoggedIn
-                      ? InkWell(
-                          onTap: () async {
-                            final result = await widget.onFavorite();
-                            if (result == true) {
-                              print(result);
-                              setState(() {
-                                widget.category.isFavorite =
-                                    !widget.category.isFavorite!;
-                                print(widget.category.isFavorite);
-                                widget.isFavorite = result;
-                                print("===================$result");
-                              });
-                            }
-                          },
-                          child: IconButton(
-                            color: AppColors.SECONDARY_COLOR,
-                            onPressed: () async => await widget.onFavorite(),
-                            icon: Icon(widget.category.isFavorite == true
-                                ? Icons.favorite
-                                : Icons.favorite_border),
-                          ),
-                        )
+                      ? IconButton(
+                        color: AppColors.SECONDARY_COLOR,
+                        onPressed: () async {
+                          final result = await widget.onFavorite();
+                          print("resutlt=${result}");
+                          if (result == true) {
+                            print(result);
+                            setState(() {
+                              widget.category.isFavorite =
+                              !widget.category.isFavorite!;
+                              print(widget.category.isFavorite);
+                              widget.isFavorite = result;
+                              print("===================$result");
+                            });
+                          }
+                        },
+                        icon: Icon(widget.category.isFavorite == true
+                            ? Icons.favorite
+                            : Icons.favorite_border),
+                      )
                       : const SizedBox.shrink(),
                   Sizer(
                     height: 15.h,

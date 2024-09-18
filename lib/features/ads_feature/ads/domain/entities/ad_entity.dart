@@ -10,6 +10,7 @@ class AdEntity {
   final String id;
   final String title;
   bool? isUser;
+  bool? isFavourite;
   final String description;
   final List<String> images;
   final num? price;
@@ -35,6 +36,7 @@ class AdEntity {
       required this.description,
       required this.images, this.price,
         this.isUser,
+        this.isFavourite=false,
       required this.address,
        this.phone,
       this.statistics,

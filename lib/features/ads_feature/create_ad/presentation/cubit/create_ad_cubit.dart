@@ -89,6 +89,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
             type: state.adProperties![i].type,
             value: values[i]));
       }
+      var selectedPrice = details.firstWhere((element) => element.label=='المرتب'||element.label=='Salary'||element.label=='price'||element.label=='السعر ').value;
       final response = await _createAdUseCase(AdModel(
           id: 'id',
           title: title ?? '',
@@ -96,7 +97,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           description: description ?? '',
           // phone: phone ?? '',
           images: state.images?.map((e) => e.mediaId).toList() ?? [],
-          // price: num.parse(price ?? ''),
+          price: num.parse(selectedPrice),
           active: true,
           createdAt: DateTime.now(),
           details: details,
