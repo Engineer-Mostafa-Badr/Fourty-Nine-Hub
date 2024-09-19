@@ -16,7 +16,6 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/notific
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/main.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -50,16 +49,22 @@ class _FourtyNineViewState extends State<FourtyNineView> {
 
   @override
   void initState() {
-    scrollController;
+    super.initState();
+    _setupScrollController();
+    context.read<FirebaseNotficationsCubit>().setupInterceptedMessage(context: context);
+    context.read<NotificationSocketIoCubit>().notificationListener();
+  }
+
+
+  void _setupScrollController() {
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
         if (!_isScrollingDown) {
           setState(() {
             _isScrollingDown = true;
           });
         }
-      } else {
+      } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
         if (_isScrollingDown) {
           setState(() {
             _isScrollingDown = false;
@@ -67,10 +72,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         }
       }
     });
-    context.read<FirebaseNotficationsCubit>().setupInterceptedMessage(context: context);
-    context.read<NotificationSocketIoCubit>().notificationListener();
-    super.initState();
   }
+
 
   @override
   void dispose() {
@@ -342,7 +345,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                       fontWeight: FontWeight.bold,
                     ),
                     icon: icon,
-                    iconSize: 30.h,
+                    iconSize: 50.h,
                     onPressed: () => function()),
               ),
               Positioned(

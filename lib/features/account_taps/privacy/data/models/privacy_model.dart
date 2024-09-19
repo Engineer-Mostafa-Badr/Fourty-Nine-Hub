@@ -24,7 +24,9 @@ class PrivacyModel extends PrivacyEntity {
       required super.createdAt,
       required super.updatedAt,
       required super.usersStoryPrivacy,
-      required super.privacyStories});
+      required super.privacyStories,
+      required super.privacyRandomAppearance,
+      });
 
   factory PrivacyModel.fromJson(Map<String, dynamic> json) {
       return PrivacyModel(
@@ -51,6 +53,7 @@ class PrivacyModel extends PrivacyEntity {
           updatedAt: json['updatedAt'],
           usersStoryPrivacy: json['usersStoryPrivacy'] ?? [],
           privacyStories: json['privacyStories'],
+          privacyRandomAppearance: json['privacyRandomAppearance'],
       );
   }
 }

@@ -102,6 +102,8 @@ class EndPoints {
   }
 
   static const getWallet = '/main-wallet/user-wallet';
+  static const transferMoney = '/main-wallet/send-money';
+  static const fetchUsers = '/users/all-usernames';
   static const getPrice = '/advertisementCompany/price';
   static const getSubscription = '/subscription';
   static const transferFiveBalance = '/main-wallet/transfer-five-years';
@@ -621,6 +623,7 @@ class EndPoints {
 
   // contact us
   static const helpMessages = '/help';
+  static const contactUs = '/email/contact-us';
   static String mediaUrl = '/media/signed-url';
 
   static String confirmUpload(String mediaId) {

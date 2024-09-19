@@ -30,6 +30,7 @@ class UpdatePrivacyParams {
   final String? privacyFollowerList;
   final String? privacyActivity;
   final String? privacyCall;
+  final String? privacyRandomAppearance;
   final bool? privacyFriendRequest;
   final bool? privacyFollowRequest;
 
@@ -49,6 +50,7 @@ class UpdatePrivacyParams {
        this.privacyFollowerList,
        this.privacyActivity,
        this.privacyCall,
+       this.privacyRandomAppearance,
        this.privacyFriendRequest,
        this.privacyFollowRequest});
 
@@ -71,5 +73,6 @@ class UpdatePrivacyParams {
     'privacyCall': privacyCall,
     'privacyFriendRequest': privacyFriendRequest,
     'privacyFollowRequest': privacyFollowRequest,
+    'privacyRandomAppearance': privacyRandomAppearance,
   };
 }

@@ -178,8 +178,9 @@ class CustomBottomNavigationBar extends StatefulWidget {
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     with SingleTickerProviderStateMixin {
   final ScrollController scrollController;
-
   bool isScrollingDown;
+
+  double bottomNavBarHeight = 90.h; // Initial height of the bottom bar
 
   _CustomBottomNavigationBarState({
     required this.scrollController,
@@ -188,98 +189,85 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
 
   @override
   void initState() {
-    scrollController;
+    super.initState();
+
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
         if (!isScrollingDown) {
           setState(() {
             isScrollingDown = true;
+            bottomNavBarHeight = 0.0; // Hide the bottom bar
           });
         }
-      } else {
+      } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
         if (isScrollingDown) {
           setState(() {
             isScrollingDown = false;
+            bottomNavBarHeight = 90.h; // Show the bottom bar
           });
         }
       }
     });
-    super.initState();
   }
-
-  // @override
-  // void dispose() {
-  //   scrollController.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: scrollController,
-      builder: (BuildContext context, Widget? child) {
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 400),
-          height: 90.h,
-          child: CustomPaint(
-            painter: BottomBarPainter(
-              color: Colors.black,
-            ),
-            child: Container(
-              padding: EdgeInsets.only(bottom: 20, top: 10),
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black12, blurRadius: 5, spreadRadius: 2)
-                ],
-              ),
-              child: SafeArea(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: List.generate(widget.items.length, (index) {
-                      int index1 = context.isArabic ? 2 : 1;
-                      int index2 = context.isArabic ? 1 : 2;
-                      return GestureDetector(
-                        onTap: () {
-                          widget.onTap(index);
-                        },
-                        child: Padding(
-                          padding: index == index1
-                              ? EdgeInsets.only(right: 30.w)
-                              : index == index2
-                                  ? EdgeInsets.only(left: 60.w)
-                                  : EdgeInsets.zero,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Expanded(
-                                child: SvgPicture.asset(
-                                  widget.items[index].image,
-                                  height: widget.items[index].height * 1.8.h,
-                                  // color: context.read<ThemeCubit>().isDarkTheme
-                                  //     ? Colors.white
-                                  //     : null,
-                                ),
-                              ),
-                            ],
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 400),
+      height: bottomNavBarHeight, // Use the dynamic height
+      child: CustomPaint(
+        painter: BottomBarPainter(
+          color: Colors.black,
+        ),
+        child: Container(
+          padding: const EdgeInsets.only(bottom: 20, top: 10),
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            boxShadow: const [
+              BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2),
+            ],
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: List.generate(widget.items.length, (index) {
+                  int index1 = context.isArabic ? 2 : 1;
+                  int index2 = context.isArabic ? 1 : 2;
+                  return GestureDetector(
+                    onTap: () {
+                      widget.onTap(index);
+                    },
+                    child: Padding(
+                      padding: index == index1
+                          ? EdgeInsets.only(right: 30.w)
+                          : index == index2
+                          ? EdgeInsets.only(left: 60.w)
+                          : EdgeInsets.zero,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Expanded(
+                            child: SvgPicture.asset(
+                              widget.items[index].image,
+                              height: widget.items[index].height * 1.8.h,
+                            ),
                           ),
-                        ),
-                      );
-                    }),
-                  ),
-                ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
               ),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
+
 
 class BottomItemModel {
   final IconData icon;

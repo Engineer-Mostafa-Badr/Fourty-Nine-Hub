@@ -6,7 +6,9 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/useCase/update_privacy_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/cubit/privacy_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/cubit/privacy_state.dart';
+import '../../../../../core/widget/custom_text_no_login.dart';
 import '../../../../../service_locator/service_locator.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../domain/entities/privacy_status_enum.dart';
 import '../widgets/privacy_muti_select_item.dart';
 import '../widgets/privacy_switch_item.dart';
@@ -20,7 +22,8 @@ class PrivacyView extends StatelessWidget {
         appBar:  BackAppBar(
           label: LocaleKeys.privacy.localize,
         ),
-        body: BlocProvider<PrivacyCubit>(
+        body:context.read<UserCubit>().isLoggedIn?
+        BlocProvider<PrivacyCubit>(
           create: (BuildContext context) => serviceLocator()..loadData(),
           child: BlocBuilder<PrivacyCubit, PrivacyState>(
             builder: (BuildContext context, state) {
@@ -54,6 +57,7 @@ class PrivacyView extends StatelessWidget {
                                       privacyCall: state.privacy?.privacyCall ?? '',
                                       privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
                                       privacyActivity: state.privacy?.privacyActivity ?? '',
+                                        privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
                                     ));
                           },
                         ),
@@ -81,6 +85,7 @@ class PrivacyView extends StatelessWidget {
                                   privacyCall: state.privacy?.privacyCall ?? '',
                                   privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
                                   privacyActivity: state.privacy?.privacyActivity ?? '',
+                                    privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
                                 ));
                           },
                         ),
@@ -108,6 +113,7 @@ class PrivacyView extends StatelessWidget {
                                   privacyCall: state.privacy?.privacyCall ?? '',
                                   privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
                                   privacyActivity: state.privacy?.privacyActivity ?? '',
+                                    privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
                                 ));
                           },
                         ),
@@ -135,6 +141,7 @@ class PrivacyView extends StatelessWidget {
                                   privacyCall: state.privacy?.privacyCall ?? '',
                                   privacyBirthDay: mapPrivacyStatusToString(value),
                                   privacyActivity: state.privacy?.privacyActivity ?? '',
+                                    privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
                                 ));
                           },
                         ),
@@ -162,6 +169,7 @@ class PrivacyView extends StatelessWidget {
                                   privacyCall: state.privacy?.privacyCall ?? '',
                                   privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
                                   privacyActivity: state.privacy?.privacyActivity ?? '',
+                                    privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
                                 ));
                           },
                         ),
@@ -189,6 +197,7 @@ class PrivacyView extends StatelessWidget {
                                   privacyCall: state.privacy?.privacyCall ?? '',
                                   privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
                                   privacyActivity: state.privacy?.privacyActivity ?? '',
+                                    privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
                                 ));
                           },
                         ),
@@ -216,6 +225,7 @@ class PrivacyView extends StatelessWidget {
                                   privacyCall: state.privacy?.privacyCall ?? '',
                                   privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
                                   privacyActivity: state.privacy?.privacyActivity ?? '',
+                                    privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
                                 ));
                           },
                         ),
@@ -243,6 +253,7 @@ class PrivacyView extends StatelessWidget {
                                   privacyCall: state.privacy?.privacyCall ?? '',
                                   privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
                                   privacyActivity: state.privacy?.privacyActivity ?? '',
+                                  privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
                                 ));
                           },
                         ),
@@ -270,6 +281,7 @@ class PrivacyView extends StatelessWidget {
                                   privacyCall: state.privacy?.privacyCall ?? '',
                                   privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
                                   privacyActivity: state.privacy?.privacyActivity ?? '',
+                                    privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
                                 ));
                           },
                         ),
@@ -297,6 +309,7 @@ class PrivacyView extends StatelessWidget {
                                   privacyCall: state.privacy?.privacyCall ?? '',
                                   privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
                                   privacyActivity: state.privacy?.privacyActivity ?? '',
+                                    privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
                                 ));
                           },
                         ),
@@ -324,6 +337,7 @@ class PrivacyView extends StatelessWidget {
                                   privacyCall: state.privacy?.privacyCall ?? '',
                                   privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
                                   privacyActivity: state.privacy?.privacyActivity ?? '',
+                                    privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
                                 ));
                           },
                         ),
@@ -351,6 +365,7 @@ class PrivacyView extends StatelessWidget {
                                   privacyCall: state.privacy?.privacyCall ?? '',
                                   privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
                                   privacyActivity: state.privacy?.privacyActivity ?? '',
+                                    privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
                                 ));
                           },
                         ),
@@ -378,6 +393,7 @@ class PrivacyView extends StatelessWidget {
                                   privacyCall: state.privacy?.privacyCall ?? '',
                                   privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
                                   privacyActivity: state.privacy?.privacyActivity ?? '',
+                                    privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
                                 ));
                           },
                         ),
@@ -405,6 +421,7 @@ class PrivacyView extends StatelessWidget {
                                   privacyCall: state.privacy?.privacyCall ?? '',
                                   privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
                                   privacyActivity:  mapPrivacyStatusToString(value),
+                                    privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
                                 ));
                           },
                         ),
@@ -432,6 +449,35 @@ class PrivacyView extends StatelessWidget {
                                   privacyCall:mapPrivacyStatusToString(value),
                                   privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
                                   privacyActivity: state.privacy?.privacyActivity ?? '',
+                                    privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
+                                ));
+                          },
+                        ),
+                        PrivacyMultiSelectItem(
+                          label: LocaleKeys.randomAppearance.localize,
+                          privacy: state.privacy?.privacyRandomAppearance ?? '',
+                          onChoose: (PrivacyStatus value) {
+                            context.read<PrivacyCubit>().updateDataPrivacy(
+                                params:
+                                UpdatePrivacyParams(
+                                    privacyCountry:state.privacy?.privacyCountry ?? '',
+                                    privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                    privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                    privacyPhone: state.privacy?.privacyPhone ?? '',
+                                    privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                    privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                    privacyJob: state.privacy?.privacyJob ?? '',
+                                    privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                    privacyFriendRequest: state.privacy?.privacyFriendRequest ??false,
+                                    privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                    privacyFollowRequest: state.privacy?.privacyFollowRequest ??false,
+                                    privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
+                                    privacyEmail: state.privacy?.privacyEmail ?? '',
+                                    privacyCity: state.privacy?.privacyCity ?? '',
+                                    privacyCall:state.privacy?.privacyCall ?? '',
+                                    privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
+                                    privacyActivity: state.privacy?.privacyActivity ?? '',
+                                    privacyRandomAppearance: mapPrivacyStatusToString(value)
                                 ));
                           },
                         ),
@@ -459,6 +505,7 @@ class PrivacyView extends StatelessWidget {
                                   privacyCall:state.privacy?.privacyCall ?? '',
                                   privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
                                   privacyActivity: state.privacy?.privacyActivity ?? '',
+                                    privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
                                 ));
                           },
                         ),
@@ -486,6 +533,7 @@ class PrivacyView extends StatelessWidget {
                                   privacyCall:state.privacy?.privacyCall ?? '',
                                   privacyBirthDay: state.privacy?.privacyBirthDay ?? '',
                                   privacyActivity: state.privacy?.privacyActivity ?? '',
+                                    privacyRandomAppearance: state.privacy?.privacyRandomAppearance ??''
                                 ));
                           },
                         ),
@@ -497,7 +545,8 @@ class PrivacyView extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             },
           ),
-        ));
+        ) :const CustomTextNoLogin(),
+    );
   }
 
 }

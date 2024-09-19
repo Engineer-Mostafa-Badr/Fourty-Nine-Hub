@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,7 +17,11 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
+import '../../../features/competition/data/repository/competition_repo_impl.dart';
+import '../../../features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
+import '../../../features/competition/presentation/cubit/competition_cubit/competition_state.dart';
 import '../../../features/competition/presentation/view/special_ads_view.dart';
+import '../../../features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/const.dart';
@@ -209,6 +211,7 @@ class DrawerWidget extends StatelessWidget {
     required BuildContext context,
     required UserEntity? user,
   }) {
+
     log(user?.id.toString() ?? "UserId", name: "UserId");
     return Column(
       children: [
@@ -216,104 +219,144 @@ class DrawerWidget extends StatelessWidget {
         const Divider(
           color: Colors.grey,
         ),
-        Row(
-          children: [
-            counterItem(
-                icon: Icons.ads_click,
-                label: LocaleKeys.specialAds.localize,
-                value: '13',
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SpecialAdsView()));
-                },
-                context: context),
-            counterItem(
-                icon: Icons.person_add,
-                label: LocaleKeys.friends.localize,
-                value: '+110',
-                onTap: () {},
-                context: context),
-            counterItem(
-              icon: FontAwesomeIcons.car,
-              label: LocaleKeys.ride.localize,
-              value: '+5',
-              context: context,
-              onTap: () {},
-            ),
-            counterItem(
-              icon: Icons.more_horiz,
-              label: LocaleKeys.more.localize,
-              value: '+1K',
-              onTap: () => context.go(Routes.COMPETITIONS),
-              context: context,
-            ),
-          ],
+        BlocProvider(
+          create: (BuildContext context) =>
+              CompetitionCubit(serviceLocator.get<CompetitionRepoImpl>())
+                ..fetchCompetition(context),
+          child: BlocBuilder<CompetitionCubit, CompetitionState>(
+            builder: (BuildContext context, state) {
+              if(state is CompetitionSuccessState) {
+                int calculateSumOfRequests() {
+                  List<int> indicesToSum = [1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13];
+
+                  return indicesToSum.fold(0, (sum, index) {
+                    return sum + (state.competitionModel.data![index].countOfRequest ?? 0);
+                  });
+                }
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Evenly distribute space
+                  crossAxisAlignment: CrossAxisAlignment.start, // Align items at the start
+                  children: [
+                    counterItem(
+                      icon: Icons.ads_click,
+                      label: LocaleKeys.specialAds.localize,
+                      value: '${state.competitionModel.data![10].countOfRequest}',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const SpecialAdsView()),
+                        );
+                      },
+                      context: context,
+                    ),
+                    counterItem(
+                      icon: Icons.person_add,
+                      label: LocaleKeys.friends.localize,
+                      value: '${state.competitionModel.data![0].countOfRequest}',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const SpecialAdsView()),
+                        );
+                      },
+                      context: context,
+                    ),
+                    counterItem(
+                      icon: FontAwesomeIcons.car,
+                      label: LocaleKeys.ride.localize,
+                      value: '${state.competitionModel.data![9].countOfRequest}',
+                      context: context,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const SpecialAdsView()),
+                        );
+                      },
+                    ),
+                    counterItem(
+                      icon: Icons.more_horiz,
+                      label: LocaleKeys.more.localize,
+                      value: '${calculateSumOfRequests()}',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const SpecialAdsView()),
+                        );
+                      },
+                      context: context,
+                    ),
+                  ],
+                )
+                ;
+
+              }
+              return const SizedBox.shrink();
+            },
+          ),
         ),
       ],
     );
   }
 
-  Widget walletCircularProgress({
-    required BuildContext context,
-  }) {
-    return InkWell(
-      onTap: () {
-        context.push(Routes.WALLET);
-      },
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: AppColors.LIGHT_GRAY_COLOR),
-        child: Row(
-          children: [
-            Expanded(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Label(
-                    text: LocaleKeys.wallet.localize,
-                    style: Styles.mediumText(fontWeight: FontWeight.bold)),
-                Label(
-                    text: 'Earn Money with 49Hub',
-                    style: Styles.mediumText(fontWeight: FontWeight.w400)),
-              ],
-            )),
-            SizedBox(
-              height: kTextTabBarHeight,
-              width: kTextTabBarHeight,
-              child: Stack(
-                children: [
-                  const Positioned.fill(
-                    child: CircularProgressIndicator(
-                      value: .3,
-                      strokeWidth: 5,
-                      color: AppColors.PRIMARY_COLOR,
-                      backgroundColor: Colors.white,
-                    ),
-                  ),
-                  Positioned.fill(
-                      child: Center(
-                          child: RichText(
-                              text: TextSpan(children: [
-                    TextSpan(text: '300\n', style: Styles.mediumText()),
-                    TextSpan(
-                        text: '/1002',
-                        style: Styles.mediumText(
-                          fontSize: 8.sp,
-                        ))
-                  ]))))
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget walletCircularProgress({
+  //   required BuildContext context,
+  // }) {
+  //   return InkWell(
+  //     onTap: () {
+  //       context.push(Routes.WALLET);
+  //     },
+  //     child: Container(
+  //       padding: const EdgeInsets.all(10),
+  //       margin: const EdgeInsets.all(5),
+  //       decoration: BoxDecoration(
+  //           borderRadius: BorderRadius.circular(5),
+  //           color: AppColors.LIGHT_GRAY_COLOR),
+  //       child: Row(
+  //         children: [
+  //           Expanded(
+  //               child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Label(
+  //                   text: LocaleKeys.wallet.localize,
+  //                   style: Styles.mediumText(fontWeight: FontWeight.bold)),
+  //               Label(
+  //                   text: 'Earn Money with 49Hub',
+  //                   style: Styles.mediumText(fontWeight: FontWeight.w400)),
+  //             ],
+  //           )),
+  //           SizedBox(
+  //             height: kTextTabBarHeight,
+  //             width: kTextTabBarHeight,
+  //             child: Stack(
+  //               children: [
+  //                 const Positioned.fill(
+  //                   child: CircularProgressIndicator(
+  //                     value: .3,
+  //                     strokeWidth: 5,
+  //                     color: AppColors.PRIMARY_COLOR,
+  //                     backgroundColor: Colors.white,
+  //                   ),
+  //                 ),
+  //                 Positioned.fill(
+  //                     child: Center(
+  //                         child: RichText(
+  //                             text: TextSpan(children: [
+  //                   TextSpan(text: '300\n', style: Styles.mediumText()),
+  //                   TextSpan(
+  //                       text: '/1002',
+  //                       style: Styles.mediumText(
+  //                         fontSize: 8.sp,
+  //                       ))
+  //                 ]))))
+  //               ],
+  //             ),
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget drawerListTile(
       {IconData? icon,
@@ -404,39 +447,59 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget counterItem(
-      {required IconData icon,
-      required String label,
-      required String value,
-      required context,
-      required Function onTap}) {
+  Widget counterItem({
+    required IconData icon,
+    required String label,
+    required String value,
+    required BuildContext context,
+    required Function onTap,
+  }) {
     return Expanded(
       child: InkWell(
         onTap: () => onTap(),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            CircleAvatar(
-              backgroundColor: AppColors.GREY_BORDER_COLOR,
-              radius: 45.r,
-              child: Icon(
-                icon,
-                size: 40.sp,
-                color: AppColors.QUANTITY_COLOR,
+            SizedBox(
+              width: 80.r, // Fixed width for CircleAvatar
+              height: 80.r, // Fixed height for CircleAvatar
+              child: CircleAvatar(
+                backgroundColor: AppColors.GREY_BORDER_COLOR,
+                radius: 40.r, // Radius to fit within the Container
+                child: Icon(
+                  icon,
+                  size: 30.sp,
+                  color: AppColors.QUANTITY_COLOR,
+                ),
               ),
             ),
-            Label(
-              text: value,
+            Text(
+              value,
               style: Styles.smallText(
                 color: Theme.of(context).primaryColor,
                 fontWeight: FontWeight.bold,
               ),
+              textAlign: TextAlign.center,
             ),
-            Label(text: label, style: Styles.smallText(color: Colors.grey)),
+            Padding(
+              padding: EdgeInsets.only(left: 5.w),
+              child: Text(
+                label,
+                style: Styles.smallText(color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ],
         ),
       ),
     );
   }
+
+
+
+
+
+
 
   Widget accountWidget({
     required BuildContext context,
@@ -478,11 +541,9 @@ class DrawerWidget extends StatelessWidget {
                           ),
                         );
                       }
-                      return CircleAvatar(
-                        // backgroundColor: Colors.transparent,
-                        backgroundImage: CachedNetworkImageProvider(
-                          user?.profilePicture ?? UIConst.profilePlaceHolder,
-                        ),
+                      return ImageFromInternet(
+                        isCircle: true,
+                        image: user?.profilePicture ?? UIConst.profilePlaceHolder,
                       );
                     },
                   ),
@@ -534,7 +595,7 @@ class DrawerWidget extends StatelessWidget {
               ],
             ),
           ),
-          Sizer(),
+          const Sizer(),
           Expanded(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
