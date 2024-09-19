@@ -16,7 +16,6 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/notific
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/main.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -346,7 +345,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                       fontWeight: FontWeight.bold,
                     ),
                     icon: icon,
-                    iconSize: 30.h,
+                    iconSize: 50.h,
                     onPressed: () => function()),
               ),
               Positioned(
