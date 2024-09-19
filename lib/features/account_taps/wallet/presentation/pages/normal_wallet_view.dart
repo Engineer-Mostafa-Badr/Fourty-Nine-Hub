@@ -133,6 +133,19 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                           ),
                         ),
                       );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => BlocProvider<PaymentCubit>(
+                      //       create: (BuildContext context) =>
+                      //           serviceLocator(),
+                      //       child: PaymentView(
+                      //         amountId: '',
+                      //         amount: 500,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // );
                     },
                   )
                       : AppButton(

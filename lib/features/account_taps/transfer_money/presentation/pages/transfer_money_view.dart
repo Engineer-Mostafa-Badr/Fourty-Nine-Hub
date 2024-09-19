@@ -101,7 +101,7 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                                 Theme.of(context).scaffoldBackgroundColor,
                               ),
                               controller: searchController,
-                              hint: 'Search...',
+                              hint: LocaleKeys.search.localize,
                               action: (value) {
                                 setState(() {
                                   // Show the list when the search text is not empty
