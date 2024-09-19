@@ -21,7 +21,9 @@ class FacebookAdvertisementCard extends StatelessWidget {
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          border: Border.all(), borderRadius: BorderRadius.circular(15)),
+          border: Border.all(
+              color:
+              AppColors.DIVIDER_GRAY_COLOR), borderRadius: BorderRadius.circular(5)),
       child: Column(
         children: [
           SizedBox(
@@ -65,7 +67,7 @@ class FacebookAdvertisementCard extends StatelessWidget {
                         children: [
                           ImageFromInternet(
                             image: post.images?[index] ?? '',
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(5),
                             defaultLogo: true,
                           ),
 
@@ -91,7 +93,7 @@ class FacebookAdvertisementCard extends StatelessWidget {
                               // padding: EdgeInsets.all(10),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: BorderRadius.circular(5),
                                 color: Colors.black.withOpacity(0.5),
                               ),
                               child: Center(
@@ -125,7 +127,7 @@ class FacebookAdvertisementCard extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: AppColors.PRIMARY_COLOR,
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Label(
                 text: LocaleKeys.sendMessage.localize,

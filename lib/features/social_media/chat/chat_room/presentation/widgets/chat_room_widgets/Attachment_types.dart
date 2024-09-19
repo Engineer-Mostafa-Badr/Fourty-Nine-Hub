@@ -1,8 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -38,7 +41,13 @@ class AttachmentTypes extends StatelessWidget {
         _buildAttachmentTypeItem(
             color: Colors.purpleAccent,
             label: LocaleKeys.gallery.tr(),
-            onTap: () => chatRoomCubit.pickMedia(),
+            onTap: () async {
+              await chatRoomCubit.pickMedia();
+              context.push(
+                Routes.MEDIASLIDER,
+                extra: chatRoomCubit,
+              );
+            },
             icon: Icons.image_outlined),
         _buildAttachmentTypeItem(
             color: Colors.orange[600]!,

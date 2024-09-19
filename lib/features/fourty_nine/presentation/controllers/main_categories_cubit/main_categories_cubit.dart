@@ -14,9 +14,6 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
@@ -26,9 +23,6 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   final GetBalanceUseCases _balanceUseCases;
   final GetMainCategoriesUseCase _getMainCategoriesUseCase;
   final GetWalletUseCase _getWalletUseCase;
-  final ListenToNewMessageUseCase _listenToNewMessageUseCase;
-  final StopListenToMessagesUseCase _stopListenToNewMessagesUseCase;
-  final MarkMessagesAsDeliveredUseCase _markMessagesAsDeliveredUseCase;
   final FourtyNineSharedData _fourtyNineSharedData =
       FourtyNineSharedData.instance;
   final ToggleFavoriteCategoryUseCase _toggleFavoriteCategoryUseCase;
@@ -40,23 +34,13 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     this._giftUseCases,
     this._getWalletUseCase,
     this._balanceUseCases,
-    this._listenToNewMessageUseCase,
-    this._stopListenToNewMessagesUseCase,
-    this._markMessagesAsDeliveredUseCase,
-  ) : super(MainCategoriesState()) {
-    _markMessagesAsDelivered();
-  }
-
+  ) : super(MainCategoriesState());
   Future<void> loadData() async {
     emit(state.copyWith(status: StateStatus.loading));
     await UserCubit.to.getUser();
     getWallet();
     fetchGiftWallet();
     fetchBalanceWallet();
-    // context.read<SliderCubit>().loadData();
-    // context.read<WalletCubit>().loadData();
-    // context.read<BalanceCubit>().loadData();
-    // context.read<GiftCubit>().loadData();
     if (_fourtyNineSharedData.mainCategories.isEmpty) {
       final user = UserCubit.to.state.data?.id;
       print('userId1$user');
@@ -99,13 +83,6 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
         },
       );
     }
-  }
-
-  _markMessagesAsDelivered() {
-    _listenToNewMessageUseCase((message) {
-      _markMessagesAsDeliveredUseCase(
-          MarkMessagesAsDeliveredParams(chatId: 'chatId'));
-    });
   }
 
   Future<void> fetchGiftWallet() async {

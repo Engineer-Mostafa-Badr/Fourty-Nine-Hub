@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -21,7 +22,7 @@ class AdCard extends StatelessWidget {
       onTap: () => context.push(Routes.ADdetails, extra: item.id),
       child: Container(
         width: kToolbarHeight * 2.5,
-        height: 250.h,
+        height: 500.h,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -36,10 +37,9 @@ class AdCard extends StatelessWidget {
               child: Stack(
                 children: [
                   Positioned.fill(
-                    child: SquareImage(
-                      fit: BoxFit.fitWidth,
-                      radius: 10,
-                      url: item.images.first,
+                    child:ImageFromInternet(image: item.images.first,
+                      height: 200.h,
+                      defaultLogo: true,
                     ),
                   ),
                   Positioned(
@@ -51,27 +51,49 @@ class AdCard extends StatelessWidget {
               ),
             )),
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Expanded(
-                  child: Label(
-                    text:
-                        '${NumbersHelper.formatThousands(number: item.price)}',
-                    style: Styles.mediumText(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.SECONDARY_COLOR),
-                    maxLines: 1,
-                  ),
-                ),
+                // Expanded(
+                //   child: Label(
+                //     text:
+                //         '${NumbersHelper.formatThousands(number: item.price??0)} L.E',
+                //     style: Styles.mediumText(
+                //         fontWeight: FontWeight.bold,
+                //         color: AppColors.SECONDARY_COLOR),
+                //     maxLines: 1,
+                //   ),
+                // ),
                 Sizer(),
                 IconAppButton(
                     size: 18, icon: Icons.favorite_border, onPressed: () {}),
               ],
             ),
-            Label(
-              text: item.title,
-              style: Styles.mediumText(
-                  fontWeight: FontWeight.w500, color: Colors.grey),
-              maxLines: 1,
+            Row(
+              children: [
+                Label(
+                    text: '${LocaleKeys.title.localize} : ',
+                    style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
+                Label(
+                  text: item.title,
+                  style: Styles.mediumText(
+                      fontWeight: FontWeight.w500, color: Colors.grey),
+                  maxLines: 1,
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Label(
+                    text: '${LocaleKeys.desc.localize} : ',
+                    style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
+
+                Label(
+                  text: item.description,
+                  style: Styles.mediumText(
+                      fontWeight: FontWeight.w500, color: Colors.grey),
+                  maxLines: 1,
+                ),
+              ],
             ),
             RichText(
                 text: TextSpan(
@@ -79,14 +101,21 @@ class AdCard extends StatelessWidget {
                         .map((e) => WidgetSpan(
                                 child: Container(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
+                                  const EdgeInsets.symmetric(horizontal: 0),
                               margin: const EdgeInsets.all(1),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              child: Label(
-                                  text: '${e.value} |',
-                                  style: Styles.mediumText()),
+                              child: Row(
+                                children: [
+                                  Label(
+                                      text: '${e.label} : ',
+                                      style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
+                                  Label(
+                                      text: '${e.value}',
+                                      style: Styles.mediumText(color: AppColors.PRIMARY_COLOR)),
+                                ],
+                              ),
                             )))
                         .toList())),
             Label(

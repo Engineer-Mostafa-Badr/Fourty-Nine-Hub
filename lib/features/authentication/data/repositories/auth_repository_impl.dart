@@ -34,8 +34,6 @@ class AuthRepositoryImpl extends AuthRepository {
     return result.fold(
       (failure) => Left(failure),
       (token) {
-        serviceLocator<Socket>().io.options?['extraHeaders']?['authorization'] =
-            token.accessToken;
         return Right(token);
       },
     );

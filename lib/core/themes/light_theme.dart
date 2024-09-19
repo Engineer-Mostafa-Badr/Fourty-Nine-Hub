@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../res/style/app_colors.dart';
+import '../../res/style/styles.dart';
 
 ThemeData lightTheme() {
   return ThemeData(
@@ -16,7 +17,7 @@ ThemeData lightTheme() {
       color: AppColors.AUTH_CONTAINER_COLOR,
     ),
     switchTheme: const SwitchThemeData(
-      trackColor: MaterialStatePropertyAll<Color>(Colors.green),
+      trackColor: MaterialStatePropertyAll<Color>(AppColors.SECONDARY_COLOR),
     ),
     textTheme: const TextTheme(
       displayMedium: TextStyle(color: AppColors.QUANTITY_COLOR),
@@ -29,14 +30,23 @@ ThemeData lightTheme() {
       buttonColor: AppColors.QUANTITY_COLOR,
     ),
     inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: AppColors.GREY_LIGHT_COLOR,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(
-            color: AppColors.DIVIDER_GRAY_COLOR2,
-          ),
-        )),
+      filled: true,
+      fillColor: AppColors.GREY_LIGHT_COLOR,
+      hintStyle:
+          Styles.headerText(fontSize: 25, decoration: TextDecoration.none,decorationThickness: 0),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8.0),
+        borderSide: const BorderSide(
+          color: AppColors.DIVIDER_GRAY_COLOR2,
+        ),
+      ),
+      enabledBorder: const OutlineInputBorder(
+        borderSide: BorderSide(color: AppColors.PRIMARY_COLOR),
+      ),
+      focusedBorder: const OutlineInputBorder(
+        borderSide: BorderSide(color: AppColors.PRIMARY_COLOR),
+      ),
+    ),
     dividerColor: AppColors.DIVIDER_GRAY_COLOR,
     drawerTheme:
         const DrawerThemeData(backgroundColor: AppColors.AUTH_CONTAINER_COLOR),

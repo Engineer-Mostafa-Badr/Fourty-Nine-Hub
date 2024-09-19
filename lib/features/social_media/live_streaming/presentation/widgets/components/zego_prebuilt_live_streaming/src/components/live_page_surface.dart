@@ -4,6 +4,7 @@ import 'dart:core';
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_state.dart';
@@ -100,7 +101,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
   }
 
   Widget get body {
-    return BlocBuilder<MeetingCubit, MeetingState>(
+    return BlocBuilder<StreamCubit, StreamState>(
       builder: (context, state) {
         return LayoutBuilder(builder: (context, constraints) {
           return Stack(
@@ -150,26 +151,39 @@ class _ZegoLiveStreamingLivePageSurfaceState
     final isCoHostEnabled = (widget.plugins?.isEnabled ?? false) &&
         widget.config.bottomMenuBar.audienceButtons
             .contains(ZegoLiveStreamingMenuBarButtonName.coHostControlButton);
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: ZegoLiveStreamingBottomBar(
-        buttonSize: zegoLiveButtonSize,
-        config: widget.config,
-        events: widget.events,
-        defaultEndAction: widget.defaultEndAction,
-        defaultLeaveConfirmationAction: widget.defaultLeaveConfirmationAction,
-        hostManager: widget.hostManager,
-        hostUpdateEnabledNotifier: widget.hostManager.hostUpdateEnabledNotifier,
-        liveStatusNotifier: widget.liveStatusManager.notifier,
-        connectManager: widget.connectManager,
-        isLeaveRequestingNotifier: ZegoUIKitPrebuiltLiveStreamingController()
-            .isLeaveRequestingNotifier,
-        popUpManager: widget.popUpManager,
-        isLiveStream: widget.isLiveStream,
-        isCoHostEnabled: isCoHostEnabled,
-        translationText: widget.config.innerText,
-      ),
-    );
+    return !widget.isLiveStream
+        ? Align(
+            alignment: Alignment.bottomCenter,
+            child: ZegoLiveStreamingBottomBar(
+              buttonSize: zegoLiveButtonSize,
+              config: widget.config,
+              events: widget.events,
+              defaultEndAction: widget.defaultEndAction,
+              defaultLeaveConfirmationAction:
+                  widget.defaultLeaveConfirmationAction,
+              hostManager: widget.hostManager,
+              hostUpdateEnabledNotifier:
+                  widget.hostManager.hostUpdateEnabledNotifier,
+              liveStatusNotifier: widget.liveStatusManager.notifier,
+              connectManager: widget.connectManager,
+              isLeaveRequestingNotifier:
+                  ZegoUIKitPrebuiltLiveStreamingController()
+                      .isLeaveRequestingNotifier,
+              popUpManager: widget.popUpManager,
+              isLiveStream: widget.isLiveStream,
+              isCoHostEnabled: isCoHostEnabled,
+              translationText: widget.config.innerText,
+            ),
+          )
+        //will be chat tiktok
+        : Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              constraints: BoxConstraints(maxHeight: 80.h),
+              padding: EdgeInsets.all(5),
+              color: Colors.red,
+            ),
+          );
   }
 
   Widget messageList() {

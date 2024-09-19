@@ -51,7 +51,7 @@ class AttachementsViewState extends State<AttachementsView> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back,
               size: 26,
               color: AppColors.BACKGROUND_COLOR,

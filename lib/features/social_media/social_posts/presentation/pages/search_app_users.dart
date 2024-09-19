@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
@@ -57,7 +59,7 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
                           fillColor: Colors.white,
                           contentPadding: const EdgeInsets.all(5),
                           hintStyle: Styles.mediumText(),
-                          hintText: 'Search with name',
+                          hintText: LocaleKeys.searchWithName.localize,
                         ),
                       ),
                     ),

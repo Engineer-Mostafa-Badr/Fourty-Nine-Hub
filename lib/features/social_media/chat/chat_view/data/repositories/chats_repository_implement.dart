@@ -5,6 +5,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/data/datasour
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/repositories/chats_repository.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_anonymous_chat_use_case.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_normal_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_request.dart';
 
@@ -53,5 +55,15 @@ class ChatsRepositoryImplementation extends ChatsRepository {
       {required String chatId}) {
     // TODO: implement getSeenHistory
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> createNormalChat(CreateNormalChatParams params) {
+    return _chatsRemoteDataSource.createNormalChat(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> createAnonymousChat(CreateAnonymousChatParams params) {
+    return _chatsRemoteDataSource.createAnonymousChat(params);
   }
 }

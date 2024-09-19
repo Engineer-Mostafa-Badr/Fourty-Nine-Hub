@@ -22,6 +22,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/minimizing/mini_button.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../../../res/assets/assets.dart';
 import '../../../../../../../../../res/style/app_colors.dart';
@@ -83,6 +84,125 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
   final ValueNotifier<bool> showTopBar = ValueNotifier(true);
   @override
   Widget build(BuildContext context) {
+    return widget.isLiveStream ? _tiktokTopBar() : _zoomTopBar();
+  }
+
+  Widget _tiktokTopBar() {
+    final buttonSize = Size(88.zR, 88.zR);
+    final iconSize = Size(56.zR, 56.zR);
+
+    return SizedBox(
+      width: double.infinity,
+      height: 50,
+      // color: Colors.red,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Row(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            IconButton(
+                style: IconButton.styleFrom(
+                    shape: const CircleBorder(),
+                    backgroundColor: Colors.grey.withOpacity(0.7)),
+                onPressed: () {
+                  context.pop();
+                },
+                icon: const Icon(
+                  Icons.close,
+                )),
+            Expanded(
+              child: Container(),
+            ),
+            Container(
+              // padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              // margin: const EdgeInsets.all(25),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.grey.withOpacity(0.7),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ZegoSwitchCameraButton(
+                    buttonSize: buttonSize,
+                    iconSize: iconSize,
+                    icon: ButtonIcon(
+                      icon: const Icon(
+                        Icons.switch_camera,
+                      ),
+                      backgroundColor: Colors.transparent,
+                    ),
+                    defaultUseFrontFacingCamera: ZegoUIKit()
+                        .getUseFrontFacingCameraStateNotifier(
+                            ZegoUIKit().getLocalUser().id)
+                        .value,
+                  ),
+                  ZegoToggleMicrophoneButton(
+                    buttonSize: buttonSize,
+                    iconSize: iconSize,
+                    normalIcon: ButtonIcon(
+                      icon: const Icon(
+                        Icons.mic,
+
+                        // size: 20,
+                      ),
+                      backgroundColor: Colors.transparent,
+                    ),
+                    offIcon: ButtonIcon(
+                      icon: const Icon(
+                        Icons.mic_off_outlined,
+
+                        // size: 20,
+                      ),
+                      backgroundColor: Colors.transparent,
+                    ),
+                  ),
+                  ZegoToggleCameraButton(
+                    buttonSize: buttonSize,
+                    iconSize: iconSize,
+                    normalIcon: ButtonIcon(
+                        icon: const Icon(
+                          Icons.videocam_outlined,
+                          // size: 20,
+                        ),
+                        backgroundColor: Colors.transparent),
+                    offIcon: ButtonIcon(
+                      icon: const Icon(
+                        Icons.videocam_off_outlined,
+
+                        // size: 20,
+                      ),
+                      backgroundColor: Colors.transparent,
+                    ),
+                  ),
+                  ZegoScreenSharingToggleButton(
+                    buttonSize: buttonSize,
+                    iconSize: iconSize,
+                    iconStartSharing: ButtonIcon(
+                      icon: const Icon(
+                        Icons.screen_share_rounded,
+                        // size: 20,
+                      ),
+                      backgroundColor: Colors.transparent,
+                    ),
+                    iconStopSharing: ButtonIcon(
+                      icon: const Icon(
+                        Icons.stop_screen_share_outlined,
+                        // size: 20,
+                      ),
+                      backgroundColor: Colors.transparent,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  ValueListenableBuilder<bool> _zoomTopBar() {
     return ValueListenableBuilder<bool>(
         valueListenable: showTopBar,
         builder: (context, showTopBarValue, child) {
@@ -176,7 +296,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                             }
                             if (context.mounted) {
                               await context
-                                  .read<MeetingCubit>()
+                                  .read<StreamCubit>()
                                   .endRoom(ZegoUIKit().getRoom().id);
                               Navigator.of(context).pop();
                             }
@@ -193,9 +313,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                               child: Text(
                                 LocaleKeys.EndMeetingForAll.localize,
                                 style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),
+                                    fontSize: 20, fontWeight: FontWeight.bold),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -221,9 +339,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                             child: Text(
                               LocaleKeys.leaveMeeting.localize,
                               style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 20, fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -325,7 +441,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
   }
 
   void minimizeAndNavigate() {
-    var cubit = context.read<MeetingCubit>();
+    var cubit = context.read<StreamCubit>();
 
     cubit.minimize();
 

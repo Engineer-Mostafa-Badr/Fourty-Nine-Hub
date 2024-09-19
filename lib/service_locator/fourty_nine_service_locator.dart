@@ -346,14 +346,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
       ),
     );
 
-    serviceLocator.registerFactory<AdsCubit>(
-      () => AdsCubit(
+    serviceLocator.registerFactory<AdvertisementCubit>(
+      () => AdvertisementCubit(
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

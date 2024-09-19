@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/animations/create_custom_transition.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_state.dart';
@@ -9,6 +11,11 @@ import 'package:fourtyninehub/features/social_media/club_house/presentation/widg
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../domain/entities/club_voice_room_entity.dart';
 import '../widgets/audio_room_card.dart';
 
 class ClubHouseHome extends StatelessWidget {
@@ -34,23 +41,11 @@ class ClubHouseHome extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Label(
-                      //   text: 'Club Voice',
-                      //   style: Styles.headerText(),
-                      // ),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                            minHeight: MediaQuery.sizeOf(context).height,
-                            maxHeight: double.infinity),
-                        child: _pagedRooms(cubit),
-                      )
-                    ],
-                  ),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                      minHeight: MediaQuery.sizeOf(context).height,
+                      maxHeight: double.infinity),
+                  child: _pagedRooms(cubit),
                 ),
               ),
               Positioned(
@@ -62,8 +57,12 @@ class ClubHouseHome extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    onPressed: () => showVoiceLiveBottomSheet(
-                        context: context, cubit: cubit),
+                    onPressed: () => Navigator.of(context).push(
+                        createCustomTransitionRoute(
+                            BlocProvider.value(
+                                value: serviceLocator<ClubVoiceCubit>(),
+                                child: const CreateRoomScreen()),
+                            TransitionType.bottomToTop)),
                     child: const Icon(
                       Icons.add,
                       color: Colors.white,
@@ -76,38 +75,34 @@ class ClubHouseHome extends StatelessWidget {
     ));
   }
 
-  PagedListView<int, Object?> _pagedRooms(ClubVoiceCubit cubit) {
-    return PagedListView.separated(
-      physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.only(bottom: 0),
+  PagedListView<int, ClubVoiceRoomEntity?> _pagedRooms(ClubVoiceCubit cubit) {
+    return PagedListView<int, ClubVoiceRoomEntity>.separated(
       pagingController: cubit.roomsPagingController,
-      shrinkWrap: true,
-      builderDelegate: PagedChildBuilderDelegate(
-        noItemsFoundIndicatorBuilder: (context) {
-          return Center(
-            child: Text(
-              "No Rooms",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 25.sp,
+      builderDelegate: PagedChildBuilderDelegate<ClubVoiceRoomEntity>(
+          noItemsFoundIndicatorBuilder: (context) {
+            print(cubit.roomsPagingController.itemList?.length);
+            return Center(
+              child: Label(
+                text: LocaleKeys.noRooms.localize,
+                style: Styles.headerText(
+                  color: Colors.black,
+                  fontSize: 30,
+                ),
               ),
-            ),
-          );
-        },
-        noMoreItemsIndicatorBuilder: (context) => Container(),
-        firstPageProgressIndicatorBuilder: (context) =>
-            const CupertinoActivityIndicator(),
-        newPageProgressIndicatorBuilder: (context) =>
-            const CupertinoActivityIndicator(),
-        itemBuilder: (context, _, index) {
-          print('room length $cubit.rooms.length');
-          final room = cubit.rooms[index];
-          return AudioRoomCard(
-            room: room,
-          );
-        },
-      ),
-      separatorBuilder: (context, index) {
+            );
+          },
+          itemBuilder: (context, item, index) {
+            return AudioRoomCard(
+              room: item,
+            );
+          },
+          noMoreItemsIndicatorBuilder: (context) => Container(),
+          firstPageProgressIndicatorBuilder: (context) => Container(
+              margin: const EdgeInsets.only(top: 150),
+              child: const CupertinoActivityIndicator()),
+          newPageProgressIndicatorBuilder: (context) =>
+              const CupertinoActivityIndicator()),
+      separatorBuilder: (BuildContext context, int index) {
         return SizedBox(
           height: 10.h,
         );
