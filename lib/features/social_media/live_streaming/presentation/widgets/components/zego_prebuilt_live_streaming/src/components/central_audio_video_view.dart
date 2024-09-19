@@ -115,7 +115,9 @@ class ZegoLiveStreamingCentralAudioVideoViewState
                 return audioVideoView(
                   host,
                   widget.constraints.maxWidth,
-                  widget.isLiveStream
+                  (widget.isLiveStream &&
+                          ZegoLiveStreamingPKBattleStateCombineNotifier
+                              .instance.state.value)
                       ? widget.constraints.maxHeight * 0.75
                       : widget.constraints.maxHeight,
                   screenSharingUsers.isNotEmpty,

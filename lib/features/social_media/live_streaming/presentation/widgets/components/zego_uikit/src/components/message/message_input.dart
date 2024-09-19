@@ -80,11 +80,11 @@ class _ZegoInRoomMessageInputState extends State<ZegoInRoomMessageInput> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: !context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+      textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 15.zR, vertical: 15.zR),
         color:
-            widget.backgroundColor ?? const Color(0xff222222).withOpacity(0.8),
+            widget.backgroundColor ?? const Color(0xff222222).withOpacity(0.1),
         child: ConstrainedBox(
           constraints: BoxConstraints(
             minHeight: 90.zR,

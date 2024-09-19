@@ -151,8 +151,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
     final isCoHostEnabled = (widget.plugins?.isEnabled ?? false) &&
         widget.config.bottomMenuBar.audienceButtons
             .contains(ZegoLiveStreamingMenuBarButtonName.coHostControlButton);
-    return !widget.isLiveStream
-        ? Align(
+    return  Align(
             alignment: Alignment.bottomCenter,
             child: ZegoLiveStreamingBottomBar(
               buttonSize: zegoLiveButtonSize,
@@ -174,16 +173,8 @@ class _ZegoLiveStreamingLivePageSurfaceState
               isCoHostEnabled: isCoHostEnabled,
               translationText: widget.config.innerText,
             ),
-          )
-        //will be chat tiktok
-        : Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              constraints: BoxConstraints(maxHeight: 80.h),
-              padding: EdgeInsets.all(5),
-              color: Colors.red,
-            ),
           );
+        
   }
 
   Widget messageList() {

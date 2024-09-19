@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
@@ -21,6 +22,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/internal/defines.dart';
 
+import '../../../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../../../core/messages/messages.dart';
 import '../inner_text.dart';
 import '../internal/pk_combine_notifier.dart';
@@ -103,50 +105,119 @@ class _ZegoLiveStreamingBottomBarState
     final needUserMuteMode =
         (!widget.config.coHost.stopCoHostingWhenMicCameraOff) ||
             ZegoLiveStreamingPKBattleStateCombineNotifier.instance.state.value;
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        margin: widget.config.bottomMenuBar.margin,
-        padding: widget.config.bottomMenuBar.padding,
-        decoration: const BoxDecoration(
-          color: Color(0xFF35383F),
-        ),
-        height: widget.config.bottomMenuBar.height ?? 120.zR,
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 20.zW),
-          scrollDirection: Axis.horizontal,
-          children: [
-            //mic
-            ZoomMicrophoneBuilder(
-              micState: micState,
-              micDefaultOn: microphoneDefaultOn,
-              needUserMuteMode: needUserMuteMode,
+    return !widget.isLiveStream
+        ? _zoomBottomBar(
+            micState,
+            microphoneDefaultOn,
+            needUserMuteMode,
+            cameraState,
+            cameraDefaultOn,
+            screenShareState,
+          )
+        : Container(
+            margin: widget.config.bottomMenuBar.margin,
+            padding: widget.config.bottomMenuBar.padding,
+            width: context.screenWidth,
+            decoration: BoxDecoration(
+              color: Color(0xFF35383F).withOpacity(0.7),
             ),
-            //camera
-            ZoomCameraBuilder(
-              cameraState: cameraState,
-              cameraDefaultOn: cameraDefaultOn,
-            ),
-            const VerticalDivider(
-              color: Colors.white,
-            ),
-            ZoomParticipantsBuilder(
-              widget: widget,
-            ),
-            ZoomChatBuilder(
-              widget: widget,
-            ),
-            ZoomSharescreenBuilder(
-              shareScreenState: screenShareState,
-            ),
-            ZoomWhiteBoardButton(
-              config: widget.config,
-            ),
-            ZoomShareCodeButton(
-              liveId: ZegoUIKit().getRoom().id,
-            ),
-          ],
-        ),
+            height: widget.config.bottomMenuBar.height ?? 120.zR,
+            child: FakeTextFieldBuilder(widget: widget),
+          );
+  }
+
+  Container _zoomBottomBar(
+      ValueNotifier<bool> micState,
+      bool microphoneDefaultOn,
+      bool needUserMuteMode,
+      ValueNotifier<bool> cameraState,
+      bool cameraDefaultOn,
+      ValueNotifier<bool> screenShareState) {
+    return Container(
+      margin: widget.config.bottomMenuBar.margin,
+      padding: widget.config.bottomMenuBar.padding,
+      decoration: const BoxDecoration(
+        color: Color(0xFF35383F),
+      ),
+      height: widget.config.bottomMenuBar.height ?? 120.zR,
+      child: ListView(
+        padding: EdgeInsets.symmetric(horizontal: 20.zW),
+        scrollDirection: Axis.horizontal,
+        children: [
+          //mic
+          ZoomMicrophoneBuilder(
+            micState: micState,
+            micDefaultOn: microphoneDefaultOn,
+            needUserMuteMode: needUserMuteMode,
+          ),
+          //camera
+          ZoomCameraBuilder(
+            cameraState: cameraState,
+            cameraDefaultOn: cameraDefaultOn,
+          ),
+          const VerticalDivider(
+            color: Colors.white,
+          ),
+          ZoomParticipantsBuilder(
+            widget: widget,
+          ),
+          ZoomChatBuilder(
+            widget: widget,
+          ),
+          ZoomSharescreenBuilder(
+            shareScreenState: screenShareState,
+          ),
+          ZoomWhiteBoardButton(
+            config: widget.config,
+          ),
+          ZoomShareCodeButton(
+            liveId: ZegoUIKit().getRoom().id,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FakeTextFieldBuilder extends StatelessWidget {
+  const FakeTextFieldBuilder({
+    super.key,
+    required this.widget,
+  });
+
+  final ZegoLiveStreamingBottomBar widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 15),
+      child: ZoomChatBuilder(
+        widget: widget,
+        child: ZegoLiveStreamingInRoomMessageInputBoardButton(
+            translationText: widget.config.innerText,
+            hostManager: widget.hostManager,
+            onSheetPopUp: (int key) {
+              widget.popUpManager.addAPopUpSheet(key);
+            },
+            onSheetPop: (int key) {
+              widget.popUpManager.removeAPopUpSheet(key);
+            },
+            buttonSize: Size(context.screenWidth * 0.85, 40),
+            iconSize: Size(context.screenWidth * 0.85, 40),
+            enabledIcon: ButtonIcon(
+                icon: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Center(
+                child: Label(
+                  text: LocaleKeys.comment.localize,
+                  color: Colors.grey,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ))),
       ),
     );
   }
@@ -327,48 +398,51 @@ class ZoomParticipantsBuilder extends StatelessWidget {
 
 class ZoomChatBuilder extends StatelessWidget {
   final ZegoLiveStreamingBottomBar widget;
+  final Widget? child;
   const ZoomChatBuilder({
     super.key,
     required this.widget,
+    this.child,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(3.0).add(EdgeInsets.only(left: 5.zW)),
-        child: Stack(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ZegoLiveStreamingInRoomMessageInputBoardButton(
-              translationText: widget.config.innerText,
-              hostManager: widget.hostManager,
-              onSheetPopUp: (int key) {
-                widget.popUpManager.addAPopUpSheet(key);
-              },
-              onSheetPop: (int key) {
-                widget.popUpManager.removeAPopUpSheet(key);
-              },
-              buttonSize: const Size(40, 40),
-              iconSize: const Size(40, 40),
-              enabledIcon: ButtonIcon(
-                  icon: Image.asset(
-                'assets/49-New-icons/chat.png',
-                // width: 20,
-              )),
-            ),
-            Positioned(
-              bottom: 8.zH,
-              right: 5,
-              child: Text(
-                LocaleKeys.chat.localize,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 25.zSP),
-              ),
-            )
-          ],
-        ));
+    return child ??
+        Padding(
+            padding: const EdgeInsets.all(3.0).add(EdgeInsets.only(left: 5.zW)),
+            child: Stack(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ZegoLiveStreamingInRoomMessageInputBoardButton(
+                  translationText: widget.config.innerText,
+                  hostManager: widget.hostManager,
+                  onSheetPopUp: (int key) {
+                    widget.popUpManager.addAPopUpSheet(key);
+                  },
+                  onSheetPop: (int key) {
+                    widget.popUpManager.removeAPopUpSheet(key);
+                  },
+                  buttonSize: const Size(40, 40),
+                  iconSize: const Size(40, 40),
+                  enabledIcon: ButtonIcon(
+                      icon: Image.asset(
+                    'assets/49-New-icons/chat.png',
+                    // width: 20,
+                  )),
+                ),
+                Positioned(
+                  bottom: 8.zH,
+                  right: 5,
+                  child: Text(
+                    LocaleKeys.chat.localize,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 25.zSP),
+                  ),
+                )
+              ],
+            ));
   }
 }
 
