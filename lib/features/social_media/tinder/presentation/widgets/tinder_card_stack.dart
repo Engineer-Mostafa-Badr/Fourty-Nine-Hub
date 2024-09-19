@@ -1042,7 +1042,7 @@ class TinderCardStack extends StatelessWidget {
 class ChatAlertDialogue extends StatelessWidget {
   final UserData cardUser;
 
-  const ChatAlertDialogue({super.key, required this.cardUser});
+  const ChatAlertDialogue({super.key, required this.  cardUser});
 
   @override
   Widget build(BuildContext context) {

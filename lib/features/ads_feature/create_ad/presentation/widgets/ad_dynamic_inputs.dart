@@ -88,8 +88,8 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           },
           child: Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 5),
-            margin: EdgeInsets.all(5),
+            padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 5),
+            // margin: EdgeInsets.all(5),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey),
               borderRadius: BorderRadius.circular(5),

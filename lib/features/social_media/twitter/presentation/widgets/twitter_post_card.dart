@@ -492,12 +492,28 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                       userId: post.user.id,
                     ),
               Sizer(),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Label(
+                        text: post.isShared == true
+                            ? "${post.mainPost?.user.firstName} ${post.mainPost?.user.lastName}"
+                            : "${post.user.firstName} ${post.user.lastName}",
+                        style: Styles.mediumText(fontWeight: FontWeight.w500)),
+                    Label(
+                        text:
+                        '@${(post.isShared == true && post.mainPost != null ? post.mainPost.user.email ?? '' : post.user.email).split('@')[0]}',
+                        maxLines: 1,
+                        style: Styles.mediumText(color: Colors.grey)),
+                  ],
+                ),
+              ),
               Label(
-                  text: post.isShared == true
-                      ? post.mainPost?.user.firstName ?? ''
-                      : post.user.firstName,
-                  style: Styles.mediumText(fontWeight: FontWeight.w500)),
-              Sizer(),
+                  text:
+                  date,
+                  maxLines: 1,
+                  style: Styles.mediumText(color: Colors.black)),
               if (post.user.isDocumented == true && post.isShared == false ||
                   (post.mainPost?.user.isDocumented == true &&
                       post.isShared == true))
@@ -505,16 +521,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                   Icons.verified,
                   color: Theme.of(context).primaryColor,
                 ),
-              Sizer(),
-              SizedBox(
-                width: 100,
-                child: Label(
-                    text:
-                        '@${(post.isShared == true && post.mainPost != null ? post.mainPost.user.email ?? '' : post.user.email).split('@')[0]} . $date',
-                    maxLines: 1,
-                    style: Styles.mediumText(color: Colors.grey)),
-              ),
-              Sizer(),
+              // Sizer(),
             ],
           ),
         ),
@@ -531,14 +538,16 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 ),
               );
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.report,
               color: AppColors.SECONDARY_COLOR,
+              size: 35.w,
             ),
           ),
           if (context.read<UserCubit>().isLoggedIn)
             IconAppButton(
               icon: Icons.clear,
+              size: 40.w,
               onPressed: () {
                 bottomSheet(
                     context: context,
@@ -550,4 +559,9 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
       ],
     );
   }
+
+
+
+
+
 }

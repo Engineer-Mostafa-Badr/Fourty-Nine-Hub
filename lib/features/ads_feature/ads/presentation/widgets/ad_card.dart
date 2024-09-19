@@ -1,13 +1,13 @@
 import 'package:card_swiper/card_swiper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/detail_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:go_router/go_router.dart';
@@ -17,6 +17,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 
 class AdCard extends StatefulWidget {
   final AdEntity item;
@@ -31,13 +32,12 @@ class AdCard extends StatefulWidget {
 class _AdCardState extends State<AdCard> {
   @override
   Widget build(BuildContext context) {
+    List<DetailEntiy> details = widget.item.details.where((e) => e.label!='المرتب'&&e.label!='Salary'&&e.label!='price'&&e.label!='Price '&&e.label!='السعر ').toList();
     return InkWell(
-      onTap: () => context.push(Routes.ADdetails, extra: widget.item.id),
       child: Container(
         width: kToolbarHeight * 2.5,
         height: 600.h,
         margin: EdgeInsetsDirectional.all(10.w),
-        // padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.r),
           border: Border.all(color: AppColors.DARK_GRAY_COLOR, width: 1),
@@ -63,10 +63,13 @@ class _AdCardState extends State<AdCard> {
                                   child: Stack(
                                     children: [
                                       ImageFromInternet(width: double.infinity,image: widget.item.images[index],defaultLogo: true,fit: BoxFit.fill,borderRadius: BorderRadius.only(topLeft: Radius.circular(5.r),topRight: Radius.circular(5.r)),),
-                                      if(index==3)Positioned.fill(child: Container(
-                                        color: Colors.black.withOpacity(0.8),
-                                        alignment: AlignmentDirectional.center,
-                                        child: Label(text: 'See More',style: Styles.headerText(color: Colors.white,decoration: TextDecoration.underline),),
+                                      if(index==3)Positioned.fill(child: InkWell(
+                                        onTap: () => context.push(Routes.ADdetails, extra: widget.item.id),
+                                        child: Container(
+                                          color: Colors.black.withOpacity(0.8),
+                                          alignment: AlignmentDirectional.center,
+                                          child: Label(text: 'See More',style: Styles.headerText(color: Colors.white,decoration: TextDecoration.underline),),
+                                        ),
                                       ))
                                     ],
                                   ),
@@ -103,82 +106,82 @@ class _AdCardState extends State<AdCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        child: Label(
-                          text:
-                              '${NumbersHelper.formatThousands(number: widget.item.price??0)} L.E',
-                          style: Styles.mediumText(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.SECONDARY_COLOR),
-                          maxLines: 1,
+                  InkWell(
+                    onTap: () => context.push(Routes.ADdetails, extra: widget.item.id),
+                    child:Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                      children:[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: Label(
+                                text:
+                                '${NumbersHelper.formatThousands(number: widget.item.price??0)} ${LocaleKeys.currency.localize}',
+                                style: Styles.mediumText(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.SECONDARY_COLOR),
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  Sizer(),
-                  Row(
-                    children: [
-                      Label(
-                          text: '${LocaleKeys.title.localize} : ',
-                          style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
-                      Label(
-                        text: widget.item.title,
-                        style: Styles.mediumText(
-                            fontWeight: FontWeight.w500, color: Colors.grey),
-                        maxLines: 1,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Label(
-                          text: '${LocaleKeys.desc.localize} : ',
-                          style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
+                        Sizer(
+                          height: 4.h,
+                        ),
+                        Row(
+                          children: [
+                            Label(
+                                text: '${LocaleKeys.title.localize} : ',
+                                style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
+                            Label(
+                              text: widget.item.title,
+                              style: Styles.mediumText(
+                                  fontWeight: FontWeight.w500, color: Colors.grey),
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Label(
+                                text: '${LocaleKeys.desc.localize} : ',
+                                style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
 
-                      Expanded(
-                        child: Label(
-                          text: widget.item.description,
-                          style: Styles.mediumText(
-                              fontWeight: FontWeight.w500, color: Colors.grey),
+                            Expanded(
+                              child: Label(
+                                text: widget.item.description,
+                                style: Styles.mediumText(
+                                    fontWeight: FontWeight.w500, color: Colors.grey),
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                        RichText(
+                            text: TextSpan(
+                                children: details
+                                    .map((e) {
+                                  return WidgetSpan(
+                                      child: Row(
+                                        children: [
+                                          Label(
+                                              text: '${e.label} : ',
+                                              style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
+                                          Label(
+                                              text: e.value,
+                                              style: Styles.mediumText(color: AppColors.PRIMARY_COLOR)),
+                                        ],
+                                      ));
+                                })
+                                    .toList())),
+                        Label(
+                          text: widget.item.formattedRestTime,
+                          style: Styles.mediumText(color: Colors.grey),
                           maxLines: 1,
                         ),
-                      ),
-                    ],
-                  ),
-                  RichText(
-                      text: TextSpan(
-                          children: widget.item.details
-                              .map((e) {
-                            bool show = e.label=='المرتب'||e.label=='Salary'||e.label=='price'||e.label=='السعر ';
-                            print(show);
-                            return show==false?WidgetSpan(
-                                child: Container(
-                                  padding:
-                                  const EdgeInsets.symmetric(horizontal: 0),
-                                  margin: const EdgeInsets.all(1),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Label(
-                                          text: '${e.label} : ',
-                                          style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
-                                      Label(
-                                          text: e.value,
-                                          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR)),
-                                    ],
-                                  ),
-                                )):const WidgetSpan(child: SizedBox.shrink());
-                              })
-                              .toList())),
-                  Label(
-                    text: widget.item.formattedRestTime,
-                    style: Styles.mediumText(color: Colors.grey),
-                    maxLines: 1,
+                      ]
+                    ),
                   ),
                   Divider(),
                   const Sizer(),
@@ -240,7 +243,15 @@ class _AdCardState extends State<AdCard> {
                               title: 'Report',
                               color: AppColors.SECONDARY_COLOR,
                               icon: Icons.report,
-                              onTap: (){},
+                              onTap: (){
+                                print("jskdnajksdnjkadn");
+                                bottomSheet(
+                                    context: context,
+                                    widget: ReportView(
+                                      id: widget.item.id,
+                                      categoryId: '66b77e77bb35968b535dc944',
+                                    ));
+                              },
                             ),
                           ),
                         ],

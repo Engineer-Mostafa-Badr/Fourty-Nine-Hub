@@ -3,36 +3,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
-import 'package:fourtyninehub/common/functions/helper/launch_url.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/detail_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
-import 'package:fourtyninehub/features/requests_history/domain/entities/address_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
 
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
-import '../../../../ride/RideRequest/presentation/widgets/customer/createOrder/changePhoneNumber.dart';
 
 class AdDetailsView extends StatefulWidget {
   final String id;
@@ -52,7 +43,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BackAppBar(),
+        // appBar: const BackAppBar(),
         body: BlocConsumer<AdDetailsCubit, AdDetailsState>(
             listener: (contex, state) {
           if (state.isError) {
@@ -72,29 +63,24 @@ class _AdDetailsViewState extends State<AdDetailsView> {
               child: CircularProgressIndicator.adaptive(),
             );
           }
-          return Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    children: [
-                      _buildAdInfoWidget(ad: state.ad!),
-                      const Sizer(),
-                      // const GoogleAddsBanner(
-                      //   margin: 0,
-                      // ),
-                      const Sizer(),
-                      _buildDetailsWidget(ad: state.ad!),
-                      // _buildLocationWidget(address: state.ad!.address!),
-                      const Sizer(),
-                      _buildRelevantAdsWidget(),
-                    ],
-                  ),
+          List<DetailEntiy>? details = state.ad?.details.where((e) => e.label!='المرتب'&&e.label!='Salary'&&e.label!='price'&&e.label!='Price '&&e.label!='السعر ').toList();
+
+          return Column(
+            children: [
+              Expanded(
+                child: ListView(
+                  children: [
+                    _buildAdInfoWidget(ad: state.ad!),
+                    const Sizer(),
+                    const Sizer(),
+                    if(details!.isNotEmpty)_buildDetailsWidget(ad: state.ad!),
+                    const Sizer(),
+                    _buildRelevantAdsWidget(),
+                  ],
                 ),
-                _buildActionsWidget(),
-              ],
-            ),
+              ),
+              _buildActionsWidget(),
+            ],
           );
         }));
   }
@@ -213,52 +199,85 @@ class _AdDetailsViewState extends State<AdDetailsView> {
       children: [
         SizedBox(
           height: kToolbarHeight * 4,
-          child: Swiper(
-            itemCount: ad.images.length,
-            onIndexChanged: (i) {},
-            outer: true,
-            physics:ad.images.length>1?null:const NeverScrollableScrollPhysics() ,
-            itemBuilder: (context, index) => Padding(
-              padding: EdgeInsets.only(bottom: 5.h),
-              child: ImageFromInternet(image: ad.images[index],defaultLogo: true,),
-            ),
-            pagination: SwiperPagination(
-                builder: SwiperCustomPagination(builder: (context, config) {
-                  return const DotSwiperPaginationBuilder(color: AppColors.GREY_DARK_COLOR, activeColor: AppColors.SECONDARY_COLOR, size: 10.0, activeSize: 10.0)
-                      .build(context, config);
-                })),
+          child: Stack(
+            children: [
+              Swiper(
+                itemCount: ad.images.length,
+                onIndexChanged: (i) {},
+                outer: false,
+                physics:ad.images.length>1?null:const NeverScrollableScrollPhysics() ,
+                itemBuilder: (context, index) => Padding(
+                  padding: EdgeInsets.only(bottom: 5.h),
+                  child: ImageFromInternet(image: ad.images[index],defaultLogo: true,),
+                ),
+                pagination: SwiperPagination(
+                    builder: SwiperCustomPagination(builder: (context, config) {
+                      return const DotSwiperPaginationBuilder(color: AppColors.GREY_DARK_COLOR, activeColor: AppColors.SECONDARY_COLOR, size: 10.0, activeSize: 10.0)
+                          .build(context, config);
+                    })),
+              ),
+              PositionedDirectional(
+                top: 10.h,
+                start: 10.w,
+                child: InkWell(
+                  onTap: ()=>context.pop(),
+                  child: Icon(Icons.arrow_back,color: Colors.white,size: 60.w,),
+                ),
+              )
+            ],
           ),
         ),
-        Row(
-          children: [
-            Label(
-              text: "${LocaleKeys.title.localize} : ",
-              style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR),
-            ),
-            Label(
-              text: ad.title,
-              style: Styles.mediumText(fontWeight: FontWeight.bold),
-            ),
-          ],
+        Padding(
+          padding: EdgeInsets.all(8.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Label(
+                    text:
+                    '${NumbersHelper.formatThousands(number: ad.price??0)} ${LocaleKeys.currency.localize}',
+                    style: Styles.mediumText(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.SECONDARY_COLOR),
+                    maxLines: 1,
+                  ),
+                  Label(text: ad.formatedDate)
+                ],
+              ),
+
+              Sizer(height: 8.h,),
+              Row(
+                children: [
+
+                  Label(
+                    text: "${LocaleKeys.title.localize} : ",
+                    style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR),
+                  ),
+                  Label(
+                    text: ad.title,
+                    style: Styles.mediumText(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              Sizer(height: 5.h,),
+              Label(
+                text: "${LocaleKeys.desc.localize} : ",
+                style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR),
+              ),
+              Label(text: ad.description),
+            ],
+          ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Label(text: ad.formatedDate)
-          ],
-        ),
-        const Sizer(),
-        Label(
-          text: "${LocaleKeys.desc.localize} : ",
-          style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR),
-        ),
-        Label(text: ad.description),
       ],
     );
   }
 
   Widget _buildDetailsWidget({required AdModel ad}) {
+    List<DetailEntiy> details = ad.details.where((e) => e.label!='المرتب'&&e.label!='Salary'&&e.label!='price'&&e.label!='Price '&&e.label!='السعر ').toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -267,11 +286,11 @@ class _AdDetailsViewState extends State<AdDetailsView> {
           style: Styles.mediumText(fontWeight: FontWeight.bold),
         ),
         ListView.builder(
-            itemCount: ad.details.length,
+            itemCount: details.length,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              final detail = ad.details[index];
+              final detail = details[index];
               return Container(
                 padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
                 decoration: BoxDecoration(

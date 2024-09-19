@@ -533,5 +533,8 @@ abstract class  LocaleKeys {
   static const addImagesDesc = 'addImagesDesc';
   static const noAds = 'noAds';
   static const currency = 'currency';
+  static const friend = 'friend';
+  static const view = 'view';
+  static const shareProfile = 'shareProfile';
 
 }

@@ -89,7 +89,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
             type: state.adProperties![i].type,
             value: values[i]));
       }
-      var selectedPrice = details.firstWhere((element) => element.label=='المرتب'||element.label=='Salary'||element.label=='price'||element.label=='السعر ').value;
+      var selectedPrice = details.firstWhere((element) => element.label=='المرتب'||element.label=='Salary'||element.label=='price'||element.label=='Price '||element.label=='السعر ').value;
       final response = await _createAdUseCase(AdModel(
           id: 'id',
           title: title ?? '',

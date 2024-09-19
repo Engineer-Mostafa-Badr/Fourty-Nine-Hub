@@ -75,7 +75,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                       radius: 10,
                       url: widget.categorization.subCategory.image,
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Expanded(
                         child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +91,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                 ),
                 const Divider(),
                 _buildImagePicker(),
-                Sizer(),
+                const Sizer(),
                 Row(
                   children: [
                     Expanded(
@@ -170,7 +170,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                     }
                   },
                 ),
-                Sizer(),
+                const Sizer(),
                 TextFormField(
                   maxLines: null,
                   onChanged: (v) =>controller.description = v,
@@ -190,7 +190,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                     }
                   },
                 ),
-                Sizer(),
+                const Sizer(),
                 ListView.separated(
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
@@ -201,11 +201,11 @@ class _CreateAdViewState extends State<CreateAdView> {
                           controller.onChanged(v: v, index: index),
                     );
                   },
-                  separatorBuilder: (context, index) => Sizer(),
+                  separatorBuilder: (context, index) => const Sizer(),
                   shrinkWrap: true,
                   itemCount: state.adProperties?.length ?? 0,
                 ),
-                Sizer(),
+                const Sizer(),
                 DefaultButton(
                     label: LocaleKeys.publish.localize,
                     onPressed: () {
@@ -268,7 +268,7 @@ class _CreateAdViewState extends State<CreateAdView> {
               ),
             ),
           ),
-          Sizer(),
+          const Sizer(),
           if (state.images?.isNotEmpty ?? false)
             SizedBox(
               height: kToolbarHeight * 1,
@@ -312,7 +312,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                       ),
                     );
                   },
-                  separatorBuilder: (context, index) => Sizer(),
+                  separatorBuilder: (context, index) => const Sizer(),
                   itemCount: state.images?.length ?? 0),
             )
         ],

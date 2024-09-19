@@ -15,7 +15,7 @@ extension AdPropertyTypeX on AdPropertyType {
   bool get isNumber => this == AdPropertyType.number;
   bool get isText => this == AdPropertyType.text;
   bool get isImage => this == AdPropertyType.image;
-  bool get isFille => this == AdPropertyType.file;
+  bool get isFile => this == AdPropertyType.file;
 }
 
 AdPropertyType getAdPropertyTypeValue(String type) {

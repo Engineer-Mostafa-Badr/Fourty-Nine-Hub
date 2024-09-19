@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
@@ -47,10 +49,10 @@ class _MediaViewState extends State<MediaView> {
                 print(controller.mediaPagingController.itemList?.length);
                 return Center(
                   child: Text(
-                    "No Media",
+                    LocaleKeys.noMedia.localize,
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 18.sp,
+                      fontSize: 36.sp,
                     ),
                   ),
                 );
@@ -58,7 +60,7 @@ class _MediaViewState extends State<MediaView> {
               itemBuilder: (context, item, index) {
                 return state.status == StateStatus.success
                     ? Container(
-                        padding: EdgeInsets.only(top: 2),
+                        padding: const EdgeInsets.only(top: 2),
                         child: ClipRRect(
                           // borderRadius: BorderRadius.circular(15),
                           child: CachedNetworkImage(
@@ -83,7 +85,7 @@ class _MediaViewState extends State<MediaView> {
               },
               noMoreItemsIndicatorBuilder: (context) => Container(),
               firstPageProgressIndicatorBuilder: (context) => Container(
-                  margin: EdgeInsets.only(top: 150),
+                  margin: const EdgeInsets.only(top: 150),
                   child: const CupertinoActivityIndicator()),
               newPageProgressIndicatorBuilder: (context) =>
                   const CupertinoActivityIndicator()),
