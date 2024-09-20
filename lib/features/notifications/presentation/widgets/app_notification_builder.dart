@@ -38,7 +38,8 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
   void initState() {
     getAppNotificationsCubit = context.read<GetAppNotificationsCubit>();
     notificationSeenCubit = context.read<NotificationSeenCubit>();
-    getUnreadNotificationsCountCubit = context.read<GetUnreadNotificationsCountCubit>();
+    getUnreadNotificationsCountCubit =
+        context.read<GetUnreadNotificationsCountCubit>();
     deleteNotificationCubit = context.read<DeleteNotificationCubit>();
     deleteAllNotificationsCubit = context.read<DeleteAllNotificationsCubit>();
     _fetchNotificationsIfEmpty();
@@ -61,7 +62,8 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
         }
       },
       builder: (context, state) {
-        if (state is GetAppNotificationsSuccess && getAppNotificationsCubit.notifications.isEmpty) {
+        if (state is GetAppNotificationsSuccess &&
+            getAppNotificationsCubit.notifications.isEmpty) {
           return const NoNotificationsWidget();
         }
         return ListView.builder(
@@ -71,42 +73,61 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
             if (index == 0) {
               return SeeAndClearButtons(
                 seeAllCallback: () async {
-                  context.read<AllNotficationsSeenCubit>().allNotificationSeen(type: 'app').then(
-                        (value) => context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount(),
+                  context
+                      .read<AllNotficationsSeenCubit>()
+                      .allNotificationSeen(type: 'app')
+                      .then(
+                        (value) => context
+                            .read<GetUnreadNotificationsCountCubit>()
+                            .getUnreadNotificationsCount(),
                       );
-                  context.read<GetAppNotificationsCubit>().notifications.forEach((element) {
+                  context
+                      .read<GetAppNotificationsCubit>()
+                      .notifications
+                      .forEach((element) {
                     element.read = true;
                   });
                 },
                 clearAllCallback: () async {
-                  await deleteAllNotificationsCubit.deleteAllNotifications(type: 'app');
+                  await deleteAllNotificationsCubit.deleteAllNotifications(
+                      type: 'app');
                   getAppNotificationsCubit.notifications = [];
                   getAppNotificationsCubit.page = 1;
                   await getAppNotificationsCubit.getAppNotifications();
-                  await getUnreadNotificationsCountCubit.getUnreadNotificationsCount();
+                  await getUnreadNotificationsCountCubit
+                      .getUnreadNotificationsCount();
                 },
               );
             }
             index--;
             if (index < getAppNotificationsCubit.notifications.length) {
-              final NotificationEntity notificationEntity = getAppNotificationsCubit.notifications[index];
+              final NotificationEntity notificationEntity =
+                  getAppNotificationsCubit.notifications[index];
               return NotificationCard(
                 notificationEntity: notificationEntity,
                 index: index,
                 notificationSeenCallback: () {
                   notificationEntity.read = true;
-                  notificationSeenCubit.notificationSeen(id: notificationEntity.id ?? '').then(
-                        (value) => getUnreadNotificationsCountCubit.getUnreadNotificationsCount().then(
-                            (value) => context.push(notificationEntity.path ?? '', extra: notificationEntity.payload)),
+                  notificationSeenCubit
+                      .notificationSeen(id: notificationEntity.id ?? '')
+                      .then(
+                        (value) => getUnreadNotificationsCountCubit
+                            .getUnreadNotificationsCount()
+                            .then((value) => context.push(
+                                notificationEntity.path ?? '',
+                                extra: notificationEntity.payload)),
                       );
                 },
                 notificationDeleteCallback: () {
-                  deleteNotificationCubit.deleteNotification(id: notificationEntity.id ?? '');
+                  deleteNotificationCubit.deleteNotification(
+                      id: notificationEntity.id ?? '');
                   getAppNotificationsCubit.notifications.removeAt(index);
                 },
               );
             }
-            return state is GetAppNotificationsLoading ? const NotificationCardLoadingList() : const SizedBox();
+            return state is GetAppNotificationsLoading
+                ? const NotificationCardLoadingList()
+                : const SizedBox();
           },
         );
       },
@@ -119,9 +140,12 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
       scrollPosition = scrollController.position.pixels;
       scrollMaxExtent = scrollController.position.maxScrollExtent;
       if (scrollPosition >= 0.7 * scrollMaxExtent) {
-        if (!isLoading && (getAppNotificationsCubit.notifications.last.hasNextPage ?? false)) {
+        if (!isLoading &&
+            (getAppNotificationsCubit.notifications.last.hasNextPage ??
+                false)) {
           isLoading = true;
-          getAppNotificationsCubit.page = getAppNotificationsCubit.notifications.last.nextPageNumber!;
+          getAppNotificationsCubit.page =
+              getAppNotificationsCubit.notifications.last.nextPageNumber!;
           await getAppNotificationsCubit.getAppNotifications();
           isLoading = false;
         }

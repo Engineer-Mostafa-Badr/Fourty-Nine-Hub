@@ -15,8 +15,10 @@ class UserId {
   factory UserId.fromJson(Map<String, dynamic> json) => UserId(
         id: json['_id'] as String?,
         email: json['email'] as String?,
-        userProfile:
-            json['USER_PROFILE'] == null ? null : UserProfile.fromJson(json['USER_PROFILE'] as Map<String, dynamic>),
+        userProfile: json['USER_PROFILE'] == null
+            ? null
+            : UserProfile.fromJson(
+                json['USER_PROFILE'] as Map<String, dynamic>),
       );
 
   Map<String, dynamic> toJson() => {

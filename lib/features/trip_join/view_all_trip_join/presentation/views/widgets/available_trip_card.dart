@@ -68,12 +68,15 @@ class AvailableTripCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.airline_seat_recline_extra_rounded),
                       const Sizer(),
-                      Text('${tripJoinCardEntity.seatNumber ?? 1} Seat', style: Styles.headerText()),
+                      Text('${tripJoinCardEntity.seatNumber ?? 1} Seat',
+                          style: Styles.headerText()),
                       const Spacer(),
                       Visibility(
                         visible: tripJoinCardEntity.isRepeated ?? false,
                         child: Icon(
-                          (tripJoinCardEntity.isRepeated ?? false) ? Icons.check_box : Icons.check_box_outline_blank,
+                          (tripJoinCardEntity.isRepeated ?? false)
+                              ? Icons.check_box
+                              : Icons.check_box_outline_blank,
                           color: AppColors.PRIMARY_COLOR,
                         ),
                       ),
@@ -89,7 +92,8 @@ class AvailableTripCard extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.trip_origin, color: AppColors.LIGHT_BLUE, size: 20),
+                      const Icon(Icons.trip_origin,
+                          color: AppColors.LIGHT_BLUE, size: 20),
                       const Sizer(width: 13),
                       Flexible(
                         child: Text(
@@ -105,7 +109,8 @@ class AvailableTripCard extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.trip_origin, color: AppColors.CHECK_MARK_COLOR, size: 20),
+                      const Icon(Icons.trip_origin,
+                          color: AppColors.CHECK_MARK_COLOR, size: 20),
                       const Sizer(width: 13),
                       Flexible(
                         child: Text(
@@ -184,13 +189,18 @@ class AvailableTripCard extends StatelessWidget {
               Positioned.directional(
                 top: 5,
                 end: 20,
-                textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                textDirection:
+                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
                 child: Column(
                   children: [
-                    Text(tripJoinCardEntity.journeyPrice?.toStringAsFixed(0) ?? '',
-                        style: Styles.headerText(fontSize: 70, color: Colors.green[600])),
+                    Text(
+                        tripJoinCardEntity.journeyPrice?.toStringAsFixed(0) ??
+                            '',
+                        style: Styles.headerText(
+                            fontSize: 70, color: Colors.green[600])),
                     Text(tripJoinCardEntity.status ?? '',
-                        style: Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR)),
+                        style: Styles.headerText(
+                            fontSize: 30, color: AppColors.SECONDARY_COLOR)),
                   ],
                 ),
               )
@@ -220,7 +230,8 @@ class AvailableTripCard extends StatelessWidget {
     if (tripJoinCardEntity.publishDate == null) {
       return '';
     }
-    return intl.DateFormat('dd MMM, hh:mm aaa')
-        .format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate! * 1000000));
+    return intl.DateFormat('dd MMM, hh:mm aaa').format(
+        DateTime.fromMicrosecondsSinceEpoch(
+            tripJoinCardEntity.publishDate! * 1000000));
   }
 }

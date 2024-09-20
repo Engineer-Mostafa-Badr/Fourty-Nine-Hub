@@ -17,7 +17,9 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecas
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/data/datasource/trip_join_request_history_remote_datasource.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/data/repo/trip_join_request_history_repo_impl.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/domain/repo/trip_join_request_history_repo.dart';
+import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/domain/usecases/delet_trip_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/domain/usecases/fetch_ty_trip_join_ads_usecase.dart';
+import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/domain/usecases/get_request_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/data/datasource/remote_datasource/view_all_trip_join_remote_datasource.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/data/repos/view_all_trip_join_repo_imp.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/repos/view_all_trip_join_repo.dart';
@@ -113,6 +115,12 @@ class TripJoinServiceLocator {
     );
     serviceLocator.registerLazySingleton<FetchMyTripJoinAdsUseCase>(
       () => FetchMyTripJoinAdsUseCase(tripJoinRequestHistoryRepo: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<DeleteTripUseCase>(
+      () => DeleteTripUseCase(tripJoinRequestHistoryRepo: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<GetRequestUsecase>(
+      () => GetRequestUsecase(tripJoinRequestHistoryRepo: serviceLocator()),
     );
   }
 }

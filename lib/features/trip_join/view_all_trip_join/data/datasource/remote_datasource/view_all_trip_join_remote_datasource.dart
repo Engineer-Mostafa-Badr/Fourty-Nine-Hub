@@ -16,10 +16,10 @@ abstract class ViewAllTripJoinRemoteDataSource {
     required String subCategory,
     required PaginationParams paginationParams,
   });
-  Future<Either<Failure, bool>> requestTripJoin({
-    required String addId,
-    required String mobile,
-  });
+  Future<Either<Failure, bool>> requestTripJoin(
+      {required String addId,
+      required String mobile,
+      bool premuimRequest = false});
 }
 
 class ViewAllTripJoinRemoteDataSourceImp
@@ -67,14 +67,15 @@ class ViewAllTripJoinRemoteDataSourceImp
   }
 
   @override
-  Future<Either<Failure, bool>> requestTripJoin({
-    required String addId,
-    required String mobile,
-  }) async {
+  Future<Either<Failure, bool>> requestTripJoin(
+      {required String addId,
+      required String mobile,
+      bool premuimRequest = false}) async {
     final response = await apiConsumer.post(
       EndPoints.makeTripJoinRequest(addId),
       data: {
         'phone': mobile,
+        'isPremium': premuimRequest,
       },
     );
 

@@ -109,7 +109,7 @@ class _PublishButtonState extends State<PublishButton> {
       distance: fetchPriceDistanceCubit.tripInfoEntity?.distance,
       duration: fetchPriceDistanceCubit.tripInfoEntity?.duration,
       price: fetchPriceDistanceCubit.tripInfoEntity?.price,
-      categoryId: UIConst.addTripJoinCategoryId,
+      categoryId: UIConst.tripJoinCategoryId,
       vehicleBrand: fetchCarBrandsCubit.brand,
       vehicleModel: fetchCarModelCubit.model,
       passengers: tripJoinViewCubit.numberOfSeats,

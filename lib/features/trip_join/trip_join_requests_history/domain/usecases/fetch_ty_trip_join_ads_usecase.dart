@@ -10,7 +10,8 @@ class FetchMyTripJoinAdsUseCase {
     required this.tripJoinRequestHistoryRepo,
   });
 
-  Future<Either<Failure, List<TripJoinMyRequestEntity>>> call({required int page}) {
+  Future<Either<Failure, List<TripJoinMyRequestEntity>>> call(
+      {required int page}) {
     return tripJoinRequestHistoryRepo.fetchMyTripJoinAds(page: page);
   }
 }

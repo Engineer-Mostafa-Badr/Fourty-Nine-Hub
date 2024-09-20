@@ -67,7 +67,21 @@ class _ViewAllTripJoinCardBuilderState
                     tripJoinCardEntity,
                     tripJoinCardEntity.categoryId ?? '',
                     'Trip Join Subscription',
-                  )) {}
+                  )) {
+                    await showModalBottomSheet(
+                      context: context,
+                      isDismissible: true,
+                      isScrollControlled: true,
+                      builder: (_) {
+                        return BlocProvider.value(
+                            value:
+                                BlocProvider.of<RequestTripJoinCubit>(context),
+                            child: RequstTripJoinBottomSheet(
+                                tripJoinCardEntity: tripJoinCardEntity,
+                                isPremium: true));
+                      },
+                    );
+                  }
                 },
                 requestOnTap: () async {
                   await showModalBottomSheet(
@@ -132,7 +146,7 @@ class _ViewAllTripJoinCardBuilderState
       );
       return false;
     }
-    return false;
+    return true;
   }
 
   Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity,
@@ -148,7 +162,7 @@ class _ViewAllTripJoinCardBuilderState
       );
       return false;
     }
-    return false;
+    return true;
   }
 
   void _reportOnTap(BuildContext context, int index) {

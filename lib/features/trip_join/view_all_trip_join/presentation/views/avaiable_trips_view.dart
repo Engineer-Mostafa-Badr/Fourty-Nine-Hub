@@ -11,8 +11,9 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 
 class AvailableTripsView extends StatelessWidget {
-  const AvailableTripsView({super.key});
-
+  const AvailableTripsView({
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     // FirebaseHelper.getToken();

@@ -34,14 +34,14 @@ class TripJoinRequestModel extends TripJoinCardEntity {
           model: model,
           journeyPrice: tripInfo?.price,
           status: tripInfo?.status,
-          seatNumber: tripInfo?.passengers,
+          seatNumber: tripInfo?.passengers?.toInt(),
           isRepeated: tripInfo?.isRepeat,
           startingAddressAr: tripInfo?.fromAr,
           destinationAddressAr: tripInfo?.toAr,
           startingAddressEn: tripInfo?.fromEn,
           destinationAddressEn: tripInfo?.toEn,
           isApproved: allowStatus == 'enable',
-          publishDate: tripInfo?.time,
+          publishDate: tripInfo?.time?.toInt(),
           phone: tripInfo?.phone,
           gender: gender,
           paymentMethod: paymentMethods,
@@ -57,7 +57,9 @@ class TripJoinRequestModel extends TripJoinCardEntity {
     return TripJoinRequestModel(
       firstName: json['firstName'] as String?,
       gender: json['gender'] as String?,
-      tripInfo: json['tripInfo'] == null ? null : TripInfo.fromJson(json['tripInfo'] as Map<String, dynamic>),
+      tripInfo: json['tripInfo'] == null
+          ? null
+          : TripInfo.fromJson(json['tripInfo'] as Map<String, dynamic>),
       allowStatus: json['allowStatus'] as String?,
       brand: json['brand'] as String?,
       model: json['model'] as String?,

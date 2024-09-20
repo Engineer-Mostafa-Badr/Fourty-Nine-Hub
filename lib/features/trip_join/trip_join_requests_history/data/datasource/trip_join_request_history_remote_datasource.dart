@@ -5,11 +5,15 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/data/models/trip_join_request_model/trip_join_request_model.dart';
+import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/data/models/tripjoin_request_history_model/tripjoin_request_history_model.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/domain/entities/tripjoin_request_entity.dart';
+import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/domain/entities/tripjoin_request_history_entity.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 
 abstract class TripJoinRequestHistoryRemoteDataSource {
   Future<Either<Failure, List<TripJoinMyRequestEntity>>> fetchMyTripJoinAds({required int page});
+  Future<Either<Failure, bool>> deleteTrip({required String id});
+  Future<Either<Failure, List<TripJoinRequestHistoryEntity>>> getRequests({required String id, required int page});
 }
 
 class TripJoinRequestHistoryRemoteDataSourceImp implements TripJoinRequestHistoryRemoteDataSource {
@@ -24,7 +28,7 @@ class TripJoinRequestHistoryRemoteDataSourceImp implements TripJoinRequestHistor
     final response = await apiConsumer.get(
       EndPoints.getAllMyTripJoin,
       queryParameters: {
-        'subCategory': UIConst.addTripJoinCategoryId,
+        'subCategory': UIConst.tripJoinCategoryId,
         'limit': 10,
         'page': page,
       },
@@ -45,6 +49,56 @@ class TripJoinRequestHistoryRemoteDataSourceImp implements TripJoinRequestHistor
         ).toList();
 
         return Right(pr(trips, t));
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteTrip({required String id}) async {
+    const t = 'deleteTrip - TripJoinRequestHistoryRemoteDataSource';
+    final response = await apiConsumer.delete(
+      EndPoints.deleteTrip(id),
+      queryParameters: {
+        'subCategory': UIConst.tripJoinCategoryId,
+      },
+    );
+
+    return response.fold(
+      (failure) => Left(pr(failure, t)),
+      (data) {
+        pr('ome with me trip deleted successfully', t);
+        return const Right(true);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<TripJoinRequestHistoryEntity>>> getRequests(
+      {required String id, required int page}) async {
+    // throw UnimplementedError();
+    const t = 'getRequests - TripJoinRequestHistoryRemoteDataSource';
+    final response = await apiConsumer.get(
+      EndPoints.getRequest(id),
+      queryParameters: {
+        'subCategory': UIConst.tripJoinCategoryId,
+        'limit': 10,
+        'page': page,
+      },
+    );
+
+    return response.fold(
+      (failure) => Left(pr(failure, t)),
+      (data) {
+        List<TripjoinRequestHistoryModel> requests = data['data']['requests']['docs'].map<TripjoinRequestHistoryModel>(
+          (json) {
+            final TripjoinRequestHistoryModel request = TripjoinRequestHistoryModel.fromJson(json);
+            request.hasNextPage = data['data']['requests']['hasNextPage'] as bool?;
+            request.nextPage = (data['data']['requests']['nextPage'] as num?)?.toInt();
+            return request;
+          },
+        ).toList();
+
+        return Right(pr(requests, t));
       },
     );
   }

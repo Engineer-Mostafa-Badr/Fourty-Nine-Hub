@@ -12,8 +12,10 @@ class RequstTripJoinBottomSheet extends StatefulWidget {
   const RequstTripJoinBottomSheet({
     super.key,
     required this.tripJoinCardEntity,
+    this.isPremium = false,
   });
   final TripJoinCardEntity tripJoinCardEntity;
+  final bool isPremium;
   @override
   State<RequstTripJoinBottomSheet> createState() =>
       _RequstTripJoinBottomSheetState();
@@ -31,7 +33,7 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
         key: formKey,
         child: Container(
           width: double.infinity,
-          height: 300.h,
+          height: 330.h,
           padding: const EdgeInsets.all(30),
           // margin: EdgeInsets.all(kToolbarHeight),
           decoration: BoxDecoration(
@@ -68,6 +70,7 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                     context.read<RequestTripJoinCubit>().makeTripJoinRequest(
                           addId: widget.tripJoinCardEntity.id ?? '',
                           mobile: phoneNumber,
+                          premuimRequest: widget.isPremium,
                         );
                     Future.delayed(const Duration(seconds: 2))
                         .then((value) => context.pop());
@@ -80,7 +83,9 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                       padding: EdgeInsets.symmetric(vertical: 10.h),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
-                        color: AppColors.PRIMARY_COLOR,
+                        color: widget.isPremium
+                            ? AppColors.SECONDARY_COLOR
+                            : AppColors.PRIMARY_COLOR,
                       ),
                       alignment: Alignment.center,
                       child: Text('Send Request',
@@ -95,21 +100,24 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                             RequestTripJoinState>(
                           builder: (context, state) {
                             if (state is RequestTripJoinLoading) {
-                              return const Center(
-                                child: CircularProgressIndicator(
-                                    color: Colors.white),
+                              return Center(
+                                child: SizedBox(
+                                    height: 35.w,
+                                    width: 35.w,
+                                    child: const CircularProgressIndicator(
+                                        color: Colors.white)),
                               );
                             }
                             if (state is RequestTripJoinSuccess) {
                               return Center(
                                 child: Icon(Icons.check,
-                                    color: Colors.green[400], size: 30),
+                                    color: Colors.green[400], size: 35.w),
                               );
                             }
                             if (state is RequestTripJoinFailed) {
                               return Center(
                                 child: Icon(Icons.error,
-                                    color: Colors.red[400], size: 30),
+                                    color: Colors.red[400], size: 35.w),
                               );
                             }
                             return const SizedBox();

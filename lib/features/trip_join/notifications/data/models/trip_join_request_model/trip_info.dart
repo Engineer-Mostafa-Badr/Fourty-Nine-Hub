@@ -7,12 +7,12 @@ class TripInfo {
   String? toAr;
   String? fromEn;
   String? toEn;
-  int? distance;
-  int? duration;
-  int? passengers;
-  int? price;
+  num? distance;
+  num? duration;
+  num? passengers;
+  num? price;
   String? phone;
-  int? time;
+  num? time;
   String? countryCode;
   List<dynamic>? calls;
   bool? isRepeat;
@@ -20,7 +20,7 @@ class TripInfo {
   bool? adminIgnore;
   DateTime? createdAt;
   DateTime? updatedAt;
-  int? countRequests;
+  num? countRequests;
 
   TripInfo({
     this.id,
@@ -61,12 +61,12 @@ class TripInfo {
         toAr: json['toAr'] as String?,
         fromEn: json['fromEn'] as String?,
         toEn: json['toEn'] as String?,
-        distance: json['distance'] as int?,
-        duration: json['duration'] as int?,
-        passengers: json['passengers'] as int?,
-        price: json['price'] as int?,
+        distance: json['distance'] as num?,
+        duration: json['duration'] as num?,
+        passengers: json['passengers'] as num?,
+        price: json['price'] as num?,
         phone: json['phone'] as String?,
-        time: json['time'] as int?,
+        time: json['time'] as num?,
         countryCode: json['countryCode'] as String?,
         calls: json['calls'] as List<dynamic>?,
         isRepeat: json['isRepeat'] as bool?,
@@ -78,7 +78,7 @@ class TripInfo {
         updatedAt: json['updatedAt'] == null
             ? null
             : DateTime.parse(json['updatedAt'] as String),
-        countRequests: json['countRequests'] as int?,
+        countRequests: json['countRequests'] as num?,
       );
 
   Map<String, dynamic> toJson() => {

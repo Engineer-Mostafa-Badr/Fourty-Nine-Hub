@@ -81,6 +81,9 @@ class BaseApiConsumer extends ApiConsumer {
       );
       return Right(result.data as Map<String, dynamic>);
     } catch (e) {
+      if (e is DioException) {
+        pr(e.response?.data, 'Failure message from the server');
+      }
       if (e is DioException &&
           e.response?.statusCode == 401 &&
           isTokenAttached) {

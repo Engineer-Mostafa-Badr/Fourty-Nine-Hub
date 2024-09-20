@@ -77,9 +77,15 @@ class TripJoinMyRequestModel extends TripJoinMyRequestEntity {
   factory TripJoinMyRequestModel.fromJson(Map<String, dynamic> json) {
     return TripJoinMyRequestModel(
       id: json['_id'] as String?,
-      userId: json['userId'] == null ? null : UserId.fromJson(json['userId'] as Map<String, dynamic>),
-      categoryId: json['categoryId'] == null ? null : CategoryId.fromJson(json['categoryId'] as Map<String, dynamic>),
-      vehicleId: json['vehicleId'] == null ? null : VehicleId.fromJson(json['vehicleId'] as Map<String, dynamic>),
+      userId: json['userId'] == null
+          ? null
+          : UserId.fromJson(json['userId'] as Map<String, dynamic>),
+      categoryId: json['categoryId'] == null
+          ? null
+          : CategoryId.fromJson(json['categoryId'] as Map<String, dynamic>),
+      vehicleId: json['vehicleId'] == null
+          ? null
+          : VehicleId.fromJson(json['vehicleId'] as Map<String, dynamic>),
       fromAr: json['fromAr'] as String?,
       toAr: json['toAr'] as String?,
       fromEn: json['fromEn'] as String?,
@@ -95,8 +101,12 @@ class TripJoinMyRequestModel extends TripJoinMyRequestEntity {
       isRepeat: json['isRepeat'] as bool?,
       status: json['status'] as String?,
       adminIgnore: json['adminIgnore'] as bool?,
-      createdAt: json['createdAt'] == null ? null : DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null ? null : DateTime.parse(json['updatedAt'] as String),
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt'] as String),
       countRequests: json['countRequests'] as num?,
     );
   }
