@@ -10,11 +10,6 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubit/notifications_state.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/cubit/rating_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/accept_decline_trip_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:intl/intl.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 
@@ -190,9 +185,9 @@ class _NotificationDriverCardState extends State<NotificationDriverCard> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
+                    const Row(
                       children: [
-                        const Text(
+                        Text(
                           'New Ride ',
                           style: TextStyle(
                             color: AppColors.PRIMARY_COLOR,

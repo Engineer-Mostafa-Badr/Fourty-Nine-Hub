@@ -84,14 +84,14 @@ class SocialServiceLocator {
         () => ListenToNewMessageUseCase(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<SendMessageUseCase>(
-            () => SendMessageUseCase(
-          serviceLocator(),
-        ));
-    serviceLocator.registerLazySingleton<GetMessagesUseCase>(
-            () => GetMessagesUseCase(
-          serviceLocator(),
-        ));
+    serviceLocator
+        .registerLazySingleton<SendMessageUseCase>(() => SendMessageUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator
+        .registerLazySingleton<GetMessagesUseCase>(() => GetMessagesUseCase(
+              serviceLocator(),
+            ));
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerFactory<ChatsCubit>(() => ChatsCubit(

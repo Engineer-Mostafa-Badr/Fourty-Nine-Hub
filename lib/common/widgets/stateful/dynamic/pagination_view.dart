@@ -71,11 +71,15 @@ class _PaginationViewState<T> extends State<PaginationView<T>> {
 
   @override
   Widget build(BuildContext context) {
-    if(_isLoading){
-      return widget.loadingWidget ?? const Center(child: CircularProgressIndicator.adaptive());
-    }else if(_isEmpty){
-return widget.emptyWidget ??  Center(child: Text(LocaleKeys.noData.tr()),);
-    }else{
+    if (_isLoading) {
+      return widget.loadingWidget ??
+          const Center(child: CircularProgressIndicator.adaptive());
+    } else if (_isEmpty) {
+      return widget.emptyWidget ??
+          Center(
+            child: Text(LocaleKeys.noData.tr()),
+          );
+    } else {
       return widget.build(_scrollController, _data);
     }
   }

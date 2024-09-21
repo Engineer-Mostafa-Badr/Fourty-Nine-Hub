@@ -69,7 +69,7 @@ class FacebookBody extends StatelessWidget {
                       height: 5,
                       color: AppColors.LIGHT_GRAY_COLOR,
                     ),
-                    Stories(),
+                    const Stories(),
                   ],
                 ),
               ),

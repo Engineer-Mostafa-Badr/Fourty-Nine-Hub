@@ -7,28 +7,17 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/phone_number_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/core/service/app_info_service.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/name_filed.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/phone_field.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/location/cities_dropdowns.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/location/governorate_dropdown.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/pickers/date/id_expiry_date_picker.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/image_validation.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -84,7 +73,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
           },
           builder: (context, state) {
             if (state is LoadingShippingState) {
-              return Align(
+              return const Align(
                 child: Center(
                   child: CircularProgressIndicator(
                     color: AppColors.PRIMARY_COLOR,
@@ -133,9 +122,9 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                     return shippingcubit.validation(
                                       message:
                                           "Choose your favorite Sub Category!",
-                                      condition: shippingcubit
-                                              .model.subCategoryId ==
-                                          null,
+                                      condition:
+                                          shippingcubit.model.subCategoryId ==
+                                              null,
                                     );
                                   },
                                   builder: (field) {
@@ -150,7 +139,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                         DropdownMenu<SubCategoryEntity>(
                                           inputDecorationTheme:
                                               InputDecorationTheme(
-                                            hintStyle: TextStyle(
+                                            hintStyle: const TextStyle(
                                                 fontSize: 16,
                                                 color: AppColors.PRIMARY_COLOR,
                                                 fontWeight: FontWeight.w600),
@@ -220,7 +209,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                         ),
                                         if (field.hasError)
                                           Padding(
-                                            padding: EdgeInsets.symmetric(
+                                            padding: const EdgeInsets.symmetric(
                                                 horizontal: 15),
                                             child: Text(
                                               field.errorText ?? "",
@@ -254,6 +243,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                               if (value == null || value.isEmpty) {
                                 return "First name is required!";
                               }
+                              return null;
                             },
                             // style: TextStyle(fontSize: 16, color: Colors.red, fontWeight: FontWeight.w600),
                             hintColor: AppColors.PRIMARY_COLOR,
@@ -269,6 +259,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                               if (value == null || value.isEmpty) {
                                 return "Last name is required!";
                               }
+                              return null;
                             },
                             hintColor: AppColors.PRIMARY_COLOR,
                             currentController: lastNameController,
@@ -292,6 +283,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                         if (p0 == null || p0.isEmpty) {
                           return "Phone is required!";
                         }
+                        return null;
                       },
                     ),
                     // const SizedBox(
@@ -362,6 +354,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                             shippingcubit.model.idImageInFront == null) {
                           return "This field is required!";
                         }
+                        return null;
                       },
                       builder: (field) {
                         return Column(
@@ -376,7 +369,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "Car Picture",
                                         style: TextStyle(
                                             fontSize: 17,
@@ -416,8 +409,9 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           children: [
                                             const SizedBox(height: 8),
                                             Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 2),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 2),
                                               child: Text(
                                                 field.errorText ?? "",
                                                 style: Styles.mediumText(
@@ -435,7 +429,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Label(
+                                      const Label(
                                         text: "ID",
                                         style: TextStyle(
                                             fontSize: 17,
@@ -503,8 +497,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                               children: [
                                                 const SizedBox(height: 8),
                                                 Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 2),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 2),
                                                   child: Text(
                                                     field.errorText ?? "",
                                                     style: Styles.mediumText(
@@ -535,7 +529,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Label(
+                            const Label(
                               text: Labels.drivingLicense,
                               style: TextStyle(
                                   fontSize: 17,
@@ -551,6 +545,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                         null) {
                                   return "This field is required!";
                                 }
+                                return null;
                               },
                               builder: (field) {
                                 return Column(
@@ -624,7 +619,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Label(
+                            const Label(
                               text: Labels.license,
                               style: TextStyle(
                                   fontSize: 17,
@@ -640,6 +635,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                         null) {
                                   return "This field is required!";
                                 }
+                                return null;
                               },
                               builder: (field) {
                                 return Column(
@@ -775,7 +771,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //     ],
                     //   ),
                     // ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
@@ -786,13 +782,14 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                               if (p0 == null || p0.isEmpty) {
                                 return "This field is required!";
                               }
+                              return null;
                             },
                             currentController: idNumberController,
                             currentFocusNode: idNumberFocusNode,
                             hint: "ID Number",
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Flexible(
@@ -801,6 +798,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                               if (p0 == null || p0.isEmpty) {
                                 return "This field is required!";
                               }
+                              return null;
                             },
                             currentController: plateNumberController,
                             currentFocusNode: plateNumberFocusNode,
@@ -814,7 +812,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       height: 10,
                     ),
                     CreateDoctorIDExpiryDatePicker(
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                           fontSize: 17,
                           color: AppColors.PRIMARY_COLOR,
                           fontWeight: FontWeight.w600),
@@ -906,7 +904,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     CreateDoctorIDExpiryDatePicker(
                       title: "Driving License Expiry Date",
                       // title: "" ExpiryDate",
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                           fontSize: 17,
                           color: AppColors.PRIMARY_COLOR,
                           fontWeight: FontWeight.w600),
@@ -993,7 +991,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     CreateDoctorIDExpiryDatePicker(
                       borderWidth: 1,
                       title: "License Expiry Date",
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                           fontSize: 17,
                           color: AppColors.PRIMARY_COLOR,
                           fontWeight: FontWeight.w600),
@@ -1035,13 +1033,14 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                         if (shippingcubit.model.model == null) {
                           return "fill your car model!";
                         }
+                        return null;
                       },
                       builder: (field) {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   vertical: 4, horizontal: 4),
                               height: 55,
                               width: double.infinity,
@@ -1059,8 +1058,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                   hintFontSize: 16,
                                   noBoarder: true,
                                   contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 5),
-                                  constraints: BoxConstraints(
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  constraints: const BoxConstraints(
                                       maxHeight: 70, minHeight: 70),
                                   onChanged: (value) {
                                     shippingcubit.model.model = value;
@@ -1082,8 +1081,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                 children: [
                                   const SizedBox(height: 8),
                                   Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 15),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15),
                                     child: Text(
                                       field.errorText ?? "",
                                       style:
@@ -1165,14 +1164,14 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //             fontSize: 18, fontWeight: FontWeight.w500))),
                     //   ],
                     // ),
-                    AppInfoText(
+                    const AppInfoText(
                       text: Labels.theApplicationDoesNot,
                     ),
                     // const Gap(30),
                     const SizedBox(
                       height: 10,
                     ),
-                    AppInfoText(
+                    const AppInfoText(
                       text: Labels.youWillGetPounds,
                     ),
                     // Row(
@@ -1208,7 +1207,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       child: AppButton(
                         backColor: AppColors.PRIMARY_COLOR,
                         textColor: Colors.white,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Colors.white,
                         ),

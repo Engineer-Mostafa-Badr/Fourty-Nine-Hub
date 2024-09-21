@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -17,16 +15,15 @@ class PaymobLink {
   final String amountId;
   final num amount;
 
-  PaymobLink(
-      {required this.amountId,
-        required this.amount});
+  PaymobLink({required this.amountId, required this.amount});
 }
+
 class PaymentView extends StatefulWidget {
   const PaymentView({
-    Key? key,
+    super.key,
     required this.amountId,
     required this.amount,
-  }) : super(key: key);
+  });
 
   final String amountId;
   final num amount;
@@ -139,7 +136,8 @@ class _PaymentViewState extends State<PaymentView> {
         if (_selectedProviderId != null) {
           print('Provider ID for $title: $_selectedProviderId');
 
-          cubit.getPaymobData(amountId: widget.amountId, providerId: _selectedProviderId!);
+          cubit.getPaymobData(
+              amountId: widget.amountId, providerId: _selectedProviderId!);
         } else {
           print('Provider ID not found for $title');
         }
@@ -220,7 +218,7 @@ class _PaymentViewState extends State<PaymentView> {
   }
 
   Widget _bankTransferPayment() {
-    final TextEditingController _bankNameController = TextEditingController();
+    final TextEditingController bankNameController = TextEditingController();
 
     final cubit = context.read<PaymentCubit>();
     final banks = cubit.state.data ?? [];
@@ -251,7 +249,7 @@ class _PaymentViewState extends State<PaymentView> {
             }).toList(),
             onChanged: (value) {
               if (value != null) {
-                _bankNameController.text = value;
+                bankNameController.text = value;
               }
             },
           ),
@@ -263,7 +261,8 @@ class _PaymentViewState extends State<PaymentView> {
             onPressed: () {},
             child: Text(
               "${widget.amount}",
-              style: const TextStyle(color: AppColors.LIGHT_COLOR, fontSize: 20),
+              style:
+                  const TextStyle(color: AppColors.LIGHT_COLOR, fontSize: 20),
             ),
           ),
           Column(
@@ -282,7 +281,7 @@ class _PaymentViewState extends State<PaymentView> {
                 },
                 child: BlocBuilder<PaymentCubit, PaymentState>(
                   buildWhen: (previous, current) =>
-                  previous.uploadedImage != current.uploadedImage ||
+                      previous.uploadedImage != current.uploadedImage ||
                       previous.uploadStatus != current.uploadStatus,
                   builder: (context, state) {
                     if (state.uploadStatus == StateStatus.loading) {
@@ -301,24 +300,28 @@ class _PaymentViewState extends State<PaymentView> {
                     onPressed: () {
                       // Snackbar: "Your bill has been sent successfully, waiting for administration approval."
                       print("${state.imageMediaId}");
-                      print(" the provider ${_selectedProviderId}");
-                      if(state.imageMediaId != null){
-                        cubit.postInstaPay(receiptId:state.imageMediaId!, amountId: widget.amountId, paymentProviderId: _selectedProviderId!);
+                      print(" the provider $_selectedProviderId");
+                      if (state.imageMediaId != null) {
+                        cubit.postInstaPay(
+                            receiptId: state.imageMediaId!,
+                            amountId: widget.amountId,
+                            paymentProviderId: _selectedProviderId!);
                       }
-                      if(state.status == StateStatus.success){
+                      if (state.status == StateStatus.success) {
                         print("99111");
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text(state.instaPayResponseData?.message ?? 'Payment successful'),
+                            content: Text(state.instaPayResponseData?.message ??
+                                'Payment successful'),
                             backgroundColor: Colors.green,
                           ),
                         );
                       }
                     },
-                    child: Text(
+                    child: const Text(
                       "Send for review and approval",
-                      style: const TextStyle(
-                          color: AppColors.LIGHT_COLOR, fontSize: 20),
+                      style:
+                          TextStyle(color: AppColors.LIGHT_COLOR, fontSize: 20),
                     ),
                   );
                 },
@@ -330,4 +333,3 @@ class _PaymentViewState extends State<PaymentView> {
     );
   }
 }
-

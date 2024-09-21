@@ -119,7 +119,10 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                 ),
                 child: Row(
                   children: [
-                    const ProfileImage(accountId: 0,userId: '',),
+                    const ProfileImage(
+                      accountId: 0,
+                      userId: '',
+                    ),
                     const Sizer(),
                     Expanded(
                         child: FormTextField(

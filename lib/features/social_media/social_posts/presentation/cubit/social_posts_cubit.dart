@@ -102,7 +102,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._unFollowUserUseCase,
     this._removeFriedRequestUseCase,
     this._blocUserUseCase,
-    this._editCommentUseCase, this._acceptRejectFriendRequestUseCase, this._deleteFriendUseCase, this._getGlobalFeedUseCase, this._viewProfileUseCase,
+    this._editCommentUseCase,
+    this._acceptRejectFriendRequestUseCase,
+    this._deleteFriendUseCase,
+    this._getGlobalFeedUseCase,
+    this._viewProfileUseCase,
   ) : super(const SocialPostsState());
 
   void loadData() async {
@@ -126,11 +130,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     });
   }
 
-  void refreshGlobalPosts(){
+  void refreshGlobalPosts() {
     globalFeedPagingController.refresh();
   }
 
-  loadInstaSuggestedPeople()async{
+  loadInstaSuggestedPeople() async {
     await getSuggestedFriends(1);
     suggestUserPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
@@ -228,25 +232,25 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   // get global feed posts
   getGlobalFeed(int page) async {
     final response =
-    await _getGlobalFeedUseCase(TwitterFeedParams(limit: 10, page: page));
+        await _getGlobalFeedUseCase(TwitterFeedParams(limit: 10, page: page));
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) async {
-          final isLastPage = data.length < 10;
-          if (page == 1) {
-            print("page == 1 $page");
-            globalFeedPagingController.itemList = [];
-          }
-          if (isLastPage) {
-            print("isLastPage = $isLastPage");
-            globalFeedPagingController.appendLastPage(data);
-          } else {
-            print("isNotLastPage = $isLastPage");
-            final nextPageKey = page + 1;
-            globalFeedPagingController.appendPage(data, nextPageKey);
-          }
-          emit(state.copyWith( status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) async {
+      final isLastPage = data.length < 10;
+      if (page == 1) {
+        print("page == 1 $page");
+        globalFeedPagingController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        globalFeedPagingController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        globalFeedPagingController.appendPage(data, nextPageKey);
+      }
+      emit(state.copyWith(status: StateStatus.success));
+    });
   }
 
 // get feed posts
@@ -311,7 +315,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       response.fold(
           (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
           (data) {
-        final isLastPage = data.length < pageSize||page==3;
+        final isLastPage = data.length < pageSize || page == 3;
         if (page == 1) {
           print("page == 1 $page");
           suggestUserPagingController.itemList = [];
@@ -363,13 +367,12 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) {
-          if(UserCubit.to.state.data!=null){
-            viewProfile(id:id);
-          }
-          loadInstaSuggestedPeople();
-          emit(
-            state.copyWith(profileData: data, status: StateStatus.success));
-        });
+      if (UserCubit.to.state.data != null) {
+        viewProfile(id: id);
+      }
+      loadInstaSuggestedPeople();
+      emit(state.copyWith(profileData: data, status: StateStatus.success));
+    });
   }
 
   // get user profile
@@ -380,10 +383,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) {
-          result =data;
-          emit(
-            state.copyWith(status: StateStatus.success));
-        });
+      result = data;
+      emit(state.copyWith(status: StateStatus.success));
+    });
     return result;
   }
 
@@ -453,15 +455,16 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   }
 
   // acceptRejectFriend
-  Future<bool> acceptRejectFriend({required AcceptRejectFriendRequestParams params}) async {
+  Future<bool> acceptRejectFriend(
+      {required AcceptRejectFriendRequestParams params}) async {
     var response = await _acceptRejectFriendRequestUseCase(params);
     bool value = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (r) {
-          value = r;
-        });
+        (r) {
+      value = r;
+    });
     return value;
   }
 
@@ -470,11 +473,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     var response = await _deleteFriendUseCase(userId);
     bool value = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (r) {
-          value = r;
-        });
+        (r) {
+      value = r;
+    });
     return value;
   }
 

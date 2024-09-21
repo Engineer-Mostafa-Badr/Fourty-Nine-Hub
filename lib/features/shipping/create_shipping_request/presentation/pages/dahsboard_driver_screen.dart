@@ -2,25 +2,17 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_renew_day_count.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_today_appointments.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_unhandled_appointments.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/popup_menu.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/driverStatistics_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/my_rating_screen.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/trip_card.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -108,9 +100,9 @@ class DahsboardDriverScreen extends StatelessWidget {
               )
               // centerTitle: true,
               ),
-          body: TabBarView(
+          body: const TabBarView(
             children: [
-              const NewTripWidget(),
+              NewTripWidget(),
               EditTabShipping(),
             ],
           )),
@@ -303,7 +295,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
         ),
       ],
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: BlocListener<ShippingCubit, ShippingState>(
           listener: (context, state) {
             if (state is SuccessDeleteDriver) {
@@ -319,7 +311,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                 return SingleChildScrollView(
                   child: Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       AppButton(
@@ -332,7 +324,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         backColor: Colors.white,
                         color: AppColors.PRIMARY_COLOR,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       AppButton(
@@ -361,10 +353,11 @@ class _EditTabShippingState extends State<EditTabShipping> {
                             context: context,
                             builder: (context) {
                               return Container(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 10),
                                 width: double.infinity,
-                                decoration: BoxDecoration(color: Colors.white),
+                                decoration:
+                                    const BoxDecoration(color: Colors.white),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -385,7 +378,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                                       "${state.model.deadlineSubscription} Day",
                                       style: Styles.headerText(),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5,
                                     ),
                                     AppButton(
@@ -407,7 +400,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         },
                         backColor: Colors.white,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       AppButton(
@@ -435,7 +428,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         },
                         backColor: Colors.white,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       AppButton(
@@ -459,7 +452,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         onPressed: () {},
                         backColor: Colors.white,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       AppButton(
@@ -483,7 +476,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         onPressed: () {},
                         backColor: Colors.white,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       AppButton(
@@ -507,7 +500,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         onPressed: () {},
                         backColor: Colors.white,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       AppButton(
@@ -531,7 +524,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         onPressed: () {},
                         backColor: Colors.white,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       AppButton(
@@ -557,7 +550,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         },
                         backColor: Colors.white,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       AppButton(

@@ -57,8 +57,10 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
     );
     return result.fold(
       (failure) {
-        CliLogger.error("can't load main categories - from data source - there is an error ${failure.toString()}");
-        return Left(failure);},
+        CliLogger.error(
+            "can't load main categories - from data source - there is an error ${failure.toString()}");
+        return Left(failure);
+      },
       (response) => Right((response['data']['mainCategories'] as List)
           .map((e) => MainCategoryModel.fromJson(e))
           .toList()),

@@ -95,7 +95,7 @@ class SearchRestaurantState {
       failure: failure ?? this.failure,
       mainCategory: mainCategory ?? this.mainCategory,
       allRestaurant: allRestaurant ?? this.allRestaurant,
-      searchRestaurant: searchResultRestaurants ?? this.searchRestaurant,
+      searchRestaurant: searchResultRestaurants ?? searchRestaurant,
       subCategories: subCategories ?? this.subCategories,
       categories: categories ?? this.categories,
       mealCategories: mealCategories ?? this.mealCategories,

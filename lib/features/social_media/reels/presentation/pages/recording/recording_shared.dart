@@ -3,14 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import 'mix_voices.dart';
-import 'my_voice.dart';
-import 'other_voice.dart';
-
 class ReelsRecordingScreen extends StatefulWidget {
   final String? voiceUrl;
 
-  const ReelsRecordingScreen({super.key,  this.voiceUrl});
+  const ReelsRecordingScreen({super.key, this.voiceUrl});
 
   @override
   ReelsRecordingScreenState createState() => ReelsRecordingScreenState();
@@ -28,7 +24,7 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Column(
+      body: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           // Expanded(
@@ -50,7 +46,7 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
           //     },
           //   ),
           // ),
-          const SizedBox(
+          SizedBox(
             height: 20,
           ),
         ],

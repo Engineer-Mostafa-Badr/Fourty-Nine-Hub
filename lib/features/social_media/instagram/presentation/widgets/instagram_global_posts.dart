@@ -29,8 +29,7 @@ import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class InstagramGlobalPosts extends StatefulWidget {
-  const InstagramGlobalPosts({super.key, required this.scrollController
-  });
+  const InstagramGlobalPosts({super.key, required this.scrollController});
   final ScrollController scrollController;
 
   @override
@@ -44,19 +43,19 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
       create: (_) => serviceLocator()..loadGlobalData(),
       child: BlocConsumer<InstagramCubit, InstagramState>(
           listener: (context, state) {
-            if (state.status == StateStatus.error) {
-              showErrorMessage(
-                context,
-                getFailureMessage(
-                  state.failure ?? UnknownFailure(''),
-                  context,
-                ),
-              );
-            }
-          }, builder: (context, state) {
+        if (state.status == StateStatus.error) {
+          showErrorMessage(
+            context,
+            getFailureMessage(
+              state.failure ?? UnknownFailure(''),
+              context,
+            ),
+          );
+        }
+      }, builder: (context, state) {
         final controller = context.read<InstagramCubit>();
         return RefreshIndicator(
-          onRefresh: ()=>controller.refreshGlobalPosts(),
+          onRefresh: () => controller.refreshGlobalPosts(),
           child: CustomScrollView(
             controller: widget.scrollController,
             slivers: [
@@ -67,7 +66,8 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                 pagingController: controller.globalFeedPagingController,
                 builderDelegate: PagedChildBuilderDelegate<PostEntity>(
                     noItemsFoundIndicatorBuilder: (context) {
-                      print(controller.globalFeedPagingController.itemList?.length);
+                      print(controller
+                          .globalFeedPagingController.itemList?.length);
                       return const Center(
                         child: Text(
                           "No Posts",
@@ -80,13 +80,15 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                     },
                     itemBuilder: (context, item, index) {
                       final pageController = PageController();
-                      if (controller.globalFeedPagingController.itemList?[index].type ==
+                      if (controller.globalFeedPagingController.itemList?[index]
+                              .type ==
                           'advertisement') {
                         return FacebookAdvertisementCard(
-                          post: controller.globalFeedPagingController.itemList![index],
+                          post: controller
+                              .globalFeedPagingController.itemList![index],
                         );
-                      } else if (controller
-                          .globalFeedPagingController.itemList?[index].type ==
+                      } else if (controller.globalFeedPagingController
+                              .itemList?[index].type ==
                           'facebook_post') {
                         return Padding(
                           padding: const EdgeInsetsDirectional.only(
@@ -98,31 +100,43 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Sizer(),
-                              _buildMainAccountHeader(post:controller
-                                  .globalFeedPagingController.itemList![index],context: context),
+                              _buildMainAccountHeader(
+                                  post: controller.globalFeedPagingController
+                                      .itemList![index],
+                                  context: context),
                               const Sizer(),
                               SizedBox(
                                 height: kToolbarHeight * 5,
                                 child: PageView.builder(
                                     controller: pageController,
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: controller.globalFeedPagingController
-                                        .itemList![index].images!.length,
+                                    itemCount: controller
+                                        .globalFeedPagingController
+                                        .itemList![index]
+                                        .images!
+                                        .length,
                                     onPageChanged: (i) {
                                       controller.changeIndex(i);
                                     },
                                     itemBuilder: (context, i) {
                                       return SocialImageViewer(
-                                        image: controller.globalFeedPagingController
-                                            .itemList![index].images![i],
+                                        image: controller
+                                            .globalFeedPagingController
+                                            .itemList![index]
+                                            .images![i],
                                         index: i + 1,
-                                        length: controller.globalFeedPagingController
-                                            .itemList![index].images!.length,
+                                        length: controller
+                                            .globalFeedPagingController
+                                            .itemList![index]
+                                            .images!
+                                            .length,
                                         onDoubleTap: () {
                                           controller.globalFeedPagingController
-                                              .itemList?[index].isLove =
-                                          !controller.globalFeedPagingController
-                                              .itemList![index].isLove!;
+                                                  .itemList?[index].isLove =
+                                              !controller
+                                                  .globalFeedPagingController
+                                                  .itemList![index]
+                                                  .isLove!;
                                           setState(() {});
                                         },
                                       );
@@ -133,29 +147,35 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                               ),
                               Label(
                                   text: controller.globalFeedPagingController
-                                      .itemList?[index].content ??
+                                          .itemList?[index].content ??
                                       ''),
                               const Sizer(
                                 height: 5,
                               ),
                               Padding(
-                                padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           IconAppButton(
-                                            icon: controller.globalFeedPagingController
-                                                .itemList?[index].isLove ==
-                                                true
+                                            icon: controller
+                                                        .globalFeedPagingController
+                                                        .itemList?[index]
+                                                        .isLove ==
+                                                    true
                                                 ? Icons.favorite
                                                 : Icons.favorite_border,
                                             onPressed: () async {
-                                              if(context.read<UserCubit>().isLoggedIn){
+                                              if (context
+                                                  .read<UserCubit>()
+                                                  .isLoggedIn) {
                                                 print('object');
                                                 var reacted =
                                                     await controller.onReact(
@@ -201,13 +221,15 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                   }
                                                 }
                                                 setState(() {});
-                                              }else{
+                                              } else {
                                                 context.push(Routes.LOGIN);
                                               }
                                             },
-                                            color: controller.globalFeedPagingController
-                                                .itemList?[index].isLove ==
-                                                true
+                                            color: controller
+                                                        .globalFeedPagingController
+                                                        .itemList?[index]
+                                                        .isLove ==
+                                                    true
                                                 ? Colors.red
                                                 : Colors.grey,
                                             size: 25,
@@ -216,18 +238,23 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                             width: 5,
                                           ),
                                           Label(
-                                            text: controller.globalFeedPagingController
-                                                .itemList?[index].loveCount
-                                                .toString() ??
+                                            text: controller
+                                                    .globalFeedPagingController
+                                                    .itemList?[index]
+                                                    .loveCount
+                                                    .toString() ??
                                                 '',
                                             style: Styles.mediumText(
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           const Sizer(),
                                           IconAppButton(
-                                            icon: Icons.chat_bubble_outline_rounded,
+                                            icon: Icons
+                                                .chat_bubble_outline_rounded,
                                             onPressed: () {
-                                              if(context.read<UserCubit>().isLoggedIn){
+                                              if (context
+                                                  .read<UserCubit>()
+                                                  .isLoggedIn) {
                                                 bottomSheet(
                                                     context: context,
                                                     isScrollControlled: true,
@@ -328,7 +355,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                         },
                                                       ),
                                                     ));
-                                              }else{
+                                              } else {
                                                 context.push(Routes.LOGIN);
                                               }
                                             },
@@ -339,9 +366,11 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                             width: 5,
                                           ),
                                           Label(
-                                            text: controller.globalFeedPagingController
-                                                .itemList?[index].commentsCount
-                                                .toString() ??
+                                            text: controller
+                                                    .globalFeedPagingController
+                                                    .itemList?[index]
+                                                    .commentsCount
+                                                    .toString() ??
                                                 '',
                                             style: Styles.mediumText(
                                                 fontWeight: FontWeight.bold),
@@ -350,7 +379,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                       ),
                                     ),
                                     if (controller.globalFeedPagingController
-                                        .itemList![index].images!.length >
+                                            .itemList![index].images!.length >
                                         1)
                                       Expanded(
                                         child: Center(
@@ -358,24 +387,27 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                             height: 8,
                                             child: ListView.separated(
                                                 shrinkWrap: true,
-                                                scrollDirection: Axis.horizontal,
+                                                scrollDirection:
+                                                    Axis.horizontal,
                                                 itemCount: controller
                                                     .globalFeedPagingController
                                                     .itemList![index]
                                                     .images!
                                                     .length,
                                                 separatorBuilder:
-                                                    (context, index) => const Sizer(
-                                                  width: 3,
-                                                ),
+                                                    (context, index) =>
+                                                        const Sizer(
+                                                          width: 3,
+                                                        ),
                                                 itemBuilder: (context, index) {
                                                   return CircleAvatar(
                                                     radius: 4,
-                                                    backgroundColor: state
-                                                        .pageIndex ==
-                                                        index
-                                                        ? AppColors.SECONDARY_COLOR
-                                                        : AppColors.PRIMARY_COLOR,
+                                                    backgroundColor:
+                                                        state.pageIndex == index
+                                                            ? AppColors
+                                                                .SECONDARY_COLOR
+                                                            : AppColors
+                                                                .PRIMARY_COLOR,
                                                   );
                                                 }),
                                           ),
@@ -383,7 +415,8 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                       ),
                                     const Expanded(
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
                                         children: [],
                                       ),
                                     ),
@@ -407,8 +440,8 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                               height: 300,
                               width: double.infinity,
                               child: InstagramReelCard(
-                                item: controller
-                                    .globalFeedPagingController.itemList![index],
+                                item: controller.globalFeedPagingController
+                                    .itemList![index],
                               ),
                             ),
                             Container(
@@ -425,7 +458,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                         margin: const EdgeInsets.only(top: 150),
                         child: const CupertinoActivityIndicator()),
                     newPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator()),
+                        const CupertinoActivityIndicator()),
               )
             ],
           ),
@@ -442,9 +475,9 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
       children: [
         InkWell(
           onTap: () {
-            if(context.read<UserCubit>().isLoggedIn){
+            if (context.read<UserCubit>().isLoggedIn) {
               context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-            }else{
+            } else {
               context.push(Routes.LOGIN);
             }
           },
@@ -458,45 +491,48 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
         const Sizer(),
         Expanded(
             child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        if(context.read<UserCubit>().isLoggedIn){
-                          context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
-                        }else{
+                InkWell(
+                  onTap: () {
+                    if (context.read<UserCubit>().isLoggedIn) {
+                      context.push(Routes.INSTAGRAMPROFILE,
+                          extra: post.user.id);
+                    } else {
+                      context.push(Routes.LOGIN);
+                    }
+                  },
+                  child: TextAppButton(
+                      style: TextStyle(color: Theme.of(context).primaryColor),
+                      label: post.user.firstName,
+                      onPressed: () {
+                        if (context.read<UserCubit>().isLoggedIn) {
+                          context.push(Routes.INSTAGRAMPROFILE,
+                              extra: post.user.id);
+                        } else {
                           context.push(Routes.LOGIN);
-                        }                      },
-                      child: TextAppButton(
-                          style: TextStyle(color: Theme.of(context).primaryColor),
-                          label: post.user.firstName,
-                          onPressed: () {
-                            if(context.read<UserCubit>().isLoggedIn){
-                              context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
-                            }else{
-                              context.push(Routes.LOGIN);
-                            }
-                          }),
-                    ),
-                    RichText(
-                        text: TextSpan(children: [
-                          TextSpan(
-                              text: post.sinceTime,
-                              style: Styles.mediumText(color: Colors.grey)),
-                          const WidgetSpan(
-                              child: Icon(
-                                Icons.group,
-                                size: 14,
-                                color: Colors.grey,
-                              ))
-                        ]))
-                  ],
+                        }
+                      }),
                 ),
-                // _buildActivityFeelingWidget(post),
+                RichText(
+                    text: TextSpan(children: [
+                  TextSpan(
+                      text: post.sinceTime,
+                      style: Styles.mediumText(color: Colors.grey)),
+                  const WidgetSpan(
+                      child: Icon(
+                    Icons.group,
+                    size: 14,
+                    color: Colors.grey,
+                  ))
+                ]))
               ],
-            )),
+            ),
+            // _buildActivityFeelingWidget(post),
+          ],
+        )),
       ],
     );
   }

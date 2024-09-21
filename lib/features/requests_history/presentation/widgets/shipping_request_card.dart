@@ -11,15 +11,9 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/shipping_request_model/shipping_request_model.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/cubit/ratin_state.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/cubit/rating_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/driver_id.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/profile_picture_key.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/user_id.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/user_profile.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -378,7 +372,7 @@ class _ShppingHistoryCardState extends State<ShppingHistoryCard> {
                                                       width: 5,
                                                     ),
                                                     Text(
-                                                      "(${serviceRating})",
+                                                      "($serviceRating)",
                                                       style:
                                                           Styles.mediumText(),
                                                     )
@@ -619,7 +613,7 @@ class _ShppingHistoryCardState extends State<ShppingHistoryCard> {
                                                         width: 5,
                                                       ),
                                                       Text(
-                                                        "(${serviceRating})",
+                                                        "($serviceRating)",
                                                         style:
                                                             Styles.mediumText(),
                                                       )

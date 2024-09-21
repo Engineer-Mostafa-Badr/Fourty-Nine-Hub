@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/payment_view.dart';
 import 'package:fourtyninehub/features/subscripe/domain/entities/subscription_amount_entity.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -58,7 +56,7 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                     onChanged: (value) {
                       setState(() {
                         groupValue = value!;
-                        print("${widget.amounts[index].id}");
+                        print(widget.amounts[index].id);
                         newIndex = widget.amounts[index].id;
                         newAmount = widget.amounts[index].amount;
                         print("${widget.amounts[index].amount}");
@@ -79,7 +77,7 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
           onPressed: () {
             context.push(Routes.PAYMENT,
                 extra: PaymobLink(
-                    amountId:newIndex,
+                    amountId: newIndex,
                     // providerId: "667331f44fbaddc4357d612b",
                     amount: newAmount));
           },

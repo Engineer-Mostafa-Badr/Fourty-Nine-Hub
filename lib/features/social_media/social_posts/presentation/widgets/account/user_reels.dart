@@ -30,7 +30,7 @@ class _UserReelsState extends State<UserReels> {
           showErrorMessage(
             context,
             getFailureMessage(
-              state.failure ??  UnknownFailure(''),
+              state.failure ?? UnknownFailure(''),
               context,
             ),
           );
@@ -46,7 +46,7 @@ class _UserReelsState extends State<UserReels> {
           builderDelegate: PagedChildBuilderDelegate<PostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.userReelsPagingController.itemList?.length);
-                return Center(
+                return const Center(
                   child: Text(
                     "No Reels",
                     style: TextStyle(
@@ -72,7 +72,7 @@ class _UserReelsState extends State<UserReels> {
                     : Center(
                         child: Label(
                             text: getFailureMessage(
-                          state.failure ??  UnknownFailure(''),
+                          state.failure ?? UnknownFailure(''),
                           context,
                         )),
                       );

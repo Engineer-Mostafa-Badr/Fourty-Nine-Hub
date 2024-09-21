@@ -86,7 +86,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ??  UnknownFailure(''),
+            state.failure ?? UnknownFailure(''),
             context,
           ),
         );
@@ -175,7 +175,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 8,right: 8),
+                  padding: const EdgeInsets.only(left: 8, right: 8),
                   child: Row(
                     children: [
                       if (myPost.likesCount != 0)
@@ -278,7 +278,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   backgroundColor: myPost.backgroundColor,
                   images: myPost.images),
               Padding(
-                padding: const EdgeInsets.only(left: 8,right: 8),
+                padding: const EdgeInsets.only(left: 8, right: 8),
                 child: Row(
                   children: [
                     if (myPost.likesCount != 0)
@@ -447,7 +447,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   }) {
     final user = context.read<UserCubit>().state.data;
     return Padding(
-      padding: const EdgeInsets.only(left: 8,right: 8,top: 8),
+      padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -475,7 +475,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     InkWell(
                       onTap: () {
                         if (widget.fromProfile == false) {
-                          context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                          context.push(Routes.OTHERSACCOUNT,
+                              extra: post.user.id);
                         }
                       },
                       child: Column(
@@ -522,15 +523,15 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   color: AppColors.SECONDARY_COLOR,
                 ),
               const Sizer(),
-                IconAppButton(
-                  icon: Icons.clear,
-                  onPressed: () {
-                    bottomSheet(
-                        context: context,
-                        widget: _buildPostOptions(
-                            fromDetails: widget.from == 'details', post: post));
-                  },
-                ),
+              IconAppButton(
+                icon: Icons.clear,
+                onPressed: () {
+                  bottomSheet(
+                      context: context,
+                      widget: _buildPostOptions(
+                          fromDetails: widget.from == 'details', post: post));
+                },
+              ),
             ],
           ),
           if (post.location != null)
@@ -785,7 +786,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         children: [
           if (post.feeling != null || post.activity != null) ...[
             Text(
-              'feeling ${post.feeling!=null?post.feeling?.name??'':''}${post.activity!=null?', ${post.activity?.name}':''}',
+              'feeling ${post.feeling != null ? post.feeling?.name ?? '' : ''}${post.activity != null ? ', ${post.activity?.name}' : ''}',
               style: Styles.mediumText(),
             ),
             const SizedBox(

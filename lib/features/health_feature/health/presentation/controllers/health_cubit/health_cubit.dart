@@ -42,7 +42,11 @@ class HealthCubit extends Cubit<HealthState> {
       this._getMedicalServicesUseCase,
       this._toggleFavoriteSubcategoryUseCase,
       this._isDoctorUseCase,
-      this._getMainCategoryDetailsUseCase, this._getGovernoratesUseCase, this._isDoctorApprovalUsecase, this._toggleFavoriteCategoryUseCase, this._deleteFavoriteCategoryUseCase)
+      this._getMainCategoryDetailsUseCase,
+      this._getGovernoratesUseCase,
+      this._isDoctorApprovalUsecase,
+      this._toggleFavoriteCategoryUseCase,
+      this._deleteFavoriteCategoryUseCase)
       : super(const HealthState());
 
   final List<HealthBookingFilterModel> services = [
@@ -155,8 +159,8 @@ class HealthCubit extends Cubit<HealthState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
         (data) {
-          return getSubCategories(reload: true);
-        });
+      return getSubCategories(reload: true);
+    });
   }
 
   // Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
@@ -183,14 +187,14 @@ class HealthCubit extends Cubit<HealthState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
         (data) {
-          MainCategoryEntity mainCategoryEntity;
-            mainCategoryEntity = state.mainCategory!;
-            mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
-          emit(state.copyWith(mainCategory: mainCategoryEntity));
-          result = state.mainCategory!.isFavorite!;
-          print("Salama ${data}");
-          return getServices();
-        });
+      MainCategoryEntity mainCategoryEntity;
+      mainCategoryEntity = state.mainCategory!;
+      mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
+      emit(state.copyWith(mainCategory: mainCategoryEntity));
+      result = state.mainCategory!.isFavorite!;
+      print("Salama $data");
+      return getServices();
+    });
     return result;
   }
 
@@ -201,14 +205,14 @@ class HealthCubit extends Cubit<HealthState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
         (data) {
-          MainCategoryEntity mainCategoryEntity;
-            mainCategoryEntity = state.mainCategory!;
-            mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
-          emit(state.copyWith(mainCategory: mainCategoryEntity));
-          result = state.mainCategory!.isFavorite!;
-          print("Salama ${data}");
-          return getServices();
-        });
+      MainCategoryEntity mainCategoryEntity;
+      mainCategoryEntity = state.mainCategory!;
+      mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
+      emit(state.copyWith(mainCategory: mainCategoryEntity));
+      result = state.mainCategory!.isFavorite!;
+      print("Salama $data");
+      return getServices();
+    });
     return result;
   }
 }

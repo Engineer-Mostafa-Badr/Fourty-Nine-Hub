@@ -28,15 +28,19 @@ class MealBanner extends StatelessWidget {
         }
         if (state.mainCategory != null) {
           return MainCategoryBanner(
-              category: state.mainCategory!,
-              canRegister: state.isResturant == true ? false : true,
-              onRegister: () {
-                if (context.read<UserCubit>().isLoggedIn) {
-                  context.push(Routes.CREATERESTURANT);
-                } else {
-                  context.push(Routes.REGISTER);
-                }
-              }, onFavorite: () {  },);
+            category: state.mainCategory!,
+            canRegister: state.isResturant == true ? false : true,
+            onRegister: () {
+              if (context.read<UserCubit>().isLoggedIn) {
+                context.push(Routes.CREATERESTURANT);
+              } else {
+                context.push(Routes.REGISTER);
+              }
+            },
+            onFavorite: () {
+              return null;
+            },
+          );
         } else {
           return const SizedBox.shrink();
         }

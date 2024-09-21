@@ -6,7 +6,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-
 class AttachmentTypes extends StatelessWidget {
   final ChatRoomCubit chatRoomCubit;
 

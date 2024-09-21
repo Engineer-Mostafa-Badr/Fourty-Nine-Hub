@@ -19,7 +19,7 @@ class DriverRequests extends StatelessWidget {
     return Scaffold(body: BlocBuilder<GetAllTripCubit, ShippingState>(
       builder: (context, state) {
         if (state is LoadingShippingState) {
-          return Align(
+          return const Align(
             child: Center(
               child: CircularProgressIndicator(
                 color: AppColors.PRIMARY_COLOR,
@@ -51,7 +51,7 @@ class DriverRequests extends StatelessWidget {
                           model: state.allTripList[index],
                         ),
                         Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 35),
+                            padding: const EdgeInsets.symmetric(horizontal: 35),
                             child: GestureDetector(
                               onTap: () {
                                 //هتروح لي صفحه subscription
@@ -59,7 +59,7 @@ class DriverRequests extends StatelessWidget {
                                     .showActiveSubscriptionAmounts(
                                         walletType: WalletTypes.balance);
                               },
-                              child: Text(
+                              child: const Text(
                                 "Subscribe to send offer / contact the client",
                                 style:
                                     TextStyle(fontSize: 16, color: Colors.red),

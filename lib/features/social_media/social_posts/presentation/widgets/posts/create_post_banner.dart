@@ -30,7 +30,8 @@ class CreatePostBanner extends StatelessWidget {
                   accountId: 0,
                 )
               : const ProfileImage(
-                  accountId: 0, userId: '',
+                  accountId: 0,
+                  userId: '',
                 ),
           const Sizer(
             width: 10,
@@ -38,7 +39,9 @@ class CreatePostBanner extends StatelessWidget {
           Expanded(
               child: InkWell(
             onTap: () {
-              !context.read<UserCubit>().isLoggedIn?context.push(Routes.LOGIN):context.push(Routes.CREATEPOST, extra: 'facebook');
+              !context.read<UserCubit>().isLoggedIn
+                  ? context.push(Routes.LOGIN)
+                  : context.push(Routes.CREATEPOST, extra: 'facebook');
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),

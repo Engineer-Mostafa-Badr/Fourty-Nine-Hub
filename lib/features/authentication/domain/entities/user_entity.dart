@@ -16,7 +16,7 @@ class UserEntity extends Equatable {
   final int? friendsCount;
   final int? followersCount;
   final int? followingCount;
-  final int? wallet;
+  final double? wallet;
   final bool? isRider;
   final bool? isDoctor;
   final bool? isRestaurant;
@@ -29,24 +29,28 @@ class UserEntity extends Equatable {
     return id == anotherId;
   }
 
-  const UserEntity({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.profilePicture,
-    required this.profileCover,
-    required this.friendsCount,
-    required this.followersCount,
-    required this.followingCount,
-    required this.wallet,
-    this.isRider = false,
-    this.isDoctor = false,
-    this.isRestaurant = false,
-    this.isLoading = false,
-    this.isDocument = false,
-    this.bio, this.phone, this.city, this.country, this.job, this.gender
-  });
+  const UserEntity(
+      {required this.id,
+      required this.firstName,
+      required this.lastName,
+      required this.email,
+      required this.profilePicture,
+      required this.profileCover,
+      required this.friendsCount,
+      required this.followersCount,
+      required this.followingCount,
+      required this.wallet,
+      this.isRider = false,
+      this.isDoctor = false,
+      this.isRestaurant = false,
+      this.isLoading = false,
+      this.isDocument = false,
+      this.bio,
+      this.phone,
+      this.city,
+      this.country,
+      this.job,
+      this.gender});
 
   @override
   List<Object?> get props => [

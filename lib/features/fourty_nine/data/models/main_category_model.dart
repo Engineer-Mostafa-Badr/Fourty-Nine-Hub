@@ -5,7 +5,7 @@ import '../../../../res/style/const.dart';
 import '../../domain/entities/main_category_entity.dart';
 
 class MainCategoryModel extends MainCategoryEntity {
-   MainCategoryModel({
+  MainCategoryModel({
     required super.id,
     required super.name,
     required super.image,

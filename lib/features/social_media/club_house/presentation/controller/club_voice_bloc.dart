@@ -82,7 +82,7 @@ class ClubVoiceCubit extends Cubit<ClubVoiceState> {
 
   int roomsLength = 0;
   List<ClubVoiceRoomEntity> rooms = [];
-  Future<void> getAllRooms() async{
+  Future<void> getAllRooms() async {
     emit(state.copyWith(requestState: ZegoRequestState.loading));
     getClubVoiceUseCase(const NoParams()).then((value) {
       value.fold((l) {

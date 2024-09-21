@@ -41,17 +41,7 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
       _saveTextEditingControllers();
       _saveWorkDays();
       String? checkFilledMessage = _createDoctorParams.isFilled();
-      if (checkFilledMessage == null) {
-        emit(CreateResturantLoading("Creating Account..."));
-        final response = await _createDoctorUseCase.call(_createDoctorParams);
-        emit(CreateResturantCloseLoading());
-        response.fold(
-            (failure) => emit(CreateResturantError("Can't Create Doctor")),
-            (data) => emit(CreateResturantSuccess(
-                "You are submit sccessfuly. Please wait admin approve and abroval.")));
-      } else {
-        emit(CreateResturantError(checkFilledMessage));
-      }
+      emit(CreateResturantError(checkFilledMessage ?? ""));
     }
   }
 

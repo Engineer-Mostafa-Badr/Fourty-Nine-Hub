@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:go_router/go_router.dart';
 
@@ -25,7 +24,7 @@ class FloatingButton extends StatelessWidget {
       height: 90.zH, // Set the desired height
       width: 90.zW,
       child: FloatingActionButton(
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
         onPressed: onTap != null
             ? () => onTap!()
             : () {

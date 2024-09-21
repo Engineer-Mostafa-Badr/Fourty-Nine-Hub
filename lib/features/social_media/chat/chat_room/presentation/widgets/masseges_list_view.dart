@@ -1,8 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
 
 import 'message_card.dart';
@@ -45,7 +43,7 @@ class MessagesListView extends StatelessWidget {
                     child: MessageCard(
                       messageEntity: state.messages![index],
                       anotherUserName: 'Anonymous',
-                          // state.chatData?.chat?.contact?.name ?? LocaleKeys.anonymous.tr(),
+                      // state.chatData?.chat?.contact?.name ?? LocaleKeys.anonymous.tr(),
                     ),
                   ),
               separatorBuilder: (context, index) => const Sizer(

@@ -1,5 +1,4 @@
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-import 'package:image_picker/image_picker.dart';
 
 class RequestModel {
   String? receiptPoint;

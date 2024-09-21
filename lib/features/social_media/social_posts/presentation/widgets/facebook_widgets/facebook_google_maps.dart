@@ -18,8 +18,8 @@ class _FacebookUserOnMapState extends State<FacebookUserOnMap> {
   @override
   void initState() {
     markers.add(Marker(
-      markerId: MarkerId('0'),
-      infoWindow: InfoWindow(title: 'user'),
+      markerId: const MarkerId('0'),
+      infoWindow: const InfoWindow(title: 'user'),
       // icon: markerIcon,
       position: LatLng(
           double.parse(widget.location.lat), double.parse(widget.location.log)),

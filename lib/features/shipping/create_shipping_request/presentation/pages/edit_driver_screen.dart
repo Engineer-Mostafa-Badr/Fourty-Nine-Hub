@@ -81,7 +81,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
             builder: (context, mainState) {
               log(mainState.toString(), name: "lskdddddd");
               if (mainState is LoadingShippingState) {
-                return Align(
+                return const Align(
                   child: Center(
                     child: CircularProgressIndicator(
                       color: AppColors.PRIMARY_COLOR,
@@ -105,12 +105,12 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                 plateNumberController.text = mainState.model.driverInformation
                         ?.driverInfoId?.carPlateInformation ??
                     "";
-                shippingcubit.model.idExpiryDate =
-                    mainState.model.driverInformation?.driverInfoId?.idExpiryDate;
+                shippingcubit.model.idExpiryDate = mainState
+                    .model.driverInformation?.driverInfoId?.idExpiryDate;
                 shippingcubit.model.drivingExpiryDate = mainState.model
                     .driverInformation?.driverInfoId?.drivingLicenseExpiryDate;
-                shippingcubit.model.licenseExpiryDate = mainState
-                    .model.driverInformation?.driverInfoId?.carLicenseExpiryDate;
+                shippingcubit.model.licenseExpiryDate = mainState.model
+                    .driverInformation?.driverInfoId?.carLicenseExpiryDate;
                 modelController.text =
                     mainState.model.driverInformation?.carModel ?? "";
                 return Form(
@@ -132,7 +132,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                               if (state is SuccessGetBannerState) {
                                 log(state.toString(),
                                     name: "llllllllllllllllllllll");
-          
+
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -163,11 +163,12 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                             DropdownMenu<SubCategoryEntity>(
                                               inputDecorationTheme:
                                                   InputDecorationTheme(
-                                                hintStyle: TextStyle(
+                                                hintStyle: const TextStyle(
                                                     fontSize: 16,
                                                     color:
                                                         AppColors.PRIMARY_COLOR,
-                                                    fontWeight: FontWeight.w600),
+                                                    fontWeight:
+                                                        FontWeight.w600),
                                                 border: OutlineInputBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(10),
@@ -179,28 +180,33 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                                 ),
                                                 errorBorder: OutlineInputBorder(
                                                     borderRadius:
-                                                        BorderRadius.circular(10),
+                                                        BorderRadius.circular(
+                                                            10),
                                                     borderSide: BorderSide(
                                                       color: field.hasError
                                                           ? Colors.red
                                                           : Colors.black,
                                                     )),
-                                                enabledBorder: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(10),
-                                                    borderSide: BorderSide(
-                                                      color: field.hasError
-                                                          ? Colors.red
-                                                          : Colors.black,
-                                                    )),
-                                                focusedBorder: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(10),
-                                                    borderSide: BorderSide(
-                                                      color: field.hasError
-                                                          ? Colors.red
-                                                          : Colors.black,
-                                                    )),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        borderSide: BorderSide(
+                                                          color: field.hasError
+                                                              ? Colors.red
+                                                              : Colors.black,
+                                                        )),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        borderSide: BorderSide(
+                                                          color: field.hasError
+                                                              ? Colors.red
+                                                              : Colors.black,
+                                                        )),
                                               ),
                                               width: MediaQuery.of(context)
                                                       .size
@@ -238,8 +244,9 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                             ),
                                             if (field.hasError)
                                               Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 15),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 15),
                                                 child: Text(
                                                   field.errorText ?? "",
                                                   style: Styles.mediumText(
@@ -324,13 +331,14 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
+                                          const Text(
                                             "Car Picture",
                                             style: TextStyle(
                                                 fontSize: 17,
@@ -377,8 +385,8 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                               children: [
                                                 const SizedBox(height: 8),
                                                 Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 2),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 2),
                                                   child: Text(
                                                     field.errorText ?? "",
                                                     style: Styles.mediumText(
@@ -396,7 +404,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Label(
+                                          const Label(
                                             text: "ID",
                                             style: TextStyle(
                                                 fontSize: 17,
@@ -412,7 +420,8 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                             children: [
                                               Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
                                                 children: [
                                                   ImageValidation(
                                                     width: 95,
@@ -472,13 +481,15 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                                   children: [
                                                     const SizedBox(height: 8),
                                                     Padding(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 2),
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 2),
                                                       child: Text(
                                                         field.errorText ?? "",
-                                                        style: Styles.mediumText(
-                                                            color: Colors.red),
+                                                        style:
+                                                            Styles.mediumText(
+                                                                color:
+                                                                    Colors.red),
                                                       ),
                                                     ),
                                                   ],
@@ -494,7 +505,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                         ),
                         // Row(
                         //   children: [
-          
+
                         //   ],
                         // ),
                         // const Gap(30),
@@ -505,7 +516,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Label(
+                                const Label(
                                   text: Labels.drivingLicense,
                                   style: TextStyle(
                                       fontSize: 17,
@@ -604,7 +615,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Label(
+                                const Label(
                                   text: Labels.license,
                                   style: TextStyle(
                                       fontSize: 17,
@@ -700,7 +711,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Row(
@@ -717,7 +728,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                 hint: "ID Number",
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Flexible(
@@ -739,7 +750,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                           height: 10,
                         ),
                         CreateDoctorIDExpiryDatePicker(
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                               fontSize: 17,
                               color: AppColors.PRIMARY_COLOR,
                               fontWeight: FontWeight.w600),
@@ -760,7 +771,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                         ),
                         CreateDoctorIDExpiryDatePicker(
                           title: "Driving License Expiry Date",
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                               fontSize: 17,
                               color: AppColors.PRIMARY_COLOR,
                               fontWeight: FontWeight.w600),
@@ -784,7 +795,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                         CreateDoctorIDExpiryDatePicker(
                           borderWidth: 1,
                           title: "License Expiry Date",
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                               fontSize: 17,
                               color: AppColors.PRIMARY_COLOR,
                               fontWeight: FontWeight.w600),
@@ -813,7 +824,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                       vertical: 4, horizontal: 4),
                                   height: 55,
                                   width: double.infinity,
@@ -831,8 +842,9 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                       hintFontSize: 16,
                                       noBoarder: true,
                                       contentPadding:
-                                          EdgeInsets.symmetric(horizontal: 5),
-                                      constraints: BoxConstraints(
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 5),
+                                      constraints: const BoxConstraints(
                                           maxHeight: 70, minHeight: 70),
                                       onChanged: (value) {
                                         shippingcubit.model.model = value;
@@ -841,12 +853,13 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                 ),
                                 if (field.hasError)
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       const SizedBox(height: 8),
                                       Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 15),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15),
                                         child: Text(
                                           field.errorText ?? "",
                                           style: Styles.mediumText(
@@ -862,13 +875,13 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        AppInfoText(
+                        const AppInfoText(
                           text: Labels.theApplicationDoesNot,
                         ),
                         const SizedBox(
                           height: 10,
                         ),
-                        AppInfoText(
+                        const AppInfoText(
                           text: Labels.youWillGetPounds,
                         ),
                         const SizedBox(
@@ -879,7 +892,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                           child: AppButton(
                             backColor: AppColors.PRIMARY_COLOR,
                             textColor: Colors.white,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               color: Colors.white,
                             ),
@@ -888,17 +901,19 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                               if (formKey.currentState!.validate()) {
                                 shippingcubit.model.firstName =
                                     firstNameController.text;
-                                shippingcubit.model.model = modelController.text;
+                                shippingcubit.model.model =
+                                    modelController.text;
                                 shippingcubit.model.lastName =
                                     lastNameController.text;
-                                shippingcubit.model.phone = phoneController.text;
+                                shippingcubit.model.phone =
+                                    phoneController.text;
                                 shippingcubit.model.idNumber =
                                     idNumberController.text;
                                 shippingcubit.model.plateInfromation =
                                     plateNumberController.text;
-                                context
-                                    .read<UpdateDriverCubit>()
-                                    .update(shippingcubit.model, context.read<ShippingCubit>());
+                                context.read<UpdateDriverCubit>().update(
+                                    shippingcubit.model,
+                                    context.read<ShippingCubit>());
                               }
                             },
                           ),
@@ -911,7 +926,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                   ),
                 );
               } else {
-                return Align(
+                return const Align(
                   child: Center(
                     child: CircularProgressIndicator(
                       color: AppColors.PRIMARY_COLOR,

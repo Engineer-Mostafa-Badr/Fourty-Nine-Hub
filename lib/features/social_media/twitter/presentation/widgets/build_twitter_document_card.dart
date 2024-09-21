@@ -30,7 +30,7 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ??  UnknownFailure(''),
+            state.failure ?? UnknownFailure(''),
             context,
           ),
         );
@@ -42,13 +42,13 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
         hoverColor: Colors.transparent,
         highlightColor: Colors.transparent,
         onTap: () {
-          if(context.read<UserCubit>().isLoggedIn){
+          if (context.read<UserCubit>().isLoggedIn) {
             bottomSheet(
               context: context,
               isScrollControlled: true,
               widget: const BuildMetaVerified(),
             );
-          }else{
+          } else {
             context.push(Routes.LOGIN);
           }
         },

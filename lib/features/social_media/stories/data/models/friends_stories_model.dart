@@ -111,9 +111,8 @@ class Story {
       content: json['content'] as String?,
       caption: json['caption'] as String?,
       thumbnailUrl: json['thumbnailSignedUrl'] as String?,
-      createdAt: json['createdAt'] != null
-          ? DateTime.parse(json['createdAt'])
-          : null,
+      createdAt:
+          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
     );
   }
 

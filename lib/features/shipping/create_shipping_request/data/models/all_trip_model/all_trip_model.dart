@@ -1,8 +1,6 @@
 import 'dart:developer';
 
-import 'category_id.dart';
 import 'goods_picture.dart';
-import 'user_id.dart';
 
 class AllTripModel {
   bool? adminIgnore;

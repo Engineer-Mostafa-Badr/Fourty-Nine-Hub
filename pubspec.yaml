@@ -94,6 +94,7 @@ dependencies:
   snapping_bottom_sheet:
 
   sqflite: ^2.3.3+1
+  country_picker: ^2.0.26
 
 dependency_overrides:
   http: ^0.13.3

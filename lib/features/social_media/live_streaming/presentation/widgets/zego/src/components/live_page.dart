@@ -26,7 +26,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/events.defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/src/internal/defines.dart';
 
-
 /// @nodoc
 /// user and sdk should be login and init before page enter
 class ZegoLiveStreamingLivePage extends StatefulWidget {

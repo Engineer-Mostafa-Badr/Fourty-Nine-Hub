@@ -2,14 +2,10 @@ import 'package:fourtyninehub/features/payment/domain/entities/instapay_entity.d
 
 class InstapayModel extends InstaPayResponseEntity {
   InstapayModel({
-    required bool status,
-    required String message,
-    required InstaPaytDataModel data,
-  }) : super(
-    status: status,
-    message: message,
-    data: data,
-  );
+    required super.status,
+    required super.message,
+    required InstaPaytDataModel super.data,
+  });
 
   factory InstapayModel.fromJson(Map<String, dynamic> json) {
     return InstapayModel(
@@ -22,51 +18,35 @@ class InstapayModel extends InstaPayResponseEntity {
 
 class InstaPaytDataModel extends InstaPaytData {
   InstaPaytDataModel({
-    required String receiptURL,
-    required TransactionModel transaction,
-  }) : super(
-    receiptURL: receiptURL,
-    transaction: transaction,
-  );
+    required super.receiptURL,
+    required TransactionModel super.transaction,
+  });
 
   factory InstaPaytDataModel.fromJson(Map<String, dynamic> json) {
     return InstaPaytDataModel(
       receiptURL: json['receiptURL'] as String? ?? '',
-      transaction: TransactionModel.fromJson(json['transaction'] as Map<String, dynamic>),
+      transaction: TransactionModel.fromJson(
+          json['transaction'] as Map<String, dynamic>),
     );
   }
 }
 
 class TransactionModel extends Transaction {
   TransactionModel({
-    required String userId,
-    required String subCategoryId,
-    required String paymentProviderId,
-    required double taxPrice,
-    required String receiptKey,
-    required String amountId,
-    required double transactionAmount,
-    required String transactionPurpose,
-    required String currency,
-    required bool isPaid,
-    required String status,
-    required String id,
-    required int version,
-  }) : super(
-    userId: userId,
-    subCategoryId: subCategoryId,
-    paymentProviderId: paymentProviderId,
-    taxPrice: taxPrice,
-    receiptKey: receiptKey,
-    amountId: amountId,
-    transactionAmount: transactionAmount,
-    transactionPurpose: transactionPurpose,
-    currency: currency,
-    isPaid: isPaid,
-    status: status,
-    id: id,
-    version: version,
-  );
+    required super.userId,
+    required super.subCategoryId,
+    required super.paymentProviderId,
+    required super.taxPrice,
+    required super.receiptKey,
+    required super.amountId,
+    required super.transactionAmount,
+    required super.transactionPurpose,
+    required super.currency,
+    required super.isPaid,
+    required super.status,
+    required super.id,
+    required super.version,
+  });
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
     return TransactionModel(

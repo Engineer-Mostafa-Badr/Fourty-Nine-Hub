@@ -81,36 +81,42 @@ class _VisitaBookingState extends State<VisitaBooking> {
                   const BookDoctorAppointmentFeesCard(),
                   const Sizer(),
 
-                Row(
-                  children: [
-                    Expanded(child: AppButton(
-                        color: AppColors.LIGHT_COLOR,
-                        height: 50,
-                        label: "${Labels.premium} ${Labels.book}",
-                        onPressed: () {
-                          serviceLocator<SubscriptionController>()
-                              .checkIfUserSubscribed(
-                            title: serviceLocator<HealthSharedData>()
-                                .doctorSearchParams
-                                .subCategory.name,
-                            onSubscribed: () async {
-                              await controller.premiumBook();
-                            },
-                            subCategoryId: serviceLocator<HealthSharedData>()
-                                .doctorSearchParams
-                                .subCategory
-                                .id,
-                          );
-                        }),),
-                   const Sizer(),
-                   Expanded(child:  AppButton(
-                       height: 50,
-                       color: AppColors.LIGHT_COLOR,
-                       label: Labels.book,
-                       backColor: AppColors.PRIMARY_COLOR,
-                       onPressed: () => controller.regularBooking()),),
-                  ],
-                ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: AppButton(
+                            color: AppColors.LIGHT_COLOR,
+                            height: 50,
+                            label: "${Labels.premium} ${Labels.book}",
+                            onPressed: () {
+                              serviceLocator<SubscriptionController>()
+                                  .checkIfUserSubscribed(
+                                title: serviceLocator<HealthSharedData>()
+                                    .doctorSearchParams
+                                    .subCategory
+                                    .name,
+                                onSubscribed: () async {
+                                  await controller.premiumBook();
+                                },
+                                subCategoryId:
+                                    serviceLocator<HealthSharedData>()
+                                        .doctorSearchParams
+                                        .subCategory
+                                        .id,
+                              );
+                            }),
+                      ),
+                      const Sizer(),
+                      Expanded(
+                        child: AppButton(
+                            height: 50,
+                            color: AppColors.LIGHT_COLOR,
+                            label: Labels.book,
+                            backColor: AppColors.PRIMARY_COLOR,
+                            onPressed: () => controller.regularBooking()),
+                      ),
+                    ],
+                  ),
                   // const Sizer(),
                   //
                   // const Sizer(),

@@ -2,14 +2,10 @@ import 'package:fourtyninehub/features/payment/domain/entities/fawry_pay_with_to
 
 class PayWithTokenModel extends PayWithTokenResponseEntity {
   PayWithTokenModel({
-    required bool status,
-    required String message,
-    required PaymentTokenData data,
-  }) : super(
-    status: status,
-    message: message,
-    data: data,
-  );
+    required super.status,
+    required super.message,
+    required super.data,
+  });
 
   factory PayWithTokenModel.fromJson(Map<String, dynamic> json) {
     return PayWithTokenModel(
@@ -22,44 +18,25 @@ class PayWithTokenModel extends PayWithTokenResponseEntity {
 
 class PaymentTokenDataModel extends PaymentTokenData {
   PaymentTokenDataModel({
-    required String type,
-    required String referenceNumber,
-    required String merchantRefNumber,
-    required int orderAmount,
-    required int paymentAmount,
-    required int fawryFees,
-    required String orderStatus,
-    required String paymentMethod,
-    required int paymentTime,
-    required String cardLastFourDigits,
-    required String customerName,
-    required String customerProfileId,
-    required String authNumber,
-    required String signature,
-    required int taxes,
-    required int statusCode,
-    required String statusDescription,
-    required bool basketPayment,
-  }) : super(
-    type: type,
-    referenceNumber: referenceNumber,
-    merchantRefNumber: merchantRefNumber,
-    orderAmount: orderAmount,
-    paymentAmount: paymentAmount,
-    fawryFees: fawryFees,
-    orderStatus: orderStatus,
-    paymentMethod: paymentMethod,
-    paymentTime: paymentTime,
-    cardLastFourDigits: cardLastFourDigits,
-    customerName: customerName,
-    customerProfileId: customerProfileId,
-    authNumber: authNumber,
-    signature: signature,
-    taxes: taxes,
-    statusCode: statusCode,
-    statusDescription: statusDescription,
-    basketPayment: basketPayment,
-  );
+    required super.type,
+    required super.referenceNumber,
+    required super.merchantRefNumber,
+    required super.orderAmount,
+    required super.paymentAmount,
+    required super.fawryFees,
+    required super.orderStatus,
+    required super.paymentMethod,
+    required super.paymentTime,
+    required super.cardLastFourDigits,
+    required super.customerName,
+    required super.customerProfileId,
+    required super.authNumber,
+    required super.signature,
+    required super.taxes,
+    required super.statusCode,
+    required super.statusDescription,
+    required super.basketPayment,
+  });
 
   factory PaymentTokenDataModel.fromJson(Map<String, dynamic> json) {
     return PaymentTokenDataModel(

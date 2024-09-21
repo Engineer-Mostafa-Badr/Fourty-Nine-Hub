@@ -42,7 +42,8 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                  text: '${toBeginningOfSentenceCase(doctor.firstName)} ${toBeginningOfSentenceCase(doctor.lastName)}',
+                  text:
+                      '${toBeginningOfSentenceCase(doctor.firstName)} ${toBeginningOfSentenceCase(doctor.lastName)}',
                   style: Styles.mediumText(fontWeight: FontWeight.w500),
                 ),
                 RatingStars(
@@ -134,13 +135,12 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                           bottomSheet(
                               context: context,
                               widget: ReportView(
-                                  id: doctor.id,
-                                  categoryId: serviceLocator<HealthSharedData>()
-                                      .doctorSearchParams
-                                      .subCategory
-                                      .id,
-                                 ));
-
+                                id: doctor.id,
+                                categoryId: serviceLocator<HealthSharedData>()
+                                    .doctorSearchParams
+                                    .subCategory
+                                    .id,
+                              ));
                         },
                         child: const Icon(
                           Icons.report_gmailerrorred_rounded,

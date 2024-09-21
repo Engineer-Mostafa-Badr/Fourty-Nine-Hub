@@ -29,7 +29,6 @@ class OtherAccountView extends StatefulWidget {
   const OtherAccountView({super.key, required this.userId});
   final String userId;
 
-
   @override
   State<OtherAccountView> createState() => _OtherAccountViewState();
 }
@@ -49,263 +48,283 @@ class _OtherAccountViewState extends State<OtherAccountView> {
               ? const Center(
                   child: CupertinoActivityIndicator(),
                 )
-              :state.status== StateStatus.error? ApiErrorPage(message:  getFailureMessage(
-            state.failure ??  UnknownFailure(''),
-            context,
-          ),):CustomScrollView(
-                  slivers: [
-                    SliverToBoxAdapter(
-                        child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsetsDirectional.only(
-                                top: 25, end: 10, start: 10),
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  IconButton(
-                                      onPressed: () => context.pop(),
-                                      icon: const Icon(
-                                        Icons.arrow_back,
-                                        color: Colors.black,
-                                      )),
-                                  if(context.read<UserCubit>().isLoggedIn)PopupMenuButton(
-                                      icon: const Icon(
-                                        Icons.more_vert,
-                                        color: Colors.black,
-                                      ),
-                                      itemBuilder: (context) {
-                                        return [
-                                          if (loginUser?.id !=
-                                              state.profileData?.id)
-                                            PopupMenuItem<int>(
-                                              value: 4,
-                                              child: const Text("Report"),
-                                              onTap: () {
-                                                bottomSheet(
-                                                    context: context,
-                                                    widget: ReportView(
-                                                      id: widget.userId,
-                                                      categoryId:
-                                                          '66b77e77bb35968b535dc944',
-                                                    ));
-                                              },
+              : state.status == StateStatus.error
+                  ? ApiErrorPage(
+                      message: getFailureMessage(
+                        state.failure ?? UnknownFailure(''),
+                        context,
+                      ),
+                    )
+                  : CustomScrollView(
+                      slivers: [
+                        SliverToBoxAdapter(
+                            child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsetsDirectional.only(
+                                    top: 25, end: 10, start: 10),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      IconButton(
+                                          onPressed: () => context.pop(),
+                                          icon: const Icon(
+                                            Icons.arrow_back,
+                                            color: Colors.black,
+                                          )),
+                                      if (context.read<UserCubit>().isLoggedIn)
+                                        PopupMenuButton(
+                                            icon: const Icon(
+                                              Icons.more_vert,
+                                              color: Colors.black,
                                             ),
-                                          if (loginUser?.id !=
-                                              state.profileData?.id)
-                                            PopupMenuItem<int>(
-                                              value: 5,
-                                              child: Text(
-                                                  state.profileData?.isBlock ==
-                                                          true
-                                                      ? 'UnBlock'
-                                                      : 'Block'),
-                                              onTap: () async {
-                                                // context.pop();
-                                                var result =
-                                                    await controller.blockUser(
-                                                        context: context,
-                                                        userId: widget.userId);
-                                                print("result:$result");
-                                                if (result == true) {
-                                                  print("object");
-                                                  if (state.profileData
-                                                          ?.isBlock ==
-                                                      false) {
-                                                    state.profileData?.isBlock =
-                                                        true;
-                                                    showSuccessMessage(context,
-                                                        'Blocked user successfully.');
-                                                  } else {
-                                                    state.profileData?.isBlock =
-                                                        false;
-                                                    showSuccessMessage(context,
-                                                        'Unblocked user successfully.');
-                                                  }
-                                                }
-                                              },
-                                            ),
-                                          if (loginUser?.id ==
-                                              state.profileData?.id)
-                                            PopupMenuItem<int>(
-                                              value: 5,
-                                              child: const Text('Edit Profile'),
-                                              onTap: () async {
-                                                await context
-                                                    .push(Routes.EDITPROFILE);
-                                                controller.getUserProfile(
-                                                    id: widget.userId);
-                                              },
-                                            )
-                                        ];
-                                      })
-                                ]))),
-                    SliverToBoxAdapter(
-                      child: Stack(
-                        children: [
-                          _buildAccountCounter(
-                              context: context,
-                              user: state.profileData!,
-                              onFollow: () async {
-                                if(context.read<UserCubit>().isLoggedIn){
-                                  if (state.profileData?.isFollowed == true) {
-                                    var result =
-                                        await controller.unFollowRequest(
-                                            context: context,
-                                            userId: state.profileData!.id);
-                                    if (result == true) {
-                                      state.profileData?.isFollowed = false;
-                                      setState(() {});
-                                    }
-                                  } else {
-                                    var result = await controller.followRequest(
-                                        context: context,
-                                        userId: state.profileData!.id);
-                                    if (result == true) {
-                                      state.profileData?.isFollowed = true;
-                                      setState(() {});
-                                    }
-                                  }
-                                }else{
-                                  context.push(Routes.LOGIN);
-                                }
-                              },
-                              onAddFriend: () async {
-                                // print("object");
-                                if(context.read<UserCubit>().isLoggedIn){
-                                  if (state.profileData?.areFriends == true) {
-                                  } else {
-                                    if (state.profileData?.sentFriendRequest ==
-                                        true) {
-                                      var result =
-                                          await controller.removeFriendRequest(
-                                              context: context,
-                                              userId: state.profileData!.id);
-                                      if (result == true) {
-                                        state.profileData?.sentFriendRequest =
-                                            false;
-                                        setState(() {});
+                                            itemBuilder: (context) {
+                                              return [
+                                                if (loginUser?.id !=
+                                                    state.profileData?.id)
+                                                  PopupMenuItem<int>(
+                                                    value: 4,
+                                                    child: const Text("Report"),
+                                                    onTap: () {
+                                                      bottomSheet(
+                                                          context: context,
+                                                          widget: ReportView(
+                                                            id: widget.userId,
+                                                            categoryId:
+                                                                '66b77e77bb35968b535dc944',
+                                                          ));
+                                                    },
+                                                  ),
+                                                if (loginUser?.id !=
+                                                    state.profileData?.id)
+                                                  PopupMenuItem<int>(
+                                                    value: 5,
+                                                    child: Text(state
+                                                                .profileData
+                                                                ?.isBlock ==
+                                                            true
+                                                        ? 'UnBlock'
+                                                        : 'Block'),
+                                                    onTap: () async {
+                                                      // context.pop();
+                                                      var result =
+                                                          await controller
+                                                              .blockUser(
+                                                                  context:
+                                                                      context,
+                                                                  userId: widget
+                                                                      .userId);
+                                                      print("result:$result");
+                                                      if (result == true) {
+                                                        print("object");
+                                                        if (state.profileData
+                                                                ?.isBlock ==
+                                                            false) {
+                                                          state.profileData
+                                                              ?.isBlock = true;
+                                                          showSuccessMessage(
+                                                              context,
+                                                              'Blocked user successfully.');
+                                                        } else {
+                                                          state.profileData
+                                                              ?.isBlock = false;
+                                                          showSuccessMessage(
+                                                              context,
+                                                              'Unblocked user successfully.');
+                                                        }
+                                                      }
+                                                    },
+                                                  ),
+                                                if (loginUser?.id ==
+                                                    state.profileData?.id)
+                                                  PopupMenuItem<int>(
+                                                    value: 5,
+                                                    child: const Text(
+                                                        'Edit Profile'),
+                                                    onTap: () async {
+                                                      await context.push(
+                                                          Routes.EDITPROFILE);
+                                                      controller.getUserProfile(
+                                                          id: widget.userId);
+                                                    },
+                                                  )
+                                              ];
+                                            })
+                                    ]))),
+                        SliverToBoxAdapter(
+                          child: Stack(
+                            children: [
+                              _buildAccountCounter(
+                                  context: context,
+                                  user: state.profileData!,
+                                  onFollow: () async {
+                                    if (context.read<UserCubit>().isLoggedIn) {
+                                      if (state.profileData?.isFollowed ==
+                                          true) {
+                                        var result =
+                                            await controller.unFollowRequest(
+                                                context: context,
+                                                userId: state.profileData!.id);
+                                        if (result == true) {
+                                          state.profileData?.isFollowed = false;
+                                          setState(() {});
+                                        }
+                                      } else {
+                                        var result =
+                                            await controller.followRequest(
+                                                context: context,
+                                                userId: state.profileData!.id);
+                                        if (result == true) {
+                                          state.profileData?.isFollowed = true;
+                                          setState(() {});
+                                        }
                                       }
                                     } else {
-                                      var result =
-                                          await controller.friendRequest(
-                                              context: context,
-                                              userId: state.profileData!.id);
-                                      if (result == true) {
-                                        state.profileData?.sentFriendRequest =
-                                            true;
-                                        setState(() {});
-                                      }
+                                      context.push(Routes.LOGIN);
                                     }
-                                  }
-                                }else{
-                                  context.push(Routes.LOGIN);
-                                }
-                              },
-                              onAcceptFriend: () async {
-                                bool result =
-                                    await controller.acceptRejectFriend(
-                                        params: AcceptRejectFriendRequestParams(
-                                            userId: widget.userId,
-                                            status: true));
-                                state.profileData?.isSenTRequest = false;
-                                state.profileData?.areFriends = true;
-                                state.profileData!.friendsCount =
-                                    state.profileData!.friendsCount! + 1;
-                                print(state.profileData?.friendsCount);
-                                setState(() {});
-                                return result;
-                              },
-                              onRejectFriend: () async {
-                                bool result =
-                                    await controller.acceptRejectFriend(
-                                        params: AcceptRejectFriendRequestParams(
-                                            userId: widget.userId,
-                                            status: false));
-                                state.profileData?.isSenTRequest = false;
-                                setState(() {});
-                                return result;
-                              },
-                              onDeleteFriend: () async {
-                                bool result = await controller.deleteFriend(
-                                    userId: widget.userId);
-                                state.profileData?.areFriends = false;
-                                state.profileData!.friendsCount =
-                                    state.profileData!.friendsCount! - 1;
-                                print(state.profileData?.friendsCount);
-                                setState(() {});
-                                return result;
-                              }),
-                        ],
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: state.profileData?.isBlock == false
-                          ? Column(
-                              children: [
-                                TabBar(
-                                    labelStyle: Styles.mediumText(),
-                                    isScrollable: true,
-                                    tabAlignment: TabAlignment.center,
-                                    onTap: (i) {
-                                      controller.changeUserPage(i);
-                                    },
-                                    tabs: [
-                                      const Tab(
-                                        text: 'Posts',
-                                      ),
-                                      const Tab(
-                                        text: 'Tweets',
-                                      ),
-                                      const Tab(
-                                        text: 'Reels',
-                                      ),
-                                      if (context
-                                              .read<UserCubit>()
-                                              .state
-                                              .data
-                                              ?.id ==
-                                          widget.userId)
-                                        const Tab(
-                                          text: 'Saved Reels',
-                                        ),
-                                    ]),
-                                // _buildAccountPages(state.profileData!),
-                              ],
-                            )
-                          : const Center(
-                              child: Padding(
-                                padding: EdgeInsets.only(top: 25.0),
-                                child: Label(
-                                  text: 'You have blocked this user.',
+                                  },
+                                  onAddFriend: () async {
+                                    // print("object");
+                                    if (context.read<UserCubit>().isLoggedIn) {
+                                      if (state.profileData?.areFriends ==
+                                          true) {
+                                      } else {
+                                        if (state.profileData
+                                                ?.sentFriendRequest ==
+                                            true) {
+                                          var result = await controller
+                                              .removeFriendRequest(
+                                                  context: context,
+                                                  userId:
+                                                      state.profileData!.id);
+                                          if (result == true) {
+                                            state.profileData
+                                                ?.sentFriendRequest = false;
+                                            setState(() {});
+                                          }
+                                        } else {
+                                          var result =
+                                              await controller.friendRequest(
+                                                  context: context,
+                                                  userId:
+                                                      state.profileData!.id);
+                                          if (result == true) {
+                                            state.profileData
+                                                ?.sentFriendRequest = true;
+                                            setState(() {});
+                                          }
+                                        }
+                                      }
+                                    } else {
+                                      context.push(Routes.LOGIN);
+                                    }
+                                  },
+                                  onAcceptFriend: () async {
+                                    bool result =
+                                        await controller.acceptRejectFriend(
+                                            params:
+                                                AcceptRejectFriendRequestParams(
+                                                    userId: widget.userId,
+                                                    status: true));
+                                    state.profileData?.isSenTRequest = false;
+                                    state.profileData?.areFriends = true;
+                                    state.profileData!.friendsCount =
+                                        state.profileData!.friendsCount! + 1;
+                                    print(state.profileData?.friendsCount);
+                                    setState(() {});
+                                    return result;
+                                  },
+                                  onRejectFriend: () async {
+                                    bool result =
+                                        await controller.acceptRejectFriend(
+                                            params:
+                                                AcceptRejectFriendRequestParams(
+                                                    userId: widget.userId,
+                                                    status: false));
+                                    state.profileData?.isSenTRequest = false;
+                                    setState(() {});
+                                    return result;
+                                  },
+                                  onDeleteFriend: () async {
+                                    bool result = await controller.deleteFriend(
+                                        userId: widget.userId);
+                                    state.profileData?.areFriends = false;
+                                    state.profileData!.friendsCount =
+                                        state.profileData!.friendsCount! - 1;
+                                    print(state.profileData?.friendsCount);
+                                    setState(() {});
+                                    return result;
+                                  }),
+                            ],
+                          ),
+                        ),
+                        SliverToBoxAdapter(
+                          child: state.profileData?.isBlock == false
+                              ? Column(
+                                  children: [
+                                    TabBar(
+                                        labelStyle: Styles.mediumText(),
+                                        isScrollable: true,
+                                        tabAlignment: TabAlignment.center,
+                                        onTap: (i) {
+                                          controller.changeUserPage(i);
+                                        },
+                                        tabs: [
+                                          const Tab(
+                                            text: 'Posts',
+                                          ),
+                                          const Tab(
+                                            text: 'Tweets',
+                                          ),
+                                          const Tab(
+                                            text: 'Reels',
+                                          ),
+                                          if (context
+                                                  .read<UserCubit>()
+                                                  .state
+                                                  .data
+                                                  ?.id ==
+                                              widget.userId)
+                                            const Tab(
+                                              text: 'Saved Reels',
+                                            ),
+                                        ]),
+                                    // _buildAccountPages(state.profileData!),
+                                  ],
+                                )
+                              : const Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: 25.0),
+                                    child: Label(
+                                      text: 'You have blocked this user.',
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                    ),
-                    state.profilePage == 0 &&
-                            state.profileData?.isBlock == false
-                        ? UserPosts(
-                            userData: state.profileData!,
-                          )
-                        : state.profilePage == 1 &&
+                        ),
+                        state.profilePage == 0 &&
                                 state.profileData?.isBlock == false
-                            ? UserTweets(
+                            ? UserPosts(
                                 userData: state.profileData!,
                               )
-                            : state.profilePage == 2 &&
+                            : state.profilePage == 1 &&
                                     state.profileData?.isBlock == false
-                                ? UserReels(
+                                ? UserTweets(
                                     userData: state.profileData!,
                                   )
                                 : state.profilePage == 2 &&
                                         state.profileData?.isBlock == false
-                                    ? SavedReelsView(
-                                        userData: state.profileData!)
-                                    : const SliverToBoxAdapter(
-                                        child: SizedBox.shrink(),
-                                      ),
-                  ],
-                );
+                                    ? UserReels(
+                                        userData: state.profileData!,
+                                      )
+                                    : state.profilePage == 2 &&
+                                            state.profileData?.isBlock == false
+                                        ? SavedReelsView(
+                                            userData: state.profileData!)
+                                        : const SliverToBoxAdapter(
+                                            child: SizedBox.shrink(),
+                                          ),
+                      ],
+                    );
         }),
       ),
     );
@@ -495,7 +514,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           ];
                         },
                         onSelected: (value) {
-                          !context.read<UserCubit>().isLoggedIn?context.push(Routes.LOGIN):context.push(Routes.CHAT);
+                          !context.read<UserCubit>().isLoggedIn
+                              ? context.push(Routes.LOGIN)
+                              : context.push(Routes.CHAT);
                         }),
                 ],
               ),

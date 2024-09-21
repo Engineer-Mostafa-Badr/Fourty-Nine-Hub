@@ -103,3 +103,5 @@ class RiderequestState {
     );
   }
 }
+
+// class RiderequestState

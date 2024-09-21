@@ -20,18 +20,18 @@ class _HealthBannerState extends State<HealthBanner> {
       builder: (context, state) {
         if (state.mainCategory != null) {
           return MainCategoryBanner(
-            onFavorite: () {
-              
-            },
-            // isFavorite: state.mainCategory!.isFavorite ?? false,
-            //   onFavorite: () async {
-                // // context.read<HealthCubit>().toggleFavoriteMedicalService(state.mainCategory!.id);
-                // print(state.mainCategory!.id);
-                // setState(() {
+              onFavorite: () {
+                return null;
+              },
+              // isFavorite: state.mainCategory!.isFavorite ?? false,
+              //   onFavorite: () async {
+              // // context.read<HealthCubit>().toggleFavoriteMedicalService(state.mainCategory!.id);
+              // print(state.mainCategory!.id);
+              // setState(() {
 
-                // });
-                //  return await  state.mainCategory!.isFavorite == true ? context.read<HealthCubit>().deleteMedicalService(state.mainCategory!.id) : context.read<HealthCubit>().toggleFavoriteMedicalService(state.mainCategory!.id);
-            //   },
+              // });
+              //  return await  state.mainCategory!.isFavorite == true ? context.read<HealthCubit>().deleteMedicalService(state.mainCategory!.id) : context.read<HealthCubit>().toggleFavoriteMedicalService(state.mainCategory!.id);
+              //   },
               category: state.mainCategory!,
               canRegister: state.isDoctor == true ? false : true,
               onRegister: () {

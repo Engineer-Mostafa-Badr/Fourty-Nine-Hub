@@ -13,7 +13,6 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twit
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_comment_card.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_comment_replied.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -164,7 +163,10 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                 ),
                 child: Row(
                   children: [
-                    const ProfileImage(accountId: 0,userId: '',),
+                    const ProfileImage(
+                      accountId: 0,
+                      userId: '',
+                    ),
                     const Sizer(),
                     Expanded(
                         child: FormTextField(

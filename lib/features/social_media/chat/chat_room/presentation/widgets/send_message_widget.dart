@@ -643,10 +643,10 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
               .read<ChatRoomCubit>()
               .sendMessage(message: _messageTextController.text);
         },
-        child: CircleAvatar(
+        child: const CircleAvatar(
           backgroundColor: AppColors.PRIMARY_COLOR,
           radius: 25,
-          child: const Center(
+          child: Center(
             child: Icon(
               Icons.send,
               color: Colors.white,

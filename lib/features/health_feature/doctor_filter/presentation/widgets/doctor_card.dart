@@ -34,68 +34,75 @@ class DoctorCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(10)),
         child: Column(
           children: [
-          Row(
-            children: [
-            Expanded(child:   Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            Row(
               children: [
-                ProfileImage(
-                  userId: '',
-                  accountId: 0,
-                  size: 25,
-                  imageURL: doctor.image,
-                ),
-                const Sizer(),
                 Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(toBeginningOfSentenceCase(doctor.fullName)??'', style: Styles.mediumText()),
-
-                            RatingStars(
-                              rating: doctor.rating.toDouble(),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )),
-              ],
-            ),),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-                decoration: BoxDecoration(
-                  color: doctor.isPremium ? Colors.black : Colors.white,
-                  borderRadius: BorderRadius.circular(20.0),
-                  border: Border.all(
-                    color: doctor.isPremium ? Colors.amber : Colors.grey,
-                    width: 2.0,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ProfileImage(
+                        userId: '',
+                        accountId: 0,
+                        size: 25,
+                        imageURL: doctor.image,
+                      ),
+                      const Sizer(),
+                      Expanded(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  toBeginningOfSentenceCase(doctor.fullName) ??
+                                      '',
+                                  style: Styles.mediumText()),
+                              RatingStars(
+                                rating: doctor.rating.toDouble(),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
+                    ],
                   ),
-                  boxShadow: doctor.isPremium
-                      ? [
-                    BoxShadow(
-                      color: Colors.amber.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 8,
-                      offset: Offset(0, 3), // changes position of shadow
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 12.0, vertical: 6.0),
+                  decoration: BoxDecoration(
+                    color: doctor.isPremium ? Colors.black : Colors.white,
+                    borderRadius: BorderRadius.circular(20.0),
+                    border: Border.all(
+                      color: doctor.isPremium ? Colors.amber : Colors.grey,
+                      width: 2.0,
                     ),
-                  ]
-                      : null,
-                ),
-                child: Text(
-                  doctor.isPremium ? "Premium" : "Regular",
-                  style: TextStyle(
-                    color: doctor.isPremium ? Colors.amber : Colors.grey,
-                    fontWeight: doctor.isPremium ? FontWeight.bold : FontWeight.normal,
-                    fontSize: 16.0,
+                    boxShadow: doctor.isPremium
+                        ? [
+                            BoxShadow(
+                              color: Colors.amber.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 8,
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
+                            ),
+                          ]
+                        : null,
+                  ),
+                  child: Text(
+                    doctor.isPremium ? "Premium" : "Regular",
+                    style: TextStyle(
+                      color: doctor.isPremium ? Colors.amber : Colors.grey,
+                      fontWeight: doctor.isPremium
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      fontSize: 16.0,
+                    ),
                   ),
                 ),
-              ),
-
-            ],
-          ),
+              ],
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

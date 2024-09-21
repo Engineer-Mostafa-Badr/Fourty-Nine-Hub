@@ -93,7 +93,7 @@ class ShippingServiceLocatior {
     serviceLocator.registerFactory(
       () => DriverStatisticsCubit(repository: serviceLocator()),
     );
-    
+
     serviceLocator.registerFactory(
       () => GetDriverDashboardData(repository: serviceLocator()),
     );

@@ -65,7 +65,7 @@ class CreateDoctorGovernorateDropdown extends StatelessWidget {
                       children: [
                         const SizedBox(height: 8),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: Text(
                             field.errorText ?? "",
                             style: Styles.mediumText(color: Colors.red),

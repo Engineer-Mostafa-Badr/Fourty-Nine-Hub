@@ -3,18 +3,16 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
 
 class SendMessageUseCase extends UseCase<bool, SendMessageParams> {
-
   final ChatRoomRepository _repo;
 
   SendMessageUseCase(this._repo);
 
   @override
   Future<Either<Failure, bool>> call(SendMessageParams params) {
-   return _repo.sendMessage(params);
+    return _repo.sendMessage(params);
   }
 }
 

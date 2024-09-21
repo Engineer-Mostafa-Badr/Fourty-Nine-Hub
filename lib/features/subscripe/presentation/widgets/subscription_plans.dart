@@ -24,7 +24,8 @@ class SubscriptionPlansWidget extends StatefulWidget {
     super.key,
     this.paymentMenthods,
     required this.subscribePlans,
-    required this.subCategoryId, this.title,
+    required this.subCategoryId,
+    this.title,
   });
 
   @override
@@ -84,7 +85,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                       color: _isPremium
                           ? Colors.red
                           : Theme.of(context).primaryColor,
-                          // : Colors.red,
+                      // : Colors.red,
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Text(
@@ -166,9 +167,19 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               setState(() => _groupValue = v!);
             },
           ),
-          Expanded(child: ElevatedAppButton(label: period, onPressed: () {},backColor: _isPremium ? Colors.red : AppColors.PRIMARY_COLOR,)),
+          Expanded(
+              child: ElevatedAppButton(
+            label: period,
+            onPressed: () {},
+            backColor: _isPremium ? Colors.red : AppColors.PRIMARY_COLOR,
+          )),
           const SizedBox(width: 10),
-          Expanded(child: ElevatedAppButton(label: '$price', onPressed: () {},backColor: _isPremium ? Colors.red : AppColors.PRIMARY_COLOR,)),
+          Expanded(
+              child: ElevatedAppButton(
+            label: '$price',
+            onPressed: () {},
+            backColor: _isPremium ? Colors.red : AppColors.PRIMARY_COLOR,
+          )),
         ],
       ),
     );

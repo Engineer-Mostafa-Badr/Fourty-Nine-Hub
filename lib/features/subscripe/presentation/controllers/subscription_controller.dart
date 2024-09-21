@@ -32,7 +32,7 @@ class SubscriptionController {
   void checkIfUserSubscribed({
     required Function onSubscribed,
     required String subCategoryId,
-     String? title,
+    String? title,
   }) async {
     showLoadingDialog(context);
     final response = await _checkIfUserSubscribedUseCase(subCategoryId);
@@ -45,13 +45,15 @@ class SubscriptionController {
       if (data) {
         onSubscribed();
       } else {
-        showSubscriptionPlans(subCategoryId: subCategoryId,title: title);
+        showSubscriptionPlans(subCategoryId: subCategoryId, title: title);
       }
     });
   }
 
   Future<void> showSubscriptionPlans(
-      {List<WalletTypes>? wallets, required String subCategoryId,String? title}) async {
+      {List<WalletTypes>? wallets,
+      required String subCategoryId,
+      String? title}) async {
     showLoadingDialog(context);
     final plansResponse = await _getSubscriptionPlansUseCase(subCategoryId);
     AppPages.router.pop();

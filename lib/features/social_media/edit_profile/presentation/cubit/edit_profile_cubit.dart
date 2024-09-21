@@ -42,13 +42,17 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   Future<void> editProfile(EditProfileEntity params) async {
     emit(state.copyWith(status: EditProfileStates.loading));
     final response = await _editProfileUseCase(params);
-    response.fold((l) => emit(state.copyWith(failure: l, status: EditProfileStates.error)), (data) {
+    response.fold(
+        (l) =>
+            emit(state.copyWith(failure: l, status: EditProfileStates.error)),
+        (data) {
       UserCubit.to.getUser();
       emit(state.copyWith(status: EditProfileStates.success));
     });
   }
 
   initGender(String gender) {
-    emit(state.copyWith(isMale: gender == 'male' || gender.isEmpty ? true : false));
+    emit(state.copyWith(
+        isMale: gender == 'male' || gender.isEmpty ? true : false));
   }
 }

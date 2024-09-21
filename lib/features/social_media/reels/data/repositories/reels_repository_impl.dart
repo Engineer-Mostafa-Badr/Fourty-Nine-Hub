@@ -136,13 +136,11 @@
 
 import 'dart:convert';
 import 'dart:developer';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/audio_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/like_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/save_reel_model.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:http/http.dart' as http;
 import '../../../../../core/utils/shared_pref.dart';
 import '../models/new_reels_model.dart';
@@ -343,10 +341,14 @@ class ReelsRepository {
       throw Exception('Failed to like/unlike the comment');
     }
   }
-  Future<ReelsForAudioResponse> fetchReelsWithSameAudio(String audioId, {int page = 1, int limit = 10}) async {
-    final url = 'https://49dev.com/api/v1/reels/audio/$audioId?page=$page&limit=$limit';
 
-    final response = await _makeGetRequest(url: url, fromMethod: 'fetchReelsWithSameAudio');
+  Future<ReelsForAudioResponse> fetchReelsWithSameAudio(String audioId,
+      {int page = 1, int limit = 10}) async {
+    final url =
+        'https://49dev.com/api/v1/reels/audio/$audioId?page=$page&limit=$limit';
+
+    final response =
+        await _makeGetRequest(url: url, fromMethod: 'fetchReelsWithSameAudio');
     if (response != null) {
       log("Fetched reels with the same audio successfully.");
       return ReelsForAudioResponse.fromJson(json.decode(response.body));
@@ -355,5 +357,4 @@ class ReelsRepository {
       throw Exception('Failed to fetch reels with the same audio');
     }
   }
-
 }

@@ -30,7 +30,10 @@ class InstallmentOrderCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                const ProfileImage(accountId: 0, userId: '',),
+                const ProfileImage(
+                  accountId: 0,
+                  userId: '',
+                ),
                 const Sizer(),
                 Expanded(
                     child: Column(

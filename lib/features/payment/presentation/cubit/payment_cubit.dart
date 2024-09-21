@@ -27,7 +27,17 @@ import 'package:fourtyninehub/features/payment/domain/use_cases/paymob_use_case.
 part 'payment_state.dart';
 
 class PaymentCubit extends Cubit<PaymentState> {
-  PaymentCubit(this.getPaymentProviderUseCase, this.paymobUseCase, this.fawryCardUseCase, this.fawrySaveCardTokenUseCase, this.getSavedCardsUseCase, this.deleteCardUseCase, this.makeMultiPaymentUseCase, this.instaPayUseCase, this.payWithTokenUseCase) : super(PaymentState());
+  PaymentCubit(
+      this.getPaymentProviderUseCase,
+      this.paymobUseCase,
+      this.fawryCardUseCase,
+      this.fawrySaveCardTokenUseCase,
+      this.getSavedCardsUseCase,
+      this.deleteCardUseCase,
+      this.makeMultiPaymentUseCase,
+      this.instaPayUseCase,
+      this.payWithTokenUseCase)
+      : super(PaymentState());
   final GetPaymentProviderUseCase getPaymentProviderUseCase;
   final PaymobUseCase paymobUseCase;
   final FawryCardUseCase fawryCardUseCase;
@@ -55,15 +65,16 @@ class PaymentCubit extends Cubit<PaymentState> {
     ));
 
     response.fold(
-          (failure) {
+      (failure) {
         emit(state.copyWith(failure: failure, status: StateStatus.error));
       },
-          (data) {
+      (data) {
         emit(state.copyWith(
           payWithTokenResponseData: data,
           status: StateStatus.success,
         ));
-        print("Pay with Token Data: ${data.message}"); // Logging the message or data received
+        print(
+            "Pay with Token Data: ${data.message}"); // Logging the message or data received
       },
     );
   }
@@ -75,10 +86,9 @@ class PaymentCubit extends Cubit<PaymentState> {
       subCategoryId: "66742736963f11f31c67b51d",
       onUploaded: (media) {
         emit(state.copyWith(
-          uploadedImage: File(media.file.path),
-          uploadStatus: StateStatus.success,
-          imageMediaId: media.mediaId
-        ));
+            uploadedImage: File(media.file.path),
+            uploadStatus: StateStatus.success,
+            imageMediaId: media.mediaId));
       },
     );
     if (result != null) {
@@ -86,6 +96,7 @@ class PaymentCubit extends Cubit<PaymentState> {
       emit(state.copyWith(uploadStatus: StateStatus.error));
     }
   }
+
   Future<void> postInstaPay({
     required String receiptId,
     required String amountId,
@@ -100,10 +111,10 @@ class PaymentCubit extends Cubit<PaymentState> {
     ));
 
     response.fold(
-          (failure) {
+      (failure) {
         emit(state.copyWith(failure: failure, status: StateStatus.error));
       },
-          (data) {
+      (data) {
         emit(state.copyWith(
           instaPayResponseData: data,
           status: StateStatus.success,
@@ -113,29 +124,28 @@ class PaymentCubit extends Cubit<PaymentState> {
     );
   }
 
-
   void setSelectedImage(File xFile) {
     final file = File(xFile.path);
     emit(state.copyWith(selectedImage: file));
   }
+
   void selectCard(CardEntity card) {
     _selectedCard = card;
     emit(state.copyWith());
   }
-
 
   Future<void> deleteCard(String cardId) async {
     emit(state.copyWith(status: StateStatus.loading));
     final response = await deleteCardUseCase(cardId);
 
     response.fold(
-          (failure) {
+      (failure) {
         emit(state.copyWith(
           failure: failure,
           status: StateStatus.error,
         ));
       },
-          (deleteCardResponse) {
+      (deleteCardResponse) {
         emit(state.copyWith(
           status: StateStatus.success,
           deleteCardResponse: deleteCardResponse,
@@ -154,34 +164,37 @@ class PaymentCubit extends Cubit<PaymentState> {
   Future<List<PaymentProviderEntity>> getPaymentProvider() async {
     emit(state.copyWith(status: StateStatus.loading));
 
-    final response =
-    await getPaymentProviderUseCase(const NoParams());
-    List<PaymentProviderEntity> paymentProviderList=[];
+    final response = await getPaymentProviderUseCase(const NoParams());
+    List<PaymentProviderEntity> paymentProviderList = [];
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) {
-              paymentProviderList.addAll(data);
-              for (var provider in paymentProviderList) {
-                paymentProviderMap[provider.nameEn] = provider.id;
-                print('Fetched provider: ${provider.nameEn}, ID: ${provider.id}');
-              }
-          emit(state.copyWith(data:paymentProviderList, status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) {
+      paymentProviderList.addAll(data);
+      for (var provider in paymentProviderList) {
+        paymentProviderMap[provider.nameEn] = provider.id;
+        print('Fetched provider: ${provider.nameEn}, ID: ${provider.id}');
+      }
+      emit(state.copyWith(
+          data: paymentProviderList, status: StateStatus.success));
+    });
     print("Payment Data:${paymentProviderList.length}");
     return paymentProviderList;
   }
+
   /// Get Paymob Data
-///
-///
-  Future<void> getPaymobData({ required String amountId, required String providerId}) async {
+  ///
+  ///
+  Future<void> getPaymobData(
+      {required String amountId, required String providerId}) async {
     emit(state.copyWith(status: StateStatus.loading));
-    final response = await paymobUseCase(PaymobParams(amountId:amountId, providerId:providerId));
+    final response = await paymobUseCase(
+        PaymobParams(amountId: amountId, providerId: providerId));
 
     response.fold(
-          (failure) {
-            emit(state.copyWith(failure: failure, status: StateStatus.error));
-          },
-          (data) {
+      (failure) {
+        emit(state.copyWith(failure: failure, status: StateStatus.error));
+      },
+      (data) {
         emit(state.copyWith(
           paymobData: data,
           status: StateStatus.success,
@@ -190,6 +203,7 @@ class PaymentCubit extends Cubit<PaymentState> {
       },
     );
   }
+
   /// Charge with Card
   Future<void> chargeWithCard({
     required String cardNumber,
@@ -213,18 +227,20 @@ class PaymentCubit extends Cubit<PaymentState> {
     ));
 
     response.fold(
-          (failure) {
+      (failure) {
         emit(state.copyWith(failure: failure, status: StateStatus.error));
       },
-          (data) {
+      (data) {
         emit(state.copyWith(
           fawryPayWithCardData: data,
           status: StateStatus.success,
         ));
-        print("Fawry Pay with Card Data: ${data.message}"); // Logging the message or data received
+        print(
+            "Fawry Pay with Card Data: ${data.message}"); // Logging the message or data received
       },
     );
   }
+
   /// Save Card Token
   Future<void> saveCardToken({
     required String cardNumber,
@@ -244,15 +260,16 @@ class PaymentCubit extends Cubit<PaymentState> {
     ));
 
     response.fold(
-          (failure) {
+      (failure) {
         emit(state.copyWith(failure: failure, status: StateStatus.error));
       },
-          (data) {
+      (data) {
         emit(state.copyWith(
           fawryCardTokenResponseData: data,
           status: StateStatus.success,
         ));
-        print("Fawry Card Token Response Data: ${data.message}"); // Logging the message or data received
+        print(
+            "Fawry Card Token Response Data: ${data.message}"); // Logging the message or data received
       },
     );
   }
@@ -262,10 +279,12 @@ class PaymentCubit extends Cubit<PaymentState> {
     final response = await getSavedCardsUseCase(const NoParams());
 
     response.fold(
-          (failure) => emit(state.copyWith(failure: failure, status: StateStatus.error)),
-          (data) {
+      (failure) =>
+          emit(state.copyWith(failure: failure, status: StateStatus.error)),
+      (data) {
         // Print the saved cards data
-        print("Fetched saved cards: ${data.map((card) => card.toString()).toList()}");
+        print(
+            "Fetched saved cards: ${data.map((card) => card.toString()).toList()}");
         emit(state.copyWith(savedCardsData: data, status: StateStatus.success));
       },
     );
@@ -286,10 +305,10 @@ class PaymentCubit extends Cubit<PaymentState> {
     ));
 
     response.fold(
-          (failure) {
+      (failure) {
         emit(state.copyWith(failure: failure, status: StateStatus.error));
       },
-          (data) {
+      (data) {
         emit(state.copyWith(
           mutliPaymentResponse: data,
           status: StateStatus.success,
@@ -298,7 +317,4 @@ class PaymentCubit extends Cubit<PaymentState> {
       },
     );
   }
-
-
-
 }

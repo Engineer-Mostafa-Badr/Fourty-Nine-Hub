@@ -1565,8 +1565,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
-import 'package:story_view/utils.dart';
-import 'package:story_view/widgets/story_view.dart';
 // import 'package:story_view/story_view.dart';
 
 import '../../../../../res/style/const.dart';
@@ -1577,7 +1575,8 @@ class StoryViewScreen extends StatefulWidget {
   final int initialUserIndex;
   final List<UserStories> stories;
 
-  const StoryViewScreen({super.key, this.initialUserIndex = 0, required this.stories});
+  const StoryViewScreen(
+      {super.key, this.initialUserIndex = 0, required this.stories});
 
   @override
   StoryViewScreenState createState() => StoryViewScreenState();

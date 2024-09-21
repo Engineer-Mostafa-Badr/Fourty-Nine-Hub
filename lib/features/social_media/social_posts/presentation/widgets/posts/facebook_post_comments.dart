@@ -119,25 +119,28 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                 ),
                 child: Row(
                   children: [
-                    ProfileImage(accountId: 0,fromProfile: true,imageURL: user?.profilePicture, userId: '',),
+                    ProfileImage(
+                      accountId: 0,
+                      fromProfile: true,
+                      imageURL: user?.profilePicture,
+                      userId: '',
+                    ),
                     const Sizer(),
                     Expanded(
-                      child:TextFormField(
-                          controller: commentTextController,
-                        onChanged: (v){
-                            setState(() {
-
-                            });
+                      child: TextFormField(
+                        controller: commentTextController,
+                        onChanged: (v) {
+                          setState(() {});
                         },
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
                           fillColor: Colors.white,
-                          contentPadding: EdgeInsets.all(5),
+                          contentPadding: const EdgeInsets.all(5),
                           hintText: 'Type your comment ....',
                           hintStyle: Styles.mediumText(),
-
                         ),
-                      ),),
+                      ),
+                    ),
                     const Sizer(),
                     if (commentTextController.text.isNotEmpty)
                       IconAppButton(

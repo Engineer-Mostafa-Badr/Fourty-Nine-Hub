@@ -12,6 +12,7 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/announce_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -31,7 +32,6 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
-import '../widgets/announce_widget.dart';
 
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
@@ -155,7 +155,12 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         context.push(Routes.SUBCATEGORIES,
                             extra: state.data![index]);
                       },
-                      child: MainCategoryBanner(category: state.data![index], onFavorite: () {  },),
+                      child: MainCategoryBanner(
+                        category: state.data![index],
+                        onFavorite: () {
+                          return null;
+                        },
+                      ),
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) =>

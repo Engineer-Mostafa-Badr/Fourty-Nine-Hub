@@ -1,9 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/zoom/data/data_source/meeting_data_source.dart';
-import 'package:fourtyninehub/features/zoom/data/model/room_response_error_model.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -10,7 +9,6 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/widget
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/medical_services/medical_services.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/booking_types/booking_types.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/sub_categories/sub_categories.dart';
-import 'package:fourtyninehub/features/payment/presentation/pages/payment_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -30,19 +28,16 @@ class HealthView extends StatelessWidget {
             return ListView(
               padding: EdgeInsets.all(16.0.zW),
               children: [
-
                 BlocProvider.value(
                   value: serviceLocator<HealthCubit>(),
-                  child: HealthBanner(),
+                  child: const HealthBanner(),
                 ),
-                if(state.isDoctor == false)
+                if (state.isDoctor == false)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: InkWell(
                       onTap: () {
-                        if (context
-                            .read<UserCubit>()
-                            .isLoggedIn) {
+                        if (context.read<UserCubit>().isLoggedIn) {
                           context.push(Routes.CREATERESTURANT);
                         } else {
                           context.push(Routes.REGISTER);
@@ -57,8 +52,7 @@ class HealthView extends StatelessWidget {
                     ),
                   ),
                 const Sizer(),
-                if(state.isApproved == true)
-                  const DoctorDashboardBanner(),
+                if (state.isApproved == true) const DoctorDashboardBanner(),
                 const Sizer(),
                 const HealthBookingTypesWidgt(),
                 const Sizer(),

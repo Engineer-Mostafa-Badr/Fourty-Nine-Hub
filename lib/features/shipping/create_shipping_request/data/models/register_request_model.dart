@@ -1,8 +1,5 @@
 import 'dart:io';
 
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-
 class RegisterRequestModel {
   // SubCategoryEntity? subCategoryEntity;
   String? subCategoryId;

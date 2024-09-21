@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -12,11 +11,9 @@ import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_so
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_user_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/chat_messgaes_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/typing_and_online_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/deleteMessage_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_request.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/getChatMessages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
@@ -60,7 +57,6 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   }
 
   // final messagesStreamController = StreamController<MessageEntity>();
-
 
   Future<void> getChatMessages(String chatID) async {
     // emit(state.copyWith(status: ChatRoomStates.loading));
@@ -138,8 +134,6 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     );
   }
 
-
-
   listenToNewMessages() {
     // _socketService.socketMessageStream.listen((event) {
     //   chatMessages.add(event);
@@ -162,7 +156,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       chatMessages.add(message);
       emit.call(state.copyWith(
-        // chatData: chatMessagesModel,
+          // chatData: chatMessagesModel,
           messages: chatMessages,
           status: ChatRoomStates.success));
     });

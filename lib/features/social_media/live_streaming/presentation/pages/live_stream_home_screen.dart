@@ -22,7 +22,7 @@ class LiveStreamHomeScreen extends StatelessWidget {
           // leading: BackButton(),
           bottom: const TabBar(
             indicatorColor: AppColors.PRIMARY_COLOR,
-            labelColor:  AppColors.PRIMARY_COLOR,
+            labelColor: AppColors.PRIMARY_COLOR,
             tabs: [
               Tab(text: 'Live'),
               Tab(text: 'Club Voice'),
@@ -46,10 +46,7 @@ class LiveStreamHomeScreen extends StatelessWidget {
         onPressed: () {
           context.push(Routes.LIVEView,
               extra: ZegoArgs(
-                '123',
-                true,
-                context.read<UserCubit>().state.data!.fullName
-              ));
+                  '123', true, context.read<UserCubit>().state.data!.fullName));
         },
         backgroundColor: Colors.red,
         child: const Icon(

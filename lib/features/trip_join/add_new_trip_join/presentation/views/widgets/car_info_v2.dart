@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -57,6 +59,9 @@ class _CarInfoV2State extends State<CarInfoV2> {
                   fetchCarBrandsCubit.fetchCarBrand(search: value);
                 },
                 validator: (value) {
+                  return null;
+                  log(value.toString(),
+                      name: "==========================================");
                   if (value == null || value.isEmpty) {
                     return 'Car Brand Required';
                   }
@@ -106,6 +111,9 @@ class _CarInfoV2State extends State<CarInfoV2> {
                   }
                 },
                 validator: (value) {
+                  return null;
+                  log(value.toString(),
+                      name: "==========================================");
                   if (value == null || value.isEmpty) {
                     return 'Car Model Required';
                   }

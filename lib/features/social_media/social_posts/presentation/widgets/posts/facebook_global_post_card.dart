@@ -83,7 +83,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ??  UnknownFailure(''),
+            state.failure ?? UnknownFailure(''),
             context,
           ),
         );
@@ -91,7 +91,8 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
     }, builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
       if (widget.from == 'posts') {
-        if (controller.globalFeedPagingController.itemList?[widget.index].type ==
+        if (controller
+                .globalFeedPagingController.itemList?[widget.index].type ==
             'advertisement') {
           return FacebookAdvertisementCard(
             post: controller.globalFeedPagingController.itemList![widget.index],
@@ -108,8 +109,8 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
               : controller.globalFeedPagingController.itemList![widget.index];
           return InkWell(
             onTap: (widget.from == 'posts' && widget.post.isShared == true)
-                ? () => widget.showPostDetails(
-                    controller.globalFeedPagingController.itemList![widget.index])
+                ? () => widget.showPostDetails(controller
+                    .globalFeedPagingController.itemList![widget.index])
                 : null,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,7 +196,6 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                     InkWell(
                       onTap: () {
                         context.push(Routes.LOGIN);
-
                       },
                       child: Row(
                         children: [
@@ -223,8 +223,8 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                   child: Row(
                     children: [
                       Expanded(
-                        child:  InkWell(
-                          onTap: (){
+                        child: InkWell(
+                          onTap: () {
                             context.push(Routes.LOGIN);
                           },
                           child: Column(
@@ -236,20 +236,23 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                                 size: 18,
                               ),
                               if (widget.from == 'posts') ...[
-                                Label(text: 'Like', style: Styles.mediumText(color: Colors.grey)),
+                                Label(
+                                    text: 'Like',
+                                    style:
+                                        Styles.mediumText(color: Colors.grey)),
                               ],
                             ],
                           ),
                         ),
                       ),
-                        Expanded(
-                          child: _buildReactionPlaceHolder(
-                              icon: FontAwesomeIcons.message,
-                              label: 'Comment',
-                              onTap: (){
-                                context.push(Routes.LOGIN);
-                              }),
-                        ),
+                      Expanded(
+                        child: _buildReactionPlaceHolder(
+                            icon: FontAwesomeIcons.message,
+                            label: 'Comment',
+                            onTap: () {
+                              context.push(Routes.LOGIN);
+                            }),
+                      ),
                       Expanded(
                         child: _buildReactionPlaceHolder(
                             icon: FontAwesomeIcons.share,
@@ -307,7 +310,6 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                   InkWell(
                     onTap: () {
                       context.push(Routes.LOGIN);
-
                     },
                     child: Row(
                       children: [
@@ -455,9 +457,10 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
           children: [
             InkWell(
               onTap: () {
-                if (widget.fromProfile == false&&context.read<UserCubit>().isLoggedIn) {
+                if (widget.fromProfile == false &&
+                    context.read<UserCubit>().isLoggedIn) {
                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-                }else{
+                } else {
                   context.push(Routes.LOGIN);
                 }
               },
@@ -475,9 +478,10 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                 children: [
                   InkWell(
                     onTap: () {
-                      if (widget.fromProfile == false&&context.read<UserCubit>().isLoggedIn) {
+                      if (widget.fromProfile == false &&
+                          context.read<UserCubit>().isLoggedIn) {
                         context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-                      }else{
+                      } else {
                         context.push(Routes.LOGIN);
                       }
                     },
@@ -487,10 +491,11 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                         TextAppButton(
                             label: post.user.firstName,
                             onPressed: () {
-                              if (widget.fromProfile == false&&context.read<UserCubit>().isLoggedIn) {
+                              if (widget.fromProfile == false &&
+                                  context.read<UserCubit>().isLoggedIn) {
                                 context.push(Routes.OTHERSACCOUNT,
                                     extra: post.user.id);
-                              }else{
+                              } else {
                                 context.push(Routes.LOGIN);
                               }
                             }),
@@ -763,7 +768,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
         children: [
           if (post.feeling != null || post.activity != null) ...[
             Text(
-              'feeling ${post.feeling!=null?post.feeling?.name??'':''}${post.activity!=null?', ${post.activity?.name}':''}',
+              'feeling ${post.feeling != null ? post.feeling?.name ?? '' : ''}${post.activity != null ? ', ${post.activity?.name}' : ''}',
               style: Styles.mediumText(),
             ),
             const SizedBox(

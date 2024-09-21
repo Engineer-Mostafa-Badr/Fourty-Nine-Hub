@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_entity.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -25,7 +24,8 @@ class ReelAccountInfo extends StatelessWidget {
           children: [
             const ProfileImage(
               withBorder: true,
-              accountId: 0, userId: '',
+              accountId: 0,
+              userId: '',
             ),
             const Sizer(),
             TextAppButton(

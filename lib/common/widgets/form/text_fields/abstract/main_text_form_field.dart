@@ -144,7 +144,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
                   borderSide: BorderSide(
                       color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
                 ),
-          errorStyle: TextStyle(color: Colors.red),
+          errorStyle: const TextStyle(color: Colors.red),
           errorBorder: const OutlineInputBorder(
             borderSide: BorderSide(
               color: Colors.red,

@@ -72,7 +72,9 @@ class TripJoinCardModel extends TripJoinCardEntity {
       id: json['_id'] as String?,
       userId: json['userId'] as String?,
       categoryId: json['categoryId'] as String?,
-      vehicleId: json['vehicleId'] == null ? null : VehicleId.fromJson(json['vehicleId'] as Map<String, dynamic>),
+      vehicleId: json['vehicleId'] == null
+          ? null
+          : VehicleId.fromJson(json['vehicleId'] as Map<String, dynamic>),
       fromAr: json['fromAr'] as String?,
       toAr: json['toAr'] as String?,
       fromEn: json['fromEn'] as String?,
@@ -87,8 +89,12 @@ class TripJoinCardModel extends TripJoinCardEntity {
       countryCode: json['countryCode'] as String?,
       isApproved: json['isApproved'] as bool?,
       isRepeat: json['isRepeat'] as bool?,
-      createdAt: json['createdAt'] == null ? null : DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null ? null : DateTime.parse(json['updatedAt'] as String),
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt'] as String),
     );
   }
 

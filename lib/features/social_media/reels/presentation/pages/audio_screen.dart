@@ -455,7 +455,6 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
           Icons.arrow_back,
           color: Colors.white,
         ),
-
         title: const Text('Audio',
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
         actions: [
@@ -565,7 +564,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                 child: ElevatedButton(
                   style: const ButtonStyle(
                       backgroundColor:
-                          MaterialStatePropertyAll(AppColors.PRIMARY_COLOR)),
+                          WidgetStatePropertyAll(AppColors.PRIMARY_COLOR)),
                   onPressed: () {
                     _player.dispose();
                     Navigator.push(
@@ -772,7 +771,7 @@ class ReelsScreenForAudio extends StatefulWidget {
 
 class ReelsScreenForAudioState extends State<ReelsScreenForAudio> {
   final PageController _pageController = PageController();
-  int _currentPage = 0;
+  final int _currentPage = 0;
 
   @override
   void initState() {

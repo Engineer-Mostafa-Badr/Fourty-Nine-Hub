@@ -57,7 +57,7 @@ void showSuccessMessage(BuildContext context, String message) {
   WidgetsBinding.instance.addPostFrameCallback(
     (_) => ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        duration: Duration(seconds: 6),
+        duration: const Duration(seconds: 6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),

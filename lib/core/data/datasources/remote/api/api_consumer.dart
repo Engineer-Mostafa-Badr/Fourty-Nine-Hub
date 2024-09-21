@@ -32,7 +32,6 @@ abstract class ApiConsumer {
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
-
   });
 
   Future<Either<Failure, Map<String, dynamic>>> delete(
@@ -63,6 +62,7 @@ class BaseApiConsumer extends ApiConsumer {
     _token = token;
     log("${token?.accessToken}", name: "Token");
     if (token != null) {
+      log(token.accessToken.toString(), name: "Token");
       _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
     }
   }
@@ -147,6 +147,7 @@ class BaseApiConsumer extends ApiConsumer {
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
+      log(data.toString());
       final result = await _dio.post(
         url,
         data: formData ?? data,
@@ -180,19 +181,15 @@ class BaseApiConsumer extends ApiConsumer {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> put(
-    String url, {
-    Map<String, dynamic>? data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers
-  }) async {
+  Future<Either<Failure, Map<String, dynamic>>> put(String url,
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) async {
     try {
-      final result = await _dio.put(
-        url,
-        data: data,
-        queryParameters: queryParameters,
-         options: Options(headers: headers)
-      );
+      final result = await _dio.put(url,
+          data: data,
+          queryParameters: queryParameters,
+          options: Options(headers: headers));
       log(result.data.toString(), name: "url");
       if (result.data['status']) {
         log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
@@ -201,7 +198,7 @@ class BaseApiConsumer extends ApiConsumer {
         } else {
           return Right({"data": result.data});
         }
-      } else {  
+      } else {
         return Left(ValidationFailure(
             result.data['message'] ?? result.data['error']['message']));
       }
@@ -260,7 +257,7 @@ class BaseApiConsumer extends ApiConsumer {
         );
       }
     }
-    return  UnknownFailure(e);
+    return UnknownFailure(e);
   }
 
   Future<void> refreshToken() async {

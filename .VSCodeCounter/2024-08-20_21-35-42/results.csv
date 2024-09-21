@@ -140,7 +140,7 @@
 "d:\projects\flutter\49\49-mobile-app\lib\core\enums\wheel.dart", "Dart", 1, 0, 1, 2
 "d:\projects\flutter\49\49-mobile-app\lib\core\enums\zego_request_state.dart", "Dart", 6, 0, 1, 7
 "d:\projects\flutter\49\49-mobile-app\lib\core\error\failure.dart", "Dart", 65, 0, 14, 79
-"d:\projects\flutter\49\49-mobile-app\lib\core\exceptions\connection_exception.dart", "Dart", 24, 23, 6, 53
+"d:\projects\flutter\49\49-mobile-app\lib\core\exceptions\ion_exception.dart", "Dart", 24, 23, 6, 53
 "d:\projects\flutter\49\49-mobile-app\lib\core\exceptions\exceed_file_size_limit_exception.dart", "Dart", 11, 0, 3, 14
 "d:\projects\flutter\49\49-mobile-app\lib\core\exceptions\launcher_exception.dart", "Dart", 11, 0, 3, 14
 "d:\projects\flutter\49\49-mobile-app\lib\core\exceptions\meeting_exception.dart", "Dart", 5, 0, 3, 8
@@ -171,7 +171,7 @@
 "d:\projects\flutter\49\49-mobile-app\lib\core\themes\light_theme.dart", "Dart", 56, 2, 3, 61
 "d:\projects\flutter\49\49-mobile-app\lib\core\utils\calendar_event.dart", "Dart", 9, 5, 5, 19
 "d:\projects\flutter\49\49-mobile-app\lib\core\utils\change_react.dart", "Dart", 153, 0, 1, 154
-"d:\projects\flutter\49\49-mobile-app\lib\core\utils\connection_checker.dart", "Dart", 0, 59, 1, 60
+"d:\projects\flutter\49\49-mobile-app\lib\core\utils\ion_checker.dart", "Dart", 0, 59, 1, 60
 "d:\projects\flutter\49\49-mobile-app\lib\core\utils\custom_printer.dart", "Dart", 31, 0, 10, 41
 "d:\projects\flutter\49\49-mobile-app\lib\core\utils\date_helper.dart", "Dart", 25, 0, 5, 30
 "d:\projects\flutter\49\49-mobile-app\lib\core\utils\device_id.dart", "Dart", 14, 0, 3, 17
@@ -1172,7 +1172,7 @@
 "d:\projects\flutter\49\49-mobile-app\lib\features\social_media\live_streaming\presentation\widgets\zego\src\controller\swiping.dart", "Dart", 66, 4, 19, 89
 "d:\projects\flutter\49\49-mobile-app\lib\features\social_media\live_streaming\presentation\widgets\zego\src\controller\user.dart", "Dart", 43, 10, 12, 65
 "d:\projects\flutter\49\49-mobile-app\lib\features\social_media\live_streaming\presentation\widgets\zego\src\core\co_host_control_button.dart", "Dart", 185, 6, 26, 217
-"d:\projects\flutter\49\49-mobile-app\lib\features\social_media\live_streaming\presentation\widgets\zego\src\core\connect_manager.dart", "Dart", 880, 23, 159, 1062
+"d:\projects\flutter\49\49-mobile-app\lib\features\social_media\live_streaming\presentation\widgets\zego\src\core\_manager.dart", "Dart", 880, 23, 159, 1062
 "d:\projects\flutter\49\49-mobile-app\lib\features\social_media\live_streaming\presentation\widgets\zego\src\core\core_manager.audio_video.dart", "Dart", 83, 1, 14, 98
 "d:\projects\flutter\49\49-mobile-app\lib\features\social_media\live_streaming\presentation\widgets\zego\src\core\core_managers.dart", "Dart", 162, 4, 41, 207
 "d:\projects\flutter\49\49-mobile-app\lib\features\social_media\live_streaming\presentation\widgets\zego\src\core\defines.dart", "Dart", 30, 12, 10, 52

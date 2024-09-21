@@ -46,18 +46,20 @@ class SubcategoriesRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, bool>> toggleFavoriteCategory(String sucategoryId) async {
-    final response = await _apiConsumer
-        .post(EndPoints.toggleFavoriteCategory(sucategoryId));
+  Future<Either<Failure, bool>> toggleFavoriteCategory(
+      String sucategoryId) async {
+    final response =
+        await _apiConsumer.post(EndPoints.toggleFavoriteCategory(sucategoryId));
     return response.fold(
-            (failure) => Left(failure), (data) => Right(data['status']));
+        (failure) => Left(failure), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, bool>> deleteFavoriteCategory(String sucategoryId)async {
+  Future<Either<Failure, bool>> deleteFavoriteCategory(
+      String sucategoryId) async {
     final response = await _apiConsumer
         .delete(EndPoints.toggleFavoriteCategory(sucategoryId));
     return response.fold(
-            (failure) => Left(failure), (data) => Right(data['status']));
+        (failure) => Left(failure), (data) => Right(data['status']));
   }
 }

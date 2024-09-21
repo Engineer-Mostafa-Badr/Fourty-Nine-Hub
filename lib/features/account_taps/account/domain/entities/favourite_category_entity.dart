@@ -1,5 +1,4 @@
 import 'package:fourtyninehub/features/account_taps/account/data/models/favouite_category_model/category_id.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 
 class FavouriteCategoryEntity {
   int? numberOfAds;

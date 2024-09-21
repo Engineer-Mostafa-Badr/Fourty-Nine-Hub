@@ -41,17 +41,7 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
       _saveTextEditingControllers();
       _saveWorkDays();
       String? checkFilledMessage = _createDoctorParams.isFilled();
-      if (checkFilledMessage == null) {
-        emit(CreateDoctorLoading("Creating Account..."));
-        final response = await _createDoctorUseCase.call(_createDoctorParams);
-        emit(CreateDoctorCloseLoading());
-        response.fold(
-            (failure) => emit(CreateDoctorError("Can't Create Doctor")),
-            (data) => emit(CreateDoctorSuccess(
-                "You are submit sccessfuly. Please wait admin approve and abroval.")));
-      } else {
-        emit(CreateDoctorError(checkFilledMessage));
-      }
+      emit(CreateDoctorError(checkFilledMessage ?? ""));
     }
   }
 

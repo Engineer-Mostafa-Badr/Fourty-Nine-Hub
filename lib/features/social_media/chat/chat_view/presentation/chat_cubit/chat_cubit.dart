@@ -1,8 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -98,7 +97,7 @@ class ChatsCubit extends Cubit<ChatsState> {
           .call(state.copyWith(chats: [], status: ChatsStates.initState));
     } else {
       _chats.clear();
-      var response;
+      Either<Failure, ChatItemModel> response;
       if (index == 5) {
         response = await _groupsChatsUseCase.call(const NoParams());
       } else {
@@ -283,7 +282,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     _socketService.socketChatTypingStream.listen((event) {
       List<TypingAndOnlineModel> chatsIds = event ?? [];
 
-      if (_chats.values.length > 0) {
+      if (_chats.values.isNotEmpty) {
         for (var key in chatsIds) {
           _chats[key.chatId]?.typing = key.typing;
           _chats[key.chatId]?.online = key.online;
@@ -311,7 +310,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   }
 
   getSeenHistory(String chatId, BuildContext context) async {
-    var response;
+    Either<Failure, List<SeenHistoryModel>> response;
     response = await _getSeenHistoryUseCase.call(chatId);
     response.fold(
       (failure) => emit
@@ -336,7 +335,7 @@ class ChatsCubit extends Cubit<ChatsState> {
                 text: 'Seen History',
                 style: Styles.headerText(
                     fontWeight: FontWeight.bold, color: Colors.black)),
-            content: Container(
+            content: SizedBox(
                 height: 300,
                 width: 400,
                 child: Column(

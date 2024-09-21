@@ -1,5 +1,3 @@
-import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
-
 class CategoryFavoritesResponse {
   final bool status;
   final List<CategoryFavoriteItem> data;
@@ -61,7 +59,6 @@ class CategoryFavoriteItem {
     );
   }
 
-
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
@@ -73,7 +70,6 @@ class CategoryFavoriteItem {
     };
   }
 }
-
 
 class FavoriteCategory {
   final String id;

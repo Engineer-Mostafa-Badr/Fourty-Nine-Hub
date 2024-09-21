@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import '../../../../../common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
 import '../../../../../common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../../domain/entities/privacy_status_enum.dart';
 
 class PrivacyMultiSelectItem extends StatelessWidget {

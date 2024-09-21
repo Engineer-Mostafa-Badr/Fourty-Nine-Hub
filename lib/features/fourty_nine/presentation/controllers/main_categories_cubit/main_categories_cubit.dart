@@ -23,13 +23,13 @@ class MainCategoriesCubit extends Cubit<BasicState<List<MainCategoryEntity>>> {
           PaginationParams(page: 1, limit: 100));
 
       result.fold(
-        (failure)
-        {
+        (failure) {
           emit(state.copyWith(
             failure: failure,
             status: StateStatus.error,
           ));
-          CliLogger.error('can\'t load main categories there is an error ${failure.toString()}');
+          CliLogger.error(
+              'can\'t load main categories there is an error ${failure.toString()}');
         },
         (r) {
           _fourtyNineSharedData.mainCategories = r;

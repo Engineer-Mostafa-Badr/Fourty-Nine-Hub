@@ -38,7 +38,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.BACKGROUND_COLOR,
-      appBar: ChatRoomAppBar(),
+      appBar: const ChatRoomAppBar(),
       body: Stack(
         children: [
           // Background image
@@ -52,7 +52,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
             ),
           ),
           // Main content
-          Column(
+          const Column(
             children: [
               Expanded(child: MessagesListView()),
               SendMessageWidget(),

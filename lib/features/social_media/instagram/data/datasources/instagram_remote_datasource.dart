@@ -39,7 +39,6 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
     });
   }
 
-
   @override
   Future<Either<Failure, List<PostEntity>>> getGlobalFeed(
       {required TwitterFeedParams params}) async {

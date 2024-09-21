@@ -43,16 +43,16 @@ class _InstagramPostsState extends State<InstagramPosts> {
   Widget build(BuildContext context) {
     return BlocConsumer<InstagramCubit, InstagramState>(
         listener: (context, state) {
-          if (state.status == StateStatus.error) {
-            showErrorMessage(
-              context,
-              getFailureMessage(
-                state.failure ??  UnknownFailure(''),
-                context,
-              ),
-            );
-          }
-        }, builder: (context, state) {
+      if (state.status == StateStatus.error) {
+        showErrorMessage(
+          context,
+          getFailureMessage(
+            state.failure ?? UnknownFailure(''),
+            context,
+          ),
+        );
+      }
+    }, builder: (context, state) {
       final controller = context.read<InstagramCubit>();
       return RefreshIndicator(
         onRefresh: () async => controller.onRefresh(),
@@ -64,8 +64,8 @@ class _InstagramPostsState extends State<InstagramPosts> {
             ),
             SliverToBoxAdapter(
               child: BlocProvider<InstagramCubit>(
-                  create: (_)=>serviceLocator()..loadInstaSuggestedPeople(),
-                  child: const InstagramSuggestPeople(),
+                create: (_) => serviceLocator()..loadInstaSuggestedPeople(),
+                child: const InstagramSuggestPeople(),
               ),
             ),
             PagedSliverList<int, PostEntity>(
@@ -90,7 +90,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                       post: controller.feedPagingController.itemList![index],
                     );
                   } else if (controller
-                      .feedPagingController.itemList?[index].type ==
+                          .feedPagingController.itemList?[index].type ==
                       'facebook_post') {
                     return Padding(
                       padding: const EdgeInsetsDirectional.only(
@@ -102,8 +102,10 @@ class _InstagramPostsState extends State<InstagramPosts> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Sizer(),
-                          _buildMainAccountHeader(post:controller.feedPagingController
-                              .itemList![index], context: context),
+                          _buildMainAccountHeader(
+                              post: controller
+                                  .feedPagingController.itemList![index],
+                              context: context),
                           const Sizer(),
                           SizedBox(
                             height: kToolbarHeight * 5,
@@ -124,9 +126,9 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                         .itemList![index].images!.length,
                                     onDoubleTap: () {
                                       controller.feedPagingController
-                                          .itemList?[index].isLove =
-                                      !controller.feedPagingController
-                                          .itemList![index].isLove!;
+                                              .itemList?[index].isLove =
+                                          !controller.feedPagingController
+                                              .itemList![index].isLove!;
                                       setState(() {});
                                     },
                                   );
@@ -137,14 +139,14 @@ class _InstagramPostsState extends State<InstagramPosts> {
                           ),
                           Label(
                               text: controller.feedPagingController
-                                  .itemList?[index].content ??
+                                      .itemList?[index].content ??
                                   ''),
                           const Sizer(
                             height: 5,
                           ),
                           Padding(
                             padding:
-                            const EdgeInsets.symmetric(horizontal: 10.0),
+                                const EdgeInsets.symmetric(horizontal: 10.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -154,13 +156,13 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                     children: [
                                       IconAppButton(
                                         icon: controller.feedPagingController
-                                            .itemList?[index].isLove ==
-                                            true
+                                                    .itemList?[index].isLove ==
+                                                true
                                             ? Icons.favorite
                                             : Icons.favorite_border,
                                         onPressed: () async {
                                           var reacted =
-                                          await controller.onReact(
+                                              await controller.onReact(
                                             params: PostReactParams(
                                               postId: controller
                                                   .feedPagingController
@@ -171,36 +173,36 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                           );
                                           if (reacted == true) {
                                             controller.feedPagingController
-                                                .itemList?[index].isLove =
-                                            !controller.feedPagingController
-                                                .itemList![index].isLove!;
+                                                    .itemList?[index].isLove =
+                                                !controller.feedPagingController
+                                                    .itemList![index].isLove!;
                                             if (controller.feedPagingController
-                                                .itemList?[index].isLove ==
+                                                    .itemList?[index].isLove ==
                                                 false) {
                                               controller
                                                   .feedPagingController
                                                   .itemList?[index]
                                                   .loveCount = (controller
-                                                  .feedPagingController
-                                                  .itemList![index]
-                                                  .loveCount! -
+                                                      .feedPagingController
+                                                      .itemList![index]
+                                                      .loveCount! -
                                                   1);
                                             } else {
                                               controller
                                                   .feedPagingController
                                                   .itemList?[index]
                                                   .loveCount = (controller
-                                                  .feedPagingController
-                                                  .itemList![index]
-                                                  .loveCount! +
+                                                      .feedPagingController
+                                                      .itemList![index]
+                                                      .loveCount! +
                                                   1);
                                             }
                                           }
                                           setState(() {});
                                         },
                                         color: controller.feedPagingController
-                                            .itemList?[index].isLove ==
-                                            true
+                                                    .itemList?[index].isLove ==
+                                                true
                                             ? Colors.red
                                             : Colors.grey,
                                         size: 25,
@@ -210,8 +212,8 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                       ),
                                       Label(
                                         text: controller.feedPagingController
-                                            .itemList?[index].loveCount
-                                            .toString() ??
+                                                .itemList?[index].loveCount
+                                                .toString() ??
                                             '',
                                         style: Styles.mediumText(
                                             fontWeight: FontWeight.bold),
@@ -239,75 +241,75 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                                       .id,
                                                   onCommentReply:
                                                       (ReplyOnCommentParams
-                                                  params) async {
+                                                          params) async {
                                                     var result =
-                                                    await controller
-                                                        .replyOnComment(
+                                                        await controller
+                                                            .replyOnComment(
                                                       params:
-                                                      ReplyOnCommentParams(
-                                                          postId:
-                                                          params.postId,
-                                                          content: params
-                                                              .content,
-                                                          commentId: params
-                                                              .commentId),
+                                                          ReplyOnCommentParams(
+                                                              postId:
+                                                                  params.postId,
+                                                              content: params
+                                                                  .content,
+                                                              commentId: params
+                                                                  .commentId),
                                                     );
                                                     var currentPost = controller
                                                         .feedPagingController
                                                         .itemList
                                                         ?.firstWhere(
                                                             (element) =>
-                                                        element.id ==
-                                                            params.postId);
+                                                                element.id ==
+                                                                params.postId);
                                                     currentPost?.commentsCount =
-                                                    (currentPost
-                                                        .commentsCount! +
-                                                        1);
+                                                        (currentPost
+                                                                .commentsCount! +
+                                                            1);
                                                     return result;
                                                   },
                                                   onAddComment:
                                                       (PostCommentParams
-                                                  params) async {
+                                                          params) async {
                                                     var result =
-                                                    await controller
-                                                        .onPostComment(
-                                                        params: params);
+                                                        await controller
+                                                            .onPostComment(
+                                                                params: params);
                                                     return result;
                                                   },
                                                   onDeleteComment:
                                                       (String id) async {
                                                     return await controller
                                                         .deleteComment(
-                                                        context: context,
-                                                        commentId: id,
-                                                        postId: controller
-                                                            .feedPagingController
-                                                            .itemList![
-                                                        index]
-                                                            .id,
-                                                        from: 'feed');
+                                                            context: context,
+                                                            commentId: id,
+                                                            postId: controller
+                                                                .feedPagingController
+                                                                .itemList![
+                                                                    index]
+                                                                .id,
+                                                            from: 'feed');
                                                     // print(result);
                                                   },
                                                   onDeleteReply:
                                                       (String id) async {
                                                     return await controller
                                                         .deleteComment(
-                                                        context: context,
-                                                        commentId: id,
-                                                        postId: controller
-                                                            .feedPagingController
-                                                            .itemList![
-                                                        index]
-                                                            .id,
-                                                        from: 'feed');
+                                                            context: context,
+                                                            commentId: id,
+                                                            postId: controller
+                                                                .feedPagingController
+                                                                .itemList![
+                                                                    index]
+                                                                .id,
+                                                            from: 'feed');
                                                   },
                                                   onEditComment:
                                                       (PostCommentParams
-                                                  params) async {
+                                                          params) async {
                                                     var result =
-                                                    await controller
-                                                        .editComment(
-                                                        params: params);
+                                                        await controller
+                                                            .editComment(
+                                                                params: params);
                                                     return result;
                                                   },
                                                 ),
@@ -321,8 +323,8 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                       ),
                                       Label(
                                         text: controller.feedPagingController
-                                            .itemList?[index].commentsCount
-                                            .toString() ??
+                                                .itemList?[index].commentsCount
+                                                .toString() ??
                                             '',
                                         style: Styles.mediumText(
                                             fontWeight: FontWeight.bold),
@@ -331,7 +333,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                   ),
                                 ),
                                 if (controller.feedPagingController
-                                    .itemList![index].images!.length >
+                                        .itemList![index].images!.length >
                                     1)
                                   Expanded(
                                     child: Center(
@@ -347,14 +349,14 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                                 .length,
                                             separatorBuilder:
                                                 (context, index) => const Sizer(
-                                              width: 3,
-                                            ),
+                                                      width: 3,
+                                                    ),
                                             itemBuilder: (context, index) {
                                               return CircleAvatar(
                                                 radius: 4,
                                                 backgroundColor: state
-                                                    .pageIndex ==
-                                                    index
+                                                            .pageIndex ==
+                                                        index
                                                     ? AppColors.SECONDARY_COLOR
                                                     : AppColors.PRIMARY_COLOR,
                                               );
@@ -403,9 +405,9 @@ class _InstagramPostsState extends State<InstagramPosts> {
                 },
                 noMoreItemsIndicatorBuilder: (context) => Container(),
                 firstPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator(),
+                    const CupertinoActivityIndicator(),
                 newPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator(),
+                    const CupertinoActivityIndicator(),
               ),
             ),
           ],
@@ -413,7 +415,6 @@ class _InstagramPostsState extends State<InstagramPosts> {
       );
     });
   }
-
 
   Widget _buildMainAccountHeader({
     required BuildContext context,
@@ -423,7 +424,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
       children: [
         InkWell(
           onTap: () {
-                context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
+            context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
           },
           child: CircleAvatar(
             backgroundColor: Colors.white,
@@ -435,39 +436,38 @@ class _InstagramPostsState extends State<InstagramPosts> {
         const Sizer(),
         Expanded(
             child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                          context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
-                                           },
-                      child: TextAppButton(
-                          style: TextStyle(color: Theme.of(context).primaryColor),
-                          label: post.user.firstName,
-                          onPressed: () {
-                              context.push(Routes.OTHERSACCOUNT,
-                                  extra: post.user.id);
-                          }),
-                    ),
-                    RichText(
-                        text: TextSpan(children: [
-                          TextSpan(
-                              text: post.sinceTime,
-                              style: Styles.mediumText(color: Colors.grey)),
-                          const WidgetSpan(
-                              child: Icon(
-                                Icons.group,
-                                size: 14,
-                                color: Colors.grey,
-                              ))
-                        ]))
-                  ],
+                InkWell(
+                  onTap: () {
+                    context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
+                  },
+                  child: TextAppButton(
+                      style: TextStyle(color: Theme.of(context).primaryColor),
+                      label: post.user.firstName,
+                      onPressed: () {
+                        context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                      }),
                 ),
-                // _buildActivityFeelingWidget(post),
+                RichText(
+                    text: TextSpan(children: [
+                  TextSpan(
+                      text: post.sinceTime,
+                      style: Styles.mediumText(color: Colors.grey)),
+                  const WidgetSpan(
+                      child: Icon(
+                    Icons.group,
+                    size: 14,
+                    color: Colors.grey,
+                  ))
+                ]))
               ],
-            )),
+            ),
+            // _buildActivityFeelingWidget(post),
+          ],
+        )),
       ],
     );
   }

@@ -59,8 +59,6 @@ import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_user_upcoming_appointments.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/is_doctor_approval_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/is_doctor_usecase.dart';
-import 'package:fourtyninehub/features/notifications/data/repository/notification_repo_impl.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubit/notifications_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/delete_favorite_category_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_subcategory.dart';
@@ -71,7 +69,6 @@ import 'package:get_it/get_it.dart';
 import '../features/health_feature/booking/data/repositories/book_doctor_appointment_repo_impl.dart';
 import '../features/health_feature/booking/domain/repositories/book_doctor_appointment_repo.dart';
 import '../features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
-import '../features/notifications/data/repository/notification_repo.dart';
 
 class HealthServiceLocator {
   static void execute({required GetIt serviceLocator}) async {
@@ -210,9 +207,9 @@ class HealthServiceLocator {
     serviceLocator.registerLazySingleton<IsDoctorApprovalUsecase>(
         () => IsDoctorApprovalUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<ToggleFavoriteCategoryUseCase>(
-            () => ToggleFavoriteCategoryUseCase(serviceLocator()));
+        () => ToggleFavoriteCategoryUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<DeleteFavoriteCategoryUseCase>(
-            () => DeleteFavoriteCategoryUseCase(serviceLocator()));
+        () => DeleteFavoriteCategoryUseCase(serviceLocator()));
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());
     serviceLocator.registerFactory<DoctorDetailsCubit>(() => DoctorDetailsCubit(

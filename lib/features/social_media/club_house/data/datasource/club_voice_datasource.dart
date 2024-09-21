@@ -10,7 +10,6 @@ import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/j
 import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/search_club_voice_use_case.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
-
 abstract class ClubVoiceDataSource {
   Future<Either<Failure, ZegoResponseModel>> addRoom(AddRoomParams params);
   Future<Either<Failure, List<ClubVoiceRoomEntity>>> getRooms();

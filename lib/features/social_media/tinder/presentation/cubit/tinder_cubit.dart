@@ -674,7 +674,6 @@
 
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/near_by_model.dart';
@@ -718,8 +717,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
         final List<UserData> updatedUserData = isLoadMore
             ? (List.from(state.userData)..addAll(userData))
             : userData;
-        log(gender +
-            "/***************************************************************************************************************************************************************");
+        log("$gender/***************************************************************************************************************************************************************");
 
         emit(state.copyWith(
             userData: updatedUserData,
@@ -810,6 +808,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       emit(state.copyWith(getFavCategoryListState: DataState.failure));
     }
   }
+
   Future<void> fetchFavoritesCategory() async {
     emit(state.copyWith(getFavCategoryListState: DataState.initial));
     final apiResponse = await tinderRepository.fetchFavoritesCategory();
@@ -866,7 +865,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
   Future<void> fetchGifts() async {
     emit(state.copyWith(giftsState: DataState.initial));
     final giftData = await tinderRepository.fetchGifts();
-    log(giftData.toString() + "dsssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    log("${giftData}dsssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     if (giftData != null) {
       emit(state.copyWith(gifts: giftData, giftsState: DataState.success));
     } else {

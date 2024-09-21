@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_images_s3_model/car_image.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_images_s3_model/car_images_s3_model.dart';
@@ -18,8 +17,6 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/data/mod
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/drivnig_license_s3_model/driving_license_behind.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/drivnig_license_s3_model/driving_license_front.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/drivnig_license_s3_model/drivnig_license_s3_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/info_documents_model/document.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/info_documents_model/info_documents_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/info_id_s3_model/id_behind.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/info_id_s3_model/id_front.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/info_id_s3_model/info_id_s3_model.dart';
@@ -45,6 +42,7 @@ class ShippingCubit extends Cubit<ShippingState> {
       : super(ShippingInitial());
   RegisterRequestModel model = RegisterRequestModel();
   RequestModel requestModel = RequestModel();
+  BannerModel bannerModel = BannerModel();
   getBannerData() async {
     emit(LoadingShippingState());
     var response = await repository.getBannerData();
@@ -54,10 +52,23 @@ class ShippingCubit extends Cubit<ShippingState> {
         emit(FailureShippingState(failure: l));
       },
       (r) {
+        bannerModel = BannerModel.fromJson(r['data']);
         log(r.toString(), name: "FailureBanner");
         emit(SuccessGetBannerState(model: BannerModel.fromJson(r['data'])));
       },
     );
+  }
+
+  sortData(String subCateogryId) {
+    var item = bannerModel.subCategories?.indexWhere(
+      (element) => element.subCategoryId == subCateogryId,
+    );
+    if (item == -1) {
+      return;
+    }
+    var removedItem = bannerModel.subCategories?.removeAt(item!);
+    bannerModel.subCategories?.insert(0, removedItem!);
+    emit(SuccessGetBannerState(model: bannerModel));
   }
 
   selectSubCategory({required SubCategoryEntity subCategory}) {
@@ -243,8 +254,8 @@ class ShippingCubit extends Cubit<ShippingState> {
     ];
     List<CarImage>? carImagesList = await Future.wait(listFile.map(
       (e) async => CarImage(
-        size: await getFileSize(e!),
-        type: getFileExtension(e!),
+        size: await getFileSize(e),
+        type: getFileExtension(e),
       ),
     ));
     var response = await repository.getS3CarImages(
@@ -255,7 +266,7 @@ class ShippingCubit extends Cubit<ShippingState> {
     );
     response.fold(
       (l) {
-        log('llllllllllllllja;sdlkfja;slkdjf;aslkdjf;alskdjfa;slkdjf ${l}');
+        log('llllllllllllllja;sdlkfja;slkdjf;aslkdjf;alskdjfa;slkdjf $l');
       },
       (r) async {
         for (var i = 0; i < carImagesList.length; i++) {

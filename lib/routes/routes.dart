@@ -258,7 +258,6 @@ abstract class Paths {
   static const SPOTLIGHT = 'Spotlight';
   static const SNAP = 'Snap';
 
-
   static const DASHBOARDDRIVERSCREEN = 'DASHBOARDDRIVERSCREEN';
   static const DRIVERREQUESTSDETIALS = 'DRIVERREQUESTSDETIALS';
   static const MyRating = 'MyRating';

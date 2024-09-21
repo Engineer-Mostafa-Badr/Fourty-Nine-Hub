@@ -27,7 +27,7 @@ abstract class MessagesRemoteDataSource {
     required String messageId,
   });
 
-  void stopListenToNewMessages() ;
+  void stopListenToNewMessages();
 }
 
 class MessagesRemoteDataSourceImplementation
@@ -62,7 +62,6 @@ class MessagesRemoteDataSourceImplementation
   void listenToNewMessages(Function(MessageEntity) params) {
     try {
       _socket.on(SocketIOEvents.newMessageFromMe, (data) {
-        
         CliLogger.info("newMessageFromMe :  $data");
         MessageModel messageModel = MessageModel.fromJson(jsonDecode(data));
         params(messageModel);
@@ -78,12 +77,12 @@ class MessagesRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> sendMessage(SendMessageParams params) async{
-    try{
-      _socket.emit(SocketIOMessages.sendMessage,params.toSocketParams());
+  Future<Either<Failure, bool>> sendMessage(SendMessageParams params) async {
+    try {
+      _socket.emit(SocketIOMessages.sendMessage, params.toSocketParams());
       CliLogger.info('message sent successfully');
       return const Right(true);
-    }catch(e){
+    } catch (e) {
       CliLogger.error('can\'t send error $e');
       return const Left(ServerFailure(message: "can't send message "));
     }

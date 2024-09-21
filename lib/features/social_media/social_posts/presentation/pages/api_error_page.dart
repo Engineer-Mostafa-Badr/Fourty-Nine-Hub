@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -25,7 +24,12 @@ class ApiErrorPage extends StatelessWidget {
               onLoaded: (loaded) {},
             ),
             Center(
-              child: Label(text:message,style: Styles.headerText(fontSize: 30),maxLines: 3,textAlign: TextAlign.center,),
+              child: Label(
+                text: message,
+                style: Styles.headerText(fontSize: 30),
+                maxLines: 3,
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
         ),

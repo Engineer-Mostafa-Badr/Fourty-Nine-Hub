@@ -10,24 +10,25 @@ class MainCategoryEntity extends Equatable {
   List<SubCategoryEntity>? subcategories;
   final String banner;
   final String cover;
-   bool? isFavorite;
+  bool? isFavorite;
   final int total;
   final String? favoriteName;
 
-   MainCategoryEntity({
+  MainCategoryEntity({
     required this.id,
     required this.name,
     required this.image,
     this.subcategories,
     required this.banner,
     required this.cover,
-     this.isFavorite = false,
+    this.isFavorite = false,
     required this.total,
     this.favoriteName,
   });
 
-  factory MainCategoryEntity.fake(){
-    return   MainCategoryEntity(id: "id",
+  factory MainCategoryEntity.fake() {
+    return MainCategoryEntity(
+        id: "id",
         name: "Fake Data",
         image: UIConst.imagePlaceHolder,
         banner: UIConst.imagePlaceHolder,

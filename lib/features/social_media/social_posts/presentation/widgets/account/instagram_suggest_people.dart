@@ -18,10 +18,12 @@ class InstagramProfileSuggestPeople extends StatefulWidget {
   const InstagramProfileSuggestPeople({super.key});
 
   @override
-  State<InstagramProfileSuggestPeople> createState() => _InstagramProfileSuggestPeopleState();
+  State<InstagramProfileSuggestPeople> createState() =>
+      _InstagramProfileSuggestPeopleState();
 }
 
-class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestPeople> {
+class _InstagramProfileSuggestPeopleState
+    extends State<InstagramProfileSuggestPeople> {
   final messageController = TextEditingController();
 
   @override
@@ -32,7 +34,7 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ??  UnknownFailure(''),
+            state.failure ?? UnknownFailure(''),
             context,
           ),
         );
@@ -45,7 +47,6 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
@@ -165,8 +166,8 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
                                                               child: InkWell(
                                                                 onTap:
                                                                     () async {
-                                                                   if (item.followSuccessfully ==
-                                                                          false) {
+                                                                  if (item.followSuccessfully ==
+                                                                      false) {
                                                                     var response = await controller.followRequest(
                                                                         context:
                                                                             context,
@@ -179,9 +180,9 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
                                                                       setState(
                                                                           () {});
                                                                     }
-                                                                  } else if (
-                                                                      item.followSuccessfully ==
-                                                                          true) {
+                                                                  } else if (item
+                                                                          .followSuccessfully ==
+                                                                      true) {
                                                                     showDialog(
                                                                       context:
                                                                           context,
@@ -278,9 +279,9 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
                                                                         ),
                                                                         child:
                                                                             Label(
-                                                                          text:item.followSuccessfully == false
-                                                                                  ? 'Follow'
-                                                                                  : "Send Greet Message",
+                                                                          text: item.followSuccessfully == false
+                                                                              ? 'Follow'
+                                                                              : "Send Greet Message",
                                                                           style: Styles.mediumText(
                                                                               color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
                                                                               fontSize: 14,

@@ -102,26 +102,26 @@ class _FormTextFieldState extends State<FormTextField> {
                 (value) {
                   validate = true;
                   final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-            // validator: widget.validator ?? 
-            //     (value) {
-            //       validate = true;
-            //       final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+                  // validator: widget.validator ??
+                  //     (value) {
+                  //       validate = true;
+                  //       final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
 
-            //       //   setState(() {});
-            //       if ((value == null || value.isEmpty) &&
-            //           (widget.required ?? true)) {
-            //         return LocaleKeys.required.localize;
-            //       } else if (widget.extraValidation ?? false) {
-            //         return widget.extraValidationMessage ?? '';
-            //       } else if (!emailRegExp.hasMatch(value!.trim()) &&
-            //           (widget.isEmail ?? false)) {
-            //         return LocaleKeys.emailFormat.localize;
-            //       } else {
-            //         validate = false;
-            //         setState(() {});
-            //         return null;
-            //       }
-            //     },
+                  //       //   setState(() {});
+                  //       if ((value == null || value.isEmpty) &&
+                  //           (widget.required ?? true)) {
+                  //         return LocaleKeys.required.localize;
+                  //       } else if (widget.extraValidation ?? false) {
+                  //         return widget.extraValidationMessage ?? '';
+                  //       } else if (!emailRegExp.hasMatch(value!.trim()) &&
+                  //           (widget.isEmail ?? false)) {
+                  //         return LocaleKeys.emailFormat.localize;
+                  //       } else {
+                  //         validate = false;
+                  //         setState(() {});
+                  //         return null;
+                  //       }
+                  //     },
                   setState(() {});
                   if ((value == null || value.isEmpty) &&
                       (widget.required ?? true)) {

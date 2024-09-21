@@ -89,7 +89,7 @@ class _UserPostCardState extends State<UserPostCard> {
         showErrorMessage(
           context,
           getFailureMessage(
-            state.failure ??  UnknownFailure(''),
+            state.failure ?? UnknownFailure(''),
             context,
           ),
         );
@@ -234,8 +234,9 @@ class _UserPostCardState extends State<UserPostCard> {
               const Spacer(),
               InkWell(
                 onTap: () {
-                  if(context.read<UserCubit>().isLoggedIn){
-                  widget.showPostComments(myPost.id);}else{
+                  if (context.read<UserCubit>().isLoggedIn) {
+                    widget.showPostComments(myPost.id);
+                  } else {
                     context.push(Routes.LOGIN);
                   }
                 },
@@ -265,17 +266,19 @@ class _UserPostCardState extends State<UserPostCard> {
             child: Row(
               children: [
                 Expanded(
-                  child: context.read<UserCubit>().isLoggedIn?BuildReactionsButtons(
-                      post: widget.post, from: 'userPosts'):_buildReactionPlaceHolder(
-                      icon: Icons.thumb_up_alt_outlined,
-                      label: 'Like',
-                      onTap: () {
-                        if(context.read<UserCubit>().isLoggedIn) {
-                          return widget.showPostComments(myPost.id);
-                        }else{
-                          context.push(Routes.LOGIN);
-                        }
-                      }),
+                  child: context.read<UserCubit>().isLoggedIn
+                      ? BuildReactionsButtons(
+                          post: widget.post, from: 'userPosts')
+                      : _buildReactionPlaceHolder(
+                          icon: Icons.thumb_up_alt_outlined,
+                          label: 'Like',
+                          onTap: () {
+                            if (context.read<UserCubit>().isLoggedIn) {
+                              return widget.showPostComments(myPost.id);
+                            } else {
+                              context.push(Routes.LOGIN);
+                            }
+                          }),
                 ),
                 if (widget.from == 'posts')
                   Expanded(
@@ -283,9 +286,9 @@ class _UserPostCardState extends State<UserPostCard> {
                         icon: FontAwesomeIcons.message,
                         label: 'Comment',
                         onTap: () {
-                          if(context.read<UserCubit>().isLoggedIn) {
+                          if (context.read<UserCubit>().isLoggedIn) {
                             return widget.showPostComments(myPost.id);
-                          }else{
+                          } else {
                             context.push(Routes.LOGIN);
                           }
                         }),
@@ -295,19 +298,19 @@ class _UserPostCardState extends State<UserPostCard> {
                       icon: FontAwesomeIcons.share,
                       label: 'Share',
                       onTap: () async {
-                        if(context.read<UserCubit>().isLoggedIn){
-                        var result = await controller.onShare(
-                            postId: myPost.isShared == true
-                                ? myPost.mainPost!.id
-                                : myPost.id);
-                        if (result == true) {
-                          showSuccessMessage(
-                              context, 'Post shared successfully');
-                        }
-                      }else{
+                        if (context.read<UserCubit>().isLoggedIn) {
+                          var result = await controller.onShare(
+                              postId: myPost.isShared == true
+                                  ? myPost.mainPost!.id
+                                  : myPost.id);
+                          if (result == true) {
+                            showSuccessMessage(
+                                context, 'Post shared successfully');
+                          }
+                        } else {
                           context.push(Routes.LOGIN);
                         }
-      }),
+                      }),
                 ),
               ],
             ),
@@ -457,7 +460,8 @@ class _UserPostCardState extends State<UserPostCard> {
                 ],
               ),
             ),
-            if (post.user.id != user?.id&&context.read<UserCubit>().isLoggedIn)
+            if (post.user.id != user?.id &&
+                context.read<UserCubit>().isLoggedIn)
               IconAppButton(
                 onPressed: () {
                   bottomSheet(
@@ -578,7 +582,7 @@ class _UserPostCardState extends State<UserPostCard> {
             alignment: Alignment.center,
             margin: const EdgeInsets.symmetric(vertical: 10),
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-            color: backgroundColor != null && images.isEmpty
+            color: images.isEmpty
                 ? Color(int.parse(backgroundColor.substring(1), radix: 16))
                 : Colors.white,
             child: ReadMoreLabel(

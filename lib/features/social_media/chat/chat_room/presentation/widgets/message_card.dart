@@ -279,7 +279,8 @@ class MessageCard extends StatelessWidget {
                         : ReadMoreLabel(
                             trimLines: 5,
                             text: messageEntity.text!,
-                            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+                            style: Styles.mediumText(
+                                color: AppColors.PRIMARY_COLOR),
                             textAlign: TextAlign.left,
                           ),
                   ),

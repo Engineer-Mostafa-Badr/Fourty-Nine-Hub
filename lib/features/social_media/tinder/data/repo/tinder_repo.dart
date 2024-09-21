@@ -256,8 +256,6 @@ import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_u
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/last_seen_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/near_by_model.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 
 import '../../../../../core/utils/shared_pref.dart';
 import '../models/tinder_person_model.dart';
@@ -385,9 +383,11 @@ class TinderRepository {
     }
     return null;
   }
+
   Future<CategoryFavoritesResponse?> fetchFavoritesCategory() async {
     const url = 'https://49dev.com/api/v1/favorite-category';
-    final response = await _makeGetRequest(url: url, fromMethod: 'fetchFavorites');
+    final response =
+        await _makeGetRequest(url: url, fromMethod: 'fetchFavorites');
     if (response != null) {
       final data = json.decode(response.body);
       return CategoryFavoritesResponse.fromJson(data);

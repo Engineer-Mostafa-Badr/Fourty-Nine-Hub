@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
@@ -22,7 +21,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class TripCardWidget extends StatefulWidget {
-  TripCardWidget(
+  const TripCardWidget(
       {super.key,
       required this.model,
       this.yourRequest = false,
@@ -98,7 +97,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                     : Border.all(color: Colors.black, width: 3),
                 borderRadius: BorderRadius.circular(10)),
             padding: widget.padding ??
-                EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,7 +109,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                       children: [
                         Text(
                           widget.title ?? 'New Ride',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: AppColors.PRIMARY_COLOR,
                             fontWeight: FontWeight.bold,
                             fontSize: 22,
@@ -120,7 +119,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                           widget.noBracts
                               ? " ${widget.model.status}"
                               : " (${widget.model.status})",
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.red,
                             fontWeight: FontWeight.bold,
                             fontSize: 22,
@@ -138,7 +137,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                             fontSize: widget.priceFontSize,
                           ),
                         ),
-                        if (!widget.noBracts) Text("Premium")
+                        if (!widget.noBracts) const Text("Premium")
                       ],
                     ),
                   ],
@@ -165,8 +164,8 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                 const SizedBox(height: 5),
                 Row(
                   children: [
-                    Icon(Icons.chat),
-                    SizedBox(
+                    const Icon(Icons.chat),
+                    const SizedBox(
                       width: 5,
                     ),
                     Flexible(

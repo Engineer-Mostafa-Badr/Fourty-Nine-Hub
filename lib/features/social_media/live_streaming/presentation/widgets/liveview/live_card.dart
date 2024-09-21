@@ -52,7 +52,10 @@ class _LiveCardState extends State<LiveCard> {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const ProfileImage(accountId: 0,userId: '',),
+          const ProfileImage(
+            accountId: 0,
+            userId: '',
+          ),
           const Sizer(),
           Expanded(
             child: Column(
@@ -78,11 +81,8 @@ class _LiveCardState extends State<LiveCard> {
               icon: Icons.add,
               onPressed: () {
                 context.push(Routes.LIVEView,
-                    extra: ZegoArgs(
-                      '123',
-                      false,
-                      context.read<UserCubit>().state.data!.fullName
-                    ));
+                    extra: ZegoArgs('123', false,
+                        context.read<UserCubit>().state.data!.fullName));
               }),
           const Sizer(),
           Row(

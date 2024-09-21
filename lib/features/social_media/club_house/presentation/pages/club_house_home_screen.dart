@@ -76,8 +76,8 @@ class ClubHouseHome extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    onPressed: () =>
-                        showVoiceLiveBottomSheet(context: context, cubit: cubit),
+                    onPressed: () => showVoiceLiveBottomSheet(
+                        context: context, cubit: cubit),
                     child: const Icon(
                       Icons.add,
                       color: Colors.white,

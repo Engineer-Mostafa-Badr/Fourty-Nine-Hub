@@ -52,7 +52,7 @@ class SQFLiteMessagesLocalDataSourceImplementation
 
   @override
   Future<Either<Failure, List<MessageEntity>>> getMessages(
-        GetMessagesParams params) async {
+      GetMessagesParams params) async {
     try {
       List<MessageEntity> messages = [];
       final result = await _database.query(

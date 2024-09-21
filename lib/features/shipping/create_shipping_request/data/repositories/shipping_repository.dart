@@ -1,24 +1,16 @@
 import 'dart:developer';
-import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/datasources/shipping_data_source.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_images_s3_model/car_images_s3_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_license_s3_model/car_license_s3_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/driver_register_request_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/drivnig_license_s3_model/drivnig_license_s3_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/info_documents_model/info_documents_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/info_id_s3_model/info_id_s3_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/request_model.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:path/path.dart' as path;
 
 class ShippingRepository {
   ShippingDataSource dataSource;
@@ -69,8 +61,8 @@ class ShippingRepository {
 
   Future<Either<Failure, Map<String, dynamic>>> getS3CarImages(
       {required CarImagesS3Model model}) {
-  // Future<Either<Failure, Map<String, dynamic>>> getS3CarImages(
-  //     {required CarImagesS3Model model}) {
+    // Future<Either<Failure, Map<String, dynamic>>> getS3CarImages(
+    //     {required CarImagesS3Model model}) {
     // try {
     log(model.toJson().toString(), name: "lllllllllllllllllllllllllll");
     return dataSource.getS3(
@@ -163,6 +155,7 @@ class ShippingRepository {
   Future<Either<Failure, Map<String, dynamic>>> getMyTrip() {
     return dataSource.getMyTrip();
   }
+
   Future<Either<Failure, Map<String, dynamic>>> driverStatistics() {
     return dataSource.driverStatistics();
   }
@@ -235,10 +228,10 @@ class ShippingRepository {
       {required String loadingTrip}) {
     return dataSource.completeTrip(loadingTrip: loadingTrip);
   }
+
   Future<Either<Failure, Map<String, dynamic>>> deleteDriver() {
     return dataSource.deleteDriver();
   }
-  
 }
 
 // class S3UploadModel {

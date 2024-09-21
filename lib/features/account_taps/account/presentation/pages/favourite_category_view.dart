@@ -1,27 +1,16 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
- import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 
-import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_category_entity.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import '../../../../../core/states/basic_state.dart';
-import '../../../../../res/strings/labels.dart';
-import '../../../../fourty_nine/presentation/widgets/main_category_card.dart';
-import '../cubit/managers/favourite_categories_cubit.dart';
 
 // class FavouriteCategoryView extends StatelessWidget {
 //   const FavouriteCategoryView({super.key});
@@ -75,8 +64,7 @@ class _FavCategoryViewContent extends StatefulWidget {
       _FavCategoryViewContentState();
 }
 
-class _FavCategoryViewContentState
-    extends State<_FavCategoryViewContent> {
+class _FavCategoryViewContentState extends State<_FavCategoryViewContent> {
   @override
   void initState() {
     // TODO: implement initState
@@ -132,7 +120,7 @@ class _FavCategoryViewContentState
       List<CategoryFavoriteItem> list, int chunkSize) {
     return List.generate(
       (list.length / chunkSize).ceil(),
-          (index) => list.sublist(
+      (index) => list.sublist(
         index * chunkSize,
         index * chunkSize + chunkSize > list.length
             ? list.length
@@ -156,20 +144,20 @@ class _FavCategoryViewContentState
     );
   }
 
-  Widget _buildCard(BuildContext context, CategoryFavoriteItem favCategoryData) {
+  Widget _buildCard(
+      BuildContext context, CategoryFavoriteItem favCategoryData) {
     return Container(
         width: 200,
         height: MediaQuery.of(context).size.height / 4,
         padding: const EdgeInsets.all(8.0),
         child: FavTinderCategoryCard(
-            favCategoryCardData: favCategoryData,
-            activeFav: false)
-      // Column(
-      //   children: [
-      //     Text(favCategoryData.categoryId?.nameAr ?? 'Unknown Category'),
-      //   ],
-      // ),
-    );
+            favCategoryCardData: favCategoryData, activeFav: false)
+        // Column(
+        //   children: [
+        //     Text(favCategoryData.categoryId?.nameAr ?? 'Unknown Category'),
+        //   ],
+        // ),
+        );
   }
 }
 
@@ -227,16 +215,16 @@ class FavTinderCategoryCard extends StatelessWidget {
               right: 5,
               child: activeFav
                   ? IconAppButton(
-                size: 25,
-                icon: Icons.favorite_border,
-                color: Colors.red,
-                onPressed: () {},
-              )
+                      size: 25,
+                      icon: Icons.favorite_border,
+                      color: Colors.red,
+                      onPressed: () {},
+                    )
                   : const Icon(
-                size: 25,
-                Icons.favorite,
-                color: Colors.red,
-              ),
+                      size: 25,
+                      Icons.favorite,
+                      color: Colors.red,
+                    ),
             )
           ],
         ),

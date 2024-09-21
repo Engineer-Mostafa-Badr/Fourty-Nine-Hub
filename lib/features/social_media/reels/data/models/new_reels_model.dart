@@ -3,7 +3,8 @@ class ReelsResponse {
   final String message;
   final ReelsData data;
 
-  ReelsResponse({required this.status, required this.message, required this.data});
+  ReelsResponse(
+      {required this.status, required this.message, required this.data});
 
   factory ReelsResponse.fromJson(Map<String, dynamic> json) {
     return ReelsResponse(

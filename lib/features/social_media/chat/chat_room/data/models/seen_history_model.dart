@@ -31,11 +31,11 @@ class SeenHistoryModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['time'] = this.time;
-    data['date'] = this.date;
-    data['_id'] = this.sId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['time'] = time;
+    data['date'] = date;
+    data['_id'] = sId;
     return data;
   }
 }

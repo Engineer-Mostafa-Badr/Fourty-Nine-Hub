@@ -1,5 +1,7 @@
 // import 'package:flutter/src/widgets/basic.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/share/context_utilty.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/pages/contact_us_view.dart';
@@ -19,7 +21,6 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/l
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit/food_cart_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
@@ -63,11 +64,17 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/picture_optional_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/review.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/accept_decline_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_trip_cubit.dart';
@@ -83,7 +90,6 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/update_driver_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/dahsboard_driver_screen.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/driver_requests.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/edit_driver_screen.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/my_rating_screen.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
@@ -91,7 +97,6 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/trip_rating_screen.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room_view.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
@@ -114,7 +119,6 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/ti
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 // import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_brand_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_model_usecase.dart';
@@ -202,14 +206,12 @@ import '../features/ride/driver_dashboard/presentation/cubit/driver_dashboard_cu
 import '../features/ride/driver_dashboard/presentation/pages/driver_dashboard_view.dart';
 import '../features/ride/trip_details/presentation/cubit/trip_details_cubit.dart';
 import '../features/ride/trip_details/presentation/pages/trip_details_view.dart';
-import '../features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
 import '../features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
 import '../features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
-import '../features/social_media/twitter/presentation/pages/twitter_post_details.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/youtube/presentation/pages/play_video.dart';
 import '../features/youtube/presentation/pages/youtube.dart';
@@ -218,202 +220,17 @@ import '../features/zoom/presentation/pages/meeting_view.dart';
 import '../service_locator/service_locator.dart';
 import 'routes.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
-import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
-import 'package:fourtyninehub/features/account_taps/contact_us/presentation/pages/contact_us_view.dart';
-import 'package:fourtyninehub/features/account_taps/lists/presentation/pages/lists_view.dart';
-import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
-import 'package:fourtyninehub/features/account_taps/privacy/presentation/pages/privacy_view.dart';
-import 'package:fourtyninehub/features/account_taps/share_app/presentation/pages/share_the_app.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_history_entity.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
-import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/create_ad.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit/food_cart_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/create_resturant_view.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/pages/create_doctor_view.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/all_doctor_reservations/all_doctor_reservations_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_statistics/doctor_statistics_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_today_appointments/doctor_today_appointments_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_unhandled_appotinments/doctor_unhandled_appotinments_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/edit_doctor_profile/edit_doctor_profile_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/all_doctor_reservations_view.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_dashboard_view.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/doctor_statistics.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_personal_info_view.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_profile.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/today_doctor_appointments_view.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/unhandled_doctor_appointments_view.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/governorate_filter_cubit/doctor_governorate_filter_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/subcategory_filter_cubit/doctor_filter_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/pages/citiy_filter_view.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/pages/governorate_filter_view.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/pages/subcategory_filter_view.dart';
-import 'package:fourtyninehub/features/health_feature/emergency/presentation/cubit/emergency_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/emergency/presentation/pages/emergnce_view.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
-import 'package:fourtyninehub/features/installment_feature/create_installment/presentation/cubit/create_installment_cubit.dart';
-import 'package:fourtyninehub/features/installment_feature/installment_details/presentation/cubit/installment_details_cubit.dart';
-import 'package:fourtyninehub/features/installment_feature/installment_list/presentation/cubit/installment_list_cubit.dart';
-import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
-import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
-import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
-import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
-import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room_view.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chat_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
-import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
-import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_dialogue.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_friends.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_places.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
-import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
-import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/instagram_profile.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 // import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_brand_usecase.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_model_usecase.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_year_type_usecase.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_location_cordinates_usecase.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_price_distance_usecase.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/publish_trip_join_usecase.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_brands/fetch_car_brands_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_models/fetch_car_models_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_year_type/fetch_car_year_type_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_price_distance/fetch_price_distance_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/publish_trip_join/publish_trip_join_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/trip_join_view.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/avaiable_trips_view.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
-import 'package:go_router/go_router.dart';
 
-import '../core/enums/wallet_types_enums.dart';
-import '../features/account_taps/account/presentation/cubit/managers/favourite_ads_cubit.dart';
-import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
-import '../features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
-import '../features/account_taps/account/presentation/pages/favourite_category_view.dart';
-import '../features/account_taps/account/presentation/pages/favourite_subcategory_view.dart';
-import '../features/account_taps/lists/presentation/cubit/lists_cubit.dart';
-import '../features/account_taps/my_adds/presentation/pages/my_adds.dart';
-import '../features/account_taps/policies/presentation/pages/policy_view.dart';
-import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
-import '../features/account_taps/transfer_money/presentation/pages/transfer_money_view.dart';
-import '../features/account_taps/wallet/presentation/pages/wallet_history.dart';
-import '../features/account_taps/wallet/presentation/pages/wallet_view.dart';
-import '../features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
-import '../features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
-import '../features/ads_feature/create_company_ad/presentation/pages/create_company_ad.dart';
-import '../features/authentication/presentation/controllers/create_new_forgot_password_cubit/create_new_forgot_password_cubit.dart';
-import '../features/authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
-import '../features/authentication/presentation/controllers/verify_forgot_password_otp/verify_forgot_password_otp_cubit.dart';
-import '../features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
-import '../features/authentication/presentation/pages/forgot_password/create_new_forget_password_view.dart';
-import '../features/authentication/presentation/pages/forgot_password/enter_email_forgot_password_view.dart';
-import '../features/authentication/presentation/pages/forgot_password/forget_password_otp_verification_view.dart';
-import '../features/authentication/presentation/pages/login_view.dart';
-import '../features/authentication/presentation/pages/register/register_verify_otp.dart';
-import '../features/azkaar/presentation/pages/azkar_view.dart';
-import '../features/competition/presentation/pages/competition_view.dart';
-import '../features/competition/presentation/pages/winners.dart';
-import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
-import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
-import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
-import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
-import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
-import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
-import '../features/fourty_nine/presentation/pages/fourty_nine.dart';
-import '../features/fourty_nine/presentation/pages/main_categories_cards_view.dart';
-import '../features/fourty_nine/presentation/pages/main_categories_taps_view.dart';
-import '../features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
-import '../features/health_feature/booking/presentation/pages/visita_booking.dart';
-import '../features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
-import '../features/health_feature/doctor_details/presentation/pages/DoctorDetails.dart';
-import '../features/health_feature/doctor_filter/presentation/pages/doctors_list.dart';
-import '../features/health_feature/health/presentation/pages/health_view.dart';
-import '../features/installment_feature/create_installment/presentation/pages/create_installment_view.dart';
-import '../features/installment_feature/installment_details/presentation/pages/installment_details.dart';
-import '../features/installment_feature/installment_list/presentation/pages/installment_view.dart';
-import '../features/installment_feature/installments/presentation/pages/installment_order_details.dart';
-import '../features/installment_feature/installments/presentation/pages/installment_orders_list.dart';
-import '../features/lucky_wheel/presentation/controllers/wheel_cubit/wheel_cubit.dart';
-import '../features/lucky_wheel/presentation/pages/lucky_wheel.dart';
-import '../features/mazadat_feature/auction_details/presentation/cubit/auction_details_cubit.dart';
-import '../features/mazadat_feature/auction_details/presentation/pages/Mazad_details.dart';
-import '../features/mazadat_feature/auction_list/presentation/cubit/auction_list_cubit.dart';
-import '../features/mazadat_feature/auction_list/presentation/pages/Mazadat_view.dart';
-import '../features/mazadat_feature/create_auction/presentation/pages/create_auction_view.dart';
-import '../features/notifications/presentation/pages/notification_view.dart';
-import '../features/payment/presentation/pages/payment_view.dart';
-import '../features/quraan/presentation/pages/quraan_view.dart';
-import '../features/register/driver_register/presentation/cubit/driver_register_cubit.dart';
-import '../features/register/driver_register/presentation/pages/driver_register_view.dart';
-import '../features/requests_history/presentation/cubit/request_history_cubit.dart';
-import '../features/ride/RideRequest/presentation/pages/ride_request_view.dart';
-import '../features/ride/driver_dashboard/presentation/cubit/driver_dashboard_cubit.dart';
-import '../features/ride/driver_dashboard/presentation/pages/driver_dashboard_view.dart';
-import '../features/ride/trip_details/presentation/cubit/trip_details_cubit.dart';
-import '../features/ride/trip_details/presentation/pages/trip_details_view.dart';
-import '../features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
-import '../features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
-import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
-import '../features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
-import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
-import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
-import '../features/youtube/presentation/pages/play_video.dart';
-import '../features/youtube/presentation/pages/youtube.dart';
-import '../features/zoom/presentation/pages/meeting_room.dart';
-import '../features/zoom/presentation/pages/meeting_view.dart';
-import '../service_locator/service_locator.dart';
-import 'routes.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
+final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 
 class AppPages {
   AppPages._();
 
   static final router = GoRouter(
+    navigatorKey: ContextUtilty.navigatorKey,
+    observers: [routeObserver],
     routes: <RouteBase>[
       GoRoute(
         path: Routes.HOME,
@@ -778,7 +595,7 @@ class AppPages {
               GoRoute(
                 path: Paths.INSTAGRAMPROFILE,
                 name: Routes.INSTAGRAMPROFILE,
-                routes: [],
+                routes: const [],
                 builder: (context, state) {
                   final id = state.extra as String?;
 
@@ -831,7 +648,7 @@ class AppPages {
                     path: Paths.TWITTER,
                     name: Routes.TWITTER,
                     builder: (context, state) => const TwitterView(),
-                    routes: []),
+                    routes: const []),
                 GoRoute(
                     path: Paths.OTHERSACCOUNT,
                     name: Routes.OTHERSACCOUNT,
@@ -968,7 +785,7 @@ class AppPages {
                       chatId: state.extra as String,
                     ),
                   ),
-              routes: [
+              routes: const [
                 // GoRoute(
                 //   path: Paths.CHATROOMCAMERAPICKER,
                 //   name: Routes.CHATROOMCAMERAPICKER,
@@ -1226,7 +1043,7 @@ class AppPages {
                 //   create: (context) => SubjectBloc(),
                 // ),
               ],
-              child: MyRatingScreen(),
+              child: const MyRatingScreen(),
             ),
           ),
           GoRoute(
@@ -1294,7 +1111,7 @@ class AppPages {
                   create: (_) => serviceLocator(),
                 ),
               ],
-              child: EditDriverScreen(),
+              child: const EditDriverScreen(),
             ),
           ),
           GoRoute(
@@ -1340,7 +1157,52 @@ class AppPages {
           GoRoute(
               path: Paths.RIDE,
               name: Routes.RIDE,
-              builder: (context, state) => const RideRequestView(),
+              builder: (context, state) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) =>
+                            serviceLocator<GetCateogryRiderCubit>(),
+                      ),
+                      BlocProvider(
+                          create: (context) =>
+                              serviceLocator<RegisterRiderCubit>()),
+                      BlocProvider(
+                          create: (context) =>
+                              serviceLocator<FavoriteMainCateogryCubit>()),
+                      BlocProvider(
+                          create: (context) =>
+                              serviceLocator<RiderTripReelTimeCubit>()),
+                      BlocProvider(
+                        create: (context) =>
+                            GetTripInfoCubit(repository: serviceLocator()),
+                      ),
+                      BlocProvider(
+                        create: (context) => StartingLocationCubit(
+                            fetchLocationCordinatesUseCase: serviceLocator()),
+                      ),
+                      BlocProvider(
+                        create: (context) => DestinationLocationCubit(
+                            fetchLocationCordinatesUseCase: serviceLocator()),
+                      ),
+                      BlocProvider(
+                        create: (context) => FetchPriceDistanceCubit(
+                            fetchPriceDistanceUsecase: serviceLocator()),
+                      ),
+                      BlocProvider(
+                        create: (context) =>
+                            FavoriteShippingCubit(repository: serviceLocator()),
+                      ),
+                      BlocProvider(
+                        create: (context) => LocationSocketCubit(
+                            socketIoService: serviceLocator()),
+                      ),
+                      BlocProvider(
+                        create: (context) => RequestRiderTripCubit(
+                            repository: serviceLocator()),
+                      ),
+                    ],
+                    child: const RideRequestView(),
+                  ),
               routes: [
                 GoRoute(
                     path: Paths.REQUESTSHISTORY,
@@ -1366,7 +1228,8 @@ class AppPages {
                               create: (_) => serviceLocator(),
                             ),
                             BlocProvider(
-                              create: (context) => DriverStatisticsCubit(repository: serviceLocator()),
+                              create: (context) => DriverStatisticsCubit(
+                                  repository: serviceLocator()),
                             ),
                           ],
                           child: const DriverDashboardView(),
@@ -1380,13 +1243,33 @@ class AppPages {
                               create: (_) => serviceLocator(),
                             ),
                             BlocProvider(
-                              create: (context) => DriverStatisticsCubit(repository: serviceLocator()),
+                              create: (context) => RegisterRiderCubit(
+                                  repo: serviceLocator(),
+                                  repository: serviceLocator()),
                             ),
                             BlocProvider(
-                              create: (context) => serviceLocator<ShippingCubit>(),
+                              create: (context) =>
+                                  serviceLocator<GetCateogryRiderCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<FetchCarBrandsCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<FetchCarModelsCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<FetchCarYearTypeCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (context) => PictureOptionalCubit(
+                                  repository: serviceLocator())
+                                ..getData(),
                             ),
                           ],
-                          child: RiderRegisterView(),
+                          child: const RiderRegisterView(),
                         ))
               ]),
           GoRoute(

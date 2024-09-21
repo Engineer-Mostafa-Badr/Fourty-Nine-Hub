@@ -138,7 +138,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
           giftId: gift.sId ?? '',
         );
 
-    _handleGiftResponse(context: context, response: data!, gift: gift);
+    _handleGiftResponse(context: context, response: data, gift: gift);
   }
 
   void _handleGiftResponse({
@@ -346,11 +346,11 @@ void showGiftBottomSheet(BuildContext context, {required String? receiverId}) {
                           padding: const EdgeInsets.all(4.0),
                           child: OutlinedButton(
                             style: const ButtonStyle(
-                              side: MaterialStatePropertyAll(BorderSide(
+                              side: WidgetStatePropertyAll(BorderSide(
                                   width: 1.5, color: AppColors.ACCENT_COLOR)),
-                              iconColor: MaterialStatePropertyAll(Colors.white),
+                              iconColor: WidgetStatePropertyAll(Colors.white),
                               backgroundColor:
-                                  MaterialStatePropertyAll(Colors.black),
+                                  WidgetStatePropertyAll(Colors.black),
                             ),
                             onPressed: () {
                               serviceLocator<SubscriptionController>()

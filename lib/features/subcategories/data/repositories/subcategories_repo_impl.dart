@@ -20,6 +20,7 @@ class SubcategoriesRepoImpl implements SubcategoriesRepo {
   Future<Either<Failure, bool>> toggleFavoriteSubcategory(String sucategoryId) {
     return _remoteDataSource.toggleFavoriteSubcategory(sucategoryId);
   }
+
   @override
   Future<Either<Failure, bool>> toggleFavoriteCategory(String sucategoryId) {
     return _remoteDataSource.toggleFavoriteCategory(sucategoryId);
@@ -28,6 +29,5 @@ class SubcategoriesRepoImpl implements SubcategoriesRepo {
   @override
   Future<Either<Failure, bool>> deleteFavoriteCategory(String sucategoryId) {
     return _remoteDataSource.deleteFavoriteCategory(sucategoryId);
-
   }
 }

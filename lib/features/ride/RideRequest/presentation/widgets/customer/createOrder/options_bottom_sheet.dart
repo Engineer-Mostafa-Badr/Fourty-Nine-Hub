@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import '../../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
@@ -33,7 +32,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
           showErrorMessage(
             context,
             getFailureMessage(
-              state.failure ??  UnknownFailure(''),
+              state.failure ?? UnknownFailure(''),
               context,
             ),
           );
@@ -64,53 +63,68 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
               const Sizer(),
 
               // Text('${state.subCategories?.length ?? 0}'),
-              if (state.subCategories?.isNotEmpty ?? false)
-                SizedBox(
-                  height: kTextTabBarHeight * 1,
-                  child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        final subCategory = state.subCategories![index];
-                        return InkWell(
-                          onTap: () => rideCubit.changeSubCategorySelection(
-                              item: subCategory),
-                          onDoubleTap: () {},
-                          child: Container(
-                            padding: const EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: state.subCategory == subCategory
-                                    ? AppColors.SECONDARY_COLOR
-                                    : Theme.of(context).primaryColor,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                        child: SquareImage(
-                                      fit: BoxFit.fitHeight,
-                                      width: 50,
-                                      url: subCategory.image,
-                                    )),
-                                    Label(
-                                        text: subCategory.name,
-                                        style: Styles.mediumText()),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) => const Sizer(),
-                      itemCount: state.subCategories?.length ?? 0),
-                ),
+              // if (state.subCategories?.isNotEmpty ?? false)
+              // BlocBuilder<GetCateogryRiderCubit, RiderState>(
+              //   builder: (context, state) {
+              //     log(state.toString());
+              //     if (state is SuccessGetCateogyRider) {
+              //       return SizedBox(
+              //         height: kTextTabBarHeight * 1,
+              //         child: ListView.separated(
+              //             scrollDirection: Axis.horizontal,
+              //             shrinkWrap: true,
+              //             itemBuilder: (context, index) {
+              //               final subCategory =
+              //                   state.model.subCategories![index];
+              //               log(subCategory.subCategoryNameEn ?? "",
+              //                   name: "lskdjflskdjfskldjf");
+              //               return InkWell(
+              //                 // onTap: () => rideCubit.changeSubCategorySelection(
+              //                 //     item: subCategory),
+              //                 onDoubleTap: () {},
+              //                 child: Container(
+              //                   padding: const EdgeInsets.all(5),
+              //                   decoration: BoxDecoration(
+              //                     border: Border.all(
+              //                       color:
+              //                           state.model.subCategories == subCategory
+              //                               ? AppColors.SECONDARY_COLOR
+              //                               : Theme.of(context).primaryColor,
+              //                     ),
+              //                     borderRadius: BorderRadius.circular(10),
+              //                   ),
+              //                   child: Row(
+              //                     crossAxisAlignment: CrossAxisAlignment.start,
+              //                     children: [
+              //                       Column(
+              //                         crossAxisAlignment:
+              //                             CrossAxisAlignment.start,
+              //                         children: [
+              //                           Expanded(
+              //                               child: SquareImage(
+              //                             fit: BoxFit.fitHeight,
+              //                             width: 50,
+              //                             url: subCategory.picture,
+              //                           )),
+              //                           Label(
+              //                               text:
+              //                                   subCategory.subCategoryNameEn ??
+              //                                       "",
+              //                               style: Styles.mediumText()),
+              //                         ],
+              //                       ),
+              //                     ],
+              //                   ),
+              //                 ),
+              //               );
+              //             },
+              //             separatorBuilder: (context, index) => const Sizer(),
+              //             itemCount: state.model.subCategories?.length ?? 0),
+              //       );
+              //     }
+              //     return Container();
+              //   },
+              // ),
               const Sizer(),
               if (state.fromAddress != null)
                 InkWell(

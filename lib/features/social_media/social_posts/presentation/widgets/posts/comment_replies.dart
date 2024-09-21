@@ -116,23 +116,27 @@ class _CommentRepliesState extends State<CommentReplies> {
                 ),
                 child: Row(
                   children: [
-                    ProfileImage(accountId: 0,fromProfile: true,imageURL: user?.profilePicture, userId: '',),
+                    ProfileImage(
+                      accountId: 0,
+                      fromProfile: true,
+                      imageURL: user?.profilePicture,
+                      userId: '',
+                    ),
                     const Sizer(),
                     Expanded(
                         child: TextFormField(
-                          controller: replyTextController,
-                          onChanged: (v){
-                            setState(() {});
-                          },
-                          style: Styles.headerText(fontSize: 26),
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            contentPadding: const EdgeInsets.all(5),
-                            hintText: 'Type your reply ....',
-                            hintStyle: Styles.mediumText(),
-
-                          ),
-                        )),
+                      controller: replyTextController,
+                      onChanged: (v) {
+                        setState(() {});
+                      },
+                      style: Styles.headerText(fontSize: 26),
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        contentPadding: const EdgeInsets.all(5),
+                        hintText: 'Type your reply ....',
+                        hintStyle: Styles.mediumText(),
+                      ),
+                    )),
                     const Sizer(),
                     if (replyTextController.text.isNotEmpty)
                       IconAppButton(

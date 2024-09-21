@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 
 class EndPoints {
-  
   static const pageSize = 20;
   static const developmentBaseUrl = 'https://49dev.com/api/v1';
   static const productionBaseUrl = 'https://49dev.com/api/v1';
@@ -46,6 +45,14 @@ class EndPoints {
       '/twitter/document-request?subCategory=66a3583454e6e337915514db';
 
   // ride
+  static String bannerDataRider = "$developmentBaseUrl/ride/get-thumbnail-ride";
+  static String specialRegister =
+      "$developmentBaseUrl/ride/riders/special/register";
+  static String riderRegister = "$developmentBaseUrl/ride/riders/register";
+  static String expectedPrice = "$developmentBaseUrl/ride/trips/expected/price";
+  static String pictureOptional =
+      "$developmentBaseUrl/ride/info/picture-optional";
+  static String newTripRide = "$developmentBaseUrl/ride/trips/newTrip";
   //shipping
   static String bannerData = "$developmentBaseUrl/loading/driver/subcategory";
   static const drivingLicenseS3 = '/ride/info/driving-license';
@@ -79,7 +86,8 @@ class EndPoints {
       '/health/doctor/rate/$doctorId';
   static String getDoctorDetails(String doctorId) =>
       '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
-  static String toggleFavoriteCategory(String subCategoryId) => '/favorite-category/$subCategoryId';
+  static String toggleFavoriteCategory(String subCategoryId) =>
+      '/favorite-category/$subCategoryId';
   static const getHealthSubcategories = '/health/subCategories-health-with-ads';
   static const getMedicalServices =
       '/health/subCategories-medicalServices-with-ads';
@@ -99,7 +107,7 @@ class EndPoints {
   static const String postInstaPay = '/manual-payment/create';
   static const String saveCardToken = '/fawry/tokenize-card';
   static const String payWithCardToken = '/fawry/pay-with-card-token';
-    static const favouriteCategoriesList = '/favorite-category';
+  static const favouriteCategoriesList = '/favorite-category';
   static const String getSavedCards = '/payment/cards';
   static const String makeMultiPayment = '/fawry/multi-charge';
   static const String deleteSavedCard = '/payment/cards';
@@ -122,20 +130,24 @@ class EndPoints {
       '/health/doctor-upload-license-practicing';
   static const updateDoctorID = '/health/doctor-upload-license-id';
   static String deleteDoctor(String doctorId) => '/health/doctor/$doctorId';
-    // ride
+  // ride
   //shipping
   static String registerDriver = "$developmentBaseUrl/loading/driver/register";
-  static String favoriteSubCategory ="$developmentBaseUrl/favorite-sub-category";
-  static String createLoadingTrip = "$developmentBaseUrl/loading/trip/createLoadingTrip";
+  static String favoriteSubCategory =
+      "$developmentBaseUrl/favorite-sub-category";
+  static String createLoadingTrip =
+      "$developmentBaseUrl/loading/trip/createLoadingTrip";
   // static const idLicenseS3 = '/ride/info/id';
-  static const getAllTripBySubCategory = '$developmentBaseUrl/loading/trip/driver/subcategory';
+  static const getAllTripBySubCategory =
+      '$developmentBaseUrl/loading/trip/driver/subcategory';
   static const carPlate = '/loading/driver/info/car-plate';
   static const makeRatingDriver = '/loading/rating-driver/makeRating';
   static const getDriverData = '$developmentBaseUrl/loading/driver/info';
   static const updateDriver = '$developmentBaseUrl/loading/driver';
   static const completeTrip = '$developmentBaseUrl/loading/trip/complete';
   static const deleteDriver = '$developmentBaseUrl/loading/driver/deleteDriver';
-  static const driverStatistics = '$developmentBaseUrl/loading/driver/driverStatistics';
+  static const driverStatistics =
+      '$developmentBaseUrl/loading/driver/driverStatistics';
   //trip
   static const sendOffer = '$developmentBaseUrl/loading/trip/sendOffer';
   static const reportUrl = '$developmentBaseUrl/report';
@@ -160,7 +172,7 @@ class EndPoints {
   static const getExploreReels = '/reels/explore';
 
   // ride request
-  static const expectedPrice = '/ride/trips/expected/price';
+  // static const expectedPrice = '/ride/trips/expected/price';
   static const carTypes = '/cars';
   static String subCategories({required String mainCategoryId}) {
     return '/categories/subcategories/$mainCategoryId';
@@ -252,7 +264,6 @@ class EndPoints {
   static String getInstagramGlobalPosts(TwitterFeedParams params) {
     return '/instagram/feed/general?limit=${params.limit}&page=${params.page}';
   }
-
 
   static String getReels(TwitterFeedParams params) {
     return '/reels/explore?limit=${params.limit}&page=${params.page}';
@@ -350,7 +361,8 @@ class EndPoints {
     return '/facebook/comment/update-comment/${params.postId}?subCategory=66b77e77bb35968b535dc944';
   }
 
-  static String acceptRejectFriendRequest(AcceptRejectFriendRequestParams params) {
+  static String acceptRejectFriendRequest(
+      AcceptRejectFriendRequestParams params) {
     return '/friends/acceptOrRejectrequest/${params.userId}?subCategory=62ef7cf658c90d4a7ed48120';
   }
 
@@ -564,7 +576,8 @@ class EndPoints {
   }
 
   static String buttonAvailable = '/global/click';
-  static String getSubscriptionPlans(String subcategoryId) => '/subscription/plans/$subcategoryId';
+  static String getSubscriptionPlans(String subcategoryId) =>
+      '/subscription/plans/$subcategoryId';
   static String checkUserSubscription(String id) {
     return '/subscription/subcategory/$id';
   }
@@ -600,6 +613,4 @@ class EndPoints {
   static String getCarModelByBrand = "/ride/riders/models";
   static String getCarYearType = "/ride/riders/car-years-and-types";
   static String publishTripJoin = "/ride/come-with-you";
-
-
 }

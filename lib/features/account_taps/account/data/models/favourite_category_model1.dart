@@ -1,6 +1,5 @@
 import 'package:fourtyninehub/features/account_taps/account/data/models/favouite_category_model/category_id.dart';
 
-import '../../../../fourty_nine/data/models/main_category_model.dart';
 import '../../domain/entities/favourite_category_entity.dart';
 
 class FavouriteCategoryModel extends FavouriteCategoryEntity {

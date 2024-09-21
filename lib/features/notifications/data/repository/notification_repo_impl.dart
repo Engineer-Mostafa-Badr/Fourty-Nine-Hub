@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/data/models/notification_model.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import '../../../../core/utils/api_service.dart';
@@ -22,7 +21,7 @@ class NotificationRepoImpl implements NotificationRepo {
       var notification = NotificationModel.fromJson(data);
       return right(notification);
     } catch (e) {
-      return left(CacheFailure());
+      return left(const CacheFailure());
     }
   }
 

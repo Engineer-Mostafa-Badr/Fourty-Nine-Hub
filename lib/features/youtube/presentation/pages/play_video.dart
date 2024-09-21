@@ -52,7 +52,10 @@ class PlayVideo extends StatelessWidget {
           const Sizer(),
           Row(
             children: [
-              const ProfileImage(accountId: 0, userId: '',),
+              const ProfileImage(
+                accountId: 0,
+                userId: '',
+              ),
               const Sizer(),
               Label(text: 'Mr Beast', style: Styles.mediumText()),
               const Spacer(),

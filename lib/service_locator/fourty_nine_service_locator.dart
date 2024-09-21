@@ -300,6 +300,9 @@ class FourtyNineServiceLocator {
     );
 
     // cubits
+    serviceLocator.registerLazySingleton<GetSliderItemsUseCase>(
+      () => GetSliderItemsUseCase(serviceLocator()),
+    );
 
     serviceLocator.registerSingleton(
       SliderCubit(

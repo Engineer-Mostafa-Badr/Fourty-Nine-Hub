@@ -22,19 +22,24 @@ class UserProfileModel extends UserProfileEntity {
     super.isDocument,
     super.isSenTRequest,
     super.sentFriendRequest,
-    super.isBlock, required super.posts,
+    super.isBlock,
+    required super.posts,
   });
 
   factory UserProfileModel.fromJson(Map<String, dynamic> json) {
     return UserProfileModel(
       id: json['userId']['_id'],
-      firstName: json['userId']['firstName'][0].toUpperCase() + json['userId']['firstName'].substring(1).toLowerCase() ?? '',
-      lastName: json['userId']['lastName'][0].toUpperCase() + json['userId']['lastName'].substring(1).toLowerCase() ?? '',
-      bio: json['userId']['bio']??'',
-      city: json['userId']['city']??'',
+      firstName: json['userId']['firstName'][0].toUpperCase() +
+              json['userId']['firstName'].substring(1).toLowerCase() ??
+          '',
+      lastName: json['userId']['lastName'][0].toUpperCase() +
+              json['userId']['lastName'].substring(1).toLowerCase() ??
+          '',
+      bio: json['userId']['bio'] ?? '',
+      city: json['userId']['city'] ?? '',
       phone: json['userId']['phone'].toString(),
-      country: json['userId']['country']??'',
-      job: json['userId']['job']??'',
+      country: json['userId']['country'] ?? '',
+      job: json['userId']['job'] ?? '',
       email: json['userId']['email'] ?? '',
       isDocument: json['userId']['twitter_documentation'] ?? false,
       totalView: json['usersView'] ?? 0,

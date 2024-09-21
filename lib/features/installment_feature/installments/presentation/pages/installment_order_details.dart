@@ -59,7 +59,11 @@ class InstallmentOrderDetails extends StatelessWidget {
   Widget _buildSellerWidget() {
     return Row(
       children: [
-        const ProfileImage(size: 20, accountId: 0, userId: '',),
+        const ProfileImage(
+          size: 20,
+          accountId: 0,
+          userId: '',
+        ),
         const Sizer(),
         Expanded(
             child: Column(

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
@@ -78,7 +77,8 @@ class StoryCubit extends Cubit<StoryState> {
         isFetchingMore: loadMore,
       ));
 
-      final listOfUserStories = await storyRepository.fetchStories(state.currentPage);
+      final listOfUserStories =
+          await storyRepository.fetchStories(state.currentPage);
 
       if (listOfUserStories.isEmpty && loadMore) {
         // No more stories to load
@@ -95,7 +95,9 @@ class StoryCubit extends Cubit<StoryState> {
           : listOfUserStories;
 
       // Remove duplicates using a Map where keys are story IDs
-      final uniqueStoriesMap = {for (var story in newStories) story.user!.id: story};
+      final uniqueStoriesMap = {
+        for (var story in newStories) story.user!.id: story
+      };
       final uniqueStories = uniqueStoriesMap.values.toList();
 
       emit(state.copyWith(

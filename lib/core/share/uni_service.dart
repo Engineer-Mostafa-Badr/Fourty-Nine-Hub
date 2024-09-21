@@ -1,7 +1,7 @@
 import 'dart:developer';
-
 import 'package:flutter/services.dart';
 import 'package:fourtyninehub/core/share/context_utilty.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uni_links/uni_links.dart';
 
@@ -11,18 +11,19 @@ class UniService {
   static bool get hasCode => _code.isNotEmpty;
   static void rest() => _code = '';
   static String baseUrl = "https://app-af0a7.web.app";
-  static String trip = "$baseUrl/trip";
-  static String product = "$baseUrl/ourProductSea";
-  static String training = "$baseUrl/training";
-  static String waterSport = "$baseUrl/waterSport";
-  static String recreationalSea = "$baseUrl/recreationalSea";
-  static String recreationalLand = "$baseUrl/recreationalLand";
-  static String safariSport = "$baseUrl/safariSport";
-  static String camping = "$baseUrl/camping";
-  static String eventLand = "$baseUrl/eventLand";
-  static String coach = "$baseUrl/coach";
   static String reel = "$baseUrl/reel";
-  static String package = "$baseUrl/package";
+  // static String trip = "$baseUrl/trip";
+  // static String product = "$baseUrl/ourProductSea";
+  // static String training = "$baseUrl/training";
+  // static String waterSport = "$baseUrl/waterSport";
+  // static String recreationalSea = "$baseUrl/recreationalSea";
+  // static String recreationalLand = "$baseUrl/recreationalLand";
+  // static String safariSport = "$baseUrl/safariSport";
+  // static String camping = "$baseUrl/camping";
+  // static String eventLand = "$baseUrl/eventLand";
+  // static String coach = "$baseUrl/coach";
+  // static String reel = "$baseUrl/reel";
+  // static String package = "$baseUrl/package";
   static init() async {
     try {
       final Uri? url = await getInitialUri();
@@ -57,6 +58,16 @@ class UniService {
 
     String finalUrl = uri.replace(queryParameters: {}).toString();
     log(finalUrl.split("?")[0]);
+
+    //Reel
+    handelShare(
+      url: finalUrl,
+      id: id,
+      success: () {
+        ContextUtilty.context?.push(Routes.HOME);
+      },
+    );
+    // reelHandel(finalUrl, id);
     //Trip
 
     // if (ContextUtilty.context != null) {
@@ -228,5 +239,24 @@ class UniService {
     //                             extra: id);
     //   }
     // }
+  }
+
+  // static reelHandel(String url, String id) {
+  //   if (url.split("?")[0] == reel) {
+  //     if (id.isEmpty) {
+  //       ContextUtilty.context?.push(Routes.HOME);
+  //     } else {
+  //       ContextUtilty.context?.push(Routes.REELS, extra: id);
+  //     }
+  //   }
+  // }
+
+  static handelShare(
+      {required String url, required String id, required Function() success}) {
+    if (id.isEmpty) {
+      ContextUtilty.context!.goNamed(Routes.HOME);
+    } else if (id.isNotEmpty) {
+      success();
+    }
   }
 }

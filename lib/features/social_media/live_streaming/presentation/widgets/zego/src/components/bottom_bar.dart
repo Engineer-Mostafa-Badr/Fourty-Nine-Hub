@@ -7,8 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_state.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import 'package:zego_uikit/zego_uikit.dart';
 
@@ -26,7 +24,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import '../../../../../../../../core/messages/messages.dart';
 import '../inner_text.dart';
 import '../internal/pk_combine_notifier.dart';
-import '../minimizing/mini_button.dart';
 import 'member/button.dart';
 import 'message/input_board_button.dart';
 
@@ -392,7 +389,7 @@ class ZoomSharescreenBuilder extends StatelessWidget {
       child: ValueListenableBuilder<bool>(
           valueListenable: shareScreenState,
           builder: (context, screenShareOn, child) {
-            log('-------------${screenShareOn}');
+            log('-------------$screenShareOn');
             if (!screenShareOn) {
               context.read<MeetingCubit>().closeWhiteBoard();
             }

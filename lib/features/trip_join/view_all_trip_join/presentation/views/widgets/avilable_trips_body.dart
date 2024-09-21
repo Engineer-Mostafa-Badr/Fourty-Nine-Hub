@@ -19,7 +19,8 @@ class AvailableTripsBody extends StatelessWidget {
               child: Text(
                 // 'These trips are for users who own cars and they want to share with other users ',
                 'Users own cars/share the trip with them! ',
-                style: Styles.headerText(color: AppColors.SECONDARY_COLOR, fontSize: 35),
+                style: Styles.headerText(
+                    color: AppColors.SECONDARY_COLOR, fontSize: 35),
                 textAlign: TextAlign.start,
               ),
             ),
