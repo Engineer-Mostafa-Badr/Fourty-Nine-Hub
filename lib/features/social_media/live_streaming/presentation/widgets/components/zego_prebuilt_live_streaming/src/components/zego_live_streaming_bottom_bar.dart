@@ -26,9 +26,12 @@ import '../../../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../../../core/messages/messages.dart';
 import '../inner_text.dart';
 import '../internal/pk_combine_notifier.dart';
+import 'live_page_surface.dart';
 import 'member/button.dart';
 import 'message/input_board_button.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+
+import 'top_bar.dart';
 
 /// @nodoc
 class ZegoLiveStreamingBottomBar extends StatefulWidget {
@@ -159,7 +162,7 @@ class _ZegoLiveStreamingBottomBarState
             color: Colors.white,
           ),
           ZoomParticipantsBuilder(
-            widget: widget,
+            widgetBottom: widget,
           ),
           ZoomChatBuilder(
             widget: widget,
@@ -356,11 +359,13 @@ class ZoomIconButtons {
 }
 
 class ZoomParticipantsBuilder extends StatelessWidget {
-  final ZegoLiveStreamingBottomBar widget;
+  final ZegoLiveStreamingBottomBar? widgetBottom;
+  final ZegoLiveStreamingLivePageSurface? widgetTop;
   const ZoomParticipantsBuilder({
     super.key,
-    required this.widget,
-  });
+    this.widgetBottom,
+    this.widgetTop,
+  }) : assert(widgetBottom == null || widgetTop == null);
 
   @override
   Widget build(BuildContext context) {
@@ -369,20 +374,36 @@ class ZoomParticipantsBuilder extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ZegoLiveStreamingMemberButton(
-            config: widget.config.memberList,
-            events: widget.events.memberList,
-            isCoHostEnabled: widget.isCoHostEnabled,
-            hostManager: widget.hostManager,
-            connectManager: widget.connectManager,
-            popUpManager: widget.popUpManager,
-            translationText: widget.translationText,
-            builder: widget.config.memberButton.builder,
-            icon: Image.asset('assets/49-New-icons/persons.png'),
-            backgroundColor: Colors.transparent,
-            avatarBuilder: widget.config.avatarBuilder,
-            itemBuilder: widget.config.memberList.itemBuilder,
-          ),
+          if (widgetTop == null)
+            ZegoLiveStreamingMemberButton(
+              config: widgetBottom!.config.memberList,
+              events: widgetBottom!.events.memberList,
+              isCoHostEnabled: widgetBottom!.isCoHostEnabled,
+              hostManager: widgetBottom!.hostManager,
+              connectManager: widgetBottom!.connectManager,
+              popUpManager: widgetBottom!.popUpManager,
+              translationText: widgetBottom!.translationText,
+              builder: widgetBottom!.config.memberButton.builder,
+              icon: Image.asset('assets/49-New-icons/persons.png'),
+              backgroundColor: Colors.transparent,
+              avatarBuilder: widgetBottom!.config.avatarBuilder,
+              itemBuilder: widgetBottom!.config.memberList.itemBuilder,
+            )
+          else
+            ZegoLiveStreamingMemberButton(
+              config: widgetTop!.config.memberList,
+              events: widgetTop!.events.memberList,
+              isCoHostEnabled: true,
+              hostManager: widgetTop!.hostManager,
+              connectManager: widgetTop!.connectManager,
+              popUpManager: widgetTop!.popUpManager,
+              translationText: ZegoUIKitPrebuiltLiveStreamingInnerText(),
+              builder: widgetTop!.config.memberButton.builder,
+              icon: Image.asset('assets/49-New-icons/persons.png'),
+              backgroundColor: Colors.transparent,
+              avatarBuilder: widgetTop!.config.avatarBuilder,
+              itemBuilder: widgetTop!.config.memberList.itemBuilder,
+            ),
           Text(
             LocaleKeys.participants.localize,
             style: TextStyle(

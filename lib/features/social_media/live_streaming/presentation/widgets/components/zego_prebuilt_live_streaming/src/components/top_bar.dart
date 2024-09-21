@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
@@ -93,7 +94,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
 
     return SizedBox(
       width: double.infinity,
-      height: 50,
+      height: 80.h,
       // color: Colors.red,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),

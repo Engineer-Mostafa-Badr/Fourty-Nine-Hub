@@ -128,21 +128,31 @@ class _ZegoLiveStreamingLivePageSurfaceState
     return Positioned(
       left: 0,
       right: 0,
-      top: 64.zR,
-      child: ZegoLiveStreamingTopBar(
-        config: widget.config,
-        events: widget.events,
-        defaultEndAction: widget.defaultEndAction,
-        defaultLeaveConfirmationAction: widget.defaultLeaveConfirmationAction,
-        isCoHostEnabled: isCoHostEnabled,
-        hostManager: widget.hostManager,
-        hostUpdateEnabledNotifier: widget.hostManager.hostUpdateEnabledNotifier,
-        connectManager: widget.connectManager,
-        popUpManager: widget.popUpManager,
-        isLeaveRequestingNotifier: ZegoUIKitPrebuiltLiveStreamingController()
-            .isLeaveRequestingNotifier,
-        translationText: widget.config.innerText,
-        isLiveStream: widget.isLiveStream,
+      top: 64.h,
+      child: Column(
+        children: [
+          ZegoLiveStreamingTopBar(
+            config: widget.config,
+            events: widget.events,
+            defaultEndAction: widget.defaultEndAction,
+            defaultLeaveConfirmationAction:
+                widget.defaultLeaveConfirmationAction,
+            isCoHostEnabled: isCoHostEnabled,
+            hostManager: widget.hostManager,
+            hostUpdateEnabledNotifier:
+                widget.hostManager.hostUpdateEnabledNotifier,
+            connectManager: widget.connectManager,
+            popUpManager: widget.popUpManager,
+            isLeaveRequestingNotifier:
+                ZegoUIKitPrebuiltLiveStreamingController()
+                    .isLeaveRequestingNotifier,
+            translationText: widget.config.innerText,
+            isLiveStream: widget.isLiveStream,
+          ),
+          Align(
+              alignment: Alignment.topRight,
+              child: ZoomParticipantsBuilder(widgetTop: widget))
+        ],
       ),
     );
   }
@@ -151,30 +161,26 @@ class _ZegoLiveStreamingLivePageSurfaceState
     final isCoHostEnabled = (widget.plugins?.isEnabled ?? false) &&
         widget.config.bottomMenuBar.audienceButtons
             .contains(ZegoLiveStreamingMenuBarButtonName.coHostControlButton);
-    return  Align(
-            alignment: Alignment.bottomCenter,
-            child: ZegoLiveStreamingBottomBar(
-              buttonSize: zegoLiveButtonSize,
-              config: widget.config,
-              events: widget.events,
-              defaultEndAction: widget.defaultEndAction,
-              defaultLeaveConfirmationAction:
-                  widget.defaultLeaveConfirmationAction,
-              hostManager: widget.hostManager,
-              hostUpdateEnabledNotifier:
-                  widget.hostManager.hostUpdateEnabledNotifier,
-              liveStatusNotifier: widget.liveStatusManager.notifier,
-              connectManager: widget.connectManager,
-              isLeaveRequestingNotifier:
-                  ZegoUIKitPrebuiltLiveStreamingController()
-                      .isLeaveRequestingNotifier,
-              popUpManager: widget.popUpManager,
-              isLiveStream: widget.isLiveStream,
-              isCoHostEnabled: isCoHostEnabled,
-              translationText: widget.config.innerText,
-            ),
-          );
-        
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: ZegoLiveStreamingBottomBar(
+        buttonSize: zegoLiveButtonSize,
+        config: widget.config,
+        events: widget.events,
+        defaultEndAction: widget.defaultEndAction,
+        defaultLeaveConfirmationAction: widget.defaultLeaveConfirmationAction,
+        hostManager: widget.hostManager,
+        hostUpdateEnabledNotifier: widget.hostManager.hostUpdateEnabledNotifier,
+        liveStatusNotifier: widget.liveStatusManager.notifier,
+        connectManager: widget.connectManager,
+        isLeaveRequestingNotifier: ZegoUIKitPrebuiltLiveStreamingController()
+            .isLeaveRequestingNotifier,
+        popUpManager: widget.popUpManager,
+        isLiveStream: widget.isLiveStream,
+        isCoHostEnabled: isCoHostEnabled,
+        translationText: widget.config.innerText,
+      ),
+    );
   }
 
   Widget messageList() {
