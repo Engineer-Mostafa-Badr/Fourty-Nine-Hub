@@ -441,20 +441,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
     );
   }
 
-  void minimizeAndNavigate() {
-    var cubit = context.read<StreamCubit>();
-
-    cubit.minimize();
-
-    // Navigate to another screen after minimizing
-    Future.delayed(const Duration(milliseconds: 300), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MeetingView()),
-      );
-    });
-  }
-}
+ }
 // Positioned(
 //                   top: 100,
 //                   right: 50,

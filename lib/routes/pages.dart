@@ -715,8 +715,8 @@ class AppPages {
                           name: Routes.LIVEView,
                           builder: (context, state) {
                             var extras = state.extra as ZegoArgs;
-                            return BlocProvider.value(
-                              value: serviceLocator<StreamCubit>(),
+                            return BlocProvider(
+                              create:(_)=> serviceLocator<StreamCubit>(),
                               child: LiveStreamView(
                                 isHost: extras.isHost,
                                 liveID: extras.liveId,

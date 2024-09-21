@@ -2,19 +2,10 @@
 import 'package:equatable/equatable.dart';
 
 class LiveCreateResponse extends Equatable {
-final String id;
-final String liveTitle;
-final List<String> tags;
-//object will be changed
-final List<Object> liveGoals;
-  const LiveCreateResponse({
-    required this.id,
-    required this.liveTitle,
-    required this.tags,
-    required this.liveGoals,
-  });
+  final String id;
 
+  const LiveCreateResponse({required this.id});
 
   @override
-  List<Object> get props => [id, liveTitle, tags, liveGoals];
+  List<Object> get props => [id];
 }

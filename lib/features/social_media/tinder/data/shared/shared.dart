@@ -12,7 +12,9 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/ti
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
 
 class BottomSheetContent extends StatefulWidget {
@@ -90,22 +92,26 @@ class BottomSheetContentState extends State<BottomSheetContent> {
   }
 
   Widget _buildGiftItem(BuildContext context, GiftData gift,
-      {required String? receiverId}) {
+      {required String? receiverId, bool fromTinder = true}) {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap: () => _handleGiftTap(context, gift, receiverId: receiverId),
+        onTap: () => fromTinder
+            ? _handleGiftTap(context, gift, receiverId: receiverId)
+                .then((value) {
+                context.pop();
+              })
+            : print('Gift selected'),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildGiftImage(gift),
             SizedBox(height: 8.h),
-            Text(
-              gift.nameEn ?? 'No Name',
+            Label(
+              text: gift.nameEn ?? 'No Name',
               textAlign: TextAlign.center,
-              softWrap: true,
-              maxLines: null,
-              style: Styles.headerText(color: Colors.white),
+              maxLines: 2,
+              style: Styles.smallText(color: Colors.white),
             ),
             SizedBox(height: 4.h),
             FittedBox(
@@ -137,7 +143,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
   Future<void> _handleGiftTap(BuildContext context, GiftData gift,
       {required String? receiverId}) async {
     final data = await context.read<TinderViewCubit>().sendGift(
-          receiverId: receiverId!,
+          receiverId: receiverId ?? "",
           subCategoryId: '66af974f8bf69f9469944746',
           giftId: gift.sId ?? '',
         );
@@ -242,7 +248,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
           title: title == 'Gift Sent'
-              ? SizedBox.shrink()
+              ? const SizedBox.shrink()
               : _buildDialogTitle(icon, title, primaryColor),
           content: title == 'Gift Sent'
               ? _buildGiftContent(gift!, message)
@@ -258,7 +264,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
     return Row(
       children: [
         Icon(icon, color: primaryColor, size: 30),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Text(title),
       ],
     );
@@ -328,7 +334,8 @@ class BottomSheetContentState extends State<BottomSheetContent> {
   }
 }
 
-void showGiftBottomSheet(BuildContext context, {required String? receiverId}) {
+void showGiftBottomSheet(BuildContext context,
+    {String? receiverId, bool fromTinder = true}) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -363,15 +370,15 @@ void showGiftBottomSheet(BuildContext context, {required String? receiverId}) {
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(20)),
                   ),
-                  child: const FittedBox(
+                  child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
-                      'Send a gift 🎁',
-                      style: TextStyle(
+                      fromTinder ? 'Send a gift 🎁' : 'Select gifts 🎁🎁🎁',
+                      style: const TextStyle(
                           color: AppColors.ACCENT_COLOR,
                           fontWeight: FontWeight.w300),
                       textAlign: TextAlign.center,
-                      textScaler: TextScaler.linear(1.6),
+                      textScaler: const TextScaler.linear(1.6),
                     ),
                   ),
                 ),
@@ -383,7 +390,7 @@ void showGiftBottomSheet(BuildContext context, {required String? receiverId}) {
                         bottom: 5,
                         right: 5,
                         child: Padding(
-                          padding: EdgeInsets.all(4.0),
+                          padding: const EdgeInsets.all(4.0),
                           child: OutlinedButton(
                             style: const ButtonStyle(
                               side: MaterialStatePropertyAll(BorderSide(
