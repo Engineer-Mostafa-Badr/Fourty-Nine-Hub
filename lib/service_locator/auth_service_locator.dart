@@ -112,8 +112,7 @@ class AuthServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
-        serviceLocator(),
-        serviceLocator(), googleSignIn: googleSignIn, firebaseAuth: firebaseAuth,
+         googleSignIn: googleSignIn, firebaseAuth: firebaseAuth,
       );
       },
     );
