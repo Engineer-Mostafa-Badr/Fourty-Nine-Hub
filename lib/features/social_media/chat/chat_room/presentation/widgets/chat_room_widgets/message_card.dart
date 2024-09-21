@@ -1,7 +1,5 @@
 // Nasr
 
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +8,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/show_image_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/send_file.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -38,12 +38,16 @@ class MessageCard extends StatelessWidget {
         ? messageEntity.media.isEmpty
             ? _buildMineMessage(
                 width: width, messageEntity: messageEntity, context: context)
-            : _buildSendImageCard(
-                isArabic: isArabic,
-                chatRoomCubit: chatRoomCubit,
-                context: context,
-                width: width,
-              )
+            : messageEntity.media[0].type == FileTypeEnum.document
+                ? SentFileCard(
+                    messageEntity: messageEntity,
+                  )
+                : _buildSendImageCard(
+                    isArabic: isArabic,
+                    chatRoomCubit: chatRoomCubit,
+                    context: context,
+                    width: width,
+                  )
         : messageEntity.media.isEmpty
             ? _buildOtherMessage(
                 width: width, messageEntity: messageEntity, context: context)
@@ -532,14 +536,13 @@ class ReplyRecivedMessageCard extends StatelessWidget {
               width: 10,
               decoration: const BoxDecoration(
                 color: AppColors.PRIMARY_COLOR,
-                borderRadius:  BorderRadius.only(
+                borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(100),
                   topRight: Radius.circular(12),
                   bottomLeft: Radius.circular(100),
                   bottomRight: Radius.circular(12),
                 ),
               ),
-
               height: 60,
             ),
             Padding(
@@ -568,7 +571,9 @@ class ReplyRecivedMessageCard extends StatelessWidget {
                       maxHeight: 20,
                     ),
                     child: Text(
-                      messageEntity.reply!.text,
+                      messageEntity.reply!.text == ""
+                          ? "Photo"
+                          : messageEntity.reply!.text,
                       overflow: TextOverflow.ellipsis,
                       style: Styles.mediumText(
                         color: AppColors.DARK_GRAY_COLOR,
@@ -578,7 +583,19 @@ class ReplyRecivedMessageCard extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+            ),
+            const Spacer(),
+            messageEntity.reply!.media.isNotEmpty
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: CachedNetworkImage(
+                      imageUrl: messageEntity.reply!.media.first.url,
+                      fit: BoxFit.cover,
+                      width: 50,
+                      height: double.infinity,
+                    ),
+                  )
+                : const SizedBox(),
           ],
         ),
       ),
@@ -615,7 +632,6 @@ class ReplySendMessageCard extends StatelessWidget {
           left: 8,
           right: 8,
         ),
-
         decoration: BoxDecoration(
           color: AppColors.DARK_GRAY_COLOR.withOpacity(0.4),
           borderRadius: const BorderRadius.only(
@@ -633,14 +649,13 @@ class ReplySendMessageCard extends StatelessWidget {
               width: 10,
               decoration: const BoxDecoration(
                 color: AppColors.PRIMARY_COLOR,
-                borderRadius:  BorderRadius.only(
+                borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(100),
                   topRight: Radius.circular(12),
                   bottomLeft: Radius.circular(100),
                   bottomRight: Radius.circular(12),
                 ),
               ),
-
               height: 60,
             ),
             Padding(
@@ -669,7 +684,9 @@ class ReplySendMessageCard extends StatelessWidget {
                       maxHeight: 20,
                     ),
                     child: Text(
-                      messageEntity.reply!.text == ""? "Photo":messageEntity.reply!.text,
+                      messageEntity.reply!.text == ""
+                          ? "Photo"
+                          : messageEntity.reply!.text,
                       overflow: TextOverflow.ellipsis,
                       style: Styles.mediumText(
                         color: AppColors.DARK_GRAY_COLOR,
@@ -681,14 +698,17 @@ class ReplySendMessageCard extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            messageEntity.reply!.media.isNotEmpty? ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: CachedNetworkImage(imageUrl: messageEntity.reply!.media.first.url,fit: BoxFit.cover,
-                width: 50,
-                height: double.infinity,
-              ),
-            ): const SizedBox(),
-
+            messageEntity.reply!.media.isNotEmpty
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: CachedNetworkImage(
+                      imageUrl: messageEntity.reply!.media.first.url,
+                      fit: BoxFit.cover,
+                      width: 50,
+                      height: double.infinity,
+                    ),
+                  )
+                : const SizedBox(),
           ],
         ),
       ),
@@ -733,18 +753,26 @@ class FourOrMoreImagesCard extends StatelessWidget {
           Positioned(
             bottom: 8,
             right: 8,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.6),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                '+${messageEntity.media.length - 4}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
+            child: GestureDetector(
+              onTap: () {
+                context.push(Routes.SHOWIMAGEVIEW, extra: messageEntity);
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.6),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: Text(
+                    '+${messageEntity.media.length - 4}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
                 ),
               ),
             ),

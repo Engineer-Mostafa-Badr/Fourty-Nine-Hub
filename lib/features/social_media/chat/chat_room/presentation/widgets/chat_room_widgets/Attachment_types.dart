@@ -1,5 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -26,8 +29,20 @@ class AttachmentTypes extends StatelessWidget {
           color: Colors.purple,
           label: LocaleKeys.document.tr(),
           icon: Icons.insert_drive_file_outlined,
-          onTap: () {
-            chatRoomCubit.pickDocuments();
+          onTap: () async {
+            await chatRoomCubit.pickDocuments();
+            log("real media: ${chatRoomCubit.media.length}");
+            List<File> tempMedia = [...chatRoomCubit.media]; // spread operator
+            log("temp media: ${tempMedia.length}");
+            chatRoomCubit.media.clear();
+            log("real media after clear: ${chatRoomCubit.media.length}");
+            for (var media in tempMedia) {
+              log("media path: ${media.path}");
+              chatRoomCubit.media.add(media);
+              log("real media after add media path: ${chatRoomCubit.media.length}");
+              await chatRoomCubit.sendMessage();
+              chatRoomCubit.media.clear();
+            }
           },
         ),
         _buildAttachmentTypeItem(

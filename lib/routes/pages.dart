@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/l
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/mneu/show_menu.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit/food_cart_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
@@ -73,6 +74,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/select_contacts_to_share_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/show_image_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/show_images_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/viewcontact_view.dart';
@@ -247,6 +249,13 @@ class AppPages {
             name: Routes.IMAGESPAGEVIEW,
             builder: (context, state) => ImagesPageView(
               params: state.extra as ImagesPageViewParams,
+            ),
+          ),
+          GoRoute(
+            path: Paths.SHOWIMAGESVIEW,
+            name: Routes.SHOWIMAGEVIEW,
+            builder: (context, state) => ShowImagesView(
+              messageEntity: state.extra as MessageEntity,
             ),
           ),
           GoRoute(
