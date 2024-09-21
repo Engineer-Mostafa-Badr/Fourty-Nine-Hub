@@ -634,6 +634,14 @@ class EndPoints {
     return '/chat/get-chat/$chatId';
   }
 
+  static String createNormalChat(
+      {required String categoryId, required String otherUserId}) {
+    return '/chat/start-chat/$otherUserId?categoryId=$categoryId';
+  }
+
+  static String createAnonymousChat(String otherUserId) =>
+      '/chat/start-anonymous-chat/$otherUserId';
+
   //club voice
   static String allClubVoiceRooms = '/clubvoice';
   static String createClubVoiceRoom = '/clubvoice';
@@ -666,8 +674,10 @@ class EndPoints {
   }
 
   static String buttonAvailable = '/global/click';
+
   static String getSubscriptionPlans(String subcategoryId) =>
       '/subscription/plans/$subcategoryId';
+
   static String checkUserSubscription(String id) {
     return '/subscription/subcategory/$id';
   }
