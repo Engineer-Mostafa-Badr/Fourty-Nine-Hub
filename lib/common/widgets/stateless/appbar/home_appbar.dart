@@ -7,10 +7,10 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart'
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../features/search/presentation/pages/search_view.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -65,76 +65,80 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             ),
           // if (showLanguage)
 
-        if (isWithBackArrow) SizedBox(width: 20.w),
-        if (isWithBackArrow)
-          IconAppButton(
-            onPressed: () => context.pop(),
-            icon: Icons.arrow_back_ios,
-            size: 20,
-          ),
-        Expanded(
-          child: Container(
-            height: 55.h,
-            padding: EdgeInsets.symmetric(horizontal: 10.w),
-            decoration: BoxDecoration(
+          if (isWithBackArrow) SizedBox(width: 20.w),
+          if (isWithBackArrow)
+            IconAppButton(
+              onPressed: () => context.pop(),
+              icon: Icons.arrow_back_ios,
+              size: 20,
+            ),
+          Expanded(
+            child: Container(
+              height: 55.h,
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40.r),
+                  color: AppColors.AUTH_CONTAINER_COLOR),
+              child: InkWell(
                 borderRadius: BorderRadius.circular(40.r),
-                color: AppColors.AUTH_CONTAINER_COLOR),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(40.r),
-              onTap: () {
-                showDialog(
-                    context: context, builder: (_) => const SearchAppUsers());
-              },
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.search,
-                    size: 30.h,
-                    color: AppColors.QUANTITY_COLOR,
-                  ),
-                  SizedBox(width: 10.h),
-                  Expanded(
-                    child: Label(
-                        text: LocaleKeys.search.localize,
-                        style: Styles.mediumText(
-                            color: AppColors.QUANTITY_COLOR)),
-                  ),
-                ],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>  SearchView(),
+                    ),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.search,
+                      size: 30.h,
+                      color: AppColors.QUANTITY_COLOR,
+                    ),
+                    SizedBox(width: 10.h),
+                    Expanded(
+                      child: Label(
+                          text: LocaleKeys.search.localize,
+                          style: Styles.mediumText(
+                              color: AppColors.QUANTITY_COLOR)),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        if (showLanguage)
-          TextButton(
-              onPressed: () {},
-              child: Label(text: 'Register', style: Styles.mediumText())),
-        if (language)
-          Container(
-              padding: EdgeInsets.symmetric(horizontal: 5.w),
-              child: TextAppButton(
-                  label: LocaleKeys.lang.tr(),
-                  style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
-                  onPressed: () {
-                    if (context.locale == Locales.english) {
-                      changeLang(locale: Locales.arabic, context: context);
-                    } else {
-                      changeLang(locale: Locales.english, context: context);
-                    }
-                  })),
+          if (showLanguage)
+            TextButton(
+                onPressed: () {},
+                child: Label(text: 'Register', style: Styles.mediumText())),
+          if (language)
+            Container(
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                child: TextAppButton(
+                    label: LocaleKeys.lang.tr(),
+                    style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
+                    onPressed: () {
+                      if (context.locale == Locales.english) {
+                        changeLang(locale: Locales.arabic, context: context);
+                      } else {
+                        changeLang(locale: Locales.english, context: context);
+                      }
+                    })),
           SizedBox(
             width: 5.w,
           ),
-        GestureDetector(
-          onTap: () {
-            context.push(Routes.NOTIFICATIONS);
-          },
-          child: const UnreadNotificationsBuilder(),
-        ),
-        SizedBox(
-          width: 5.w,
-        ),
-      ],
-            ),
+          GestureDetector(
+            onTap: () {
+              context.push(Routes.NOTIFICATIONS);
+            },
+            child: const UnreadNotificationsBuilder(),
+          ),
+          SizedBox(
+            width: 5.w,
+          ),
+        ],
+      ),
       elevation: 0,
       titleSpacing: 0,
       //systemOverlayStyle: SystemUiOverlayStyle.light,
