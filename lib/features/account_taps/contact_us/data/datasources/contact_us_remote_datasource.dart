@@ -17,7 +17,7 @@ class ContactUsRemoteDataSourceImpl implements ContactUsRemoteDataSource {
   Future<Either<Failure, bool>> createContactUs(
       {required ContactUsModel item}) async {
     final response =
-        await _apiConsumer.post(EndPoints.helpMessages, data: item.toJson());
+        await _apiConsumer.post(EndPoints.contactUs, data: item.toJson());
     return response.fold(
         (l) => Left(l), (data) => Right(data['status'] as bool));
   }

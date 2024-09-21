@@ -40,7 +40,7 @@ class Biddings extends StatelessWidget {
             backgroundImage: NetworkImage(
                 item.user.profilePicture ?? UIConst.profilePlaceHolder),
           ),
-          Sizer(),
+          const Sizer(),
           Expanded(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,9 +51,9 @@ class Biddings extends StatelessWidget {
                   style: Styles.mediumText(color: Colors.grey))
             ],
           )),
-          Sizer(),
+          const Sizer(),
           Label(
-              text: '${item.bidding} ${Labels.currency}',
+              text: '${item.bidding}',
               style: Styles.headerText(color: AppColors.PRIMARY_COLOR))
         ],
       ),

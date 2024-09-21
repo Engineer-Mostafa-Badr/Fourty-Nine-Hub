@@ -18,6 +18,8 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/get_soc
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
+import 'core/service/background_service.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
@@ -27,109 +29,12 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-class SocketService {
-  static final SocketService _instance = SocketService._internal();
-   IO.Socket? _socket;
-
-  SocketService._internal();
-
-  factory SocketService() {
-    return _instance;
-  }
-
-  Future<void> initialize() async {
-  if(_socket == null) {
-    final token = await TokenManager.getAccessToken();
-    // socket
-    _socket = IO.io(
-        'https://49dev.com',
-        IO.OptionBuilder()
-            .setTransports(['websocket'])
-            .disableAutoConnect()
-            .setExtraHeaders({'authorization': token}) // optional
-            .build());}
-    if(!_socket!.connected){
-      _socket!.connect();
-    }
-
-    _socket!.onConnect((_) {
-      print('Connected to the socket server');
-    });
-
-    _socket!.on(SocketIOListeners.newMessageFromOther, (data) {
-      _socket!.emit(SocketIOEvents.markMessageAsDelivered,
-          jsonEncode({"chatId": jsonDecode(data)['chatId']}));
-    });
-
-    _socket!.onDisconnect((_) {
-      print('Disconnected from the socket server');
-    });
-
-  }
-
-  void emitNotification(Map<String, dynamic> notification) {
-    // if (_socket.connected) {
-    // } else {
-    //   print('Socket not connected, unable to emit event');
-    // }
-  }
-}
-
-class NotificationService {
-
-  Future<void> initialize() async {
-    // Initialize the socket service
-
-    // Listen for foreground notifications
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      saveNotificationAndEmit(message);
-
-    });
-
-    // Listen for background notifications
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  }
-
-  Future<void> saveNotificationAndEmit(RemoteMessage message) async {
-    final SocketService socketService = SocketService();
-    await socketService.initialize();
-    final Map<String, dynamic> notification = {
-      'title': message.notification?.title ?? 'No title',
-      'body': message.notification?.body ?? 'No body',
-      'timestamp': DateTime.now().toIso8601String(),
-    };
-
-    // Emit to socket
-  }
-}
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  final SocketService socketService = SocketService();
-    await socketService.initialize();
-  final Map<String, dynamic> notification = {
-    'title': message.notification?.title ?? 'No title',
-    'body': message.notification?.body ?? 'No body',
-    'timestamp': DateTime.now().toIso8601String(),
-  };
-
-  // Save to SQLite
-
-  // Emit to socket
-  // socketService.emitNotification(notification);
-}
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await CacheServiceImpl.init();
   await DI.execute();
-  NotificationService _notificationService = NotificationService();
-  // await _notificationService.initialize();
-  //to cache gift items
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    _firebaseMessagingBackgroundHandler(message);
-  });
+
   // ZegoGiftManager().cache.cache(giftItemList);
 
   //Admob.initialize();
@@ -150,8 +55,24 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Future<void> _startWebSocketService() async {
+    final token = await TokenManager.getAccessToken();
+    BackgroundService.startWebSocketService(token);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _startWebSocketService();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -58,12 +58,24 @@ class ChatsRepositoryImplementation extends ChatsRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> createNormalChat(CreateNormalChatParams params) {
+  Future<Either<Failure, bool>> createNormalChat(
+      CreateNormalChatParams params) {
     return _chatsRemoteDataSource.createNormalChat(params);
   }
 
   @override
-  Future<Either<Failure, bool>> createAnonymousChat(CreateAnonymousChatParams params) {
+  Future<Either<Failure, bool>> createAnonymousChat(
+      CreateAnonymousChatParams params) {
     return _chatsRemoteDataSource.createAnonymousChat(params);
+  }
+
+  @override
+  void listenToNewChats(Function(ChatEntity) onNewChat) {
+    _chatsRemoteDataSource.listenToNewChats(onNewChat);
+  }
+
+  @override
+  void stopListenToNewChats() {
+    _chatsRemoteDataSource.stopListenToNewChats();
   }
 }

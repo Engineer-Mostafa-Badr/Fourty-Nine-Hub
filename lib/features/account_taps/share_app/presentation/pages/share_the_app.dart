@@ -10,7 +10,6 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/assets/assets.dart';
-import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 import '../cubit/share_app_cubit.dart';
@@ -120,7 +119,7 @@ class ShareTheApp extends StatelessWidget {
               child: _buildStatisticsItem(
                   color: AppColors.PRIMARY_COLOR,
                   title: 'Balance',
-                  subTitle: '1500 ${Labels.currency}')),
+                  subTitle: '1500')),
         ],
       ),
     );
