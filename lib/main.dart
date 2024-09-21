@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,6 +23,7 @@ import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'firebase_options.dart';
 import 'routes/pages.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -121,6 +123,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await CacheServiceImpl.init();
   await DI.execute();
   NotificationService _notificationService = NotificationService();

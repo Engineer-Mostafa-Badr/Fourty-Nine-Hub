@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -15,6 +14,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -99,8 +99,10 @@ class _LoginViewState extends State<LoginView> {
               ),
             );
           } else if (state is LoginSuccess) {
-            await TokenManager.saveAccessToken(state.userTokensEntity.accessToken);
-            await TokenManager.saveRefreshToken(state.userTokensEntity.refreshToken);
+            await TokenManager.saveAccessToken(
+                state.userTokensEntity.accessToken);
+            await TokenManager.saveRefreshToken(
+                state.userTokensEntity.refreshToken);
 
             serviceLocator<UserCubit>()
               ..setLogin(true)
@@ -110,17 +112,21 @@ class _LoginViewState extends State<LoginView> {
                 serviceLocator<WalletCubit>().getWallet();
                 String? accessToken = await TokenManager.getAccessToken();
                 String? refreshToken = await TokenManager.getRefreshToken();
-                debugPrint('/////////////////////////////////////////////////////////////////////////');
+                debugPrint(
+                    '/////////////////////////////////////////////////////////////////////////');
                 debugPrint('Refresh Token: $refreshToken');
                 debugPrint('Access Token: $accessToken');
-                debugPrint('/////////////////////////////////////////////////////////////////////////');
+                debugPrint(
+                    '/////////////////////////////////////////////////////////////////////////');
                 debugPrint(serviceLocator<UserCubit>().state.data.toString());
                 // Navigator.pop(context);
                 Navigator.pop(context);
                 context.push(Routes.HOME);
               });
             context.read<NotificationSocketIoCubit>().notificationListener();
-            context.read<NotificationSocketIoCubit>().clearAllNotificationsAndRefeatchAfterLogin();
+            context
+                .read<NotificationSocketIoCubit>()
+                .clearAllNotificationsAndRefeatchAfterLogin();
             showSuccessMessage(context, LocaleKeys.welcomeBack.localize);
           }
         },
@@ -212,8 +218,13 @@ class _LoginViewState extends State<LoginView> {
                                 if (registerCubit.accept) {
                                   registerCubit.register();
                                 } else {
-                                  showErrorMessage(context,
-                                      getFailureMessage(ServerFailure(message: LocaleKeys.terms.localize), context));
+                                  showErrorMessage(
+                                      context,
+                                      getFailureMessage(
+                                          ServerFailure(
+                                              message:
+                                                  LocaleKeys.terms.localize),
+                                          context));
                                 }
                               },
                             )
@@ -264,6 +275,7 @@ enum AuthType { LOGIN, REGISTER }
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key, required this.loginCubit});
+
   final LoginCubit loginCubit;
 
   @override
@@ -272,8 +284,11 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   bool obsecure = false;
+
   @override
   Widget build(BuildContext context) {
+    final loginCubit = BlocProvider.of<LoginCubit>(context);
+
     return Column(
       children: [
         FormTextField(
@@ -281,8 +296,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.r),
           style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
-          controller: widget.loginCubit.emailTextController,
-          // label: 'E-mail or phone number',
+          controller: loginCubit.emailTextController,
           hint: LocaleKeys.emailOrPhone.localize,
           prefix: Icon(
             Icons.email,
@@ -293,12 +307,11 @@ class _LoginWidgetState extends State<LoginWidget> {
         ),
         const Sizer(),
         FormTextField(
-          constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
+          constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.r),
           style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
-          controller: widget.loginCubit.passwordTextController,
-          // label: 'Password',
+          controller: loginCubit.passwordTextController,
           hint: LocaleKeys.password.localize,
           obsecure: obsecure,
           prefix: GestureDetector(
@@ -319,21 +332,12 @@ class _LoginWidgetState extends State<LoginWidget> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             TextAppButton(
-                style: Styles.smallText(fontSize: 40.sp,color: Theme.of(context).primaryColor),
+                style: Styles.smallText(
+                    fontSize: 40.sp, color: Theme.of(context).primaryColor),
                 label: LocaleKeys.forgetPassword.localize,
                 onPressed: () => context.push(Routes.FORGOTPASSWORD)),
           ],
         ),
-        // Sizer(height: ,),
-        // Spacer(),
-        // DefaultButton(
-        //   width: double.infinity,
-        //   label: 'Login',
-        //   onPressed: widget.loginCubit.login,
-        // ),
-        // Sizer(),
-        // Column(
-        //   children: [
         const Sizer(),
         Label(
           text: LocaleKeys.orContinueWith.localize,
@@ -348,9 +352,28 @@ class _LoginWidgetState extends State<LoginWidget> {
                 backColor: AppColors.LIGHT_GRAY_COLOR,
                 textColor: Colors.black,
                 icon: FontAwesomeIcons.google,
-               // onPressed: widget.loginCubit.signInWithGoogle,
-                onPressed: (){
-                  signInWithGoogle();
+                onPressed: () async {
+               // await  loginCubit.handleGoogleSignIn();
+                  print('@@@@@@@@@@@@@@@@@@@@@@@@@');
+                  print(loginCubit.user!.uid);
+                try {
+                  final user = await loginCubit.loginWithGoogle();
+                  if (user != null && mounted) {
+                    context.push(Routes.HOME);
+                  }
+                } on FirebaseAuthException catch (error) {
+                  print(error.message);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        error.message ?? "Something went wrong",
+                      )));
+                } catch (error) {
+                  print(error);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        error.toString(),
+                      )));
+                }
                 },
               ),
             ),
@@ -361,7 +384,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                 backColor: AppColors.LIGHT_GRAY_COLOR,
                 textColor: Colors.black,
                 icon: FontAwesomeIcons.facebook,
-                onPressed: widget.loginCubit.signInWithFacebook,
+                onPressed: () {
+                  loginCubit.signInWithFacebook();
+                },
               ),
             ),
             if (Platform.isIOS) const Sizer(),
@@ -372,30 +397,13 @@ class _LoginWidgetState extends State<LoginWidget> {
                   backColor: AppColors.LIGHT_GRAY_COLOR,
                   textColor: Colors.black,
                   icon: FontAwesomeIcons.apple,
-                  onPressed: widget.loginCubit.signInWithApple,
+                  onPressed: () {
+                    loginCubit.signInWithApple();
+                  },
                 ),
               ),
           ],
         ),
-        //     Sizer(),
-        //     RichText(
-        //       text: TextSpan(
-        //         children: [
-        //           TextSpan(
-        //             text: "Doesn't have account? ",
-        //             style: Styles.headerText(color: Colors.grey),
-        //           ),
-        //           TextSpan(
-        //             text: "Register",
-        //             recognizer: TapGestureRecognizer()
-        //               ..onTap = () => context.push(Routes.REGISTER),
-        //             style: Styles.headerText(color: Colors.black),
-        //           ),
-        //         ],
-        //       ),
-        //     )
-        //   ],
-        // ),
       ],
     );
   }
@@ -435,12 +443,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             child: Column(
               children: [
                 FormTextField(
-                  constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
+                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
-                  style: const TextStyle( color: AppColors.QUANTITY_COLOR),
+                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                   hint: LocaleKeys.firstName.localize,
                   prefix: Icon(
                     Icons.person_2_rounded,
@@ -454,11 +462,11 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30.h,
                 ),
                 FormTextField(
-                  constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
+                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.lastNameController,
-                  style: const TextStyle( color: AppColors.QUANTITY_COLOR),
+                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                   // label: 'E-mail or phone number',
                   hint: LocaleKeys.lastName.localize,
                   prefix: Icon(
@@ -472,7 +480,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30.h,
                 ),
                 FormTextField(
-                  constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
+                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.emailTextController,
@@ -495,8 +503,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   children: [
                     Flexible(
                         child: Text(LocaleKeys.gender.localize,
-                            style:
-                                Styles.mediumText(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w400))),
+                            style: Styles.mediumText(
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.w400))),
                     Flexible(
                       child: Row(
                         children: [
@@ -511,7 +520,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                   isCentered: true,
                                   close: false,
                                   isBordered: !registerCubit.isMale,
-                                  color: registerCubit.isMale ? AppColors.PRIMARY_COLOR : Colors.transparent,
+                                  color: registerCubit.isMale
+                                      ? AppColors.PRIMARY_COLOR
+                                      : Colors.transparent,
                                   textColor: registerCubit.isMale
                                       ? AppColors.AUTH_CONTAINER_COLOR
                                       : Theme.of(context).primaryColor,
@@ -533,7 +544,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                               textColor: registerCubit.isMale
                                   ? Theme.of(context).primaryColor
                                   : AppColors.AUTH_CONTAINER_COLOR,
-                              color: registerCubit.isMale ? Colors.transparent : AppColors.PRIMARY_COLOR,
+                              color: registerCubit.isMale
+                                  ? Colors.transparent
+                                  : AppColors.PRIMARY_COLOR,
                               label: 'female'.localize,
                             ),
                           ),
@@ -546,8 +559,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30.h,
                 ),
                 FormTextField(
-                  style: const TextStyle( color: AppColors.QUANTITY_COLOR),
-                  constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
+                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
+                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.passwordTextController,
@@ -573,12 +586,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 ),
                 FormTextField(
                   style: const TextStyle(color: AppColors.QUANTITY_COLOR),
-                  constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
+                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.confirmPasswordTextController,
                   // label: 'Password',
-                  hint: '${LocaleKeys.confirm.localize} ${LocaleKeys.password.localize}',
+                  hint:
+                      '${LocaleKeys.confirm.localize} ${LocaleKeys.password.localize}',
                   obsecure: obsecure,
                   prefix: GestureDetector(
                     onTap: () {
@@ -601,12 +615,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   validator: (p0) {
                     return null;
                   },
-                  constraints:  BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
+                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
                   borderRadius: BorderRadius.circular(20.r),
                   // controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
-                  style: const TextStyle( color: AppColors.QUANTITY_COLOR),
+                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                   hint: LocaleKeys.code.localize,
                   prefix: Container(
                     margin: const EdgeInsets.all(9),
@@ -636,7 +650,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     ),
                     Text(
                       LocaleKeys.conditions.localize,
-                      style: Styles.mediumText(color: const Color(0xFF4898D6), fontWeight: FontWeight.w600),
+                      style: Styles.mediumText(
+                          color: const Color(0xFF4898D6),
+                          fontWeight: FontWeight.w600),
                     ),
                     Checkbox(
                       activeColor: Colors.red,
@@ -698,7 +714,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 //     ],
                 //   ),
                 // ),
-                 SizedBox(
+                SizedBox(
                   height: 80.h,
                 )
               ],
@@ -708,38 +724,141 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       ),
     );
   }
-
-
-
 }
-Future<UserCredential> signInWithGoogle() async {
-  try {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    if (googleUser == null) {
-      // The user canceled the sign-in process
-      throw Exception("User canceled sign-in");
-    }
+// enum AuthStatus {
+//   uninitialized,
+//   authenticated,
+//   authenticating,
+//   authenticateError,
+//   authenticateException,
+//   authenticateCanceled,
+// }
+//
+// enum SocialLogins {
+//   google,
+//   apple,
+// }
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+// class SocialAuthProvider extends ChangeNotifier {
+//   final GoogleSignIn googleSignIn;
+//   final FirebaseAuth firebaseAuth;
+//
+//   AuthStatus _status = AuthStatus.uninitialized;
+//
+//   AuthStatus get status => _status;
+//
+//   User? _currentUser;
+//
+//   User? get currentUser => _currentUser;
+//
+//   SocialAuthProvider({
+//     required this.firebaseAuth,
+//     required this.googleSignIn,
+//   }) {
+//     firebaseAuth.authStateChanges().listen((User? user) {
+//       _currentUser = user;
+//       notifyListeners();
+//     });
+//   }
 
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
+  // Future<void> handleSocialSignIn(SocialLogins social) async {
+  //   switch (social) {
+  //     case SocialLogins.google:
+  //       await handleGoogleSignIn();
+  //       break;
+  //     case SocialLogins.apple:
+  //       // await handleAppleSignIn();
+  //       break;
+  //   }
+  // }
 
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
-  } on FirebaseAuthException catch (e) {
-    // Handle error
-    print("Firebase sign-in failed: ${e.message}");
-    rethrow;
-  } catch (e) {
-    // Handle other errors
-    print("Sign-in failed: ${e.toString()}");
-    rethrow;
-  }
-}
+  // Future<bool> handleGoogleSignIn() async {
+  //   _setStatus(AuthStatus.authenticating);
+  //   GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+  //   if (googleUser == null) {
+  //     _setStatus(AuthStatus.authenticateCanceled);
+  //     return false;
+  //   }
+  //
+  //   GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
+  //   final AuthCredential credential = GoogleAuthProvider.credential(
+  //     accessToken: googleAuth.accessToken,
+  //     idToken: googleAuth.idToken,
+  //   );
+  //
+  //   User? firebaseUser;
+  //   try {
+  //     firebaseUser = (await firebaseAuth.signInWithCredential(credential)).user;
+  //   } catch (error, stacktrace) {
+  //     debugPrint('Authentication Error : $error\n$stacktrace');
+  //     _setStatus(AuthStatus.authenticateError);
+  //     return false;
+  //   }
+  //
+  //   if (firebaseUser == null) {
+  //     _setStatus(AuthStatus.authenticateError);
+  //     return false;
+  //   }
+  //
+  //   _currentUser = firebaseUser;
+  //   _setStatus(AuthStatus.authenticated);
+  //   return true;
+  // }
+
+  // Future<bool> handleAppleSignIn() async {
+  //   /*
+  //   * Note : Normally Apple sign-in isn't used in Android, but to enable Apple sign-in in Android, you need to do some steps.
+  //   * see here : https://firebase.google.com/docs/auth/android/apple?hl=ko#join-the-apple-developer-program
+  //   * */
+  //   _setStatus(AuthStatus.authenticating);
+  //
+  //   final appleCredential = await SignInWithApple.getAppleIDCredential(
+  //     scopes: [
+  //       AppleIDAuthorizationScopes.email,
+  //       AppleIDAuthorizationScopes.fullName,
+  //     ],
+  //   );
+  //
+  //   final oauthCredential = OAuthProvider('apple.com').credential(
+  //     idToken: appleCredential.identityToken,
+  //     accessToken: appleCredential.authorizationCode,
+  //   );
+  //
+  //   User? firebaseUser;
+  //   try{
+  //     firebaseUser = (await firebaseAuth.signInWithCredential(oauthCredential)).user;
+  //   } catch (error, stacktrace) {
+  //     debugPrint('Authentication Error : $error\n$stacktrace');
+  //     _setStatus(AuthStatus.authenticateError);
+  //     return false;
+  //   }
+  //
+  //   if (firebaseUser == null){
+  //     _setStatus(AuthStatus.authenticateError);
+  //     return false;
+  //   }
+  //
+  //   _currentUser = firebaseUser;
+  //   _setStatus(_status = AuthStatus.authenticated);
+  //   return true;
+  // }
+
+  // Future<void> handleSignOut() async {
+  //   await firebaseAuth.signOut();
+  //   // Note: Do this to prevent google sign-in from automatically selecting the previous account.
+  //   // See also : https://stackoverflow.com/a/73552210/16626322
+  //   if (await googleSignIn.isSignedIn()) {
+  //     await googleSignIn.disconnect();
+  //     await googleSignIn.signOut();
+  //   }
+
+  //   _currentUser = null;
+  //   _setStatus(AuthStatus.uninitialized);
+  // }
+  //
+  // void _setStatus(AuthStatus status) {
+  //   _status = status;
+  //   notifyListeners();
+  // }
+//}

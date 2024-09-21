@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_cat
 
 import '../../../../core/error/failure.dart';
 import '../entities/parent_main_category_entity.dart';
+import '../entities/wallet_home_entity.dart';
 
 abstract class FourtyNineRepository {
   Future<Either<Failure, List<ParentMainCategoryEntity>>>
@@ -23,4 +24,6 @@ abstract class FourtyNineRepository {
 
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems();
   Future<Either<Failure, Banner>> getBannerById({required String id});
+
+  Future<Either<Failure,WalletHomeEntity>> getWalletHome();
 }
