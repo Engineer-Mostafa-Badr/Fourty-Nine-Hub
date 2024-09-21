@@ -8,10 +8,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../../../domain/entities/user_tokens_entity.dart';
 import '../../../domain/use_cases/apple_sign_in_usecase.dart';
-import '../../../domain/use_cases/facebook_sign_in_use_case.dart';
-import '../../../domain/use_cases/google_sign_in_use_case.dart';
 import '../../../domain/use_cases/login_use_case.dart';
 import '../../../domain/use_cases/save_tokens_use_case.dart';
 import '../../../domain/use_cases/attach_token_use_case.dart';
@@ -19,9 +16,7 @@ import '../../../domain/use_cases/attach_token_use_case.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   final LoginUseCase _loginUseCase;
-  final GoogleSignInUseCase _googleSignInUseCase;
   final AppleSignInUseCase _appleSignInUseCase;
-  final FacebookSignInUseCase _facebookSignInUseCase;
   final SaveTokensUseCase _saveTokens;
   final AttachTokenUseCase _attachToken;
   final emailTextController = TextEditingController();
@@ -33,8 +28,6 @@ class LoginCubit extends Cubit<LoginState> {
       this._loginUseCase,
       this._saveTokens,
       this._attachToken,
-      this._googleSignInUseCase,
-      this._facebookSignInUseCase,
       this._appleSignInUseCase,
   {
     required this.googleSignIn,
