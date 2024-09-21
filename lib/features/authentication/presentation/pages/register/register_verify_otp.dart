@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/service/background_service.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
@@ -50,6 +51,9 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
               state.userTokensEntity.accessToken);
           await TokenManager.saveRefreshToken(
               state.userTokensEntity.refreshToken);
+          await BackgroundService.reStartWebSocketService(
+              state.userTokensEntity.accessToken);
+
           context.read<NotificationSocketIoCubit>().notificationListener();
           context
               .read<NotificationSocketIoCubit>()
