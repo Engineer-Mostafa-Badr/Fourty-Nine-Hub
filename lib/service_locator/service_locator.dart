@@ -187,6 +187,7 @@ import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
 import 'package:fourtyninehub/service_locator/setting_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
 import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
+import 'package:fourtyninehub/service_locator/transfer_money_service_locator.dart';
 import 'package:fourtyninehub/service_locator/trip_join_service_locator.dart';
 import 'package:fourtyninehub/service_locator/twitter_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
@@ -384,5 +385,6 @@ class DI {
     PrivacyServiceLocator.execute(serviceLocator: serviceLocator);
     SettingServiceLocator.execute(serviceLocator: serviceLocator);
     PaymentProviderServiceLocator.execute(serviceLocator: serviceLocator);
+    TransferMoneyServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

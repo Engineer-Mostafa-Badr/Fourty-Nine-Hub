@@ -1,5 +1,4 @@
 abstract class Labels {
-  static const currency = 'L.E';
   static const welcomRegiesterResturant = 'Welcome to Resturant Registeration';
   static const highestBid = 'Highest bid';
   static const bid = 'bid';

@@ -73,8 +73,8 @@ class ReelsScreenState extends State<ReelsScreen> {
           build:
               (ScrollController scrollController, List<CompanyAdEntity> data) {
             if (data.isEmpty) {
-              return const Center(
-                child: CupertinoActivityIndicator(radius: 25),
+              return  Center(
+                child: Label(text: LocaleKeys.noReel.localize)
               );
             }
             return data.isNotEmpty
@@ -118,7 +118,7 @@ class ReelsScreenState extends State<ReelsScreen> {
                   );
                 }
                   )
-                : Center(child: Label(text: LocaleKeys.noPosts.localize));
+                : Center(child: Label(text: LocaleKeys.noReel.localize));
           },
           fetchData: (PaginationParams paginationParams) {
             return context.read<CreateCompanyAdCubit>().getCompanyAdPosts(

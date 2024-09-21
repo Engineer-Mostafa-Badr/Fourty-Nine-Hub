@@ -73,7 +73,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                       _buildPlansWidget(context: context),
                       AppButton(
                           label:
-                              '${Labels.buyWithInstallment} ${NumbersHelper.formatThousands(number: state.selectedPlan?.installment ?? 0)} ${Labels.currency} / ${Labels.month}',
+                              '${Labels.buyWithInstallment} ${NumbersHelper.formatThousands(number: state.selectedPlan?.installment ?? 0)} ${Labels.month}',
                           onPressed: () {
                             if (AuthHelper().isLoggedIn()) {
                               controller.buyWithInstallment(
