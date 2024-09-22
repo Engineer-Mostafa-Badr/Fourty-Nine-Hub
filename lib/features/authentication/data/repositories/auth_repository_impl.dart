@@ -76,7 +76,7 @@ class AuthRepositoryImpl extends AuthRepository {
       final LoginResult loginResult = await FacebookAuth.instance.login();
 
       final OAuthCredential facebookAuthCredential =
-          FacebookAuthProvider.credential(loginResult.accessToken!.token);
+          FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
 
       final result = await FirebaseAuth.instance
           .signInWithCredential(facebookAuthCredential);
