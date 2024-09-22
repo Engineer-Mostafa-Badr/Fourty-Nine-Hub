@@ -49,7 +49,7 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
     return response.fold(
         (failure) => Left(failure),
         (data) => Right(
-            (data['data'] as List).map((e) => AdModel.fromJson(e)).toList()));
+            (data['data']['ads'] as List).map((e) => AdModel.fromJson(e)).toList()));
   }
 
   @override

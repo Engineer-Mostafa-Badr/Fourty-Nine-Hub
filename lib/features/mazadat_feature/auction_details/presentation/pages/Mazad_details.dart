@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
@@ -134,12 +135,12 @@ class _MazadDetailsState extends State<MazadDetails> {
                   children: [
                     Expanded(
                         child: Label(
-                      text: detail.label,
+                      text: getLang()=='ar'?detail.value.nameAr:detail.value.nameEn,
                       color: AppColors.QUANTITY_COLOR,
                     )),
                     Expanded(
                         child: Label(
-                      text: detail.value,
+                      text: getLang()=='ar'?detail.value.nameAr:detail.value.nameEn,
                       color: AppColors.QUANTITY_COLOR,
                     )),
                   ],

@@ -107,6 +107,7 @@ class CodegenLoader extends AssetLoader{
   "restaurantsForSelectedMeal": "المطاعم للوجبة المحدده",
   "itemName": "اسم الوجبة",
   "price": "السعر",
+  "salary": "المرتب",
   "youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval": "تم تقديم التسجيل بنجاح، الان يتم الموافقة عليها من قبل المشرف",
   "selectSubcategoryFirst": "يرجى تحديد الفئه الفرعيه",
   "uploadingImage": "جاري تحميل الصورة...",
@@ -500,8 +501,8 @@ class CodegenLoader extends AssetLoader{
   "play": "ابدء",
   "showComments": "عرض التعليقات",
   "suggestedForYou": "مقترح لك",
-  "hours": "ساعة",
-  "minute": "دقيقة",
+  "hours": "س",
+  "minute": "د",
   "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
   "newPassword": "كلمة مرور جديدة",
   "createNewPassword": "إنشاء كلمة مرور جديدة",
@@ -557,12 +558,17 @@ class CodegenLoader extends AssetLoader{
   "provider": "مقدم خدمة",
   "createAd": "إضافة إعلان",
   "title": "العنوان",
+  "adTitle": "عنوان الاعلان",
   "desc": "الوصف",
   "details": "التفاصيل",
   "publish": "نشر",
   "addImages": "إضافة صور",
   "addImagesDesc": "الحد الأقصى لحجم الملف 5 ميجابايت مقبول بالتنسيقات التالية: jpg، Jpeg، png، gif",
-  "noAds": "لا توجد إعلانات في الوقت الحالي."
+  "noAds": "لا توجد إعلانات في الوقت الحالي.",
+  "currency": "جنيه مصري",
+  "friend": "صديق",
+  "view": "مشاهدة",
+  "shareProfile": "مشاركة الملف الشخصي"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -665,6 +671,7 @@ static const Map<String,dynamic> en = {
   "cantLoadSubSubCategories": "Can't Load SubSubCategories",
   "creatingRestaurant": "Creating Restaurant...",
   "price": "Price",
+  "salary": "Salary",
   "youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval": "You have submitted your registration successfully, waiting for administration approval",
   "photoForMeal": "Photo For Meal",
   "menu": "Menu",
@@ -965,7 +972,7 @@ static const Map<String,dynamic> en = {
   "whatDoYouThink": "What do you think about?",
   "peopleYouMayKnow": "People You May Know",
   "noFriendsSuggested": "No Friends Suggested",
-  "days": "Days",
+  "days": "d",
   "comments": "Comments",
   "comment": "Comment",
   "like": "Like",
@@ -1050,7 +1057,7 @@ static const Map<String,dynamic> en = {
   "showComments": "Show Comments",
   "suggestedForYou": "Suggested For You",
   "hours": "H",
-  "minute": "Min",
+  "minute": "m",
   "tinder": {
     "header": "Tinder",
     "favorites": "Favorites",
@@ -1113,7 +1120,12 @@ static const Map<String,dynamic> en = {
   "publish": "Publish",
   "addImages": "Add Images",
   "addImagesDesc": "5MB maximum file size accepted in the following formats: jpg, Jpeg, png, gif",
-  "noAds": "There are no Ads at the moment."
+  "noAds": "There are no Ads at the moment.",
+  "currency": "L.E",
+  "friend": "Friend",
+  "view": "View",
+  "adTitle": "Ad Title",
+  "shareProfile": "Share Profile"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

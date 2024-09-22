@@ -276,6 +276,14 @@ class EndPoints {
     return '/ride/pick-me/request/$id';
   }
 
+  static String favouriteAd(String id) {
+    return '/ads-favourites/adToFavourites/$id';
+  }
+
+  static String removeFavouriteAd(String id) {
+    return '/ads-favourites/reomveAdFromFavourites/$id';
+  }
+
   static String requestComeWithMe(String id) {
     return '/ride/come-with-you/request/$id';
   }
@@ -549,7 +557,7 @@ class EndPoints {
   }
 
   static String getSubcategoryAdProps(String id) {
-    return '/ads/PropsBySubCategoryId/$id';
+    return '/ads/PropsByMainCategoryId/$id';
   }
 
   static const createAd = '/ads/create-ads';

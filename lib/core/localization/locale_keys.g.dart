@@ -93,6 +93,7 @@ abstract class  LocaleKeys {
   static const restaurantsForSelectedMeal = 'restaurantsForSelectedMeal';
   static const itemName = 'itemName';
   static const price = 'price';
+  static const salary = 'salary';
   static const youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval = 'youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval';
   static const selectSubcategoryFirst = 'selectSubcategoryFirst';
   static const uploadingImage = 'uploadingImage';
@@ -537,11 +538,16 @@ abstract class  LocaleKeys {
   static const provider = 'provider';
   static const createAd = 'createAd';
   static const title = 'title';
+  static const adTitle = 'adTitle';
   static const desc = 'desc';
   static const details = 'details';
   static const publish = 'publish';
   static const addImages = 'addImages';
   static const addImagesDesc = 'addImagesDesc';
   static const noAds = 'noAds';
+  static const currency = 'currency';
+  static const friend = 'friend';
+  static const view = 'view';
+  static const shareProfile = 'shareProfile';
 
 }

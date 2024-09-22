@@ -15,6 +15,8 @@ abstract class AdsRemoteDataSource {
   Future<Either<Failure, List<TripEntity>>> getComeWithMeAds();
   Future<Either<Failure, List<TripEntity>>> getPickMeAds();
   Future<Either<Failure, bool>> requestPickMe({required RequestParams params});
+  Future<Either<Failure, bool>> favouriteAd({required String params});
+  Future<Either<Failure, bool>> removeFavouriteAd({required String params});
   Future<Either<Failure, bool>> requestComeWithMe(
       {required RequestParams params});
 }
@@ -30,7 +32,7 @@ class AdsRemoteDataSourceImpl implements AdsRemoteDataSource {
         await _apiConsumer.get(EndPoints.subCategoryAds(params));
     return response.fold(
         (failure) => Left(failure),
-        (response) => Right((response['data'] as List)
+        (response) => Right((response['data']['allAds'] as List)
             .map((e) => AdModel.fromJson(e))
             .toList()));
   }
@@ -68,6 +70,22 @@ class AdsRemoteDataSourceImpl implements AdsRemoteDataSource {
     final response = await _apiConsumer.post(
         EndPoints.requestPickMe(params.subCategoryId),
         data: params.toJson());
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> favouriteAd({required String params}) async{
+    final response = await _apiConsumer.post(
+        EndPoints.favouriteAd(params),
+        );
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> removeFavouriteAd({required String params}) async{
+    final response = await _apiConsumer.delete(
+        EndPoints.removeFavouriteAd(params),
+        );
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 }

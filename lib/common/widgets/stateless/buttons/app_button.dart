@@ -61,9 +61,11 @@ class AppButton extends StatelessWidget {
                     Sizer(
                       width: 10.w,
                     ),
-                  Label(
-                      text: label,
-                      style: style ?? Styles.mediumText(color: color)),
+                  SizedBox(
+                    child: Label(
+                        text: label,
+                        style: style ?? Styles.mediumText(color: color),maxLines: 1,overflow: TextOverflow.ellipsis,),
+                  ),
                 ],
               ),
             ),
