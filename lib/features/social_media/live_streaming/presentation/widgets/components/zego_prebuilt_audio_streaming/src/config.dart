@@ -150,13 +150,7 @@ class ZegoUIKitPrebuiltLiveAudioRoomConfig {
         duration = ZegoLiveAudioRoomLiveDurationConfig(),
         mediaPlayer = ZegoLiveAudioRoomMediaPlayerConfig(),
         backgroundMedia = ZegoLiveAudioRoomBackgroundMediaConfig(),
-        innerText = ZegoUIKitPrebuiltLiveAudioRoomInnerText(),
-        confirmDialogInfo = ZegoLiveAudioRoomDialogInfo(
-          title: 'Leave the room',
-          message: 'Are you sure to leave the room?',
-          cancelButtonName: 'Cancel',
-          confirmButtonName: 'OK',
-        );
+        innerText = ZegoUIKitPrebuiltLiveAudioRoomInnerText();
 
   /// Default initialization parameters for the audience.
   /// If a configuration item does not meet your expectations, you can directly override its value.
@@ -169,7 +163,7 @@ class ZegoUIKitPrebuiltLiveAudioRoomConfig {
   /// ```
   ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
       : role = ZegoLiveAudioRoomRole.audience,
-        turnOnMicrophoneWhenJoining = false,
+        turnOnMicrophoneWhenJoining = true,
         useSpeakerWhenJoining = true,
         rootNavigator = false,
         userInRoomAttributes = const {},

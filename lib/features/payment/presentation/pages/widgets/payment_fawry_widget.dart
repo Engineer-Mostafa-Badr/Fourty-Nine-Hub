@@ -5,16 +5,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/enums/club_house_layout_mode_enum.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_save_card_token_response_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_saved_cards_entity.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../../../res/style/styles.dart';
 
 class FawryPayment extends StatefulWidget {
   final String amountId;
@@ -80,7 +80,7 @@ class _FawryPaymentState extends State<FawryPayment> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16.w),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -99,9 +99,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                   isSelected: _isCardSelected,
                 ),
               ),
-              Sizer(
-                width: 10.w,
-              ),
+              const Sizer(),
               Expanded(
                 child: _paymentOptionButton(
                   onTap: () {
@@ -128,7 +126,7 @@ class _FawryPaymentState extends State<FawryPayment> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16.w),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -154,9 +152,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                   isSelected: _showLink,
                 ),
               ),
-              Sizer(
-                width: 10,
-              ),
+              const Sizer(),
               Expanded(
                 child: _paymentOptionButton(
                   onTap: () {
@@ -193,7 +189,7 @@ class _FawryPaymentState extends State<FawryPayment> {
       children: [
         Text(
           'Saved Cards',
-          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+          style: Styles.mediumText(),
         ),
         SizedBox(height: 16.h),
         ...savedCards.map((card) {
@@ -321,14 +317,14 @@ class _FawryPaymentState extends State<FawryPayment> {
                       cvv: card.cvv.toString());
                 }
               },
-              child: const Text(
+              child:  Text(
                 "Pay Now",
-                style: TextStyle(color: AppColors.LIGHT_COLOR),
+                style: Styles.mediumText(color: AppColors.AUTH_CONTAINER_COLOR),
               ),
             ),
-          SizedBox(height: 16.h),
+          const Sizer(),
           AppButton(
-            height: 50.h,
+            height: 70.h,
             color: AppColors.LIGHT_COLOR,
             label: _isAddingNewCard ? 'Hide Card Form' : 'Add New Card',
             backColor: AppColors.PRIMARY_COLOR_DARK,
@@ -342,6 +338,8 @@ class _FawryPaymentState extends State<FawryPayment> {
             CreditCardWidget(
               cardBgColor: Colors.black,
               cardNumber: _cardNumberController.text,
+           //  textStyle: Styles.mediumText(fontSize: 30.sp,color: Theme.of(context).scaffoldBackgroundColor),
+              chipColor: Theme.of(context).scaffoldBackgroundColor,
               expiryDate:
                   '${_expiryMonthController.text}/${_expiryYearController.text}',
               cardHolderName: _cardAlias.text,
@@ -351,11 +349,13 @@ class _FawryPaymentState extends State<FawryPayment> {
               obscureCardCvv: true,
               isHolderNameVisible: false,
               isChipVisible: true,
-              onCreditCardWidgetChange: (CreditCardBrand) {},
+              onCreditCardWidgetChange: (creditCardBrand) {},
             ),
             SizedBox(height: 16.h),
             TextFormField(
               controller: _cardNumberController,
+              cursorColor: AppColors.PRIMARY_COLOR,
+              style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
               decoration: InputDecoration(
                 labelText: 'Credit Card Number',
                 labelStyle: const TextStyle(color: Colors.black),
@@ -383,6 +383,8 @@ class _FawryPaymentState extends State<FawryPayment> {
             ),
             SizedBox(height: 16.h),
             TextFormField(
+              cursorColor: AppColors.PRIMARY_COLOR,
+              style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
               controller: _cardAlias,
               decoration: InputDecoration(
                 labelText: 'Credit Card Name',
@@ -409,7 +411,10 @@ class _FawryPaymentState extends State<FawryPayment> {
             Row(
               children: [
                 Expanded(
+
                   child: TextFormField(
+                    cursorColor: AppColors.PRIMARY_COLOR,
+                    style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
                     controller: _expiryMonthController,
                     decoration: InputDecoration(
                       labelText: 'Expiry Month',
@@ -441,6 +446,8 @@ class _FawryPaymentState extends State<FawryPayment> {
                 Expanded(
                   child: TextFormField(
                     controller: _expiryYearController,
+                    cursorColor: AppColors.PRIMARY_COLOR,
+                    style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
                     decoration: InputDecoration(
                       labelText: 'Expiry Year',
                       labelStyle: const TextStyle(color: Colors.black),
@@ -472,6 +479,8 @@ class _FawryPaymentState extends State<FawryPayment> {
             SizedBox(height: 16.h),
             TextFormField(
               controller: _cvvController,
+              cursorColor: AppColors.PRIMARY_COLOR,
+              style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
               decoration: InputDecoration(
                 labelText: 'CVV',
                 labelStyle: const TextStyle(color: Colors.black),
@@ -687,32 +696,33 @@ class _FawryPaymentState extends State<FawryPayment> {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        width: 150, // Fixed width for all buttons
-        height: 60.h, // Fixed height for all buttons
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        width: 150.w,
+        // Fixed width for all buttons
+        height: 80.h,
+        // Fixed height for all buttons
+        padding: EdgeInsets.symmetric(horizontal: 10.w),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          color:
-              isSelected ? AppColors.PRIMARY_COLOR : AppColors.LIGHT_GRAY_COLOR,
+          borderRadius: BorderRadius.circular(40.r),
+          color: isSelected
+              ? Theme.of(context).primaryColor
+              : AppColors.LIGHT_GRAY_COLOR,
         ),
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(
-                icon,
-                color: isSelected ? Colors.white : Colors.grey,
-              ),
-              const SizedBox(width: 10),
+              Icon(icon,
+                  color: isSelected
+                      ? Theme.of(context).scaffoldBackgroundColor
+                      : AppColors.GREY_NORMAL_COLOR),
+              const Sizer(),
               Flexible(
                 child: Text(
                   text,
-                  style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black87,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.sp,
-                  ),
+                  style: Styles.mediumText(
+                      color: isSelected
+                          ? Theme.of(context).scaffoldBackgroundColor
+                          : Colors.black87),
                   textAlign: TextAlign.center, // Center text horizontally
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

@@ -10,17 +10,22 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/
 
 abstract class CreateDoctorRemoteDataSource {
   Future<Either<Failure, bool>> createDoctor(CreateDoctorParams params);
+
   Future<Either<Failure, List<GovernorateEntity>>> getGovernorates();
+
   Future<Either<Failure, List<CityEntity>>> getCities(String governorateId);
 }
 
 class CreateDoctorRemoteDataSourceImpl implements CreateDoctorRemoteDataSource {
   final ApiConsumer _apiConsumer;
+
   CreateDoctorRemoteDataSourceImpl(this._apiConsumer);
+
   @override
   Future<Either<Failure, bool>> createDoctor(CreateDoctorParams params) async {
-    final response =
-        await _apiConsumer.post(EndPoints.createDoctor, data: params.toJson());
+    final response = await _apiConsumer.post(EndPoints.createDoctor,
+        data: params.toJson(),
+        queryParameters: {'subCategory': params.subCategoryId});
 
     return response.fold(
       (failure) => Left(failure),

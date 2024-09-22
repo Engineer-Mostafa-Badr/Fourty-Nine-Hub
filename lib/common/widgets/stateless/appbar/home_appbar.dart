@@ -7,12 +7,10 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart'
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../features/search/presentation/pages/search_view.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -48,26 +46,24 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Container(
-        margin: const EdgeInsets.only(top: 10),
-        child: Row(
-          children: [
-            if (isShowLogo)
-              InkWell(
-                onTap: () {},
-                child: SizedBox(
-                  height: 50.h,
-                  width: 50.h,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5.r),
-                    child: Image(
-                      image: AssetImage(Assets.icon),
-                      fit: BoxFit.cover,
-                    ),
+      title: Row(
+        children: [
+          if (isShowLogo)
+            InkWell(
+              onTap: () {},
+              child: SizedBox(
+                height: 50.h,
+                width: 50.h,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5.r),
+                  child: Image(
+                    image: AssetImage(Assets.icon),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-            // if (showLanguage)
+            ),
+          // if (showLanguage)
 
           if (isWithBackArrow) SizedBox(width: 20.w),
           if (isWithBackArrow)
@@ -86,8 +82,12 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               child: InkWell(
                 borderRadius: BorderRadius.circular(40.r),
                 onTap: () {
-                  showDialog(
-                      context: context, builder: (_) => const SearchAppUsers());
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>  SearchView(),
+                    ),
+                  );
                 },
                 child: Row(
                   children: [
@@ -125,18 +125,20 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                         changeLang(locale: Locales.english, context: context);
                       }
                     })),
+          SizedBox(
+            width: 5.w,
+          ),
           GestureDetector(
             onTap: () {
               context.push(Routes.NOTIFICATIONS);
             },
-
             child: const UnreadNotificationsBuilder(),
           ),
           SizedBox(
-            width: 10.h,
+            width: 5.w,
           ),
         ],
-      )),
+      ),
       elevation: 0,
       titleSpacing: 0,
       //systemOverlayStyle: SystemUiOverlayStyle.light,

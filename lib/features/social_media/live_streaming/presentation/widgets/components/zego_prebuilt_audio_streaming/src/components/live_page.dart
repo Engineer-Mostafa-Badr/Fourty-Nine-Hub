@@ -110,46 +110,31 @@ class _ZegoLiveAudioRoomPageState extends State<ZegoLiveAudioRoomPage>
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: WillPopScope(
-        onWillPop: () async {
-          final endConfirmationEvent = ZegoLiveAudioRoomLeaveConfirmationEvent(
-            context: context,
-          );
-          defaultAction() async {
-            return widget.defaultLeaveConfirmationAction(endConfirmationEvent);
-          }
-
-          return widget.events.onLeaveConfirmation!(
-            endConfirmationEvent,
-            defaultAction,
+      body: ZegoScreenUtilInit(
+        designSize: const Size(750, 1334),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (context, child) {
+          return clickListener(
+            child: LayoutBuilder(builder: (context, constraints) {
+              return Stack(
+                children: [
+                  background(context, constraints.maxHeight),
+                  audioVideoContainer(
+                    constraints.maxWidth,
+                    constraints.maxHeight,
+                  ),
+                  durationTimeBoard(),
+                  topBar(),
+                  bottomBar(),
+                  messageList(),
+                  emptyArea(constraints.maxHeight),
+                  foreground(context, constraints.maxHeight),
+                ],
+              );
+            }),
           );
         },
-        child: ZegoScreenUtilInit(
-          designSize: const Size(750, 1334),
-          minTextAdapt: true,
-          splitScreenMode: true,
-          builder: (context, child) {
-            return clickListener(
-              child: LayoutBuilder(builder: (context, constraints) {
-                return Stack(
-                  children: [
-                    background(context, constraints.maxHeight),
-                    audioVideoContainer(
-                      constraints.maxWidth,
-                      constraints.maxHeight,
-                    ),
-                    durationTimeBoard(),
-                    topBar(),
-                    bottomBar(),
-                    messageList(),
-                    emptyArea(constraints.maxHeight),
-                    foreground(context, constraints.maxHeight),
-                  ],
-                );
-              }),
-            );
-          },
-        ),
       ),
     );
   }

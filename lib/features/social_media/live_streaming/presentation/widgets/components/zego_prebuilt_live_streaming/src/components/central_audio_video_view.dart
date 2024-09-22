@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // Dart imports:
 import 'dart:async';
 import 'dart:core';
@@ -33,14 +34,15 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 /// @nodoc
 class ZegoLiveStreamingCentralAudioVideoView extends StatefulWidget {
   const ZegoLiveStreamingCentralAudioVideoView({
-    super.key,
+    Key? key,
     required this.config,
     required this.hostManager,
     required this.liveStatusManager,
     required this.popUpManager,
-    required this.constraints,
     this.plugins,
-  });
+    required this.constraints,
+    required this.isLiveStream,
+  }) : super(key: key);
 
   final ZegoUIKitPrebuiltLiveStreamingConfig config;
 
@@ -50,6 +52,7 @@ class ZegoLiveStreamingCentralAudioVideoView extends StatefulWidget {
   final ZegoLiveStreamingPlugins? plugins;
 
   final BoxConstraints constraints;
+  final bool isLiveStream;
 
   @override
   State<ZegoLiveStreamingCentralAudioVideoView> createState() =>
@@ -112,7 +115,11 @@ class ZegoLiveStreamingCentralAudioVideoViewState
                 return audioVideoView(
                   host,
                   widget.constraints.maxWidth,
-                  widget.constraints.maxHeight,
+                  (widget.isLiveStream &&
+                          ZegoLiveStreamingPKBattleStateCombineNotifier
+                              .instance.state.value)
+                      ? widget.constraints.maxHeight * 0.75
+                      : widget.constraints.maxHeight,
                   screenSharingUsers.isNotEmpty,
                 );
               },
@@ -231,7 +238,7 @@ class ZegoLiveStreamingCentralAudioVideoViewState
                                 ZegoUIKit().getAudioVideoList(),
                                 audioVideoViewCreator,
                               ) ??
-                              BlocBuilder<MeetingCubit, MeetingState>(
+                              BlocBuilder<StreamCubit, StreamState>(
                                 builder: (context, state) {
                                   if (state.isOpenWhiteBoard &&
                                       ZegoUIKit()
@@ -248,7 +255,7 @@ class ZegoLiveStreamingCentralAudioVideoViewState
                       );
                     },
                   )
-                : BlocBuilder<MeetingCubit, MeetingState>(
+                : BlocBuilder<StreamCubit, StreamState>(
                     builder: (context, state) {
                       print('loggggg ${state.status}');
                       if (state.isOpenWhiteBoard &&

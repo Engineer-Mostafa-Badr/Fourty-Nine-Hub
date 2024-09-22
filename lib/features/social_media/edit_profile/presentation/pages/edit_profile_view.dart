@@ -6,6 +6,8 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.da
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
 import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/privacy_status_enum.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -68,61 +70,59 @@ class _EditProfileViewState extends State<EditProfileView> {
         return Stack(
           children: [
             Scaffold(
-              appBar: const BackAppBar(
-                label: 'Edit Profile',
+              appBar: BackAppBar(
+                label: LocaleKeys.editProfile.localize,
               ),
               body: ListView(
-                padding: EdgeInsets.all(15),
+                padding: const EdgeInsets.all(15),
                 shrinkWrap: true,
                 children: [
                   Text(
-                    'First Name',
-                    style: Styles.headerText(fontSize: 30.sp),
+                    LocaleKeys.firstName.localize,
+                    style: Styles.headerText(fontSize: 30),
                   ),
-                  Sizer(),
+                  const Sizer(),
                   FormTextField(
-                      hint: 'First Name....',
+                      hint: '${LocaleKeys.lastName.localize}....',
                       action: (v) {
                         setState(() {});
                       },
                       prefix: const Icon(Icons.edit),
                       controller: firstNameTextController),
-                  Sizer(),
+                  const Sizer(),
                   Text(
-                    'Last Name',
-                    style: Styles.headerText(fontSize: 30.sp),
+                    LocaleKeys.lastName.localize,
+                    style: Styles.headerText(fontSize: 30),
                   ),
-                  Sizer(),
+                  const Sizer(),
                   FormTextField(
-                      hint: 'Last Name ....',
+                      hint: '${LocaleKeys.lastName.localize} ....',
                       action: (v) {
                         setState(() {});
                       },
                       prefix: const Icon(Icons.edit),
                       controller: lastNameTextController),
-                  Sizer(),
+                  const Sizer(),
                   Row(
                     children: [
                       Text(
-                        'Bio',
-                        style: Styles.headerText(fontSize: 30.sp),
+                        LocaleKeys.bio.localize,
+                        style: Styles.headerText(fontSize: 30),
                       ),
-                      Sizer(),
+                      const Sizer(),
                       if (state.selectedBioPrivacy != null)
                         Text(
-                          '(${state.selectedBioPrivacy == 'public' ? 'Public' : state.selectedBioPrivacy == 'friends' ? 'Friends' : state.selectedBioPrivacy == 'followers' ? 'Followers' : state.selectedBioPrivacy == 'friendsAndFollowers' ? 'Friends / Followers' : state.selectedBioPrivacy == 'onlyMe' ? 'Only Me' : ''})',
-                          style: Styles.headerText(fontSize: 22.sp),
+                          '(${state.selectedBioPrivacy == 'public' ? LocaleKeys.public.localize : state.selectedBioPrivacy == 'friends' ? LocaleKeys.friends.localize : state.selectedBioPrivacy == 'followers' ? LocaleKeys.followers.localize : state.selectedBioPrivacy == 'friendsAndFollowers' ? LocaleKeys.friendsAndFollowers.localize : state.selectedBioPrivacy == 'onlyMe' ? LocaleKeys.onlyMe.localize : ''})',
+                          style: Styles.headerText(fontSize: 22),
                         ),
                     ],
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Row(
                     children: [
                       Expanded(
                         child: FormTextField(
-                            hint: 'Bio ....',
-                            height: 80.h,
-                            maxLength: 100,
+                            hint: '${LocaleKeys.bio.localize} ....',
                             action: (v) {
                               setState(() {});
                             },
@@ -136,27 +136,27 @@ class _EditProfileViewState extends State<EditProfileView> {
                       ),
                     ],
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Row(
                     children: [
                       Text(
-                        'Phone Number',
-                        style: Styles.headerText(fontSize: 30.sp),
+                        LocaleKeys.phoneNumber.localize,
+                        style: Styles.headerText(fontSize: 30),
                       ),
-                      Sizer(),
+                      const Sizer(),
                       if (state.selectedPhonePrivacy != null)
                         Text(
-                          '(${state.selectedPhonePrivacy == 'public' ? 'Public' : state.selectedPhonePrivacy == 'friends' ? 'Friends' : state.selectedPhonePrivacy == 'followers' ? 'Followers' : state.selectedPhonePrivacy == 'friendsAndFollowers' ? 'Friends / Followers' : state.selectedPhonePrivacy == 'onlyMe' ? 'Only Me' : ''})',
-                          style: Styles.headerText(fontSize: 22.sp),
+                          '(${state.selectedPhonePrivacy == 'public' ? LocaleKeys.public.localize : state.selectedPhonePrivacy == 'friends' ? LocaleKeys.friends.localize : state.selectedPhonePrivacy == 'followers' ? LocaleKeys.followers.localize : state.selectedPhonePrivacy == 'friendsAndFollowers' ? LocaleKeys.friendsAndFollowers.localize : state.selectedPhonePrivacy == 'onlyMe' ? LocaleKeys.onlyMe.localize : ''})',
+                          style: Styles.headerText(fontSize: 22),
                         ),
                     ],
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Row(
                     children: [
                       Expanded(
                         child: FormTextField(
-                            hint: 'Phone ....',
+                            hint: '${LocaleKeys.phone.localize} ....',
                             action: (v) {
                               setState(() {});
                             },
@@ -168,27 +168,27 @@ class _EditProfileViewState extends State<EditProfileView> {
                       })
                     ],
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Row(
                     children: [
                       Text(
-                        'Job',
-                        style: Styles.headerText(fontSize: 30.sp),
+                        LocaleKeys.job.localize,
+                        style: Styles.headerText(fontSize: 30),
                       ),
-                      Sizer(),
+                      const Sizer(),
                       if (state.selectedJobPrivacy != null)
                         Text(
-                          '(${state.selectedJobPrivacy == 'public' ? 'Public' : state.selectedJobPrivacy == 'friends' ? 'Friends' : state.selectedJobPrivacy == 'followers' ? 'Followers' : state.selectedJobPrivacy == 'friendsAndFollowers' ? 'Friends / Followers' : state.selectedJobPrivacy == 'onlyMe' ? 'Only Me' : ''})',
-                          style: Styles.headerText(fontSize: 22.sp),
+                          '(${state.selectedJobPrivacy == 'public' ? LocaleKeys.public.localize : state.selectedJobPrivacy == 'friends' ? LocaleKeys.friends.localize : state.selectedJobPrivacy == 'followers' ? LocaleKeys.followers.localize : state.selectedJobPrivacy == 'friendsAndFollowers' ? LocaleKeys.friendsAndFollowers.localize : state.selectedJobPrivacy == 'onlyMe' ? LocaleKeys.onlyMe.localize : ''})',
+                          style: Styles.headerText(fontSize: 22),
                         ),
                     ],
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Row(
                     children: [
                       Expanded(
                         child: FormTextField(
-                            hint: 'Job ....',
+                            hint: '${LocaleKeys.job.localize} ....',
                             action: (v) {
                               setState(() {});
                             },
@@ -200,27 +200,27 @@ class _EditProfileViewState extends State<EditProfileView> {
                       })
                     ],
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Row(
                     children: [
                       Text(
-                        'Country',
-                        style: Styles.headerText(fontSize: 30.sp),
+                        LocaleKeys.country.localize,
+                        style: Styles.headerText(fontSize: 30),
                       ),
-                      Sizer(),
+                      const Sizer(),
                       if (state.selectedCountryPrivacy != null)
                         Text(
-                          '(${state.selectedCountryPrivacy == 'public' ? 'Public' : state.selectedCountryPrivacy == 'friends' ? 'Friends' : state.selectedCountryPrivacy == 'followers' ? 'Followers' : state.selectedCountryPrivacy == 'friendsAndFollowers' ? 'Friends / Followers' : state.selectedCountryPrivacy == 'onlyMe' ? 'Only Me' : ''})',
-                          style: Styles.headerText(fontSize: 22.sp),
+                          '(${state.selectedCountryPrivacy == 'public' ? LocaleKeys.public.localize : state.selectedCountryPrivacy == 'friends' ? LocaleKeys.friends.localize : state.selectedCountryPrivacy == 'followers' ? LocaleKeys.followers.localize : state.selectedCountryPrivacy == 'friendsAndFollowers' ? LocaleKeys.friendsAndFollowers.localize : state.selectedCountryPrivacy == 'onlyMe' ? LocaleKeys.onlyMe.localize : ''})',
+                          style: Styles.headerText(fontSize: 22),
                         ),
                     ],
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Row(
                     children: [
                       Expanded(
                         child: FormTextField(
-                            hint: 'Country ....',
+                            hint: '${LocaleKeys.country.localize} ....',
                             action: (v) {
                               setState(() {});
                             },
@@ -232,27 +232,27 @@ class _EditProfileViewState extends State<EditProfileView> {
                       })
                     ],
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Row(
                     children: [
                       Text(
-                        'City',
-                        style: Styles.headerText(fontSize: 30.sp),
+                        LocaleKeys.city.localize,
+                        style: Styles.headerText(fontSize: 30),
                       ),
-                      Sizer(),
+                      const Sizer(),
                       if (state.selectedCityPrivacy != null)
                         Text(
-                          '(${state.selectedCityPrivacy == 'public' ? 'Public' : state.selectedCityPrivacy == 'friends' ? 'Friends' : state.selectedCityPrivacy == 'followers' ? 'Followers' : state.selectedCityPrivacy == 'friendsAndFollowers' ? 'Friends / Followers' : state.selectedCityPrivacy == 'onlyMe' ? 'Only Me' : ''})',
-                          style: Styles.headerText(fontSize: 22.sp),
+                          '(${state.selectedCityPrivacy == 'public' ? LocaleKeys.public.localize : state.selectedCityPrivacy == 'friends' ? LocaleKeys.friends.localize : state.selectedCityPrivacy == 'followers' ? LocaleKeys.friends.localize : state.selectedCityPrivacy == 'friendsAndFollowers' ? LocaleKeys.friendsAndFollowers.localize : state.selectedCityPrivacy == 'onlyMe' ? LocaleKeys.onlyMe.localize : ''})',
+                          style: Styles.headerText(fontSize: 22),
                         ),
                     ],
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Row(
                     children: [
                       Expanded(
                         child: FormTextField(
-                            hint: 'City ....',
+                            hint: '${LocaleKeys.city.localize} ....',
                             action: (v) {
                               setState(() {});
                             },
@@ -266,23 +266,23 @@ class _EditProfileViewState extends State<EditProfileView> {
                       ),
                     ],
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Row(
                     children: [
                       Text(
-                        'Marital Status',
-                        style: Styles.headerText(fontSize: 30.sp),
+                        LocaleKeys.maritalStatus.localize,
+                        style: Styles.headerText(fontSize: 30),
                       ),
                       if (state.selectedStatusPrivacy != null) ...[
-                        Sizer(),
+                        const Sizer(),
                         Text(
-                          '(${state.selectedStatusPrivacy == 'public' ? 'Public' : state.selectedStatusPrivacy == 'friends' ? 'Friends' : state.selectedStatusPrivacy == 'followers' ? 'Followers' : state.selectedStatusPrivacy == 'friendsAndFollowers' ? 'Friends / Followers' : state.selectedStatusPrivacy == 'onlyMe' ? 'Only Me' : ''})',
-                          style: Styles.headerText(fontSize: 22.sp),
+                          '(${state.selectedStatusPrivacy == 'public' ? LocaleKeys.public.localize : state.selectedStatusPrivacy == 'friends' ? LocaleKeys.friends.localize : state.selectedStatusPrivacy == 'followers' ? LocaleKeys.followers.localize : state.selectedStatusPrivacy == 'friendsAndFollowers' ? LocaleKeys.friendsAndFollowers.localize : state.selectedStatusPrivacy == 'onlyMe' ? LocaleKeys.onlyMe.localize : ''})',
+                          style: Styles.headerText(fontSize: 22),
                         )
                       ],
                     ],
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Row(
                     children: [
                       Expanded(
@@ -291,38 +291,38 @@ class _EditProfileViewState extends State<EditProfileView> {
                             final res = await CustomVerticalSheetItem.normal<
                                 MaritalStatus>(context, [
                               CustomSheetModel(
-                                  text: "Single",
+                                  text: LocaleKeys.single.localize,
                                   value: MaritalStatus.single,
                                   image: Assets.single),
                               CustomSheetModel(
-                                  text: "Married",
+                                  text: LocaleKeys.married.localize,
                                   value: MaritalStatus.married,
                                   image: Assets.married),
                               CustomSheetModel(
-                                  text: "Divorced",
+                                  text: LocaleKeys.divorced.localize,
                                   value: MaritalStatus.divorced,
                                   image: Assets.divorced),
                               CustomSheetModel(
-                                  text: "Widowed",
+                                  text: LocaleKeys.widowed.localize,
                                   value: MaritalStatus.widowed,
                                   image: Assets.widowed),
                             ]);
                             print(res?.name);
                             print("============>");
                             statusController.text = res?.name == 'single'
-                                ? 'Single'
+                                ? LocaleKeys.single.localize
                                 : res?.name == 'married'
-                                    ? 'Married'
+                                    ? LocaleKeys.married.localize
                                     : res?.name == 'divorced'
-                                        ? 'Divorced'
+                                        ? LocaleKeys.divorced.localize
                                         : res?.name == 'widowed'
-                                            ? 'Widowed'
+                                            ? LocaleKeys.widowed.localize
                                             : '';
                             controller.selectMaritalStatus(
                                 status: res?.name ?? 'single');
                           },
                           child: FormTextField(
-                            hint: 'Marital Status....',
+                            hint: '${LocaleKeys.maritalStatus.localize}....',
                             controller: statusController,
                             onTap: () async {},
                             enabled: false,
@@ -337,7 +337,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                       })
                     ],
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Row(
                     children: [
                       Expanded(
@@ -348,7 +348,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                           });
                         },
                         child: Container(
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                               color: state.isMale == true
                                   ? AppColors.PRIMARY_COLOR
@@ -358,7 +358,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                   Border.all(color: AppColors.PRIMARY_COLOR)),
                           alignment: AlignmentDirectional.center,
                           child: Text(
-                            'Male',
+                            LocaleKeys.maleUser.localize,
                             style: Styles.mediumText(
                                 color: state.isMale == false
                                     ? AppColors.PRIMARY_COLOR
@@ -366,7 +366,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                           ),
                         ),
                       )),
-                      Sizer(),
+                      const Sizer(),
                       Expanded(
                         child: InkWell(
                           onTap: () {
@@ -375,7 +375,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                             });
                           },
                           child: Container(
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                                 color: state.isMale == false
                                     ? AppColors.PRIMARY_COLOR
@@ -385,7 +385,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                     Border.all(color: AppColors.PRIMARY_COLOR)),
                             alignment: AlignmentDirectional.center,
                             child: Text(
-                              'Female',
+                              LocaleKeys.femaleUser.localize,
                               style: Styles.mediumText(
                                   color: state.isMale == true
                                       ? AppColors.PRIMARY_COLOR
@@ -396,7 +396,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                       ),
                     ],
                   ),
-                  Sizer(),
+                  const Sizer(),
                   state.status == EditProfileStates.loading
                       ? const Center(
                           child: CircularProgressIndicator(),
@@ -434,7 +434,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                     Border.all(color: AppColors.PRIMARY_COLOR)),
                             alignment: AlignmentDirectional.center,
                             child: Text(
-                              'Edit',
+                              LocaleKeys.edit.localize,
                               style: Styles.mediumText(color: Colors.white),
                             ),
                           ),

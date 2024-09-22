@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_media_entity.dart';
+
 import 'message_sender_entity.dart';
 import 'reply_message_entity.dart';
 
@@ -6,7 +8,7 @@ class MessageEntity {
   String? chatId;
   String? groupId;
   String text;
-  List<String> media;
+  List<MessageMediaEntity> media;
   MessageSenderEntity sender;
   ReplyMessageEntity? reply;
   DateTime createdAt;
@@ -43,8 +45,10 @@ class MessageEntity {
   }
 
   void markAsDelivered() {
-    delivered = true;
-    seen = false;
+    if (!seen) {
+      delivered = true;
+      seen = false;
+    }
   }
 
   @override

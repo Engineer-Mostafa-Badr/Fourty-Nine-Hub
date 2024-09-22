@@ -12,7 +12,9 @@ import 'package:go_router/go_router.dart';
 // import 'package:intl/intl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../res/style/styles.dart';
 
 class ScheduleMeetingScreen extends StatefulWidget {
   const ScheduleMeetingScreen({super.key});
@@ -131,13 +133,19 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                 children: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: Text(
-                      LocaleKeys.cancel.localize,
-                      style: const TextStyle(color: Colors.blue),
+                    child: Label(
+                      text: LocaleKeys.cancel.localize,
+                      style: Styles.headerText(
+                        color: AppColors.SECONDARY_COLOR,
+                        fontSize: 25,
+                      ),
                     ),
                   ),
-                  Text(LocaleKeys.scheduleAMeeting.localize,
-                      style: TextStyle(
+                  Label(
+                      text: LocaleKeys.scheduleAMeeting.localize,
+                      style: Styles.headerText(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
                           color: context.isDarkMode
                               ? Colors.white
                               : AppColors.PRIMARY_COLOR)),
@@ -159,7 +167,7 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
 
                           return;
                         }
-                        await context.read<MeetingCubit>().createNewMeeting(
+                        await context.read<StreamCubit>().createNewMeeting(
                               startTime: _combineDateAndTime(
                                 _selectedDate!,
                                 _startTime!,
@@ -179,12 +187,11 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                             context, LocaleKeys.pleaseFillAllFields.localize);
                       }
                     },
-                    child: Text(
-                      LocaleKeys.done.localize,
-                      style: TextStyle(
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
+                    child: Label(
+                      text: LocaleKeys.done.localize,
+                      style: Styles.headerText(
+                        fontSize: 25,
+                        color: AppColors.PRIMARY_COLOR,
                       ),
                     ),
                   ),
@@ -255,19 +262,20 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  title,
-                  style: TextStyle(
+                Label(
+                  text: title,
+                  style: Styles.headerText(
+                      fontSize: 25,
                       color: context.isDarkMode ? Colors.white : Colors.black,
                       fontWeight: FontWeight.bold),
                 ),
                 Expanded(
                   child: Container(),
                 ),
-                Text(
-                  content,
-                  style: TextStyle(
-                    fontSize: 20.sp,
+                Label(
+                  text: content,
+                  style: Styles.headerText(
+                    fontSize: 20,
                     color: context.isDarkMode ? Colors.white70 : Colors.black54,
                   ),
                 ),

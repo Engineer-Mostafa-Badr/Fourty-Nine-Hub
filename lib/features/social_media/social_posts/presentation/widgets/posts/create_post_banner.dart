@@ -21,7 +21,7 @@ class CreatePostBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -36,7 +36,7 @@ class CreatePostBanner extends StatelessWidget {
                   accountId: 0,
                   userId: '',
                 ),
-          Sizer(
+          const Sizer(
             width: 10,
           ),
           Expanded(
@@ -50,7 +50,7 @@ class CreatePostBanner extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey, width: .5),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Label(
                 text: LocaleKeys.whatDoYouThink.localize,
@@ -58,7 +58,7 @@ class CreatePostBanner extends StatelessWidget {
               ),
             ),
           )),
-          Sizer(
+          const Sizer(
             width: 10,
           ),
           InkWell(

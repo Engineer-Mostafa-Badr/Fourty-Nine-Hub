@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_subcategory_entity.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/favourite_sub_category_card.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 
 class FavSubCategoryView extends StatelessWidget {
   const FavSubCategoryView({
@@ -16,8 +17,8 @@ class FavSubCategoryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(
-        label: Labels.favouriteSubcategories,
+      appBar: BackAppBar(
+        label: LocaleKeys.favouriteSubCategories.localize,
       ),
       body: BlocBuilder<FavouriteSubCategoryCubit, FavouriteSubCategoryState>(
           builder: (context, state) {

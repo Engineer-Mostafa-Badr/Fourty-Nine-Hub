@@ -47,7 +47,7 @@ class ViewAllTripJoinRemoteDataSourceImp
         return Left(failure);
       },
       (data) {
-        List rawData = data['data'];
+        List rawData = data['data']['updatedTrips'];
         if (rawData.isEmpty) {
           // pr('No data found');
           return const Right([]);

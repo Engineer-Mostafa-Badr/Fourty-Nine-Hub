@@ -5,11 +5,10 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/custom_container.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/show_post_company_advertise.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../core/widget/custom_text_no_login.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../payment/presentation/cubit/payment_cubit.dart';
@@ -252,35 +251,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                 );
               },
             )
-          : Center(
-              child: SingleChildScrollView(
-                child: GestureDetector(
-                  onTap: () => context.push(Routes.LOGIN),
-                  child: Container(
-                    padding: EdgeInsets.all(12.w),
-                    width: 500.w,
-                    height: 500.h,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Theme.of(context).primaryColor,
-                        width: 4,
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Please Login, Register to enjoy the app',
-                        style: Styles.headerText(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          : const CustomTextNoLogin(),
     );
   }
 

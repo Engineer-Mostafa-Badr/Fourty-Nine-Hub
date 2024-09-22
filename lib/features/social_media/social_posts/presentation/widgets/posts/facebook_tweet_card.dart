@@ -58,8 +58,10 @@ class FacebookTweetCard extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                border: Border.all(),
-                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                    color:
+                    AppColors.DIVIDER_GRAY_COLOR),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Column(
                 children: [
@@ -79,8 +81,10 @@ class FacebookTweetCard extends StatelessWidget {
                   ],
                   Container(
                     decoration: BoxDecoration(
-                        border: isShared == true ? Border.all() : null,
-                        borderRadius: BorderRadius.circular(15)),
+                        border: isShared == true ? Border.all(
+                            color:
+                            AppColors.DIVIDER_GRAY_COLOR) : null,
+                        borderRadius: BorderRadius.circular(5)),
                     child: Column(
                       children: [
                         _buildAccountHeader(
@@ -127,8 +131,8 @@ class FacebookTweetCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextAppButton(
-                  style: TextStyle(color: Theme.of(context).primaryColor),
-                  label: user.firstName,
+                  style: Styles.headerText(fontSize: 32,color: Theme.of(context).primaryColor),
+                  label: "${user.firstName} ${user.lastName}",
                   onPressed: () => () => context.push(Routes.OTHERSACCOUNT)),
               RichText(
                   text: TextSpan(children: [
@@ -216,7 +220,7 @@ class FacebookTweetCard extends StatelessWidget {
                                   // padding: EdgeInsets.all(10),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    // borderRadius: BorderRadius.circular(15),
+                                    // borderRadius: BorderRadius.circular(5),
                                     color: Colors.black.withOpacity(0.5),
                                   ),
                                   child: Center(
@@ -300,7 +304,7 @@ class FacebookTweetCard extends StatelessWidget {
                                       end: 10, bottom: 10),
                                   padding: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(5),
                                     image: DecorationImage(
                                       fit: BoxFit.fill,
                                       image: NetworkImage(
@@ -316,7 +320,7 @@ class FacebookTweetCard extends StatelessWidget {
                                     // padding: EdgeInsets.all(10),
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
+                                      borderRadius: BorderRadius.circular(5),
                                       color: Colors.black.withOpacity(0.5),
                                     ),
                                     child: Center(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../res/style/app_colors.dart';
+import '../../res/style/styles.dart';
 
 ThemeData darkTheme() {
   return ThemeData(
@@ -27,12 +28,21 @@ ThemeData darkTheme() {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.GREY_DARK_COLOR,
+       hintStyle: Styles.headerText(fontSize: 25),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8.0),
         borderSide: const BorderSide(
           color: AppColors.AUTH_CONTAINER_COLOR,
         ),
+        
       ),
+      enabledBorder: const OutlineInputBorder(
+        borderSide: BorderSide(color: AppColors.PRIMARY_COLOR),
+      ),
+      focusedBorder: const OutlineInputBorder(
+        borderSide: BorderSide(color: AppColors.PRIMARY_COLOR),
+      ),
+      
     ),
     dividerColor: AppColors.GREY_DARK_COLOR,
     colorScheme: const ColorScheme.dark(

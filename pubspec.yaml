@@ -36,7 +36,7 @@ dependencies:
   flutter_cache_manager: ^3.3.3
   flutter_card_swiper: ^7.0.1
   flutter_credit_card: ^4.0.1
-  flutter_facebook_auth: ^3.5.0
+  flutter_facebook_auth: ^7.1.0
   flutter_fortune_wheel: ^1.3.1
   flutter_local_notifications: ^17.1.2
   flutter_polyline_points: 2.0.0
@@ -97,7 +97,7 @@ dependencies:
   # awesome_snackbar_content: ^0.1.3
   elegant_notification: ^2.3.0
   flutter_phoenix: ^1.1.1
-  flutter_story_presenter: ^0.0.8
+  advance_pdf_viewer2: ^2.0.5+1
 dependency_overrides:
   http: ^0.13.3
 dev_dependencies:
@@ -125,6 +125,7 @@ flutter:
     - assets/images/reactions/
     - assets/images/
     - assets/49-New-icons/
+    - assets/pdf/
     # - assets/images/lion.png
     # - assets/images/butterfly.png
     # - assets/images/salary.png

@@ -1,62 +1,35 @@
-import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balance/balance_data_entity.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_entities.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_entity.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_balance_use_case.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_gifts_use_case.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_usecase.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+
+import '../../../domain/entities/wallet_home_entity.dart';
+import '../../../domain/use_cases/get_wallet_home_use_case.dart';
 
 part 'main_categories_state.dart';
 
 class MainCategoriesCubit extends Cubit<MainCategoriesState> {
-  final GetBalanceUseCases _balanceUseCases;
   final GetMainCategoriesUseCase _getMainCategoriesUseCase;
-  final GetWalletUseCase _getWalletUseCase;
-  final ListenToNewMessageUseCase _listenToNewMessageUseCase;
-  final StopListenToMessagesUseCase _stopListenToNewMessagesUseCase;
-  final MarkMessagesAsDeliveredUseCase _markMessagesAsDeliveredUseCase;
   final FourtyNineSharedData _fourtyNineSharedData =
       FourtyNineSharedData.instance;
   final ToggleFavoriteCategoryUseCase _toggleFavoriteCategoryUseCase;
-  final GetWalletGiftsUseCase _giftUseCases;
+  final GetWalletHomeUseCase _getWalletHomeUseCase;
 
   MainCategoriesCubit(
     this._getMainCategoriesUseCase,
     this._toggleFavoriteCategoryUseCase,
-    this._giftUseCases,
-    this._getWalletUseCase,
-    this._balanceUseCases,
-    this._listenToNewMessageUseCase,
-    this._stopListenToNewMessagesUseCase,
-    this._markMessagesAsDeliveredUseCase,
-  ) : super(MainCategoriesState()) {
-    _markMessagesAsDelivered();
-  }
-
+   this._getWalletHomeUseCase,
+  ) : super(MainCategoriesState());
   Future<void> loadData() async {
     emit(state.copyWith(status: StateStatus.loading));
     await UserCubit.to.getUser();
     getWallet();
-    fetchGiftWallet();
-    fetchBalanceWallet();
-    // context.read<SliderCubit>().loadData();
-    // context.read<WalletCubit>().loadData();
-    // context.read<BalanceCubit>().loadData();
-    // context.read<GiftCubit>().loadData();
     if (_fourtyNineSharedData.mainCategories.isEmpty) {
       final user = UserCubit.to.state.data?.id;
       print('userId1$user');
@@ -101,25 +74,6 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     }
   }
 
-  _markMessagesAsDelivered() {
-    _listenToNewMessageUseCase((message) {
-      _markMessagesAsDeliveredUseCase(
-          MarkMessagesAsDeliveredParams(chatId: 'chatId'));
-    });
-  }
-
-  Future<void> fetchGiftWallet() async {
-    final response = await _giftUseCases.call(const NoParams());
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: StateStatus.error));
-    }, (data) {
-      log('///////////////////////////////////////');
-      log(data.giftWallet.userId);
-      log('///////////////////////////////////////');
-      emit(state.copyWith(gift: data));
-    });
-  }
-
   Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
     final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
     bool result = false;
@@ -147,7 +101,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   Future<void> getWallet() async {
-    final response = await _getWalletUseCase.call(const NoParams());
+    final response = await _getWalletHomeUseCase.call(const NoParams());
     response.fold((l) {
       emit(state.copyWith(failure: l, status: StateStatus.error));
     }, (data) {
@@ -155,12 +109,4 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     });
   }
 
-  Future<void> fetchBalanceWallet() async {
-    final response = await _balanceUseCases.call(const NoParams());
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: StateStatus.error));
-    }, (data) {
-      emit(state.copyWith(balance: data));
-    });
-  }
 }

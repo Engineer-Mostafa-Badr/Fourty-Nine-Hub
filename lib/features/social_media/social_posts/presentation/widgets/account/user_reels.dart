@@ -51,10 +51,10 @@ class _UserReelsState extends State<UserReels> {
                 print(controller.userReelsPagingController.itemList?.length);
                 return Center(
                   child: Text(
-                    LocaleKeys.noTweets.localize,
-                    style: TextStyle(
+                    LocaleKeys.noReels.localize,
+                    style: const TextStyle(
                       color: Colors.black,
-                      fontSize: 18.sp,
+                      fontSize: 18,
                     ),
                   ),
                 );

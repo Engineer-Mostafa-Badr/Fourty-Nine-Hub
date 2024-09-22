@@ -79,7 +79,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
             BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
                 builder: (context, state) {
               return SizedBox(
-                height: 30.h,
+                height: 60.h,
                 child: TabBar(
                     isScrollable: true,
                     onTap: (i) {
@@ -101,7 +101,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                         // ),
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(5),
                           color: index == state.selectedIndex
                               ? AppColors.PRIMARY_COLOR
                               : null,

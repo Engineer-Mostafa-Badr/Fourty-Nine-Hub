@@ -7,7 +7,6 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
@@ -67,7 +66,7 @@ class InstallmentAdCard extends StatelessWidget {
                       ),
                     ],
                   )),
-                  Sizer(),
+                  const Sizer(),
                   // IconAppButton(
                   //     size: 20, icon: Icons.favorite_border, onPressed: () {}),
                 ],
@@ -79,7 +78,7 @@ class InstallmentAdCard extends StatelessWidget {
               ),
               Label(
                 text:
-                    '${NumbersHelper.formatThousands(number: item.ad?.price ?? 0)} ${Labels.currency}',
+                    NumbersHelper.formatThousands(number: item.ad?.price ?? 0),
                 style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
                     color: AppColors.SECONDARY_COLOR),
@@ -116,7 +115,7 @@ class InstallmentAdCard extends StatelessWidget {
             Expanded(
               child: Label(
                 text:
-                    '${NumbersHelper.formatThousands(number: item.ad?.price ?? 0)} ${Labels.currency}',
+                    NumbersHelper.formatThousands(number: item.ad?.price ?? 0),
                 style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
                     color: AppColors.SECONDARY_COLOR),

@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/core/constants/constants.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
@@ -49,6 +50,7 @@ class EndPoints {
 
   static String getBannerByID({required String id}) => '/categories/main/$id';
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
+  static const getWalletHome = '/main-wallet/user-wallets-amount';
 
   static String getMainCategoryDetails(String id) => '/categories/main/$id';
 
@@ -101,6 +103,8 @@ class EndPoints {
   }
 
   static const getWallet = '/main-wallet/user-wallet';
+  static const transferMoney = '/main-wallet/send-money';
+  static const fetchUsers = '/users/all-usernames';
   static const getPrice = '/advertisementCompany/price';
   static const getSubscription = '/subscription';
   static const transferFiveBalance = '/main-wallet/transfer-five-years';
@@ -558,8 +562,8 @@ class EndPoints {
     return '/ads/deleteAd/$id';
   }
 
-  static String subCategoryAds(String id) {
-    return '/ads/subCategoryAds/$id';
+  static String subCategoryAds(GetAdsParams params) {
+    return '/ads/subCategoryAds/${params.subCategoryId}?filter=${params.filter}&page=${params.page}&limit=${params.limit}';
   }
 
   static String createAuction(String id) {
@@ -620,6 +624,7 @@ class EndPoints {
 
   // contact us
   static const helpMessages = '/help';
+  static const contactUs = '/email/contact-us';
   static String mediaUrl = '/media/signed-url';
 
   static String confirmUpload(String mediaId) {
@@ -632,6 +637,14 @@ class EndPoints {
   static String getChatMessages(String chatId) {
     return '/chat/get-chat/$chatId';
   }
+
+  static String createNormalChat(
+      {required String categoryId, required String otherUserId}) {
+    return '/chat/start-chat/$otherUserId?categoryId=$categoryId';
+  }
+
+  static String createAnonymousChat(String otherUserId) =>
+      '/chat/start-anonymous-chat/$otherUserId';
 
   //club voice
   static String allClubVoiceRooms = '/clubvoice';
@@ -654,6 +667,11 @@ class EndPoints {
   static String endMeeting(String id) => '/room-id/finish/$id';
 
   static String getScheduledMeetings(String id) => '/room-id/$id';
+
+  //lives
+  static String allLiveTopics = '/stream-topic';
+
+
   static String deleteChatMessage = '/chat/message';
 
   static String changeChatMuteState(String chatId) {
@@ -665,8 +683,10 @@ class EndPoints {
   }
 
   static String buttonAvailable = '/global/click';
+
   static String getSubscriptionPlans(String subcategoryId) =>
       '/subscription/plans/$subcategoryId';
+
   static String checkUserSubscription(String id) {
     return '/subscription/subcategory/$id';
   }
