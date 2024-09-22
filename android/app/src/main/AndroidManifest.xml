@@ -1,4 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <queries>
+        <!-- Facebook app -->
+        <package android:name="com.facebook.katana" />
+        <!-- Facebook Messenger app -->
+        <package android:name="com.facebook.orca" />
+        <!-- Instagram app (if needed for Instagram login) -->
+        <package android:name="com.instagram.android" />
+    </queries>
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

@@ -150,34 +150,24 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
 
-  Future<UserCredential?> signInWithFacebook() async {
-    try {
-      // Trigger the sign-in flow
-      final LoginResult loginResult = await FacebookAuth.instance.login();
+   Future<UserCredential> signInWithFacebook() async {
+    // Trigger the sign-in flow
+    final LoginResult loginResult = await FacebookAuth.instance.login();
 
-      if (loginResult.status == LoginStatus.success && loginResult.accessToken != null) {
-        // Create a credential from the access token
-        final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+    // log(loginResult.accessToken!.tokenString.toString());
+    // log(loginResult.message.toString());
 
-        // Sign in with the credential
-        UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+    // Create a credential from the access token
+    final OAuthCredential facebookAuthCredential =
+    FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
 
-        // Check if the user is not null before logging their details
-        if (userCredential.user != null) {
-          log(userCredential.user!.displayName ?? 'No display name available');
-          log(userCredential.user!.photoURL ?? 'No photo URL available');
-        }
-
-        // Once signed in, return the UserCredential
-        return userCredential;
-      } else {
-        log('Facebook login failed: ${loginResult.status}');
-        return null; // Handle login failure here
-      }
-    } catch (e) {
-      log('Error during Facebook sign-in: $e');
-      return null; // Handle errors gracefully
-    }
+    // Once signed in, return the UserCredential
+    UserCredential userCredential = await FirebaseAuth.instance
+        .signInWithCredential(facebookAuthCredential);
+    log(userCredential.additionalUserInfo!.username.toString());
+    log(userCredential.user!.email.toString());
+    log(userCredential.user!.photoURL.toString());
+    return userCredential;
   }
 
 

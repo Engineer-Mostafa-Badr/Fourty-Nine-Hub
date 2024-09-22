@@ -494,6 +494,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.5"
+  facebook_auth_desktop:
+    dependency: transitive
+    description:
+      name: facebook_auth_desktop
+      sha256: "219d559a33891e937c1913430505eae01fb946cb35729167bbdc747e3ebbd9ff"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.1"
   fake_async:
     dependency: transitive
     description:
@@ -703,26 +711,26 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_facebook_auth
-      sha256: "779215296119c156975d4f596a7434a1fa35c0ef304f2ead3c17c1546499c6c5"
+      sha256: faa92fb7626c230837f30d02de7d92b6af334b77ba744867c63545d4ad7e171f
       url: "https://pub.dev"
     source: hosted
-    version: "3.5.7"
+    version: "7.1.0"
   flutter_facebook_auth_platform_interface:
     dependency: transitive
     description:
       name: flutter_facebook_auth_platform_interface
-      sha256: "06b27d024cff8093e0ed6f8067d43f9451610ca23845d1ad5ddf12f7e43904e3"
+      sha256: e04b8dbfa77702bea45a79993163ad5d20b2c0084109bec591fdc2b9ee505779
       url: "https://pub.dev"
     source: hosted
-    version: "2.7.1"
+    version: "6.1.2"
   flutter_facebook_auth_web:
     dependency: transitive
     description:
       name: flutter_facebook_auth_web
-      sha256: "7845becbe9631400caa9a86557382431cef72e5530f2b809cfbc69587c0d119d"
+      sha256: "8a6890a98522604169ca9f958d7189c9f579dbf05ba4d3d7adf26eca4c4c4c93"
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.0+2"
+    version: "6.1.1"
   flutter_fortune_wheel:
     dependency: "direct main"
     description:
