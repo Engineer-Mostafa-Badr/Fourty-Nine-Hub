@@ -267,7 +267,7 @@ class _ZegoLiveStreamingPreviewPageState
                   child: InkWell(
                     onTap: () {
                       showGiftBottomSheet(context,
-                          fromTinder: false, receiverId: '');
+                          receiverId: '');
                     },
                     child: Container(
                       // margin: EdgeInsets.only(left: constraints.maxWidth / 20),
