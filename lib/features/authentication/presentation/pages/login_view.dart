@@ -12,6 +12,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart'
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/service/background_service.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
@@ -98,11 +99,9 @@ class _LoginViewState extends State<LoginView> {
               ),
             );
           } else if (state is LoginSuccess) {
-            await TokenManager.saveAccessToken(
-                state.userTokensEntity.accessToken);
-            await TokenManager.saveRefreshToken(
-                state.userTokensEntity.refreshToken);
-
+            await TokenManager.saveAccessToken(state.userTokensEntity.accessToken);
+            await TokenManager.saveRefreshToken(state.userTokensEntity.refreshToken);
+            await BackgroundService.reStartWebSocketService(state.userTokensEntity.accessToken);
             serviceLocator<UserCubit>()
               ..setLogin(true)
               ..attachToken()

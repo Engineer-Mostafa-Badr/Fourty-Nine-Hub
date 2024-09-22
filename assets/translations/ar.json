@@ -68,6 +68,7 @@
   "meet": "زوم",
   "cast": "سرعة",
   "noRooms": "لا توجد غرف صوتيه",
+  "selectATopic": "اختر الموضوع",
 
   "restaurantName": "إسم المطعم",
   "theCommercialRegister": "السجل التجاري",
@@ -515,11 +516,11 @@
   "imageNotSelected": "الصورة غير محددة",
   "randomAppearance": "المظهر العشوائي",
   "messageSuccessfully": "تم ارسال الرسالة بنجاح سوف يتم التواصل معك باقرب وقت.",
-  "phoneOptional":"الهاتف (اختياري)",
-  "TeamHelp":"فريق 49Hub جاهز للمساعدة",
-  "moneySuccessfully":"تم إرسال الامول بنجاح.",
-  "paymentAddress":"عنوان الدفع",
-  "amount":"المبلغ",
+  "phoneOptional": "الهاتف (اختياري)",
+  "TeamHelp": "فريق 49Hub جاهز للمساعدة",
+  "moneySuccessfully": "تم إرسال الامول بنجاح.",
+  "paymentAddress": "عنوان الدفع",
+  "amount": "المبلغ",
   "bio": "السيرة الذاتية",
   "friendsAndFollowers": "الأصدقاء و المتابعين",
   "maritalStatus": "الحالة الاجتماعية",
@@ -548,6 +549,4 @@
   "addImages": "إضافة صور",
   "addImagesDesc": "الحد الأقصى لحجم الملف 5 ميجابايت مقبول بالتنسيقات التالية: jpg، Jpeg، png، gif",
   "noAds": "لا توجد إعلانات في الوقت الحالي."
-
-
 }

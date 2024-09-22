@@ -30,7 +30,7 @@ class SocialServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     // ---------------------------------- data sources ----------------------------------
     serviceLocator.registerLazySingleton<ChatsRemoteDataSource>(
-        () => ChatsRemoteDataSourceImplementation(serviceLocator()));
+        () => ChatsRemoteDataSourceImplementation(serviceLocator(),serviceLocator()));
     serviceLocator.registerLazySingleton<MessagesRemoteDataSource>(() =>
         MessagesRemoteDataSourceImplementation(
             serviceLocator(), serviceLocator()));

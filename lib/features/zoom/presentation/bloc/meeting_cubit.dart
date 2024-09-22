@@ -155,8 +155,5 @@ class StreamCubit extends Cubit<StreamState> {
     emit(state.copyWith(status: StreamsStates.success));
   }
 
-  void minimize() {
-    isMinimized = true;
-    emit(state.copyWith(status: StreamsStates.minimizing));
-  }
+  
 }
