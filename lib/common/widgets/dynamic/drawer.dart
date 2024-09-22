@@ -241,7 +241,7 @@ class DrawerWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Evenly distribute space
                   crossAxisAlignment: CrossAxisAlignment.start, // Align items at the start
                   children: [
-                    counterItem(
+                    state.competitionModel.data![10].competitionId?.nameEn !=null ? counterItem(
                       icon: Icons.ads_click,
                       label: LocaleKeys.specialAds.localize,
                       value: '${state.competitionModel.data![10].countOfRequest}',
@@ -252,8 +252,8 @@ class DrawerWidget extends StatelessWidget {
                         );
                       },
                       context: context,
-                    ),
-                    counterItem(
+                    ):const SizedBox.shrink(),
+                    state.competitionModel.data![0].competitionId?.nameEn !=null ?  counterItem(
                       icon: Icons.person_add,
                       label: LocaleKeys.friends.localize,
                       value: '${state.competitionModel.data![0].countOfRequest}',
@@ -264,8 +264,8 @@ class DrawerWidget extends StatelessWidget {
                         );
                       },
                       context: context,
-                    ),
-                    counterItem(
+                    ) :const SizedBox.shrink(),
+                    state.competitionModel.data![9].competitionId?.nameEn !=null ?  counterItem(
                       icon: FontAwesomeIcons.car,
                       label: LocaleKeys.ride.localize,
                       value: '${state.competitionModel.data![9].countOfRequest}',
@@ -276,8 +276,8 @@ class DrawerWidget extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => const SpecialAdsView()),
                         );
                       },
-                    ),
-                    counterItem(
+                    ):const SizedBox.shrink(),
+                    state.competitionModel.data !=null ?  counterItem(
                       icon: Icons.more_horiz,
                       label: LocaleKeys.more.localize,
                       value: '${calculateSumOfRequests()}',
@@ -288,7 +288,7 @@ class DrawerWidget extends StatelessWidget {
                         );
                       },
                       context: context,
-                    ),
+                    ):const SizedBox.shrink(),
                   ],
                 )
                 ;

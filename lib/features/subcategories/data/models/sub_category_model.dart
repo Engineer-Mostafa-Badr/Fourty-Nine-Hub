@@ -13,7 +13,7 @@ class SubCategoryModel extends SubCategoryEntity {
     return SubCategoryModel(
       id: json['_id'],
       name: getLang() == 'ar' ? json['nameAr'] : json['nameEn'],
-      numberOfContent: json['numberOfAds'] ?? 0,
+      numberOfContent: json['numberOfAdsCount'] ?? 0,
       image: json['picture'] ?? '',
       isFavorite: json['isFavorite'] ?? false,
     );
@@ -24,7 +24,7 @@ class SubCategoryModel extends SubCategoryEntity {
     data['id'] = id;
     data['name'] = name;
     if (numberOfContent != null) {
-      data['numberOfAds'] = numberOfContent;
+      data['numberOfAdsCount'] = numberOfContent;
     }
     data['image'] = image;
     data['isFavorite'] = isFavorite;

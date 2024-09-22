@@ -10,6 +10,7 @@ class MainCategoryEntity extends Equatable {
   final List<SubCategoryEntity>? subcategories;
   final String banner;
   final String cover;
+  final int? numberOfAdsCount;
   bool? isFavorite;
   final int total;
 
@@ -22,6 +23,7 @@ class MainCategoryEntity extends Equatable {
     required this.cover,
     this.isFavorite = false,
     required this.total,
+     this.numberOfAdsCount
   });
 
   factory MainCategoryEntity.fake() {

@@ -13,6 +13,7 @@ class MainCategoryModel extends MainCategoryEntity {
     required super.cover,
     required super.isFavorite,
     required super.total,
+     super.numberOfAdsCount,
     super.subcategories,
   });
 
@@ -25,6 +26,7 @@ class MainCategoryModel extends MainCategoryEntity {
           cover: json['cover'] ?? '',
           isFavorite: json['isFavorite'] ?? false,
           total: json['totalAds'] ?? 0,
+          numberOfAdsCount: json['numberOfAdsCount'] ?? 0,
           subcategories: json['subCategories'] == null
               ? []
               : (json['subCategories'] as List)

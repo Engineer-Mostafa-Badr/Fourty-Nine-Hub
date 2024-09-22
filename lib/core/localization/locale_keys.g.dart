@@ -549,5 +549,8 @@ abstract class  LocaleKeys {
   static const friend = 'friend';
   static const view = 'view';
   static const shareProfile = 'shareProfile';
+  static const playedSpins = 'playedSpins';
+  static const noFavouriteCategory = 'playedSpins';
+  static const noFavouriteSubCategory = 'playedSpins';
 
 }

@@ -554,5 +554,8 @@
   "currency": "جنيه مصري",
   "friend": "صديق",
   "view": "مشاهدة",
-  "shareProfile": "مشاركة الملف الشخصي"
+  "shareProfile": "مشاركة الملف الشخصي",
+  "playedSpins": "عذرا، لقد لعبت كل دوراتك لهذا اليوم.",
+  "noFavouriteCategory": "لا يوجد فئة مفضلة في الوقت الحالي.",
+  "noFavouriteSubCategory": "لا توجد فئة فرعية مفضلة في الوقت الحالي."
 }

@@ -553,5 +553,8 @@
   "friend": "Friend",
   "view": "View",
   "adTitle": "Ad Title",
-  "shareProfile": "Share Profile"
+  "shareProfile": "Share Profile",
+  "playedSpins": "Sorry, you have played all your spins for today.",
+  "noFavouriteCategory": "There is no favourite category at the moment.",
+  "noFavouriteSubCategory": "There is no favourite sub category at the moment."
 }

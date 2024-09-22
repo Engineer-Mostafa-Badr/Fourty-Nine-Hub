@@ -51,7 +51,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       imageBuilder: (context, i) => Container(
         padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(10.r),
           color: widget.category.banner.isNotEmpty
               ? Colors.transparent
               : AppColors.PRIMARY_COLOR,
@@ -105,7 +105,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                       )
                       : const SizedBox.shrink(),
                   Label(
-                    text: '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
+                    text: '${widget.category.numberOfAdsCount} ${LocaleKeys.ads.localize}',
                     style: Styles.mediumText(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
