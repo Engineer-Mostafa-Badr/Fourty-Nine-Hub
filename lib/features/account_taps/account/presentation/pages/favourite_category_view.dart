@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -38,9 +39,9 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
                   separatorBuilder: (context, i) => Sizer(
                     height: 0.h,
                   ),
-                  itemBuilder: (context, i) => state.data![i].id.isNotEmpty
+                  itemBuilder: (context, i) => state.data!.isNotEmpty && state.data !=null
                       ? Padding(
-                          padding: EdgeInsets.only(bottom: 10.0),
+                          padding: const EdgeInsets.only(bottom: 10.0),
                           child: FavouriteMainCategoryBanner(
                             category: state.data![i],
                             canRegister: false,
@@ -54,7 +55,7 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
                             },
                           ),
                         )
-                      : SizedBox.shrink(),
+                      : const Label(text: 'There is no preferred category at the moment.'),
                 );
         }));
   }

@@ -37,7 +37,7 @@ class _FavouriteMainCategoryBannerState
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: widget.category.banner,
-      height: MediaQuery.sizeOf(context).height * 0.08,
+      height: MediaQuery.sizeOf(context).height * 0.09,
       imageBuilder: (context, i) => Container(
         padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
         decoration: BoxDecoration(
@@ -79,7 +79,7 @@ class _FavouriteMainCategoryBannerState
                             color: AppColors.SECONDARY_COLOR,
                           ),
                         )
-                      : SizedBox.shrink(),
+                      : const SizedBox.shrink(),
                   Sizer(
                     height: 15.h,
                   ),
@@ -168,7 +168,7 @@ class _FavouriteMainCategoryBannerState
                 color: Colors.white, fontWeight: FontWeight.bold)),
       );
     } else {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
   }
 }

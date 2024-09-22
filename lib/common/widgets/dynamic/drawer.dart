@@ -227,10 +227,14 @@ class DrawerWidget extends StatelessWidget {
             builder: (BuildContext context, state) {
               if(state is CompetitionSuccessState) {
                 int calculateSumOfRequests() {
-                  List<int> indicesToSum = [1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13];
+                  // Create a list of indices, excluding 0, 9, and 10
+                  List<int> indicesToSum = List.generate(state.competitionModel.data?.length ?? 0, (index) => index)
+                      .where((index) => index != 0 && index != 9 && index != 10)
+                      .toList();
 
+                  // Use fold to sum the values, handling null values with ?? 0
                   return indicesToSum.fold(0, (sum, index) {
-                    return sum + (state.competitionModel.data![index].countOfRequest ?? 0);
+                    return sum + (state.competitionModel.data?[index].countOfRequest ?? 0);
                   });
                 }
                 return Row(
