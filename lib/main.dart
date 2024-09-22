@@ -62,8 +62,7 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
         ),
         BlocProvider(
-          create: (BuildContext context) =>
-              serviceLocator<MainCategoriesCubit>()..loadData(),
+          create: (BuildContext context) => serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
         // BlocProvider(
         //   create: (context) => serviceLocator<RiderequestCubit>(),
@@ -108,7 +107,7 @@ class MyApp extends StatelessWidget {
           create: (context) => NotificationSocketIoCubit(
             context: context,
             notificationListenerUseCase: serviceLocator(),
-          )..notificationListener(),
+          )..notificationListener(languageCode: 'en'),
         ),
       ],
       child: ScreenUtilInit(
@@ -119,9 +118,7 @@ class MyApp extends StatelessWidget {
           return BlocBuilder<ThemeCubit, ThemeStates>(
             builder: (BuildContext context, state) {
               return MaterialApp.router(
-                themeMode: context.read<ThemeCubit>().isDarkTheme
-                    ? ThemeMode.dark
-                    : ThemeMode.light,
+                themeMode: context.read<ThemeCubit>().isDarkTheme ? ThemeMode.dark : ThemeMode.light,
                 theme: lightTheme(),
                 darkTheme: darkTheme(),
                 title: '49',

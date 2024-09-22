@@ -9,15 +9,14 @@ abstract class NotificationRepo {
     required String type,
     required int page,
     int limit = 10,
+    required String languageCode,
   });
   Future<void> setupInteractedMessage({
     required BuildContext context,
   });
-  Future<void> notificationListener(
-      {required Function(Map<String, dynamic> data) notificationCallback});
+  Future<void> notificationListener({required Function(Map<String, dynamic> data) notificationCallback});
 
-  Future<Either<Failure, UnreadNotificationsCountEntity>>
-      getUnreadNotificationsCount();
+  Future<Either<Failure, UnreadNotificationsCountEntity>> getUnreadNotificationsCount();
 
   Future<Either<Failure, bool>> notificationSeen({required String id});
   Future<Either<Failure, bool>> allNotificationSeen({required String type});

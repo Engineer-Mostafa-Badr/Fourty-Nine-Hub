@@ -1,7 +1,10 @@
+import 'package:easy_localization/easy_localization.dart' as EasyLocale;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
@@ -29,6 +32,8 @@ class AvailableTripCard extends StatelessWidget {
   final void Function()? subscribeMessageOnTap;
   @override
   Widget build(BuildContext context) {
+    const testColor = Color(0xFFff2a6d);
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.h),
       child: Column(
@@ -47,7 +52,8 @@ class AvailableTripCard extends StatelessWidget {
                         '${tripJoinCardEntity.brand}, ${tripJoinCardEntity.model}',
                         style: Styles.headerText(
                           fontSize: 45,
-                          color: AppColors.SECONDARY_COLOR,
+                          color: AppColors.getSecondryColor(context),
+                          // color: testColor,
                         ),
                         textAlign: TextAlign.start,
                       ),
@@ -59,7 +65,7 @@ class AvailableTripCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.calendar_month),
                       const Sizer(),
-                      Text(_formatDate(), style: Styles.headerText()),
+                      Text(_formatDate(context), style: Styles.headerText()),
                     ],
                   ),
                   const Sizer(),
@@ -68,22 +74,20 @@ class AvailableTripCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.airline_seat_recline_extra_rounded),
                       const Sizer(),
-                      Text('${tripJoinCardEntity.seatNumber ?? 1} Seat',
-                          style: Styles.headerText()),
+                      Text(' ${tripJoinCardEntity.seatNumber ?? 1} ', style: Styles.headerText()),
+                      Text(LocaleKeys.seat.localize, style: Styles.headerText()),
                       const Spacer(),
                       Visibility(
                         visible: tripJoinCardEntity.isRepeated ?? false,
                         child: Icon(
-                          (tripJoinCardEntity.isRepeated ?? false)
-                              ? Icons.check_box
-                              : Icons.check_box_outline_blank,
+                          (tripJoinCardEntity.isRepeated ?? false) ? Icons.check_box : Icons.check_box_outline_blank,
                           color: AppColors.PRIMARY_COLOR,
                         ),
                       ),
                       const Sizer(),
                       Visibility(
                         visible: tripJoinCardEntity.isRepeated ?? false,
-                        child: Text('Repeated', style: Styles.headerText()),
+                        child: Text(LocaleKeys.repeat.localize, style: Styles.headerText()),
                       ),
                       const Sizer(width: 20),
                     ],
@@ -92,12 +96,13 @@ class AvailableTripCard extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.trip_origin,
-                          color: AppColors.LIGHT_BLUE, size: 20),
+                      const Icon(Icons.trip_origin, color: AppColors.LIGHT_BLUE, size: 20),
                       const Sizer(width: 13),
                       Flexible(
                         child: Text(
-                          tripJoinCardEntity.startingAddressEn ?? '',
+                          context.isArabic
+                              ? tripJoinCardEntity.startingAddressAr ?? ''
+                              : tripJoinCardEntity.startingAddressEn ?? '',
                           style: Styles.headerText(fontSize: 32),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
@@ -109,12 +114,13 @@ class AvailableTripCard extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.trip_origin,
-                          color: AppColors.CHECK_MARK_COLOR, size: 20),
+                      const Icon(Icons.trip_origin, color: AppColors.CHECK_MARK_COLOR, size: 20),
                       const Sizer(width: 13),
                       Flexible(
                         child: Text(
-                          tripJoinCardEntity.destinationAddressEn ?? '',
+                          context.isArabic
+                              ? tripJoinCardEntity.destinationAddressAr ?? ''
+                              : tripJoinCardEntity.destinationAddressEn ?? '',
                           style: Styles.headerText(fontSize: 32),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
@@ -129,8 +135,9 @@ class AvailableTripCard extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: AvaialbleTripsButton(
-                          title: 'Premium Request',
-                          color: AppColors.SECONDARY_COLOR,
+                          title: LocaleKeys.premuimRequest.localize,
+                          // color: testColor,
+                          color: AppColors.getSecondryColor(context),
                           onTap: premuimRequestOnTap,
                         ),
                       ),
@@ -138,7 +145,7 @@ class AvailableTripCard extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: AvaialbleTripsButton(
-                          title: 'Request',
+                          title: LocaleKeys.regularRequest.localize,
                           color: AppColors.PRIMARY_COLOR,
                           onTap: requestOnTap,
                         ),
@@ -152,7 +159,7 @@ class AvailableTripCard extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: AvaialbleTripsButton(
-                          title: 'Call',
+                          title: LocaleKeys.call.localize,
                           color: (tripJoinCardEntity.isApproved ?? false)
                               ? AppColors.PRIMARY_COLOR
                               : AppColors.DARK_GRAY_COLOR,
@@ -164,7 +171,7 @@ class AvailableTripCard extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: AvaialbleTripsButton(
-                          title: 'Message',
+                          title: LocaleKeys.message.localize,
                           color: (tripJoinCardEntity.isApproved ?? false)
                               ? AppColors.PRIMARY_COLOR
                               : AppColors.DARK_GRAY_COLOR,
@@ -176,8 +183,9 @@ class AvailableTripCard extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: AvaialbleTripsButton(
-                          title: 'Report',
-                          color: AppColors.SECONDARY_COLOR,
+                          title: LocaleKeys.report.localize,
+                          // color: testColor,
+                          color: AppColors.getSecondryColor(context),
                           icon: Icons.report,
                           onTap: reportOnTap,
                         ),
@@ -189,18 +197,18 @@ class AvailableTripCard extends StatelessWidget {
               Positioned.directional(
                 top: 5,
                 end: 20,
-                textDirection:
-                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
                 child: Column(
                   children: [
+                    Text(tripJoinCardEntity.journeyPrice?.toStringAsFixed(0) ?? '',
+                        style: Styles.headerText(fontSize: 70, color: Colors.green[600])),
                     Text(
-                        tripJoinCardEntity.journeyPrice?.toStringAsFixed(0) ??
-                            '',
-                        style: Styles.headerText(
-                            fontSize: 70, color: Colors.green[600])),
-                    Text(tripJoinCardEntity.status ?? '',
-                        style: Styles.headerText(
-                            fontSize: 30, color: AppColors.SECONDARY_COLOR)),
+                      _localizeStatus(context, tripJoinCardEntity.status ?? ''),
+                      style: Styles.headerText(
+                        fontSize: 30,
+                        color: AppColors.getSecondryColor(context),
+                      ),
+                    ),
                   ],
                 ),
               )
@@ -212,9 +220,9 @@ class AvailableTripCard extends StatelessWidget {
             child: InkWell(
               onTap: subscribeMessageOnTap,
               child: Text(
-                'Subscribe to contact the client!',
+                LocaleKeys.subscribeToContactClient.localize,
                 style: Styles.headerText(
-                  color: Colors.red[300],
+                  color: AppColors.getSecondryColor(context),
                   fontSize: 30,
                 ),
                 textAlign: TextAlign.start,
@@ -226,12 +234,22 @@ class AvailableTripCard extends StatelessWidget {
     );
   }
 
-  String _formatDate() {
+  String _formatDate(BuildContext context) {
     if (tripJoinCardEntity.publishDate == null) {
       return '';
     }
-    return intl.DateFormat('dd MMM, hh:mm aaa').format(
-        DateTime.fromMicrosecondsSinceEpoch(
-            tripJoinCardEntity.publishDate! * 1000000));
+    return intl.DateFormat('dd MMM, hh:mm aaa', context.locale.languageCode)
+        .format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate! * 1000000));
+  }
+
+  String _localizeStatus(BuildContext context, String text) {
+    switch (text.toLowerCase().trim()) {
+      case 'regular':
+        return context.isArabic ? 'عادي' : 'Regular';
+      case 'premium':
+        return context.isArabic ? 'مميز' : 'Premium';
+      default:
+        return text;
+    }
   }
 }

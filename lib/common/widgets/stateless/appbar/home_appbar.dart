@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/widgets/unread_notifications_builder.dart';
@@ -7,11 +8,10 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart'
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
@@ -80,15 +80,12 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 child: Container(
                   height: 55.h,
                   padding: EdgeInsets.symmetric(horizontal: 10.w),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40.r),
-                      color: AppColors.AUTH_CONTAINER_COLOR),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(40.r), color: AppColors.AUTH_CONTAINER_COLOR),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(40.r),
                     onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (_) => const SearchAppUsers());
+                      showDialog(context: context, builder: (_) => const SearchAppUsers());
                     },
                     child: Row(
                       children: [
@@ -101,8 +98,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                         Expanded(
                           child: Label(
                               text: LocaleKeys.search.localize,
-                              style: Styles.mediumText(
-                                  color: AppColors.QUANTITY_COLOR)),
+                              style: Styles.mediumText(color: AppColors.QUANTITY_COLOR)),
                         ),
                       ],
                     ),
@@ -110,24 +106,26 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
               if (showLanguage)
-                TextButton(
-                    onPressed: () {},
-                    child: Label(text: 'Register', style: Styles.mediumText())),
+                TextButton(onPressed: () {}, child: Label(text: 'Register', style: Styles.mediumText())),
               if (language)
                 Container(
                     padding: EdgeInsets.symmetric(horizontal: 5.w),
                     child: TextAppButton(
                         label: LocaleKeys.lang.tr(),
-                        style:
-                            Styles.headerText(color: AppColors.SECONDARY_COLOR),
+                        style: Styles.headerText(
+                          color: AppColors.getSecondryColor(context),
+                        ),
                         onPressed: () {
                           if (context.locale == Locales.english) {
-                            changeLang(
-                                locale: Locales.arabic, context: context);
+                            changeLang(locale: Locales.arabic, context: context);
                           } else {
-                            changeLang(
-                                locale: Locales.english, context: context);
+                            changeLang(locale: Locales.english, context: context);
                           }
+                          Future.delayed(const Duration(milliseconds: 100)).then((_) {
+                            context
+                                .read<NotificationSocketIoCubit>()
+                                .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
+                          });
                         })),
               GestureDetector(
                 onTap: () {

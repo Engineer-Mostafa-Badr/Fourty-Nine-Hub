@@ -5,18 +5,7 @@ import 'package:flutter/foundation.dart' show describeEnum;
 
 import '../localization/locale_keys.g.dart';
 
-enum RideServicesEnum {
-  pickMe,
-  comeWithYou,
-  womenOnly,
-  captain,
-  taxi,
-  scooter,
-  intercity,
-  pickup,
-  suv,
-  premium
-}
+enum RideServicesEnum { pickMe, comeWithYou, womenOnly, captain, taxi, scooter, intercity, pickup, suv, premium }
 
 extension RideServicesEnumOnString on String {
   RideServicesEnum get toRideServiceEnum {
@@ -81,7 +70,8 @@ extension RideServicesEnumExtension on RideServicesEnum {
   String title() {
     switch (this) {
       case RideServicesEnum.pickMe:
-        return LocaleKeys.pickMe.tr();
+        // return LocaleKeys.pickMe.tr();
+        return 'Carpool ';
       case RideServicesEnum.womenOnly:
         return 'Women Only';
       case RideServicesEnum.captain:

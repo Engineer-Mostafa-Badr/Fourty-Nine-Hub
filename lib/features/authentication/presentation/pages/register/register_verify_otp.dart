@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
@@ -46,14 +46,10 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
         } else if (state is ResendOtpSuccess) {
           showSuccessMessage(context, 'resend otp success');
         } else if (state is VerifyOtpSuccess) {
-          await TokenManager.saveAccessToken(
-              state.userTokensEntity.accessToken);
-          await TokenManager.saveRefreshToken(
-              state.userTokensEntity.refreshToken);
-          context.read<NotificationSocketIoCubit>().notificationListener();
-          context
-              .read<NotificationSocketIoCubit>()
-              .clearAllNotificationsAndRefeatchAfterLogin();
+          await TokenManager.saveAccessToken(state.userTokensEntity.accessToken);
+          await TokenManager.saveRefreshToken(state.userTokensEntity.refreshToken);
+          context.read<NotificationSocketIoCubit>().notificationListener(languageCode: 'en');
+          context.read<NotificationSocketIoCubit>().clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
 
           serviceLocator<UserCubit>()
             ..setLogin(true)
@@ -65,12 +61,10 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
               String? accessToken = await TokenManager.getAccessToken();
               String? refreshToken = await TokenManager.getRefreshToken();
 
-              print(
-                  '/////////////////////////////////////////////////////////////////////////');
+              print('/////////////////////////////////////////////////////////////////////////');
               print('Refresh Token: $refreshToken');
               print('Access Token: $accessToken');
-              print(
-                  '/////////////////////////////////////////////////////////////////////////');
+              print('/////////////////////////////////////////////////////////////////////////');
               print(serviceLocator<UserCubit>().state.data.toString());
 
               // Navigate to the home screen
@@ -84,8 +78,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                     context: context,
                     builder: (BuildContext context) {
                       return Dialog(
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
+                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24.0.r),
                         ),
@@ -96,9 +89,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                             children: <Widget>[
                               Text(
                                 LocaleKeys.congratulations.localize,
-                                style: Styles.headerText(
-                                    color: AppColors.SECONDARY_COLOR,
-                                    fontSize: 45.sp),
+                                style: Styles.headerText(color: AppColors.SECONDARY_COLOR, fontSize: 45.sp),
                               ),
                               SizedBox(height: 16.h),
                               Text(
@@ -109,12 +100,10 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                               SizedBox(height: 40.h),
                               ElevatedButton(
                                 onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
+                                  Navigator.of(context).pop(); // Close the dialog
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      Theme.of(context).primaryColor,
+                                  backgroundColor: Theme.of(context).primaryColor,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16.0.r),
                                   ),
@@ -126,9 +115,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                                   ),
                                   child: Text(
                                     LocaleKeys.close.localize,
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .scaffoldBackgroundColor),
+                                    style: TextStyle(color: Theme.of(context).scaffoldBackgroundColor),
                                   ),
                                 ),
                               ),
@@ -159,7 +146,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
             const Label(
               text: 'Please check your phone to see the verification\ncode',
             ),
-            Sizer(),
+            const Sizer(),
             PinCodeTextField(
               appContext: context,
               pastedTextStyle: TextStyle(
@@ -208,7 +195,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                 return true;
               },
             ),
-            Sizer(),
+            const Sizer(),
             const Label(
               text: 'Didn\'t receive an email?',
             ),

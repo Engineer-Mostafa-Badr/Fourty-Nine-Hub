@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +12,6 @@ import 'package:fourtyninehub/features/notifications/domain/entities/notificatio
 import 'package:fourtyninehub/features/notifications/presentation/cubits/all_notifications_seen/all_notfications_seen_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../res/assets/assets.dart';
 
@@ -55,8 +55,7 @@ class _NotificationCardState extends State<NotificationCard> {
                   context: context,
                   builder: (context) {
                     return Container(
-                      padding: EdgeInsets.only(
-                          top: 20.h, right: 10.w, left: 10.w, bottom: 20.h),
+                      padding: EdgeInsets.only(top: 20.h, right: 10.w, left: 10.w, bottom: 20.h),
                       child: AreYouSure(
                         title: LocaleKeys.alert.localize,
                         subTitle: LocaleKeys.clearNoti.localize,
@@ -82,18 +81,15 @@ class _NotificationCardState extends State<NotificationCard> {
                 ),
               ),
               child: NotificationCustomContainer(
-                color: widget.notificationEntity.read!
-                    ? Colors.transparent
-                    : AppColors.PRIMARY_COLOR.withOpacity(0.1),
+                color: widget.notificationEntity.read! ? Colors.transparent : AppColors.PRIMARY_COLOR.withOpacity(0.1),
                 child: Row(
                   children: [
                     Builder(builder: (context) {
                       if (widget.type == 'services') {
                         return Container(
-                            decoration:
-                                const BoxDecoration(shape: BoxShape.circle),
+                            decoration: const BoxDecoration(shape: BoxShape.circle),
                             clipBehavior: Clip.hardEdge,
-                            margin: EdgeInsets.only(right: 10.w),
+                            margin: EdgeInsetsDirectional.only(end: 15.w),
                             height: kToolbarHeight,
                             width: kToolbarHeight,
                             child: Image.asset(
@@ -103,9 +99,10 @@ class _NotificationCardState extends State<NotificationCard> {
                               fit: BoxFit.fill,
                             ));
                       }
-                      return SizedBox(
+                      return Container(
                         height: kToolbarHeight,
                         width: kToolbarHeight,
+                        margin: EdgeInsetsDirectional.only(end: 15.w),
                         child: widget.notificationEntity.userImageUrl == null
                             ? Image.asset(
                                 Assets.icon,
@@ -119,8 +116,7 @@ class _NotificationCardState extends State<NotificationCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _capitalizeTitle(
-                                widget.notificationEntity.title ?? ''),
+                            _capitalizeTitle(widget.notificationEntity.title ?? ''),
                             style: Styles.headerText(),
                           ),
                           Sizer(height: 5.h),
@@ -152,8 +148,7 @@ class _NotificationCardState extends State<NotificationCard> {
     List<String> words = title.split(' ');
     String? result;
     for (String word in words) {
-      result =
-          '${result == null ? "" : "$result "}${word[0].toUpperCase()}${word.substring(1)}';
+      result = '${result == null ? "" : "$result "}${word[0].toUpperCase()}${word.substring(1)}';
     }
     return result ?? '';
   }
@@ -183,14 +178,12 @@ class _NotificationCardState extends State<NotificationCard> {
     if (widget.notificationEntity.createdAt == null) {
       return '';
     }
-    return DateFormat('dd MMM, hh:mm aaa')
-        .format(widget.notificationEntity.createdAt!);
+    return DateFormat('dd MMM, hh:mm aaa', context.locale.languageCode).format(widget.notificationEntity.createdAt!);
   }
 }
 
 class NotificationCustomContainer extends StatelessWidget {
-  const NotificationCustomContainer(
-      {super.key, required this.color, required this.child});
+  const NotificationCustomContainer({super.key, required this.color, required this.child});
   final Color color;
   final Widget child;
   @override

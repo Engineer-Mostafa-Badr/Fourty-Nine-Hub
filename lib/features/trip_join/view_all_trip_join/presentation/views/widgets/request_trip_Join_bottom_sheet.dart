@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/request_trip_join_cubit/request_trip_join_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -17,8 +19,7 @@ class RequstTripJoinBottomSheet extends StatefulWidget {
   final TripJoinCardEntity tripJoinCardEntity;
   final bool isPremium;
   @override
-  State<RequstTripJoinBottomSheet> createState() =>
-      _RequstTripJoinBottomSheetState();
+  State<RequstTripJoinBottomSheet> createState() => _RequstTripJoinBottomSheetState();
 }
 
 class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
@@ -27,8 +28,7 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Form(
         key: formKey,
         child: Container(
@@ -49,10 +49,9 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
               TextFormField(
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15)),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                   fillColor: Colors.transparent,
-                  label: const Text('Mobile'),
+                  label: Text(LocaleKeys.phone.localize),
                   isDense: true,
                   contentPadding: const EdgeInsets.all(14),
                 ),
@@ -72,8 +71,7 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                           mobile: phoneNumber,
                           premuimRequest: widget.isPremium,
                         );
-                    Future.delayed(const Duration(seconds: 2))
-                        .then((value) => context.pop());
+                    Future.delayed(const Duration(seconds: 2)).then((value) => context.pop());
                   }
                 },
                 child: Stack(
@@ -83,41 +81,34 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                       padding: EdgeInsets.symmetric(vertical: 10.h),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
-                        color: widget.isPremium
-                            ? AppColors.SECONDARY_COLOR
-                            : AppColors.PRIMARY_COLOR,
+                        color: widget.isPremium ? AppColors.SECONDARY_COLOR : AppColors.PRIMARY_COLOR,
                       ),
                       alignment: Alignment.center,
-                      child: Text('Send Request',
-                          style: Styles.headerText(color: Colors.white)),
+                      child: Text(LocaleKeys.sendRequest.localize, style: Styles.headerText(color: Colors.white)),
                     ),
                     Positioned(
                       top: 5,
                       right: 20,
                       child: SizedBox(
                         height: 40.h,
-                        child: BlocBuilder<RequestTripJoinCubit,
-                            RequestTripJoinState>(
+                        child: BlocBuilder<RequestTripJoinCubit, RequestTripJoinState>(
                           builder: (context, state) {
                             if (state is RequestTripJoinLoading) {
                               return Center(
                                 child: SizedBox(
                                     height: 35.w,
                                     width: 35.w,
-                                    child: const CircularProgressIndicator(
-                                        color: Colors.white)),
+                                    child: const CircularProgressIndicator(color: Colors.white)),
                               );
                             }
                             if (state is RequestTripJoinSuccess) {
                               return Center(
-                                child: Icon(Icons.check,
-                                    color: Colors.green[400], size: 35.w),
+                                child: Icon(Icons.check, color: Colors.green[400], size: 35.w),
                               );
                             }
                             if (state is RequestTripJoinFailed) {
                               return Center(
-                                child: Icon(Icons.error,
-                                    color: Colors.red[400], size: 35.w),
+                                child: Icon(Icons.error, color: Colors.red[400], size: 35.w),
                               );
                             }
                             return const SizedBox();
@@ -139,9 +130,9 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
     String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
     RegExp regExp = RegExp(pattern);
     if (value == null || value.isEmpty) {
-      return 'Please enter mobile number';
+      return LocaleKeys.enterPhoneNumber.localize;
     } else if (!regExp.hasMatch(value)) {
-      return 'Please enter valid mobile number';
+      return LocaleKeys.enterValidPhoneNumber.localize;
     }
     return null;
   }

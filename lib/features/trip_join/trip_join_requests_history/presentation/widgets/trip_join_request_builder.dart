@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/cubits/delete_trips/delete_trips_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/cubits/fetch_my_trip_join_ads/fetch_my_trip_join_ads_cubit.dart';
@@ -46,49 +48,37 @@ class _TripJoinRequestBuilderState extends State<TripJoinRequestBuilder> {
           controller: scrollController,
           itemCount: fetchMyTripJoinAdsCubit.trips.length + 1,
           itemBuilder: (context, index) {
-            if (state is! FetchMyTripJoinAdsLoading &&
-                fetchMyTripJoinAdsCubit.trips.isEmpty) {
+            if (state is! FetchMyTripJoinAdsLoading && fetchMyTripJoinAdsCubit.trips.isEmpty) {
               // if (true) {
               return Container(
                 height: context.screenHeight * 0.6,
                 width: double.infinity,
                 alignment: Alignment.center,
-                child: Text('There are no requests in history',
-                    style: Styles.headerText()),
+                child: Text(LocaleKeys.noTripRequests.localize, style: Styles.headerText()),
               );
             }
             if (index < fetchMyTripJoinAdsCubit.trips.length) {
               return TripJoinRequestCard(
                 tripJoinRequestEntity: fetchMyTripJoinAdsCubit.trips[index],
                 deleteRequestOnTap: () async {
-                  await context.read<DeleteTripsCubit>().deleteTrip(
-                      id: fetchMyTripJoinAdsCubit.trips[index].id ?? '');
+                  await context.read<DeleteTripsCubit>().deleteTrip(id: fetchMyTripJoinAdsCubit.trips[index].id ?? '');
                   fetchMyTripJoinAdsCubit.trips.removeAt(index);
                   setState(() {});
                 },
                 subscribeOnTap: () {
-                  serviceLocator<SubscriptionController>()
-                      .showSubscriptionPlans(
-                    wallets: [
-                      fetchMyTripJoinAdsCubit
-                              .trips[index].paymentMethod?.toWalletType ??
-                          WalletTypes.balance
-                    ],
-                    subCategoryId:
-                        fetchMyTripJoinAdsCubit.trips[index].categoryMainId ??
-                            '',
-                    title: 'Trip Join Subscription',
+                  serviceLocator<SubscriptionController>().showSubscriptionPlans(
+                    wallets: [fetchMyTripJoinAdsCubit.trips[index].paymentMethod?.toWalletType ?? WalletTypes.balance],
+                    subCategoryId: fetchMyTripJoinAdsCubit.trips[index].categoryMainId ?? '',
+                    title: LocaleKeys.tripjoinPremuimSubscription,
                   );
                 },
                 requestHistoryOnTap: () {
-                  context.push(Routes.TRIP_JOIN_REQUEST_HISTORY,
-                      extra: {'id': fetchMyTripJoinAdsCubit.trips[index].id});
+                  context
+                      .push(Routes.TRIP_JOIN_REQUEST_HISTORY, extra: {'id': fetchMyTripJoinAdsCubit.trips[index].id});
                 },
               );
             }
-            return state is FetchMyTripJoinAdsLoading
-                ? const TripJoinRequestLoadingList()
-                : const SizedBox();
+            return state is FetchMyTripJoinAdsLoading ? const TripJoinRequestLoadingList() : const SizedBox();
           },
         );
       },
@@ -105,12 +95,10 @@ class _TripJoinRequestBuilderState extends State<TripJoinRequestBuilder> {
         // pr('0.7 * scrollMaxExtent', t);
         // pr(fetchMyTripJoinAdsCubit.trips.last.hasNextPage, t);
         // pr(fetchMyTripJoinAdsCubit.trips.last.nextPage, t);
-        if (!isLoading &&
-            (fetchMyTripJoinAdsCubit.trips.last.hasNextPage ?? false)) {
+        if (!isLoading && (fetchMyTripJoinAdsCubit.trips.last.hasNextPage ?? false)) {
           // pr('new request', t);
           isLoading = true;
-          fetchMyTripJoinAdsCubit.page =
-              fetchMyTripJoinAdsCubit.trips.last.nextPage!;
+          fetchMyTripJoinAdsCubit.page = fetchMyTripJoinAdsCubit.trips.last.nextPage!;
           await fetchMyTripJoinAdsCubit.fetchMyTripJoinAds();
           isLoading = false;
         }

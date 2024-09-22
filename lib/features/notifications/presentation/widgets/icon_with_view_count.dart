@@ -10,7 +10,7 @@ class IconWithViewCount extends StatelessWidget {
     super.key,
     required this.icon,
     required this.unreadCount,
-    this.spaceBetween = 5,
+    this.spaceBetween = 10,
   });
   final Widget icon;
   final int unreadCount;
@@ -27,7 +27,9 @@ class IconWithViewCount extends StatelessWidget {
         Sizer(width: spaceBetween.w),
         Text(
           _formatCount(unreadCount),
-          style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
+          style: Styles.mediumText(
+            color: AppColors.getSecondryColor(context),
+          ),
         ),
       ],
     );

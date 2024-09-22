@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trips_floating_action_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/avilable_trips_body.dart';
@@ -36,35 +37,33 @@ class AvailableTripsView extends StatelessWidget {
               Builder(builder: (context) {
                 const double size = 40;
                 return TabBar(
+                  dividerColor: context.isDarkMode ? Colors.grey : null,
                   tabs: [
                     TripJoinTabIcon(
-                      icon: Image.asset(Assets.tripjoin,
-                          width: size.h, height: size.h, fit: BoxFit.fill),
-                      title: 'Car Trips',
+                      icon: Image.asset(Assets.tripjoin, width: size.h, height: size.h, fit: BoxFit.fill),
+                      title: LocaleKeys.carTrips.localize,
                       height: size + 15,
                     ),
                     TripJoinTabIcon(
-                      icon: Image.asset(Assets.autoComplete,
-                          width: size.h, height: size.h, fit: BoxFit.fill),
-                      title: 'User Trips',
+                      icon: Image.asset(Assets.autoComplete, width: size.h, height: size.h, fit: BoxFit.fill),
+                      title: LocaleKeys.userTrips.localize,
                       height: size + 15,
                     ),
                   ],
                 );
               }),
               const Sizer(height: 20),
-              const Expanded(
+              Expanded(
                 child: TabBarView(
                   children: [
-                    Stack(
+                    const Stack(
                       children: [
-                        SizedBox(
-                            width: double.infinity, height: double.infinity),
+                        SizedBox(width: double.infinity, height: double.infinity),
                         AvailableTripsBody(),
                         AvailableTripsFloatingActionButton(),
                       ],
                     ),
-                    Center(child: Text('User Trips')),
+                    Center(child: Text(LocaleKeys.userTrips.localize)),
                   ],
                 ),
               )
@@ -90,20 +89,23 @@ class TripJoinTabIcon extends StatelessWidget {
   final double height;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Tab(
-          icon: icon,
-          height: height.h,
-        ),
-        Sizer(width: spaceBetween.w),
-        Text(
-          title,
-          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
-        ),
-      ],
+    return Container(
+      margin: EdgeInsets.only(bottom: 5.h),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Tab(
+            icon: icon,
+            height: height.h,
+          ),
+          Sizer(width: spaceBetween.w),
+          Text(
+            title,
+            style: Styles.mediumText(color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+          ),
+        ],
+      ),
     );
   }
 }

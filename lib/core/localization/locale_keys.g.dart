@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const nnew = 'nnew';
   static const today = 'today';
   static const tommorow = 'tommorow';
@@ -71,12 +71,9 @@ abstract class LocaleKeys {
   static const cast = 'cast';
   static const restaurantName = 'restaurantName';
   static const theCommercialRegister = 'theCommercialRegister';
-  static const theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider =
-      'theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider';
-  static const youWillGetEGP3650PerYearIfYouSubscribeDaily =
-      'youWillGetEGP3650PerYearIfYouSubscribeDaily';
-  static const welcomeToResturantRegisteration =
-      'welcomeToResturantRegisteration';
+  static const theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider = 'theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider';
+  static const youWillGetEGP3650PerYearIfYouSubscribeDaily = 'youWillGetEGP3650PerYearIfYouSubscribeDaily';
+  static const welcomeToResturantRegisteration = 'welcomeToResturantRegisteration';
   static const selecteSubcategory = 'selecteSubcategory';
   static const photoForRestaurant = 'photoForRestaurant';
   static const searchForFavouriteMeals = 'searchForFavouriteMeals';
@@ -85,8 +82,7 @@ abstract class LocaleKeys {
   static const thirdPage = 'thirdPage';
   static const selectGovernorate = 'selectGovernorate';
   static const selectCity = 'selectCity';
-  static const newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore =
-      'newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore';
+  static const newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore = 'newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore';
   static const premium = 'premium';
   static const comma = 'comma';
   static const noResultFound = 'noResultFound';
@@ -95,8 +91,7 @@ abstract class LocaleKeys {
   static const restaurantsForSelectedMeal = 'restaurantsForSelectedMeal';
   static const itemName = 'itemName';
   static const price = 'price';
-  static const youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval =
-      'youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval';
+  static const youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval = 'youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval';
   static const selectSubcategoryFirst = 'selectSubcategoryFirst';
   static const uploadingImage = 'uploadingImage';
   static const cantLoadCities = 'cantLoadCities';
@@ -108,8 +103,7 @@ abstract class LocaleKeys {
   static const cantLoadSpecialities = 'cantLoadSpecialities';
   static const cantLoadSubSubCategories = 'cantLoadSubSubCategories';
   static const creatingRestaurant = 'creatingRestaurant';
-  static const youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove =
-      'youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove';
+  static const youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove = 'youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove';
   static const photoForMeal = 'photoForMeal';
   static const menu = 'menu';
   static const submit = 'submit';
@@ -305,7 +299,7 @@ abstract class LocaleKeys {
   static const chatLockMessage = 'chatLockMessage';
   static const createGroupWith = 'createGroupWith';
   static const createGroup = 'createGroup';
-  static const attachments = 'attachments ';
+  static const attachments  = 'attachments ';
   static const docs = 'docs';
   static const links = 'links';
   static const media = 'media';
@@ -369,24 +363,19 @@ abstract class LocaleKeys {
   static const aBirdInHand = 'aBirdInHand';
   static const permissionDenied = 'permissionDenied';
   static const contacts = 'contacts';
-  static const pleaseLoginRegisterToEnjoyTheApp =
-      'pleaseLoginRegisterToEnjoyTheApp';
+  static const pleaseLoginRegisterToEnjoyTheApp = 'pleaseLoginRegisterToEnjoyTheApp';
   static const noChatsUntilNow = 'noChatsUntilNow';
   static const tinder_header = 'tinder.header';
   static const tinder_favorites = 'tinder.favorites';
   static const tinder_noData = 'tinder.noData';
   static const tinder_find = 'tinder.find';
   static const tinder = 'tinder';
-  static const chat_alert_dialog_pick_chat_type =
-      'chat_alert_dialog.pick_chat_type';
+  static const chat_alert_dialog_pick_chat_type = 'chat_alert_dialog.pick_chat_type';
   static const chat_alert_dialog_anonymous = 'chat_alert_dialog.anonymous';
   static const chat_alert_dialog_regular = 'chat_alert_dialog.regular';
-  static const chat_alert_dialog_error_starting_anonymous =
-      'chat_alert_dialog.error.starting_anonymous';
-  static const chat_alert_dialog_error_starting_normal =
-      'chat_alert_dialog.error.starting_normal';
-  static const chat_alert_dialog_error_chat_id_empty =
-      'chat_alert_dialog.error.chat_id_empty';
+  static const chat_alert_dialog_error_starting_anonymous = 'chat_alert_dialog.error.starting_anonymous';
+  static const chat_alert_dialog_error_starting_normal = 'chat_alert_dialog.error.starting_normal';
+  static const chat_alert_dialog_error_chat_id_empty = 'chat_alert_dialog.error.chat_id_empty';
   static const chat_alert_dialog_error = 'chat_alert_dialog.error';
   static const chat_alert_dialog = 'chat_alert_dialog';
   static const user_info_date_of_birth = 'user_info.date_of_birth';
@@ -514,4 +503,41 @@ abstract class LocaleKeys {
   static const google = 'google';
   static const facebook = 'facebook';
   static const orContinueWith = 'orContinueWith';
+  static const carTrips = 'carTrips';
+  static const userTrips = 'userTrips';
+  static const userOwnCarsShareWithThem = 'userOwnCarsShareWithThem';
+  static const noTripsAvailable = 'noTripsAvailable';
+  static const tripjoinPremuimSubscription = 'tripjoinPremuimSubscription';
+  static const chatSubscription = 'chatSubscription';
+  static const premuimRequest = 'premuimRequest';
+  static const regularRequest = 'regularRequest';
+  static const subscribeToContactClient = 'subscribeToContactClient';
+  static const sendRequest = 'sendRequest';
+  static const enterPhoneNumber = 'enterPhoneNumber';
+  static const enterValidPhoneNumber = 'enterValidPhoneNumber';
+  static const seat = 'seat';
+  static const welcomeToTripjoin = 'welcomeToTripjoin';
+  static const ownCar = 'ownCar';
+  static const startingPoint = 'startingPoint';
+  static const destinationPoint = 'destinationPoint';
+  static const KM = 'KM';
+  static const repeat = 'repeat';
+  static const totalPrice = 'totalPrice';
+  static const brand = 'brand';
+  static const model = 'model';
+  static const publish = 'publish';
+  static const youCantLeaveFieldEmpty = 'youCantLeaveFieldEmpty';
+  static const addressMustBeAtLeast10Chars = 'addressMustBeAtLeast10Chars';
+  static const searchFind = 'searchFind';
+  static const seeAll = 'seeAll';
+  static const markAllNotificationAsSeen = 'markAllNotificationAsSeen';
+  static const requestLog = 'requestLog';
+  static const requestsHistory = 'requestsHistory';
+  static const subscribe = 'subscribe';
+  static const deleteRequest = 'deleteRequest';
+  static const subscribtionWillEndAt = 'subscribtionWillEndAt';
+  static const TripJoinRequestHistory = 'TripJoinRequestHistory';
+  static const noTripRequests = 'noTripRequests';
+  static const _ = '_';
+
 }

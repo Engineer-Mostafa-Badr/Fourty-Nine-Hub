@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -13,12 +15,10 @@ class DestinationTextFieldAndFindButon extends StatefulWidget {
   });
 
   @override
-  State<DestinationTextFieldAndFindButon> createState() =>
-      _DestinationTextFieldAndFindButonState();
+  State<DestinationTextFieldAndFindButon> createState() => _DestinationTextFieldAndFindButonState();
 }
 
-class _DestinationTextFieldAndFindButonState
-    extends State<DestinationTextFieldAndFindButon> {
+class _DestinationTextFieldAndFindButonState extends State<DestinationTextFieldAndFindButon> {
   late TextEditingController destinationController;
   late final DestinationLocationCubit destinationLocationCubit;
   final formKey = GlobalKey<FormState>();
@@ -45,14 +45,14 @@ class _DestinationTextFieldAndFindButonState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: BlocBuilder<DestinationLocationCubit,
-                  DestinationLocationState>(
+              child: BlocBuilder<DestinationLocationCubit, DestinationLocationState>(
                 builder: (context, state) {
                   return DefaultTextFormField(
                     suffixIcon: _getIcon(state),
                     currentController: destinationController,
+                    labelStyle: const TextStyle(color: Colors.black),
                     // hint: 'Find your destination point..!',
-                    label: 'Destination Point',
+                    label: LocaleKeys.destinationPoint.localize,
                     hint: '',
                     validator: _validator,
                   );
@@ -61,10 +61,10 @@ class _DestinationTextFieldAndFindButonState
             ),
             const Sizer(width: 5),
             CustomButton(
+              title: LocaleKeys.searchFind.localize,
               onTap: () {
                 if (formKey.currentState!.validate()) {
-                  destinationLocationCubit.getDestinationLocation(
-                      address: destinationController.text);
+                  destinationLocationCubit.getDestinationLocation(address: destinationController.text);
                 }
               },
               height: double.infinity,
@@ -114,10 +114,10 @@ class _DestinationTextFieldAndFindButonState
 
   String? _validator(String? value) {
     if (value == null) {
-      return "You can't leave the field empty";
+      return LocaleKeys.youCantLeaveFieldEmpty.localize;
     }
     if (value.length < 10) {
-      return "Address must be at least 10 characters";
+      return LocaleKeys.addressMustBeAtLeast10Chars.localize;
     }
     return null;
   }

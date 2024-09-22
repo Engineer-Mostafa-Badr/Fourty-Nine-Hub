@@ -8,24 +8,29 @@ class TripjoinRequestHistoryModel extends TripJoinRequestHistoryEntity {
   UserId? userId;
   @override
   String? allowStatus;
+  @override
+  String? phone;
+  String? paymentMethods;
 
   TripjoinRequestHistoryModel({
     this.id,
     this.userId,
     this.allowStatus,
+    this.phone,
+    this.paymentMethods,
   }) : super(
           id: id,
           userIdStr: userId?.id,
           firstName: userId?.firstName,
           gender: userId?.gender,
           allowStatus: allowStatus,
-          //! phone:,
-          //! paymentType:,
+          phone: phone,
+          paymentType: paymentMethods,
         );
 
   @override
   String toString() {
-    return 'TripjoinRequestHistoryModel(id: $id, userId: $userId, allowStatus: $allowStatus)';
+    return 'TripjoinRequestHistoryModel(id: $id, userId: $userId, allowStatus: $allowStatus , phone: $phone , paymentMethods: $paymentMethods)';
   }
 
   factory TripjoinRequestHistoryModel.fromJson(Map<String, dynamic> json) {
@@ -33,6 +38,8 @@ class TripjoinRequestHistoryModel extends TripJoinRequestHistoryEntity {
       id: json['_id'] as String?,
       userId: json['userId'] == null ? null : UserId.fromJson(json['userId'] as Map<String, dynamic>),
       allowStatus: json['allowStatus'] as String?,
+      phone: json['phone'] as String?,
+      paymentMethods: json['trip']['categoryId']['paymentMethods'] as String?,
     );
   }
 
@@ -40,5 +47,6 @@ class TripjoinRequestHistoryModel extends TripJoinRequestHistoryEntity {
         '_id': id,
         'userId': userId?.toJson(),
         'allowStatus': allowStatus,
+        'phone': phone,
       };
 }

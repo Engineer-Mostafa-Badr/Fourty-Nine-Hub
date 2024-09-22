@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/domain/entities/tripjoin_request_history_entity.dart';
@@ -63,7 +65,7 @@ class _TripJoinRequestHistoryBuilderState extends State<TripJoinRequestHistoryBu
                 height: context.screenHeight * 0.8,
                 width: double.infinity,
                 alignment: Alignment.center,
-                child: const Text('There are no requests history'),
+                child: Text(LocaleKeys.noTripRequests.localize),
               );
             }
             if (index < getRequestCubit.requests.length) {
@@ -73,7 +75,7 @@ class _TripJoinRequestHistoryBuilderState extends State<TripJoinRequestHistoryBu
                   if (await _userApproved(
                     tripJoinRequestHistoryEntity,
                     UIConst.chatNormalId,
-                    'Chat Subscription',
+                    LocaleKeys.chatSubscription.localize,
                   )) {
                     launchUrlString("tel://${tripJoinRequestHistoryEntity.phone}");
                   }
@@ -82,7 +84,7 @@ class _TripJoinRequestHistoryBuilderState extends State<TripJoinRequestHistoryBu
                   if (await _userApproved(
                     tripJoinRequestHistoryEntity,
                     UIConst.chatNormalId,
-                    'Chat Subscription',
+                    LocaleKeys.chatSubscription.localize,
                   )) {}
                 },
                 reportOnTap: () {

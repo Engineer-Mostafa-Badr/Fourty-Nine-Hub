@@ -23,12 +23,14 @@ class SeeAndClearButtons extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           TextAppButton(
-            style: const TextStyle(color: AppColors.SECONDARY_COLOR),
-            label: 'See All',
+            style: TextStyle(
+              color: AppColors.getSecondryColor(context),
+            ),
+            label: LocaleKeys.seeAll.localize,
             onPressed: () {
               showAreYouSure(
-                title: 'See All',
-                subTitle: "Do you want to mark all notifications as seen?",
+                title: LocaleKeys.seeAll.localize,
+                subTitle: LocaleKeys.markAllNotificationAsSeen.localize,
                 action: seeAllCallback,
                 context: context,
               );
@@ -36,7 +38,9 @@ class SeeAndClearButtons extends StatelessWidget {
           ),
           const Sizer(),
           TextAppButton(
-            style: const TextStyle(color: AppColors.SECONDARY_COLOR),
+            style: TextStyle(
+              color: AppColors.getSecondryColor(context),
+            ),
             label: LocaleKeys.clearAll.localize,
             onPressed: () {
               showAreYouSure(

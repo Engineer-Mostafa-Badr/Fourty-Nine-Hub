@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/icon_with_view_count.dart';
 
@@ -13,12 +14,14 @@ class UnreadNotificationsBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        final getUnreadNotificationsCountCubit =
-            context.watch<GetUnreadNotificationsCountCubit>();
+        final getUnreadNotificationsCountCubit = context.watch<GetUnreadNotificationsCountCubit>();
 
         return IconWithViewCount(
-          icon: Icon(Icons.notifications,
-              size: 45.w, color: Colors.black.withOpacity(0.8)),
+          icon: Icon(
+            Icons.notifications,
+            size: 45.w,
+            color: context.isDarkMode ? Colors.grey[200] : Colors.black.withOpacity(0.8),
+          ),
           // icon: Image.asset(
           //   Assets.notification,
           //   width: 30.h,
@@ -26,9 +29,7 @@ class UnreadNotificationsBuilder extends StatelessWidget {
           //   fit: BoxFit.cover,
           // ),
           spaceBetween: 0,
-          unreadCount: getUnreadNotificationsCountCubit
-                  .unreadNotificationsCountEntity?.total ??
-              0,
+          unreadCount: getUnreadNotificationsCountCubit.unreadNotificationsCountEntity?.total ?? 0,
         );
       },
     );
