@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -9,6 +10,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/payment_view.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -19,6 +21,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import '../../domain/entities/wallet/wallet_history_entity.dart';
 import '../cubit/wallet_cubit.dart';
 import '../widgets/drop_down_subscription.dart';
@@ -44,19 +47,10 @@ class _NormalWalletViewState extends State<NormalWalletView> {
       bottomNavigationBar: Container(
         margin: const EdgeInsets.all(10),
         child: MaterialButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BlocProvider<PaymentCubit>(
-                  create: (BuildContext context) => serviceLocator(),
-                  child: PaymentView(
-                    amountId: '',
-                    amount: 500,
-                  ),
-                ),
-              ),
-            );
+          onPressed: ()  async {
+           // if (await LocalAuth().checkBiometrics()) {
+              context.push(Routes.TRANSFERMONEY);
+          //  }
           },
           color: AppColors.SECONDARY_COLOR,
           textColor: AppColors.AUTH_CONTAINER_COLOR,
@@ -99,33 +93,24 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                     balance: '${state.wallet?.realAmount ?? ''}',
                     type: WalletTypes.mainWallet,
                   ),
-                  Sizer(),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.info_outline,
-                        color: Colors.grey,
-                      ),
-                      Sizer(),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Label(
-                              text: LocaleKeys.minimum.localize,
-                              style: Styles.mediumText(color: Colors.grey),
-                            ),
-                            Label(
-                              text: '500 ',
-                              style: Styles.mediumText(color: Colors.grey),
-                            ),
-                            Label(
-                              text: LocaleKeys.transaction.localize,
-                              style: Styles.mediumText(color: Colors.grey),
-                            ),
-                          ],
+                  const Sizer(),
+                  Padding(
+                    padding:  EdgeInsets.only(right: 5.w),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.info_outline,
+                          color: Colors.grey,
                         ),
-                      ),
-                    ],
+                        const Sizer(),
+                        Expanded(
+                          child: Label(
+                            text: '${LocaleKeys.minimum.localize}500 ${LocaleKeys.transaction.localize}',
+                            style: Styles.mediumText(color: Colors.grey),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Sizer(),
                   state.wallet?.realAmount != null &&
@@ -148,6 +133,19 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                           ),
                         ),
                       );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => BlocProvider<PaymentCubit>(
+                      //       create: (BuildContext context) =>
+                      //           serviceLocator(),
+                      //       child: PaymentView(
+                      //         amountId: '',
+                      //         amount: 500,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // );
                     },
                   )
                       : AppButton(

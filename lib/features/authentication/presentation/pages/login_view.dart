@@ -1,5 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -11,6 +13,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart'
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/service/background_service.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
@@ -21,6 +24,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
@@ -98,7 +102,7 @@ class _LoginViewState extends State<LoginView> {
           } else if (state is LoginSuccess) {
             await TokenManager.saveAccessToken(state.userTokensEntity.accessToken);
             await TokenManager.saveRefreshToken(state.userTokensEntity.refreshToken);
-
+            await BackgroundService.reStartWebSocketService(state.userTokensEntity.accessToken);
             serviceLocator<UserCubit>()
               ..setLogin(true)
               ..attachToken()
@@ -345,7 +349,10 @@ class _LoginWidgetState extends State<LoginWidget> {
                 backColor: AppColors.LIGHT_GRAY_COLOR,
                 textColor: Colors.black,
                 icon: FontAwesomeIcons.google,
-                onPressed: widget.loginCubit.signInWithGoogle,
+               // onPressed: widget.loginCubit.signInWithGoogle,
+                onPressed: (){
+                  signInWithGoogle();
+                },
               ),
             ),
             const Sizer(),
@@ -701,5 +708,39 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         ),
       ),
     );
+  }
+
+
+
+}
+Future<UserCredential> signInWithGoogle() async {
+  try {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    if (googleUser == null) {
+      // The user canceled the sign-in process
+      throw Exception("User canceled sign-in");
+    }
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  } on FirebaseAuthException catch (e) {
+    // Handle error
+    print("Firebase sign-in failed: ${e.message}");
+    rethrow;
+  } catch (e) {
+    // Handle other errors
+    print("Sign-in failed: ${e.toString()}");
+    rethrow;
   }
 }

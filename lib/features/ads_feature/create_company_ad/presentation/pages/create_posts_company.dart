@@ -69,7 +69,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
               listener: (BuildContext context, state) {
                 if (state.status == StateStatus.success) {
                   showSuccessMessage(
-                      context, LocaleKeys.postSuccessfully.localize);
+                      context, LocaleKeys.postSubmitted.localize);
 
                   context.pop();
                   context.pop();
@@ -98,7 +98,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                             ? controller.selectedImages
                                             : showSuccessMessage(
                                                 context,
-                                                'Image not selected',
+                                                LocaleKeys.imageNotSelected.localize,
                                                 color:
                                                     AppColors.SECONDARY_COLOR,
                                                 icon: Icons.error,
@@ -108,7 +108,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                     post: widget.text
                                         ? postContentTextController.text
                                         : null,
-                                    totalPrice: 10,
+                                    totalPrice: widget.totalPrice,
                                   );
                               // CompanyAdvertiseCubit.get(context)
                               //     .addPostCompanyAdvertise(

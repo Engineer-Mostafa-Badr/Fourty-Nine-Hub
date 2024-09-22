@@ -33,7 +33,7 @@ class _TextPostContentState extends State<TextPostContent> {
         },
         builder: (BuildContext context, state) {
           return PaginationView<CompanyAdEntity>(
-            loadingWidget: SizedBox.shrink(),
+            loadingWidget: const SizedBox.shrink(),
             build: (scrollController, data) {
               return data.isNotEmpty
                   ? ListView.separated(

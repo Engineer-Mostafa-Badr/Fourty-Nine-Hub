@@ -22,6 +22,7 @@ class PrivacyEntity {
   final String? updatedAt;
   final List<dynamic>? usersStoryPrivacy;
   final String? privacyStories;
+  final String? privacyRandomAppearance;
 
   PrivacyEntity(
       { this.id,
@@ -46,5 +47,7 @@ class PrivacyEntity {
        this.createdAt,
        this.updatedAt,
        this.usersStoryPrivacy,
-       this.privacyStories});
+       this.privacyStories,
+       this.privacyRandomAppearance,
+      });
 }

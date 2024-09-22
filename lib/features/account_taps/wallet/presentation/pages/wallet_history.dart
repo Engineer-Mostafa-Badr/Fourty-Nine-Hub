@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -79,7 +78,7 @@ class WalletHistory extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = list[index];
           return walletActionRow(
-              title: '${item.amount} ${Labels.currency}',
+              title: '${item.amount}',
               subTitle: item.description,
               onTap: () {},
               icon: FontAwesomeIcons.check);

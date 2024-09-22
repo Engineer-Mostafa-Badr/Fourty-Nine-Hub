@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
@@ -65,32 +66,23 @@ class BalanceWalletView extends StatelessWidget {
                         type: WalletTypes.balance,
                       ),
                       Sizer(),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.info_outline,
-                            color: Colors.grey,
-                          ),
-                          Sizer(),
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Label(
-                                  text: LocaleKeys.minimum.localize,
-                                  style: Styles.mediumText(color: Colors.grey),
-                                ),
-                                Label(
-                                  text: '1002 ',
-                                  style: Styles.mediumText(color: Colors.grey),
-                                ),
-                                Label(
-                                  text: LocaleKeys.transaction.localize,
-                                  style: Styles.mediumText(color: Colors.grey),
-                                ),
-                              ],
+                      Padding(
+                        padding:  EdgeInsets.only(right: 5.w),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.info_outline,
+                              color: Colors.grey,
                             ),
-                          ),
-                        ],
+                            Sizer(),
+                            Expanded(
+                              child: Label(
+                                text: '${LocaleKeys.minimum.localize}1002 ${LocaleKeys.transaction.localize}',
+                                style: Styles.mediumText(color: Colors.grey),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       state.balance?.openBalance == true
                           ? AppButton(

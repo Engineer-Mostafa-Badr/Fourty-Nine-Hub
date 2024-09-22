@@ -72,6 +72,7 @@ class _PaymentViewState extends State<PaymentView> {
                         icon: Image.asset(
                           Assets.paymob,
                           fit: BoxFit.cover,
+                          height: 30.h,
                         ),
                         color: Colors.blue,
                         details: 'Enter your credit card details',
@@ -85,6 +86,7 @@ class _PaymentViewState extends State<PaymentView> {
                         icon: Image.asset(
                           Assets.fawry,
                           fit: BoxFit.cover,
+                          height: 30.h,
                         ),
                         color: Colors.orange,
                         details: 'Enter your Paymob link',
@@ -98,6 +100,7 @@ class _PaymentViewState extends State<PaymentView> {
                         icon: Image.asset(
                           Assets.instaPay,
                           fit: BoxFit.cover,
+                          height: 50.h,
                         ),
                         color: Colors.deepPurple,
                         details: 'Enter your bank account details',
@@ -152,11 +155,11 @@ class _PaymentViewState extends State<PaymentView> {
       },
       child: Container(
         height: 150.h,
-        margin: EdgeInsets.symmetric(horizontal: 8.0),
-        padding: EdgeInsets.all(16.0),
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(15.r),
           border: Border.all(
             color: _selectedPaymentMethod == title ? color : Colors.grey,
             width: 2.0,
@@ -174,14 +177,10 @@ class _PaymentViewState extends State<PaymentView> {
           mainAxisSize: MainAxisSize.min,
           children: [
             icon,
-            Spacer(),
+            const Spacer(),
             Text(
               title,
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.bold,
-                fontSize: 16.sp,
-              ),
+              style: Styles.mediumText(color: color),
               maxLines: 2,
               textAlign: TextAlign.center,
             ),
