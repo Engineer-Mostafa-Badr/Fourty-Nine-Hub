@@ -8,7 +8,7 @@
 // import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_cubit/chat_room_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
+// import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_card_stack.dart';
@@ -189,6 +189,8 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_card_stack.dart';
@@ -196,6 +198,9 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../routes/routes.dart';
 
 const kToolbarHeightFactor = 0.80;
 const kDefaultPadding = 8.0;
@@ -249,8 +254,11 @@ class _TinderScreenState extends State<TinderScreen> {
         builder: (context, state) {
           if (state.userData.isEmpty || state.subCategoryData.isEmpty) {
             return const Center(
-              child: CupertinoActivityIndicator(radius: 25),
+              child: CircularProgressIndicator(),
             );
+          }
+          if (!serviceLocator<UserCubit>().isLoggedIn) {
+            return pleaseLoginWidget(context);
           }
           return _buildLoggedInContent(context, state);
         },
@@ -305,7 +313,7 @@ class _TinderScreenState extends State<TinderScreen> {
 
   Widget _buildSubCategoryList(TinderViewState state) {
     return SizedBox(
-      height: 225,
+      height: 380.h,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 4),
         scrollDirection: Axis.horizontal,

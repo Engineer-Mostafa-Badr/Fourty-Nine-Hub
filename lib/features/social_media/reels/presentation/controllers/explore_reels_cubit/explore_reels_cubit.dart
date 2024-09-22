@@ -336,7 +336,6 @@ class ReelsCubit extends Cubit<ReelsState> {
       // Fetch 3 reels at a time
       final ReelsResponse response = await repository.fetchReels(
         page: state.globalReelsCurrentPage + 1,
-        limit: 2,
       );
 
       emit(state.copyWith(
@@ -353,10 +352,10 @@ class ReelsCubit extends Cubit<ReelsState> {
 
 //--------------------------------------------------------------------------------------------//---------------------------------------------------------------------------------------
   Future<void> fetchReelsForFollowers() async {
-    if (state.reelsForFollowerIsLoading ||
-        state.reelsForFollowerHasReachedMax) {
-      return;
-    }
+    // if (state.reelsForFollowerIsLoading ||
+    //     state.reelsForFollowerHasReachedMax) {
+    //   return;
+    // }
 
     emit(state.copyWith(reelsForFollowerIsLoading: true));
 
@@ -364,10 +363,9 @@ class ReelsCubit extends Cubit<ReelsState> {
       // Fetch 3 reels at a time
       final ReelsResponse response = await repository.fetchReelsForFollowers(
         page: state.reelsForFollowerCurrentPage + 1,
-        limit: 2,
       );
 
-      log('from fetchReelsForFollowers --> ${response.data.reels.first.user.firstName}');
+      log('from fetchReelsForFollowers --> ${response.data.reels.length}');
       emit(state.copyWith(
         reelsForFollower: [...state.reelsForFollower, ...response.data.reels],
         reelsForFollowerIsLoading: false,

@@ -385,7 +385,7 @@ class CodegenLoader extends AssetLoader{
     "header": "تيندر",
     "favorites": "المفضلة",
     "noData": "لا توجد بيانات متاحة",
-    "find": "ابحث"
+    "find": "اكتشف"
   },
   "chat_alert_dialog": {
     "pick_chat_type": "اختر نوع الدردشة:",
@@ -522,7 +522,84 @@ class CodegenLoader extends AssetLoader{
   "activity": "نشاط",
   "google": "جوجل",
   "facebook": "فيسبوك",
-  "orContinueWith": "او استمر باستخدام"
+  "orContinueWith": "او استمر باستخدام",
+  "error_dialog": {
+    "audio_playback_fail": "فشل في تحميل الصوت",
+    "title": "خطأ",
+    "ok_button": "موافق",
+    "camera_init_fail": "فشل في تهيئة الكاميرا.",
+    "controller_init_fail": "فشل في تهيئة وحدة تحكم الكاميرا.",
+    "start_recording_fail": "فشل في بدء التسجيل.",
+    "stop_recording_fail": "فشل في إيقاف التسجيل.",
+    "video_process_fail": "فشل في معالجة الفيديو:",
+    "upload_fail": "فشل في تحميل الفيديو. حاول مرة أخرى."
+  },
+  "reel_upload_success": {
+    "upload_success": "تم تحميل الفيديو بنجاح!"
+  },
+  "timer": {
+    "recording_stops_in": "التسجيل يتوقف في ",
+    "seconds": " ثانية"
+  },
+  "controls": {
+    "switch_camera": "تبديل الكاميرا",
+    "upload_reel": "ارفع الفيديو الخاص بك"
+  },
+  "reel_voices": {
+    "my_voice": "صوتي",
+    "other_voice": "صوت آخر",
+    "mix_voices": "دمج الأصوات"
+  },
+  "comments_header": "التعليقات",
+  "add_comment_hint": "أضف تعليقًا...",
+  "write_reply_hint": "اكتب ردًا...",
+  "view_replies": "عرض الردود",
+  "hide_replies": "إخفاء الردود",
+  "failed_send_reply": "فشل في إرسال الرد. حاول مرة أخرى.",
+  "reel_audio": "الصوت",
+  "check_out_reel": "تحقق من هذا الريل!",
+  "reel_saved": "تم حفظ الريل",
+  "reel_unsaved": "تم ازالة الريل من المحفوظات",
+  "use_audio": "استخدام الصوت",
+  "audio_load_fail": "فشل في تحميل الصوت!",
+  "no_reels": "لا توجد ريلز",
+  "one_reel": "1 ريل",
+  "multiple_reels": "ريلز",
+  "gift_body": {
+    "no_name": "بدون اسم",
+    "gift_sent": "تم إرسال الهدية",
+    "sent_successfully": "تم الإرسال بنجاح!",
+    "amount_deducted": "المبلغ المخصوم",
+    "insufficient_funds": "الأموال غير كافية",
+    "insufficient_funds_message": "ليس لديك أموال كافية في محفظتك.",
+    "error": "خطأ",
+    "unexpected_error": "خطأ غير متوقع!",
+    "ok": "موافق",
+    "charge_wallet": "شحن المحفظة",
+    "send_a_gift": "أرسل هدية",
+    "recharge": "شحن"
+  },
+  "report_nudity": "يحتوي هذا المحتوى على عري صريح وهو غير مناسب للجماهير العامة.",
+  "report_frequent": "النشر المفرط لنفس الرسالة يعطل تجربة المستخدم.",
+  "report_fake": "يبرز هذا التقرير انتشار الأخبار الزائفة أو المعلومات المضللة.",
+  "report_abuse": "المحتوى المبلغ عنه يتضمن لغة أو سلوكاً مسيئاً.",
+  "report_hated": "يتعلق هذا التقرير بمحتوى يروج لخطاب الكراهية أو التمييز.",
+  "report_illegal": "المحتوى المبلغ عنه مشتبه في ترويجه لأنشطة غير قانونية.",
+  "report_politics": "يتضمن المحتوى المعني دعاية سياسية أو معلومات متحيزة.",
+  "report_category_nudity": "عري",
+  "report_category_frequent": "متكرر",
+  "report_category_fake": "مزيف",
+  "report_category_abuse": "إساءة",
+  "report_category_hated": "كراهية",
+  "report_category_illegal": "غير قانوني",
+  "report_category_politics": "سياسة",
+  "spotlight_title": "الأضواء",
+  "friends_title": "الأصدقاء",
+  "following_title": "متابعة",
+  "discover_title": "اكتشف",
+  "spotlight_follow": "متابعة +",
+  "spotlight_following": "متابع",
+  "add_story": "أضف قصة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1000,7 +1077,7 @@ static const Map<String,dynamic> en = {
   "requestVerification": "Request Verification",
   "documentSuccessfully": "You have successfully uploaded your document. It is now awaiting administration review and approval.",
   "noReportCategoriesAvailable": "No report categories available",
-  "Type report reason": "Type Report Reason",
+  "typeReportReason": "Type report reason",
   "pleaseSelectReason": "Please select a reason!",
   "reportSentSuccessfully": "Report sent successfully",
   "play": "Play",
@@ -1033,7 +1110,84 @@ static const Map<String,dynamic> en = {
   },
   "google": "Google",
   "facebook": "Facebook",
-  "orContinueWith": "Or Continue with"
+  "orContinueWith": "Or Continue with",
+  "error_dialog": {
+    "audio_playback_fail": "Failed to load audio",
+    "title": "Error",
+    "ok_button": "OK",
+    "camera_init_fail": "Failed to initialize the camera.",
+    "controller_init_fail": "Failed to initialize the camera controller.",
+    "start_recording_fail": "Failed to start recording.",
+    "stop_recording_fail": "Failed to stop recording.",
+    "video_process_fail": "Failed to process the video:",
+    "upload_fail": "Failed to upload video. Try again."
+  },
+  "reel_upload_success": {
+    "upload_success": "Reel uploaded successfully!"
+  },
+  "timer": {
+    "recording_stops_in": "Recording stops in ",
+    "seconds": " seconds"
+  },
+  "controls": {
+    "switch_camera": "Switch Camera",
+    "upload_reel": "Upload your Reel"
+  },
+  "reel_voices": {
+    "my_voice": "My Voice",
+    "other_voice": "Other Voice",
+    "mix_voices": "Mix Voices"
+  },
+  "comments_header": "Comments",
+  "add_comment_hint": "Add a comment...",
+  "write_reply_hint": "Write a reply...",
+  "view_replies": "View Replies",
+  "hide_replies": "Hide Replies",
+  "failed_send_reply": "Failed to send reply. Please try again.",
+  "reel_audio": "Audio",
+  "check_out_reel": "Check out this reel!",
+  "reel_saved": "Reel Saved Successfully",
+  "reel_unsaved": "Reel UnSaved",
+  "use_audio": "Use Audio",
+  "audio_load_fail": "Failed to load audio!",
+  "no_reels": "No reels",
+  "one_reel": "1 reel",
+  "multiple_reels": "reels",
+  "gift_body": {
+    "no_name": "No Name",
+    "gift_sent": "Gift Sent",
+    "sent_successfully": "has been sent successfully!",
+    "amount_deducted": "Amount deducted",
+    "insufficient_funds": "Insufficient Funds",
+    "insufficient_funds_message": "You do not have enough money in your wallet.",
+    "error": "Error",
+    "unexpected_error": "Unexpected error!",
+    "ok": "OK",
+    "charge_wallet": "Charge Wallet",
+    "send_a_gift": "Send a gift",
+    "recharge": "Recharge"
+  },
+  "report_nudity": "This content contains explicit nudity and is inappropriate for general audiences.",
+  "report_frequent": "Please investigate the frequency of this user's posts.",
+  "report_fake": "The content in question is deceptive and should be verified for authenticity.",
+  "report_abuse": "The content reported involves abusive language or behavior.",
+  "report_hated": "This report concerns content that promotes hate speech or discrimination.",
+  "report_illegal": "The content reported is suspected of promoting illegal activities.",
+  "report_politics": "Illegal activities are strictly prohibited on our platform.",
+  "report_category_nudity": "nudity",
+  "report_category_frequent": "frequent",
+  "report_category_fake": "fake",
+  "report_category_abuse": "abuse",
+  "report_category_hated": "hated",
+  "report_category_illegal": "illegal",
+  "report_category_politics": "politics",
+  "spotlight_title": "Spotlight",
+  "friends_title": "Friends",
+  "following_title": "Following",
+  "discover_title": "Discover",
+  "spotlight_follow": "Follow +",
+  "spotlight_following": "Following",
+  "add_story": "Add Story"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

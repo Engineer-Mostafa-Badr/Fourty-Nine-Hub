@@ -256,6 +256,7 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/us
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../tinder/data/shared/shared.dart';
 import '../../data/models/followers_model.dart';
 import '../cubit/stories_cubit.dart';
 
