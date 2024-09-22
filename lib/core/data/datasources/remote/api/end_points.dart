@@ -50,6 +50,7 @@ class EndPoints {
 
   static String getBannerByID({required String id}) => '/categories/main/$id';
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
+  static const getWalletHome = '/main-wallet/user-wallets-amount';
 
   static String getMainCategoryDetails(String id) => '/categories/main/$id';
 
