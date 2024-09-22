@@ -20,6 +20,7 @@ import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
@@ -33,6 +34,7 @@ import '../../../../../../../../zoom/presentation/bloc/meeting_cubit.dart';
 import '../../../../../../../../zoom/presentation/bloc/meeting_state.dart';
 import '../../../../../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../../../../tinder/data/shared/shared.dart';
+import '../../../../../../domain/entity/topic_entity.dart';
 import '../../../../liveview/gifts/simple_gifts_sheet.dart';
 import '../config.dart';
 
@@ -228,7 +230,9 @@ class _ZegoLiveStreamingPreviewPageState
                     ),
                     child: InkWell(
                       onTap: () {
-                        _showTopicSheet(context, topics, (topic) {
+                        _showTopicSheet(
+                            context, context.read<StreamCubit>().topics,
+                            (topic) {
                           context.read<StreamCubit>().setTopic(topic);
                         });
                       },
@@ -296,8 +300,8 @@ class _ZegoLiveStreamingPreviewPageState
         ));
   }
 
-  Future<dynamic> _showTopicSheet(BuildContext context, List<String> topics,
-      Function(String? value) onChanged) {
+  Future<dynamic> _showTopicSheet(BuildContext context,
+      List<TopicEntity> topics, Function(String? value) onChanged) {
     return showModalBottomSheet(
       context: context,
       builder: (context) => Padding(
@@ -315,8 +319,8 @@ class _ZegoLiveStreamingPreviewPageState
               ),
               ...topics.map((topic) {
                 return RadioListTile<String>(
-                  title: Label(text: topic),
-                  value: topic,
+                  title: Label(text: topic.name),
+                  value: topic.name,
                   groupValue: state.topic.isEmpty ? null : state.topic,
                   onChanged: (value) {
                     onChanged(value);
@@ -324,7 +328,7 @@ class _ZegoLiveStreamingPreviewPageState
                     // print('new topic is ${state.topic}');
                   },
                 );
-              }).toList(),
+              }),
             ]);
           }),
         ),

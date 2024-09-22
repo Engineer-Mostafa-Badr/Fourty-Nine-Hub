@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity/live.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity/live_entity.dart';
 
 class LiveModel extends LiveEntity {
   const LiveModel({

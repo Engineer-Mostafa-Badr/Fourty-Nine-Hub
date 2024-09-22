@@ -207,6 +207,7 @@ import 'food_service_locator.dart';
 import 'fourty_nine_service_locator.dart';
 import 'health_service_locator.dart';
 import 'installment_service_locator.dart';
+import 'live_service_locator.dart';
 import 'meeting_service_locator.dart';
 import 'social_service_locator.dart';
 import 'subscribe_service_locator.dart';
@@ -375,6 +376,8 @@ class DI {
     ShippingServiceLocatior.execute(serviceLocator: serviceLocator);
     // trip join
     TripJoinServiceLocator.execute(serviceLocator: serviceLocator);
+    //live
+    LiveServiceLocator.execute(serviceLocator: serviceLocator);
     // notifications
     await NotificationsServiceLocator.execute(serviceLocator: serviceLocator);
     InstagramServiceLocator.execute(serviceLocator: serviceLocator);

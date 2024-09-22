@@ -205,13 +205,13 @@ class FakeTextFieldBuilder extends StatelessWidget {
             onSheetPop: (int key) {
               widget.popUpManager.removeAPopUpSheet(key);
             },
-            buttonSize: Size(context.screenWidth * 0.85, 40),
-            iconSize: Size(context.screenWidth * 0.85, 40),
+            buttonSize: Size(context.screenWidth * 0.8, 40),
+            iconSize: Size(context.screenWidth * 0.8, 40),
             enabledIcon: ButtonIcon(
                 icon: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
                 child: Label(
@@ -272,15 +272,15 @@ class ZoomMicrophoneBuilder extends StatelessWidget {
                   defaultOn: micDefaultOn,
                   muteMode: micDefaultOn,
                 ),
-                Text(
-                  micState.value
-                      ? LocaleKeys.mute.localize
-                      : LocaleKeys.unmute.localize,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20.zSP),
-                )
+                // Text(
+                //   micState.value
+                //       ? LocaleKeys.mute.localize
+                //       : LocaleKeys.unmute.localize,
+                //   style: TextStyle(
+                //       color: Colors.white,
+                //       fontWeight: FontWeight.w400,
+                //       fontSize: 20.zSP),
+                // )
               ],
             );
           }),
@@ -335,15 +335,15 @@ class ZoomCameraBuilder extends StatelessWidget {
                   ),
                   defaultOn: cameraDefaultOn,
                 ),
-                Text(
-                  cameraState.value
-                      ? LocaleKeys.startVideo.localize
-                      : LocaleKeys.stopVideo.localize,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20.zSP),
-                )
+                // Text(
+                //   cameraState.value
+                //       ? LocaleKeys.startVideo.localize
+                //       : LocaleKeys.stopVideo.localize,
+                //   style: TextStyle(
+                //       color: Colors.white,
+                //       fontWeight: FontWeight.w400,
+                //       fontSize: 20.zSP),
+                // )
               ],
             );
           }),
@@ -404,13 +404,13 @@ class ZoomParticipantsBuilder extends StatelessWidget {
               avatarBuilder: widgetTop!.config.avatarBuilder,
               itemBuilder: widgetTop!.config.memberList.itemBuilder,
             ),
-          Text(
-            LocaleKeys.participants.localize,
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w400,
-                fontSize: 20.zSP),
-          )
+          // Text(
+          //   LocaleKeys.participants.localize,
+          //   style: TextStyle(
+          //       color: Colors.white,
+          //       fontWeight: FontWeight.w400,
+          //       fontSize: 20.zSP),
+          // )
         ],
       ),
     );
@@ -451,17 +451,17 @@ class ZoomChatBuilder extends StatelessWidget {
                     // width: 20,
                   )),
                 ),
-                Positioned(
-                  bottom: 8.zH,
-                  right: 5,
-                  child: Text(
-                    LocaleKeys.chat.localize,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 25.zSP),
-                  ),
-                )
+                // Positioned(
+                //   bottom: 8.zH,
+                //   right: 5,
+                //   child: Text(
+                //     LocaleKeys.chat.localize,
+                //     style: TextStyle(
+                //         color: Colors.white,
+                //         fontWeight: FontWeight.w400,
+                //         fontSize: 25.zSP),
+                //   ),
+                // )
               ],
             ));
   }
@@ -504,18 +504,18 @@ class ZoomSharescreenBuilder extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 5.zH),
-                  child: Text(
-                    !screenShareOn
-                        ? LocaleKeys.share.localize
-                        : LocaleKeys.stopVideo.localize,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 25.zSP),
-                  ),
-                )
+                // Padding(
+                //   padding: EdgeInsets.only(top: 5.zH),
+                //   child: Text(
+                //     !screenShareOn
+                //         ? LocaleKeys.share.localize
+                //         : LocaleKeys.stopVideo.localize,
+                //     style: TextStyle(
+                //         color: Colors.white,
+                //         fontWeight: FontWeight.w400,
+                //         fontSize: 25.zSP),
+                //   ),
+                // )
               ],
             );
           }),
@@ -568,14 +568,14 @@ class ZoomWhiteBoardButton extends StatelessWidget {
             onTap: () async {
               await context.read<StreamCubit>().openWhiteBoard();
             }),
-        Text(
-          LocaleKeys.whiteBoard.localize,
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w400,
-            fontSize: 25.zSP,
-          ),
-        )
+        // Text(
+        //   LocaleKeys.whiteBoard.localize,
+        //   style: TextStyle(
+        //     color: Colors.white,
+        //     fontWeight: FontWeight.w400,
+        //     fontSize: 25.zSP,
+        //   ),
+        // )
       ],
     );
   }

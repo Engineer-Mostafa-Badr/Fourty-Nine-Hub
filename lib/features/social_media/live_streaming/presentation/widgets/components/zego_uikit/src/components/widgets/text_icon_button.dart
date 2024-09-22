@@ -71,12 +71,12 @@ class _ZegoTextIconButtonState extends State<ZegoTextIconButton> {
           color: widget.onPressed != null
               ? widget.clickableBackgroundColor
               : widget.unclickableBackgroundColor,
-          borderRadius: null != widget.borderRadius
-              ? BorderRadius.all(Radius.circular(widget.borderRadius!))
-              : null,
-          shape: null != widget.borderRadius
-              ? BoxShape.rectangle
-              : BoxShape.circle,
+          // borderRadius: null != widget.borderRadius
+          //     ? BorderRadius.all(Radius.circular(widget.borderRadius!))
+          //     : null,
+          // shape: null != widget.borderRadius
+          //     ? BoxShape.rectangle
+          //     : BoxShape.circle,
         ),
         child: widget.verticalLayout
             ? Column(
@@ -110,11 +110,11 @@ class _ZegoTextIconButtonState extends State<ZegoTextIconButton> {
         color: widget.icon?.backgroundColor ?? Colors.transparent,
         border: Border.all(
             color: widget.iconBorderColor ?? Colors.transparent, width: 1),
-        borderRadius:
-            BorderRadius.all(Radius.circular(widget.iconSize?.width ?? 74 / 2)),
+        // borderRadius:
+        //     BorderRadius.all(Radius.circular(widget.iconSize?.width ?? 74 / 2)),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(widget.iconSize?.width ?? 74 / 2),
+        // borderRadius: BorderRadius.circular(widget.iconSize?.width ?? 74 / 2),
         child: widget.icon?.icon,
       ),
     );

@@ -83,6 +83,7 @@ import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cu
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pages/edit_profile_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/live_streaming_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
@@ -716,7 +717,8 @@ class AppPages {
                           builder: (context, state) {
                             var extras = state.extra as ZegoArgs;
                             return BlocProvider(
-                              create:(_)=> serviceLocator<StreamCubit>(),
+                              //to render topics before entering the live
+                              create:(_)=> serviceLocator<StreamCubit>()..getTopics(),
                               child: LiveStreamView(
                                 isHost: extras.isHost,
                                 liveID: extras.liveId,

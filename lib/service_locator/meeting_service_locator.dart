@@ -35,6 +35,7 @@ class MeetingServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
         ));
   }
 }

@@ -666,6 +666,11 @@ class EndPoints {
   static String endMeeting(String id) => '/room-id/finish/$id';
 
   static String getScheduledMeetings(String id) => '/room-id/$id';
+
+  //lives
+  static String allLiveTopics = '/stream-topic';
+
+
   static String deleteChatMessage = '/chat/message';
 
   static String changeChatMuteState(String chatId) {
