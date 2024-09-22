@@ -4,13 +4,22 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:swipe_to/swipe_to.dart';
+
+import '../../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../../core/localization/locale_keys.g.dart';
+import '../../controllers/chat_room_cubit/chat_room_cubit.dart';
+import 'message_card.dart';
 
 class SentFileCard extends StatefulWidget {
   const SentFileCard({
@@ -23,16 +32,14 @@ class SentFileCard extends StatefulWidget {
 }
 
 class _SentFileCardState extends State<SentFileCard> {
-  String? fileName;
   String? fileSize;
   String? fileExtension;
 
   @override
   void initState() {
-    // initTheSocket();
-    fileName = getFileName();
-    log(fileName.toString());
-    fileExtension = extension(fileName!).toUpperCase();
+    fileExtension =
+        extension(widget.messageEntity.media[0].fileName?? "Unknown").toUpperCase();
+    fileSize = formatFileSize(fileSizeInBytes:  widget.messageEntity.media[0].fileSize?? 100);
     super.initState();
   }
 
@@ -43,201 +50,176 @@ class _SentFileCardState extends State<SentFileCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8, bottom: 6, top: 6),
-      child: Container(
-        color: Colors.transparent,
-        child: Row(
-          children: [
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 64,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: AppColors.MESSAGE_COLOR,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        bottomLeft: Radius.circular(16),
-                        bottomRight: Radius.circular(16),
+    final isArabic = LocaleKeys.more.tr() == "More";
+    final chatRoomCubit = context.read<ChatRoomCubit>();
+    return SwipeTo(
+      onRightSwipe: !isArabic
+          ? null
+          : (details) {
+        chatRoomCubit.selectMessageForReplaying(widget.messageEntity);
+      },
+      onLeftSwipe: isArabic
+          ? null
+          : (details) {
+        chatRoomCubit.selectMessageForReplaying(widget.messageEntity);
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(right: 8, bottom: 6, top: 6),
+        child: Container(
+          color: Colors.transparent,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.MESSAGE_COLOR,
+                  borderRadius: BorderRadius.only(
+                    topLeft:const Radius.circular(12),
+                    topRight: const Radius.circular(12),
+                    bottomLeft:
+                    isArabic ? const Radius.circular(12) : const Radius.circular(0),
+                    bottomRight:
+                    isArabic ? const Radius.circular(0) : const Radius.circular(12),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 0.1,
+                      blurRadius: 5,
+                      offset: const Offset(
+                        0,
+                        0,
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 0.1,
-                          blurRadius: 5,
-                          offset: const Offset(
-                            0,
-                            0,
-                          ),
-                        ),
-                      ],
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            log("Downloading...");
-                            downloadAndOpenFile(
-                              fileUrl: widget.messageEntity.media[0].url,
-                            );
-                          },
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.65,
-                            height: MediaQuery.of(context).size.height * 0.08,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.1),
-                                ),
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.insert_drive_file,
-                                      size: 40,
-                                      color: AppColors.GREY_DARK_COLOR,
-                                    ),
-                                    Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.5,
-                                          child: Text(
-                                            fileName!,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Styles.mediumText(
-                                                color:
-                                                    AppColors.GREY_DARK_COLOR),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+
+                    GestureDetector(
+                      onTap: () {
+                        log("Downloading...");
+                        downloadAndOpenFile(
+                          fileUrl: widget.messageEntity.media[0].url,
+                        );
+                      },
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.7,
+                        // height:widget.messageEntity.hasReply? MediaQuery.of(context).size.height * 0.15:MediaQuery.of(context).size.height * 0.08,
+                        child: Column(
+                          children: [
+                            widget.messageEntity.hasReply
+                                ? ReplySendMessageCard(
+                                width: double.infinity, messageEntity: widget.messageEntity)
+                                : const SizedBox(),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  // margin: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.1),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.insert_drive_file,
+                                        size: 40,
+                                        color: AppColors.GREY_DARK_COLOR,
+                                      ),
+                                      Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.5,
+                                            child: Text(
+                                              widget.messageEntity.media[0]
+                                                      .fileName ??
+                                                  "fileName",
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Styles.mediumText(
+                                                  color:
+                                                      AppColors.GREY_DARK_COLOR),
+                                            ),
                                           ),
-                                        ),
-                                        FutureBuilder(
-                                          future: getFileSizeAsync(),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.done) {
-                                              return Text(
-                                                '${fileSize ?? ''}'
-                                                ' - '
-                                                '$fileExtension',
-                                                style: Styles.smallText(
-                                                    color: AppColors
-                                                        .GREY_DARK_COLOR),
-                                              );
-                                            } else {
-                                              return const SizedBox();
-                                            }
-                                          },
-                                        )
-                                      ],
-                                    )
-                                  ],
+                                Text(
+                                  '${fileSize ?? ''}'
+                                      ' - '
+                                      '$fileExtension',
+                                  style: Styles.smallText(
+                                      color: AppColors
+                                          .GREY_DARK_COLOR),
+                                )
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 6,
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              widget.messageEntity.time,
-                              style: Styles.smallText(
-                                  color: AppColors.GREY_DARK_COLOR),
-                            ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  )
-                ],
-              ),
-            ),
-          ],
+
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+
+                          Label(
+                            text: widget.messageEntity.time,
+                            style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(
+                            _getMessageIcon(widget.messageEntity),
+                            color: _getMessageIconColor(widget.messageEntity),
+                            size: 12,
+                          ),
+                        ],
+                      ),
+                    ),
+
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  getFileName() {
-    String fileUrl = widget.messageEntity.media[0].url;
-
-    String fileName = extractFileName(fileUrl);
-    String cleanedFileName = cleanFileName(fileName);
-    // print('file name : $cleanedFileName'); // Output: pdf-test.pdf
-    return cleanedFileName;
-  }
-
-  String extractFileName(String url) {
-    Uri uri = Uri.parse(url);
-    String path = uri.path;
-    List<String> segments = path.split('/');
-    return segments.last;
-  }
-
-  String cleanFileName(String fileName) {
-    // Assuming the format is UUID-fileName.pdf
-    return fileName.substring(37);
-  }
-
-  Future<void> getFileSizeAsync() async {
-    log("getFileSizeAsync");
-    fileSize = await getFileSize(
-      fileUrl: widget.messageEntity.media[0].url,
-    );
-  }
-
-  Future<String?> getFileSize({required String fileUrl}) async {
-    try {
-      final dio = Dio();
-
-      log("before response");
-      final response = await dio.head(
-        fileUrl,
-        options: Options(validateStatus: (status) => status! < 500),
-      );
-      log("after response");
-
-      if (response.statusCode == 200) {
-        log("200 OK");
-        // Content-Length header contains the file size in bytes
-        String? contentLengthHeader = response.headers.value('content-length');
-
-        if (contentLengthHeader != null) {
-          log("contentLengthHeader");
-          int fileSizeInBytes = int.parse(contentLengthHeader);
-
-          // Convert the file size to a formatted string
-          return formatFileSize(fileSizeInBytes: fileSizeInBytes);
-        } else {
-          log("Content-Length header not found in the response.");
-        }
-      } else if (response.statusCode == 403) {
-        log("403 Forbidden - Check URL permissions or headers.");
-      } else {
-        log("Failed to fetch file size. Status code: ${response.statusCode}");
-      }
-    } catch (e) {
-      log("Error: $e");
+  IconData _getMessageIcon(MessageEntity messageEntity) {
+    if (messageEntity.seen) {
+      return FontAwesomeIcons.checkDouble;
+    } else if (messageEntity.delivered) {
+      return FontAwesomeIcons.checkDouble;
+    } else {
+      return FontAwesomeIcons.check;
     }
-    return null;
+  }
+
+  Color _getMessageIconColor(MessageEntity messageEntity) {
+    if (messageEntity.seen) {
+      return Colors.red;
+    } else if (messageEntity.delivered) {
+      return Colors.grey;
+    } else {
+      return Colors.grey;
+    }
   }
 
   String formatFileSize({required int fileSizeInBytes}) {
@@ -247,18 +229,14 @@ class _SentFileCardState extends State<SentFileCard> {
 
     if (fileSizeInBytes < kb) {
       return '$fileSizeInBytes B';
-      log('$fileSizeInBytes B');
     } else if (fileSizeInBytes < mb) {
       double sizeInKB = fileSizeInBytes / kb;
-      log('${sizeInKB.toStringAsFixed(2)} KB');
       return '${sizeInKB.toStringAsFixed(2)} KB';
     } else if (fileSizeInBytes < gb) {
       double sizeInMB = fileSizeInBytes / mb;
-      log('${sizeInMB.toStringAsFixed(2)} MB');
       return '${sizeInMB.toStringAsFixed(2)} MB';
     } else {
       double sizeInGB = fileSizeInBytes / gb;
-      log('${sizeInGB.toStringAsFixed(2)} GB');
       return '${sizeInGB.toStringAsFixed(2)} GB';
     }
   }

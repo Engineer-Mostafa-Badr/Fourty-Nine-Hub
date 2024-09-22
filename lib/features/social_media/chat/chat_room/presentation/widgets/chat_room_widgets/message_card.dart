@@ -13,6 +13,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/show_image_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/recived_file.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/send_file.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -51,12 +52,16 @@ class MessageCard extends StatelessWidget {
         : messageEntity.media.isEmpty
             ? _buildOtherMessage(
                 width: width, messageEntity: messageEntity, context: context)
-            : _buildReceiveImageCard(
-                isArabic: isArabic,
-                chatRoomCubit: chatRoomCubit,
-                context: context,
-                width: width,
-              );
+            : messageEntity.media[0].type == FileTypeEnum.document
+                ? ReceivedFileCard(
+                    messageEntity: messageEntity,
+                  )
+                : _buildReceiveImageCard(
+                    isArabic: isArabic,
+                    chatRoomCubit: chatRoomCubit,
+                    context: context,
+                    width: width,
+                  );
   }
 
   SwipeTo _buildSendImageCard(
@@ -242,11 +247,13 @@ class MessageCard extends StatelessWidget {
                 style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
               ),
               const SizedBox(width: 4),
-              Icon(
-                _getMessageIcon(messageEntity),
-                color: _getMessageIconColor(messageEntity),
-                size: 12,
-              ),
+              messageEntity.byMe
+                  ? Icon(
+                      _getMessageIcon(messageEntity),
+                      color: _getMessageIconColor(messageEntity),
+                      size: 12,
+                    )
+                  : const SizedBox(width: 4),
             ],
           ),
         ],
@@ -572,7 +579,13 @@ class ReplyRecivedMessageCard extends StatelessWidget {
                     ),
                     child: Text(
                       messageEntity.reply!.text == ""
-                          ? "Photo"
+                          ? messageEntity.reply!.media.isNotEmpty
+                              ? messageEntity.reply!.media[0].type ==
+                                      FileTypeEnum.image
+                                  ? "Photo"
+                                  : messageEntity.reply!.media[0].fileName ??
+                                      "File"
+                              : messageEntity.reply!.text
                           : messageEntity.reply!.text,
                       overflow: TextOverflow.ellipsis,
                       style: Styles.mediumText(
@@ -586,15 +599,21 @@ class ReplyRecivedMessageCard extends StatelessWidget {
             ),
             const Spacer(),
             messageEntity.reply!.media.isNotEmpty
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: CachedNetworkImage(
-                      imageUrl: messageEntity.reply!.media.first.url,
-                      fit: BoxFit.cover,
-                      width: 50,
-                      height: double.infinity,
-                    ),
-                  )
+                ? messageEntity.reply!.media[0].type == FileTypeEnum.image
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: CachedNetworkImage(
+                          imageUrl: messageEntity.reply!.media.first.url,
+                          fit: BoxFit.cover,
+                          width: 50,
+                          height: double.infinity,
+                        ),
+                      )
+                    : const Icon(
+                        Icons.insert_drive_file,
+                        size: 40,
+                        color: AppColors.GREY_DARK_COLOR,
+                      )
                 : const SizedBox(),
           ],
         ),
@@ -685,7 +704,13 @@ class ReplySendMessageCard extends StatelessWidget {
                     ),
                     child: Text(
                       messageEntity.reply!.text == ""
-                          ? "Photo"
+                          ? messageEntity.reply!.media.isNotEmpty
+                              ? messageEntity.reply!.media[0].type ==
+                                      FileTypeEnum.image
+                                  ? "Photo"
+                                  : messageEntity.reply!.media[0].fileName ??
+                                      "File"
+                              : messageEntity.reply!.text
                           : messageEntity.reply!.text,
                       overflow: TextOverflow.ellipsis,
                       style: Styles.mediumText(
@@ -699,15 +724,21 @@ class ReplySendMessageCard extends StatelessWidget {
             ),
             const Spacer(),
             messageEntity.reply!.media.isNotEmpty
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: CachedNetworkImage(
-                      imageUrl: messageEntity.reply!.media.first.url,
-                      fit: BoxFit.cover,
-                      width: 50,
-                      height: double.infinity,
-                    ),
-                  )
+                ? messageEntity.reply!.media[0].type == FileTypeEnum.image
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: CachedNetworkImage(
+                          imageUrl: messageEntity.reply!.media.first.url,
+                          fit: BoxFit.cover,
+                          width: 50,
+                          height: double.infinity,
+                        ),
+                      )
+                    : const Icon(
+                        Icons.insert_drive_file,
+                        size: 40,
+                        color: AppColors.GREY_DARK_COLOR,
+                      )
                 : const SizedBox(),
           ],
         ),
