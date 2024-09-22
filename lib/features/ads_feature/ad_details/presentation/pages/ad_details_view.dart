@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -14,6 +15,7 @@ import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/detail_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 
@@ -63,7 +65,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
               child: CircularProgressIndicator.adaptive(),
             );
           }
-          List<DetailEntiy>? details = state.ad?.details.where((e) => e.label!='المرتب'&&e.label!='Salary'&&e.label!='price'&&e.label!='Price '&&e.label!='السعر ').toList();
+          List<CreateAdEntity>? details = state.ad?.details.where((e) => e.value.nameAr!='price'&&e.value.nameAr!='السعر').toList();
 
           return Column(
             children: [
@@ -276,7 +278,9 @@ class _AdDetailsViewState extends State<AdDetailsView> {
   }
 
   Widget _buildDetailsWidget({required AdModel ad}) {
-    List<DetailEntiy> details = ad.details.where((e) => e.label!='المرتب'&&e.label!='Salary'&&e.label!='price'&&e.label!='Price '&&e.label!='السعر ').toList();
+    List<CreateAdEntity>? details = ad.details.where((e) => e.value.nameAr!='price'&&e.value.nameAr!='السعر').toList();
+
+    // List<DetailEntiy> details = ad.details.where((e) => e.label!='المرتب'&&e.label!='Salary'&&e.label!='price'&&e.label!='Price '&&e.label!='السعر ').toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -299,8 +303,8 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         : Colors.white),
                 child: Row(
                   children: [
-                    Expanded(child: Label(text: "${detail.label} : ",style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR))),
-                    Expanded(child: Label(text: detail.value)),
+                    Expanded(child: Label(text: "${getLang()=='ar'?detail.value.nameAr:detail.value.nameEn} : ",style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR))),
+                    Expanded(child: Label(text: getLang()=='ar'?detail.value.nameAr:detail.value.nameEn)),
                   ],
                 ),
               );

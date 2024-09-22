@@ -106,6 +106,7 @@ class CodegenLoader extends AssetLoader{
   "restaurantsForSelectedMeal": "المطاعم للوجبة المحدده",
   "itemName": "اسم الوجبة",
   "price": "السعر",
+  "salary": "المرتب",
   "youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval": "تم تقديم التسجيل بنجاح، الان يتم الموافقة عليها من قبل المشرف",
   "selectSubcategoryFirst": "يرجى تحديد الفئه الفرعيه",
   "uploadingImage": "جاري تحميل الصورة...",
@@ -546,6 +547,7 @@ class CodegenLoader extends AssetLoader{
   "provider": "مقدم خدمة",
   "createAd": "إضافة إعلان",
   "title": "العنوان",
+  "adTitle": "عنوان الاعلان",
   "desc": "الوصف",
   "details": "التفاصيل",
   "publish": "نشر",
@@ -657,6 +659,7 @@ static const Map<String,dynamic> en = {
   "cantLoadSubSubCategories": "Can't Load SubSubCategories",
   "creatingRestaurant": "Creating Restaurant...",
   "price": "Price",
+  "salary": "Salary",
   "youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval": "You have submitted your registration successfully, waiting for administration approval",
   "photoForMeal": "Photo For Meal",
   "menu": "Menu",
@@ -1099,6 +1102,7 @@ static const Map<String,dynamic> en = {
   "currency": "L.E",
   "friend": "Friend",
   "view": "View",
+  "adTitle": "Ad Title",
   "shareProfile": "Share Profile"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};

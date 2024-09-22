@@ -12,9 +12,11 @@ extension CreateAdStateX on CreateAdState {
 class CreateAdState {
   final CreateAdStates? status;
   final Failure? failure;
+  final bool? isPrice;
   final List<MainCategoryEntity>? mainCategories;
   final List<SubCategoryEntity>? subCategories;
   final List<AdPropertiesEntity>? adProperties;
+  final List<SelectionEntity>? selections;
   final MainCategoryEntity? selectedCategory;
   final SubCategoryEntity? selectedSubCategory;
   bool? isUser;
@@ -25,9 +27,11 @@ class CreateAdState {
       this.mainCategories,
       this.adProperties,
       this.selectedCategory,
+      this.selections,
       this.selectedSubCategory,
       this.status,
       this.isUser=true,
+      this.isPrice=true,
       this.images,
       this.subCategories});
 
@@ -38,7 +42,9 @@ class CreateAdState {
     List<SubCategoryEntity>? subCategories,
     List<AdPropertiesEntity>? adProperties,
     MainCategoryEntity? selectedCategory,
+    List<SelectionEntity>? selections,
     bool? isUser,
+    bool? isPrice,
     SubCategoryEntity? selectedSubCategory,
     List<UploadFileEntity>? images,
   }) {
@@ -52,6 +58,8 @@ class CreateAdState {
       selectedSubCategory: selectedSubCategory ?? this.selectedSubCategory,
       images: images ?? this.images,
       isUser: isUser ?? this.isUser,
+      isPrice: isPrice ?? this.isPrice,
+      selections: selections ?? this.selections,
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/ad_statistics_model.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/data/models/create_ad_model.dart';
 
 import '../../../../authentication/data/models/user_model.dart';
 import '../../../../requests_history/data/models/address_model.dart';
@@ -56,23 +57,32 @@ class AdModel extends AdEntity {
         details: json['props'] == null
             ? []
             : (json['props'] as List)
-                .map((e) => DetailModel.fromJson(e))
+                .map((e) => CreateAdModel.fromJson(e))
                 .toList(),
         createdAt: DateTime.parse(json['createdAt']));
   }
   Map<String, dynamic> toJson() => {
         "desc": description,
-        // "phone": phone,
+        "phone": phone,
         "title": title,
         "type": isUser==false?"provider":"user",
         "subCategoryId": subCategoryId,
         "mainCategoryId": mainCategoryId,
-    "price":price,
+    if(price!=null)"price":price,
         // "userId": userId,
         "searchText": "testPropsAndAds",
         "images": images,
         "props": details.map((e) {
-          return {"label": e.label, "value": e.value, "type": e.type};
+
+          if(e.value.nameEn.isNotEmpty){
+            return {
+              "value":{
+                "ar":e.value.nameAr,
+                "en":e.value.nameEn
+              },
+              "propertyId":e.propId
+            };
+          }
         }).toList()
       };
 }

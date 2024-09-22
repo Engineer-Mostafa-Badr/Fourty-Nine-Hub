@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_statistics_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../core/utils/duration_helper.dart';
@@ -18,7 +19,7 @@ class AdEntity {
   final AdStatisticsEntity? statistics;
   final AddressEntity? address;
   final UserEntity? user;
-  List<DetailEntiy> details;
+  List<CreateAdEntity> details;
   DateTime createdAt;
   final String? phone;
   final String? subCategoryId;

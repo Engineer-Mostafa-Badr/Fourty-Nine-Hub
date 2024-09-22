@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
@@ -6,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -15,18 +17,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AdDynamicInputWidget extends StatefulWidget {
   final AdPropertiesEntity property;
-  final Function(String) onChanged;
+  final Function(SelectionEntity) onChanged;
+  final Function(String) onTextChanged;
   const AdDynamicInputWidget(
-      {super.key, required this.property, required this.onChanged});
+      {super.key, required this.property, required this.onChanged, required this.onTextChanged});
 
   @override
   State<AdDynamicInputWidget> createState() => _AdDynamicInputWidgetState();
 }
 
 class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
-  String value = '';
+  SelectionEntity? value ;
   @override
   void initState() {
+
     if (widget.property.values.isNotEmpty) {
       value = widget.property.values.first;
     }
@@ -47,25 +51,31 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
   }
 
   Widget _buildTextFieldWidget() {
-    return TextFormField(
-      maxLines: null,
-      onChanged: (v) =>widget.onChanged(v),
-      style: Styles.headerText(fontSize: 26),
-      decoration: InputDecoration(
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.all(5),
-        hintText: widget.property.label,
-        hintStyle: Styles.mediumText(),
-        prefix: Sizer(width: 20.w,)
-      ),
-      // keyboardType: TextInputType.number,
-      validator: (value) {
-        if ((value == null || value.isEmpty)) {
-          return LocaleKeys.required.localize;
-        } else {
-          return null;
-        }
-      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Label(text: getLang()=='ar'?widget.property.nameAr:widget.property.nameEn),
+        TextFormField(
+          maxLines: null,
+          onChanged: (v) =>widget.onTextChanged(v),
+          style: Styles.headerText(fontSize: 26),
+          decoration: InputDecoration(
+            fillColor: Colors.white,
+            contentPadding: const EdgeInsets.all(5),
+            hintText: getLang()=='ar'?widget.property.nameAr:widget.property.nameEn,
+            hintStyle: Styles.mediumText(),
+            prefix: Sizer(width: 20.w,)
+          ),
+          // keyboardType: TextInputType.number,
+          validator: (value) {
+            if ((value == null || value.isEmpty)) {
+              return LocaleKeys.required.localize;
+            } else {
+              return null;
+            }
+          },
+        ),
+      ],
     );
   }
 
@@ -73,14 +83,14 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Label(text: widget.property.label),
+        Label(text: getLang()=='ar'?widget.property.nameAr:widget.property.nameEn),
         InkWell(
           onTap: () {
             bottomSheet(
                 context: context,
                 isScrollControlled: true,
                 widget: _buildOptionsSheet(
-                    action: (String v) {
+                    action: (SelectionEntity v) {
                       widget.onChanged(v);
                       context.pop();
                     },
@@ -94,7 +104,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
               border: Border.all(color: Colors.grey),
               borderRadius: BorderRadius.circular(5),
             ),
-            child: Label(text: value),
+            child: Label(text: getLang()=='ar'?value?.nameAr??'':value?.nameEn??''),
           ),
         ),
       ],
@@ -102,8 +112,8 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
   }
 
   Widget _buildOptionsSheet({
-    required Function(String v) action,
-    required List<String> values,
+    required Function(SelectionEntity v) action,
+    required List<SelectionEntity> values,
   }) {
     return Scaffold(
       appBar: const BackAppBar(
@@ -119,19 +129,25 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
                 value = v;
                 setState(() {});
               },
-              title: Label(text: v),
+              title: Label(text: getLang()=='ar'?v.nameAr:v.nameEn),
             );
           }),
     );
   }
 
   Widget _buildNumberFieldWidget() {
-    return FormTextField(
-      label: widget.property.label,
-      type: TextInputType.number,
-      height: kToolbarHeight * .8,
-      hint: 'Type here',
-      action: (String v) => widget.onChanged(v),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Label(text: getLang()=='ar'?widget.property.nameAr:widget.property.nameEn),
+        FormTextField(
+          label: getLang()=='ar'?widget.property.nameAr:widget.property.nameEn,
+          type: TextInputType.number,
+          height: kToolbarHeight * .8,
+          hint: 'Type here',
+          action: (String v) => widget.onTextChanged(v),
+        ),
+      ],
     );
   }
 
@@ -139,7 +155,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Label(text: widget.property.label),
+        Label(text: getLang()=='ar'?widget.property.nameAr:widget.property.nameEn),
         RichText(
             text: TextSpan(
                 children: widget.property.values.map((e) {
@@ -160,7 +176,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: Label(
-                text: e,
+                text: getLang()=='ar'?e.nameAr:e.nameEn,
               ),
             ),
           ));

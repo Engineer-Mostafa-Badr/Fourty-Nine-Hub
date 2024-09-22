@@ -554,7 +554,7 @@ class EndPoints {
   }
 
   static String getSubcategoryAdProps(String id) {
-    return '/ads/PropsBySubCategoryId/$id';
+    return '/ads/PropsByMainCategoryId/$id';
   }
 
   static const createAd = '/ads/create-ads';

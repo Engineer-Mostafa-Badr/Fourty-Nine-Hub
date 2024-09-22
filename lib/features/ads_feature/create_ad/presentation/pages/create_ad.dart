@@ -10,6 +10,7 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -38,7 +39,7 @@ class _CreateAdViewState extends State<CreateAdView> {
   void initState() {
     context
         .read<CreateAdCubit>()
-        .loadData(subCategoryId: widget.categorization.subCategory.id);
+        .loadData(subCategoryId: widget.categorization.mainCategory.id);
     super.initState();
   }
 
@@ -151,6 +152,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                   ],
                 ),
                 const Sizer(),
+                Label(text: LocaleKeys.adTitle.localize),
                 TextFormField(
                   maxLines: null,
                   onChanged: (v) =>controller.title = v,
@@ -171,6 +173,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                   },
                 ),
                 const Sizer(),
+                Label(text: LocaleKeys.desc.localize),
                 TextFormField(
                   maxLines: null,
                   onChanged: (v) =>controller.description = v,
@@ -191,14 +194,57 @@ class _CreateAdViewState extends State<CreateAdView> {
                   },
                 ),
                 const Sizer(),
+                Label(text: LocaleKeys.phone.localize),
+                TextFormField(
+                  maxLines: null,
+                  onChanged: (v) =>controller.phone = v,
+                  style: Styles.headerText(fontSize: 26),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.all(5),
+                    hintText: LocaleKeys.phone.localize,
+                    hintStyle: Styles.mediumText(),
+                      prefix: Sizer(width: 20.w,)
+                  ),
+                  validator: (value) {
+                    if ((value == null || value.isEmpty)) {
+                      return LocaleKeys.required.localize;
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+                Sizer(),
+                Label(text: state.isPrice==true?LocaleKeys.price.localize:LocaleKeys.salary.localize),
+                TextFormField(
+                  maxLines: null,
+                  onChanged: (v) =>controller.price = v,
+                  style: Styles.headerText(fontSize: 26),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.all(5),
+                    hintText: state.isPrice==true?LocaleKeys.price.localize:LocaleKeys.salary.localize,
+                    hintStyle: Styles.mediumText(),
+                      prefix: Sizer(width: 20.w,)
+                  ),
+                  validator: (value) {
+                    if ((value == null || value.isEmpty)) {
+                      return LocaleKeys.required.localize;
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+                const Sizer(),
                 ListView.separated(
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     final property = state.adProperties![index];
                     return AdDynamicInputWidget(
                       property: property,
-                      onChanged: (String v) =>
-                          controller.onChanged(v: v, index: index),
+                      onChanged: (SelectionEntity v) =>
+                          controller.onChanged(v: v, index: index), onTextChanged: (String v) =>
+                        controller.onTextChanged(v: v, index: index),
                     );
                   },
                   separatorBuilder: (context, index) => const Sizer(),

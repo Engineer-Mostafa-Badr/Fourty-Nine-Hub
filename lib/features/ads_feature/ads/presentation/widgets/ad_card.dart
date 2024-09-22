@@ -1,6 +1,7 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -8,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/detail_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:go_router/go_router.dart';
@@ -32,7 +34,7 @@ class AdCard extends StatefulWidget {
 class _AdCardState extends State<AdCard> {
   @override
   Widget build(BuildContext context) {
-    List<DetailEntiy> details = widget.item.details.where((e) => e.label!='المرتب'&&e.label!='Salary'&&e.label!='price'&&e.label!='Price '&&e.label!='السعر ').toList();
+    List<CreateAdEntity> details = widget.item.details.where((e) => e.value.nameAr!='السعر'&&e.value.nameAr!='المرتب').toList();
     return InkWell(
       child: Container(
         width: kToolbarHeight * 2.5,
@@ -166,10 +168,10 @@ class _AdCardState extends State<AdCard> {
                                       child: Row(
                                         children: [
                                           Label(
-                                              text: '${e.label} : ',
+                                              text: '${getLang()=='ar'?e.value.nameAr:e.value.nameEn} : ',
                                               style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
                                           Label(
-                                              text: e.value,
+                                              text: getLang()=='ar'?e.value.nameAr:e.value.nameEn,
                                               style: Styles.mediumText(color: AppColors.PRIMARY_COLOR)),
                                         ],
                                       ));

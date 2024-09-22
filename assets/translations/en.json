@@ -99,6 +99,7 @@
   "cantLoadSubSubCategories": "Can't Load SubSubCategories",
   "creatingRestaurant": "Creating Restaurant...",
   "price": "Price",
+  "salary": "Salary",
   "youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval": "You have submitted your registration successfully, waiting for administration approval",
   "photoForMeal": "Photo For Meal",
   "menu": "Menu",
@@ -542,5 +543,6 @@
   "currency": "L.E",
   "friend": "Friend",
   "view": "View",
+  "adTitle": "Ad Title",
   "shareProfile": "Share Profile"
 }
