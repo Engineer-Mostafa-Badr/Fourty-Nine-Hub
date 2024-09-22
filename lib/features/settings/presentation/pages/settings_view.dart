@@ -13,32 +13,33 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../common/theme/cubit/cubit.dart';
 import '../../../../common/theme/cubit/states.dart';
+import '../../../../core/messages/messages.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 
 import '../../../../res/style/styles.dart';
+import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = context.read<UserCubit>();
     return Scaffold(
         appBar: BackAppBar(
           label: LocaleKeys.settings.localize,
         ),
         body: BlocProvider<SettingCubit>(
-          create: (BuildContext context) =>serviceLocator(),
+          create: (BuildContext context) => serviceLocator(),
           child: BlocConsumer<SettingCubit, SettingState>(
             listener: (BuildContext context, SettingState state) {
-              if (state.status == SettingStates.success) {
-                // showSuccessMessage(
-                //   context,
-                //   LocaleKeys.deleteSuccessfully.localize,
-                // );
-                print('77777777777777777777777777777');
-                print(state.able?.isDisabled );
-                print('77777777777777777777777777777');
+              if (state.status == SettingStates.success1) {
+                showSuccessMessage(
+                  context,
+                  LocaleKeys.deleteSuccessfully.localize,
+                );
+                controller.logout();
                 context.push(Routes.HOME);
               }
             },
@@ -46,43 +47,47 @@ class SettingsView extends StatelessWidget {
               print('Account isDisabled status: ${state.able?.isDisabled}');
               return Column(
                 children: [
-                  listTileWidget(
-                      image: Assets.password,
-                      trailing:
-                          Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
-                      label: LocaleKeys.changePassword.localize,
-                      onTap: () => context.push(Routes.FORGOTPASSWORD)),
-                  listTileWidget(
-                      image: Assets.noPerson,
-                      trailing:
-                          Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
-                      label:state.able?.isDisabled == true? 'Enable Account':LocaleKeys.disableAccount.localize,
-                      onTap: () => showAreYouSure(
-                          title: LocaleKeys.alert.localize,
-                          subTitle:LocaleKeys.disable.localize,
-                          action: () {
-                            if (state.able?.isDisabled == true) {
-                              context.read<SettingCubit>().enableAccount();
-                            } else {
-                              context.read<SettingCubit>().disableAccount();
-                            }
-                          },
-                          context: context)),
-                  listTileWidget(
-                      image: Assets.person,
-                      trailing: Icon(
-                        Icons.arrow_forward_ios_outlined,
-                        size: 40.h,
-                      ),
-                      label: LocaleKeys.deleteAccount.localize,
-                      onTap: () => showAreYouSure(
-                          title: LocaleKeys.alert.localize,
-                          subTitle: LocaleKeys.delete.localize,
-                          action: () {
-                            context.read<SettingCubit>().deleteAccount();
-                          },
-                          context: context)),
-
+                  if (context.read<UserCubit>().isLoggedIn)
+                    listTileWidget(
+                        image: Assets.password,
+                        trailing:
+                            Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
+                        label: LocaleKeys.changePassword.localize,
+                        onTap: () => context.push(Routes.FORGOTPASSWORD)),
+                  if (context.read<UserCubit>().isLoggedIn)
+                    listTileWidget(
+                        image: Assets.noPerson,
+                        trailing:
+                            Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
+                        label: state.able?.isDisabled == true
+                            ? 'Enable Account'
+                            : LocaleKeys.disableAccount.localize,
+                        onTap: () => showAreYouSure(
+                            title: LocaleKeys.alert.localize,
+                            subTitle: LocaleKeys.disable.localize,
+                            action: () {
+                              if (state.able?.isDisabled == true) {
+                                context.read<SettingCubit>().enableAccount();
+                              } else {
+                                context.read<SettingCubit>().disableAccount();
+                              }
+                            },
+                            context: context)),
+                  if (context.read<UserCubit>().isLoggedIn)
+                    listTileWidget(
+                        image: Assets.person,
+                        trailing: Icon(
+                          Icons.arrow_forward_ios_outlined,
+                          size: 40.h,
+                        ),
+                        label: LocaleKeys.deleteAccount.localize,
+                        onTap: () => showAreYouSure(
+                            title: LocaleKeys.alert.localize,
+                            subTitle: LocaleKeys.delete.localize,
+                            action: () {
+                              context.read<SettingCubit>().deleteAccount();
+                            },
+                            context: context)),
                   BlocBuilder<ThemeCubit, ThemeStates>(
                     builder: (BuildContext context, theme) {
                       return SwitchListTile(
@@ -94,17 +99,17 @@ class SettingsView extends StatelessWidget {
                         ),
                         title: theme is DarkThemeModeStates
                             ? Text(
-                          LocaleKeys.lightMode.localize,
-                          style: Styles.mediumText(
-                              fontSize: 65.sp,
-                              fontWeight: FontWeight.w400),
-                        )
+                                LocaleKeys.lightMode.localize,
+                                style: Styles.mediumText(
+                                    fontSize: 65.sp,
+                                    fontWeight: FontWeight.w400),
+                              )
                             : Text(
-                          LocaleKeys.darkMode.localize,
-                          style: Styles.mediumText(
-                              fontSize: 65.sp,
-                              fontWeight: FontWeight.w400),
-                        ),
+                                LocaleKeys.darkMode.localize,
+                                style: Styles.mediumText(
+                                    fontSize: 65.sp,
+                                    fontWeight: FontWeight.w400),
+                              ),
                         value: ThemeCubit.get(context).isDarkTheme,
                         activeColor: AppColors.SECONDARY_COLOR,
                         activeTrackColor: AppColors.AUTH_CONTAINER_COLOR,
@@ -139,7 +144,9 @@ class SettingsView extends StatelessWidget {
         height: 50.h,
       ),
       title: Label(
-          text: label, style: Styles.mediumText(fontSize: 65.sp,fontWeight: FontWeight.w400)),
+          text: label,
+          style:
+              Styles.mediumText(fontSize: 65.sp, fontWeight: FontWeight.w400)),
       onTap: () => onTap(),
       trailing: trailing,
     );
