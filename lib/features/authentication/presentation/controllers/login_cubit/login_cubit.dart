@@ -159,7 +159,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     // Create a credential from the access token
     final OAuthCredential facebookAuthCredential =
-    FacebookAuthProvider.credential(loginResult.accessToken!.token);
+    FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
 
     // Once signed in, return the UserCredential
     UserCredential userCredential = await FirebaseAuth.instance
