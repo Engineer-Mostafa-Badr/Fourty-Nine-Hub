@@ -22,7 +22,7 @@ class _FavouriteViewState extends State<FavouriteView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         label: LocaleKeys.favouriteAds.localize,
       ),
       body: BlocBuilder<FavouriteAdsCubit, BasicState<List<FavouriteAdEntity>>>(
@@ -32,15 +32,17 @@ class _FavouriteViewState extends State<FavouriteView> {
         }
         return Padding(
           padding: EdgeInsets.all(10.0.w),
-          child: GridView.builder(
+          child: ListView.builder(
               itemBuilder: (context, index) => AdCard(
-                    item: state.data![index].item, onFav: (String ) {  }, onRemoveFav: (String ) {  },
+                    item: state.data![index].item,
+                    onFav: (String) {},
+                    onRemoveFav: (String) {},
                   ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: .8,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  crossAxisCount: 2),
+              // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              //     childAspectRatio: .8,
+              //     mainAxisSpacing: 10,
+              //     crossAxisSpacing: 10,
+              //     crossAxisCount: 2),
               itemCount: state.data?.length ?? 0),
         );
       }),
