@@ -538,6 +538,8 @@ abstract class  LocaleKeys {
   static const subscribtionWillEndAt = 'subscribtionWillEndAt';
   static const TripJoinRequestHistory = 'TripJoinRequestHistory';
   static const noTripRequests = 'noTripRequests';
-  static const _ = '_';
+  static const tripJoinNotifications = 'tripJoinNotifications';
+  static const subscribeToContactTheClient = 'subscribeToContactTheClient';
+  static const goToRequestHistory = 'goToRequestHistory';
 
 }

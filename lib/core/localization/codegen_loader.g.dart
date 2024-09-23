@@ -558,7 +558,9 @@ class CodegenLoader extends AssetLoader{
   "subscribtionWillEndAt": "الاشتراك سوف ينتهي في ",
   "TripJoinRequestHistory": "تاريخ طلبات مشاركة الرحلة",
   "noTripRequests": "لا يوجد طلبات لمشاركة الرحلة",
-  "_": "_"
+  "tripJoinNotifications": "أشعارات مشاركة الرحلات",
+  "subscribeToContactTheClient": "أشترك للتواصل مع العميل",
+  "goToRequestHistory": "الذهاب الي تاريخ الطلبات"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1105,7 +1107,9 @@ static const Map<String,dynamic> en = {
   "subscribtionWillEndAt": "Subscribtion will end at ",
   "TripJoinRequestHistory": "Trip Join Request History",
   "noTripRequests": "There are no requests history",
-  "_": "_"
+  "tripJoinNotifications": "Trip Join Notification",
+  "subscribeToContactTheClient": "Subscribe to contact the client",
+  "goToRequestHistory": "Go to Request History"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

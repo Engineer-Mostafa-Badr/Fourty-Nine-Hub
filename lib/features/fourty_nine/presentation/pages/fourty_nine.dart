@@ -273,16 +273,20 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             children: [
               Expanded(
                 child: _buildRideSubCategoryItem(
-                  service: state.data![0].service,
-                  image: state.data![0].image,
+                  service: state.data![0].service ?? RideServicesEnum.pickMe,
+                  image: state.data![0].image ?? '',
+                  isFavorite: state.data![0].isFavorite,
+                  numberOfAds: state.data![0].numberOfAds?.toInt(),
                 ),
               ),
               const Sizer(),
               Expanded(
                 child: _buildRideSubCategoryItem(
-                  service: state.data![1].service,
-                  image: state.data![1].image,
+                  service: state.data![1].service ?? RideServicesEnum.comeWithYou,
+                  image: state.data![1].image ?? '',
                   route: Routes.AVAILABLE_TRIPS,
+                  isFavorite: state.data![1].isFavorite,
+                  numberOfAds: state.data![1].numberOfAds?.toInt(),
                 ),
               )
             ],
@@ -368,6 +372,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     required RideServicesEnum service,
     required String image,
     String? route,
+    bool? isFavorite,
+    int? numberOfAds,
   }) {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),
@@ -426,14 +432,15 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         InkWell(
                           onTap: () async {},
                           child: Icon(
-                            Icons.favorite_border,
+                            isFavorite ?? false ? Icons.favorite : Icons.favorite_border,
+                            // Icons.favorite,
                             color: AppColors.SECONDARY_COLOR,
                             size: 38.h,
                           ),
                         ),
                         const Spacer(),
                         Label(
-                          text: '4 ${LocaleKeys.ads.tr()}',
+                          text: '$numberOfAds ${LocaleKeys.ads.tr()}',
                           style: Styles.mediumText(
                             color: Colors.white,
                           ),

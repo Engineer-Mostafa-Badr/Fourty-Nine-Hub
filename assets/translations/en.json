@@ -544,5 +544,7 @@
   "subscribtionWillEndAt" : "Subscribtion will end at " , 
   "TripJoinRequestHistory" :"Trip Join Request History" , 
   "noTripRequests" :"There are no requests history" , 
-  "_" : "_"
+  "tripJoinNotifications" : "Trip Join Notification" , 
+  "subscribeToContactTheClient" : "Subscribe to contact the client" , 
+  "goToRequestHistory" : "Go to Request History" 
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/features/trip_join/notifications/data/models/trip_join_request_model/trip_join_request_model.dart';
@@ -17,12 +19,10 @@ class RequestTripJoinNotificationView extends StatefulWidget {
   const RequestTripJoinNotificationView({super.key, required this.payload});
   final Map<String, dynamic> payload;
   @override
-  State<RequestTripJoinNotificationView> createState() =>
-      _RequestTripJoinNotificationViewState();
+  State<RequestTripJoinNotificationView> createState() => _RequestTripJoinNotificationViewState();
 }
 
-class _RequestTripJoinNotificationViewState
-    extends State<RequestTripJoinNotificationView> {
+class _RequestTripJoinNotificationViewState extends State<RequestTripJoinNotificationView> {
   late final TripJoinCardEntity tripJoinCardEntity;
   @override
   void initState() {
@@ -32,18 +32,6 @@ class _RequestTripJoinNotificationViewState
 
   @override
   Widget build(BuildContext context) {
-    // TripJoinCardEntity tripJoinCardEntity = TripJoinCardEntity(
-    //   requestOwnerFirstName: 'Eslam',
-    //   gender: 'male',
-    //   brand: 'Toyota',
-    //   model: 'Corolla',
-    //   journeyPrice: 300,
-    //   status: 'regular',
-    //   startingAddressEn: 'Samia El Gamal, Mansoura Qism 2, El Mansoura, Dakahlia Governorate 7650310, Egypt',
-    //   destinationAddressEn: 'El Gomhouria St, Dakahlia Governorate, Egypt',
-    //   publishDate: 1726399641,
-    //   isRepeated: true,
-    // );
     pr(widget.payload, 'notication page build method is called');
     return SafeArea(
       child: Scaffold(
@@ -51,7 +39,7 @@ class _RequestTripJoinNotificationViewState
           title: Transform(
             transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
             child: Text(
-              'Trip Join Notification',
+              LocaleKeys.tripJoinNotifications.localize,
               style: Styles.headerText(),
             ),
           ),
@@ -64,7 +52,7 @@ class _RequestTripJoinNotificationViewState
               if (await _userApproved(
                 tripJoinCardEntity,
                 UIConst.chatNormalId,
-                'Chat Subscription',
+                LocaleKeys.chatSubscription.localize,
               )) {
                 launchUrlString("tel://${tripJoinCardEntity.phone}");
               }
@@ -73,7 +61,7 @@ class _RequestTripJoinNotificationViewState
               if (await _userApproved(
                 tripJoinCardEntity,
                 UIConst.chatNormalId,
-                'Chat Subscription',
+                LocaleKeys.chatSubscription.localize,
               )) {}
             },
             reportOnTap: () {
@@ -83,7 +71,7 @@ class _RequestTripJoinNotificationViewState
               if (await _isPremuim(
                 tripJoinCardEntity,
                 tripJoinCardEntity.categoryId ?? '',
-                'Trip Join Subscription',
+                LocaleKeys.tripjoinPremuimSubscription.localize,
               )) {}
             },
             navigateToRequestHistoryCallback: () {},
@@ -93,14 +81,10 @@ class _RequestTripJoinNotificationViewState
     );
   }
 
-  Future<bool> _isPremuim(TripJoinCardEntity tripJoinCardEntity,
-      String subCategoryId, String title) async {
-    if (tripJoinCardEntity.subscribedPremium == null ||
-        tripJoinCardEntity.subscribedPremium == false) {
+  Future<bool> _isPremuim(TripJoinCardEntity tripJoinCardEntity, String subCategoryId, String title) async {
+    if (tripJoinCardEntity.subscribedPremium == null || tripJoinCardEntity.subscribedPremium == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-        wallets: [
-          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
-        ],
+        wallets: [tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance],
         subCategoryId: subCategoryId,
         title: title,
       );
@@ -109,14 +93,10 @@ class _RequestTripJoinNotificationViewState
     return false;
   }
 
-  Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity,
-      String subCategoryId, String title) async {
-    if (tripJoinCardEntity.isApproved == null ||
-        tripJoinCardEntity.isApproved == false) {
+  Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity, String subCategoryId, String title) async {
+    if (tripJoinCardEntity.isApproved == null || tripJoinCardEntity.isApproved == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-        wallets: [
-          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
-        ],
+        wallets: [tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance],
         subCategoryId: subCategoryId,
         title: title,
       );
@@ -125,8 +105,7 @@ class _RequestTripJoinNotificationViewState
     return false;
   }
 
-  void _reportOnTap(
-      BuildContext context, TripJoinCardEntity tripJoinCardEntity) {
+  void _reportOnTap(BuildContext context, TripJoinCardEntity tripJoinCardEntity) {
     bottomSheet(
         context: context,
         widget: ReportViewTripJoin(

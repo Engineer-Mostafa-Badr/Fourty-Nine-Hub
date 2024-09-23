@@ -543,5 +543,7 @@
   "subscribtionWillEndAt" : "الاشتراك سوف ينتهي في " , 
   "TripJoinRequestHistory" :"تاريخ طلبات مشاركة الرحلة" , 
   "noTripRequests" :"لا يوجد طلبات لمشاركة الرحلة" , 
-  "_" : "_"
+  "tripJoinNotifications" : "أشعارات مشاركة الرحلات" , 
+  "subscribeToContactTheClient" : "أشترك للتواصل مع العميل" , 
+  "goToRequestHistory" : "الذهاب الي تاريخ الطلبات" 
 }
