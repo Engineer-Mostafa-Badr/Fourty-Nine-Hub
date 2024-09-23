@@ -9,8 +9,7 @@ class UpdatePrivacyUseCase extends UseCase<PrivacyEntity, UpdatePrivacyParams> {
 
   UpdatePrivacyUseCase(this._privacyRepository);
   @override
-  Future<Either<Failure, PrivacyEntity>> call(
-      UpdatePrivacyParams params) async {
+  Future<Either<Failure, PrivacyEntity>> call(UpdatePrivacyParams params) async {
     return await _privacyRepository.updateDataPrivacy(params);
   }
 }
@@ -31,6 +30,7 @@ class UpdatePrivacyParams {
   final String? privacyFollowerList;
   final String? privacyActivity;
   final String? privacyCall;
+  final String? privacyRandomAppearance;
   final bool? privacyFriendRequest;
   final bool? privacyFollowRequest;
 
@@ -50,6 +50,7 @@ class UpdatePrivacyParams {
       this.privacyFollowerList,
       this.privacyActivity,
       this.privacyCall,
+      this.privacyRandomAppearance,
       this.privacyFriendRequest,
       this.privacyFollowRequest});
 
@@ -71,5 +72,6 @@ class UpdatePrivacyParams {
         'privacyCall': privacyCall,
         'privacyFriendRequest': privacyFriendRequest,
         'privacyFollowRequest': privacyFollowRequest,
+        'privacyRandomAppearance': privacyRandomAppearance,
       };
 }

@@ -13,7 +13,9 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_cat
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../../res/assets/jsons.dart';
+import '../../../domain/entities/wallet_home_entity.dart';
 import '../../models/slider_item_model.dart';
+import '../../models/wallet_home_model.dart';
 
 abstract class FourtyNineRemoteDataSource {
   Future<Either<Failure, List<ParentMainCategoryEntity>>>
@@ -30,6 +32,7 @@ abstract class FourtyNineRemoteDataSource {
 
   Future<Either<Failure, bool>> removeMainCategoryFromFavorites(String id);
   Future<Either<Failure, BannerModel>> getBannerById({required String id});
+  Future<Either<Failure,WalletHomeEntity>> getWalletHome();
 }
 
 class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
@@ -131,6 +134,16 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
       (failure) => Left(failure),
       (response) => Right(BannerModel.fromJson(
           response['data']["mainCategory"] as Map<String, dynamic>)),
+    );
+  }
+
+  @override
+  Future<Either<Failure, WalletHomeEntity>> getWalletHome()async {
+    final result =
+    await _apiConsumer.get(EndPoints.getWalletHome);
+    return result.fold(
+          (failure) => Left(failure),
+          (data) => Right(WalletHomeModel.fromJson(data['data'])),
     );
   }
 }

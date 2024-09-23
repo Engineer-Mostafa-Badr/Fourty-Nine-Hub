@@ -136,6 +136,9 @@ class SubscriptionWidget extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
                 textColor: Theme.of(context).scaffoldBackgroundColor,
                 function: () {
+                  print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+                  print(subscription.subCategoryId);
+                  print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
                   serviceLocator<SubscriptionController>()
                       .showSubscriptionPlans(
                     subCategoryId: subscription.subCategoryId!,

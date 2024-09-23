@@ -9,17 +9,20 @@ import 'detail_entity.dart';
 class AdEntity {
   final String id;
   final String title;
+  bool? isUser;
   final String description;
   final List<String> images;
-  final num price;
+  final num? price;
   final bool active;
   final AdStatisticsEntity? statistics;
   final AddressEntity? address;
   final UserEntity? user;
   List<DetailEntiy> details;
   DateTime createdAt;
-  final String phone;
+  final String? phone;
   final String? subCategoryId;
+  final String? mainCategoryId;
+  final String? userId;
   String get formatedDate => DateFormat('yyyy-MM-dd').format(createdAt);
   Duration get restTimeDuration => DateTime.now().difference(createdAt);
 
@@ -30,13 +33,15 @@ class AdEntity {
       {required this.id,
       required this.title,
       required this.description,
-      required this.images,
-      required this.price,
+      required this.images, this.price,
+        this.isUser,
       required this.address,
-      required this.phone,
+       this.phone,
       this.statistics,
       required this.user,
       this.subCategoryId,
+      this.mainCategoryId,
+      this.userId,
       required this.active,
       required this.details,
       required this.createdAt});

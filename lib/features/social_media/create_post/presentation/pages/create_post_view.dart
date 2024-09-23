@@ -77,27 +77,27 @@ class _CreatePostViewState extends State<CreatePostView> {
                           final res = await CustomVerticalSheetItem.normal<
                               PrivacyStatus>(context, [
                             CustomSheetModel(
-                              text: "Public",
+                              text: LocaleKeys.public.localize,
                               value: PrivacyStatus.public,
                               iconData: Icons.language,
                             ),
                             CustomSheetModel(
-                              text: "Friends",
+                              text: LocaleKeys.friends.localize,
                               value: PrivacyStatus.friends,
                               iconData: Icons.family_restroom,
                             ),
                             CustomSheetModel(
-                              text: "Followers",
+                              text: LocaleKeys.followers.localize,
                               value: PrivacyStatus.followers,
                               iconData: Icons.accessibility_sharp,
                             ),
                             CustomSheetModel(
-                              text: "Friends / Followers",
+                              text: LocaleKeys.friendsAndFollowers.localize,
                               value: PrivacyStatus.friendsAndFollowers,
                               iconData: Icons.supervised_user_circle_outlined,
                             ),
                             CustomSheetModel(
-                              text: "Only Me",
+                              text: LocaleKeys.onlyMe.localize,
                               value: PrivacyStatus.onlyMe,
                               iconData: Icons.lock,
                             ),
@@ -133,15 +133,15 @@ class _CreatePostViewState extends State<CreatePostView> {
                               Sizer(),
                               Text(
                                 state.selectedPrivacy == 'onlyMe'
-                                    ? 'Only Me'
+                                    ? LocaleKeys.onlyMe.localize
                                     : state.selectedPrivacy == 'friends'
-                                        ? 'Friends'
+                                        ? LocaleKeys.friends.localize
                                         : state.selectedPrivacy == 'followers'
-                                            ? 'Followers'
+                                            ? LocaleKeys.followers.localize
                                             : state.selectedPrivacy ==
                                                     'friendsAndFollowers'
-                                                ? 'Friends / Followers'
-                                                : 'Public',
+                                                ? LocaleKeys.friendsAndFollowers.localize
+                                                : LocaleKeys.public.localize,
                                 style: Styles.mediumText(
                                     color: AppColors.PRIMARY_COLOR,
                                     fontSize: 24),
@@ -198,7 +198,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                                         child: Row(
                                           children: [
                                             Text(
-                                              'Feeling ',
+                                              '${LocaleKeys.feeling.localize} ',
                                               style: Styles.headerText(
                                                   fontSize: 24),
                                             ),
@@ -267,7 +267,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Label(
-                        text: 'with: ',
+                        text: '${LocaleKeys.withKey.localize}: ',
                         style: Styles.headerText(),
                       ),
                     ),
@@ -377,7 +377,7 @@ class _CreatePostViewState extends State<CreatePostView> {
               controller:
                   context.read<CreatePostCubit>().postContentTextController,
               decoration: InputDecoration(
-                hintText: 'Type Here ... ',
+                hintText: '${LocaleKeys.typeHere.localize} ... ',
                 hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
                 floatingLabelAlignment: FloatingLabelAlignment.center,
                 fillColor: ((state.isBiggerThen150 == true &&
@@ -557,7 +557,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                     ),
                     Sizer(),
                     Text(
-                      'Photo',
+                      LocaleKeys.photo.localize,
                       style: Styles.mediumText(
                           fontSize: 34, fontWeight: FontWeight.w500),
                     ),
@@ -590,7 +590,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                       ),
                       Sizer(),
                       Text(
-                        'Activity',
+                        LocaleKeys.activity.localize,
                         style: Styles.mediumText(
                             fontSize: 34, fontWeight: FontWeight.w500),
                       ),
@@ -624,7 +624,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                       ),
                       Sizer(),
                       Text(
-                        'Feeling',
+                        LocaleKeys.feeling.localize,
                         style: Styles.mediumText(
                             fontSize: 34, fontWeight: FontWeight.w500),
                       ),
@@ -658,7 +658,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                       ),
                       Sizer(),
                       Text(
-                        'Tag People',
+                        LocaleKeys.tagPeople.localize,
                         style: Styles.mediumText(
                             fontSize: 34, fontWeight: FontWeight.w500),
                       ),

@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/trip_model.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/trip_entity.dart';
 
@@ -10,7 +11,7 @@ import '../../domain/usecases/request_come_with_me_usecase.dart';
 
 abstract class AdsRemoteDataSource {
   Future<Either<Failure, List<AdModel>>> getAds(
-      {required String subCategoryId});
+      {required GetAdsParams params});
   Future<Either<Failure, List<TripEntity>>> getComeWithMeAds();
   Future<Either<Failure, List<TripEntity>>> getPickMeAds();
   Future<Either<Failure, bool>> requestPickMe({required RequestParams params});
@@ -24,9 +25,9 @@ class AdsRemoteDataSourceImpl implements AdsRemoteDataSource {
   AdsRemoteDataSourceImpl(this._apiConsumer);
   @override
   Future<Either<Failure, List<AdModel>>> getAds(
-      {required String subCategoryId}) async {
+      {required GetAdsParams params}) async {
     final response =
-        await _apiConsumer.get(EndPoints.subCategoryAds(subCategoryId));
+        await _apiConsumer.get(EndPoints.subCategoryAds(params));
     return response.fold(
         (failure) => Left(failure),
         (response) => Right((response['data'] as List)

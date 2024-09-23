@@ -138,6 +138,9 @@ abstract class Routes {
 
   static const SPOTLIGHT = '/Spotlight';
   static const SNAP = '/Snap';
+  static const SEEALLBROADCASTS = '/SeeAllBroadcasts';
+    static const BROADCAST = '/Broadcast';
+
 }
 
 abstract class Paths {
@@ -265,4 +268,8 @@ abstract class Paths {
   static const SNAP = 'Snap';
 
   static const SELECTCONTACTSTOSHARE = 'SelectContactsToShareView';
+
+  static const SEEALLBROADCASTS = 'SeeAllBroadcasts';
+
+  static const BROADCAST = 'Broadcast';
 }

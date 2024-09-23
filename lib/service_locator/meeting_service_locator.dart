@@ -30,7 +30,8 @@ class MeetingServiceLocator {
     serviceLocator
         .registerFactory(() => GetScheduledRoomsUseCase(serviceLocator()));
     //cubit
-    serviceLocator.registerFactory(() => MeetingCubit(
+    serviceLocator.registerFactory(() => StreamCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

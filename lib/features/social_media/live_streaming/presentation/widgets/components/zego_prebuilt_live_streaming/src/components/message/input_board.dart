@@ -1,6 +1,5 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 // Package imports:
@@ -61,7 +60,7 @@ class ZegoLiveStreamingInRoomMessageInputBoard extends ModalRoute<String> {
             ),
           ),
           ZegoInRoomMessageInput(
-            placeHolder: LocaleKeys.saySomthing.localize,
+            placeHolder: LocaleKeys.comment.localize,
             payloadAttributes: payloadAttributes,
             // to change text field text color
             textColor: Colors.black,

@@ -1,19 +1,21 @@
 import 'dart:developer';
-import 'package:easy_localization/easy_localization.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../data/shared/shared.dart';
 
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key});
@@ -42,25 +44,28 @@ class UserProfilePageState extends State<UserProfilePage> {
         : _buildProfileScaffold(context);
   }
 
-  SharedScaffold _buildLoadingScaffold() {
-    return SharedScaffold(
-      mainCategoryId: 6,
-      body: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          title: const Text('My Profile'),
+  Scaffold _buildLoadingScaffold() {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(
+          context.isArabic ? 'الصفحة الشخصية' : 'Profile',
+          textScaler: TextScaler.noScaling,
         ),
-        body: const Center(child: CupertinoActivityIndicator()),
       ),
+      body: const Center(child: CupertinoActivityIndicator()),
     );
   }
 
-  SharedScaffold _buildProfileScaffold(BuildContext context) {
-    return SharedScaffold(
-      mainCategoryId: 6,
-      body: Scaffold(
-        floatingActionButton: _buildFloatingActionButton(context),
-        body: SingleChildScrollView(
+  Scaffold _buildProfileScaffold(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: _buildFloatingActionButton(context),
+      appBar: AppBar(
+        toolbarHeight: kToolbarHeight / 2,
+      ),
+      extendBodyBehindAppBar: true,
+      body: SafeArea(
+        child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 20.h),
@@ -71,7 +76,7 @@ class UserProfilePageState extends State<UserProfilePage> {
                 _buildUserInfo(context),
                 _buildStats(context),
                 const Sizer(
-                  height: kToolbarHeight,
+                  height: kToolbarHeight * 1.5,
                 ),
               ],
             ),
@@ -93,10 +98,9 @@ class UserProfilePageState extends State<UserProfilePage> {
     return FloatingActionButton(
       heroTag: 'upload_image',
       onPressed: () => _handleImageUpload(context),
-      backgroundColor: Colors.red,
+      backgroundColor: AppColors.SECONDARY_COLOR,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-      child:
-          const Icon(Icons.add_photo_alternate_outlined, color: Colors.white),
+      child: const Icon(Icons.add_photo_alternate_outlined, color: Colors.white),
     );
   }
 
@@ -131,40 +135,42 @@ class UserProfilePageState extends State<UserProfilePage> {
       margin: const EdgeInsets.only(top: 10.0),
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDarkTheme(context) ? Colors.black26 : Colors.white,
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)],
       ),
       child: Column(
         children: [
           Text(
-            capitalizeAndSplit(
-                "${userId?.firstName ?? ''} ${userId?.lastName ?? ''}"),
-            style: Styles.headerText(
-              color: AppColors.PRIMARY_COLOR,
-              fontSize: 38,
+            capitalizeAndSplit("${userId?.firstName ?? ''} ${userId?.lastName ?? ''}"),
+            textScaler: TextScaler.noScaling,
+            style: TextStyle(
+              color: isDarkTheme(context) ? Colors.white : AppColors.PRIMARY_COLOR,
+              fontSize: 55.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             userId?.email ?? '',
-            style: Styles.mediumText(
-              fontWeight: FontWeight.w400,
-              color: Colors.black87,
+            textScaler: TextScaler.noScaling,
+            style: TextStyle(
+              color: isDarkTheme(context) ? Colors.white.withOpacity(0.8) : AppColors.PRIMARY_COLOR.withOpacity(0.8),
+              fontSize: 40.sp,
+              fontWeight: FontWeight.w300,
             ),
           ),
           const Divider(),
           _buildListTile(
             icon: Icons.cake,
             iconColor: Colors.redAccent,
-            title: LocaleKeys.user_info_date_of_birth.tr(),
+            title: LocaleKeys.user_info_date_of_birth.localize,
             subtitle: userId?.birthday ?? '',
           ),
           _buildListTile(
             icon: Icons.person,
             iconColor: Colors.redAccent,
-            title: LocaleKeys.user_info_gender.tr(),
+            title: LocaleKeys.user_info_gender.localize,
             subtitle: getGender(context, userId?.gender ?? ''),
           ),
         ],
@@ -191,8 +197,16 @@ class UserProfilePageState extends State<UserProfilePage> {
   }) {
     return ListTile(
       leading: Icon(icon, color: iconColor),
-      title: Text(title),
-      subtitle: Text(subtitle),
+      title: Text(
+        title,
+        textScaler: TextScaler.noScaling,
+        style: TextStyle(fontSize: 45.sp),
+      ),
+      subtitle: Text(
+        subtitle,
+        textScaler: TextScaler.noScaling,
+        style: TextStyle(fontSize: 40.sp),
+      ),
     );
   }
 
@@ -210,12 +224,9 @@ class UserProfilePageState extends State<UserProfilePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildStatItem(LocaleKeys.user_info_followers.tr(),
-              profileData?.followersCount.toString() ?? '0'),
-          _buildStatItem(LocaleKeys.user_info_following.tr(),
-              profileData?.followingCount.toString() ?? '0'),
-          _buildStatItem(LocaleKeys.user_info_friends.tr(),
-              profileData?.friendsCount.toString() ?? '0'),
+          _buildStatItem(LocaleKeys.user_info_followers.localize, profileData?.followersCount.toString() ?? '0'),
+          _buildStatItem(LocaleKeys.user_info_following.localize, profileData?.followingCount.toString() ?? '0'),
+          _buildStatItem(LocaleKeys.user_info_friends.localize, profileData?.friendsCount.toString() ?? '0'),
         ],
       ),
     );
@@ -226,16 +237,18 @@ class UserProfilePageState extends State<UserProfilePage> {
       children: [
         Text(
           count,
+          textScaler: TextScaler.noScaling,
           style: TextStyle(
-            fontSize: 22,
+            fontSize: 45.sp,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Text(
           label,
-          style: TextStyle(fontSize: 16, color: Colors.white70),
+          textScaler: TextScaler.noScaling,
+          style: TextStyle(fontSize: 40.sp, color: Colors.white70),
         ),
       ],
     );
@@ -254,18 +267,14 @@ class SwipeCardDemoState extends State<SwipeCardDemo> {
 
   void _nextStory() {
     setState(() {
-      final pictures =
-          context.read<TinderViewCubit>().state.profileUserData?.pictures ?? [];
-      _currentStoryIndex = (_currentStoryIndex < pictures.length - 1)
-          ? _currentStoryIndex + 1
-          : pictures.length - 1;
+      final pictures = context.read<TinderViewCubit>().state.profileUserData?.pictures ?? [];
+      _currentStoryIndex = (_currentStoryIndex < pictures.length - 1) ? _currentStoryIndex + 1 : pictures.length - 1;
     });
   }
 
   void _previousStory() {
     setState(() {
-      _currentStoryIndex =
-          (_currentStoryIndex > 0) ? _currentStoryIndex - 1 : 0;
+      _currentStoryIndex = (_currentStoryIndex > 0) ? _currentStoryIndex - 1 : 0;
     });
   }
 
@@ -282,18 +291,16 @@ class SwipeCardDemoState extends State<SwipeCardDemo> {
     final bool tappedLeftSide = localPosition.dx < screenWidth / 2;
 
     if (tappedLeftSide) {
-      _previousStory();
+      context.isArabic ? _nextStory() : _previousStory();
     } else {
-      _nextStory();
+      context.isArabic ? _previousStory() : _nextStory();
     }
   }
 
   Widget _buildCard(BuildContext context) {
-    final pictures =
-        context.watch<TinderViewCubit>().state.profileUserData?.pictures ?? [];
-    final imageUrl = pictures.isNotEmpty
-        ? pictures.reversed.toList()[_currentStoryIndex].mediaKey
-        : UIConst.profilePlaceHolder;
+    final pictures = context.watch<TinderViewCubit>().state.profileUserData?.pictures ?? [];
+    final imageUrl =
+        pictures.isNotEmpty ? pictures.reversed.toList()[_currentStoryIndex].mediaKey : UIConst.profilePlaceHolder;
 
     return Card(
       clipBehavior: Clip.hardEdge,
@@ -314,10 +321,11 @@ class SwipeCardDemoState extends State<SwipeCardDemo> {
               height: double.infinity,
             ),
           ),
-          Positioned(
+          Positioned.directional(
             top: 10,
-            left: 10,
-            right: 10,
+            start: 10,
+            end: 10,
+            textDirection: TextDirection.ltr,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
@@ -327,9 +335,7 @@ class SwipeCardDemoState extends State<SwipeCardDemo> {
                     margin: const EdgeInsets.symmetric(horizontal: 2.0),
                     height: 4.h,
                     decoration: BoxDecoration(
-                      color: (dotIndex == _currentStoryIndex)
-                          ? Colors.red
-                          : Colors.white54,
+                      color: (dotIndex == _currentStoryIndex) ? Colors.red : Colors.white54,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -340,49 +346,5 @@ class SwipeCardDemoState extends State<SwipeCardDemo> {
         ],
       ),
     );
-  }
-}
-
-String capitalize(String name) {
-  if (name.isEmpty) return name;
-  return name[0].toUpperCase() + name.substring(1).toLowerCase();
-}
-
-String capitalizeAndSplit(String name) {
-  if (name.isEmpty) return name;
-  List<String> parts = name.split(' ').toList();
-  return parts.map(capitalize).join(' ');
-}
-
-String capitalizeAndSplit2Only(String name) {
-  if (name.isEmpty) return name;
-  List<String> parts = name.split(' ').take(2).toList();
-  return parts.map(capitalize).join(' ');
-}
-
-String getTimeAgo(BuildContext context, String lastSeen) {
-  DateTime lastSeenTime = DateTime.parse(lastSeen);
-  DateTime now = DateTime.now().toUtc();
-
-  Duration difference = now.difference(lastSeenTime);
-
-  if (difference.inDays > 7) {
-    DateFormat dateFormat = DateFormat('EEEE, MMMM d, yyyy');
-    DateFormat timeFormat = DateFormat('h:mm a');
-    String formattedDate = dateFormat.format(lastSeenTime);
-    String formattedTime = timeFormat.format(lastSeenTime);
-    return context.isArabic
-        ? '$formattedDate: $formattedTime'
-        : 'Date: $formattedDate\nTime: $formattedTime';
-  } else if (difference.inMinutes < 1) {
-    return context.isArabic ? 'الآن' : "Just now";
-  } else if (difference.inMinutes == 1) {
-    return "1 ${context.isArabic ? 'دقيقه' : "minute ago"}";
-  } else if (difference.inMinutes < 60) {
-    return "${difference.inMinutes} ${context.isArabic ? 'دقائق' : 'minutes ago'}";
-  } else if (difference.inHours == 1) {
-    return context.isArabic ? 'ساعة' : "1 hour ago";
-  } else {
-    return "${difference.inHours} ${context.isArabic ? 'ساعة' : 'hours ago'}";
   }
 }

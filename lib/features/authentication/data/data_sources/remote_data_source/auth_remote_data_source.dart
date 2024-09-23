@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
@@ -19,8 +22,7 @@ abstract class AuthRemoteDataSource {
 
   Future<Either<Failure, UserTokensModel>> login(LoginParams loginParams);
 
-  Future<Either<Failure, UserTokensModel>> socialLogin(
-      SocialLoginParams params);
+  Future<Either<Failure, UserTokensModel>> socialLogin(SocialLoginParams params);
 
   Future<Either<Failure, void>> register(RegisterParams registerParams);
 
@@ -123,20 +125,20 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     );
   }
 
-  Future<Either<Failure, UserCredential>> signInWithGoogle() async {
+  Future<Either<Failure, UserCredential>> signInWithGoogle({
+    required String idToken,
+  }) async {
     try {
       // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
       // Check if the user is null (i.e., the user canceled the sign-in)
       if (googleUser == null) {
-        return Left(
-            SocialLoginFailure('Google sign-in was canceled by the user.'));
+        return const Left(SocialLoginFailure('Google sign-in was canceled by the user.'));
       }
 
       // Obtain the authentication details from the request
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
       // Create a new credential
       final OAuthCredential credential = GoogleAuthProvider.credential(
@@ -145,8 +147,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       );
 
       // Sign in to Firebase using the credential
-      final UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
 
       // Return the signed-in user's credentials
       return Right(userCredential);
@@ -155,12 +156,23 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     }
   }
 
+  Future<String?> _getDeviceId() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.id; // Android device ID
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.identifierForVendor; // iOS device ID
+    }
+    return 'unknown_device';
+  }
+
   @override
-  Future<Either<Failure, UserTokensModel>> socialLogin(
-      SocialLoginParams params) async {
+  Future<Either<Failure, UserTokensModel>> socialLogin(SocialLoginParams params) async {
     try {
       // Perform Google sign-in and get the user credentials
-      final signInResult = await signInWithGoogle();
+      final signInResult = await signInWithGoogle(idToken: params.idToken);
 
       // Handle the result
       return signInResult.fold(
@@ -170,12 +182,14 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
           final idToken = await userCredential.user?.getIdToken();
           final accessToken = await userCredential.user?.getIdTokenResult();
 
-          // Prepare the social login data (you can include idToken and accessToken in the params)
+          // Get the device ID
+          final deviceId = await _getDeviceId();
+
+          // Prepare the social login data (including idToken, fcm, and deviceId)
           final data = {
             'idToken': idToken,
-            'accessToken': accessToken?.token,
-            // Add other necessary data for your backend here
-            'deviceId': 'dfdfrrgtgt', // Replace with actual device ID if needed
+            'fcm': accessToken?.token, // Use the FCM token if available
+            'deviceId': deviceId, // Use the actual device ID
           };
 
           // Call the API for social login

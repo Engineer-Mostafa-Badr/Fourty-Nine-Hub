@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const nnew = 'nnew';
   static const today = 'today';
   static const tommorow = 'tommorow';
@@ -69,9 +69,12 @@ abstract class  LocaleKeys {
   static const voice = 'voice';
   static const meet = 'meet';
   static const cast = 'cast';
+  static const noRooms = 'noRooms';
+  static const selectATopic = 'selectATopic';
   static const restaurantName = 'restaurantName';
   static const theCommercialRegister = 'theCommercialRegister';
-  static const theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider = 'theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider';
+  static const theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider =
+      'theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider';
   static const youWillGetEGP3650PerYearIfYouSubscribeDaily = 'youWillGetEGP3650PerYearIfYouSubscribeDaily';
   static const welcomeToResturantRegisteration = 'welcomeToResturantRegisteration';
   static const selecteSubcategory = 'selecteSubcategory';
@@ -82,7 +85,8 @@ abstract class  LocaleKeys {
   static const thirdPage = 'thirdPage';
   static const selectGovernorate = 'selectGovernorate';
   static const selectCity = 'selectCity';
-  static const newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore = 'newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore';
+  static const newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore =
+      'newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore';
   static const premium = 'premium';
   static const comma = 'comma';
   static const noResultFound = 'noResultFound';
@@ -91,7 +95,8 @@ abstract class  LocaleKeys {
   static const restaurantsForSelectedMeal = 'restaurantsForSelectedMeal';
   static const itemName = 'itemName';
   static const price = 'price';
-  static const youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval = 'youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval';
+  static const youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval =
+      'youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval';
   static const selectSubcategoryFirst = 'selectSubcategoryFirst';
   static const uploadingImage = 'uploadingImage';
   static const cantLoadCities = 'cantLoadCities';
@@ -103,7 +108,8 @@ abstract class  LocaleKeys {
   static const cantLoadSpecialities = 'cantLoadSpecialities';
   static const cantLoadSubSubCategories = 'cantLoadSubSubCategories';
   static const creatingRestaurant = 'creatingRestaurant';
-  static const youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove = 'youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove';
+  static const youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove =
+      'youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove';
   static const photoForMeal = 'photoForMeal';
   static const menu = 'menu';
   static const submit = 'submit';
@@ -261,6 +267,7 @@ abstract class  LocaleKeys {
   static const noTextPosts = 'noTextPosts';
   static const noPhotoPosts = 'noPhotoPosts';
   static const noPosts = 'noPosts';
+  static const noReel = 'noReel';
   static const transferMoney = 'transferMoney';
   static const yourBalance = 'yourBalance';
   static const yourGift = 'yourGift';
@@ -299,7 +306,7 @@ abstract class  LocaleKeys {
   static const chatLockMessage = 'chatLockMessage';
   static const createGroupWith = 'createGroupWith';
   static const createGroup = 'createGroup';
-  static const attachments  = 'attachments ';
+  static const attachments = 'attachments ';
   static const docs = 'docs';
   static const links = 'links';
   static const media = 'media';
@@ -541,5 +548,111 @@ abstract class  LocaleKeys {
   static const tripJoinNotifications = 'tripJoinNotifications';
   static const subscribeToContactTheClient = 'subscribeToContactTheClient';
   static const goToRequestHistory = 'goToRequestHistory';
-
+  static const error_dialog_audio_playback_fail = 'error_dialog.audio_playback_fail';
+  static const error_dialog_title = 'error_dialog.title';
+  static const error_dialog_ok_button = 'error_dialog.ok_button';
+  static const error_dialog_camera_init_fail = 'error_dialog.camera_init_fail';
+  static const error_dialog_controller_init_fail = 'error_dialog.controller_init_fail';
+  static const error_dialog_start_recording_fail = 'error_dialog.start_recording_fail';
+  static const error_dialog_stop_recording_fail = 'error_dialog.stop_recording_fail';
+  static const error_dialog_video_process_fail = 'error_dialog.video_process_fail';
+  static const error_dialog_upload_fail = 'error_dialog.upload_fail';
+  static const error_dialog = 'error_dialog';
+  static const reel_upload_success_upload_success = 'reel_upload_success.upload_success';
+  static const reel_upload_success = 'reel_upload_success';
+  static const timer_recording_stops_in = 'timer.recording_stops_in';
+  static const timer_seconds = 'timer.seconds';
+  static const timer = 'timer';
+  static const controls_switch_camera = 'controls.switch_camera';
+  static const controls_upload_reel = 'controls.upload_reel';
+  static const controls = 'controls';
+  static const reel_voices_my_voice = 'reel_voices.my_voice';
+  static const reel_voices_other_voice = 'reel_voices.other_voice';
+  static const reel_voices_mix_voices = 'reel_voices.mix_voices';
+  static const reel_voices = 'reel_voices';
+  static const comments_header = 'comments_header';
+  static const add_comment_hint = 'add_comment_hint';
+  static const write_reply_hint = 'write_reply_hint';
+  static const view_replies = 'view_replies';
+  static const hide_replies = 'hide_replies';
+  static const failed_send_reply = 'failed_send_reply';
+  static const reel_audio = 'reel_audio';
+  static const check_out_reel = 'check_out_reel';
+  static const reel_saved = 'reel_saved';
+  static const reel_unsaved = 'reel_unsaved';
+  static const use_audio = 'use_audio';
+  static const audio_load_fail = 'audio_load_fail';
+  static const no_reels = 'no_reels';
+  static const one_reel = 'one_reel';
+  static const multiple_reels = 'multiple_reels';
+  static const gift_body_no_name = 'gift_body.no_name';
+  static const gift_body_gift_sent = 'gift_body.gift_sent';
+  static const gift_body_sent_successfully = 'gift_body.sent_successfully';
+  static const gift_body_amount_deducted = 'gift_body.amount_deducted';
+  static const gift_body_insufficient_funds = 'gift_body.insufficient_funds';
+  static const gift_body_insufficient_funds_message = 'gift_body.insufficient_funds_message';
+  static const gift_body_error = 'gift_body.error';
+  static const gift_body_unexpected_error = 'gift_body.unexpected_error';
+  static const gift_body_ok = 'gift_body.ok';
+  static const gift_body_charge_wallet = 'gift_body.charge_wallet';
+  static const gift_body_send_a_gift = 'gift_body.send_a_gift';
+  static const gift_body_recharge = 'gift_body.recharge';
+  static const gift_body = 'gift_body';
+  static const report_nudity = 'report_nudity';
+  static const report_frequent = 'report_frequent';
+  static const report_fake = 'report_fake';
+  static const report_abuse = 'report_abuse';
+  static const report_hated = 'report_hated';
+  static const report_illegal = 'report_illegal';
+  static const report_politics = 'report_politics';
+  static const report_category_nudity = 'report_category_nudity';
+  static const report_category_frequent = 'report_category_frequent';
+  static const report_category_fake = 'report_category_fake';
+  static const report_category_abuse = 'report_category_abuse';
+  static const report_category_hated = 'report_category_hated';
+  static const report_category_illegal = 'report_category_illegal';
+  static const report_category_politics = 'report_category_politics';
+  static const spotlight_title = 'spotlight_title';
+  static const friends_title = 'friends_title';
+  static const following_title = 'following_title';
+  static const discover_title = 'discover_title';
+  static const spotlight_follow = 'spotlight_follow';
+  static const spotlight_following = 'spotlight_following';
+  static const add_story = 'add_story';
+  static const postSubmitted = 'postSubmitted';
+  static const imageNotSelected = 'imageNotSelected';
+  static const randomAppearance = 'randomAppearance';
+  static const messageSuccessfully = 'messageSuccessfully';
+  static const phoneOptional = 'phoneOptional';
+  static const TeamHelp = 'TeamHelp';
+  static const moneySuccessfully = 'moneySuccessfully';
+  static const paymentAddress = 'paymentAddress';
+  static const amount = 'amount';
+  static const bio = 'bio';
+  static const friendsAndFollowers = 'friendsAndFollowers';
+  static const maritalStatus = 'maritalStatus';
+  static const single = 'single';
+  static const married = 'married';
+  static const divorced = 'divorced';
+  static const widowed = 'widowed';
+  static const maleUser = 'maleUser';
+  static const femaleUser = 'femaleUser';
+  static const requests = 'requests';
+  static const blocked = 'blocked';
+  static const searchWithName = 'searchWithName';
+  static const acceptRequestSuccessfully = 'acceptRequestSuccessfully';
+  static const removeRequestSuccessfully = 'removeRequestSuccessfully';
+  static const unFollowSuccessfully = 'unFollowSuccessfully';
+  static const tagPeople = 'tagPeople';
+  static const selectFeeling = 'selectFeeling';
+  static const selectActivity = 'selectActivity';
+  static const user = 'user';
+  static const provider = 'provider';
+  static const createAd = 'createAd';
+  static const title = 'title';
+  static const desc = 'desc';
+  static const details = 'details';
+  static const addImages = 'addImages';
+  static const addImagesDesc = 'addImagesDesc';
+  static const noAds = 'noAds';
 }

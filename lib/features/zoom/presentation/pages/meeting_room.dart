@@ -71,9 +71,9 @@ class _MeetingRoomState extends State<MeetingRoom> {
           ..showBackgroundTips = true;
 
     return SafeArea(
-      child: BlocProvider(
-        create: (context) => serviceLocator<MeetingCubit>(),
-        child: BlocBuilder<MeetingCubit, MeetingState>(
+      child: BlocProvider.value(
+        value: serviceLocator<StreamCubit>(),
+        child: BlocBuilder<StreamCubit, StreamState>(
           builder: (context, state) {
             // var cubit = context.read<MeetingCubit>();
             return ZegoUIKitPrebuiltLiveStreaming(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
 import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/privacy_status_enum.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
@@ -14,27 +16,27 @@ class PrivacyIcon extends StatelessWidget {
           final res =
               await CustomVerticalSheetItem.normal<PrivacyStatus>(context, [
             CustomSheetModel(
-              text: "Public",
+              text: LocaleKeys.public.localize,
               value: PrivacyStatus.public,
               iconData: Icons.language,
             ),
             CustomSheetModel(
-              text: "Friends",
+              text: LocaleKeys.friends.localize,
               value: PrivacyStatus.friends,
               iconData: Icons.family_restroom,
             ),
             CustomSheetModel(
-              text: "Followers",
+              text: LocaleKeys.followers.localize,
               value: PrivacyStatus.followers,
               iconData: Icons.accessibility_sharp,
             ),
             CustomSheetModel(
-              text: "Friends / Followers",
+              text: LocaleKeys.friendsAndFollowers.localize,
               value: PrivacyStatus.friendsAndFollowers,
               iconData: Icons.supervised_user_circle_outlined,
             ),
             CustomSheetModel(
-              text: "Only Me",
+              text: LocaleKeys.onlyMe.localize,
               value: PrivacyStatus.onlyMe,
               iconData: Icons.lock,
             ),

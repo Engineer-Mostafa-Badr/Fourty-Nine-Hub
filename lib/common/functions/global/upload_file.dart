@@ -59,48 +59,98 @@ class UploadFile {
     return null;
   }
 
-  static Future<String?> uploadPickedFile(
-      {required File file, required String subCategoryId}) async {
+  // static Future<String?> uploadPickedFile(
+  //     {required File file, required String subCategoryId}) async {
+  //   try {
+  //     final fileInBytes = await file.readAsBytes();
+  //     String? mediaId;
+  //     CliLogger.info("creating upload url for : ${file.path}");
+  //     final uploadUrlResponse =
+  //         await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
+  //       "type": "${file.type.name}/${file.path.split('.').last}",
+  //       "size": fileInBytes.length,
+  //       "subcategoryId": subCategoryId,
+  //     });
+
+  //     uploadUrlResponse.fold(
+  //       (l) {
+  //         CliLogger.error("can't get upload url");
+  //       },
+  //       (data) async {
+  //         CliLogger.info(
+  //             "upload url : ${data['data']['signedUrl']}\nmediaId : ${data['data']['mediaId']}");
+  //         final uploadUrl = data['data']['signedUrl'];
+  //         mediaId = data['data']['mediaId'];
+  //         Options options = Options(contentType: file.type.name, headers: {
+  //           'Accept': "*/*",
+  //           // 'Content-Type': 'application/octet-stream',
+  //           'Content-Length': fileInBytes.length,
+  //           'Connection': 'keep-alive',
+  //           'User-Agent': 'ClinicPlush',
+  //         });
+  //         CliLogger.info("uploading file : ${file.path}");
+  //         await Dio().put(uploadUrl, data: fileInBytes, options: options);
+  //         file.length();
+  //         fileInBytes.lengthInBytes;
+  //         CliLogger.success("file uploaded : ${file.path}");
+  //       },
+  //     );
+
+  //     return mediaId;
+  //   } catch (e) {
+  //     CliLogger.error("can't upload file $e");
+  //     return null;
+  //   }
+  // }
+
+  static Future<String?> uploadPickedFile({
+    required File file,
+    required String subCategoryId,
+  }) async {
     try {
       final fileInBytes = await file.readAsBytes();
       String? mediaId;
-      CliLogger.info("creating upload url for : ${file.path}");
-      final uploadUrlResponse =
-          await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
-        "type": "${file.type.name}/${file.path.split('.').last}",
-        "size": fileInBytes.length,
-        "subcategoryId": subCategoryId,
-      });
+      CliLogger.info("Creating upload URL for: ${file.path}");
+
+      final uploadUrlResponse = await serviceLocator<ApiConsumer>().post(
+        EndPoints.mediaUrl,
+        data: {
+          "type": "${file.type.name}/${file.path.split('.').last}",
+          "size": fileInBytes.length,
+          "subcategoryId": subCategoryId,
+        },
+      );
 
       uploadUrlResponse.fold(
         (l) {
-          CliLogger.error("can't get upload url");
+          CliLogger.error("Can't get upload URL");
         },
         (data) async {
           CliLogger.info(
-              "upload url : ${data['data']['signedUrl']}\nmediaId : ${data['data']['mediaId']}");
+              "Upload URL: ${data['data']['signedUrl']}\nMediaId: ${data['data']['mediaId']}");
           final uploadUrl = data['data']['signedUrl'];
           mediaId = data['data']['mediaId'];
-          Options options = Options(contentType: file.type.name, headers: {
-            'Accept': "*/*",
-            'Content-Type': 'application/octet-stream',
-            'Content-Length': fileInBytes.length,
-            'Connection': 'keep-alive',
-            'User-Agent': 'ClinicPlush',
-          });
-          CliLogger.info("uploading file : ${file.path}");
-          await Dio().put(uploadUrl,
-              data: Stream.fromIterable(fileInBytes.map((e) => [e])),
-              options: options);
-          file.length();
-          fileInBytes.lengthInBytes;
-          CliLogger.success("file uploaded : ${file.path}");
+
+          final options = Options(
+            contentType: file.type.name,
+            headers: {
+              'Accept': "*/*",
+              'Content-Type': 'application/octet-stream',
+              'Content-Length': fileInBytes.length,
+              'Connection': 'keep-alive',
+              'User-Agent': 'ClinicPlush',
+            },
+          );
+
+          CliLogger.info("Uploading file: ${file.path}");
+          await Dio().put(uploadUrl, data: fileInBytes, options: options);
+          CliLogger.success("File uploaded: ${file.path}");
         },
       );
 
       return mediaId;
     } catch (e) {
-      CliLogger.error("can't upload file $e");
+      CliLogger.error("Can't upload file: $e");
       return null;
     }
   }

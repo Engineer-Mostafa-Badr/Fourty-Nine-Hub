@@ -3,6 +3,8 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_anonymous_chat_use_case.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_normal_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_request.dart';
 
@@ -15,4 +17,11 @@ abstract class ChatsRepository {
   Future<Either<Failure, ChatCategoryEntity>> getGroups();
   Future<Either<Failure, List<SeenHistoryModel>>> getSeenHistory(
       {required String chatId});
+
+  Future<Either<Failure, bool>> createNormalChat(CreateNormalChatParams params);
+
+  Future<Either<Failure, bool>> createAnonymousChat(CreateAnonymousChatParams params);
+
+  void listenToNewChats(Function(ChatEntity) onNewChat);
+  void stopListenToNewChats();
 }

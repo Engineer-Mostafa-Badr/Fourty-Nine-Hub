@@ -4,9 +4,10 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/favourite_main_category_banner.dart';
-import '../../../../../res/strings/labels.dart';
 import '../cubit/managers/favourite_categories_cubit.dart';
 
 class FavouriteCategoryView extends StatefulWidget {
@@ -20,8 +21,8 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BackAppBar(
-          label: Labels.favouriteCategories,
+        appBar: BackAppBar(
+          label: LocaleKeys.favouriteCategories.localize,
         ),
         body: BlocBuilder<FavouriteCategoryCubit, FavouriteCategoryState>(
             builder: (context, state) {

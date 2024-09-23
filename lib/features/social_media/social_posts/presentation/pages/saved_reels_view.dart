@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
@@ -41,10 +43,10 @@ class SavedReelsView extends StatelessWidget {
                 print(controller.savedReelsPagingController.itemList?.length);
                 return Center(
                   child: Text(
-                    "No Reels",
-                    style: TextStyle(
+                    LocaleKeys.noReels.localize,
+                    style: const TextStyle(
                       color: Colors.black,
-                      fontSize: 18.sp,
+                      fontSize: 18,
                     ),
                   ),
                 );

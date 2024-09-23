@@ -48,7 +48,13 @@ class _FourtyNineViewState extends State<FourtyNineView> {
 
   @override
   void initState() {
-    scrollController;
+    super.initState();
+    _setupScrollController();
+    context.read<FirebaseNotficationsCubit>().setupInterceptedMessage(context: context);
+    context.read<NotificationSocketIoCubit>().notificationListener(languageCode: 'en');
+  }
+
+  void _setupScrollController() {
     scrollController.addListener(() {
       if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
         if (!_isScrollingDown) {
@@ -56,7 +62,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             _isScrollingDown = true;
           });
         }
-      } else {
+      } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
         if (_isScrollingDown) {
           setState(() {
             _isScrollingDown = false;
@@ -334,7 +340,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                       fontWeight: FontWeight.bold,
                     ),
                     icon: icon,
-                    iconSize: 30.h,
+                    iconSize: 50.h,
                     onPressed: () => function()),
               ),
               Positioned(

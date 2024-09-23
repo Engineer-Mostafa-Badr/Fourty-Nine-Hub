@@ -1,30 +1,32 @@
 import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/privacy_entity.dart';
 
 class PrivacyModel extends PrivacyEntity {
-  PrivacyModel(
-      {required super.id,
-      required super.userId,
-      required super.privacyCountry,
-      required super.privacyPhone,
-      required super.privacyEmail,
-      required super.privacyBirthDay,
-      required super.privacySocialStatus,
-      required super.privacyJob,
-      required super.privacyCity,
-      required super.privacyIsMale,
-      required super.privacyLanguage,
-      required super.privacyReceiveMessages,
-      required super.privacyLastSeen,
-      required super.privacyFriendList,
-      required super.privacyFollowerList,
-      required super.privacyActivity,
-      required super.privacyCall,
-      required super.privacyFriendRequest,
-      required super.privacyFollowRequest,
-      required super.createdAt,
-      required super.updatedAt,
-      required super.usersStoryPrivacy,
-      required super.privacyStories});
+  PrivacyModel({
+    required super.id,
+    required super.userId,
+    required super.privacyCountry,
+    required super.privacyPhone,
+    required super.privacyEmail,
+    required super.privacyBirthDay,
+    required super.privacySocialStatus,
+    required super.privacyJob,
+    required super.privacyCity,
+    required super.privacyIsMale,
+    required super.privacyLanguage,
+    required super.privacyReceiveMessages,
+    required super.privacyLastSeen,
+    required super.privacyFriendList,
+    required super.privacyFollowerList,
+    required super.privacyActivity,
+    required super.privacyCall,
+    required super.privacyFriendRequest,
+    required super.privacyFollowRequest,
+    required super.createdAt,
+    required super.updatedAt,
+    required super.usersStoryPrivacy,
+    required super.privacyStories,
+    required super.privacyRandomAppearance,
+  });
 
   factory PrivacyModel.fromJson(Map<String, dynamic> json) {
     return PrivacyModel(
@@ -51,6 +53,7 @@ class PrivacyModel extends PrivacyEntity {
       updatedAt: json['updatedAt'],
       usersStoryPrivacy: json['usersStoryPrivacy'] ?? [],
       privacyStories: json['privacyStories'],
+      privacyRandomAppearance: json['privacyRandomAppearance'],
     );
   }
 }

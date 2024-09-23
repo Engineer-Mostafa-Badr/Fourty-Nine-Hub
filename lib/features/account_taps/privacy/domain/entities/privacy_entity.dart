@@ -22,29 +22,32 @@ class PrivacyEntity {
   final String? updatedAt;
   final List<dynamic>? usersStoryPrivacy;
   final String? privacyStories;
+  final String? privacyRandomAppearance;
 
-  PrivacyEntity(
-      {this.id,
-      this.userId,
-      this.privacyCountry,
-      this.privacyPhone,
-      this.privacyEmail,
-      this.privacyBirthDay,
-      this.privacySocialStatus,
-      this.privacyJob,
-      this.privacyCity,
-      this.privacyIsMale,
-      this.privacyLanguage,
-      this.privacyReceiveMessages,
-      this.privacyLastSeen,
-      this.privacyFriendList,
-      this.privacyFollowerList,
-      this.privacyActivity,
-      this.privacyCall,
-      this.privacyFriendRequest,
-      this.privacyFollowRequest,
-      this.createdAt,
-      this.updatedAt,
-      this.usersStoryPrivacy,
-      this.privacyStories});
+  PrivacyEntity({
+    this.id,
+    this.userId,
+    this.privacyCountry,
+    this.privacyPhone,
+    this.privacyEmail,
+    this.privacyBirthDay,
+    this.privacySocialStatus,
+    this.privacyJob,
+    this.privacyCity,
+    this.privacyIsMale,
+    this.privacyLanguage,
+    this.privacyReceiveMessages,
+    this.privacyLastSeen,
+    this.privacyFriendList,
+    this.privacyFollowerList,
+    this.privacyActivity,
+    this.privacyCall,
+    this.privacyFriendRequest,
+    this.privacyFollowRequest,
+    this.createdAt,
+    this.updatedAt,
+    this.usersStoryPrivacy,
+    this.privacyStories,
+    this.privacyRandomAppearance,
+  });
 }

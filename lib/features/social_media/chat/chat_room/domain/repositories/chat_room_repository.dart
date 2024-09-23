@@ -21,14 +21,13 @@ abstract class ChatRoomRepository {
   Future<Either<Failure, bool>> markMessageAsSeen(
       MarkMessageAsSeenParams params);
 
-  Future<Either<Failure, bool>> markMessageAsDelivered(
-      MarkMessagesAsDeliveredParams params);
+  Future<Either<Failure, bool>> markMessageAsDelivered(MarkMessagesAsDeliveredParams params);
 
   void listenToSeenStatus(Function(List<MessageEntity> messages) params);
 
   void stopListenToSeenStatus();
 
-  void listenToDeliveredStatus(Function(List<MessageEntity> messages) params);
+  void listenToDeliveredStatus(Function(String chatId) params);
 
   void stopListenToDeliveredStatus();
 }

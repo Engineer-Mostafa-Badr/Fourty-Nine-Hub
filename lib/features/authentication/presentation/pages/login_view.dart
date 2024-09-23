@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,8 +12,10 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart'
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/service/background_service.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -96,7 +99,7 @@ class _LoginViewState extends State<LoginView> {
           } else if (state is LoginSuccess) {
             await TokenManager.saveAccessToken(state.userTokensEntity.accessToken);
             await TokenManager.saveRefreshToken(state.userTokensEntity.refreshToken);
-
+            await BackgroundService.reStartWebSocketService(state.userTokensEntity.accessToken);
             serviceLocator<UserCubit>()
               ..setLogin(true)
               ..attachToken()
@@ -251,6 +254,7 @@ enum AuthType { LOGIN, REGISTER }
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key, required this.loginCubit});
+
   final LoginCubit loginCubit;
 
   @override
@@ -259,8 +263,11 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   bool obsecure = false;
+
   @override
   Widget build(BuildContext context) {
+    final loginCubit = BlocProvider.of<LoginCubit>(context);
+
     return Column(
       children: [
         FormTextField(
@@ -268,8 +275,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.r),
           style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
-          controller: widget.loginCubit.emailTextController,
-          // label: 'E-mail or phone number',
+          controller: loginCubit.emailTextController,
           hint: LocaleKeys.emailOrPhone.localize,
           prefix: Icon(
             Icons.email,
@@ -284,8 +290,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.r),
           style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
-          controller: widget.loginCubit.passwordTextController,
-          // label: 'Password',
+          controller: loginCubit.passwordTextController,
           hint: LocaleKeys.password.localize,
           obsecure: obsecure,
           prefix: GestureDetector(
@@ -311,16 +316,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                 onPressed: () => context.push(Routes.FORGOTPASSWORD)),
           ],
         ),
-        // Sizer(height: ,),
-        // Spacer(),
-        // DefaultButton(
-        //   width: double.infinity,
-        //   label: 'Login',
-        //   onPressed: widget.loginCubit.login,
-        // ),
-        // Sizer(),
-        // Column(
-        //   children: [
         const Sizer(),
         Label(
           text: LocaleKeys.orContinueWith.localize,
@@ -335,7 +330,29 @@ class _LoginWidgetState extends State<LoginWidget> {
                 backColor: AppColors.LIGHT_GRAY_COLOR,
                 textColor: Colors.black,
                 icon: FontAwesomeIcons.google,
-                onPressed: widget.loginCubit.signInWithGoogle,
+                onPressed: () async {
+                  // await  loginCubit.handleGoogleSignIn();
+                  print('@@@@@@@@@@@@@@@@@@@@@@@@@');
+                  print(loginCubit.user!.uid);
+                  try {
+                    final user = await loginCubit.loginWithGoogle();
+                    if (user != null && mounted) {
+                      context.push(Routes.HOME);
+                    }
+                  } on FirebaseAuthException catch (error) {
+                    print(error.message);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                      error.message ?? "Something went wrong",
+                    )));
+                  } catch (error) {
+                    print(error);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                      error.toString(),
+                    )));
+                  }
+                },
               ),
             ),
             const Sizer(),
@@ -345,7 +362,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                 backColor: AppColors.LIGHT_GRAY_COLOR,
                 textColor: Colors.black,
                 icon: FontAwesomeIcons.facebook,
-                onPressed: widget.loginCubit.signInWithFacebook,
+                onPressed: () async {
+                  await loginCubit.signInWithFacebook();
+                },
               ),
             ),
             if (Platform.isIOS) const Sizer(),
@@ -356,30 +375,13 @@ class _LoginWidgetState extends State<LoginWidget> {
                   backColor: AppColors.LIGHT_GRAY_COLOR,
                   textColor: Colors.black,
                   icon: FontAwesomeIcons.apple,
-                  onPressed: widget.loginCubit.signInWithApple,
+                  onPressed: () {
+                    loginCubit.signInWithApple();
+                  },
                 ),
               ),
           ],
         ),
-        //     Sizer(),
-        //     RichText(
-        //       text: TextSpan(
-        //         children: [
-        //           TextSpan(
-        //             text: "Doesn't have account? ",
-        //             style: Styles.headerText(color: Colors.grey),
-        //           ),
-        //           TextSpan(
-        //             text: "Register",
-        //             recognizer: TapGestureRecognizer()
-        //               ..onTap = () => context.push(Routes.REGISTER),
-        //             style: Styles.headerText(color: Colors.black),
-        //           ),
-        //         ],
-        //       ),
-        //     )
-        //   ],
-        // ),
       ],
     );
   }
@@ -693,3 +695,140 @@ class _RegisterWidgetState extends State<RegisterWidget> {
     );
   }
 }
+
+// enum AuthStatus {
+//   uninitialized,
+//   authenticated,
+//   authenticating,
+//   authenticateError,
+//   authenticateException,
+//   authenticateCanceled,
+// }
+//
+// enum SocialLogins {
+//   google,
+//   apple,
+// }
+
+// class SocialAuthProvider extends ChangeNotifier {
+//   final GoogleSignIn googleSignIn;
+//   final FirebaseAuth firebaseAuth;
+//
+//   AuthStatus _status = AuthStatus.uninitialized;
+//
+//   AuthStatus get status => _status;
+//
+//   User? _currentUser;
+//
+//   User? get currentUser => _currentUser;
+//
+//   SocialAuthProvider({
+//     required this.firebaseAuth,
+//     required this.googleSignIn,
+//   }) {
+//     firebaseAuth.authStateChanges().listen((User? user) {
+//       _currentUser = user;
+//       notifyListeners();
+//     });
+//   }
+
+  // Future<void> handleSocialSignIn(SocialLogins social) async {
+  //   switch (social) {
+  //     case SocialLogins.google:
+  //       await handleGoogleSignIn();
+  //       break;
+  //     case SocialLogins.apple:
+  //       // await handleAppleSignIn();
+  //       break;
+  //   }
+  // }
+
+  // Future<bool> handleGoogleSignIn() async {
+  //   _setStatus(AuthStatus.authenticating);
+  //   GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+  //   if (googleUser == null) {
+  //     _setStatus(AuthStatus.authenticateCanceled);
+  //     return false;
+  //   }
+  //
+  //   GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
+  //   final AuthCredential credential = GoogleAuthProvider.credential(
+  //     accessToken: googleAuth.accessToken,
+  //     idToken: googleAuth.idToken,
+  //   );
+  //
+  //   User? firebaseUser;
+  //   try {
+  //     firebaseUser = (await firebaseAuth.signInWithCredential(credential)).user;
+  //   } catch (error, stacktrace) {
+  //     debugPrint('Authentication Error : $error\n$stacktrace');
+  //     _setStatus(AuthStatus.authenticateError);
+  //     return false;
+  //   }
+  //
+  //   if (firebaseUser == null) {
+  //     _setStatus(AuthStatus.authenticateError);
+  //     return false;
+  //   }
+  //
+  //   _currentUser = firebaseUser;
+  //   _setStatus(AuthStatus.authenticated);
+  //   return true;
+  // }
+
+  // Future<bool> handleAppleSignIn() async {
+  //   /*
+  //   * Note : Normally Apple sign-in isn't used in Android, but to enable Apple sign-in in Android, you need to do some steps.
+  //   * see here : https://firebase.google.com/docs/auth/android/apple?hl=ko#join-the-apple-developer-program
+  //   * */
+  //   _setStatus(AuthStatus.authenticating);
+  //
+  //   final appleCredential = await SignInWithApple.getAppleIDCredential(
+  //     scopes: [
+  //       AppleIDAuthorizationScopes.email,
+  //       AppleIDAuthorizationScopes.fullName,
+  //     ],
+  //   );
+  //
+  //   final oauthCredential = OAuthProvider('apple.com').credential(
+  //     idToken: appleCredential.identityToken,
+  //     accessToken: appleCredential.authorizationCode,
+  //   );
+  //
+  //   User? firebaseUser;
+  //   try{
+  //     firebaseUser = (await firebaseAuth.signInWithCredential(oauthCredential)).user;
+  //   } catch (error, stacktrace) {
+  //     debugPrint('Authentication Error : $error\n$stacktrace');
+  //     _setStatus(AuthStatus.authenticateError);
+  //     return false;
+  //   }
+  //
+  //   if (firebaseUser == null){
+  //     _setStatus(AuthStatus.authenticateError);
+  //     return false;
+  //   }
+  //
+  //   _currentUser = firebaseUser;
+  //   _setStatus(_status = AuthStatus.authenticated);
+  //   return true;
+  // }
+
+  // Future<void> handleSignOut() async {
+  //   await firebaseAuth.signOut();
+  //   // Note: Do this to prevent google sign-in from automatically selecting the previous account.
+  //   // See also : https://stackoverflow.com/a/73552210/16626322
+  //   if (await googleSignIn.isSignedIn()) {
+  //     await googleSignIn.disconnect();
+  //     await googleSignIn.signOut();
+  //   }
+
+  //   _currentUser = null;
+  //   _setStatus(AuthStatus.uninitialized);
+  // }
+  //
+  // void _setStatus(AuthStatus status) {
+  //   _status = status;
+  //   notifyListeners();
+  // }
+//}

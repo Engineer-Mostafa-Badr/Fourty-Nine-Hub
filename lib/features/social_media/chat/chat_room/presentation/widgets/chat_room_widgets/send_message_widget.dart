@@ -698,13 +698,13 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   Widget _sendButton() {
     return LayoutBuilder(builder: (context, constraints) {
       return InkWell(
-        onTap: () {
-          context.read<ChatRoomCubit>().sendMessage();
+        onTap: () async {
+          await context.read<ChatRoomCubit>().sendMessage();
         },
-        child: CircleAvatar(
+        child: const CircleAvatar(
           backgroundColor: AppColors.PRIMARY_COLOR,
           radius: 25,
-          child: const Center(
+          child: Center(
             child: Icon(
               Icons.send,
               color: Colors.white,

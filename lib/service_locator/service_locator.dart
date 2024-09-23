@@ -187,6 +187,7 @@ import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
 import 'package:fourtyninehub/service_locator/setting_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
 import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
+import 'package:fourtyninehub/service_locator/transfer_money_service_locator.dart';
 import 'package:fourtyninehub/service_locator/trip_join_service_locator.dart';
 import 'package:fourtyninehub/service_locator/twitter_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
@@ -206,6 +207,7 @@ import 'food_service_locator.dart';
 import 'fourty_nine_service_locator.dart';
 import 'health_service_locator.dart';
 import 'installment_service_locator.dart';
+import 'live_service_locator.dart';
 import 'meeting_service_locator.dart';
 import 'social_service_locator.dart';
 import 'subscribe_service_locator.dart';
@@ -374,6 +376,8 @@ class DI {
     ShippingServiceLocatior.execute(serviceLocator: serviceLocator);
     // trip join
     TripJoinServiceLocator.execute(serviceLocator: serviceLocator);
+    //live
+    LiveServiceLocator.execute(serviceLocator: serviceLocator);
     // notifications
     await NotificationsServiceLocator.execute(serviceLocator: serviceLocator);
     InstagramServiceLocator.execute(serviceLocator: serviceLocator);
@@ -384,5 +388,6 @@ class DI {
     PrivacyServiceLocator.execute(serviceLocator: serviceLocator);
     SettingServiceLocator.execute(serviceLocator: serviceLocator);
     PaymentProviderServiceLocator.execute(serviceLocator: serviceLocator);
+    TransferMoneyServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

@@ -72,7 +72,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
     }
 
     return BlocProvider.value(
-      value: serviceLocator<MeetingCubit>(),
+      value: serviceLocator<StreamCubit>(),
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -80,7 +80,10 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
           leading: IconButton(
               onPressed: () => context.pop(),
               icon: const Icon(Icons.arrow_back_ios)),
-          title: Text(LocaleKeys.joinMeeting.localize),
+          title: Label(
+            text: LocaleKeys.joinMeeting.localize,
+            style: Styles.headerText(fontSize: 30, fontWeight: FontWeight.bold),
+          ),
 
           // 'Join a meeting',
           // style: TextStyle(
@@ -169,7 +172,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                     ),
                   ),
                 ),
-                BlocConsumer<MeetingCubit, MeetingState>(
+                BlocConsumer<StreamCubit, StreamState>(
                     listener: (context, state) {
                   String meetingId = _meetingIdController.text.trim();
 
@@ -180,7 +183,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                       Routes.MEETINGROOM,
                       extra: ZegoArgs(
                         meetingId,
-                        context.read<MeetingCubit>().isHost,
+                        context.read<StreamCubit>().isHost,
                         _userNameController.text.trim().isNotEmpty
                             ? _userNameController.text.trim()
                             : context.read<UserCubit>().state.data!.fullName,
@@ -208,7 +211,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                             // context.pop();
                             return;
                           } else {
-                            var cubit = context.read<MeetingCubit>();
+                            var cubit = context.read<StreamCubit>();
                             await joinRoom(cubit, meetingId);
                           }
                         }
@@ -233,7 +236,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
   }
 }
 
-Future<bool> joinRoom(MeetingCubit cubit, String liveId) async {
+Future<bool> joinRoom(StreamCubit cubit, String liveId) async {
   return cubit.joinNewMeeting(liveId);
 }
 

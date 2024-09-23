@@ -704,7 +704,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
           },
           child: CircleAvatar(
             backgroundColor: Colors.white,
-            backgroundImage: NetworkImage((post.user.image.isNotEmpty)
+            backgroundImage: NetworkImage((post.user.image!=null&&post.user.image.isNotEmpty)
                 ? post.user.image
                 : UIConst.profilePlaceHolder),
           ),
