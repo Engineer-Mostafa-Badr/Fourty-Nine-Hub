@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/remote_data_source/auth_remote_data_source.dart';
@@ -14,7 +15,6 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/send_forg
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_forget_password_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_otp_use_case.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
@@ -78,8 +78,7 @@ class AuthRepositoryImpl extends AuthRepository {
       final OAuthCredential facebookAuthCredential =
           FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
 
-      final result = await FirebaseAuth.instance
-          .signInWithCredential(facebookAuthCredential);
+      final result = await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
       final tokenResult = await _remoteDataSource.socialLogin(
         await _loginWithCredentials(
           GoogleAuthProvider.credential(
