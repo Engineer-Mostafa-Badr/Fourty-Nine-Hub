@@ -16,7 +16,7 @@ class MealCategories extends StatelessWidget {
 
       if (state.mealCategories != null && state.mealCategories!.isNotEmpty) {
         return SizedBox(
-          height: 200.h,
+          height: 350.h,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

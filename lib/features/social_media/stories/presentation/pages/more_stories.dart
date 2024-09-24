@@ -2247,7 +2247,6 @@ class ReactionWidget extends StatelessWidget {
             hintStyle: TextStyle(
               color: Colors.white54,
             ),
-            border: InputBorder.none,
           ),
           style: const TextStyle(
             color: Colors.white,

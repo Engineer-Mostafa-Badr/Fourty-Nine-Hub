@@ -252,7 +252,7 @@ class _TinderScreenState extends State<TinderScreen> {
       body: BlocConsumer<TinderViewCubit, TinderViewState>(
         listener: (context, state) {},
         builder: (context, state) {
-          if (state.userData.isEmpty || state.subCategoryData.isEmpty) {
+          if (state.userData.isEmpty && state.subCategoryData.isEmpty) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -279,10 +279,7 @@ class _TinderScreenState extends State<TinderScreen> {
             state.userData.isNotEmpty
                 ? const TinderCardStack()
                 : SizedBox(
-                    height: MediaQuery.of(context).size.height * 2.5 / 4,
-                    child: const Center(
-                      child: CupertinoActivityIndicator(radius: 15),
-                    ),
+                    // height: MediaQuery.of(context).size.height/2,
                   ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0, bottom: 2),

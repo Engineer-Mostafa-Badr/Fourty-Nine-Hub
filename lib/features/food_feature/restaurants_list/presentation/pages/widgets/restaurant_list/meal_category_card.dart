@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
@@ -21,34 +22,44 @@ class MealCategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => onTap(subCategory?.id ?? ""),
-      child: Container(
-        width: 200,
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(10),
+    return FittedBox(
+      child: Card(
+        color: Colors.white,
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
         ),
-        child: Column(
-          children: [
-            Expanded(
-                child: SizedBox(
-              width: double.infinity,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: SquareImage(
-                      fit: BoxFit.fitWidth,
-                      radius: 10,
-                      url: subCategory?.picture,
+        child: InkWell(
+          onTap: () => onTap(subCategory?.id ?? ""),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  children: [
+                    // Heart image
+                    Container(
+                      height: 300.h,
+                      width: 300.h,
+                      decoration: BoxDecoration(
+                        // color: Colors.green,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            subCategory!
+                                .picture!, // Replace with your image URL
+                          ),
+                          fit: BoxFit.fitHeight,
+                        ),
+                      ),
                     ),
-                  ),
-                  Positioned(
+                    // Favorite Icon (Heart)
+                    Positioned(
                       top: 5,
                       right: 5,
                       child: IconAppButton(
-                          size: 20,
+                          size: 25,
                           icon: subCategory?.isFavorite ?? false
                               ? Icons.favorite
                               : Icons.favorite_border,
@@ -60,40 +71,58 @@ class MealCategoryCard extends StatelessWidget {
                                 .read<RestaurantsListCubit>()
                                 .toggleFavoriteSubcategory(
                                     subCategory?.id ?? "");
-                          })),
-                ],
-              ),
-            )),
-            Sizer(),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Sizer(
-                        width: double.infinity,
-                      ),
+                          }),
                     ),
                   ],
                 ),
+                const SizedBox(height: 10),
                 Label(
                   text: (getLang() == "ar"
                           ? subCategory?.nameAr
                           : subCategory?.nameEn) ??
                       "",
-                  style: Styles.mediumText(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize:45.sp),
                 ),
                 Label(
                   text:
                       '${subCategory?.numberOfRestaurant ?? "0"} ${LocaleKeys.restaurants.tr()}',
-                  style: Styles.mediumText(),
+                  style: TextStyle(fontSize:35.sp),
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
+/*
+Container(
+  width: 200,
+  padding: const EdgeInsets.all(10),
+  decoration: BoxDecoration(
+    color: Theme.of(context).scaffoldBackgroundColor,
+    borderRadius: BorderRadius.circular(10),
+  ),
+  child: Column(
+    children: [
+           Sizer(),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Sizer(
+                  width: double.infinity,
+                ),
+              ),
+            ],
+          ),
+
+        ],
+      ),
+    ],
+  ),
+),
+*/

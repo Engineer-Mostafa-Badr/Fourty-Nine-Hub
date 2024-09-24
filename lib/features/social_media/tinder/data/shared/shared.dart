@@ -414,6 +414,8 @@
 //   );
 // }
 
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -472,6 +474,8 @@ class BottomSheetContentState extends State<BottomSheetContent> {
 
   @override
   Widget build(BuildContext context) {
+    // log(context.read<GiftsCubit>().state.length.toString()+"555555555555");
+
     const crossAxisCount = 4; // Adjusts grid based on screen size
 
     return BlocBuilder<GiftsCubit, GiftsState>(
@@ -481,6 +485,9 @@ class BottomSheetContentState extends State<BottomSheetContent> {
             child: CircularProgressIndicator(color: Colors.white),
           );
         } else if (state is GiftsLoaded) {
+          log("${state.length}  "
+              "555555555555");
+
           return GridView.builder(
             controller: _scrollController,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -644,16 +651,18 @@ class BottomSheetContentState extends State<BottomSheetContent> {
   }
 
   Widget _buildDialogTitle(IconData icon, String title, Color primaryColor) {
-    return Row(
-      children: [
-        Icon(icon, color: primaryColor, size: 30),
-        const SizedBox(width: 10),
-        Text(
-          title,
-          style: TextStyle(fontSize: 45.sp, fontWeight: FontWeight.bold),
-          textScaler: TextScaler.noScaling,
-        ),
-      ],
+    return FittedBox(
+      child: Row(
+        children: [
+          Icon(icon, color: primaryColor, size: 30),
+          const SizedBox(width: 10),
+          Text(
+            title,
+            style: TextStyle(fontSize: 45.sp, fontWeight: FontWeight.bold),
+            textScaler: TextScaler.noScaling,
+          ),
+        ],
+      ),
     );
   }
 
@@ -758,6 +767,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
 }
 
 void showGiftBottomSheet(BuildContext context, {required String? receiverId}) {
+  // log(serviceLocator<GiftsCubit>().state.length.toString()+"555555555555");
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,

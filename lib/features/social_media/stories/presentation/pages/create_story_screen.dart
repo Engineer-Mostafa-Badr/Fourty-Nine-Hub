@@ -260,35 +260,59 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   Widget _buildTextStoryInput() {
-    return Container(
-      color: currentColor,
-      padding: const EdgeInsets.all(16.0),
-      child: Center(
-        child: TextField(
-          cursorColor: Colors.white,
-          maxLines: null,
-          style: TextStyle(
-            fontSize: 28,
-            color: Colors.white,
-            shadows: const [
-              Shadow(
-                offset: Offset(1.0, 1.0),
-                blurRadius: 4.0,
-                color: Colors.black,
+    FocusNode _focusNode = FocusNode(); // Create a FocusNode
+
+    return GestureDetector(
+      onTap: () {
+        _focusNode.requestFocus(); // Request focus when tapping anywhere
+      },
+      child: Container(
+        color: currentColor,
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: MediaQuery(
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: TextScaler.noScaling),
+            child: TextField(
+              focusNode: _focusNode,
+              // Assign the FocusNode to the TextField
+              cursorColor: Colors.white,
+              maxLines: null,
+              textAlign: TextAlign.center,
+              // Center the text
+              style: TextStyle(
+                fontSize: 28,
+                color: Colors.white,
+                shadows: const [
+                  Shadow(
+                    offset: Offset(1.0, 1.0),
+                    blurRadius: 4.0,
+                    color: Colors.black,
+                  ),
+                ],
               ),
-            ],
+              decoration: const InputDecoration(
+                hintText: 'Write your story...',
+                hintStyle: TextStyle(
+                  color: Colors.white70,
+                ),
+                border: InputBorder.none,
+                // Remove the border
+                enabledBorder: InputBorder.none,
+                // Remove the enabled border
+                focusedBorder: InputBorder.none,
+
+                // Remove the focused border
+                filled: true,
+                fillColor: Colors.transparent,
+              ),
+              onChanged: (text) {
+                setState(() {
+                  _storyText = text;
+                });
+              },
+            ),
           ),
-          decoration: const InputDecoration(
-            hintText: 'Write your story...',
-            hintStyle: TextStyle(color: Colors.white),
-            border: InputBorder.none,
-            fillColor: Colors.transparent,
-          ),
-          onChanged: (text) {
-            setState(() {
-              _storyText = text;
-            });
-          },
         ),
       ),
     );
