@@ -203,6 +203,7 @@ import 'account_service_locator.dart';
 import 'auction_service_locator.dart';
 import 'balance_service_locator.dart';
 import 'company_add_service_locator.dart';
+import 'custom_page_service_locator.dart';
 import 'food_service_locator.dart';
 import 'fourty_nine_service_locator.dart';
 import 'health_service_locator.dart';
@@ -386,5 +387,6 @@ class DI {
     SettingServiceLocator.execute(serviceLocator: serviceLocator);
     PaymentProviderServiceLocator.execute(serviceLocator: serviceLocator);
     TransferMoneyServiceLocator.execute(serviceLocator: serviceLocator);
+    CustomPageServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

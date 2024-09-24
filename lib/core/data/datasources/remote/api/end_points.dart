@@ -102,6 +102,9 @@ class EndPoints {
     return '/advertisementCompany?subCategory=66adecd7aa2ff24015872e9f';
   }
 
+  // Custom Page
+  static const getSocialPage='/navigators/socialPage';
+
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';
   static const fetchUsers = '/users/all-usernames';
