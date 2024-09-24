@@ -223,6 +223,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
   final PagingController<int, UserFriendEntity> usersPagingController =
       PagingController(firstPageKey: 1);
+
   Future<void> searchUsers(int page, String search) async {
     final response = await _searchUsersUsecase
         .call(TwitterFeedParams(page: page, limit: pageSize, search: search));
@@ -386,6 +387,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       PagingController(firstPageKey: 1);
   final PagingController<int, PostEntity> userPostsPagingController =
       PagingController(firstPageKey: 1);
+
   // get suggested friends
   Future<void> getSuggestedFriends(int page) async {
     if (page != 4) {
@@ -708,6 +710,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
   final PagingController<int, CommentEntity> repliesPagingController =
       PagingController(firstPageKey: 1);
+
   Future<void> getCommentReplies(
       {required BuildContext context,
       required String commentId,

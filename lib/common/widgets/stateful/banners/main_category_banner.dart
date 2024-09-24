@@ -1,9 +1,10 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -80,7 +81,8 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
             ),
             PositionedDirectional(
               start: 0,
-              child: Column(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   context.read<UserCubit>().isLoggedIn
                       ? IconButton(
@@ -104,11 +106,9 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                             : Icons.favorite_border),
                       )
                       : const SizedBox.shrink(),
-                  Sizer(
-                    height: 15.h,
-                  ),
                   Label(
-                    text: '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
+                    text:
+                        '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
                     style: Styles.mediumText(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -194,7 +194,10 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
   Widget _buildRegisterButton() {
     if (widget.canRegister) {
       return InkWell(
-        onTap: () => widget.onRegister?.call(),
+        onTap: () {
+          log('88888888888888888888888888');
+          widget.onRegister?.call();
+        },
         child: Text(Labels.register,
             style: Styles.mediumText(
                 color: Colors.white, fontWeight: FontWeight.bold)),

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -13,6 +14,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 // ignore: must_be_immutable
@@ -22,6 +24,7 @@ class ShowMneu extends StatelessWidget {
   TextEditingController foodNameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   String imagePath = "";
+
   @override
   Widget build(BuildContext context) {
     final createRestaurantCubit = context.read<RestaurantMenuCubit>();
@@ -114,110 +117,114 @@ class ShowMneu extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(width: .4)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () async {
-                        await createRestaurantCubit.uploadMealImage(context);
-                      },
-                      child:
-                          BlocBuilder<RestaurantMenuCubit, RestaurantMenuState>(
-                        builder: (context, state) {
-                          if (state is RestaurantMenuImagePicked) {
-                            imagePath = state.imagePath;
-                            return ImagePickerPlaceholder(
-                              image: Image.file(
-                                File(imagePath),
-                                fit: BoxFit.cover,
-                              ),
-                            );
-                          }
-                          return ImagePickerPlaceholder(
-                            tilte: LocaleKeys.photoForMeal.tr(),
-                          );
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          await createRestaurantCubit.uploadMealImage(context);
                         },
-                      ),
-                    ),
-                    Sizer(),
-                    TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return LocaleKeys.emptyFieldNotValid.tr();
-                        }
-                        return null;
-                      },
-                      controller: foodNameController,
-                      decoration: InputDecoration(
-                        filled: false,
-                        contentPadding: const EdgeInsets.all(10),
-                        hintText: LocaleKeys.itemName.tr(),
-                        hintStyle: const TextStyle(color: Colors.red),
-                      ),
-                    ),
-                    Sizer(),
-                    TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return LocaleKeys.emptyFieldNotValid.tr();
-                        }
-                        return null;
-                      },
-                      controller: priceController,
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: true),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-                      ],
-                      decoration: InputDecoration(
-                        filled: false,
-                        contentPadding: const EdgeInsets.all(10),
-                        hintText: LocaleKeys.price.tr(),
-                        hintStyle: const TextStyle(color: Colors.red),
-                      ),
-                    ),
-                    Sizer(),
-                    Sizer(),
-                    GestureDetector(
-                      onTap: () {
-                        final foodName = foodNameController.text;
-                        final price = double.tryParse(priceController.text);
-                        if (foodName.isNotEmpty &&
-                            price != null &&
-                            imagePath.isNotEmpty) {
-                          final menuItem = RestaurantMneuModel(
-                            foodName: foodName,
-                            price: price,
-                            photoPath: imagePath,
-                            photo: createRestaurantCubit.imageId,
-                          );
-
-                          context
-                              .read<RestaurantMenuCubit>()
-                              .addMenuItem(context, menuItem);
-
-                          // Clear the input fields
-                          foodNameController.clear();
-                          priceController.clear();
-                        }
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: MediaQuery.of(context).size.width * .1,
-                        width: MediaQuery.of(context).size.width * .4,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(width: .4)),
-                        child: const Icon(
-                          Icons.add,
-                          color: Colors.white,
+                        child: BlocBuilder<RestaurantMenuCubit,
+                            RestaurantMenuState>(
+                          builder: (context, state) {
+                            if (state is RestaurantMenuImagePicked) {
+                              imagePath = state.imagePath;
+                              return ImagePickerPlaceholder(
+                                image: Image.file(
+                                  File(imagePath),
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            }
+                            return ImagePickerPlaceholder(
+                              tilte: LocaleKeys.photoForMeal.tr(),
+                            );
+                          },
                         ),
                       ),
-                    ),
-                  ],
+                      Sizer(),
+                      TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return LocaleKeys.emptyFieldNotValid.tr();
+                          }
+                          return null;
+                        },
+                        controller: foodNameController,
+                        decoration: InputDecoration(
+                          filled: false,
+                          contentPadding: const EdgeInsets.all(10),
+                          hintText: LocaleKeys.itemName.tr(),
+                          hintStyle: const TextStyle(color: Colors.red),
+                        ),
+                      ),
+                      Sizer(),
+                      TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return LocaleKeys.emptyFieldNotValid.tr();
+                          }
+                          return null;
+                        },
+                        controller: priceController,
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+                        ],
+                        decoration: InputDecoration(
+                          filled: false,
+                          contentPadding: const EdgeInsets.all(10),
+                          hintText: LocaleKeys.price.tr(),
+                          hintStyle: const TextStyle(color: Colors.red),
+                        ),
+                      ),
+                      Sizer(),
+                      Sizer(),
+                      ElevatedAppButton(
+                        onPressed: () {
+                          final foodName = foodNameController.text;
+                          final price = double.tryParse(priceController.text);
+                          if (foodName.isNotEmpty &&
+                              price != null &&
+                              imagePath.isNotEmpty) {
+                            final menuItem = RestaurantMneuModel(
+                              foodName: foodName,
+                              price: price,
+                              photoPath: imagePath,
+                              photo: createRestaurantCubit.imageId,
+                            );
+
+                            context
+                                .read<RestaurantMenuCubit>()
+                                .addMenuItem(context, menuItem);
+
+                            // Clear the input fields
+                            foodNameController.clear();
+                            priceController.clear();
+                          }
+                        },
+                        label: '',
+                        backColor: AppColors.SECONDARY_COLOR,
+                        icon: Icons.add,
+
+                        // child: Container(
+                        //   alignment: Alignment.center,
+                        //   height: MediaQuery.of(context).size.width * .1,
+                        //   width: MediaQuery.of(context).size.width * .4,
+                        //   padding: const EdgeInsets.all(10),
+                        //   decoration: BoxDecoration(
+                        //       color: Colors.red,
+                        //       borderRadius: BorderRadius.circular(10),
+                        //       border: Border.all(width: .4)),
+                        //   child:
+                        // ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(

@@ -3007,11 +3007,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_items.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -3035,8 +3037,8 @@ class ReelView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
+      extendBody: true,
       appBar: _buildAppBar(context),
-      backgroundColor: Colors.transparent,
       body: MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -3057,14 +3059,14 @@ class ReelView extends StatelessWidget {
       elevation: 0,
       leading: IconAppButton(
         icon: Icons.arrow_back,
-        color: Colors.white,
-        size: 24,
+        size: 50.h,
+        color: isDarkTheme(context) ? Colors.white : Colors.grey,
         onPressed: () => context.pop(),
       ),
       actions: [
         const Spacer(),
         Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: IconButton(
             onPressed: () async {
               // context.pop();
@@ -3078,10 +3080,10 @@ class ReelView extends StatelessWidget {
                         ),
                   ));
             },
-            icon: const FaIcon(
+            icon: FaIcon(
               Icons.camera_alt_outlined,
-              color: Colors.white,
-              size: 35,
+              color: isDarkTheme(context) ? Colors.white : Colors.grey,
+              size: 50.h,
             ),
           ),
         )
@@ -3106,13 +3108,19 @@ void showSnackBarAfterBuild(
       children: [
         Expanded(
           child: Text(
-            message,
-            style: TextStyle(color: textColor),
+            message, textScaleFactor: 1.0, // Disable font scaling
+
+            style: TextStyle(
+                color: textColor, fontSize: 30.sp, fontWeight: FontWeight.w700),
           ),
         ),
         if (icon != null) ...[
-          Icon(icon, color: Colors.green),
-          SizedBox(width: 12),
+          Icon(
+            icon,
+            color: Colors.green,
+            size: 50.h,
+          ),
+          const SizedBox(width: 12),
         ],
       ],
     ),
@@ -3129,7 +3137,7 @@ void showSnackBarAfterBuild(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10),
     ),
-    margin: EdgeInsets.all(16),
+    margin: const EdgeInsets.all(16),
     elevation: 10,
   );
   SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -3164,10 +3172,13 @@ class ReelsScreenState extends State<ReelsScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<ReelsCubit, ReelsState>(
       builder: (context, state) {
-        if (state.globalReels.isEmpty) {
+        if ((state.globalReels.isEmpty)) {
           return const Center(
-            child: CupertinoActivityIndicator(radius: 25),
+            child: CircularProgressIndicator(),
           );
+        }
+        if (!serviceLocator<UserCubit>().isLoggedIn) {
+          return pleaseLoginWidget(context);
         }
         return PageView.builder(
           physics: const BouncingScrollPhysics(),
@@ -3182,9 +3193,9 @@ class ReelsScreenState extends State<ReelsScreen> {
                 child: CupertinoActivityIndicator(radius: 25),
               );
             }
-            return ReelItem(
-              key: ValueKey(state.globalReels[index].id),
+            return MainReelItem(
               reel: state.globalReels[index],
+              fromSpotlight: false,
               isVisible: _currentPage == index,
             );
           },
@@ -3208,619 +3219,76 @@ class ReelsScreenState extends State<ReelsScreen> {
   }
 }
 
-class ReelItem extends StatefulWidget {
-  final Reel reel;
-  final bool isVisible;
-
-  const ReelItem({super.key, required this.reel, required this.isVisible});
-
-  @override
-  ReelItemState createState() => ReelItemState();
-}
-
-class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
-  late final VideoPlayerController _videoPlayerController;
-  ChewieController? _chewieController;
-  bool _isInitialized = false;
-  bool _isPlaying = false;
-  bool _showPlayPauseIcon = false;
-
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializePlayer();
-  }
-
-  @override
-  void didUpdateWidget(ReelItem oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.isVisible != oldWidget.isVisible) {
-      widget.isVisible ? _playVideo() : _pauseVideo();
-    }
-  }
-
-  Future<void> _initializePlayer() async {
-    if (!await _checkConnectivity()) return;
-
-    await _initializeVideoController();
-    _setupChewieController();
-    _setInitialVideoState();
-  }
-
-  Future<void> _initializeVideoController() async {
-    _videoPlayerController =
-        VideoPlayerController.networkUrl(Uri.parse(widget.reel.videoMedia));
-    try {
-      await _videoPlayerController.initialize();
-    } catch (error) {
-      if (mounted) {
-        _handleVideoError('Failed to load video');
-      }
-    }
-  }
-
-  void _setupChewieController() {
-    _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController,
-      autoPlay: widget.isVisible,
-      looping: true,
-      showControls: false,
-      aspectRatio: _videoPlayerController.value.aspectRatio,
-    );
-  }
-
-  void _setInitialVideoState() {
-    if (mounted) {
-      setState(() {
-        _isInitialized = true;
-        _isPlaying = widget.isVisible;
-      });
-    }
-  }
-
-  Future<bool> _checkConnectivity() async {
-    final connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult == ConnectivityResult.none) {
-      if (mounted) {
-        _handleVideoError('No internet connection');
-      }
-      return false;
-    }
-    return true;
-  }
-
-  void _handleVideoError(String message) {
-    if (mounted) {
-      setState(() {
-        _isInitialized = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
-    }
-  }
-
-  void _playVideo() {
-    if (_isInitialized && !_isPlaying) {
-      _chewieController?.play();
-      if (mounted) {
-        setState(() {
-          _isPlaying = true;
-          _showPlayPauseIcon = true;
-        });
-      }
-      _hidePlayPauseIconAfterDelay();
-    }
-  }
-
-  void _pauseVideo() {
-    if (_isInitialized && _isPlaying) {
-      _chewieController?.pause();
-      if (mounted) {
-        setState(() {
-          _isPlaying = false;
-          _showPlayPauseIcon = true;
-        });
-      }
-    }
-  }
-
-  void _togglePlayPause() {
-    if (_isPlaying) {
-      _pauseVideo();
-    } else {
-      _playVideo();
-    }
-  }
-
-  void _hidePlayPauseIconAfterDelay() {
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (mounted) {
-        setState(() {
-          _showPlayPauseIcon = false;
-        });
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return GestureDetector(
-      onTap: _togglePlayPause,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          _buildVideoOrPlaceholder(),
-          _buildPlayPauseIcon(),
-          _buildOverlay(),
-          if (!_isInitialized)
-            const Center(
-              child: CupertinoActivityIndicator(radius: 25),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildVideoOrPlaceholder() {
-    if (_isInitialized && _chewieController != null) {
-      return FittedBox(
-        fit: BoxFit.fitHeight,
-        child: SizedBox(
-          width: _videoPlayerController.value.size.width,
-          height: _videoPlayerController.value.size.height,
-          child: Chewie(controller: _chewieController!),
-        ),
-      );
-    } else {
-      return CachedNetworkImage(
-        imageUrl: widget.reel.thumbnailSignedUrl,
-        fit: BoxFit.cover,
-        placeholder: (context, url) => const Center(
-          child: CupertinoActivityIndicator(radius: 25),
-        ),
-        errorWidget: (context, url, error) =>
-            const Center(child: Icon(Icons.error)),
-      );
-    }
-  }
-
-  Widget _buildPlayPauseIcon() {
-    return GestureDetector(
-      onTap: _togglePlayPause,
-      child: Center(
-        child: AnimatedOpacity(
-          opacity: _showPlayPauseIcon ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 300),
-          child: Icon(
-            _isPlaying ? Icons.pause : Icons.play_arrow,
-            color: Colors.white,
-            size: 100,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildOverlay() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: kToolbarHeight + 20),
-        Expanded(
-          child: GestureDetector(
-            onTap: _togglePlayPause,
-          ),
-        ),
-        _buildReelInfo(),
-      ],
-    );
-  }
-
-  Widget _buildReelInfo() {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    return Padding(
-      padding: EdgeInsets.all(0.0),
-      child: SizedBox(
-        height: height * 0.5,
-        width: double.infinity,
-        child: Stack(
-          children: [
-            // Positioned(
-            //
-            //   top: 100,
-            //   right: 100,
-            //   child: Padding(
-            //     padding: EdgeInsets.all(8.0),
-            //     child: IconButton(
-            //
-            //       onPressed: () {
-            //         _pauseVideo();
-            //
-            //         Navigator.push(
-            //             context,
-            //             MaterialPageRoute(
-            //               builder: (context) => const ReelsRecordingScreen(),
-            //             ));
-            //       },
-            //       icon: const FaIcon(
-            //         Icons.camera_alt_outlined,
-            //         color: Colors.white,
-            //         size: 35,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-
-            Positioned(
-              bottom: 16,
-              left: 4,
-              right: 20,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      _buildUserAvatar(),
-                      SizedBox(width: 12),
-                      FittedBox(child: _buildUserInfo()),
-                    ],
-                  ),
-                  _buildAudioAndButtons(width),
-                ],
-              ),
-            ),
-
-            context.isArabic
-
-
-                ? Positioned(
-                    left: 8,
-                    bottom: 0,
-                    child: _buildActionButtons(),
-                  )
-                : Positioned(
-                    right: 8,
-                    bottom: 0,
-                    child: _buildActionButtons(),
-                  ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildUserAvatar() {
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: widget.reel.user.story
-              ? AppColors.PRIMARY_COLOR_DARK
-              : Colors.transparent,
-          width: 3,
-        ),
-      ),
-      child: CircleAvatar(
-        radius: 30,
-        backgroundImage: CachedNetworkImageProvider(
-          widget.reel.user.profilePictureSignedUrl!,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildUserInfo() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildUserName(),
-        _buildReelNameAndViews(),
-      ],
-    );
-  }
-
-  Widget _buildUserName() {
-    return Row(
-      children: [
-        Text(
-          capitalizeAndSplit(
-              '${widget.reel.user.firstName} ${widget.reel.user.lastName}'),
-          textScaler: const TextScaler.linear(1.5),
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(width: 4),
-        if (widget.reel.user.verified)
-          const Icon(
-            Icons.verified,
-            color: AppColors.PRIMARY_COLOR_DARK,
-            size: 25,
-          ),
-      ],
-    );
-  }
-
-  Widget _buildReelNameAndViews() {
-    return Row(
-      children: [
-        Text(
-          widget.reel.name,
-          style: const TextStyle(color: AppColors.DARK_GRAY_COLOR),
-        ),
-        SizedBox(width: 16),
-        FaIcon(
-          FontAwesomeIcons.eye,
-          size: 20,
-          color: AppColors.PRIMARY_COLOR_DARK.withOpacity(0.6),
-        ),
-        SizedBox(width: 8),
-        Text(
-          widget.reel.viewCount.toString(),
-          style: const TextStyle(color: AppColors.DARK_GRAY_COLOR),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAudioAndButtons(double width) {
-    return Row(
-      children: [
-        SizedBox(width: 4),
-        // FaIcon(
-        //   FontAwesomeIcons.music,
-        //   color: AppColors.PRIMARY_COLOR_DARK.withOpacity(0.5),
-        // ),
-        Container(
-          color: Colors.blueGrey.withOpacity(0.2),
-          width: width / 2,
-          child: ScrollingText(text: widget.reel.audio.audioName),
-        ),
-        SizedBox(width: 4),
-        RoundedButtonWithImage(
-          imagePath: widget.reel.audio.audioPicture,
-          onPressed: () {
-            _pauseVideo();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BlocProvider.value(
-                  value: serviceLocator<ReelsCubit>()
-                    ..fetchReelsWithSameAudio(widget.reel.audio.id),
-                  child: InstagramAudioScreen(
-                    audio: widget.reel.audio,
-                    reel: widget.reel,
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-        const Spacer(),
-      ],
-    );
-  }
-
-  Widget _buildActionButtons() {
-    final reelsCubit = context.read<ReelsCubit>();
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _buildActionButton(
-          widget.reel.likeCount == 0
-              ? FontAwesomeIcons.heart
-              : FontAwesomeIcons.solidHeart,
-          widget.reel.likeCount,
-          () async {
-            await _handleLikeAction(reelsCubit);
-          },
-          iconColor: widget.reel.likeCount == 0 ? Colors.white : Colors.red,
-        ),
-        _buildActionButton(
-          FontAwesomeIcons.comment,
-          widget.reel.commentCount,
-          () async {
-            await _handleCommentAction(reelsCubit);
-          },
-        ),
-        _buildActionButton(
-          FontAwesomeIcons.paperPlane,
-          widget.reel.shareCount,
-          () async {
-            _handleShareAction(widget.reel.videoMedia);
-          },
-        ),
-        _buildActionButton(
-          widget.reel.saveCount == 0
-              ? FontAwesomeIcons.bookmark
-              : FontAwesomeIcons.solidBookmark,
-          widget.reel.saveCount,
-          () async {
-            await _handleSaveAction(reelsCubit);
-          },
-          iconColor:
-              widget.reel.saveCount == 0 ? Colors.white : Colors.yellowAccent,
-        ),
-        _buildActionButton(
-          Icons.card_giftcard,
-          0,
-          () {
-            showGiftBottomSheet(context, receiverId: widget.reel.user.id);
-          },
-        ),
-        _buildActionButton(
-          Icons.report_outlined,
-          0,
-          () {
-            bottomSheet(
-              context: context,
-              widget: ReportView(
-                id: widget.reel.user.id,
-                categoryId: '66684135dbb427ee42aa0141',
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  Future<void> _handleLikeAction(ReelsCubit reelsCubit) async {
-    try {
-      await reelsCubit.likeReel(widget.reel.id);
-      final response = reelsCubit.state.likeReelResponse;
-      if (response?.message == "Reel liked successfully") {
-        setState(() => widget.reel.likeCount++);
-      } else if (response?.message == "Reel unlike successfully") {
-        setState(() => widget.reel.likeCount--);
-      }
-    } catch (e) {
-      // Handle error (e.g., show a snackbar)
-    }
-  }
-
-  Future<void> _handleCommentAction(ReelsCubit reelsCubit) async {
-    try {
-      await reelsCubit.getComments(widget.reel.id);
-      showCommentsBottomSheet(context, reel: widget.reel);
-    } catch (e) {
-      // Handle error (e.g., show a snackbar)
-    }
-  }
-
-  void _handleShareAction(String videoUrl) {
-    Share.share(
-      videoUrl,
-      subject: 'Check out this reel!',
-    );
-  }
-
-  Future<void> _handleSaveAction(ReelsCubit reelsCubit) async {
-    try {
-      await reelsCubit.saveReel(widget.reel.id);
-      final response = reelsCubit.state.reelSaveResponse;
-      if (response!.message == "saved successfully") {
-        setState(() => widget.reel.saveCount++);
-      } else if (response.message == "unsaved successfully") {
-        setState(() => widget.reel.saveCount--);
-      }
-    } catch (e) {
-      // Handle error (e.g., show a snackbar)
-    }
-  }
-
-  Widget _buildActionButton(IconData icon, int count, VoidCallback function,
-      {Color? iconColor}) {
-    return IconButton(
-      onPressed: function,
-      icon: Column(
-        children: [
-          FaIcon(
-            icon,
-            color: iconColor ?? Colors.white,
-            size: 30,
-          ),
-          SizedBox(height: 2),
-          if (count != 0)
-            Text(
-              '$count',
-              style: const TextStyle(color: Colors.white),
-            )
-          else
-            Sizer(),
-        ],
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _pauseVideo();
-    _videoPlayerController.dispose();
-    _chewieController?.dispose();
-    super.dispose();
-  }
-}
-
-class ScrollingText extends StatefulWidget {
-  final String text;
-
-  const ScrollingText({super.key, required this.text});
-
-  @override
-  ScrollingTextState createState() => ScrollingTextState();
-}
-
-class ScrollingTextState extends State<ScrollingText>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-      duration: const Duration(seconds: 10),
-      vsync: this,
-    )..repeat(reverse: false);
-
-    _animation = Tween<double>(begin: -1.0, end: 1.0).animate(_controller);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double textSize = screenWidth * 0.03;
-
-    return ClipRect(
-      child: Container(
-        alignment: Alignment.centerLeft,
-        child: AnimatedBuilder(
-          animation: _animation,
-          builder: (context, child) {
-            return FractionalTranslation(
-              translation: Offset(_animation.value, 0),
-              child: child,
-            );
-          },
-          child: Text(
-            widget.text,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: textSize,
-              color: AppColors.UNSELECTED_GRAY_COLOR,
-              decoration: TextDecoration.none,
-              shadows: [
-                const Shadow(
-                  offset: Offset(1.0, 1.0),
-                  blurRadius: 4.0,
-                  color: Colors.black,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+// class ScrollingText extends StatefulWidget {
+//   final String text;
+//
+//   const ScrollingText({super.key, required this.text});
+//
+//   @override
+//   ScrollingTextState createState() => ScrollingTextState();
+// }
+//
+// class ScrollingTextState extends State<ScrollingText>
+//     with SingleTickerProviderStateMixin {
+//   late AnimationController _controller;
+//   late Animation<double> _animation;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//
+//     _controller = AnimationController(
+//       duration: const Duration(seconds: 10),
+//       vsync: this,
+//     )..repeat(reverse: false);
+//
+//     _animation = Tween<double>(begin: -1.0, end: 1.0).animate(_controller);
+//   }
+//
+//   @override
+//   void dispose() {
+//     _controller.dispose();
+//     super.dispose();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     double screenWidth = MediaQuery.of(context).size.width;
+//     double textSize = screenWidth * 0.03;
+//
+//     return ClipRect(
+//       child: Container(
+//         alignment: Alignment.centerLeft,
+//         child: AnimatedBuilder(
+//           animation: _animation,
+//           builder: (context, child) {
+//             return FractionalTranslation(
+//               translation: Offset(_animation.value, 0),
+//               child: child,
+//             );
+//           },
+//           child: Text(
+//             widget.text,
+//             maxLines: 1,
+//             overflow: TextOverflow.ellipsis,
+//             style: TextStyle(
+//               fontSize: textSize,
+//               color: AppColors.UNSELECTED_GRAY_COLOR,
+//               decoration: TextDecoration.none,
+//               shadows: [
+//                 const Shadow(
+//                   offset: Offset(1.0, 1.0),
+//                   blurRadius: 4.0,
+//                   color: Colors.black,
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class RoundedButtonWithImage extends StatelessWidget {
   final String imagePath;

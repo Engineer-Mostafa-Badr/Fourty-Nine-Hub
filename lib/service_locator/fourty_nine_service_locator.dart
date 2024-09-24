@@ -37,6 +37,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_banner_b
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/add_main_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_wallet_home_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/remove_main_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
@@ -282,6 +283,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<GetWalletHomeUseCase>(
+      () => GetWalletHomeUseCase(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<RejectPickMeUseCase>(
       () => RejectPickMeUseCase(
         serviceLocator(),
@@ -357,8 +363,6 @@ class FourtyNineServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
       ),
     );
 
@@ -390,7 +394,6 @@ class FourtyNineServiceLocator {
     // ContactUsCubit
     serviceLocator.registerFactory<ContactUsCubit>(
       () => ContactUsCubit(
-        serviceLocator(),
         serviceLocator(),
       ),
     );

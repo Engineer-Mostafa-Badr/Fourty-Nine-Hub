@@ -129,10 +129,7 @@ class FormTextField extends StatelessWidget {
                   TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
               labelStyle: style ??
                   TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
-              prefixIcon: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.w),
-                child: prefix,
-              ),
+              prefixIcon: prefix,
               suffixIcon: suffix,
               enabledBorder: noBorder
                   ? InputBorder.none

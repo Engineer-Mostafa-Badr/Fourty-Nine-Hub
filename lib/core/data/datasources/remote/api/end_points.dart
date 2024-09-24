@@ -50,6 +50,7 @@ class EndPoints {
 
   static String getBannerByID({required String id}) => '/categories/main/$id';
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
+  static const getWalletHome = '/main-wallet/user-wallets-amount';
 
   static String getMainCategoryDetails(String id) => '/categories/main/$id';
 
@@ -102,6 +103,8 @@ class EndPoints {
   }
 
   static const getWallet = '/main-wallet/user-wallet';
+  static const transferMoney = '/main-wallet/send-money';
+  static const fetchUsers = '/users/all-usernames';
   static const getPrice = '/advertisementCompany/price';
   static const getSubscription = '/subscription';
   static const transferFiveBalance = '/main-wallet/transfer-five-years';
@@ -629,6 +632,7 @@ class EndPoints {
 
   // contact us
   static const helpMessages = '/help';
+  static const contactUs = '/email/contact-us';
   static String mediaUrl = '/media/signed-url';
 
   static String confirmUpload(String mediaId) {
@@ -671,6 +675,11 @@ class EndPoints {
   static String endMeeting(String id) => '/room-id/finish/$id';
 
   static String getScheduledMeetings(String id) => '/room-id/$id';
+
+  //lives
+  static String allLiveTopics = '/stream-topic';
+
+
   static String deleteChatMessage = '/chat/message';
 
   static String changeChatMuteState(String chatId) {

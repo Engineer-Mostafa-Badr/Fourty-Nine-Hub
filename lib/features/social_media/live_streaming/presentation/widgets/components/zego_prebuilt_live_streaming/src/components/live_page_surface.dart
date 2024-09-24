@@ -4,9 +4,11 @@ import 'dart:core';
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_state.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_state.dart';
 
 // Package imports:
 
@@ -107,6 +109,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
             children: [
               durationTimeBoard(),
               if (!state.isOpenWhiteBoard) topBar(),
+              if (widget.isLiveStream) participants(),
               bottomBar(),
               if (!state.isOpenWhiteBoard) messageList(),
               foreground(
@@ -120,6 +123,16 @@ class _ZegoLiveStreamingLivePageSurfaceState
     );
   }
 
+  Widget participants() => Positioned.directional(
+        textDirection: context.textDirection,
+        end: 10,
+        top: 150.h,
+        child: Container(
+            decoration: BoxDecoration(
+                color: Colors.grey, borderRadius: BorderRadius.circular(20)),
+            child: ZoomParticipantsBuilder(widgetTop: widget)),
+      );
+
   Widget topBar() {
     final isCoHostEnabled = (widget.plugins?.isEnabled ?? false) &&
         widget.config.bottomMenuBar.audienceButtons
@@ -127,7 +140,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
     return Positioned(
       left: 0,
       right: 0,
-      top: 64.zR,
+      top: 64.h,
       child: ZegoLiveStreamingTopBar(
         config: widget.config,
         events: widget.events,

@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // Dart imports:
 import 'dart:async';
 import 'dart:core';
@@ -25,22 +26,23 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/internal/defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/internal/pk_combine_notifier.dart';
 
-import '../../../../../../../../zoom/presentation/bloc/meeting_cubit.dart';
-import '../../../../../../../../zoom/presentation/bloc/meeting_state.dart';
+import '../../../../../../../../zoom/presentation/controller/stream_cubit.dart';
+import '../../../../../../../../zoom/presentation/controller/stream_state.dart';
 import '../../../zego_uikit/src/services/defines/defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 /// @nodoc
 class ZegoLiveStreamingCentralAudioVideoView extends StatefulWidget {
   const ZegoLiveStreamingCentralAudioVideoView({
-    super.key,
+    Key? key,
     required this.config,
     required this.hostManager,
     required this.liveStatusManager,
     required this.popUpManager,
-    required this.constraints,
     this.plugins,
-  });
+    required this.constraints,
+    required this.isLiveStream,
+  }) : super(key: key);
 
   final ZegoUIKitPrebuiltLiveStreamingConfig config;
 
@@ -50,6 +52,7 @@ class ZegoLiveStreamingCentralAudioVideoView extends StatefulWidget {
   final ZegoLiveStreamingPlugins? plugins;
 
   final BoxConstraints constraints;
+  final bool isLiveStream;
 
   @override
   State<ZegoLiveStreamingCentralAudioVideoView> createState() =>
@@ -112,7 +115,11 @@ class ZegoLiveStreamingCentralAudioVideoViewState
                 return audioVideoView(
                   host,
                   widget.constraints.maxWidth,
-                  widget.constraints.maxHeight,
+                  (widget.isLiveStream &&
+                          ZegoLiveStreamingPKBattleStateCombineNotifier
+                              .instance.state.value)
+                      ? widget.constraints.maxHeight * 0.75
+                      : widget.constraints.maxHeight,
                   screenSharingUsers.isNotEmpty,
                 );
               },

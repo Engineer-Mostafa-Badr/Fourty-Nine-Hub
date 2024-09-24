@@ -12,7 +12,9 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../routes/pages.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'meeting_state.dart';
+import '../../../social_media/live_streaming/domain/entity/topic_entity.dart';
+import '../../../social_media/live_streaming/domain/usecases/get_all_topics_use_case.dart';
+import 'stream_state.dart';
 
 class StreamCubit extends Cubit<StreamState> {
   StreamCubit(
@@ -20,13 +22,17 @@ class StreamCubit extends Cubit<StreamState> {
     this.joinRoomUseCase,
     this.endRoomUseCase,
     this.getScheduledRoomsUseCase,
+    this.getAllTopicsUseCase,
   ) : super(const StreamState());
   final AddRoomUseCase addRoomUseCase;
   final JoinRoomUseCase joinRoomUseCase;
   final EndRoomUseCase endRoomUseCase;
   final GetScheduledRoomsUseCase getScheduledRoomsUseCase;
-
+  //for live_streaming
+  final GetAllTopicsUseCase getAllTopicsUseCase;
   String meetingId = '';
+  List<TopicEntity> topics = [];
+
   String get genRandNo {
     int min = 10000000;
     int max = 99999999;
@@ -153,10 +159,5 @@ class StreamCubit extends Cubit<StreamState> {
   void toggleMinimized() {
     isMinimized = !isMinimized;
     emit(state.copyWith(status: StreamsStates.success));
-  }
-
-  void minimize() {
-    isMinimized = true;
-    emit(state.copyWith(status: StreamsStates.minimizing));
   }
 }

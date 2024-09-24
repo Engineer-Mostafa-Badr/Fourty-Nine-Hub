@@ -64,7 +64,7 @@ class WalletWidget extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (context) => const BalanceWalletView()));
               }, LocaleKeys.balance.tr(),
-                  '${state.balance?.balance ?? ''}'),
+                  '${state.wallet?.balance ?? ''}'),
               Container(
                 width: 2.w,
                 margin: EdgeInsets.symmetric(horizontal: 5.w),
@@ -85,7 +85,7 @@ class WalletWidget extends StatelessWidget {
                       builder: (context) => const GiftWalletView()));
             },
             LocaleKeys.gift.tr(),
-            '${state.gift?.giftWallet.amount ?? ''}',
+            '${state.wallet?.giftWallet ?? ''}',
           ),
               Container(
                 width: 2.h,
@@ -102,7 +102,7 @@ class WalletWidget extends StatelessWidget {
                 context.push(Routes.WALLET, extra: WalletTypes.mainWallet);
               },
                   LocaleKeys.wallet.tr(),
-                  '${state.wallet?.realAmount?.floor() ?? ''}'),
+                  '${state.wallet?.realAmount.floor() ?? ''}'),
             ],
           ),
         );
@@ -123,10 +123,12 @@ class WalletWidget extends StatelessWidget {
                 style: Styles.mediumText(
                   fontWeight: FontWeight.bold,
                 )),
-            Label(
-                text: amount,
-                style: Styles.mediumText(
-                    fontWeight: FontWeight.bold,)),
+            Expanded(
+              child: Label(
+                  text: amount,
+                  style: Styles.mediumText(
+                      fontWeight: FontWeight.bold,)),
+            ),
           ],
         ),
       ));

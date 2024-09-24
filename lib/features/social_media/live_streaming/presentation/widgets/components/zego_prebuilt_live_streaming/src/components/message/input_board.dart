@@ -60,7 +60,7 @@ class ZegoLiveStreamingInRoomMessageInputBoard extends ModalRoute<String> {
             ),
           ),
           ZegoInRoomMessageInput(
-            placeHolder: LocaleKeys.saySomthing.localize,
+            placeHolder: LocaleKeys.comment.localize,
             payloadAttributes: payloadAttributes,
             // to change text field text color
             textColor: Colors.black,

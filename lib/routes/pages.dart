@@ -83,11 +83,12 @@ import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cu
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pages/edit_profile_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/live_streaming_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
@@ -119,7 +120,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/useca
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/request_trip_join_cubit/request_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/avaiable_trips_view.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -535,7 +536,7 @@ class AppPages {
                 GoRoute(
                     path: Paths.POLICY,
                     name: Routes.POLICY,
-                    builder: (context, state) => const PolicyView()),
+                    builder: (context, state) =>  PolicyView()),
                 GoRoute(
                     path: Paths.Lists,
                     name: Routes.Lists,
@@ -716,7 +717,8 @@ class AppPages {
                           builder: (context, state) {
                             var extras = state.extra as ZegoArgs;
                             return BlocProvider.value(
-                              value: serviceLocator<StreamCubit>(),
+                              //to render topics before entering the live
+                              value: serviceLocator<StreamCubit>()..getTopics(),
                               child: LiveStreamView(
                                 isHost: extras.isHost,
                                 liveID: extras.liveId,

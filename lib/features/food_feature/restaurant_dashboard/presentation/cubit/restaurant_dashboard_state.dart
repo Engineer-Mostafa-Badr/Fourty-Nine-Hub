@@ -7,7 +7,7 @@ class RestaurantDashboardState {
   final Failure? failure;
   final String? successMessage;
   final bool connected;
-  final List<FoodOrderEntity>? orders;
+  final RestaurantOrdersModel? orders;
   const RestaurantDashboardState(
       {this.status = RestaurantDashboardStates.loading,
       this.failure,
@@ -17,7 +17,7 @@ class RestaurantDashboardState {
   RestaurantDashboardState copyWith(
       {RestaurantDashboardStates? status,
       Failure? failure,
-      List<FoodOrderEntity>? orders,
+      RestaurantOrdersModel? orders,
       bool? connected,
       String? successMessage}) {
     return RestaurantDashboardState(

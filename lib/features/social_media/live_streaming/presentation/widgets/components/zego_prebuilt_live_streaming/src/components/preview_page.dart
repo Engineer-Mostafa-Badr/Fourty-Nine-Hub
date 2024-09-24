@@ -5,8 +5,10 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/animations/create_custom_transition.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/live_streaming_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/effects/beauty_effect_button.dart';
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/utils/permissions.dart';
@@ -14,20 +16,30 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/core/host_manager.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/internal/defines.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:go_router/go_router.dart';
 // Package imports:
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:shimmer/shimmer.dart';
 
+import '../../../../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../../../res/style/const.dart';
 import '../../../../../../../../../res/style/styles.dart';
+import '../../../../../../../../../service_locator/service_locator.dart';
 import '../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../../../../../zoom/presentation/controller/stream_cubit.dart';
+import '../../../../../../../../zoom/presentation/controller/stream_state.dart';
 import '../../../../../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../../../tinder/data/shared/shared.dart';
+import '../../../../../../../tinder/presentation/cubit/gift_cubit.dart';
+import '../../../../../../domain/entity/topic_entity.dart';
 import '../../../../liveview/gifts/simple_gifts_sheet.dart';
 import '../config.dart';
+import 'select_live_goals_screen.dart';
 
 /// @nodoc
 /// user should be login before page enter
@@ -219,27 +231,53 @@ class _ZegoLiveStreamingPreviewPageState
                     decoration: BoxDecoration(
                       color: Colors.grey.withOpacity(0.7),
                     ),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          'assets/49-New-icons/hash.png',
-                          width: 25,
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(LocaleKeys.addTopic.localize,
-                            style: const TextStyle(color: Colors.white)),
-                      ],
+                    child: InkWell(
+                      onTap: () {
+                        _showTopicSheet(
+                            context, context.read<StreamCubit>().topics,
+                            (topic) {
+                          context.read<StreamCubit>().setTopic(topic);
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/49-New-icons/hash.png',
+                            width: 25,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          BlocBuilder<StreamCubit, StreamState>(
+                            builder: (context, state) {
+                              return Text(
+                                state.topic.isEmpty
+                                    ? LocaleKeys.addTopic.localize
+                                    : state.topic,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                Sizer(),
+                const Sizer(),
                 Expanded(
                   child: InkWell(
                     onTap: () {
-                      showSimpleGiftBottomSheet(
-                          context, context.read<UserCubit>().state.data!.id);
+                      // showGiftBottomSheet(context,
+                      //     receiverId: '', forSelect: true);
+                      Navigator.of(context).push(createCustomTransitionRoute(
+                        MultiBlocProvider(
+                          providers: [   BlocProvider.value(value: serviceLocator<StreamCubit>()),
+          BlocProvider(create:(context)=> GiftsCubit()..fetchGifts()),],
+                          child: const SelectLiveGoalsScreen()),
+                        TransitionType.bottomToTop,
+                      ));
                     },
                     child: Container(
                       // margin: EdgeInsets.only(left: constraints.maxWidth / 20),
@@ -270,6 +308,42 @@ class _ZegoLiveStreamingPreviewPageState
             )
           ],
         ));
+  }
+
+  Future<dynamic> _showTopicSheet(BuildContext context,
+      List<TopicEntity> topics, Function(String? value) onChanged) {
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: BlocProvider.value(
+          value: serviceLocator<StreamCubit>(),
+          child:
+              BlocBuilder<StreamCubit, StreamState>(builder: (context, state) {
+            return Column(mainAxisSize: MainAxisSize.min, children: [
+              Label(
+                text: LocaleKeys.selectATopic.localize,
+                style: Styles.headerText(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              ...topics.map((topic) {
+                return RadioListTile<String>(
+                  title: Label(text: topic.name),
+                  value: topic.name,
+                  groupValue: state.topic.isEmpty ? null : state.topic,
+                  onChanged: (value) {
+                    onChanged(value);
+                    context.pop();
+                    // print('new topic is ${state.topic}');
+                  },
+                );
+              }),
+            ]);
+          }),
+        ),
+      ),
+    );
   }
 
   Scaffold zoomPreviewScreen(BuildContext context) {
@@ -841,3 +915,5 @@ class _ZegoLiveStreamingPreviewPageState
         !v;
   }
 }
+
+final List<String> topics = ['Athletics', 'Sport', 'Cinema', 'Fun'];

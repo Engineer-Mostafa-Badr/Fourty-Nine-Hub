@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_category_model.dart';
@@ -10,6 +13,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entiti
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_anonymous_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_normal_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 abstract class ChatsRemoteDataSource {
   Future<Either<Failure, List<ChatEntity>>> getChats(GetChatsParams params);
@@ -45,12 +50,17 @@ abstract class ChatsRemoteDataSource {
 
   Future<Either<Failure, bool>> createAnonymousChat(
       CreateAnonymousChatParams params);
+
+  void stopListenToNewChats();
+
+  void listenToNewChats(Function(ChatEntity) onNewChat);
 }
 
 class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
   final ApiConsumer _apiConsumer;
+  final Socket _socket;
 
-  ChatsRemoteDataSourceImplementation(this._apiConsumer);
+  ChatsRemoteDataSourceImplementation(this._apiConsumer, this._socket);
 
   @override
   Future<Either<Failure, List<ChatEntity>>> getChats(
@@ -161,5 +171,32 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
 
     return response.fold(
         (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  void listenToNewChats(Function(ChatEntity) onNewChat) {
+    try {
+      _socket.connect();
+      // TODO
+      // _socket.on(SocketIOListeners.newMessageFromMe, (data) {
+      //   final decodedData = jsonDecode(data);
+      //   if (decodedData is List) {
+      //     data = decodedData[0];
+      //   } else {
+      //     data = decodedData;
+      //   }
+      //   CliLogger.info("newChat :  $data");
+      //   ChatModel messageModel = ChatModel.fromJson(data);
+      //   onNewChat(messageModel);
+      // });
+
+    } catch (e) {
+      CliLogger.info("can't read new chat error $e");
+    }
+  }
+
+  @override
+  void stopListenToNewChats() {
+    // TODO: implement stopListenToNewChats
   }
 }

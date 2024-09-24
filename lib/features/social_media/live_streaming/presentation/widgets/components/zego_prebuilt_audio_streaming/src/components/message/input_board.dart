@@ -58,7 +58,7 @@ class ZegoLiveAudioRoomInRoomMessageInputBoard extends ModalRoute<String> {
             ),
           ),
           ZegoInRoomMessageInput(
-            placeHolder: LocaleKeys.saySomthing.localize,
+            placeHolder: LocaleKeys.comment.localize,
             backgroundColor: Colors.white,
             // inputBackgroundColor: const Color(0xffF7F7F8),
             // textColor: Colors.white,
