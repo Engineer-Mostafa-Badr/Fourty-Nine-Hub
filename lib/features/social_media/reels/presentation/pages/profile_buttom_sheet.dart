@@ -712,6 +712,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart'; // For localization keys
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -719,7 +720,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../routes/routes.dart';
 import '../../../social_posts/presentation/cubit/social_posts_cubit.dart';
-import '../../../tinder/data/shared/shared.dart';
+import '../../../stories/presentation/pages/more_stories.dart';
 import '../../data/models/new_reels_model.dart';
 
 class ProfileBottomSheet extends StatelessWidget {

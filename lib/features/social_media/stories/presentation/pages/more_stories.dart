@@ -2190,6 +2190,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:story_view/story_view.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../res/style/const.dart';
+import '../../../tinder/data/shared/shared.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import '../cubit/stories_cubit.dart';
 
@@ -2640,11 +2641,11 @@ class UserInfoBar extends StatelessWidget {
   }
 }
 
-String capitalizeAndSplit2Only(String text) {
-  return text.split(' ').map((str) {
-    return str[0].toUpperCase() + str.substring(1).toLowerCase();
-  }).join(' ');
-}
+// String capitalizeAndSplit2Only(String text) {
+//   return text.split(' ').map((str) {
+//     return str[0].toUpperCase() + str.substring(1).toLowerCase();
+//   }).join(' ');
+// }
 
 String removeSubstringBeforeFirstTildeOnly(String input) {
   int tildeIndex = input.indexOf('~');

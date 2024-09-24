@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+
 // import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/live_streaming_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -31,6 +32,7 @@ class SelectLiveGoalsScreen extends StatefulWidget {
 
 class _SelectLiveGoalsScreenState extends State<SelectLiveGoalsScreen> {
   final TextEditingController _descriptionController = TextEditingController();
+
   //dispose
   @override
   void dispose() {
@@ -195,7 +197,7 @@ class _SelectLiveGoalsScreenState extends State<SelectLiveGoalsScreen> {
             InkWell(
               onTap: () {
                 showSuccessMessage(context, LocaleKeys.goalsAreSelectedSuccess);
-                
+
                 context.pop();
               },
               child: Container(
@@ -221,7 +223,7 @@ class _SelectLiveGoalsScreenState extends State<SelectLiveGoalsScreen> {
   }
 
   String _progressGoals(BuildContext context) =>
-      '${LocaleKeys.progress.localize} ${context.read<StreamCubit>().state.selectedGifts.length}/${context.read<GiftsCubit>().length} ${LocaleKeys.gift.localize}';
+      '${LocaleKeys.progress.localize} ${context.read<StreamCubit>().state.selectedGifts.length}/${context.read<GiftsCubit>().state.length} ${LocaleKeys.gift.localize}';
 }
 
 class GiftItemWidget extends StatelessWidget {

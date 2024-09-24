@@ -444,7 +444,8 @@ import '../../../../zoom/presentation/controller/stream_cubit.dart';
 class BottomSheetContent extends StatefulWidget {
   final String? receiverId;
   final bool forSelect;
-  final void Function (GiftData)? selectGift;
+  final void Function(GiftData)? selectGift;
+
   const BottomSheetContent({
     super.key,
     required this.receiverId,
@@ -777,7 +778,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
   }
 
   Widget _buildGiftItemForSelect(BuildContext context, GiftData gift,
-      {String? receiverId,required void Function(GiftData) selectGift}) {
+      {String? receiverId, required void Function(GiftData) selectGift}) {
     return InkWell(
       onTap: () {
         // context.read<StreamCubit>().selectGift(gift);
@@ -820,10 +821,10 @@ class BottomSheetContentState extends State<BottomSheetContent> {
   }
 }
 
-void showGiftBottomSheet(BuildContext context, {required String? receiverId}) {
-  // log(serviceLocator<GiftsCubit>().state.length.toString()+"555555555555");
 void showGiftBottomSheet(BuildContext context,
-    {required String? receiverId, bool forSelect = false,void Function(GiftData)? selectGift}) {
+    {required String? receiverId,
+    bool forSelect = false,
+    void Function(GiftData)? selectGift}) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -872,7 +873,7 @@ void showGiftBottomSheet(BuildContext context,
                           color: isDarkTheme(context)
                               ? AppColors.ACCENT_COLOR
                               : AppColors.PRIMARY_COLOR,
-                          fontSize: 22.sp,
+                          fontSize: 40.sp,
                           fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
