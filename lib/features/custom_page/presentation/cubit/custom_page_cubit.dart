@@ -1,15 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/custom_page/domain/use_case/fetch_social_page_use_case.dart';
-
-import '../../../../../../common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/features/custom_page/domain/use_case/update_social_page_use_case.dart';
 import 'custom_page_states.dart';
 
 class CustomPageCubit extends Cubit<CustomPageState> {
   final FetchSocialPageUseCase _fetchSocialPageUseCase;
+  final UpdateSocialPageUseCase _updateSocialPageUseCase;
 
   CustomPageCubit(
-    this._fetchSocialPageUseCase
+    this._fetchSocialPageUseCase, this._updateSocialPageUseCase
   ) : super(const CustomPageState());
 
   // void loadData() async {
@@ -24,6 +24,15 @@ class CustomPageCubit extends Cubit<CustomPageState> {
       emit(state.copyWith(failure: l, status: CustomPageStates.error));
     }, (data) {
       emit(state.copyWith(social: data,status: CustomPageStates.success));
+    });
+  }
+
+  Future<void> updateSocialPage(SocialPageParams params) async {
+    final response = await _updateSocialPageUseCase.call(params);
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: CustomPageStates.error));
+    }, (data) {
+      emit(state.copyWith(status: CustomPageStates.success));
     });
   }
 }

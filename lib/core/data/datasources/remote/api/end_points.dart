@@ -103,7 +103,7 @@ class EndPoints {
   }
 
   // Custom Page
-  static const getSocialPage='/navigators/socialPage';
+  static const SocialPage='/navigators/socialPage';
 
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';

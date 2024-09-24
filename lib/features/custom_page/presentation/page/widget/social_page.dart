@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/custom_page/domain/use_case/update_social_page_use_case.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -80,22 +81,36 @@ class _SocialPageState extends State<SocialPage> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (_selectedItem != null) {
-            // Proceed with the selected item
-            print('Selected Item: ${_items[_selectedItem!]}');
-          } else {
-            // Show a message if no item is selected
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Please select at 1 item.'),
-              ),
+      floatingActionButton: BlocProvider<CustomPageCubit>(
+        create: (BuildContext context) =>serviceLocator(),
+        child: BlocConsumer<CustomPageCubit,CustomPageState>(
+          listener: (BuildContext context, state) {  },
+          builder: (BuildContext context, Object? state) {
+            return FloatingActionButton(
+              onPressed: () {
+                if (_selectedItem != null) {
+                  // Map selectedItem index to a boolean for 'face'
+                  bool face = _selectedItem == 0 ? true : false;
+
+                  // Call the updateSocialPage method with the selected value
+                  context.read<CustomPageCubit>().updateSocialPage(SocialPageParams(face: face));
+
+                  print('Selected Item: ${_items[_selectedItem!]}');
+                } else {
+                  // Show a message if no item is selected
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please select at least one item.'),
+                    ),
+                  );
+                }
+              },
+              child: const Icon(Icons.check),
             );
-          }
-        },
-        child: const Icon(Icons.check),
+          },
+        ),
       ),
+
     );
   }
 }
