@@ -568,7 +568,15 @@ class CodegenLoader extends AssetLoader{
   "currency": "جنيه مصري",
   "friend": "صديق",
   "view": "مشاهدة",
-  "shareProfile": "مشاركة الملف الشخصي"
+  "shareProfile": "مشاركة الملف الشخصي",
+  "playedSpins": "عذرا، لقد لعبت كل دوراتك لهذا اليوم.",
+  "noFavouriteCategory": "لا يوجد فئة مفضلة في الوقت الحالي.",
+  "noFavouriteSubCategory": "لا توجد فئة فرعية مفضلة في الوقت الحالي.",
+  "face": "فيسبوك 49",
+  "insta": "إنستا 49",
+  "socialPage": "صفحة اجتماعية",
+  "errorLoadingSocialPage": "خطأ في تحميل الصفحة الاجتماعية",
+  "updateSuccessfully": "تم التحديث بنجاح"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1125,7 +1133,15 @@ static const Map<String,dynamic> en = {
   "friend": "Friend",
   "view": "View",
   "adTitle": "Ad Title",
-  "shareProfile": "Share Profile"
+  "shareProfile": "Share Profile",
+  "playedSpins": "Sorry, you have played all your spins for today.",
+  "noFavouriteCategory": "There is no favourite category at the moment.",
+  "noFavouriteSubCategory": "There is no favourite sub category at the moment.",
+  "face": "49 Face",
+  "insta": "49 Insta",
+  "socialPage": "Social Page",
+  "errorLoadingSocialPage": "Error loading social page",
+  "updateSuccessfully": "Update Successfully"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

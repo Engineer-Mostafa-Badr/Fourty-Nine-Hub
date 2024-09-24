@@ -550,8 +550,8 @@ abstract class  LocaleKeys {
   static const view = 'view';
   static const shareProfile = 'shareProfile';
   static const playedSpins = 'playedSpins';
-  static const noFavouriteCategory = 'playedSpins';
-  static const noFavouriteSubCategory = 'playedSpins';
+  static const noFavouriteCategory = 'noFavouriteCategory';
+  static const noFavouriteSubCategory = 'noFavouriteSubCategory';
   static const face = 'face';
   static const insta = 'insta';
   static const socialPage = 'socialPage';
