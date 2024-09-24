@@ -7,8 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_state.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_state.dart';
 
 // Package imports:
 

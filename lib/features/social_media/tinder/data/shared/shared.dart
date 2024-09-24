@@ -426,6 +426,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/live_streaming_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_cubit.dart';
@@ -435,15 +436,20 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../routes/routes.dart';
+import '../../../../zoom/presentation/controller/stream_cubit.dart';
 
 class BottomSheetContent extends StatefulWidget {
   final String? receiverId;
-
+  final bool forSelect;
+  final void Function (GiftData)? selectGift;
   const BottomSheetContent({
     super.key,
     required this.receiverId,
+    this.forSelect = false,
+    this.selectGift,
   });
 
   @override
@@ -474,9 +480,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
 
   @override
   Widget build(BuildContext context) {
-    // log(context.read<GiftsCubit>().state.length.toString()+"555555555555");
-
-    const crossAxisCount = 4; // Adjusts grid based on screen size
+    const crossAxisCount = 3; // Adjusts grid based on screen size
 
     return BlocBuilder<GiftsCubit, GiftsState>(
       builder: (context, state) {
@@ -492,14 +496,23 @@ class BottomSheetContentState extends State<BottomSheetContent> {
             controller: _scrollController,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: crossAxisCount,
-              childAspectRatio: 1 / 2, // Adjust aspect ratio
+              childAspectRatio: 1 / 0.95, // Adjust aspect ratio
             ),
             itemCount: state.gifts.length + 1,
             shrinkWrap: true,
             itemBuilder: (context, index) {
               if (index < state.gifts.length) {
-                return _buildGiftItem(context, state.gifts[index],
-                    receiverId: widget.receiverId);
+                if (widget.forSelect) {
+                  return _buildGiftItemForSelect(
+                    context,
+                    state.gifts[index],
+                    receiverId: widget.receiverId,
+                    selectGift: widget.selectGift!,
+                  );
+                } else {
+                  return _buildGiftItem(context, state.gifts[index],
+                      receiverId: widget.receiverId);
+                }
               } else {
                 return const Center(child: CupertinoActivityIndicator());
               }
@@ -529,24 +542,24 @@ class BottomSheetContentState extends State<BottomSheetContent> {
           Flexible(
             child: Text(
               context.isArabic ? '${gift.nameAr}' : '${gift.nameEn}',
-              textScaleFactor: 1.0,
+              textScaler: const TextScaler.linear(1.0),
               textAlign: TextAlign.center,
               softWrap: true,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                   color: isDarkTheme(context) ? Colors.white : Colors.black87,
-                  fontSize: 40.sp),
+                  fontSize: 25.sp),
             ),
           ),
           const SizedBox(height: 4),
           Expanded(
             child: Text(
               '${gift.value ?? 0} 💰',
-              textScaleFactor: 1.0,
+              textScaler: const TextScaler.linear(1.0),
               style: TextStyle(
                   color: isDarkTheme(context) ? Colors.white : Colors.black87,
-                  fontSize: 35.sp),
+                  fontSize: 20.sp),
             ),
           ),
         ],
@@ -651,18 +664,16 @@ class BottomSheetContentState extends State<BottomSheetContent> {
   }
 
   Widget _buildDialogTitle(IconData icon, String title, Color primaryColor) {
-    return FittedBox(
-      child: Row(
-        children: [
-          Icon(icon, color: primaryColor, size: 30),
-          const SizedBox(width: 10),
-          Text(
-            title,
-            style: TextStyle(fontSize: 45.sp, fontWeight: FontWeight.bold),
-            textScaler: TextScaler.noScaling,
-          ),
-        ],
-      ),
+    return Row(
+      children: [
+        Icon(icon, color: primaryColor, size: 30),
+        const SizedBox(width: 10),
+        Text(
+          title,
+          style: TextStyle(fontSize: 45.sp, fontWeight: FontWeight.bold),
+          textScaler: TextScaler.noScaling,
+        ),
+      ],
     );
   }
 
@@ -736,7 +747,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
         ),
         child: Text(LocaleKeys.ok.tr(),
             textScaleFactor: 1.0,
-            style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.normal)),
+            style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.normal)),
       ),
       if (isError)
         TextButton(
@@ -753,7 +764,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
           child: Text(
             LocaleKeys.gift_body_charge_wallet.tr(),
             textScaleFactor: 1.0,
-            style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.normal),
+            style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.normal),
           ),
         ),
     ];
@@ -764,10 +775,55 @@ class BottomSheetContentState extends State<BottomSheetContent> {
     _scrollController.dispose();
     super.dispose();
   }
+
+  Widget _buildGiftItemForSelect(BuildContext context, GiftData gift,
+      {String? receiverId,required void Function(GiftData) selectGift}) {
+    return InkWell(
+      onTap: () {
+        // context.read<StreamCubit>().selectGift(gift);
+        // print(
+        //     'selected ${context.read<StreamCubit>().state.selectedGifts.toString()}');
+        selectGift.call(gift);
+        Navigator.of(context).pop();
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(child: _buildGiftImage(gift)),
+          const SizedBox(height: 4),
+          Flexible(
+            child: Text(
+              context.isArabic ? '${gift.nameAr}' : '${gift.nameEn}',
+              textScaler: const TextScaler.linear(1.0),
+              textAlign: TextAlign.center,
+              softWrap: true,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  color: isDarkTheme(context) ? Colors.white : Colors.black87,
+                  fontSize: 25.sp),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Expanded(
+            child: Text(
+              '${gift.value ?? 0} 💰',
+              textScaler: const TextScaler.linear(1.0),
+              style: TextStyle(
+                  color: isDarkTheme(context) ? Colors.white : Colors.black87,
+                  fontSize: 20.sp),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 void showGiftBottomSheet(BuildContext context, {required String? receiverId}) {
   // log(serviceLocator<GiftsCubit>().state.length.toString()+"555555555555");
+void showGiftBottomSheet(BuildContext context,
+    {required String? receiverId, bool forSelect = false,void Function(GiftData)? selectGift}) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -775,8 +831,7 @@ void showGiftBottomSheet(BuildContext context, {required String? receiverId}) {
     builder: (context) => MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => GiftsCubit()),
-        BlocProvider(create: (_) => serviceLocator<TinderViewCubit>()),
-        BlocProvider(create: (_) => serviceLocator<UserCubit>()),
+        BlocProvider.value(value: serviceLocator<StreamCubit>()),
       ],
       child: DraggableScrollableSheet(
         initialChildSize: 0.6,
@@ -809,13 +864,15 @@ void showGiftBottomSheet(BuildContext context, {required String? receiverId}) {
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
-                      LocaleKeys.gift_body_send_a_gift.tr(),
-                      textScaleFactor: 1.0,
+                      forSelect
+                          ? LocaleKeys.editYourLiveGoal.tr()
+                          : LocaleKeys.gift_body_send_a_gift.tr(),
+                      textScaler: const TextScaler.linear(1.0),
                       style: TextStyle(
                           color: isDarkTheme(context)
                               ? AppColors.ACCENT_COLOR
                               : AppColors.PRIMARY_COLOR,
-                          fontSize: 45.sp,
+                          fontSize: 22.sp,
                           fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
@@ -824,7 +881,11 @@ void showGiftBottomSheet(BuildContext context, {required String? receiverId}) {
                 Expanded(
                   child: Stack(
                     children: [
-                      BottomSheetContent(receiverId: receiverId),
+                      BottomSheetContent(
+                        receiverId: receiverId,
+                        forSelect: forSelect,
+                        selectGift: selectGift,
+                      ),
                       Positioned(
                         bottom: 5,
                         right: 5,
@@ -848,9 +909,9 @@ void showGiftBottomSheet(BuildContext context, {required String? receiverId}) {
                             },
                             child: Text(
                               "${LocaleKeys.gift_body_recharge.tr()} 💳",
-                              textScaleFactor: 1.0,
+                              textScaler: const TextScaler.linear(1.0),
                               style: TextStyle(
-                                  fontSize: 45.sp,
+                                  fontSize: 25.sp,
                                   fontWeight: FontWeight.bold,
                                   color: isDarkTheme(context)
                                       ? AppColors.YELLOW_COLOR
@@ -930,7 +991,7 @@ pleaseLoginWidget(context) {
               LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.tr(),
               textScaler: TextScaler.noScaling,
               style: TextStyle(
-                fontSize: 40.sp,
+                fontSize: 22.sp,
               ),
               textAlign: TextAlign.center,
             ),

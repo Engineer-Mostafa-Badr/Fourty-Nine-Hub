@@ -69,6 +69,12 @@
   "cast": "سرعة",
   "noRooms": "لا توجد غرف صوتيه",
   "selectATopic": "اختر الموضوع",
+  "editYourLiveGoal": "أضف اهداف البث",
+  "goalExpirationIn4Hours": "أهداف البث متاحه لمده 4 ساعات",
+  "describeYourGoal": "اكتب رساله تشجيعيه ",
+  "progress": "تم:",
+  "gifts": "هدايا",
+  "goalsAreSelectedSuccess": "تم اختيار الاهداف",
 
   "restaurantName": "إسم المطعم",
   "theCommercialRegister": "السجل التجاري",

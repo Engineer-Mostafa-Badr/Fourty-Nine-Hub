@@ -59,6 +59,13 @@
   "reverb":"Reverb",
   "meetingTitle":"Meeting Title",
   "noRooms":"No Rooms",
+  "editYourLiveGoal":"Edit your LIVE goal",
+  "goalExpirationIn4Hours":"The LIVE goal will expire in 4 hours",
+  "describeYourGoal":"Describe Your Goal",
+  "progress":"Progress:",
+  "gifts":"Gifts:",
+  "goalsAreSelectedSuccess":"Goals are selected successfully",
+
   "selectATopic":"Choose Topic for LIVE",
   "arabic": "Arabic",
   "english": "English",
