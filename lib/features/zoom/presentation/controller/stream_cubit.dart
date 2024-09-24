@@ -14,7 +14,7 @@ import '../../../../routes/pages.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../social_media/live_streaming/domain/entity/topic_entity.dart';
 import '../../../social_media/live_streaming/domain/usecases/get_all_topics_use_case.dart';
-import 'meeting_state.dart';
+import 'stream_state.dart';
 
 class StreamCubit extends Cubit<StreamState> {
   StreamCubit(

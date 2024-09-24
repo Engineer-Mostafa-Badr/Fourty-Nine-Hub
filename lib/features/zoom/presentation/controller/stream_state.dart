@@ -3,6 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 
+import '../../../social_media/tinder/data/models/gift_model.dart';
+
 enum StreamsStates {
   initial,
   loading,
@@ -26,6 +28,7 @@ extension MeetingStateX on StreamState {
 class StreamState extends Equatable {
   final StreamsStates? status;
   final List<ScheduledMeeting>? scheduledMeeting;
+  final List<GiftData> selectedGifts;
   final String? errorMessage;
   final String topic;
   final Failure? failure;
@@ -33,8 +36,9 @@ class StreamState extends Equatable {
     this.status = StreamsStates.initial,
     this.errorMessage,
     this.failure,
-    this.topic='',
+    this.topic = '',
     this.scheduledMeeting,
+    this.selectedGifts = const [],
   });
 
   StreamState copyWith({
@@ -43,6 +47,7 @@ class StreamState extends Equatable {
     String? topic,
     Failure? failure,
     List<ScheduledMeeting>? scheduledMeetings,
+    List<GiftData>? selectedGifts,
   }) =>
       StreamState(
         status: status,
@@ -50,6 +55,7 @@ class StreamState extends Equatable {
         failure: failure ?? this.failure,
         topic: topic ?? this.topic,
         scheduledMeeting: scheduledMeetings ?? scheduledMeeting,
+        selectedGifts: selectedGifts ?? this.selectedGifts,
       );
 
   @override
@@ -59,5 +65,6 @@ class StreamState extends Equatable {
         failure,
         topic,
         scheduledMeeting,
+        selectedGifts,
       ];
 }

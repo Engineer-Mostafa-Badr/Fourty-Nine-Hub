@@ -71,6 +71,11 @@ abstract class  LocaleKeys {
   static const cast = 'cast';
   static const noRooms = 'noRooms';
   static const selectATopic = 'selectATopic';
+  static const editYourLiveGoal = 'editYourLiveGoal';
+  static const goalExpirationIn4Hours = 'goalExpirationIn4Hours';
+  static const describeYourGoal = 'describeYourGoal';
+  static const progress = 'progress';
+  static const gifts = 'gifts';
   static const restaurantName = 'restaurantName';
   static const theCommercialRegister = 'theCommercialRegister';
   static const theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider = 'theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider';

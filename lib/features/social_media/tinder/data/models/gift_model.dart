@@ -30,8 +30,18 @@ class GiftData {
   String? nameEn;
   int? value;
   String? picture;
+  int? currentValue;
+  int? maximumGoal;
 
-  GiftData({this.sId, this.nameAr, this.nameEn, this.value, this.picture});
+  GiftData({
+    this.sId,
+    this.nameAr,
+    this.nameEn,
+    this.value,
+    this.picture,
+    this.currentValue = 0,
+    this.maximumGoal = 100,
+  });
 
   GiftData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -50,4 +60,24 @@ class GiftData {
     data['picture'] = picture;
     return data;
   }
+    GiftData copyWith({
+    String? sId,
+    String? nameAr,
+    String? nameEn,
+    int? value,
+    String? picture,
+    int? currentValue,
+    int? maximumGoal,
+  }) {
+    return GiftData(
+      sId: sId ?? this.sId,
+      nameAr: nameAr ?? this.nameAr,
+      nameEn: nameEn ?? this.nameEn,
+      value: value ?? this.value,
+      picture: picture ?? this.picture,
+      currentValue: currentValue ?? this.currentValue,
+      maximumGoal: maximumGoal ?? this.maximumGoal,
+    );
+  }
 }
+

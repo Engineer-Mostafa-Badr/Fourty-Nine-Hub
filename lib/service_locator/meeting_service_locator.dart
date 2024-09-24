@@ -7,7 +7,7 @@ import '../features/zoom/domain/repositories/meeting_repository.dart';
 import '../features/zoom/domain/usecases/add_room_use_case.dart';
 import '../features/zoom/domain/usecases/join_room_use_case.dart';
 import '../features/zoom/domain/usecases/end_room_use_case.dart';
-import '../features/zoom/presentation/bloc/meeting_cubit.dart';
+import '../features/zoom/presentation/controller/stream_cubit.dart';
 
 class MeetingServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {

@@ -120,7 +120,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/useca
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/request_trip_join_cubit/request_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/avaiable_trips_view.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -716,9 +716,9 @@ class AppPages {
                           name: Routes.LIVEView,
                           builder: (context, state) {
                             var extras = state.extra as ZegoArgs;
-                            return BlocProvider(
+                            return BlocProvider.value(
                               //to render topics before entering the live
-                              create:(_)=> serviceLocator<StreamCubit>()..getTopics(),
+                              value: serviceLocator<StreamCubit>()..getTopics(),
                               child: LiveStreamView(
                                 isHost: extras.isHost,
                                 liveID: extras.liveId,
