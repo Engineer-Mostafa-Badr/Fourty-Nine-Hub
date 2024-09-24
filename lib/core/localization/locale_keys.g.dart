@@ -538,5 +538,15 @@ abstract class  LocaleKeys {
   static const friend = 'friend';
   static const view = 'view';
   static const shareProfile = 'shareProfile';
+  static const createdOn = 'createdOn';
+  static const active = 'active';
+  static const pending = 'pending';
+  static const adReviewSoon = 'adReviewSoon';
+  static const sureRemoveAd = 'sureRemoveAd';
+  static const markSsSold = 'markSsSold';
+  static const deactivate = 'deactivate';
+  static const tel = 'tel';
+  static const chats = 'chats';
+  static const deleteAd = 'deleteAd';
 
 }

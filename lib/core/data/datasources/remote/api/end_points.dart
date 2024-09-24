@@ -558,7 +558,7 @@ class EndPoints {
   }
 
   static const createAd = '/ads/create-ads';
-  static const myAds = '/ads/allMyAds';
+  static const myAds = '/ads/allMyAds?limit=100';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const favouriteAds = '/ads-favourites/allFavouriteAds';
   static const favouriteSubCategories = '/favorite-sub-category';

@@ -4,7 +4,6 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/data/models/create_
 import '../../../../authentication/data/models/user_model.dart';
 import '../../../../requests_history/data/models/address_model.dart';
 import '../../domain/entities/ad_entity.dart';
-import 'detail_model.dart';
 
 class AdModel extends AdEntity {
   AdModel(
@@ -21,6 +20,7 @@ class AdModel extends AdEntity {
         super.userId,
       super.statistics,
       required super.active,
+      required super.approved,
       required super.createdAt,
       required super.details,
       super.subCategoryId, super.phone});
@@ -46,7 +46,8 @@ class AdModel extends AdEntity {
         images: images,
         price: json['price'] ?? 0,
         subCategoryId: json['subCategoryId'],
-        active: json['active'] ?? true,
+        active: json['isActive'] ?? true,
+        approved: json['isApproved'] ?? true,
         isFavourite: json['isFavorite'] ?? false,
         // phone: json['phone'] ?? '',
         statistics: json['statistics'] == null

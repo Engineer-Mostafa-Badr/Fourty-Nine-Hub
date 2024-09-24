@@ -557,7 +557,17 @@ class CodegenLoader extends AssetLoader{
   "currency": "جنيه مصري",
   "friend": "صديق",
   "view": "مشاهدة",
-  "shareProfile": "مشاركة الملف الشخصي"
+  "shareProfile": "مشاركة الملف الشخصي",
+  "createdOn": "نشظ من",
+  "active": "نشط",
+  "pending": "قيد الانتظار",
+  "adReviewSoon": "هذا الإعلان قيد المراجعة وسيتم نشره قريبًا.",
+  "sureRemoveAd": "هل أنت متأكد أنك تريد إزالة م؟",
+  "markSsSold": "ضع علامة علي أنه تم بيعه",
+  "deactivate": "توقف",
+  "tel": "هاتف",
+  "chats": "محادثة",
+  "deleteAd": "حذف الإعلان"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1103,7 +1113,17 @@ static const Map<String,dynamic> en = {
   "friend": "Friend",
   "view": "View",
   "adTitle": "Ad Title",
-  "shareProfile": "Share Profile"
+  "shareProfile": "Share Profile",
+  "createdOn": "Created On",
+  "active": "Active",
+  "pending": "Pending",
+  "adReviewSoon": "This ad is being reviewed and it will be live soon.",
+  "sureRemoveAd": "Are you sure, you want to remove AD?",
+  "markSsSold": "Mark as sold",
+  "deactivate": "Deactivate",
+  "tel": "Tel",
+  "chats": "Chats",
+  "deleteAd": "Delete"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/detail_entity.dart';
 
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
@@ -120,7 +119,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           createdAt: DateTime.now(),
           details: selectedDetails,
           subCategoryId: categorize.subCategory.id,
-          mainCategoryId: categorize.mainCategory.id,
+          mainCategoryId: categorize.mainCategory.id, approved: false,
       ));
 
       response.fold(

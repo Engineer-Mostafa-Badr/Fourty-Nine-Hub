@@ -544,5 +544,15 @@
   "friend": "Friend",
   "view": "View",
   "adTitle": "Ad Title",
-  "shareProfile": "Share Profile"
+  "shareProfile": "Share Profile",
+  "createdOn": "Created On",
+  "active": "Active",
+  "pending": "Pending",
+  "adReviewSoon": "This ad is being reviewed and it will be live soon.",
+  "sureRemoveAd": "Are you sure, you want to remove AD?",
+  "markSsSold": "Mark as sold",
+  "deactivate": "Deactivate",
+  "tel": "Tel",
+  "chats": "Chats",
+  "deleteAd": "Delete"
 }

@@ -48,10 +48,10 @@ class MyAddsCubit extends Cubit<MyAddsState> {
       : super(const MyAddsState());
 
   void loadData() async {
-    await getMyAds();
+    // await getMyAds();
     await getPickMeTrips();
-    await getComeWithMeTrips();
-    await getMyAuctions();
+    // await getComeWithMeTrips();
+    // await getMyAuctions();
   }
 
   Future<void> getMyAds() async {
