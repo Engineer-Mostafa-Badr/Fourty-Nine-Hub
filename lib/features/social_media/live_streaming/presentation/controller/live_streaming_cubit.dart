@@ -56,4 +56,10 @@ extension TiktokController on StreamCubit {
       selectedGifts: updatedGifts,
     ));
   }
+  void setGoalDescription(String decstiption){
+    emit(state.copyWith(
+      status: StreamsStates.success,
+      goalDescription: decstiption,
+    ));
+  }
 }

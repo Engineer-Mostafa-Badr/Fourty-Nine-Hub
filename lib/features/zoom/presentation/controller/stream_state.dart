@@ -30,7 +30,8 @@ class StreamState extends Equatable {
   final List<ScheduledMeeting>? scheduledMeeting;
   final List<GiftData> selectedGifts;
   final String? errorMessage;
-  final String topic;
+  final String topic; 
+  final String? goalDescription;
   final Failure? failure;
   const StreamState({
     this.status = StreamsStates.initial,
@@ -39,12 +40,14 @@ class StreamState extends Equatable {
     this.topic = '',
     this.scheduledMeeting,
     this.selectedGifts = const [],
+    this.goalDescription= '',
   });
 
   StreamState copyWith({
     StreamsStates? status,
     String? errorMessage,
     String? topic,
+    String? goalDescription,
     Failure? failure,
     List<ScheduledMeeting>? scheduledMeetings,
     List<GiftData>? selectedGifts,
@@ -56,6 +59,7 @@ class StreamState extends Equatable {
         topic: topic ?? this.topic,
         scheduledMeeting: scheduledMeetings ?? scheduledMeeting,
         selectedGifts: selectedGifts ?? this.selectedGifts,
+        goalDescription: goalDescription ?? this.goalDescription,
       );
 
   @override
@@ -64,6 +68,7 @@ class StreamState extends Equatable {
         errorMessage,
         failure,
         topic,
+        goalDescription,
         scheduledMeeting,
         selectedGifts,
       ];

@@ -14,6 +14,7 @@ class GiftApi {
     }
   }
 
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
@@ -32,6 +33,7 @@ class GiftData {
   String? picture;
   int? currentValue;
   int? maximumGoal;
+  int? length;
 
   GiftData({
     this.sId,
@@ -41,6 +43,7 @@ class GiftData {
     this.picture,
     this.currentValue = 0,
     this.maximumGoal = 100,
+    this.length,
   });
 
   GiftData.fromJson(Map<String, dynamic> json) {
@@ -49,6 +52,7 @@ class GiftData {
     nameEn = json['nameEn'];
     value = json['value'];
     picture = json['picture'];
+    // length = json['length'];
   }
 
   Map<String, dynamic> toJson() {
@@ -78,6 +82,9 @@ class GiftData {
       currentValue: currentValue ?? this.currentValue,
       maximumGoal: maximumGoal ?? this.maximumGoal,
     );
+  }
+   static int calculateLength(List<GiftData> gifts) {
+    return gifts.length;
   }
 }
 

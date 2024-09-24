@@ -132,7 +132,7 @@ class GiftsCubit extends Cubit<GiftsState> {
       _isFetching = false;
     }
   }
-
+int length = 0;
   Future<List<GiftData>> _fetchGiftsFromApi(String accessToken) async {
     final response = await _makeGetRequest(
       url:
@@ -143,6 +143,7 @@ class GiftsCubit extends Cubit<GiftsState> {
 
     if (response != null) {
       final giftApi = GiftApi.fromJson(jsonDecode(response.body));
+      length = giftApi.data?.length?? 0;
       return giftApi.data ?? [];
     } else {
       throw Exception("Failed to fetch gifts");
