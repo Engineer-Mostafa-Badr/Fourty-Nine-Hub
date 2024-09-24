@@ -9,7 +9,10 @@ import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart'
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
@@ -33,6 +36,7 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../fourty_nine/domain/entities/slider_item_entity.dart';
+import '../../../../social_media/social_posts/presentation/pages/Social_home.dart';
 import '../../../../social_media/stories/presentation/cubit/stories_cubit.dart';
 
 class PagePreview extends StatelessWidget {
@@ -55,27 +59,49 @@ class PagePreview extends StatelessWidget {
             ],
           ),
         ),
-        body:  TabBarView(
+        body: TabBarView(
           children: [
             MultiBlocProvider(
               providers: [
                 BlocProvider(
                   create: (context) =>
-                  serviceLocator<InstagramCubit>()..loadData(),
+                      serviceLocator<InstagramCubit>()..loadData(),
                 ),
                 BlocProvider(
                   create: (context) => serviceLocator<StoryCubit>(),
                 ),
+                BlocProvider(
+                  create: (context) =>
+                      serviceLocator<CustomPageCubit>()..fetchSocialPage(),
+                ),
               ],
-              child: BlocBuilder<InstagramCubit,InstagramState>(
-                  builder: (BuildContext context, state) {
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 8
-                      ),
-                      child: InstagramView(hideAppBar: true,),
-                    );
-                  },),
+              child: BlocBuilder<InstagramCubit, InstagramState>(
+                builder: (BuildContext context, state) {
+                  return BlocBuilder<CustomPageCubit, CustomPageState>(
+                    builder: (BuildContext context, social) {
+                      if (social.status == CustomPageStates.success) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            right: 8,
+                            left: 8,
+                            top: 8
+                          ),
+                          child: social.social?.face == true
+                              ? SocialHomeView(
+                                  userId: social.social!.userId,
+                                  hideAppBar: true,
+                                )
+                              : const InstagramView(
+                                  hideAppBar: true,
+                                ),
+                        );
+                      } else {
+                        return const CustomLoading();
+                      }
+                    },
+                  );
+                },
+              ),
             ),
             const ServicePagePreview(), // Content for second tab
           ],
@@ -100,20 +126,23 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
   void initState() {
     super.initState();
     _setupScrollController();
-    context.read<FirebaseNotficationsCubit>().setupInterceptedMessage(context: context);
+    context
+        .read<FirebaseNotficationsCubit>()
+        .setupInterceptedMessage(context: context);
     context.read<NotificationSocketIoCubit>().notificationListener();
   }
 
-
   void _setupScrollController() {
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
         if (!_isScrollingDown) {
           setState(() {
             _isScrollingDown = true;
           });
         }
-      } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      } else if (scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
         if (_isScrollingDown) {
           setState(() {
             _isScrollingDown = false;
@@ -123,22 +152,24 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
     });
   }
 
-
   @override
   void dispose() {
     scrollController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) =>serviceLocator<SliderCubit>(),
+      create: (BuildContext context) => serviceLocator<SliderCubit>(),
       child: BlocBuilder<SliderCubit, BasicState<List<SliderItemEntity>>>(
         builder: (BuildContext context, state) {
           return BlocProvider(
-            create: (BuildContext context) =>serviceLocator<ThumbnailsCubit>(),
-            child: BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
-              builder: (BuildContext context, BasicState<List<RideThumbnailEntity>> state) {
+            create: (BuildContext context) => serviceLocator<ThumbnailsCubit>(),
+            child: BlocBuilder<ThumbnailsCubit,
+                BasicState<List<RideThumbnailEntity>>>(
+              builder: (BuildContext context,
+                  BasicState<List<RideThumbnailEntity>> state) {
                 return Scaffold(
                   bottomNavigationBar: BottomNavigator(
                     scrollController: scrollController,
@@ -146,15 +177,19 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                     mainCategory: 1,
                     index: 2,
                   ),
-                  body:  ListView(
+                  body: ListView(
                     controller: scrollController,
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     children: [
                       Sizer(),
                       //carousel slider
-                      !context.read<UserCubit>().isLoggedIn?  Sizer():const SizedBox.shrink(),
+                      !context.read<UserCubit>().isLoggedIn
+                          ? Sizer()
+                          : const SizedBox.shrink(),
                       //wallet
-                      context.read<UserCubit>().isLoggedIn? const WalletWidget():const SizedBox.shrink(),
+                      context.read<UserCubit>().isLoggedIn
+                          ? const WalletWidget()
+                          : const SizedBox.shrink(),
                       //    Sizer(),
                       //admob
                       //   const GoogleAddsBanner(),
@@ -171,7 +206,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                       //main cats
                       BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
                         builder: (context, state) {
-                          final controller = context.read<MainCategoriesCubit>();
+                          final controller =
+                              context.read<MainCategoriesCubit>();
                           if (state.status == StateStatus.loading) {
                             return Shimmer.fromColors(
                               baseColor: Colors.grey[100]!,
@@ -179,27 +215,34 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                               child: Column(
                                 children: List.generate(
                                     6,
-                                        (index) => Padding(
-                                      padding: EdgeInsets.only(bottom: 15.h),
-                                      child: Container(
-                                        height: MediaQuery.of(context).size.height *
-                                            .15.h,
-                                        width: double.infinity,
-                                        margin:
-                                        EdgeInsets.symmetric(horizontal: 10.w),
-                                        padding:
-                                        EdgeInsets.symmetric(horizontal: 10.w),
-                                        decoration: BoxDecoration(
-                                          color: AppColors.AUTH_CONTAINER_COLOR,
-                                          borderRadius: BorderRadius.circular(20.r),
-                                          border: Border.all(color: Colors.grey),
-                                        ),
-                                      ),
-                                    )),
+                                    (index) => Padding(
+                                          padding:
+                                              EdgeInsets.only(bottom: 15.h),
+                                          child: Container(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                .15.h,
+                                            width: double.infinity,
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 10.w),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 10.w),
+                                            decoration: BoxDecoration(
+                                              color: AppColors
+                                                  .AUTH_CONTAINER_COLOR,
+                                              borderRadius:
+                                                  BorderRadius.circular(20.r),
+                                              border: Border.all(
+                                                  color: Colors.grey),
+                                            ),
+                                          ),
+                                        )),
                               ),
                             );
                           }
-                          if (state.status==StateStatus.success && state.data != null) {
+                          if (state.status == StateStatus.success &&
+                              state.data != null) {
                             return ListView.separated(
                               itemCount: state.data?.length ?? 0,
                               physics: const NeverScrollableScrollPhysics(),
@@ -212,17 +255,18 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                                   },
                                   child: MainCategoryBanner(
                                     category: state.data![index],
-                                    onFavorite: () async{
-                                      var result = await controller.toggleFavoriteMedicalService(
-                                          state.data![index].id);
+                                    onFavorite: () async {
+                                      var result = await controller
+                                          .toggleFavoriteMedicalService(
+                                              state.data![index].id);
                                       print("result$result");
                                       return result;
                                     },
                                   ),
                                 );
                               },
-                              separatorBuilder: (BuildContext context, int index) =>
-                                  Sizer(),
+                              separatorBuilder:
+                                  (BuildContext context, int index) => Sizer(),
                             );
                           } else {
                             return const SizedBox.shrink();
@@ -280,9 +324,9 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
   }
 
   Widget _buildItemTabBar(
-      Widget icon,
-      String routeName,
-      ) {
+    Widget icon,
+    String routeName,
+  ) {
     return InkWell(
       onTap: () => context.push(routeName),
       child: Container(
@@ -294,30 +338,30 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
   }
 
   BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-  _pickMeAndComeWithUWidget() {
+      _pickMeAndComeWithUWidget() {
     return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
       builder: (context, state) {
         if (state.status == StateStatus.loading) {
           return Row(
             children: List.generate(
                 2,
-                    (index) => Expanded(
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.grey[100]!,
-                    highlightColor: Colors.white24,
-                    child: Container(
-                      width: 100.h,
-                      height: kToolbarHeight * 2.h,
-                      margin: const EdgeInsets.symmetric(horizontal: 5),
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                        color: AppColors.AUTH_CONTAINER_COLOR,
-                        borderRadius: BorderRadius.circular(20.r),
-                        border: Border.all(color: Colors.grey),
+                (index) => Expanded(
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey[100]!,
+                        highlightColor: Colors.white24,
+                        child: Container(
+                          width: 100.h,
+                          height: kToolbarHeight * 2.h,
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          decoration: BoxDecoration(
+                            color: AppColors.AUTH_CONTAINER_COLOR,
+                            borderRadius: BorderRadius.circular(20.r),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                )),
+                    )),
           );
         } else if (state.status == StateStatus.success) {
           return Row(
@@ -341,8 +385,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
         } else {
           return Container(
             padding:
-            //EdgeInsets.all
-            const EdgeInsets.symmetric(horizontal: 10),
+                //EdgeInsets.all
+                const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               LocaleKeys.noRideSubcategories.localize,
               style: TextStyle(fontSize: 32.sp.w, fontWeight: FontWeight.w500),
@@ -357,10 +401,10 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
     return Row(
       children: [
         itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
-                () => context.push(Routes.MAZADAT), Icons.group),
+            () => context.push(Routes.MAZADAT), Icons.group),
         Sizer(),
         itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize,
-                () => context.push(Routes.INSTALLMENT), Icons.list),
+            () => context.push(Routes.INSTALLMENT), Icons.list),
       ],
     );
   }
@@ -427,7 +471,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
       onTap: () => route != null ? context.push(route) : null,
       child: Container(
         height: kToolbarHeight * 2.h,
-        padding:  EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(10.r),
@@ -462,7 +506,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
               ),
             ),
             Padding(
-              padding:  EdgeInsets.symmetric(horizontal: 10.w),
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Row(
                 children: [
                   Label(
@@ -474,7 +518,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                   ),
                   const Spacer(),
                   Padding(
-                    padding:  EdgeInsets.symmetric(vertical: 5.h),
+                    padding: EdgeInsets.symmetric(vertical: 5.h),
                     child: Column(
                       children: [
                         InkWell(
