@@ -557,5 +557,10 @@
   "shareProfile": "مشاركة الملف الشخصي",
   "playedSpins": "عذرا، لقد لعبت كل دوراتك لهذا اليوم.",
   "noFavouriteCategory": "لا يوجد فئة مفضلة في الوقت الحالي.",
-  "noFavouriteSubCategory": "لا توجد فئة فرعية مفضلة في الوقت الحالي."
+  "noFavouriteSubCategory": "لا توجد فئة فرعية مفضلة في الوقت الحالي.",
+  "face": "فيسبوك 49",
+  "insta": "إنستا 49",
+  "socialPage": "صفحة اجتماعية",
+  "errorLoadingSocialPage": "خطأ في تحميل الصفحة الاجتماعية",
+  "updateSuccessfully": "تم التحديث بنجاح"
 }

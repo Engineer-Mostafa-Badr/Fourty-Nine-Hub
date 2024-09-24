@@ -556,5 +556,10 @@
   "shareProfile": "Share Profile",
   "playedSpins": "Sorry, you have played all your spins for today.",
   "noFavouriteCategory": "There is no favourite category at the moment.",
-  "noFavouriteSubCategory": "There is no favourite sub category at the moment."
+  "noFavouriteSubCategory": "There is no favourite sub category at the moment.",
+  "face": "49 Face",
+  "insta": "49 Insta",
+  "socialPage": "Social Page",
+  "errorLoadingSocialPage": "Error loading social page",
+  "updateSuccessfully": "Update Successfully"
 }

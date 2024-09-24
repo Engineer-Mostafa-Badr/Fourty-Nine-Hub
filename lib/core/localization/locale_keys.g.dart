@@ -552,5 +552,10 @@ abstract class  LocaleKeys {
   static const playedSpins = 'playedSpins';
   static const noFavouriteCategory = 'playedSpins';
   static const noFavouriteSubCategory = 'playedSpins';
+  static const face = 'face';
+  static const insta = 'insta';
+  static const socialPage = 'socialPage';
+  static const errorLoadingSocialPage = 'errorLoadingSocialPage';
+  static const updateSuccessfully = 'updateSuccessfully';
 
 }
