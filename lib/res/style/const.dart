@@ -42,4 +42,5 @@ class UIConst {
   static const String googleGeocodingApiKey =
       'AIzaSyBMtQpwW-qKq89zuXJr62e9iQC5cVmvsWg';
   static const String tripJoinCategoryId = '62ea00e269ea29c91dfc390c';
+  static const String pickmeCategoryId = '62ea008d69ea29c91dfc3908';
 }

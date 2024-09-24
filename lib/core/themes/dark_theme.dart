@@ -28,13 +28,12 @@ ThemeData darkTheme() {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.GREY_DARK_COLOR,
-       hintStyle: Styles.headerText(fontSize: 25),
+      hintStyle: Styles.headerText(fontSize: 25),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8.0),
         borderSide: const BorderSide(
           color: AppColors.AUTH_CONTAINER_COLOR,
         ),
-        
       ),
       enabledBorder: const OutlineInputBorder(
         borderSide: BorderSide(color: AppColors.PRIMARY_COLOR),
@@ -42,7 +41,6 @@ ThemeData darkTheme() {
       focusedBorder: const OutlineInputBorder(
         borderSide: BorderSide(color: AppColors.PRIMARY_COLOR),
       ),
-      
     ),
     dividerColor: AppColors.GREY_DARK_COLOR,
     colorScheme: const ColorScheme.dark(

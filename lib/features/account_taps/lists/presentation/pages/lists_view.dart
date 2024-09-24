@@ -106,8 +106,10 @@ class _ListsViewState extends State<ListsView> {
                                     if (result == true) {
                                       state.friends?.removeWhere(
                                           (element) => element.id == id);
-                                      showSuccessMessage(context,
-                                          LocaleKeys.unBlockedSuccessfully.localize);
+                                      showSuccessMessage(
+                                          context,
+                                          LocaleKeys
+                                              .unBlockedSuccessfully.localize);
                                       setState(() {});
                                     }
                                   },
@@ -133,8 +135,10 @@ class _ListsViewState extends State<ListsView> {
                                         if (result == true) {
                                           state.friends?.removeWhere(
                                               (element) => element.id == id);
-                                          showSuccessMessage(context,
-                                              LocaleKeys.unFollowSuccessfully.localize);
+                                          showSuccessMessage(
+                                              context,
+                                              LocaleKeys.unFollowSuccessfully
+                                                  .localize);
                                           setState(() {});
                                         }
                                       })
@@ -155,8 +159,11 @@ class _ListsViewState extends State<ListsView> {
                                                   (element) =>
                                                       element.id ==
                                                       params.userId);
-                                              showSuccessMessage(context,
-                                                  LocaleKeys.removeRequestSuccessfully.localize);
+                                              showSuccessMessage(
+                                                  context,
+                                                  LocaleKeys
+                                                      .removeRequestSuccessfully
+                                                      .localize);
                                               setState(() {});
                                             }
                                           },
@@ -171,8 +178,11 @@ class _ListsViewState extends State<ListsView> {
                                                   (element) =>
                                                       element.id ==
                                                       params.userId);
-                                              showSuccessMessage(context,
-                                                  LocaleKeys.acceptRequestSuccessfully.localize);
+                                              showSuccessMessage(
+                                                  context,
+                                                  LocaleKeys
+                                                      .acceptRequestSuccessfully
+                                                      .localize);
                                               setState(() {});
                                             }
                                           },
@@ -199,8 +209,11 @@ class _ListsViewState extends State<ListsView> {
                                               state.blocked?.removeWhere(
                                                   (element) =>
                                                       element.id == id);
-                                              showSuccessMessage(context,
-                                                  LocaleKeys.unBlockedSuccessfully.localize);
+                                              showSuccessMessage(
+                                                  context,
+                                                  LocaleKeys
+                                                      .unBlockedSuccessfully
+                                                      .localize);
                                               setState(() {});
                                             }
                                           },

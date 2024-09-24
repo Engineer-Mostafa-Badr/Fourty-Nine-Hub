@@ -8,7 +8,8 @@ part 'get_request_state.dart';
 
 class GetRequestCubit extends Cubit<GetRequestState> {
   final GetRequestUsecase getRequestUsecase;
-  GetRequestCubit({required this.getRequestUsecase}) : super(GetRequestInitial());
+  GetRequestCubit({required this.getRequestUsecase})
+      : super(GetRequestInitial());
   List<TripJoinRequestHistoryEntity> requests = [];
   int page = 1;
   Future<void> getRequets({required String id}) async {

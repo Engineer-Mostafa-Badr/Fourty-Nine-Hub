@@ -11,17 +11,18 @@ class AdModel extends AdEntity {
       required super.title,
       required super.description,
       required super.images,
-       super.price,
-        super.isUser,
+      super.price,
+      super.isUser,
       super.address,
       super.user,
-        super.mainCategoryId,
-        super.userId,
+      super.mainCategoryId,
+      super.userId,
       super.statistics,
       required super.active,
       required super.createdAt,
       required super.details,
-      super.subCategoryId, super.phone});
+      super.subCategoryId,
+      super.phone});
   factory AdModel.fromJson(Map<String, dynamic> json) {
     List<String> images = [];
     try {
@@ -62,7 +63,7 @@ class AdModel extends AdEntity {
         "desc": description,
         // "phone": phone,
         "title": title,
-        "type": isUser==false?"provider":"user",
+        "type": isUser == false ? "provider" : "user",
         "subCategoryId": subCategoryId,
         "mainCategoryId": mainCategoryId,
         // "userId": userId,

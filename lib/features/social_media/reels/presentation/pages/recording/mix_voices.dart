@@ -688,13 +688,11 @@ class MixVoiceVideoRecordingScreenState
       floatingActionButton: (showUploadReelButton != null &&
               showUploadReelButton == true)
           ? Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: kToolbarHeight),
+              padding: const EdgeInsets.symmetric(vertical: kToolbarHeight),
               child: Align(
                 // Check the current text direction to determine alignment
-                alignment: context.isArabic
-                    ? Alignment.topLeft
-                    : Alignment.topRight,
+                alignment:
+                    context.isArabic ? Alignment.topLeft : Alignment.topRight,
                 child: FloatingActionButton.small(
                   tooltip: LocaleKeys.controls_upload_reel.tr(),
                   shape: const CircleBorder(),

@@ -65,7 +65,7 @@ class BalanceWalletView extends StatelessWidget {
                       ),
                       Sizer(),
                       Padding(
-                        padding:  EdgeInsets.only(right: 5.w),
+                        padding: EdgeInsets.only(right: 5.w),
                         child: Row(
                           children: [
                             const Icon(
@@ -75,7 +75,8 @@ class BalanceWalletView extends StatelessWidget {
                             Sizer(),
                             Expanded(
                               child: Label(
-                                text: '${LocaleKeys.minimum.localize}1002 ${LocaleKeys.transaction.localize}',
+                                text:
+                                    '${LocaleKeys.minimum.localize}1002 ${LocaleKeys.transaction.localize}',
                                 style: Styles.mediumText(color: Colors.grey),
                               ),
                             ),

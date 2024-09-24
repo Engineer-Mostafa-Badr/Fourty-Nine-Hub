@@ -37,7 +37,8 @@ class AdCard extends StatelessWidget {
               child: Stack(
                 children: [
                   Positioned.fill(
-                    child:ImageFromInternet(image: item.images.first,
+                    child: ImageFromInternet(
+                      image: item.images.first,
                       height: 200.h,
                       defaultLogo: true,
                     ),
@@ -86,7 +87,6 @@ class AdCard extends StatelessWidget {
                 Label(
                     text: '${LocaleKeys.desc.localize} : ',
                     style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
-
                 Label(
                   text: item.description,
                   style: Styles.mediumText(
@@ -110,10 +110,12 @@ class AdCard extends StatelessWidget {
                                 children: [
                                   Label(
                                       text: '${e.label} : ',
-                                      style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
+                                      style: Styles.mediumText(
+                                          color: AppColors.SECONDARY_COLOR)),
                                   Label(
                                       text: '${e.value}',
-                                      style: Styles.mediumText(color: AppColors.PRIMARY_COLOR)),
+                                      style: Styles.mediumText(
+                                          color: AppColors.PRIMARY_COLOR)),
                                 ],
                               ),
                             )))

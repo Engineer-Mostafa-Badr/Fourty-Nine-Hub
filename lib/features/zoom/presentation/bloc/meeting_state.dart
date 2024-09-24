@@ -33,7 +33,7 @@ class StreamState extends Equatable {
     this.status = StreamsStates.initial,
     this.errorMessage,
     this.failure,
-    this.topic='',
+    this.topic = '',
     this.scheduledMeeting,
   });
 

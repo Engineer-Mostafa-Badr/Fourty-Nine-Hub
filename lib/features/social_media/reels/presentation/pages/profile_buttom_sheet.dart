@@ -733,27 +733,27 @@ class ProfileBottomSheet extends StatelessWidget {
   });
 
   static Future<void> show(BuildContext context, Reel reel) async {
-   await  showModalBottomSheet(
+    await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      builder: (context) =>
-          DraggableScrollableSheet(
-            initialChildSize: 0.6,
-            minChildSize: 0.5,
-            maxChildSize: (reel.user.birthday!.isNotEmpty ||
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        minChildSize: 0.5,
+        maxChildSize: (reel.user.birthday!.isNotEmpty ||
                 reel.user.country!.isNotEmpty ||
-                reel.user.job!.isNotEmpty) ? 0.8:0.6,
-            expand: false,
-            builder: (context, scrollController) =>
-                ProfileBottomSheet(
-                  scrollController: scrollController,
-                  reel: reel,
-                ),
-          ),
+                reel.user.job!.isNotEmpty)
+            ? 0.8
+            : 0.6,
+        expand: false,
+        builder: (context, scrollController) => ProfileBottomSheet(
+          scrollController: scrollController,
+          reel: reel,
+        ),
+      ),
     );
   }
 
@@ -779,26 +779,22 @@ class ProfileContent extends StatelessWidget {
     final imageUrl = (coverUrl != null && coverUrl.isNotEmpty)
         ? coverUrl
         : (profileUrl != null && profileUrl.isNotEmpty)
-        ? profileUrl
-        : UIConst.profilePlaceHolder;
+            ? profileUrl
+            : UIConst.profilePlaceHolder;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       // Use min to avoid overflow in SingleChildScrollView
       children: [
         SizedBox(
-          height: MediaQuery
-              .of(context)
-              .size
-              .width * 0.75,
+          height: MediaQuery.of(context).size.width * 0.75,
           width: double.infinity,
           child: Image.network(
             imageUrl,
-            errorBuilder: (context, error, stackTrace) =>
-                Image.network(
-                  UIConst.profilePlaceHolder,
-                  fit: BoxFit.cover,
-                ),
+            errorBuilder: (context, error, stackTrace) => Image.network(
+              UIConst.profilePlaceHolder,
+              fit: BoxFit.cover,
+            ),
             fit: BoxFit.cover,
           ),
         ),
@@ -870,10 +866,7 @@ class ProfileHeader extends StatelessWidget {
                       textScaler: TextScaler.noScaling,
                       capitalizeAndSplit2Only(
                           "${reel.user.firstName} ${reel.user.lastName}"),
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .headlineSmall,
+                      style: Theme.of(context).textTheme.headlineSmall,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -889,10 +882,8 @@ class ProfileHeader extends StatelessWidget {
                 child: Text(
                   maxLines: 1,
                   textScaler: TextScaler.noScaling,
-                  '${reel.user.firstName} ${reel.user.lastName} · ${reel.user
-                      .job ?? ''}',
-                  style: Theme
-                      .of(context)
+                  '${reel.user.firstName} ${reel.user.lastName} · ${reel.user.job ?? ''}',
+                  style: Theme.of(context)
                       .textTheme
                       .titleMedium
                       ?.copyWith(color: Colors.grey[600]),
@@ -954,25 +945,19 @@ class _ActionButtonState extends State<ActionButton> {
     }
 
     return SizedBox(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
+      width: MediaQuery.of(context).size.width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           SizedBox(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width * 0.75,
+            width: MediaQuery.of(context).size.width * 0.75,
             child: ElevatedButton(
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.black,
                   backgroundColor: Colors.yellow,
                   padding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                   elevation: 0),
               child: Text(
                 buttonText,
@@ -1057,10 +1042,7 @@ class Description extends StatelessWidget {
         Text(
           bio,
           textScaler: TextScaler.noScaling,
-          style: Theme
-              .of(context)
-              .textTheme
-              .bodyLarge,
+          style: Theme.of(context).textTheme.bodyLarge,
           textAlign: TextAlign.start,
         ),
       ],

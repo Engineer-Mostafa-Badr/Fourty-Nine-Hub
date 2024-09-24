@@ -3110,7 +3110,8 @@ void showSnackBarAfterBuild(
           child: Text(
             message, textScaleFactor: 1.0, // Disable font scaling
 
-            style: TextStyle(color: textColor, fontSize: 30.sp, fontWeight: FontWeight.w700),
+            style: TextStyle(
+                color: textColor, fontSize: 30.sp, fontWeight: FontWeight.w700),
           ),
         ),
         if (icon != null) ...[
@@ -3183,7 +3184,8 @@ class ReelsScreenState extends State<ReelsScreen> {
           physics: const BouncingScrollPhysics(),
           controller: _pageController,
           scrollDirection: Axis.vertical,
-          itemCount: state.globalReels.length + (state.globalReelsHasReachedMax ? 0 : 1),
+          itemCount: state.globalReels.length +
+              (state.globalReelsHasReachedMax ? 0 : 1),
           onPageChanged: _handlePageChange,
           itemBuilder: (context, index) {
             if (index >= state.globalReels.length) {

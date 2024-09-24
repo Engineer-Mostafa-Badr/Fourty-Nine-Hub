@@ -65,13 +65,14 @@ class _PolicyViewState extends State<PolicyView> {
         child: _isLoading
             ? const CircularProgressIndicator()
             : PDFViewer(
-          document: document,
-          zoomSteps: 2,
-          showNavigation: false, // Hide bottom navigation
-          showPicker: false, // Hide page picker
-          lazyLoad: false, // Set this to true if you want to load pages lazily
-          scrollDirection: Axis.vertical, // Vertical scrolling
-        ),
+                document: document,
+                zoomSteps: 2,
+                showNavigation: false, // Hide bottom navigation
+                showPicker: false, // Hide page picker
+                lazyLoad:
+                    false, // Set this to true if you want to load pages lazily
+                scrollDirection: Axis.vertical, // Vertical scrolling
+              ),
       ),
     );
   }

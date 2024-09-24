@@ -158,7 +158,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                                     .call(phone: state.ad?.phone ?? ''))),
                       ],
                     );
-                  }else{
+                  } else {
                     return Row(
                       children: [
                         Expanded(
@@ -238,7 +238,6 @@ class _AdDetailsViewState extends State<AdDetailsView> {
     });
   }
 
-
   Widget _buildAdInfoWidget({required AdModel ad}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,23 +248,34 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             itemCount: ad.images.length,
             onIndexChanged: (i) {},
             outer: true,
-            physics:ad.images.length>1?null:const NeverScrollableScrollPhysics() ,
+            physics: ad.images.length > 1
+                ? null
+                : const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) => Padding(
               padding: EdgeInsets.only(bottom: 5.h),
-              child: ImageFromInternet(image: ad.images[index],defaultLogo: true,),
+              child: ImageFromInternet(
+                image: ad.images[index],
+                defaultLogo: true,
+              ),
             ),
             pagination: SwiperPagination(
                 builder: SwiperCustomPagination(builder: (context, config) {
-                  return const DotSwiperPaginationBuilder(color: AppColors.GREY_DARK_COLOR, activeColor: AppColors.SECONDARY_COLOR, size: 10.0, activeSize: 10.0)
-                      .build(context, config);
-                })),
+              return const DotSwiperPaginationBuilder(
+                      color: AppColors.GREY_DARK_COLOR,
+                      activeColor: AppColors.SECONDARY_COLOR,
+                      size: 10.0,
+                      activeSize: 10.0)
+                  .build(context, config);
+            })),
           ),
         ),
         Row(
           children: [
             Label(
               text: "${LocaleKeys.title.localize} : ",
-              style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR),
+              style: Styles.mediumText(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.SECONDARY_COLOR),
             ),
             Label(
               text: ad.title,
@@ -276,14 +286,13 @@ class _AdDetailsViewState extends State<AdDetailsView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Label(text: ad.formatedDate)
-          ],
+          children: [Label(text: ad.formatedDate)],
         ),
         const Sizer(),
         Label(
           text: "${LocaleKeys.desc.localize} : ",
-          style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR),
+          style: Styles.mediumText(
+              fontWeight: FontWeight.bold, color: AppColors.SECONDARY_COLOR),
         ),
         Label(text: ad.description),
       ],
@@ -312,7 +321,12 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         : Colors.white),
                 child: Row(
                   children: [
-                    Expanded(child: Label(text: "${detail.label} : ",style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR))),
+                    Expanded(
+                        child: Label(
+                            text: "${detail.label} : ",
+                            style: Styles.mediumText(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.SECONDARY_COLOR))),
                     Expanded(child: Label(text: detail.value)),
                   ],
                 ),

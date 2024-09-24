@@ -5,26 +5,24 @@ import '../features/social_media/live_streaming/data/datasource/live_datasource.
 import '../features/social_media/live_streaming/data/repository/live_repository_impl.dart';
 import '../features/social_media/live_streaming/domain/repository/live_repository.dart';
 
-
-
 class LiveServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     //concrete class return implementation class
     serviceLocator.registerLazySingleton<LiveDataSource>(
       () => LiveDataSourceImpl(
-         apiConsumer:serviceLocator(),
+        apiConsumer: serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<LiveRepository>(
       () => LiveRepositoryImpl(
-        liveDataSource:  serviceLocator(),
+        liveDataSource: serviceLocator(),
       ),
     );
     //usecases
-    serviceLocator.registerFactory(() => GetAllTopicsUseCase(liveRepository:serviceLocator()));
+    serviceLocator.registerFactory(
+        () => GetAllTopicsUseCase(liveRepository: serviceLocator()));
 
     //cubit is extension method on stream cubit
-    
   }
 }

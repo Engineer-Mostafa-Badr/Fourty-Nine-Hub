@@ -7,5 +7,4 @@ class LiveModel extends LiveEntity {
     required super.topic,
     required super.gift,
   });
-  
 }

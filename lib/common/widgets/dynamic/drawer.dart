@@ -211,7 +211,6 @@ class DrawerWidget extends StatelessWidget {
     required BuildContext context,
     required UserEntity? user,
   }) {
-
     log(user?.id.toString() ?? "UserId", name: "UserId");
     return Column(
       children: [
@@ -225,26 +224,33 @@ class DrawerWidget extends StatelessWidget {
                 ..fetchCompetition(context),
           child: BlocBuilder<CompetitionCubit, CompetitionState>(
             builder: (BuildContext context, state) {
-              if(state is CompetitionSuccessState) {
+              if (state is CompetitionSuccessState) {
                 int calculateSumOfRequests() {
                   List<int> indicesToSum = [1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13];
 
                   return indicesToSum.fold(0, (sum, index) {
-                    return sum + (state.competitionModel.data![index].countOfRequest ?? 0);
+                    return sum +
+                        (state.competitionModel.data![index].countOfRequest ??
+                            0);
                   });
                 }
+
                 return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Evenly distribute space
-                  crossAxisAlignment: CrossAxisAlignment.start, // Align items at the start
+                  mainAxisAlignment:
+                      MainAxisAlignment.spaceEvenly, // Evenly distribute space
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start, // Align items at the start
                   children: [
                     counterItem(
                       icon: Icons.ads_click,
                       label: LocaleKeys.specialAds.localize,
-                      value: '${state.competitionModel.data![10].countOfRequest}',
+                      value:
+                          '${state.competitionModel.data![10].countOfRequest}',
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const SpecialAdsView()),
+                          MaterialPageRoute(
+                              builder: (context) => const SpecialAdsView()),
                         );
                       },
                       context: context,
@@ -252,11 +258,13 @@ class DrawerWidget extends StatelessWidget {
                     counterItem(
                       icon: Icons.person_add,
                       label: LocaleKeys.friends.localize,
-                      value: '${state.competitionModel.data![0].countOfRequest}',
+                      value:
+                          '${state.competitionModel.data![0].countOfRequest}',
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const SpecialAdsView()),
+                          MaterialPageRoute(
+                              builder: (context) => const SpecialAdsView()),
                         );
                       },
                       context: context,
@@ -264,12 +272,14 @@ class DrawerWidget extends StatelessWidget {
                     counterItem(
                       icon: FontAwesomeIcons.car,
                       label: LocaleKeys.ride.localize,
-                      value: '${state.competitionModel.data![9].countOfRequest}',
+                      value:
+                          '${state.competitionModel.data![9].countOfRequest}',
                       context: context,
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const SpecialAdsView()),
+                          MaterialPageRoute(
+                              builder: (context) => const SpecialAdsView()),
                         );
                       },
                     ),
@@ -280,15 +290,14 @@ class DrawerWidget extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const SpecialAdsView()),
+                          MaterialPageRoute(
+                              builder: (context) => const SpecialAdsView()),
                         );
                       },
                       context: context,
                     ),
                   ],
-                )
-                ;
-
+                );
               }
               return const SizedBox.shrink();
             },
@@ -495,12 +504,6 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
-
-
-
-
-
-
   Widget accountWidget({
     required BuildContext context,
     required UserEntity? user,
@@ -543,7 +546,8 @@ class DrawerWidget extends StatelessWidget {
                       }
                       return ImageFromInternet(
                         isCircle: true,
-                        image: user?.profilePicture ?? UIConst.profilePlaceHolder,
+                        image:
+                            user?.profilePicture ?? UIConst.profilePlaceHolder,
                       );
                     },
                   ),

@@ -140,7 +140,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                                             ? LocaleKeys.followers.localize
                                             : state.selectedPrivacy ==
                                                     'friendsAndFollowers'
-                                                ? LocaleKeys.friendsAndFollowers.localize
+                                                ? LocaleKeys.friendsAndFollowers
+                                                    .localize
                                                 : LocaleKeys.public.localize,
                                 style: Styles.mediumText(
                                     color: AppColors.PRIMARY_COLOR,

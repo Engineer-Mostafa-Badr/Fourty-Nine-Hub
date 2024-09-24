@@ -9,24 +9,23 @@ import '../features/account_taps/transfer_money/presentation/cubit/transfer_mone
 class TransferMoneyServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<TransferMoneyRemoteDataSource>(
-            () => TransferMoneyRemoteDataSourceImpl(
-          serviceLocator(),
-        ));
+        () => TransferMoneyRemoteDataSourceImpl(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<TransferMoneyRepository>(
-            () => TransferMoneyRepositoryImpl(serviceLocator()));
+        () => TransferMoneyRepositoryImpl(serviceLocator()));
 
     serviceLocator
         .registerLazySingleton<TransferMoneyUseCase>(() => TransferMoneyUseCase(
-      serviceLocator(),
-    ));
+              serviceLocator(),
+            ));
     serviceLocator
         .registerLazySingleton<FetchUserUseCase>(() => FetchUserUseCase(
-      serviceLocator(),
-    ));
+              serviceLocator(),
+            ));
 
-    serviceLocator.registerFactory<TransferMoneyCubit>(
-            () => TransferMoneyCubit(
+    serviceLocator.registerFactory<TransferMoneyCubit>(() => TransferMoneyCubit(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

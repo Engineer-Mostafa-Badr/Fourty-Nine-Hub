@@ -20,10 +20,12 @@ class TripJoinRequestHistoryBuilder extends StatefulWidget {
   const TripJoinRequestHistoryBuilder({super.key, required this.id});
   final String id;
   @override
-  State<TripJoinRequestHistoryBuilder> createState() => _TripJoinRequestHistoryBuilderState();
+  State<TripJoinRequestHistoryBuilder> createState() =>
+      _TripJoinRequestHistoryBuilderState();
 }
 
-class _TripJoinRequestHistoryBuilderState extends State<TripJoinRequestHistoryBuilder> {
+class _TripJoinRequestHistoryBuilderState
+    extends State<TripJoinRequestHistoryBuilder> {
   late final GetRequestCubit getRequestCubit;
   late final ScrollController scrollController;
   late double scrollPosition;
@@ -59,8 +61,11 @@ class _TripJoinRequestHistoryBuilderState extends State<TripJoinRequestHistoryBu
           itemCount: getRequestCubit.requests.length + 1,
           itemBuilder: (context, index) {
             final tripJoinRequestHistoryEntity =
-                index < getRequestCubit.requests.length ? getRequestCubit.requests[index] : null;
-            if (getRequestCubit.requests.isEmpty && state is! GetRequestLoading) {
+                index < getRequestCubit.requests.length
+                    ? getRequestCubit.requests[index]
+                    : null;
+            if (getRequestCubit.requests.isEmpty &&
+                state is! GetRequestLoading) {
               return Container(
                 height: context.screenHeight * 0.8,
                 width: double.infinity,
@@ -77,7 +82,8 @@ class _TripJoinRequestHistoryBuilderState extends State<TripJoinRequestHistoryBu
                     UIConst.chatNormalId,
                     LocaleKeys.chatSubscription.localize,
                   )) {
-                    launchUrlString("tel://${tripJoinRequestHistoryEntity.phone}");
+                    launchUrlString(
+                        "tel://${tripJoinRequestHistoryEntity.phone}");
                   }
                 },
                 messageOnTap: () async {
@@ -92,7 +98,9 @@ class _TripJoinRequestHistoryBuilderState extends State<TripJoinRequestHistoryBu
                 },
               );
             }
-            return state is GetRequestLoading ? const TripJoinRequestHistoryLoadingList() : const SizedBox();
+            return state is GetRequestLoading
+                ? const TripJoinRequestHistoryLoadingList()
+                : const SizedBox();
           },
         );
       },
@@ -100,10 +108,16 @@ class _TripJoinRequestHistoryBuilderState extends State<TripJoinRequestHistoryBu
   }
 
   Future<bool> _userApproved(
-      TripJoinRequestHistoryEntity tripJoinRequestHistoryEntity, String subCategoryId, String title) async {
-    if (tripJoinRequestHistoryEntity.allowStatus == null || tripJoinRequestHistoryEntity.allowStatus != 'enable') {
+      TripJoinRequestHistoryEntity tripJoinRequestHistoryEntity,
+      String subCategoryId,
+      String title) async {
+    if (tripJoinRequestHistoryEntity.allowStatus == null ||
+        tripJoinRequestHistoryEntity.allowStatus != 'enable') {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-        wallets: [tripJoinRequestHistoryEntity.paymentType?.toWalletType ?? WalletTypes.balance],
+        wallets: [
+          tripJoinRequestHistoryEntity.paymentType?.toWalletType ??
+              WalletTypes.balance
+        ],
         subCategoryId: subCategoryId,
         title: title,
       );
@@ -112,7 +126,8 @@ class _TripJoinRequestHistoryBuilderState extends State<TripJoinRequestHistoryBu
     return true;
   }
 
-  void _reportOnTap(BuildContext context, TripJoinRequestHistoryEntity tripJoinRequestHistoryEntity) {
+  void _reportOnTap(BuildContext context,
+      TripJoinRequestHistoryEntity tripJoinRequestHistoryEntity) {
     bottomSheet(
         context: context,
         widget: ReportViewTripJoin(
@@ -128,7 +143,8 @@ class _TripJoinRequestHistoryBuilderState extends State<TripJoinRequestHistoryBu
       scrollPosition = scrollController.position.pixels;
       scrollMaxExtent = scrollController.position.maxScrollExtent;
       if (scrollPosition >= 0.7 * scrollMaxExtent) {
-        if (!isLoading && (getRequestCubit.requests.last.hasNextPage ?? false)) {
+        if (!isLoading &&
+            (getRequestCubit.requests.last.hasNextPage ?? false)) {
           isLoading = true;
           getRequestCubit.page = getRequestCubit.requests.last.nextPage!;
           await getRequestCubit.getRequets(id: widget.id);

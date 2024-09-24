@@ -7,7 +7,8 @@ class GetRequestUsecase {
   final TripJoinRequestHistoryRepo tripJoinRequestHistoryRepo;
 
   GetRequestUsecase({required this.tripJoinRequestHistoryRepo});
-  Future<Either<Failure, List<TripJoinRequestHistoryEntity>>> call({required String id, required int page}) async {
+  Future<Either<Failure, List<TripJoinRequestHistoryEntity>>> call(
+      {required String id, required int page}) async {
     return tripJoinRequestHistoryRepo.getRequests(id: id, page: page);
   }
 }

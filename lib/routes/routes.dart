@@ -139,8 +139,7 @@ abstract class Routes {
   static const SPOTLIGHT = '/Spotlight';
   static const SNAP = '/Snap';
   static const SEEALLBROADCASTS = '/SeeAllBroadcasts';
-    static const BROADCAST = '/Broadcast';
-
+  static const BROADCAST = '/Broadcast';
 }
 
 abstract class Paths {

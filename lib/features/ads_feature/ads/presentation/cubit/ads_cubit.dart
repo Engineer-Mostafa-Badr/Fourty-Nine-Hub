@@ -40,11 +40,11 @@ class AdvertisementCubit extends Cubit<AdsState> {
   //   }
   // }
 
-  void loadData({required String subCategoryId,required String filter}) async {
-    await getAds(subCategoryId: subCategoryId,filter: filter, page: 1);
+  void loadData({required String subCategoryId, required String filter}) async {
+    await getAds(subCategoryId: subCategoryId, filter: filter, page: 1);
     adsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getAds(subCategoryId: subCategoryId,filter: filter, page: pageKey);
+      getAds(subCategoryId: subCategoryId, filter: filter, page: pageKey);
     });
   }
 
@@ -53,27 +53,31 @@ class AdvertisementCubit extends Cubit<AdsState> {
   }
 
   final PagingController<int, AdModel> adsPagingController =
-  PagingController(firstPageKey: 1);
-  getAds({required String subCategoryId,required String filter,required int page}) async {
-    final response = await _getAdsUseCase(GetAdsParams(subCategoryId: subCategoryId,filter: filter,page: page,limit:10));
-    response.fold(
-            (l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
+      PagingController(firstPageKey: 1);
+  getAds(
+      {required String subCategoryId,
+      required String filter,
+      required int page}) async {
+    final response = await _getAdsUseCase(GetAdsParams(
+        subCategoryId: subCategoryId, filter: filter, page: page, limit: 10));
+    response
+        .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
             (data) async {
-          final isLastPage = data.length < 10;
-          if (page == 1) {
-            print("page == 1 $page");
-            adsPagingController.itemList = [];
-          }
-          if (isLastPage) {
-            print("isLastPage = $isLastPage");
-            adsPagingController.appendLastPage(data);
-          } else {
-            print("isNotLastPage = $isLastPage");
-            final nextPageKey = page + 1;
-            adsPagingController.appendPage(data, nextPageKey);
-          }
-          emit(state.copyWith(ads: data, status: AdsStates.success));
-        });
+      final isLastPage = data.length < 10;
+      if (page == 1) {
+        print("page == 1 $page");
+        adsPagingController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        adsPagingController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        adsPagingController.appendPage(data, nextPageKey);
+      }
+      emit(state.copyWith(ads: data, status: AdsStates.success));
+    });
   }
 
   Future<void> getPickMeAds() async {

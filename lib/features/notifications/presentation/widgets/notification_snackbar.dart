@@ -26,7 +26,8 @@ notificationSnackBar({
     Overlay.of(context),
     GestureDetector(
       onTap: () {
-        context.push(notificationEntity.path ?? '', extra: notificationEntity.payload);
+        context.push(notificationEntity.path ?? '',
+            extra: notificationEntity.payload);
       },
       child: CustomSnackBar.error(
         message: "${notificationEntity.title} \n${notificationEntity.body}",

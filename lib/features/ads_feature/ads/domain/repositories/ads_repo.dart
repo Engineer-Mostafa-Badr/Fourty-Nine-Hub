@@ -7,8 +7,7 @@ import '../../../../requests_history/domain/entities/trip_entity.dart';
 import '../usecases/request_come_with_me_usecase.dart';
 
 abstract class AdsRepo {
-  Future<Either<Failure, List<AdModel>>> getAds(
-      {required GetAdsParams params});
+  Future<Either<Failure, List<AdModel>>> getAds({required GetAdsParams params});
   Future<Either<Failure, List<TripEntity>>> getComeWithMeAds();
   Future<Either<Failure, List<TripEntity>>> getPickMeAds();
   Future<Either<Failure, bool>> requestPickMe({required RequestParams params});

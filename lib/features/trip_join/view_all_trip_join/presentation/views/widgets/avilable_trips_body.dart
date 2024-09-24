@@ -24,7 +24,8 @@ class _AvailableTripsBodyState extends State<AvailableTripsBody> {
   bool isLoading = false;
   @override
   void initState() {
-    viewAllTripJoinCubit = context.read<ViewAllTripJoinCubit>()..viewAllTripJoin();
+    viewAllTripJoinCubit = context.read<ViewAllTripJoinCubit>()
+      ..viewAllTripJoin();
     scrollController = ScrollController();
     _scrollControllerListener();
     super.initState();
@@ -59,7 +60,8 @@ class _AvailableTripsBodyState extends State<AvailableTripsBody> {
     scrollController.addListener(() async {
       scrollPosition = scrollController.position.pixels;
       scrollMaxExtent = scrollController.position.maxScrollExtent;
-      if (scrollPosition >= 0.7 * scrollMaxExtent && scrollPosition <= 0.72 * scrollMaxExtent) {
+      if (scrollPosition >= 0.7 * scrollMaxExtent &&
+          scrollPosition <= 0.72 * scrollMaxExtent) {
         if (!isLoading) {
           isLoading = true;
           if (!viewAllTripJoinCubit.noMoreDataInDatabase) {

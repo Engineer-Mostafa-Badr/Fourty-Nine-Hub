@@ -49,7 +49,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
     return DefaultTabController(
       length: loginUser?.id == widget.userId ? 4 : 3,
       child: Scaffold(
-        body: BlocBuilder<SocialPostsCubit, SocialPostsState>(builder: (context, state) {
+        body: BlocBuilder<SocialPostsCubit, SocialPostsState>(
+            builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();
           return state.status == StateStatus.loading
               ? const Center(
@@ -67,81 +68,122 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         SliverToBoxAdapter(
                             child: Container(
                                 width: double.infinity,
-                                padding: const EdgeInsetsDirectional.only(top: 35, end: 10, start: 10),
-                                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                  IconButton(
-                                      onPressed: () => context.pop(),
-                                      icon: const Icon(
-                                        Icons.arrow_back,
-                                        color: Colors.black,
-                                      )),
-                                  if (context.read<UserCubit>().isLoggedIn && loginUser?.id != widget.userId)
-                                    PopupMenuButton(
-                                        icon: const Icon(
-                                          Icons.more_vert,
-                                          color: Colors.black,
-                                        ),
-                                        itemBuilder: (context) {
-                                          return [
-                                            if (loginUser?.id != state.profileData?.id)
-                                              PopupMenuItem<int>(
-                                                value: 4,
-                                                child: Text(LocaleKeys.report.localize),
-                                                onTap: () {
-                                                  bottomSheet(
-                                                      context: context,
-                                                      widget: ReportView(
-                                                        id: widget.userId,
-                                                        categoryId: '66b77e77bb35968b535dc944',
-                                                      ));
-                                                },
-                                              ),
-                                            if (loginUser?.id != state.profileData?.id)
-                                              PopupMenuItem<int>(
-                                                value: 5,
-                                                child: Text(state.profileData?.isBlock == true
-                                                    ? LocaleKeys.unBlock.localize
-                                                    : LocaleKeys.block.localize),
-                                                onTap: () async {
-                                                  // context.pop();
-                                                  var result = await controller.blockUser(
-                                                      context: context, userId: widget.userId);
-                                                  print("result:$result");
-                                                  if (result == true) {
-                                                    print("object");
-                                                    if (state.profileData?.isBlock == false) {
-                                                      state.profileData?.isBlock = true;
-                                                      showSuccessMessage(
-                                                          context, LocaleKeys.blockedSuccessfully.localize);
-                                                    } else {
-                                                      state.profileData?.isBlock = false;
-                                                      showSuccessMessage(
-                                                          context, LocaleKeys.unBlockedSuccessfully.localize);
-                                                    }
-                                                  }
-                                                },
-                                              ),
-                                            if (loginUser?.id == state.profileData?.id)
-                                              PopupMenuItem<int>(
-                                                value: 5,
-                                                child: Text(LocaleKeys.editProfile.localize),
-                                                onTap: () async {
-                                                  await context.push(Routes.EDITPROFILE);
-                                                  controller.getUserProfile(id: widget.userId);
-                                                },
-                                              )
-                                          ];
-                                        }),
-                                  if (context.read<UserCubit>().isLoggedIn && loginUser?.id == widget.userId)
-                                    IconButton(
-                                        onPressed: () {
-                                          showDialog(context: context, builder: (_) => const SearchAppUsers());
-                                        },
-                                        icon: const Icon(
-                                          Icons.search,
-                                          color: Colors.black,
-                                        )),
-                                ]))),
+                                padding: const EdgeInsetsDirectional.only(
+                                    top: 35, end: 10, start: 10),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      IconButton(
+                                          onPressed: () => context.pop(),
+                                          icon: const Icon(
+                                            Icons.arrow_back,
+                                            color: Colors.black,
+                                          )),
+                                      if (context
+                                              .read<UserCubit>()
+                                              .isLoggedIn &&
+                                          loginUser?.id != widget.userId)
+                                        PopupMenuButton(
+                                            icon: const Icon(
+                                              Icons.more_vert,
+                                              color: Colors.black,
+                                            ),
+                                            itemBuilder: (context) {
+                                              return [
+                                                if (loginUser?.id !=
+                                                    state.profileData?.id)
+                                                  PopupMenuItem<int>(
+                                                    value: 4,
+                                                    child: Text(LocaleKeys
+                                                        .report.localize),
+                                                    onTap: () {
+                                                      bottomSheet(
+                                                          context: context,
+                                                          widget: ReportView(
+                                                            id: widget.userId,
+                                                            categoryId:
+                                                                '66b77e77bb35968b535dc944',
+                                                          ));
+                                                    },
+                                                  ),
+                                                if (loginUser?.id !=
+                                                    state.profileData?.id)
+                                                  PopupMenuItem<int>(
+                                                    value: 5,
+                                                    child: Text(state
+                                                                .profileData
+                                                                ?.isBlock ==
+                                                            true
+                                                        ? LocaleKeys
+                                                            .unBlock.localize
+                                                        : LocaleKeys
+                                                            .block.localize),
+                                                    onTap: () async {
+                                                      // context.pop();
+                                                      var result =
+                                                          await controller
+                                                              .blockUser(
+                                                                  context:
+                                                                      context,
+                                                                  userId: widget
+                                                                      .userId);
+                                                      print("result:$result");
+                                                      if (result == true) {
+                                                        print("object");
+                                                        if (state.profileData
+                                                                ?.isBlock ==
+                                                            false) {
+                                                          state.profileData
+                                                              ?.isBlock = true;
+                                                          showSuccessMessage(
+                                                              context,
+                                                              LocaleKeys
+                                                                  .blockedSuccessfully
+                                                                  .localize);
+                                                        } else {
+                                                          state.profileData
+                                                              ?.isBlock = false;
+                                                          showSuccessMessage(
+                                                              context,
+                                                              LocaleKeys
+                                                                  .unBlockedSuccessfully
+                                                                  .localize);
+                                                        }
+                                                      }
+                                                    },
+                                                  ),
+                                                if (loginUser?.id ==
+                                                    state.profileData?.id)
+                                                  PopupMenuItem<int>(
+                                                    value: 5,
+                                                    child: Text(LocaleKeys
+                                                        .editProfile.localize),
+                                                    onTap: () async {
+                                                      await context.push(
+                                                          Routes.EDITPROFILE);
+                                                      controller.getUserProfile(
+                                                          id: widget.userId);
+                                                    },
+                                                  )
+                                              ];
+                                            }),
+                                      if (context
+                                              .read<UserCubit>()
+                                              .isLoggedIn &&
+                                          loginUser?.id == widget.userId)
+                                        IconButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (_) =>
+                                                      const SearchAppUsers());
+                                            },
+                                            icon: const Icon(
+                                              Icons.search,
+                                              color: Colors.black,
+                                            )),
+                                    ]))),
                         SliverToBoxAdapter(
                           child: Column(
                             children: [
@@ -150,16 +192,21 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   user: state.profileData!,
                                   onFollow: () async {
                                     if (context.read<UserCubit>().isLoggedIn) {
-                                      if (state.profileData?.isFollowed == true) {
-                                        var result = await controller.unFollowRequest(
-                                            context: context, userId: state.profileData!.id);
+                                      if (state.profileData?.isFollowed ==
+                                          true) {
+                                        var result =
+                                            await controller.unFollowRequest(
+                                                context: context,
+                                                userId: state.profileData!.id);
                                         if (result == true) {
                                           state.profileData?.isFollowed = false;
                                           setState(() {});
                                         }
                                       } else {
-                                        var result = await controller.followRequest(
-                                            context: context, userId: state.profileData!.id);
+                                        var result =
+                                            await controller.followRequest(
+                                                context: context,
+                                                userId: state.profileData!.id);
                                         if (result == true) {
                                           state.profileData?.isFollowed = true;
                                           setState(() {});
@@ -172,20 +219,31 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   onAddFriend: () async {
                                     // print("object");
                                     if (context.read<UserCubit>().isLoggedIn) {
-                                      if (state.profileData?.areFriends == true) {
+                                      if (state.profileData?.areFriends ==
+                                          true) {
                                       } else {
-                                        if (state.profileData?.sentFriendRequest == true) {
-                                          var result = await controller.removeFriendRequest(
-                                              context: context, userId: state.profileData!.id);
+                                        if (state.profileData
+                                                ?.sentFriendRequest ==
+                                            true) {
+                                          var result = await controller
+                                              .removeFriendRequest(
+                                                  context: context,
+                                                  userId:
+                                                      state.profileData!.id);
                                           if (result == true) {
-                                            state.profileData?.sentFriendRequest = false;
+                                            state.profileData
+                                                ?.sentFriendRequest = false;
                                             setState(() {});
                                           }
                                         } else {
-                                          var result = await controller.friendRequest(
-                                              context: context, userId: state.profileData!.id);
+                                          var result =
+                                              await controller.friendRequest(
+                                                  context: context,
+                                                  userId:
+                                                      state.profileData!.id);
                                           if (result == true) {
-                                            state.profileData?.sentFriendRequest = true;
+                                            state.profileData
+                                                ?.sentFriendRequest = true;
                                             setState(() {});
                                           }
                                         }
@@ -195,33 +253,45 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                     }
                                   },
                                   onAcceptFriend: () async {
-                                    bool result = await controller.acceptRejectFriend(
-                                        params: AcceptRejectFriendRequestParams(userId: widget.userId, status: true));
+                                    bool result =
+                                        await controller.acceptRejectFriend(
+                                            params:
+                                                AcceptRejectFriendRequestParams(
+                                                    userId: widget.userId,
+                                                    status: true));
                                     state.profileData?.isSenTRequest = false;
                                     state.profileData?.areFriends = true;
-                                    state.profileData!.friendsCount = state.profileData!.friendsCount! + 1;
+                                    state.profileData!.friendsCount =
+                                        state.profileData!.friendsCount! + 1;
                                     print(state.profileData?.friendsCount);
                                     setState(() {});
                                     return result;
                                   },
                                   onRejectFriend: () async {
-                                    bool result = await controller.acceptRejectFriend(
-                                        params: AcceptRejectFriendRequestParams(userId: widget.userId, status: false));
+                                    bool result =
+                                        await controller.acceptRejectFriend(
+                                            params:
+                                                AcceptRejectFriendRequestParams(
+                                                    userId: widget.userId,
+                                                    status: false));
                                     state.profileData?.isSenTRequest = false;
                                     setState(() {});
                                     return result;
                                   },
                                   onDeleteFriend: () async {
-                                    bool result = await controller.deleteFriend(userId: widget.userId);
+                                    bool result = await controller.deleteFriend(
+                                        userId: widget.userId);
                                     state.profileData?.areFriends = false;
-                                    state.profileData!.friendsCount = state.profileData!.friendsCount! - 1;
+                                    state.profileData!.friendsCount =
+                                        state.profileData!.friendsCount! - 1;
                                     print(state.profileData?.friendsCount);
                                     setState(() {});
                                     return result;
                                   },
                                   editProfile: () async {
                                     await context.push(Routes.EDITPROFILE);
-                                    controller.getUserProfile(id: widget.userId);
+                                    controller.getUserProfile(
+                                        id: widget.userId);
                                   },
                                   selectImageGallary: () {
                                     showModalBottomSheet(
@@ -230,20 +300,26 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                         return Wrap(
                                           children: <Widget>[
                                             ListTile(
-                                              leading: const Icon(Icons.photo_library),
-                                              title: Text(LocaleKeys.gallery.localize),
+                                              leading: const Icon(
+                                                  Icons.photo_library),
+                                              title: Text(
+                                                  LocaleKeys.gallery.localize),
                                               onTap: () async {
                                                 Navigator.pop(context);
-                                                await controller.uploadPhoto(isGallery: true);
+                                                await controller.uploadPhoto(
+                                                    isGallery: true);
                                                 // Reload user data if needed
                                               },
                                             ),
                                             ListTile(
-                                              leading: const Icon(Icons.camera_alt),
-                                              title: Text(LocaleKeys.camera.localize),
+                                              leading:
+                                                  const Icon(Icons.camera_alt),
+                                              title: Text(
+                                                  LocaleKeys.camera.localize),
                                               onTap: () async {
                                                 Navigator.pop(context);
-                                                await controller.uploadPhoto(isGallery: false);
+                                                await controller.uploadPhoto(
+                                                    isGallery: false);
                                                 // Reload user data if needed
                                               },
                                             ),
@@ -259,20 +335,28 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                         return Wrap(
                                           children: <Widget>[
                                             ListTile(
-                                              leading: const Icon(Icons.photo_library),
-                                              title: Text(LocaleKeys.gallery.localize),
+                                              leading: const Icon(
+                                                  Icons.photo_library),
+                                              title: Text(
+                                                  LocaleKeys.gallery.localize),
                                               onTap: () async {
                                                 Navigator.pop(context);
-                                                await controller.uploadCoverPhoto(isGallery: true);
+                                                await controller
+                                                    .uploadCoverPhoto(
+                                                        isGallery: true);
                                                 // Reload user data if needed
                                               },
                                             ),
                                             ListTile(
-                                              leading: const Icon(Icons.camera_alt),
-                                              title: Text(LocaleKeys.camera.localize),
+                                              leading:
+                                                  const Icon(Icons.camera_alt),
+                                              title: Text(
+                                                  LocaleKeys.camera.localize),
                                               onTap: () async {
                                                 Navigator.pop(context);
-                                                await controller.uploadCoverPhoto(isGallery: false);
+                                                await controller
+                                                    .uploadCoverPhoto(
+                                                        isGallery: false);
                                                 // Reload user data if needed
                                               },
                                             ),
@@ -283,12 +367,14 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   }),
                               if (loginUser?.id == widget.userId)
                                 Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.h),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 6.h),
                                   child: AppButton(
                                     label: LocaleKeys.editProfile.localize,
                                     onPressed: () async {
                                       await context.push(Routes.EDITPROFILE);
-                                      controller.getUserProfile(id: widget.userId);
+                                      controller.getUserProfile(
+                                          id: widget.userId);
                                     },
                                     color: Colors.white,
                                     backColor: AppColors.PRIMARY_COLOR,
@@ -318,9 +404,15 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           Tab(
                                             text: LocaleKeys.reels.localize,
                                           ),
-                                          if (context.read<UserCubit>().state.data?.id == widget.userId)
+                                          if (context
+                                                  .read<UserCubit>()
+                                                  .state
+                                                  .data
+                                                  ?.id ==
+                                              widget.userId)
                                             Tab(
-                                              text: LocaleKeys.savedReels.localize,
+                                              text: LocaleKeys
+                                                  .savedReels.localize,
                                             ),
                                         ]),
                                     // _buildAccountPages(state.profileData!),
@@ -330,25 +422,31 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 25.0),
                                     child: Label(
-                                      text: LocaleKeys.youHaveBlockedThisUser.localize,
+                                      text: LocaleKeys
+                                          .youHaveBlockedThisUser.localize,
                                     ),
                                   ),
                                 ),
                         ),
-                        state.profilePage == 0 && state.profileData?.isBlock == false
+                        state.profilePage == 0 &&
+                                state.profileData?.isBlock == false
                             ? UserPosts(
                                 userData: state.profileData!,
                               )
-                            : state.profilePage == 1 && state.profileData?.isBlock == false
+                            : state.profilePage == 1 &&
+                                    state.profileData?.isBlock == false
                                 ? UserTweets(
                                     userData: state.profileData!,
                                   )
-                                : state.profilePage == 2 && state.profileData?.isBlock == false
+                                : state.profilePage == 2 &&
+                                        state.profileData?.isBlock == false
                                     ? UserReels(
                                         userData: state.profileData!,
                                       )
-                                    : state.profilePage == 2 && state.profileData?.isBlock == false
-                                        ? SavedReelsView(userData: state.profileData!)
+                                    : state.profilePage == 2 &&
+                                            state.profileData?.isBlock == false
+                                        ? SavedReelsView(
+                                            userData: state.profileData!)
                                         : const SliverToBoxAdapter(
                                             child: SizedBox.shrink(),
                                           ),
@@ -371,7 +469,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
       required Function editProfile,
       required Function onAddFriend}) {
     final loginUser = context.read<UserCubit>().state.data;
-    return BlocBuilder<SocialPostsCubit, SocialPostsState>(builder: (context, state) {
+    return BlocBuilder<SocialPostsCubit, SocialPostsState>(
+        builder: (context, state) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -392,8 +491,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   onTap: () {
                                     showDialog(
                                         context: context,
-                                        builder: (context) => ImageDetailsScreen(
-                                              image: state.newCover?.file.path ?? '',
+                                        builder: (context) =>
+                                            ImageDetailsScreen(
+                                              image:
+                                                  state.newCover?.file.path ??
+                                                      '',
                                               fromPost: false,
                                               onRemoveImage: () {
                                                 // controller
@@ -412,7 +514,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   onTap: () {
                                     showDialog(
                                         context: context,
-                                        builder: (context) => ImageDetailsScreen(
+                                        builder: (context) =>
+                                            ImageDetailsScreen(
                                               image: user.profileCover ?? '',
                                               fromPost: true,
                                               onRemoveImage: () {
@@ -423,7 +526,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                             ));
                                   },
                                   child: Image.network(
-                                    user.profileCover!.isNotEmpty ? user.profileCover! : UIConst.socialImagePlaceHolder,
+                                    user.profileCover!.isNotEmpty
+                                        ? user.profileCover!
+                                        : UIConst.socialImagePlaceHolder,
                                     fit: BoxFit.fill,
                                     width: double.infinity,
                                   ),
@@ -435,8 +540,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               },
                               child: Container(
                                   padding: const EdgeInsets.all(5),
-                                  decoration:
-                                      const BoxDecoration(shape: BoxShape.circle, color: AppColors.PRIMARY_COLOR),
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppColors.PRIMARY_COLOR),
                                   child: const Icon(
                                     Icons.camera_alt_outlined,
                                     color: Colors.white,
@@ -447,7 +553,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     ),
                     Expanded(
                         child: Padding(
-                      padding: const EdgeInsetsDirectional.only(top: 3.0, end: 10),
+                      padding:
+                          const EdgeInsetsDirectional.only(top: 3.0, end: 10),
                       child: loginUser?.id == user.id
                           ? Container()
                           : Row(
@@ -459,17 +566,21 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   child: AppButton(
                                       // height: 120.h,
                                       width: kToolbarHeight * 1.5,
-                                      backColor: user.isFollowed == true ? AppColors.PRIMARY_COLOR : null,
+                                      backColor: user.isFollowed == true
+                                          ? AppColors.PRIMARY_COLOR
+                                          : null,
                                       label: user.isFollowed == true
                                           ? LocaleKeys.unFollow.localize
                                           : LocaleKeys.follow.localize,
-                                      style: Styles.mediumText(color: Colors.white, fontSize: 24),
+                                      style: Styles.mediumText(
+                                          color: Colors.white, fontSize: 24),
                                       onPressed: () {
                                         onFollow();
                                       }),
                                 ),
                                 const Sizer(),
-                                (user.areFriends == true || user.isSenTRequest == true)
+                                (user.areFriends == true ||
+                                        user.isSenTRequest == true)
                                     ? PopupMenuButton(
                                         // iconSize: 150,
                                         itemBuilder: (context) {
@@ -477,52 +588,71 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                             if (user.isSenTRequest == true) ...[
                                               PopupMenuItem<int>(
                                                 value: 0,
-                                                child: Text(LocaleKeys.Accept.localize),
+                                                child: Text(
+                                                    LocaleKeys.Accept.localize),
                                                 onTap: () => onAcceptFriend(),
                                               ),
                                               PopupMenuItem<int>(
                                                 value: 1,
-                                                child: Text(LocaleKeys.reject.localize),
+                                                child: Text(
+                                                    LocaleKeys.reject.localize),
                                                 onTap: () => onRejectFriend(),
                                               ),
                                             ],
                                             if (user.areFriends == true)
                                               PopupMenuItem<int>(
                                                 value: 0,
-                                                child: Text(LocaleKeys.deleteFriend.localize),
+                                                child: Text(LocaleKeys
+                                                    .deleteFriend.localize),
                                                 onTap: () => onDeleteFriend(),
                                               ),
                                           ];
                                         },
                                         child: Container(
                                             alignment: Alignment.center,
-                                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(5),
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
                                               color: AppColors.PRIMARY_COLOR,
                                             ),
                                             child: Text(
                                               user.isSenTRequest == true
-                                                  ? LocaleKeys.acceptRequest.localize
+                                                  ? LocaleKeys
+                                                      .acceptRequest.localize
                                                   : user.areFriends == true
-                                                      ? LocaleKeys.friends.localize
+                                                      ? LocaleKeys
+                                                          .friends.localize
                                                       : '',
-                                              style: Styles.mediumText(color: Colors.white),
+                                              style: Styles.mediumText(
+                                                  color: Colors.white),
                                             )))
                                     : SizedBox(
                                         width: 110,
                                         child: AppButton(
                                             // height: 80.h,
                                             padding: 5,
-                                            backColor: user.sentFriendRequest == true ? AppColors.PRIMARY_COLOR : null,
-                                            style: Styles.mediumText(color: Colors.white, fontSize: 24),
+                                            backColor:
+                                                user.sentFriendRequest == true
+                                                    ? AppColors.PRIMARY_COLOR
+                                                    : null,
+                                            style: Styles.mediumText(
+                                                color: Colors.white,
+                                                fontSize: 24),
                                             label: user.isSenTRequest == true
-                                                ? LocaleKeys.acceptRequest.localize
+                                                ? LocaleKeys
+                                                    .acceptRequest.localize
                                                 : user.areFriends == true
-                                                    ? LocaleKeys.friends.localize
-                                                    : user.sentFriendRequest == true
-                                                        ? LocaleKeys.removeRequest.localize
-                                                        : LocaleKeys.addFriend.localize,
+                                                    ? LocaleKeys
+                                                        .friends.localize
+                                                    : user.sentFriendRequest ==
+                                                            true
+                                                        ? LocaleKeys
+                                                            .removeRequest
+                                                            .localize
+                                                        : LocaleKeys
+                                                            .addFriend.localize,
                                             onPressed: () {
                                               onAddFriend();
                                             }),
@@ -544,7 +674,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   showDialog(
                                       context: context,
                                       builder: (context) => ImageDetailsScreen(
-                                            image: state.newImage?.file.path ?? '',
+                                            image:
+                                                state.newImage?.file.path ?? '',
                                             fromPost: false,
                                             onRemoveImage: () {
                                               // controller
@@ -558,7 +689,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   child: CircleAvatar(
                                     radius: 60,
                                     backgroundColor: Colors.white,
-                                    backgroundImage: FileImage(File(state.newImage!.file.path)),
+                                    backgroundImage: FileImage(
+                                        File(state.newImage!.file.path)),
                                   ),
                                 ),
                               )
@@ -577,7 +709,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           ));
                                 },
                                 child: ImageFromInternet(
-                                  image: user.profilePicture ?? UIConst.profilePlaceHolder,
+                                  image: user.profilePicture ??
+                                      UIConst.profilePlaceHolder,
                                   height: 140.h,
                                   width: 160.w,
                                   isCircle: true,
@@ -592,8 +725,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               },
                               child: Container(
                                   padding: const EdgeInsets.all(5),
-                                  decoration:
-                                      const BoxDecoration(shape: BoxShape.circle, color: AppColors.PRIMARY_COLOR),
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppColors.PRIMARY_COLOR),
                                   child: Icon(
                                     Icons.camera_alt_outlined,
                                     color: Colors.white,
@@ -620,7 +754,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               children: [
                                 Label(
                                     text: "${user.firstName} ${user.lastName}",
-                                    style: Styles.headerText(fontWeight: FontWeight.w600, color: Colors.black)),
+                                    style: Styles.headerText(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black)),
                                 const Sizer(
                                   width: 5,
                                 ),
@@ -637,11 +773,14 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               text: TextSpan(children: [
                                 TextSpan(
                                     text: "${user.firstName} ${user.lastName}",
-                                    style: Styles.headerText(fontWeight: FontWeight.w600, color: Colors.black)),
+                                    style: Styles.headerText(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black)),
                                 if (user.job.isNotEmpty)
                                   TextSpan(
                                       text: '\t(${user.job})',
-                                      style: Styles.headerText(color: Colors.black, fontSize: 26)),
+                                      style: Styles.headerText(
+                                          color: Colors.black, fontSize: 26)),
                               ])),
                     ),
                     if (loginUser?.id != widget.userId)
@@ -649,9 +788,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           child: Container(
                               width: 110,
                               alignment: Alignment.center,
-                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5.h),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5), color: AppColors.SECONDARY_COLOR),
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: AppColors.SECONDARY_COLOR),
                               child: Text(
                                 LocaleKeys.message.localize,
                                 style: Styles.mediumText(color: Colors.white),
@@ -678,7 +819,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                 Sizer(
                   height: 4.h,
                 ),
-                Label(text: '@${user.email.split('@')[0]}', style: Styles.mediumText(color: Colors.grey)),
+                Label(
+                    text: '@${user.email.split('@')[0]}',
+                    style: Styles.mediumText(color: Colors.grey)),
                 Sizer(
                   height: 4.h,
                 ),
@@ -701,9 +844,14 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   ],
                 ),
                 Sizer(height: 5.h),
-                Label(text: user.bio, style: Styles.mediumText(color: Colors.black)),
+                Label(
+                    text: user.bio,
+                    style: Styles.mediumText(color: Colors.black)),
                 Sizer(height: 5.h),
-                if (user.city.isNotEmpty || user.job.isNotEmpty || user.country.isNotEmpty || user.phone.isNotEmpty)
+                if (user.city.isNotEmpty ||
+                    user.job.isNotEmpty ||
+                    user.country.isNotEmpty ||
+                    user.phone.isNotEmpty)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -719,14 +867,16 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             ),
                             Label(
                                 text: LocaleKeys.livesIn.localize,
-                                style: Styles.headerText(color: Colors.grey, fontSize: 30)),
+                                style: Styles.headerText(
+                                    color: Colors.grey, fontSize: 30)),
                             Sizer(
                               height: 5.h,
                             ),
                             Expanded(
                               child: Label(
                                 text: user.city,
-                                style: Styles.headerText(color: Colors.black, fontSize: 30),
+                                style: Styles.headerText(
+                                    color: Colors.black, fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -748,14 +898,16 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             ),
                             Label(
                                 text: LocaleKeys.from.localize,
-                                style: Styles.headerText(color: Colors.grey, fontSize: 30)),
+                                style: Styles.headerText(
+                                    color: Colors.grey, fontSize: 30)),
                             Sizer(
                               height: 5.h,
                             ),
                             Expanded(
                               child: Label(
                                 text: user.country,
-                                style: Styles.headerText(color: Colors.black, fontSize: 30),
+                                style: Styles.headerText(
+                                    color: Colors.black, fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -777,14 +929,16 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             ),
                             Label(
                                 text: LocaleKeys.work.localize,
-                                style: Styles.headerText(color: Colors.grey, fontSize: 30)),
+                                style: Styles.headerText(
+                                    color: Colors.grey, fontSize: 30)),
                             Sizer(
                               height: 5.h,
                             ),
                             Expanded(
                               child: Label(
                                 text: user.job,
-                                style: Styles.headerText(color: Colors.black, fontSize: 30),
+                                style: Styles.headerText(
+                                    color: Colors.black, fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -806,12 +960,14 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             ),
                             Label(
                                 text: LocaleKeys.phone.localize,
-                                style: Styles.headerText(color: Colors.grey, fontSize: 30)),
+                                style: Styles.headerText(
+                                    color: Colors.grey, fontSize: 30)),
                             const Sizer(),
                             Expanded(
                               child: Label(
                                 text: user.phone,
-                                style: Styles.headerText(color: Colors.black, fontSize: 30),
+                                style: Styles.headerText(
+                                    color: Colors.black, fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -834,7 +990,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             Expanded(
                               child: Label(
                                 text: user.maritalStatus,
-                                style: Styles.headerText(color: Colors.black, fontSize: 30),
+                                style: Styles.headerText(
+                                    color: Colors.black, fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -857,7 +1014,10 @@ class _OtherAccountViewState extends State<OtherAccountView> {
   Widget _buildCounter({required String value, required String label}) {
     return RichText(
         text: TextSpan(children: [
-      TextSpan(text: value, style: Styles.mediumText(color: Colors.black, fontWeight: FontWeight.w500)),
+      TextSpan(
+          text: value,
+          style: Styles.mediumText(
+              color: Colors.black, fontWeight: FontWeight.w500)),
       TextSpan(
           text: label,
           style: Styles.mediumText(

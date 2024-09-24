@@ -14,10 +14,12 @@ class TripJoinRequestView extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<FetchMyTripJoinAdsCubit>(
-          create: (context) => FetchMyTripJoinAdsCubit(fetchMyTripJoinAdsUseCase: serviceLocator()),
+          create: (context) => FetchMyTripJoinAdsCubit(
+              fetchMyTripJoinAdsUseCase: serviceLocator()),
         ),
         BlocProvider<DeleteTripsCubit>(
-          create: (context) => DeleteTripsCubit(deleteTripUseCase: serviceLocator()),
+          create: (context) =>
+              DeleteTripsCubit(deleteTripUseCase: serviceLocator()),
         ),
       ],
       child: MultiBlocListener(

@@ -27,7 +27,7 @@ class CreateAdState {
       this.selectedCategory,
       this.selectedSubCategory,
       this.status,
-      this.isUser=true,
+      this.isUser = true,
       this.images,
       this.subCategories});
 

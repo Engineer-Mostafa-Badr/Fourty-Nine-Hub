@@ -13,10 +13,12 @@ class TripJoinRequestHistoryView extends StatefulWidget {
   final Map<String, dynamic> extra;
 
   @override
-  State<TripJoinRequestHistoryView> createState() => _TripJoinRequestHistoryViewState();
+  State<TripJoinRequestHistoryView> createState() =>
+      _TripJoinRequestHistoryViewState();
 }
 
-class _TripJoinRequestHistoryViewState extends State<TripJoinRequestHistoryView> {
+class _TripJoinRequestHistoryViewState
+    extends State<TripJoinRequestHistoryView> {
   late final String id;
   @override
   void initState() {

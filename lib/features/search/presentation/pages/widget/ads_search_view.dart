@@ -17,8 +17,8 @@ class AdsSearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      itemBuilder: (context,index)=>buildItem(),
-      separatorBuilder: (context,index)=>Sizer(),
+      itemBuilder: (context, index) => buildItem(),
+      separatorBuilder: (context, index) => Sizer(),
       itemCount: 10,
     );
   }
@@ -58,7 +58,8 @@ class AdsSearchView extends StatelessWidget {
                       child: SquareImage(
                         fit: BoxFit.fill,
                         radius: 5,
-                        url: 'https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg',
+                        url:
+                            'https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg',
                       ),
                     ),
                     Positioned(

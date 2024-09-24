@@ -54,8 +54,8 @@ class SubscriptionController {
   bool _isBottomSheetShown = false;
   Future<void> showSubscriptionPlans(
       {List<WalletTypes>? wallets,
-        required String subCategoryId,
-        String? title}) async {
+      required String subCategoryId,
+      String? title}) async {
     if (!_isBottomSheetShown) {
       _isBottomSheetShown = true;
 
@@ -66,24 +66,21 @@ class SubscriptionController {
       Navigator.of(context).pop(); // Close loading dialog
 
       final plansResponse = await _getSubscriptionPlansUseCase(subCategoryId);
-      plansResponse.fold(
-              (l) {
-            showErrorMessage(context, Labels.errorHappened);
-            _isBottomSheetShown = false; // Reset flag on error
-          },
-              (plans) {
-            bottomSheet(
-              context: context,
-              backColor: Theme.of(context).scaffoldBackgroundColor,
-              widget: SubscriptionPlansWidget(
-                title: title,
-                subscribePlans: plans,
-                subCategoryId: subCategoryId,
-                paymentMenthods: wallets,
-              ),
-            );
-          }
-      );
+      plansResponse.fold((l) {
+        showErrorMessage(context, Labels.errorHappened);
+        _isBottomSheetShown = false; // Reset flag on error
+      }, (plans) {
+        bottomSheet(
+          context: context,
+          backColor: Theme.of(context).scaffoldBackgroundColor,
+          widget: SubscriptionPlansWidget(
+            title: title,
+            subscribePlans: plans,
+            subCategoryId: subCategoryId,
+            paymentMenthods: wallets,
+          ),
+        );
+      });
 
       _isBottomSheetShown = false; // Reset flag after bottom sheet is shown
     }

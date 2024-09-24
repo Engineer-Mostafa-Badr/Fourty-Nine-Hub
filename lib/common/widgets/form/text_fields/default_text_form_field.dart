@@ -33,7 +33,8 @@ class DefaultTextFormField extends MainTextFormField {
     Color? hintColor,
     super.labelStyle,
   }) : super(
-          validator: validator ?? (isRequired ? Validator().validateEmptyField : null),
+          validator:
+              validator ?? (isRequired ? Validator().validateEmptyField : null),
           hintText: hint + (isRequired ? '*' : ''),
           textCapitalization: TextCapitalization.words,
           maxLength: maxLines,

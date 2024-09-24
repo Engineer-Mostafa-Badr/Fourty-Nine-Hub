@@ -753,13 +753,16 @@ class MyVoiceVideoRecordingScreen extends StatefulWidget {
   final String? totalPrice;
   final String? advertisementType;
 
-  const MyVoiceVideoRecordingScreen({super.key, this.comeFrom, this.totalPrice, this.advertisementType});
+  const MyVoiceVideoRecordingScreen(
+      {super.key, this.comeFrom, this.totalPrice, this.advertisementType});
 
   @override
-  MyVoiceVideoRecordingScreenState createState() => MyVoiceVideoRecordingScreenState();
+  MyVoiceVideoRecordingScreenState createState() =>
+      MyVoiceVideoRecordingScreenState();
 }
 
-class MyVoiceVideoRecordingScreenState extends State<MyVoiceVideoRecordingScreen> with TickerProviderStateMixin {
+class MyVoiceVideoRecordingScreenState
+    extends State<MyVoiceVideoRecordingScreen> with TickerProviderStateMixin {
   CameraController? _controller;
   late List<CameraDescription> cameras;
   String? videoPath;
@@ -804,7 +807,8 @@ class MyVoiceVideoRecordingScreenState extends State<MyVoiceVideoRecordingScreen
       });
   }
 
-  Future<void> _initializeCameraController(CameraDescription cameraDescription) async {
+  Future<void> _initializeCameraController(
+      CameraDescription cameraDescription) async {
     _controller = CameraController(
       cameraDescription,
       ResolutionPreset.high,
@@ -832,7 +836,8 @@ class MyVoiceVideoRecordingScreenState extends State<MyVoiceVideoRecordingScreen
 
     try {
       final directory = await getTemporaryDirectory();
-      videoPath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
+      videoPath =
+          '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
       await _controller!.startVideoRecording();
       setState(() {
         showUploadReelButton = false;
@@ -888,7 +893,8 @@ class MyVoiceVideoRecordingScreenState extends State<MyVoiceVideoRecordingScreen
 
   Future<bool?> _mergeVideoWithFilter() async {
     final directory = await getTemporaryDirectory();
-    filteredVideoPath = '${directory.path}/filtered_${DateTime.now().millisecondsSinceEpoch}.mp4';
+    filteredVideoPath =
+        '${directory.path}/filtered_${DateTime.now().millisecondsSinceEpoch}.mp4';
 
     // Construct the FFmpeg command with the selected filter and horizontal flip
     final filterCommand = _selectedFilter?.ffmpegFilter != null
@@ -914,7 +920,8 @@ class MyVoiceVideoRecordingScreenState extends State<MyVoiceVideoRecordingScreen
 
       if (ReturnCode.isSuccess(returnCode)) {
         log("FFmpeg process succeeded");
-        final savedSuccessfully = await GallerySaver.saveVideo(filteredVideoPath!);
+        final savedSuccessfully =
+            await GallerySaver.saveVideo(filteredVideoPath!);
         if (savedSuccessfully ?? false) {
           setState(() {
             showGalleryBtn = true;
@@ -925,11 +932,13 @@ class MyVoiceVideoRecordingScreenState extends State<MyVoiceVideoRecordingScreen
         return savedSuccessfully;
       } else {
         final failStackTrace = await session.getFailStackTrace();
-        throw Exception("FFmpeg process failed with return code $returnCode\n$failStackTrace");
+        throw Exception(
+            "FFmpeg process failed with return code $returnCode\n$failStackTrace");
       }
     } catch (e) {
       log("Error in _mergeVideoWithFilter: $e");
-      _showErrorDialog(LocaleKeys.error_dialog_video_process_fail.tr(args: [e.toString()]));
+      _showErrorDialog(
+          LocaleKeys.error_dialog_video_process_fail.tr(args: [e.toString()]));
       filteredVideoPath = null;
     }
     return false;
@@ -937,7 +946,9 @@ class MyVoiceVideoRecordingScreenState extends State<MyVoiceVideoRecordingScreen
 
   Future uploadReel() async {
     await serviceLocator<ReelsCubit>().uploadReel(File(filteredVideoPath!),
-        advertisementType: widget.advertisementType, comeFrom: widget.comeFrom, totalPrice: widget.totalPrice);
+        advertisementType: widget.advertisementType,
+        comeFrom: widget.comeFrom,
+        totalPrice: widget.totalPrice);
   }
 
   void _switchCamera() {
@@ -994,7 +1005,10 @@ class MyVoiceVideoRecordingScreenState extends State<MyVoiceVideoRecordingScreen
                 width: 150.h,
                 margin: const EdgeInsets.symmetric(horizontal: 5),
                 decoration: BoxDecoration(
-                  border: Border.all(color: _selectedFilter == filters[index] ? Colors.blue : Colors.transparent),
+                  border: Border.all(
+                      color: _selectedFilter == filters[index]
+                          ? Colors.blue
+                          : Colors.transparent),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: FittedBox(
@@ -1007,7 +1021,10 @@ class MyVoiceVideoRecordingScreenState extends State<MyVoiceVideoRecordingScreen
                           FilterLibrary.filterImagesPaths[index].toString(),
                         ),
                       ),
-                      Text(context.isArabic ? filters[index].arName : filters[index].enName,
+                      Text(
+                          context.isArabic
+                              ? filters[index].arName
+                              : filters[index].enName,
                           textScaleFactor: 1.0,
                           maxLines: 1,
                           overflow: TextOverflow.fade,
@@ -1041,12 +1058,14 @@ class MyVoiceVideoRecordingScreenState extends State<MyVoiceVideoRecordingScreen
 
     return Scaffold(
       backgroundColor: Colors.black,
-      floatingActionButton: (showUploadReelButton != null && showUploadReelButton == true)
+      floatingActionButton: (showUploadReelButton != null &&
+              showUploadReelButton == true)
           ? Padding(
               padding: const EdgeInsets.symmetric(vertical: kToolbarHeight),
               child: Align(
 // Check the current text direction to determine alignment
-                alignment: context.isArabic ? Alignment.topLeft : Alignment.topRight,
+                alignment:
+                    context.isArabic ? Alignment.topLeft : Alignment.topRight,
                 child: FloatingActionButton.small(
                   tooltip: LocaleKeys.controls_upload_reel.tr(),
                   shape: const CircleBorder(),
@@ -1080,18 +1099,25 @@ class MyVoiceVideoRecordingScreenState extends State<MyVoiceVideoRecordingScreen
                                   padding: const EdgeInsets.all(8.0),
                                   child: FittedBox(
                                     child: Text(
-                                      LocaleKeys.reel_upload_success_upload_success.tr(),
+                                      LocaleKeys
+                                          .reel_upload_success_upload_success
+                                          .tr(),
                                       textScaleFactor: 1.0,
-                                      style: TextStyle(fontSize: 40.sp, fontWeight: FontWeight.normal),
+                                      style: TextStyle(
+                                          fontSize: 40.sp,
+                                          fontWeight: FontWeight.normal),
                                     ),
                                   ),
                                 ),
                                 actionsPadding: EdgeInsets.zero,
                                 actions: <Widget>[
                                   TextButton(
-                                    child: Text(LocaleKeys.error_dialog_ok_button.tr(), textScaleFactor: 1.0),
+                                    child: Text(
+                                        LocaleKeys.error_dialog_ok_button.tr(),
+                                        textScaleFactor: 1.0),
                                     onPressed: () {
-                                      Navigator.of(context).pop(); // Close the dialog
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
                                     },
                                   ),
                                 ],
@@ -1121,15 +1147,20 @@ class MyVoiceVideoRecordingScreenState extends State<MyVoiceVideoRecordingScreen
                                 child: Text(
                                   LocaleKeys.error_dialog_upload_fail.tr(),
                                   textScaleFactor: 1.0,
-                                  style: TextStyle(fontSize: 40.sp, fontWeight: FontWeight.normal),
+                                  style: TextStyle(
+                                      fontSize: 40.sp,
+                                      fontWeight: FontWeight.normal),
                                 ),
                               ),
                               actionsPadding: EdgeInsets.zero,
                               actions: <Widget>[
                                 TextButton(
-                                  child: Text(LocaleKeys.error_dialog_ok_button.tr(), textScaleFactor: 1.0),
+                                  child: Text(
+                                      LocaleKeys.error_dialog_ok_button.tr(),
+                                      textScaleFactor: 1.0),
                                   onPressed: () {
-                                    Navigator.of(context).pop(); // Close the dialog
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
                                   },
                                 ),
                               ],
@@ -1165,7 +1196,8 @@ class MyVoiceVideoRecordingScreenState extends State<MyVoiceVideoRecordingScreen
     return SizedBox(
       height: double.infinity,
       child: ColorFiltered(
-        colorFilter: _selectedFilter?.colorFilter ?? const ColorFilter.mode(Colors.transparent, BlendMode.srcOver),
+        colorFilter: _selectedFilter?.colorFilter ??
+            const ColorFilter.mode(Colors.transparent, BlendMode.srcOver),
         child: CameraPreview(_controller!),
       ),
     );
@@ -1184,7 +1216,9 @@ class MyVoiceVideoRecordingScreenState extends State<MyVoiceVideoRecordingScreen
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
-            LocaleKeys.timer_recording_stops_in.tr() + _secondsRemaining.toString() + LocaleKeys.timer_seconds.tr(),
+            LocaleKeys.timer_recording_stops_in.tr() +
+                _secondsRemaining.toString() +
+                LocaleKeys.timer_seconds.tr(),
             textScaleFactor: 1.0,
             style: TextStyle(color: Colors.white, fontSize: 30.sp),
           ),

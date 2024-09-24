@@ -10,8 +10,7 @@ import 'package:fourtyninehub/features/requests_history/domain/entities/trip_ent
 import '../../domain/usecases/request_come_with_me_usecase.dart';
 
 abstract class AdsRemoteDataSource {
-  Future<Either<Failure, List<AdModel>>> getAds(
-      {required GetAdsParams params});
+  Future<Either<Failure, List<AdModel>>> getAds({required GetAdsParams params});
   Future<Either<Failure, List<TripEntity>>> getComeWithMeAds();
   Future<Either<Failure, List<TripEntity>>> getPickMeAds();
   Future<Either<Failure, bool>> requestPickMe({required RequestParams params});
@@ -26,8 +25,7 @@ class AdsRemoteDataSourceImpl implements AdsRemoteDataSource {
   @override
   Future<Either<Failure, List<AdModel>>> getAds(
       {required GetAdsParams params}) async {
-    final response =
-        await _apiConsumer.get(EndPoints.subCategoryAds(params));
+    final response = await _apiConsumer.get(EndPoints.subCategoryAds(params));
     return response.fold(
         (failure) => Left(failure),
         (response) => Right((response['data'] as List)

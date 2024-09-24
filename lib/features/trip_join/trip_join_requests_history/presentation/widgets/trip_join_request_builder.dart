@@ -48,37 +48,49 @@ class _TripJoinRequestBuilderState extends State<TripJoinRequestBuilder> {
           controller: scrollController,
           itemCount: fetchMyTripJoinAdsCubit.trips.length + 1,
           itemBuilder: (context, index) {
-            if (state is! FetchMyTripJoinAdsLoading && fetchMyTripJoinAdsCubit.trips.isEmpty) {
+            if (state is! FetchMyTripJoinAdsLoading &&
+                fetchMyTripJoinAdsCubit.trips.isEmpty) {
               // if (true) {
               return Container(
                 height: context.screenHeight * 0.6,
                 width: double.infinity,
                 alignment: Alignment.center,
-                child: Text(LocaleKeys.noTripRequests.localize, style: Styles.headerText()),
+                child: Text(LocaleKeys.noTripRequests.localize,
+                    style: Styles.headerText()),
               );
             }
             if (index < fetchMyTripJoinAdsCubit.trips.length) {
               return TripJoinRequestCard(
                 tripJoinRequestEntity: fetchMyTripJoinAdsCubit.trips[index],
                 deleteRequestOnTap: () async {
-                  await context.read<DeleteTripsCubit>().deleteTrip(id: fetchMyTripJoinAdsCubit.trips[index].id ?? '');
+                  await context.read<DeleteTripsCubit>().deleteTrip(
+                      id: fetchMyTripJoinAdsCubit.trips[index].id ?? '');
                   fetchMyTripJoinAdsCubit.trips.removeAt(index);
                   setState(() {});
                 },
                 subscribeOnTap: () {
-                  serviceLocator<SubscriptionController>().showSubscriptionPlans(
-                    wallets: [fetchMyTripJoinAdsCubit.trips[index].paymentMethod?.toWalletType ?? WalletTypes.balance],
-                    subCategoryId: fetchMyTripJoinAdsCubit.trips[index].categoryMainId ?? '',
+                  serviceLocator<SubscriptionController>()
+                      .showSubscriptionPlans(
+                    wallets: [
+                      fetchMyTripJoinAdsCubit
+                              .trips[index].paymentMethod?.toWalletType ??
+                          WalletTypes.balance
+                    ],
+                    subCategoryId:
+                        fetchMyTripJoinAdsCubit.trips[index].categoryMainId ??
+                            '',
                     title: LocaleKeys.tripjoinPremuimSubscription,
                   );
                 },
                 requestHistoryOnTap: () {
-                  context
-                      .push(Routes.TRIP_JOIN_REQUEST_HISTORY, extra: {'id': fetchMyTripJoinAdsCubit.trips[index].id});
+                  context.push(Routes.TRIP_JOIN_REQUEST_HISTORY,
+                      extra: {'id': fetchMyTripJoinAdsCubit.trips[index].id});
                 },
               );
             }
-            return state is FetchMyTripJoinAdsLoading ? const TripJoinRequestLoadingList() : const SizedBox();
+            return state is FetchMyTripJoinAdsLoading
+                ? const TripJoinRequestLoadingList()
+                : const SizedBox();
           },
         );
       },
@@ -95,10 +107,12 @@ class _TripJoinRequestBuilderState extends State<TripJoinRequestBuilder> {
         // pr('0.7 * scrollMaxExtent', t);
         // pr(fetchMyTripJoinAdsCubit.trips.last.hasNextPage, t);
         // pr(fetchMyTripJoinAdsCubit.trips.last.nextPage, t);
-        if (!isLoading && (fetchMyTripJoinAdsCubit.trips.last.hasNextPage ?? false)) {
+        if (!isLoading &&
+            (fetchMyTripJoinAdsCubit.trips.last.hasNextPage ?? false)) {
           // pr('new request', t);
           isLoading = true;
-          fetchMyTripJoinAdsCubit.page = fetchMyTripJoinAdsCubit.trips.last.nextPage!;
+          fetchMyTripJoinAdsCubit.page =
+              fetchMyTripJoinAdsCubit.trips.last.nextPage!;
           await fetchMyTripJoinAdsCubit.fetchMyTripJoinAds();
           isLoading = false;
         }

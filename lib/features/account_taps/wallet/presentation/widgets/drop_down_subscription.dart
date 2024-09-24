@@ -35,8 +35,9 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
   }
 
   void _fetchCategories() async {
-    final categories =
-        await context.read<WalletCubit>().fetchMainCategoryWallet(paginationParams: PaginationParams(page: 1));
+    final categories = await context
+        .read<WalletCubit>()
+        .fetchMainCategoryWallet(paginationParams: PaginationParams(page: 1));
     setState(() {
       this.categories = categories;
       isCategoryLoading = false;
@@ -49,7 +50,8 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
     });
     final subCategories = await context
         .read<WalletCubit>()
-        .fetchSubCategoryWallet(id: categoryId, paginationParams: PaginationParams(page: 1));
+        .fetchSubCategoryWallet(
+            id: categoryId, paginationParams: PaginationParams(page: 1));
     setState(() {
       this.subCategories = subCategories;
       isSubCategoryLoading = false;
@@ -89,7 +91,8 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
             value: selectedCategory,
             isExpanded: true,
             underline: const SizedBox.shrink(),
-            icon: Icon(Icons.arrow_drop_down, size: 50.sp, color: Theme.of(context).scaffoldBackgroundColor),
+            icon: Icon(Icons.arrow_drop_down,
+                size: 50.sp, color: Theme.of(context).scaffoldBackgroundColor),
             items: isCategoryLoading
                 ? [
                     DropdownMenuItem(
@@ -103,7 +106,9 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
                     return DropdownMenuItem<String>(
                       value: category.id,
                       child: Text(
-                        context.locale == Locales.english ? category.nameEn : category.nameAr,
+                        context.locale == Locales.english
+                            ? category.nameEn
+                            : category.nameAr,
                         style: TextStyle(
                           fontSize: 30.sp,
                           color: Theme.of(context).scaffoldBackgroundColor,
@@ -154,7 +159,9 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
               dropdownColor: Theme.of(context).primaryColor,
               value: selectedSubCategory,
               isExpanded: true,
-              icon: Icon(Icons.arrow_drop_down, size: 50.sp, color: Theme.of(context).scaffoldBackgroundColor),
+              icon: Icon(Icons.arrow_drop_down,
+                  size: 50.sp,
+                  color: Theme.of(context).scaffoldBackgroundColor),
               items: isSubCategoryLoading
                   ? [
                       DropdownMenuItem(
@@ -168,7 +175,9 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
                       return DropdownMenuItem<String>(
                         value: subCategory.id,
                         child: Text(
-                          context.locale == Locales.english ? subCategory.nameEn : subCategory.nameAr,
+                          context.locale == Locales.english
+                              ? subCategory.nameEn
+                              : subCategory.nameAr,
                           style: TextStyle(
                             fontSize: 30.sp,
                             color: Theme.of(context).scaffoldBackgroundColor,
@@ -184,7 +193,8 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
                   print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
                   print(newSubCategoryId);
                   print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-                  serviceLocator<SubscriptionController>().showSubscriptionPlans(
+                  serviceLocator<SubscriptionController>()
+                      .showSubscriptionPlans(
                     subCategoryId: newSubCategoryId,
                     wallets: [],
                   );

@@ -32,8 +32,10 @@ ThemeData lightTheme() {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.GREY_LIGHT_COLOR,
-      hintStyle:
-          Styles.headerText(fontSize: 25, decoration: TextDecoration.none,decorationThickness: 0),
+      hintStyle: Styles.headerText(
+          fontSize: 25,
+          decoration: TextDecoration.none,
+          decorationThickness: 0),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8.0),
         borderSide: const BorderSide(

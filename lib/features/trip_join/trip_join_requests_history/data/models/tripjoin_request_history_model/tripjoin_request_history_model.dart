@@ -36,7 +36,9 @@ class TripjoinRequestHistoryModel extends TripJoinRequestHistoryEntity {
   factory TripjoinRequestHistoryModel.fromJson(Map<String, dynamic> json) {
     return TripjoinRequestHistoryModel(
       id: json['_id'] as String?,
-      userId: json['userId'] == null ? null : UserId.fromJson(json['userId'] as Map<String, dynamic>),
+      userId: json['userId'] == null
+          ? null
+          : UserId.fromJson(json['userId'] as Map<String, dynamic>),
       allowStatus: json['allowStatus'] as String?,
       phone: json['phone'] as String?,
       paymentMethods: json['trip']['categoryId']['paymentMethods'] as String?,

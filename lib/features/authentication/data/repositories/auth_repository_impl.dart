@@ -78,7 +78,8 @@ class AuthRepositoryImpl extends AuthRepository {
       final OAuthCredential facebookAuthCredential =
           FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
 
-      final result = await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+      final result = await FirebaseAuth.instance
+          .signInWithCredential(facebookAuthCredential);
       final tokenResult = await _remoteDataSource.socialLogin(
         await _loginWithCredentials(
           GoogleAuthProvider.credential(

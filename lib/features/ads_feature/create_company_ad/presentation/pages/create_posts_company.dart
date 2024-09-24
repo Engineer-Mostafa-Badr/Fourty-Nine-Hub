@@ -98,7 +98,8 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                             ? controller.selectedImages
                                             : showSuccessMessage(
                                                 context,
-                                                LocaleKeys.imageNotSelected.localize,
+                                                LocaleKeys
+                                                    .imageNotSelected.localize,
                                                 color:
                                                     AppColors.SECONDARY_COLOR,
                                                 icon: Icons.error,

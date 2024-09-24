@@ -43,7 +43,7 @@ class ProfileSearchView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Label(text: 'Moaz Mohamed'),
-               Label(
+              Label(
                 text: 'Friend',
                 style: Styles.smallText(
                   color: AppColors.GREY_NORMAL_COLOR,

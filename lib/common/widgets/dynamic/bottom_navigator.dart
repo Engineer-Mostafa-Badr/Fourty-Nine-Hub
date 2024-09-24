@@ -193,14 +193,16 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     super.initState();
 
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
         if (!isScrollingDown) {
           setState(() {
             isScrollingDown = true;
             bottomNavBarHeight = 0.0; // Hide the bottom bar
           });
         }
-      } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      } else if (scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
         if (isScrollingDown) {
           setState(() {
             isScrollingDown = false;
@@ -244,8 +246,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                       padding: index == index1
                           ? EdgeInsets.only(right: 30.w)
                           : index == index2
-                          ? EdgeInsets.only(left: 60.w)
-                          : EdgeInsets.zero,
+                              ? EdgeInsets.only(left: 60.w)
+                              : EdgeInsets.zero,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -268,7 +270,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     );
   }
 }
-
 
 class BottomItemModel {
   final IconData icon;

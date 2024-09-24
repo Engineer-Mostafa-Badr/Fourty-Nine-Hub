@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_pick_me/presentation/views/all_pickme_view.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trips_floating_action_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/avilable_trips_body.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -40,12 +41,14 @@ class AvailableTripsView extends StatelessWidget {
                   dividerColor: context.isDarkMode ? Colors.grey : null,
                   tabs: [
                     TripJoinTabIcon(
-                      icon: Image.asset(Assets.tripjoin, width: size.h, height: size.h, fit: BoxFit.fill),
+                      icon: Image.asset(Assets.tripjoin,
+                          width: size.h, height: size.h, fit: BoxFit.fill),
                       title: LocaleKeys.carTrips.localize,
                       height: size + 15,
                     ),
                     TripJoinTabIcon(
-                      icon: Image.asset(Assets.autoComplete, width: size.h, height: size.h, fit: BoxFit.fill),
+                      icon: Image.asset(Assets.autoComplete,
+                          width: size.h, height: size.h, fit: BoxFit.fill),
                       title: LocaleKeys.userTrips.localize,
                       height: size + 15,
                     ),
@@ -53,17 +56,18 @@ class AvailableTripsView extends StatelessWidget {
                 );
               }),
               const Sizer(height: 20),
-              Expanded(
+              const Expanded(
                 child: TabBarView(
                   children: [
-                    const Stack(
+                    Stack(
                       children: [
-                        SizedBox(width: double.infinity, height: double.infinity),
+                        SizedBox(
+                            width: double.infinity, height: double.infinity),
                         AvailableTripsBody(),
                         AvailableTripsFloatingActionButton(),
                       ],
                     ),
-                    Center(child: Text(LocaleKeys.userTrips.localize)),
+                    AllPickMeView(),
                   ],
                 ),
               )
@@ -102,7 +106,10 @@ class TripJoinTabIcon extends StatelessWidget {
           Sizer(width: spaceBetween.w),
           Text(
             title,
-            style: Styles.mediumText(color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+            style: Styles.mediumText(
+                color: context.isDarkMode
+                    ? Colors.white
+                    : AppColors.PRIMARY_COLOR),
           ),
         ],
       ),

@@ -24,7 +24,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   MainCategoriesCubit(
     this._getMainCategoriesUseCase,
     this._toggleFavoriteCategoryUseCase,
-   this._getWalletHomeUseCase,
+    this._getWalletHomeUseCase,
   ) : super(MainCategoriesState());
   Future<void> loadData() async {
     emit(state.copyWith(status: StateStatus.loading));
@@ -108,5 +108,4 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       emit(state.copyWith(wallet: data));
     });
   }
-
 }

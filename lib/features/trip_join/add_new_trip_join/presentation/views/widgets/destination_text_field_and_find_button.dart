@@ -15,10 +15,12 @@ class DestinationTextFieldAndFindButon extends StatefulWidget {
   });
 
   @override
-  State<DestinationTextFieldAndFindButon> createState() => _DestinationTextFieldAndFindButonState();
+  State<DestinationTextFieldAndFindButon> createState() =>
+      _DestinationTextFieldAndFindButonState();
 }
 
-class _DestinationTextFieldAndFindButonState extends State<DestinationTextFieldAndFindButon> {
+class _DestinationTextFieldAndFindButonState
+    extends State<DestinationTextFieldAndFindButon> {
   late TextEditingController destinationController;
   late final DestinationLocationCubit destinationLocationCubit;
   final formKey = GlobalKey<FormState>();
@@ -45,7 +47,8 @@ class _DestinationTextFieldAndFindButonState extends State<DestinationTextFieldA
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: BlocBuilder<DestinationLocationCubit, DestinationLocationState>(
+              child: BlocBuilder<DestinationLocationCubit,
+                  DestinationLocationState>(
                 builder: (context, state) {
                   return DefaultTextFormField(
                     suffixIcon: _getIcon(state),
@@ -64,7 +67,8 @@ class _DestinationTextFieldAndFindButonState extends State<DestinationTextFieldA
               title: LocaleKeys.searchFind.localize,
               onTap: () {
                 if (formKey.currentState!.validate()) {
-                  destinationLocationCubit.getDestinationLocation(address: destinationController.text);
+                  destinationLocationCubit.getDestinationLocation(
+                      address: destinationController.text);
                 }
               },
               height: double.infinity,

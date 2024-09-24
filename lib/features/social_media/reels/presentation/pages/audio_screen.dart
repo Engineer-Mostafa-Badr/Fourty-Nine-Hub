@@ -919,12 +919,11 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
           textScaleFactor: 1.0,
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.sp),
         ),
-
         actions: [
           _buildActionButton(
             Icons.send,
             iconColor: Colors.black87,
-                () {
+            () {
               Share.share(
                 widget.audio.audioSignedUrl,
                 subject: LocaleKeys.check_out_reel.tr(),
@@ -938,20 +937,20 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                     ? Icons.bookmark
                     : Icons.bookmark_border,
                 iconColor: widget.reel.isSaved && widget.reel.saveCount > 0
-                    ? AppColors.YELLOW_COLOR:Colors.black87,
-                    () async {
+                    ? AppColors.YELLOW_COLOR
+                    : Colors.black87,
+                () async {
                   try {
                     context.read<ReelsCubit>().saveReel(widget.reel.id).then(
-                            (val) =>
-                            showSnackBarAfterBuild(context,
-                                message: val == 'unsaved successfully'
-                                    ? LocaleKeys.reel_unsaved.tr()
-                                    : LocaleKeys.reel_saved.tr(),
-                                icon: val != 'unsaved successfully'
-                                    ? Icons.check_circle
-                                    : Icons.unpublished,
-                                backgroundColor: Colors.white,
-                                textColor: AppColors.QUANTITY_COLOR));
+                        (val) => showSnackBarAfterBuild(context,
+                            message: val == 'unsaved successfully'
+                                ? LocaleKeys.reel_unsaved.tr()
+                                : LocaleKeys.reel_saved.tr(),
+                            icon: val != 'unsaved successfully'
+                                ? Icons.check_circle
+                                : Icons.unpublished,
+                            backgroundColor: Colors.white,
+                            textColor: AppColors.QUANTITY_COLOR));
                   } catch (e) {
                     // Handle error
                   }
@@ -962,7 +961,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
           _buildActionButton(
             Icons.report_outlined,
             iconColor: AppColors.PRIMARY_COLOR_DARK,
-                () {
+            () {
               bottomSheet(
                 context: context,
                 widget: ReportView(
@@ -978,13 +977,14 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 16,),
+          const SizedBox(
+            height: 16,
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-              onTap: () =>
-                  context.push(Routes.OTHERSACCOUNT,
-                      extra: widget.reel.user.id),
+              onTap: () => context.push(Routes.OTHERSACCOUNT,
+                  extra: widget.reel.user.id),
               child: Row(
                 children: [
                   Container(
@@ -1053,16 +1053,15 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                   child: ElevatedButton(
                     style: const ButtonStyle(
                         backgroundColor:
-                        MaterialStatePropertyAll(AppColors.PRIMARY_COLOR)),
+                            MaterialStatePropertyAll(AppColors.PRIMARY_COLOR)),
                     onPressed: () {
                       _player.dispose();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                ReelsRecordingScreen(
-                                  voiceUrl: widget.audio.audioSignedUrl,
-                                ),
+                            builder: (context) => ReelsRecordingScreen(
+                              voiceUrl: widget.audio.audioSignedUrl,
+                            ),
                           ));
                     },
                     child: Text(
@@ -1080,156 +1079,155 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
           ),
           _hasError
               ? Center(
-            child: Text(
-              LocaleKeys.audio_load_fail.tr(),
-              textScaleFactor: 1.0,
-              style: const TextStyle(),
-            ),
-          )
+                  child: Text(
+                    LocaleKeys.audio_load_fail.tr(),
+                    textScaleFactor: 1.0,
+                    style: const TextStyle(),
+                  ),
+                )
               : Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                StreamBuilder<PlayerState>(
-                  stream: _player.playerStateStream,
-                  builder: (context, snapshot) {
-                    final playerState = snapshot.data;
-                    final playing = playerState?.playing;
-                    if (playing != true) {
-                      return IconButton(
-                        icon: const Icon(
-                          Icons.play_arrow,
-                        ),
-                        onPressed: _togglePlayPause,
-                      );
-                    } else {
-                      return IconButton(
-                        icon: const Icon(
-                          Icons.pause,
-                        ),
-                        onPressed: _togglePlayPause,
-                      );
-                    }
-                  },
-                ),
-                Expanded(
-                  child: StreamBuilder<Duration>(
-                    stream: _player.positionStream,
-                    builder: (context, snapshot) {
-                      final position = snapshot.data ?? Duration.zero;
-                      final duration = _player.duration ?? Duration.zero;
-
-                      double sliderValue =
-                      position.inMilliseconds.toDouble();
-                      if (sliderValue >
-                          duration.inMilliseconds.toDouble()) {
-                        sliderValue = duration.inMilliseconds.toDouble();
-                      }
-
-                      return Slider(
-                        value: sliderValue,
-                        max: duration.inMilliseconds.toDouble(),
-                        onChanged: (value) {
-                          _player.seek(
-                              Duration(milliseconds: value.toInt()));
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      StreamBuilder<PlayerState>(
+                        stream: _player.playerStateStream,
+                        builder: (context, snapshot) {
+                          final playerState = snapshot.data;
+                          final playing = playerState?.playing;
+                          if (playing != true) {
+                            return IconButton(
+                              icon: const Icon(
+                                Icons.play_arrow,
+                              ),
+                              onPressed: _togglePlayPause,
+                            );
+                          } else {
+                            return IconButton(
+                              icon: const Icon(
+                                Icons.pause,
+                              ),
+                              onPressed: _togglePlayPause,
+                            );
+                          }
                         },
-                      );
-                    },
+                      ),
+                      Expanded(
+                        child: StreamBuilder<Duration>(
+                          stream: _player.positionStream,
+                          builder: (context, snapshot) {
+                            final position = snapshot.data ?? Duration.zero;
+                            final duration = _player.duration ?? Duration.zero;
+
+                            double sliderValue =
+                                position.inMilliseconds.toDouble();
+                            if (sliderValue >
+                                duration.inMilliseconds.toDouble()) {
+                              sliderValue = duration.inMilliseconds.toDouble();
+                            }
+
+                            return Slider(
+                              value: sliderValue,
+                              max: duration.inMilliseconds.toDouble(),
+                              onChanged: (value) {
+                                _player.seek(
+                                    Duration(milliseconds: value.toInt()));
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      StreamBuilder<Duration>(
+                        stream: _player.positionStream,
+                        builder: (context, snapshot) {
+                          final position = snapshot.data ?? Duration.zero;
+                          final positionText = formatDuration(position);
+                          return Text(
+                            positionText,
+                            textScaleFactor: 1.0,
+                            style: TextStyle(
+                              fontSize: 30.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
-                StreamBuilder<Duration>(
-                  stream: _player.positionStream,
-                  builder: (context, snapshot) {
-                    final position = snapshot.data ?? Duration.zero;
-                    final positionText = formatDuration(position);
-                    return Text(
-                      positionText,
-                      textScaleFactor: 1.0,
-                      style: TextStyle(
-                        fontSize: 30.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
           reelCubit.state.reelsForAudio != null
               ? Expanded(
-            child: BlocConsumer<ReelsCubit, ReelsState>(
-              listener: (context, state) {},
-              builder: (context, state) {
-                return GridView.builder(
-                  gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 0.6,
-                    mainAxisSpacing: 4,
-                    crossAxisSpacing: 4,
-                  ),
-                  itemCount: state.reelsForAudio!.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  BlocProvider.value(
-                                    value: serviceLocator<ReelsCubit>(),
-                                    child: ReelsScreenForAudio(
-                                      navigateTo: index,
-                                      reels: state.reelsForAudio!,
+                  child: BlocConsumer<ReelsCubit, ReelsState>(
+                    listener: (context, state) {},
+                    builder: (context, state) {
+                      return GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: 0.6,
+                          mainAxisSpacing: 4,
+                          crossAxisSpacing: 4,
+                        ),
+                        itemCount: state.reelsForAudio!.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BlocProvider.value(
+                                      value: serviceLocator<ReelsCubit>(),
+                                      child: ReelsScreenForAudio(
+                                        navigateTo: index,
+                                        reels: state.reelsForAudio!,
+                                      ),
                                     ),
-                                  ),
-                            ));
-                      },
-                      child: Stack(
-                        children: [
-                          Image.network(
-                            width: double.infinity,
-                            height: double.infinity,
-                            state
-                                .reelsForAudio![index].thumbnailSignedUrl,
-                            errorBuilder: (context, error, stackTrace) =>
-                            const Center(
-                              child: CupertinoActivityIndicator(),
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                          Positioned(
-                            bottom: 8,
-                            left: 2,
-                            child: Row(
+                                  ));
+                            },
+                            child: Stack(
                               children: [
-                                const Icon(Icons.play_arrow, size: 16),
-                                const SizedBox(width: 4),
-                                Text(
-                                  state.reelsForAudio![index].viewCount
-                                      .toString(),
-                                  textScaleFactor: 1.0,
-                                  style: TextStyle(
-                                    fontSize: 25.sp,
-                                    fontWeight: FontWeight.normal,
+                                Image.network(
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  state
+                                      .reelsForAudio![index].thumbnailSignedUrl,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      const Center(
+                                    child: CupertinoActivityIndicator(),
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                                Positioned(
+                                  bottom: 8,
+                                  left: 2,
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.play_arrow, size: 16),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        state.reelsForAudio![index].viewCount
+                                            .toString(),
+                                        textScaleFactor: 1.0,
+                                        style: TextStyle(
+                                          fontSize: 25.sp,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          )
+                          );
+                        },
+                      );
+                    },
+                  ),
+                )
               : const Center(
-            child: CupertinoActivityIndicator(),
-          ),
+                  child: CupertinoActivityIndicator(),
+                ),
         ],
       ),
     );

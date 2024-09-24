@@ -58,9 +58,7 @@ class FacebookTweetCard extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                border: Border.all(
-                    color:
-                    AppColors.DIVIDER_GRAY_COLOR),
+                border: Border.all(color: AppColors.DIVIDER_GRAY_COLOR),
                 borderRadius: BorderRadius.circular(5),
               ),
               child: Column(
@@ -81,9 +79,9 @@ class FacebookTweetCard extends StatelessWidget {
                   ],
                   Container(
                     decoration: BoxDecoration(
-                        border: isShared == true ? Border.all(
-                            color:
-                            AppColors.DIVIDER_GRAY_COLOR) : null,
+                        border: isShared == true
+                            ? Border.all(color: AppColors.DIVIDER_GRAY_COLOR)
+                            : null,
                         borderRadius: BorderRadius.circular(5)),
                     child: Column(
                       children: [
@@ -131,7 +129,8 @@ class FacebookTweetCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextAppButton(
-                  style: Styles.headerText(fontSize: 32,color: Theme.of(context).primaryColor),
+                  style: Styles.headerText(
+                      fontSize: 32, color: Theme.of(context).primaryColor),
                   label: "${user.firstName} ${user.lastName}",
                   onPressed: () => () => context.push(Routes.OTHERSACCOUNT)),
               RichText(

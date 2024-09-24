@@ -5,7 +5,18 @@ import 'package:flutter/foundation.dart' show describeEnum;
 
 import '../localization/locale_keys.g.dart';
 
-enum RideServicesEnum { pickMe, comeWithYou, womenOnly, captain, taxi, scooter, intercity, pickup, suv, premium }
+enum RideServicesEnum {
+  pickMe,
+  comeWithYou,
+  womenOnly,
+  captain,
+  taxi,
+  scooter,
+  intercity,
+  pickup,
+  suv,
+  premium
+}
 
 extension RideServicesEnumOnString on String {
   RideServicesEnum get toRideServiceEnum {

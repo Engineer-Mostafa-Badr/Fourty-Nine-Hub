@@ -37,23 +37,16 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     context.read<AdvertisementCubit>().loadData(
-          subCategoryId: widget.params.subCategory.id,
-      filter: 'provider'
-        );
+        subCategoryId: widget.params.subCategory.id, filter: 'provider');
 
     _tabController.addListener(() {
-        if(_tabController.index==0){
-          context.read<AdvertisementCubit>().loadData(
-              subCategoryId: widget.params.subCategory.id,
-              filter: 'provider'
-          );
-        }else{
-          context.read<AdvertisementCubit>().loadData(
-              subCategoryId: widget.params.subCategory.id,
-              filter: 'user'
-          );
-        }
-
+      if (_tabController.index == 0) {
+        context.read<AdvertisementCubit>().loadData(
+            subCategoryId: widget.params.subCategory.id, filter: 'provider');
+      } else {
+        context.read<AdvertisementCubit>().loadData(
+            subCategoryId: widget.params.subCategory.id, filter: 'user');
+      }
     });
   }
 
@@ -67,83 +60,81 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const HomeAppbar(),
-      body: BlocBuilder<AdvertisementCubit,AdsState>(
-        builder: (context,state) {
-          final controller = context.read<AdvertisementCubit>();
-          return Column(
-            children: [
-              const Sizer(),
-              SizedBox(
-                  width: double.infinity,
-                  child: MainCategoryBanner(
-                    category: widget.params.mainCategory,
-                    onFavorite: () {},
-                    isFavorite: widget.params.mainCategory.isFavorite,
-                  )),
-              const Sizer(),
-              Label(
-                text: widget.params.subCategory.name,
-                style: Styles.headerText(),
-              ),
-              const Sizer(),
-              TabBar(
-                controller: _tabController,
-                labelColor: AppColors.SECONDARY_COLOR,
-                unselectedLabelColor: Theme.of(context).primaryColor,
-                indicatorColor: AppColors.SECONDARY_COLOR,
-                indicatorSize: TabBarIndicatorSize.tab,
-                labelStyle: Styles.headerText(),
-                onTap: (i){
-                  if(i==1){
-                    controller.loadData(
-                        subCategoryId: widget.params.subCategory.id,
-                        filter: 'user'
-                    );
-                  }else{
-                    controller.loadData(
-                        subCategoryId: widget.params.subCategory.id,
-                        filter: 'provider'
-                    );
-                  }
-                },
-                tabs: [
-                  Tab(text: LocaleKeys.provider.localize),
-                  Tab(text: LocaleKeys.user.localize),
-                ],
-              ),
-              state.status==AdsStates.success?Expanded(child:
-              PagedListView<int, AdModel>(
-                pagingController: controller.adsPagingController,
-                builderDelegate: PagedChildBuilderDelegate<AdModel>(
-                    noItemsFoundIndicatorBuilder: (context) {
-                      print(controller
-                          .adsPagingController.itemList?.length);
-                      return Center(
-                        child: Text(
-                          LocaleKeys.noAds.localize,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                          ),
-                        ),
-                      );
-                    },
-                    itemBuilder: (context, item, index) {
-                      return AdCard(item: item);
-                    },
-                    noMoreItemsIndicatorBuilder: (context) => Container(),
-                    firstPageProgressIndicatorBuilder: (context) => Container(
-                        margin: const EdgeInsets.only(top: 150),
-                        child: const CupertinoActivityIndicator()),
-                    newPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator()),
-              )
-
-              ):const SizedBox.shrink()
-            ],
-          );
-        }
-      ),
+      body:
+          BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
+        final controller = context.read<AdvertisementCubit>();
+        return Column(
+          children: [
+            const Sizer(),
+            SizedBox(
+                width: double.infinity,
+                child: MainCategoryBanner(
+                  category: widget.params.mainCategory,
+                  onFavorite: () {},
+                  isFavorite: widget.params.mainCategory.isFavorite,
+                )),
+            const Sizer(),
+            Label(
+              text: widget.params.subCategory.name,
+              style: Styles.headerText(),
+            ),
+            const Sizer(),
+            TabBar(
+              controller: _tabController,
+              labelColor: AppColors.SECONDARY_COLOR,
+              unselectedLabelColor: Theme.of(context).primaryColor,
+              indicatorColor: AppColors.SECONDARY_COLOR,
+              indicatorSize: TabBarIndicatorSize.tab,
+              labelStyle: Styles.headerText(),
+              onTap: (i) {
+                if (i == 1) {
+                  controller.loadData(
+                      subCategoryId: widget.params.subCategory.id,
+                      filter: 'user');
+                } else {
+                  controller.loadData(
+                      subCategoryId: widget.params.subCategory.id,
+                      filter: 'provider');
+                }
+              },
+              tabs: [
+                Tab(text: LocaleKeys.provider.localize),
+                Tab(text: LocaleKeys.user.localize),
+              ],
+            ),
+            state.status == AdsStates.success
+                ? Expanded(
+                    child: PagedListView<int, AdModel>(
+                    pagingController: controller.adsPagingController,
+                    builderDelegate: PagedChildBuilderDelegate<AdModel>(
+                        noItemsFoundIndicatorBuilder: (context) {
+                          print(
+                              controller.adsPagingController.itemList?.length);
+                          return Center(
+                            child: Text(
+                              LocaleKeys.noAds.localize,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                              ),
+                            ),
+                          );
+                        },
+                        itemBuilder: (context, item, index) {
+                          return AdCard(item: item);
+                        },
+                        noMoreItemsIndicatorBuilder: (context) => Container(),
+                        firstPageProgressIndicatorBuilder: (context) =>
+                            Container(
+                                margin: const EdgeInsets.only(top: 150),
+                                child: const CupertinoActivityIndicator()),
+                        newPageProgressIndicatorBuilder: (context) =>
+                            const CupertinoActivityIndicator()),
+                  ))
+                : const SizedBox.shrink()
+          ],
+        );
+      }),
     );
   }
 }

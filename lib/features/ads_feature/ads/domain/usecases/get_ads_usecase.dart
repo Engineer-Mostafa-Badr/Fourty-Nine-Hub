@@ -15,17 +15,21 @@ class GetAdsUseCase extends UseCase<List<AdModel>, GetAdsParams> {
   }
 }
 
-class GetAdsParams{
+class GetAdsParams {
   final String subCategoryId;
   final String filter;
   final int page;
   final int limit;
 
-  GetAdsParams({required this.subCategoryId, required this.filter,required this.page,required this.limit});
+  GetAdsParams(
+      {required this.subCategoryId,
+      required this.filter,
+      required this.page,
+      required this.limit});
   Map<String, dynamic> toJson() => {
-    'subCategoryId': subCategoryId,
-    'filter': filter,
-    'page': page,
-    'limit': limit,
-  };
+        'subCategoryId': subCategoryId,
+        'filter': filter,
+        'page': page,
+        'limit': limit,
+      };
 }

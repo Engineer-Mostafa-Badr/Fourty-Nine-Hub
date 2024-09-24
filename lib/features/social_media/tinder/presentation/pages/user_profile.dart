@@ -100,7 +100,8 @@ class UserProfilePageState extends State<UserProfilePage> {
       onPressed: () => _handleImageUpload(context),
       backgroundColor: AppColors.SECONDARY_COLOR,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-      child: const Icon(Icons.add_photo_alternate_outlined, color: Colors.white),
+      child:
+          const Icon(Icons.add_photo_alternate_outlined, color: Colors.white),
     );
   }
 
@@ -142,10 +143,12 @@ class UserProfilePageState extends State<UserProfilePage> {
       child: Column(
         children: [
           Text(
-            capitalizeAndSplit("${userId?.firstName ?? ''} ${userId?.lastName ?? ''}"),
+            capitalizeAndSplit(
+                "${userId?.firstName ?? ''} ${userId?.lastName ?? ''}"),
             textScaler: TextScaler.noScaling,
             style: TextStyle(
-              color: isDarkTheme(context) ? Colors.white : AppColors.PRIMARY_COLOR,
+              color:
+                  isDarkTheme(context) ? Colors.white : AppColors.PRIMARY_COLOR,
               fontSize: 55.sp,
               fontWeight: FontWeight.bold,
             ),
@@ -155,7 +158,9 @@ class UserProfilePageState extends State<UserProfilePage> {
             userId?.email ?? '',
             textScaler: TextScaler.noScaling,
             style: TextStyle(
-              color: isDarkTheme(context) ? Colors.white.withOpacity(0.8) : AppColors.PRIMARY_COLOR.withOpacity(0.8),
+              color: isDarkTheme(context)
+                  ? Colors.white.withOpacity(0.8)
+                  : AppColors.PRIMARY_COLOR.withOpacity(0.8),
               fontSize: 40.sp,
               fontWeight: FontWeight.w300,
             ),
@@ -224,9 +229,12 @@ class UserProfilePageState extends State<UserProfilePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildStatItem(LocaleKeys.user_info_followers.localize, profileData?.followersCount.toString() ?? '0'),
-          _buildStatItem(LocaleKeys.user_info_following.localize, profileData?.followingCount.toString() ?? '0'),
-          _buildStatItem(LocaleKeys.user_info_friends.localize, profileData?.friendsCount.toString() ?? '0'),
+          _buildStatItem(LocaleKeys.user_info_followers.localize,
+              profileData?.followersCount.toString() ?? '0'),
+          _buildStatItem(LocaleKeys.user_info_following.localize,
+              profileData?.followingCount.toString() ?? '0'),
+          _buildStatItem(LocaleKeys.user_info_friends.localize,
+              profileData?.friendsCount.toString() ?? '0'),
         ],
       ),
     );
@@ -267,14 +275,18 @@ class SwipeCardDemoState extends State<SwipeCardDemo> {
 
   void _nextStory() {
     setState(() {
-      final pictures = context.read<TinderViewCubit>().state.profileUserData?.pictures ?? [];
-      _currentStoryIndex = (_currentStoryIndex < pictures.length - 1) ? _currentStoryIndex + 1 : pictures.length - 1;
+      final pictures =
+          context.read<TinderViewCubit>().state.profileUserData?.pictures ?? [];
+      _currentStoryIndex = (_currentStoryIndex < pictures.length - 1)
+          ? _currentStoryIndex + 1
+          : pictures.length - 1;
     });
   }
 
   void _previousStory() {
     setState(() {
-      _currentStoryIndex = (_currentStoryIndex > 0) ? _currentStoryIndex - 1 : 0;
+      _currentStoryIndex =
+          (_currentStoryIndex > 0) ? _currentStoryIndex - 1 : 0;
     });
   }
 
@@ -298,9 +310,11 @@ class SwipeCardDemoState extends State<SwipeCardDemo> {
   }
 
   Widget _buildCard(BuildContext context) {
-    final pictures = context.watch<TinderViewCubit>().state.profileUserData?.pictures ?? [];
-    final imageUrl =
-        pictures.isNotEmpty ? pictures.reversed.toList()[_currentStoryIndex].mediaKey : UIConst.profilePlaceHolder;
+    final pictures =
+        context.watch<TinderViewCubit>().state.profileUserData?.pictures ?? [];
+    final imageUrl = pictures.isNotEmpty
+        ? pictures.reversed.toList()[_currentStoryIndex].mediaKey
+        : UIConst.profilePlaceHolder;
 
     return Card(
       clipBehavior: Clip.hardEdge,
@@ -335,7 +349,9 @@ class SwipeCardDemoState extends State<SwipeCardDemo> {
                     margin: const EdgeInsets.symmetric(horizontal: 2.0),
                     height: 4.h,
                     decoration: BoxDecoration(
-                      color: (dotIndex == _currentStoryIndex) ? Colors.red : Colors.white54,
+                      color: (dotIndex == _currentStoryIndex)
+                          ? Colors.red
+                          : Colors.white54,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),

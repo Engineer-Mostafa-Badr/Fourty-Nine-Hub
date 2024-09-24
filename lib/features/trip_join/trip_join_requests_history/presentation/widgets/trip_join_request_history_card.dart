@@ -37,7 +37,8 @@ class TripJoinRequestHistoryCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   boxShadow: [
-                    BoxShadow(color: Colors.grey[300]!, offset: const Offset(3, 3)),
+                    BoxShadow(
+                        color: Colors.grey[300]!, offset: const Offset(3, 3)),
                   ],
                 ),
                 clipBehavior: Clip.hardEdge,
@@ -49,7 +50,8 @@ class TripJoinRequestHistoryCard extends StatelessWidget {
                 ),
               ),
               Sizer(width: 30.w),
-              Text(tripJoinRequestHistoryEntity.firstName ?? 'Unknown', style: Styles.headerText()),
+              Text(tripJoinRequestHistoryEntity.firstName ?? 'Unknown',
+                  style: Styles.headerText()),
             ],
           ),
           const Sizer(),

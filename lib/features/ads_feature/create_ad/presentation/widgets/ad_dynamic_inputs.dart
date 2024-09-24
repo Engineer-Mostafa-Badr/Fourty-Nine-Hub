@@ -49,15 +49,16 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
   Widget _buildTextFieldWidget() {
     return TextFormField(
       maxLines: null,
-      onChanged: (v) =>widget.onChanged(v),
+      onChanged: (v) => widget.onChanged(v),
       style: Styles.headerText(fontSize: 26),
       decoration: InputDecoration(
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.all(5),
-        hintText: widget.property.label,
-        hintStyle: Styles.mediumText(),
-        prefix: Sizer(width: 20.w,)
-      ),
+          fillColor: Colors.white,
+          contentPadding: const EdgeInsets.all(5),
+          hintText: widget.property.label,
+          hintStyle: Styles.mediumText(),
+          prefix: Sizer(
+            width: 20.w,
+          )),
       // keyboardType: TextInputType.number,
       validator: (value) {
         if ((value == null || value.isEmpty)) {

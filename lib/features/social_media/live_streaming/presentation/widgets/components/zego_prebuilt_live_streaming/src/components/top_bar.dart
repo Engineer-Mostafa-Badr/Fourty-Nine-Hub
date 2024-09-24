@@ -440,8 +440,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
       },
     );
   }
-
- }
+}
 // Positioned(
 //                   top: 100,
 //                   right: 50,

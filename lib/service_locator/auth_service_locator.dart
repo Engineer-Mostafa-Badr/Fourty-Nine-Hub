@@ -108,12 +108,13 @@ class AuthServiceLocator {
         final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
         final GoogleSignIn googleSignIn = GoogleSignIn();
         return LoginCubit(
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-         googleSignIn: googleSignIn, firebaseAuth: firebaseAuth,
-      );
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          googleSignIn: googleSignIn,
+          firebaseAuth: firebaseAuth,
+        );
       },
     );
     serviceLocator.registerSingleton(

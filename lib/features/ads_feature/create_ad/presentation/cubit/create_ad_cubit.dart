@@ -29,7 +29,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   final formState = GlobalKey<FormState>();
 
   CreateAdCubit(this._getAdPropertiesUsecase, this._createAdUseCase)
-      : super( CreateAdState());
+      : super(CreateAdState());
 
   void loadData({required String subCategoryId}) async {
     getAdProperties(subCategoryId: subCategoryId);
@@ -90,18 +90,18 @@ class CreateAdCubit extends Cubit<CreateAdState> {
             value: values[i]));
       }
       final response = await _createAdUseCase(AdModel(
-          id: 'id',
-          title: title ?? '',
-          isUser: state.isUser,
-          description: description ?? '',
-          // phone: phone ?? '',
-          images: state.images?.map((e) => e.mediaId).toList() ?? [],
-          // price: num.parse(price ?? ''),
-          active: true,
-          createdAt: DateTime.now(),
-          details: details,
-          subCategoryId: categorize.subCategory.id,
-          mainCategoryId: categorize.mainCategory.id,
+        id: 'id',
+        title: title ?? '',
+        isUser: state.isUser,
+        description: description ?? '',
+        // phone: phone ?? '',
+        images: state.images?.map((e) => e.mediaId).toList() ?? [],
+        // price: num.parse(price ?? ''),
+        active: true,
+        createdAt: DateTime.now(),
+        details: details,
+        subCategoryId: categorize.subCategory.id,
+        mainCategoryId: categorize.mainCategory.id,
       ));
 
       response.fold(

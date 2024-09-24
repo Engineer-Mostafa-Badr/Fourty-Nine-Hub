@@ -88,7 +88,8 @@ class _NotificationViewState extends State<NotificationView> {
               }
             },
           ),
-          BlocListener<DeleteAllNotificationsCubit, DeleteAllNotificationsState>(
+          BlocListener<DeleteAllNotificationsCubit,
+              DeleteAllNotificationsState>(
             listener: (context, state) {
               if (state is DeleteAllNotificationsFailed) {
                 showErrorMessage(context, state.message);

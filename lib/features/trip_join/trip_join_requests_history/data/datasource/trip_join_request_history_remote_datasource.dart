@@ -11,19 +11,23 @@ import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/doma
 import 'package:fourtyninehub/res/style/const.dart';
 
 abstract class TripJoinRequestHistoryRemoteDataSource {
-  Future<Either<Failure, List<TripJoinMyRequestEntity>>> fetchMyTripJoinAds({required int page});
+  Future<Either<Failure, List<TripJoinMyRequestEntity>>> fetchMyTripJoinAds(
+      {required int page});
   Future<Either<Failure, bool>> deleteTrip({required String id});
-  Future<Either<Failure, List<TripJoinRequestHistoryEntity>>> getRequests({required String id, required int page});
+  Future<Either<Failure, List<TripJoinRequestHistoryEntity>>> getRequests(
+      {required String id, required int page});
 }
 
-class TripJoinRequestHistoryRemoteDataSourceImp implements TripJoinRequestHistoryRemoteDataSource {
+class TripJoinRequestHistoryRemoteDataSourceImp
+    implements TripJoinRequestHistoryRemoteDataSource {
   final ApiConsumer apiConsumer;
   TripJoinRequestHistoryRemoteDataSourceImp({
     required this.apiConsumer,
   });
 
   @override
-  Future<Either<Failure, List<TripJoinMyRequestEntity>>> fetchMyTripJoinAds({required int page}) async {
+  Future<Either<Failure, List<TripJoinMyRequestEntity>>> fetchMyTripJoinAds(
+      {required int page}) async {
     const t = 'fetchMyTripJoinAds - TripJoinRequestHistoryRemoteDataSource';
     final response = await apiConsumer.get(
       EndPoints.getAllMyTripJoin,
@@ -37,13 +41,17 @@ class TripJoinRequestHistoryRemoteDataSourceImp implements TripJoinRequestHistor
     return response.fold(
       (failure) => Left(pr(failure, t)),
       (data) {
-        List<TripJoinMyRequestModel> trips = data['data']['trips']['docs'].map<TripJoinMyRequestModel>(
+        List<TripJoinMyRequestModel> trips =
+            data['data']['trips']['docs'].map<TripJoinMyRequestModel>(
           (json) {
-            final TripJoinMyRequestModel trip = TripJoinMyRequestModel.fromJson(json);
+            final TripJoinMyRequestModel trip =
+                TripJoinMyRequestModel.fromJson(json);
             trip.subscribedPremium = data['data']['subscribedPremium'] as bool?;
-            trip.subscriptionEndDate = (data['data']['subscriptionEndDate'] as num?)?.toInt();
+            trip.subscriptionEndDate =
+                (data['data']['subscriptionEndDate'] as num?)?.toInt();
             trip.hasNextPage = data['data']['trips']['hasNextPage'] as bool?;
-            trip.nextPage = (data['data']['trips']['nextPage'] as num?)?.toInt();
+            trip.nextPage =
+                (data['data']['trips']['nextPage'] as num?)?.toInt();
             return trip;
           },
         ).toList();
@@ -89,11 +97,15 @@ class TripJoinRequestHistoryRemoteDataSourceImp implements TripJoinRequestHistor
     return response.fold(
       (failure) => Left(pr(failure, t)),
       (data) {
-        List<TripjoinRequestHistoryModel> requests = data['data']['requests']['docs'].map<TripjoinRequestHistoryModel>(
+        List<TripjoinRequestHistoryModel> requests =
+            data['data']['requests']['docs'].map<TripjoinRequestHistoryModel>(
           (json) {
-            final TripjoinRequestHistoryModel request = TripjoinRequestHistoryModel.fromJson(json);
-            request.hasNextPage = data['data']['requests']['hasNextPage'] as bool?;
-            request.nextPage = (data['data']['requests']['nextPage'] as num?)?.toInt();
+            final TripjoinRequestHistoryModel request =
+                TripjoinRequestHistoryModel.fromJson(json);
+            request.hasNextPage =
+                data['data']['requests']['hasNextPage'] as bool?;
+            request.nextPage =
+                (data['data']['requests']['nextPage'] as num?)?.toInt();
             return request;
           },
         ).toList();

@@ -9,7 +9,7 @@ import '../../domain/use_case/transfer_money_use_case.dart';
 
 abstract class TransferMoneyRemoteDataSource {
   Future<Either<Failure, bool>> transferMoney(TransferMoneyParams params);
-  Future<Either<Failure,List<UserTransferMoneyEntity>>> fetchUser();
+  Future<Either<Failure, List<UserTransferMoneyEntity>>> fetchUser();
 }
 
 class TransferMoneyRemoteDataSourceImpl extends TransferMoneyRemoteDataSource {
@@ -23,27 +23,24 @@ class TransferMoneyRemoteDataSourceImpl extends TransferMoneyRemoteDataSource {
     var response =
         await _apiConsumer.post(EndPoints.transferMoney, data: params.toJson());
 
-   return response.fold(
-      (failure)=>Left(failure),
-      (response)=>Right(response['status']),
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
   }
 
   @override
   Future<Either<Failure, List<UserTransferMoneyEntity>>> fetchUser() async {
-    var response =
-    await _apiConsumer.get(EndPoints.fetchUsers);
+    var response = await _apiConsumer.get(EndPoints.fetchUsers);
 
     return response.fold(
-          (failure)=>Left(failure),
-          (response) {
-            final list = (response['data'] as List)
-                .map((e) => UserTransferMoneyModel.fromJson(e))
-                .toList();
-            return Right(list);
-          },
+      (failure) => Left(failure),
+      (response) {
+        final list = (response['data'] as List)
+            .map((e) => UserTransferMoneyModel.fromJson(e))
+            .toList();
+        return Right(list);
+      },
     );
   }
-
-
 }

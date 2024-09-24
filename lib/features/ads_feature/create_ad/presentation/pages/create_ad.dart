@@ -58,9 +58,7 @@ class _CreateAdViewState extends State<CreateAdView> {
     }, builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
       return Scaffold(
-        appBar: BackAppBar(
-          label: LocaleKeys.createAd.localize
-        ),
+        appBar: BackAppBar(label: LocaleKeys.createAd.localize),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
@@ -96,30 +94,29 @@ class _CreateAdViewState extends State<CreateAdView> {
                   children: [
                     Expanded(
                         child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              state.isUser = true;
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: state.isUser == true
-                                    ? AppColors.PRIMARY_COLOR
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                                border:
-                                Border.all(color: AppColors.PRIMARY_COLOR)),
-                            alignment: AlignmentDirectional.center,
-                            child: Text(
-                              LocaleKeys.user.localize,
-                              style: Styles.mediumText(
-                                  color: state.isUser == false
-                                      ? AppColors.PRIMARY_COLOR
-                                      : Colors.white),
-                            ),
-                          ),
-                        )),
+                      onTap: () {
+                        setState(() {
+                          state.isUser = true;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: state.isUser == true
+                                ? AppColors.PRIMARY_COLOR
+                                : Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                        alignment: AlignmentDirectional.center,
+                        child: Text(
+                          LocaleKeys.user.localize,
+                          style: Styles.mediumText(
+                              color: state.isUser == false
+                                  ? AppColors.PRIMARY_COLOR
+                                  : Colors.white),
+                        ),
+                      ),
+                    )),
                     const Sizer(),
                     Expanded(
                       child: InkWell(
@@ -136,7 +133,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                   : Colors.white,
                               borderRadius: BorderRadius.circular(15),
                               border:
-                              Border.all(color: AppColors.PRIMARY_COLOR)),
+                                  Border.all(color: AppColors.PRIMARY_COLOR)),
                           alignment: AlignmentDirectional.center,
                           child: Text(
                             LocaleKeys.provider.localize,
@@ -153,15 +150,16 @@ class _CreateAdViewState extends State<CreateAdView> {
                 const Sizer(),
                 TextFormField(
                   maxLines: null,
-                  onChanged: (v) =>controller.title = v,
+                  onChanged: (v) => controller.title = v,
                   style: Styles.headerText(fontSize: 26),
                   decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    contentPadding: const EdgeInsets.all(5),
-                    hintText: LocaleKeys.title.localize,
-                    hintStyle: Styles.mediumText(),
-                      prefix: Sizer(width: 20.w,)
-                  ),
+                      fillColor: Colors.white,
+                      contentPadding: const EdgeInsets.all(5),
+                      hintText: LocaleKeys.title.localize,
+                      hintStyle: Styles.mediumText(),
+                      prefix: Sizer(
+                        width: 20.w,
+                      )),
                   validator: (value) {
                     if ((value == null || value.isEmpty)) {
                       return LocaleKeys.required.localize;
@@ -173,15 +171,16 @@ class _CreateAdViewState extends State<CreateAdView> {
                 Sizer(),
                 TextFormField(
                   maxLines: null,
-                  onChanged: (v) =>controller.description = v,
+                  onChanged: (v) => controller.description = v,
                   style: Styles.headerText(fontSize: 26),
                   decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    contentPadding: const EdgeInsets.all(5),
-                    hintText: LocaleKeys.desc.localize,
-                    hintStyle: Styles.mediumText(),
-                      prefix: Sizer(width: 20.w,)
-                  ),
+                      fillColor: Colors.white,
+                      contentPadding: const EdgeInsets.all(5),
+                      hintText: LocaleKeys.desc.localize,
+                      hintStyle: Styles.mediumText(),
+                      prefix: Sizer(
+                        width: 20.w,
+                      )),
                   validator: (value) {
                     if ((value == null || value.isEmpty)) {
                       return LocaleKeys.required.localize;
@@ -256,8 +255,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                         close: false,
                       ),
                     Label(
-                      text:
-                      LocaleKeys.addImagesDesc.localize,
+                      text: LocaleKeys.addImagesDesc.localize,
                       style: Styles.mediumText(
                         color: Colors.grey,
                       ),

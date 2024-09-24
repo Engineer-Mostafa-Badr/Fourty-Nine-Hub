@@ -50,19 +50,23 @@ class TripJoinServiceLocator {
     );
 
     serviceLocator.registerLazySingleton<GoogleApiConsumer>(
-      () => GoogleApiConsumer(dio: serviceLocator(instanceName: 'dioGoogleApi')),
+      () =>
+          GoogleApiConsumer(dio: serviceLocator(instanceName: 'dioGoogleApi')),
     );
 
     serviceLocator.registerLazySingleton<FetchLocationRemoteDataSource>(
-      () => FetchLocationRemoteDataSourceImp(googleApiConsumer: serviceLocator()),
+      () =>
+          FetchLocationRemoteDataSourceImp(googleApiConsumer: serviceLocator()),
     );
 
     serviceLocator.registerLazySingleton<TripJoinGoogleApiRepo>(
-      () => TripJoinGoogleApiRepoImp(fetchLocationRemoteDataSource: serviceLocator()),
+      () => TripJoinGoogleApiRepoImp(
+          fetchLocationRemoteDataSource: serviceLocator()),
     );
 
     serviceLocator.registerLazySingleton<FetchLocationCordinatesUseCase>(
-      () => FetchLocationCordinatesUseCase(tripJoinGoogleApiRepo: serviceLocator()),
+      () => FetchLocationCordinatesUseCase(
+          tripJoinGoogleApiRepo: serviceLocator()),
     );
 
     //! add new trip join db injection
@@ -95,7 +99,8 @@ class TripJoinServiceLocator {
       () => ViewAllTripJoinRemoteDataSourceImp(apiConsumer: serviceLocator()),
     );
     serviceLocator.registerLazySingleton<ViewAllTripJoinRepo>(
-      () => ViewAllTripJoinRepoImp(viewripJoinRemoteDataSource: serviceLocator()),
+      () =>
+          ViewAllTripJoinRepoImp(viewripJoinRemoteDataSource: serviceLocator()),
     );
     serviceLocator.registerLazySingleton<ViewAllTripJoinUseCase>(
       () => ViewAllTripJoinUseCase(viewAllTripJoinRepo: serviceLocator()),
@@ -107,14 +112,18 @@ class TripJoinServiceLocator {
     );
 
     //! get my trip join ads
-    serviceLocator.registerLazySingleton<TripJoinRequestHistoryRemoteDataSource>(
-      () => TripJoinRequestHistoryRemoteDataSourceImp(apiConsumer: serviceLocator()),
+    serviceLocator
+        .registerLazySingleton<TripJoinRequestHistoryRemoteDataSource>(
+      () => TripJoinRequestHistoryRemoteDataSourceImp(
+          apiConsumer: serviceLocator()),
     );
     serviceLocator.registerLazySingleton<TripJoinRequestHistoryRepo>(
-      () => TripJoinRequestHistoryRepoImp(tripJoinRequestHistoryRemoteDataSource: serviceLocator()),
+      () => TripJoinRequestHistoryRepoImp(
+          tripJoinRequestHistoryRemoteDataSource: serviceLocator()),
     );
     serviceLocator.registerLazySingleton<FetchMyTripJoinAdsUseCase>(
-      () => FetchMyTripJoinAdsUseCase(tripJoinRequestHistoryRepo: serviceLocator()),
+      () => FetchMyTripJoinAdsUseCase(
+          tripJoinRequestHistoryRepo: serviceLocator()),
     );
     serviceLocator.registerLazySingleton<DeleteTripUseCase>(
       () => DeleteTripUseCase(tripJoinRequestHistoryRepo: serviceLocator()),
