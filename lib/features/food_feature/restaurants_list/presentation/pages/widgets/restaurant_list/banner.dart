@@ -11,6 +11,10 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../../service_locator/service_locator.dart';
+import '../../../../../create_restaurant/cubit/create_resturant_cubit.dart';
+import '../../../../../create_restaurant/views/create_resturant_view.dart';
+
 class MealBanner extends StatelessWidget {
   const MealBanner({super.key});
 
@@ -53,12 +57,23 @@ class MealBanner extends StatelessWidget {
             canRegister: state.isResturant?.isRestaurant == true ? false : true,
             onRegister: () {
               if (context.read<UserCubit>().isLoggedIn) {
-                context.push(Routes.CREATERESTURANT);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BlocProvider<CreateRestaurantCubit>(
+                        create: (context) => serviceLocator(),
+                        child: const CreateRestaurantForm(),
+                      ),
+                    ));
+                // context.push(Routes.CREATERESTURANT);
               } else {
                 context.push(Routes.REGISTER);
               }
             },
             onFavorite: () {},
+            isFavorite: false,
+
+
           );
         } else {
           return SizedBox.shrink();

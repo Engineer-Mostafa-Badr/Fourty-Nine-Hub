@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -78,9 +80,9 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                   fontSize: 45.sp),
             ),
             PositionedDirectional(
-              start: 0.h,
-              bottom: 0.h,
-              child: Column(
+              start: 0,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   context.read<UserCubit>().isLoggedIn
                       ? InkWell(
@@ -107,7 +109,8 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                         )
                       : const SizedBox.shrink(),
                   Label(
-                    text: '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
+                    text:
+                        '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
                     style: Styles.mediumText(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -193,7 +196,10 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
   Widget _buildRegisterButton() {
     if (widget.canRegister) {
       return InkWell(
-        onTap: () => widget.onRegister?.call(),
+        onTap: () {
+          log('88888888888888888888888888');
+          widget.onRegister?.call();
+        },
         child: Text(Labels.register,
             style: Styles.mediumText(
                 color: Colors.white, fontWeight: FontWeight.bold)),

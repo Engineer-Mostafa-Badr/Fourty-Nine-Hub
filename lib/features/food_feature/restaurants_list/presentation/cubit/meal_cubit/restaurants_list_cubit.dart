@@ -81,7 +81,7 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
       _getMealCategoriesWithCountRestaurants(),
       _getNumOfRestaurants(),
       _getAllRestaurant(),
-      _isDoctor(),
+      isRestaurant(),
       _getMainCategoryDetails(),
     ]);
   }
@@ -95,7 +95,7 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
     });
   }
 
-  Future<void> _isDoctor() async {
+  Future<void> isRestaurant() async {
     if (user != null) {
       final response = await _isResturantUseCase.call(const NoParams());
       response.fold(
