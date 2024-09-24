@@ -79,7 +79,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/viewcontact_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/pages/see_all_broadcasts.dart';
-import 'package:fourtyninehub/features/social_media/chat/contacts/presentation/pages/contacts_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/contacts_view.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_sheet.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
@@ -237,7 +237,7 @@ class AppPages {
           GoRoute(
             path: Paths.CONTACTS_VIEW,
             name: Routes.CONTACTSVIEW,
-            builder: (context, state) => const ContactsView(),
+            builder: (context, state) =>  ContactsView(contactsViewParams: state.extra as ContactsViewParams,),
           ),
           GoRoute(
             path: Paths.BROADCAST,
@@ -832,7 +832,7 @@ class AppPages {
                   path: Paths.SELECTCONTACTSTOSHARE,
                   name: Routes.SELECTCONTACTSTOSHARE,
                   builder: (context, state) =>
-                      const SelectContactsToShareView(),
+                       SelectContactsToShareView(chatRoomCubit: state.extra as ChatRoomCubit,),
                 ),
               ]),
           // Snap

@@ -31,18 +31,17 @@ class AttachmentTypes extends StatelessWidget {
           icon: Icons.insert_drive_file_outlined,
           onTap: () async {
             await chatRoomCubit.pickDocuments();
-            log("real media: ${chatRoomCubit.media.length}");
-            List<File> tempMedia = [...chatRoomCubit.media]; // spread operator
-            log("temp media: ${tempMedia.length}");
-            chatRoomCubit.media.clear();
-            log("real media after clear: ${chatRoomCubit.media.length}");
-            for (var media in tempMedia) {
-              log("media path: ${media.path}");
-              chatRoomCubit.media.add(media);
-              log("real media after add media path: ${chatRoomCubit.media.length}");
-              await chatRoomCubit.sendMessage();
+            if(chatRoomCubit.media.isNotEmpty){
+              List<File> tempMedia = [...chatRoomCubit.media]; // spread operator
               chatRoomCubit.media.clear();
+              for (var media in tempMedia) {
+                chatRoomCubit.media.add(media);
+                await chatRoomCubit.sendMessage();
+                chatRoomCubit.media.clear();
+              }
+
             }
+            context.pop();
           },
         ),
         _buildAttachmentTypeItem(
@@ -62,6 +61,7 @@ class AttachmentTypes extends StatelessWidget {
                 Routes.MEDIASLIDER,
                 extra: chatRoomCubit,
               );
+              context.pop();
             },
             icon: Icons.image_outlined),
         _buildAttachmentTypeItem(
@@ -78,7 +78,9 @@ class AttachmentTypes extends StatelessWidget {
             label: LocaleKeys.contact.tr(),
             icon: Icons.person,
             onTap: () {
-              context.push(Routes.SELECTCONTACTSTOSHARE);
+              context.push(Routes.SELECTCONTACTSTOSHARE,
+                extra: chatRoomCubit,
+              );
             }),
       ],
     );

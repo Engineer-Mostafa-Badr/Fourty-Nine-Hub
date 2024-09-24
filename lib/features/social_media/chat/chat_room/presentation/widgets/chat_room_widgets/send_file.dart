@@ -18,6 +18,8 @@ import 'package:swipe_to/swipe_to.dart';
 
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../../core/service/download_and_open_files.dart';
+import '../../../../../../../core/service/get_file_size_format.dart';
 import '../../controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'message_card.dart';
 
@@ -99,9 +101,9 @@ class _SentFileCardState extends State<SentFileCard> {
                   children: [
 
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async{
                         log("Downloading...");
-                        downloadAndOpenFile(
+                       await downloadAndOpenFile(
                           fileUrl: widget.messageEntity.media[0].url,
                         );
                       },
@@ -222,48 +224,8 @@ class _SentFileCardState extends State<SentFileCard> {
     }
   }
 
-  String formatFileSize({required int fileSizeInBytes}) {
-    const int kb = 1024;
-    const int mb = kb * 1024;
-    const int gb = mb * 1024;
 
-    if (fileSizeInBytes < kb) {
-      return '$fileSizeInBytes B';
-    } else if (fileSizeInBytes < mb) {
-      double sizeInKB = fileSizeInBytes / kb;
-      return '${sizeInKB.toStringAsFixed(2)} KB';
-    } else if (fileSizeInBytes < gb) {
-      double sizeInMB = fileSizeInBytes / mb;
-      return '${sizeInMB.toStringAsFixed(2)} MB';
-    } else {
-      double sizeInGB = fileSizeInBytes / gb;
-      return '${sizeInGB.toStringAsFixed(2)} GB';
-    }
-  }
 }
 
-Future<void> downloadAndOpenFile({required String fileUrl}) async {
-  Dio dio = Dio();
 
-  try {
-    var dir = await getDownloadsDirectory();
-    String fileName = fileUrl.split('/').last;
-    String savePath = '${dir!.path}/$fileName';
-    // print(savePath);
 
-    // Check if the file already exists
-    if (await File(savePath).exists()) {
-      // print('File already exists, opening...');
-      // Open the existing file
-
-      OpenFile.open(savePath);
-    } else {
-      // File doesn't exist, download it
-      await dio.download(fileUrl, savePath);
-
-      OpenFile.open(savePath);
-    }
-  } catch (e) {
-    // print("Error: $e");
-  }
-}

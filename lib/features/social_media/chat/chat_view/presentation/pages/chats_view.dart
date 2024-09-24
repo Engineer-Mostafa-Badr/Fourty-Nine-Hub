@@ -338,19 +338,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       length: ChatCategories.values.length,
       initialIndex: widget.initialTabIndex,
       child: SharedScaffold(
-        floatingActionButton: context.read<UserCubit>().isLoggedIn
-            ? FloatingActionButton(
-                onPressed: () {
-                  context.push(Routes.CONTACTSVIEW);
-                },
-                tooltip: LocaleKeys.contacts.tr(),
-                backgroundColor: AppColors.PRIMARY_COLOR,
-                child: const Icon(
-                  Icons.contacts,
-                  color: Colors.white,
-                ),
-              )
-            : null,
+
         mainCategoryId: 2,
         body: NestedAppbar(
           scrollController: ScrollController(),

@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_contacts/contact.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -12,6 +13,7 @@ import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/extensions/map_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_shared_contacts_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_delivered_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_seen_messages.dart';
@@ -39,6 +41,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final TextEditingController messageTextController = TextEditingController();
   final FilePicker _filePicker = FilePicker.platform;
   List<File> media = [];
+  List<MessageSharedContactsEntity> sharedContacts = [];
+  List<MessageSharedContactsEntity> selectedContactsToShare = [];
   Map<String, MessageEntity> _messages = {};
   MessageEntity? _replayMessage;
   late ChatEntity _chat;
@@ -106,6 +110,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         message: messageTextController.text,
         chat: _chat,
         media: media,
+        sharedContacts: selectedContactsToShare,
         oneTimeView: false));
     result.fold(
         (l) => emit(state.copyWith(failure: l, status: ChatRoomStates.error)),
@@ -113,6 +118,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       cancelReplay();
       messageTextController.text = '';
       media.clear();
+      selectedContactsToShare.clear();
+      sharedContacts.clear();
     });
   }
 
@@ -217,6 +224,47 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       CliLogger.error('Error picking file: $e');
       if (e is PlatformException) {
         showPermissionDialog(message: 'Please allow access to files');
+      }
+    }
+  }
+
+  void convertContactsToSharedContacts(
+      {required List<Contact>? contacts}) async {
+    try {
+      if (contacts != null) {
+        for (var contact in contacts) {
+          if (contact.phones.isNotEmpty) {
+            log(contact.toString());
+            sharedContacts.add(MessageSharedContactsEntity(
+              name: contact.displayName,
+              phoneNumber: contact.phones[0].number,
+            ));
+          }
+        }
+      }
+    } catch (e) {
+      CliLogger.error('Error picking file: $e');
+    }
+  }
+
+  addToSelectedContacts({required MessageSharedContactsEntity contact}) {
+    selectedContactsToShare.add(contact);
+  }
+
+  removeFromSelectedContacts({required MessageSharedContactsEntity contact}) {
+    selectedContactsToShare
+        .removeWhere((element) => contact.name == element.name);
+  }
+
+  checkRegirterdContacts(
+      {required List<MessageSharedContactsEntity> contacts}) {
+    for (var contact in contacts) {
+      for (var myContact in sharedContacts) {
+        if (contact.name == myContact.name ||
+            contact.phoneNumber == myContact.phoneNumber) {
+          contact.isRegistered = true;
+          break;
+        }
       }
     }
   }

@@ -15,12 +15,15 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/show_image_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/recived_file.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/send_file.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/send_contacts.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swipe_to/swipe_to.dart';
+
+import '../widgets_contacts/recived_contacts.dart';
 
 class MessageCard extends StatelessWidget {
   final MessageEntity messageEntity;
@@ -36,7 +39,7 @@ class MessageCard extends StatelessWidget {
     final chatRoomCubit = context.read<ChatRoomCubit>();
 
     return messageEntity.byMe
-        ? messageEntity.media.isEmpty
+        ? messageEntity.sharedContacts.isNotEmpty? SentContactsCard(messageEntity: messageEntity): messageEntity.media.isEmpty
             ? _buildMineMessage(
                 width: width, messageEntity: messageEntity, context: context)
             : messageEntity.media[0].type == FileTypeEnum.document
@@ -49,7 +52,7 @@ class MessageCard extends StatelessWidget {
                     context: context,
                     width: width,
                   )
-        : messageEntity.media.isEmpty
+        :messageEntity.sharedContacts.isNotEmpty? ReceivedContactsCard(messageEntity: messageEntity):  messageEntity.media.isEmpty
             ? _buildOtherMessage(
                 width: width, messageEntity: messageEntity, context: context)
             : messageEntity.media[0].type == FileTypeEnum.document

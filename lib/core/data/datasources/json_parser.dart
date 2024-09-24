@@ -42,7 +42,9 @@ class JsonParser implements ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> post(String url,
       {Map<String, dynamic>? data,
       FormData? formData,
-      Map<String, dynamic>? queryParameters}) {
+      Map<String, dynamic>? queryParameters,
+      Options? options
+      }) {
     // TODO: implement post
     throw UnimplementedError();
   }
