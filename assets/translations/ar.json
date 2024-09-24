@@ -562,5 +562,9 @@
   "insta": "إنستا 49",
   "socialPage": "صفحة اجتماعية",
   "errorLoadingSocialPage": "خطأ في تحميل الصفحة الاجتماعية",
-  "updateSuccessfully": "تم التحديث بنجاح"
+  "updateSuccessfully": "تم التحديث بنجاح",
+  "carpool": "مشاركة السيارة",
+  "chance": "فرصة",
+  "subTab": "علامة تبويب فرعية",
+  "exactly2items": "الرجاء تحديد عنصرين على وجه التحديد."
 }

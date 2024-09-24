@@ -557,5 +557,9 @@ abstract class  LocaleKeys {
   static const socialPage = 'socialPage';
   static const errorLoadingSocialPage = 'errorLoadingSocialPage';
   static const updateSuccessfully = 'updateSuccessfully';
+  static const carpool = 'carpool';
+  static const chance = 'chance';
+  static const subTab = 'subTab';
+  static const exactly2items = 'exactly2items';
 
 }

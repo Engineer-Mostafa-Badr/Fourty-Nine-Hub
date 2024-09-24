@@ -81,11 +81,8 @@ class PagePreview extends StatelessWidget {
                     builder: (BuildContext context, social) {
                       if (social.status == CustomPageStates.success) {
                         return Padding(
-                          padding: const EdgeInsets.only(
-                            right: 8,
-                            left: 8,
-                            top: 8
-                          ),
+                          padding:
+                              const EdgeInsets.only(right: 8, left: 8, top: 8),
                           child: social.social?.face == true
                               ? SocialHomeView(
                                   userId: social.social!.userId,
@@ -160,124 +157,146 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => serviceLocator<SliderCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (BuildContext context) => serviceLocator<SliderCubit>(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => serviceLocator<ThumbnailsCubit>(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) =>
+              serviceLocator<CustomPageCubit>()..fetchSubTab(),
+        )
+      ],
       child: BlocBuilder<SliderCubit, BasicState<List<SliderItemEntity>>>(
         builder: (BuildContext context, state) {
-          return BlocProvider(
-            create: (BuildContext context) => serviceLocator<ThumbnailsCubit>(),
-            child: BlocBuilder<ThumbnailsCubit,
-                BasicState<List<RideThumbnailEntity>>>(
-              builder: (BuildContext context,
-                  BasicState<List<RideThumbnailEntity>> state) {
-                return Scaffold(
-                  bottomNavigationBar: BottomNavigator(
-                    scrollController: scrollController,
-                    isScrollingDown: _isScrollingDown,
-                    mainCategory: 1,
-                    index: 2,
-                  ),
-                  body: ListView(
-                    controller: scrollController,
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    children: [
-                      Sizer(),
-                      //carousel slider
-                      !context.read<UserCubit>().isLoggedIn
-                          ? Sizer()
-                          : const SizedBox.shrink(),
-                      //wallet
-                      context.read<UserCubit>().isLoggedIn
-                          ? const WalletWidget()
-                          : const SizedBox.shrink(),
-                      //    Sizer(),
-                      //admob
-                      //   const GoogleAddsBanner(),
-                      //  Sizer(),
-                      //pick me and come with U
-                      _pickMeAndComeWithUWidget(),
-                      Sizer(),
-                      //auction
-                      _auctionAndInstallmentWidget(),
-                      Sizer(),
-                      //cats layout
-                      _buildMainCategoriesViews(),
-                      Sizer(),
-                      //main cats
-                      BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
-                        builder: (context, state) {
-                          final controller =
-                              context.read<MainCategoriesCubit>();
-                          if (state.status == StateStatus.loading) {
-                            return Shimmer.fromColors(
-                              baseColor: Colors.grey[100]!,
-                              highlightColor: Colors.white24,
-                              child: Column(
-                                children: List.generate(
-                                    6,
-                                    (index) => Padding(
-                                          padding:
-                                              EdgeInsets.only(bottom: 15.h),
-                                          child: Container(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                .15.h,
-                                            width: double.infinity,
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 10.w),
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.w),
-                                            decoration: BoxDecoration(
-                                              color: AppColors
-                                                  .AUTH_CONTAINER_COLOR,
-                                              borderRadius:
-                                                  BorderRadius.circular(20.r),
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                            ),
-                                          ),
-                                        )),
-                              ),
-                            );
-                          }
-                          if (state.status == StateStatus.success &&
-                              state.data != null) {
-                            return ListView.separated(
-                              itemCount: state.data?.length ?? 0,
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () {
-                                    context.push(Routes.SUBCATEGORIES,
-                                        extra: state.data![index]);
-                                  },
-                                  child: MainCategoryBanner(
-                                    category: state.data![index],
-                                    onFavorite: () async {
-                                      var result = await controller
-                                          .toggleFavoriteMedicalService(
-                                              state.data![index].id);
-                                      print("result$result");
-                                      return result;
-                                    },
+          return BlocBuilder<ThumbnailsCubit,
+              BasicState<List<RideThumbnailEntity>>>(
+            builder: (BuildContext context,
+                BasicState<List<RideThumbnailEntity>> state) {
+              return Scaffold(
+                bottomNavigationBar: BottomNavigator(
+                  scrollController: scrollController,
+                  isScrollingDown: _isScrollingDown,
+                  mainCategory: 1,
+                  index: 2,
+                ),
+                body: BlocBuilder<CustomPageCubit, CustomPageState>(
+                  builder: (BuildContext context, subTab) {
+                    if (subTab.status == CustomPageStates.success) {
+                      return ListView(
+                        controller: scrollController,
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        children: [
+                          Sizer(),
+                          //carousel slider
+                          !context.read<UserCubit>().isLoggedIn
+                              ? Sizer()
+                              : const SizedBox.shrink(),
+                          //wallet
+                          context.read<UserCubit>().isLoggedIn
+                              ? const WalletWidget()
+                              : const SizedBox.shrink(),
+                          //    Sizer(),
+                          //admob
+                          //   const GoogleAddsBanner(),
+                          //  Sizer(),
+                          //pick me and come with U
+                          _pickMeAndComeWithUWidget(subTab),
+                          if (subTab.subTab?.carpool == true ||
+                              subTab.subTab?.tripJoin == true)
+                            Sizer(),
+                          //auction
+                          _auctionAndInstallmentWidget(subTab),
+                          if (subTab.subTab?.auction == true ||
+                              subTab.subTab?.installment == true)
+                            Sizer(),
+                          //cats layout
+                          _buildMainCategoriesViews(),
+                          Sizer(),
+                          //main cats
+                          BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+                            builder: (context, state) {
+                              final controller =
+                                  context.read<MainCategoriesCubit>();
+                              if (state.status == StateStatus.loading) {
+                                return Shimmer.fromColors(
+                                  baseColor: Colors.grey[100]!,
+                                  highlightColor: Colors.white24,
+                                  child: Column(
+                                    children: List.generate(
+                                        6,
+                                        (index) => Padding(
+                                              padding:
+                                                  EdgeInsets.only(bottom: 15.h),
+                                              child: Container(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    .15.h,
+                                                width: double.infinity,
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 10.w),
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 10.w),
+                                                decoration: BoxDecoration(
+                                                  color: AppColors
+                                                      .AUTH_CONTAINER_COLOR,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20.r),
+                                                  border: Border.all(
+                                                      color: Colors.grey),
+                                                ),
+                                              ),
+                                            )),
                                   ),
                                 );
-                              },
-                              separatorBuilder:
-                                  (BuildContext context, int index) => Sizer(),
-                            );
-                          } else {
-                            return const SizedBox.shrink();
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                              }
+                              if (state.status == StateStatus.success &&
+                                  state.data != null) {
+                                return ListView.separated(
+                                  itemCount: state.data?.length ?? 0,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        context.push(Routes.SUBCATEGORIES,
+                                            extra: state.data![index]);
+                                      },
+                                      child: MainCategoryBanner(
+                                        category: state.data![index],
+                                        onFavorite: () async {
+                                          var result = await controller
+                                              .toggleFavoriteMedicalService(
+                                                  state.data![index].id);
+                                          print("result$result");
+                                          return result;
+                                        },
+                                      ),
+                                    );
+                                  },
+                                  separatorBuilder:
+                                      (BuildContext context, int index) =>
+                                          Sizer(),
+                                );
+                              } else {
+                                return const SizedBox.shrink();
+                              }
+                            },
+                          ),
+                        ],
+                      );
+                    } else {
+                      return const CustomLoading();
+                    }
+                  },
+                ),
+              );
+            },
           );
         },
       ),
@@ -338,7 +357,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
   }
 
   BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-      _pickMeAndComeWithUWidget() {
+      _pickMeAndComeWithUWidget(subTab) {
     return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
       builder: (context, state) {
         if (state.status == StateStatus.loading) {
@@ -366,20 +385,24 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
         } else if (state.status == StateStatus.success) {
           return Row(
             children: [
-              Expanded(
-                child: _buildRideSubCategoryItem(
-                  service: state.data![0].service,
-                  image: state.data![0].image,
-                ),
-              ),
+              subTab.subTab?.carpool == true
+                  ? Expanded(
+                      child: _buildRideSubCategoryItem(
+                        service: state.data![0].service,
+                        image: state.data![0].image,
+                      ),
+                    )
+                  : const SizedBox.shrink(),
               Sizer(),
-              Expanded(
-                child: _buildRideSubCategoryItem(
-                  service: state.data![1].service,
-                  image: state.data![1].image,
-                  route: Routes.AVAILABLE_TRIPS,
-                ),
-              )
+              subTab.subTab?.tripJoin == true
+                  ? Expanded(
+                      child: _buildRideSubCategoryItem(
+                        service: state.data![1].service,
+                        image: state.data![1].image,
+                        route: Routes.AVAILABLE_TRIPS,
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ],
           );
         } else {
@@ -397,14 +420,18 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
     );
   }
 
-  Row _auctionAndInstallmentWidget() {
+  Row _auctionAndInstallmentWidget(subTab) {
     return Row(
       children: [
-        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
-            () => context.push(Routes.MAZADAT), Icons.group),
-        Sizer(),
-        itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize,
-            () => context.push(Routes.INSTALLMENT), Icons.list),
+        subTab.subTab?.auction == true
+            ? itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
+                () => context.push(Routes.MAZADAT), Icons.group)
+            : const SizedBox.shrink(),
+        const Sizer(),
+        subTab.subTab?.installment == true
+            ? itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize,
+                () => context.push(Routes.INSTALLMENT), Icons.list)
+            : const SizedBox.shrink(),
       ],
     );
   }

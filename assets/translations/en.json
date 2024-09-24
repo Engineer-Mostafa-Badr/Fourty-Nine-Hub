@@ -561,5 +561,9 @@
   "insta": "49 Insta",
   "socialPage": "Social Page",
   "errorLoadingSocialPage": "Error loading social page",
-  "updateSuccessfully": "Update Successfully"
+  "updateSuccessfully": "Update Successfully",
+  "carpool": "Carpool",
+  "chance": "Chance",
+  "subTab": "Sub Tab",
+  "exactly2items": "Please select exactly 2 items."
 }

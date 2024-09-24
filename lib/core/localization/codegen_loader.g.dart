@@ -576,7 +576,11 @@ class CodegenLoader extends AssetLoader{
   "insta": "إنستا 49",
   "socialPage": "صفحة اجتماعية",
   "errorLoadingSocialPage": "خطأ في تحميل الصفحة الاجتماعية",
-  "updateSuccessfully": "تم التحديث بنجاح"
+  "updateSuccessfully": "تم التحديث بنجاح",
+  "carpool": "مشاركة السيارة",
+  "chance": "فرصة",
+  "subTab": "علامة تبويب فرعية",
+  "exactly2items": "الرجاء تحديد عنصرين على وجه التحديد."
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1141,7 +1145,11 @@ static const Map<String,dynamic> en = {
   "insta": "49 Insta",
   "socialPage": "Social Page",
   "errorLoadingSocialPage": "Error loading social page",
-  "updateSuccessfully": "Update Successfully"
+  "updateSuccessfully": "Update Successfully",
+  "carpool": "Carpool",
+  "chance": "Chance",
+  "subTab": "Sub Tab",
+  "exactly2items": "Please select exactly 2 items."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
