@@ -580,7 +580,17 @@ class CodegenLoader extends AssetLoader{
   "carpool": "مشاركة السيارة",
   "chance": "فرصة",
   "subTab": "علامة تبويب فرعية",
-  "exactly2items": "الرجاء تحديد عنصرين على وجه التحديد."
+  "exactly2items": "الرجاء تحديد عنصرين على وجه التحديد.",
+  "snap": "لقطة",
+  "spotlight": "سبوت لايت",
+  "atLeast3atMost5items": "الرجاء تحديد 3 عناصر على الأقل و5 عناصر على الأكثر.",
+  "editPage": "تحرير الصفحة",
+  "navigateBar": "شريط التنقل",
+  "favoriteCategory": "الفئة المفضلة",
+  "customPage": "صفحة مخصصة",
+  "activatePage": "تنشيط الصفحة",
+  "pagePreview": "معاينة الصفحة",
+  "service": "خدمة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1149,7 +1159,17 @@ static const Map<String,dynamic> en = {
   "carpool": "Carpool",
   "chance": "Chance",
   "subTab": "Sub Tab",
-  "exactly2items": "Please select exactly 2 items."
+  "exactly2items": "Please select exactly 2 items.",
+  "snap": "Snap",
+  "spotlight": "Spotlight",
+  "atLeast3atMost5items": "Please select at least 3 and at most 5 items.",
+  "editPage": "Edit Page",
+  "navigateBar": "Navigate Bar",
+  "favoriteCategory": "Favorite Category",
+  "customPage": "Custom Page",
+  "activatePage": "Activate Page",
+  "pagePreview": "Page Preview",
+  "service": "Service"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

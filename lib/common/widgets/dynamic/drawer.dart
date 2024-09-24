@@ -74,7 +74,7 @@ class DrawerWidget extends StatelessWidget {
                         onTap: () => context.push(Routes.AZKAAR)),
                     drawerListTile(
                         icon: Icons.maps_home_work_rounded,
-                        label: 'Custom Page',
+                        label: LocaleKeys.customPage.localize,
                         onTap: () {
                           Navigator.push(
                               context,

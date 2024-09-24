@@ -561,5 +561,15 @@ abstract class  LocaleKeys {
   static const chance = 'chance';
   static const subTab = 'subTab';
   static const exactly2items = 'exactly2items';
+  static const snap = 'snap';
+  static const spotlight = 'spotlight';
+  static const atLeast3atMost5items = 'atLeast3atMost5items';
+  static const editPage = 'editPage';
+  static const navigateBar = 'navigateBar';
+  static const favoriteCategory = 'favoriteCategory';
+  static const customPage = 'customPage';
+  static const activatePage = 'activatePage';
+  static const pagePreview = 'pagePreview';
+  static const service = 'service';
 
 }

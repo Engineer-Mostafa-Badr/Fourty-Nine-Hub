@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page_preview.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
@@ -14,8 +16,8 @@ class CustomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(
-        label: 'Custom Page',
+      appBar:  BackAppBar(
+        label: LocaleKeys.customPage.localize,
       ),
       body: Column(
         children: [
@@ -27,7 +29,7 @@ class CustomPage extends StatelessWidget {
             //   fit: BoxFit.cover,
             // ),
             title: Text(
-              'Activate Page',
+              LocaleKeys.activatePage.localize,
               style: Styles.mediumText(
                   fontSize: 65.sp, fontWeight: FontWeight.w400),
             ),
@@ -51,7 +53,7 @@ class CustomPage extends StatelessWidget {
             //   height: 50.h,
             // ),
             title: Label(
-                text: 'Edit Page',
+                text: LocaleKeys.editPage.localize,
                 style: Styles.mediumText(
                     fontSize: 65.sp, fontWeight: FontWeight.w400)),
             onTap: () {
@@ -71,7 +73,7 @@ class CustomPage extends StatelessWidget {
             //   height: 50.h,
             // ),
             title: Label(
-                text: 'Page Preview',
+                text: LocaleKeys.pagePreview.localize,
                 style: Styles.mediumText(
                     fontSize: 65.sp, fontWeight: FontWeight.w400)),
             onTap: () {

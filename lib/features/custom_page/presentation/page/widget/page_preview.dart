@@ -4,8 +4,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
@@ -30,13 +32,13 @@ class PagePreview extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Label(
-            text: 'Page Preview',
+            text: LocaleKeys.pagePreview.localize,
             style: Styles.headerText(),
           ),
-          bottom: const TabBar(
+          bottom:  TabBar(
             tabs: [
-              Tab(text: 'Social'), // First Tab
-              Tab(text: 'Service'), // Second Tab
+              Tab(text: LocaleKeys.social.localize), // First Tab
+              Tab(text: LocaleKeys.service.localize), // Second Tab
             ],
           ),
         ),

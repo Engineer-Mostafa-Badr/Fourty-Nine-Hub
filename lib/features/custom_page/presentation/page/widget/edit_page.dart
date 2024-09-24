@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/navigate_bar.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/social_page.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/sub_tab.dart';
@@ -15,14 +17,14 @@ class EditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(
-        label: 'Edit Page',
+      appBar:  BackAppBar(
+        label: LocaleKeys.editPage.localize,
       ),
       body: Column(
         children: [
           ListTile(
             title: Label(
-                text: 'Navigate Bar',
+                text: LocaleKeys.navigateBar.localize,
                 style: Styles.mediumText(
                     fontSize: 65.sp, fontWeight: FontWeight.w400)),
             onTap: () {
@@ -33,7 +35,7 @@ class EditPage extends StatelessWidget {
           ),
           ListTile(
             title: Label(
-                text: 'Social Page',
+                text: LocaleKeys.socialPage.localize,
                 style: Styles.mediumText(
                     fontSize: 65.sp, fontWeight: FontWeight.w400)),
             onTap: () {
@@ -48,7 +50,7 @@ class EditPage extends StatelessWidget {
           ),
           ListTile(
             title: Label(
-                text: 'Favorite Category',
+                text: LocaleKeys.favoriteCategory.localize,
                 style: Styles.mediumText(
                     fontSize: 65.sp, fontWeight: FontWeight.w400)),
             onTap: () {
@@ -63,7 +65,7 @@ class EditPage extends StatelessWidget {
           ),
           ListTile(
             title: Label(
-                text: 'Sub Tab',
+                text: LocaleKeys.subTab.localize,
                 style: Styles.mediumText(
                     fontSize: 65.sp, fontWeight: FontWeight.w400)),
             onTap: () {

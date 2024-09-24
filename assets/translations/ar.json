@@ -566,5 +566,15 @@
   "carpool": "مشاركة السيارة",
   "chance": "فرصة",
   "subTab": "علامة تبويب فرعية",
-  "exactly2items": "الرجاء تحديد عنصرين على وجه التحديد."
+  "exactly2items": "الرجاء تحديد عنصرين على وجه التحديد.",
+  "snap":"لقطة",
+  "spotlight":"سبوت لايت",
+  "atLeast3atMost5items":"الرجاء تحديد 3 عناصر على الأقل و5 عناصر على الأكثر.",
+  "editPage":"تحرير الصفحة",
+  "navigateBar":"شريط التنقل",
+  "favoriteCategory":"الفئة المفضلة",
+  "customPage":"صفحة مخصصة",
+  "activatePage":"تنشيط الصفحة",
+  "pagePreview":"معاينة الصفحة",
+  "service":"خدمة"
 }

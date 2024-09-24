@@ -565,5 +565,15 @@
   "carpool": "Carpool",
   "chance": "Chance",
   "subTab": "Sub Tab",
-  "exactly2items": "Please select exactly 2 items."
+  "exactly2items": "Please select exactly 2 items.",
+  "snap":"Snap",
+  "spotlight":"Spotlight",
+  "atLeast3atMost5items":"Please select at least 3 and at most 5 items.",
+  "editPage":"Edit Page",
+  "navigateBar":"Navigate Bar",
+  "favoriteCategory":"Favorite Category",
+  "customPage":"Custom Page",
+  "activatePage":"Activate Page",
+  "pagePreview":"Page Preview",
+  "service":"Service"
 }

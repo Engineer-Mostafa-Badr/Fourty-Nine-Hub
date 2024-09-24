@@ -24,11 +24,11 @@ class _SubTabState extends State<SubTab> {
 
   // List of items
   final List<String> _items = [
-    'Trip Join',
-    'Carpool',
-    'Auction',
-    'Installment',
-    'Chance',
+    LocaleKeys.tripJoin.localize,
+    LocaleKeys.carpool.localize,
+    LocaleKeys.auction.localize,
+    LocaleKeys.installments.localize,
+    LocaleKeys.chance.localize,
   ];
 
   @override
