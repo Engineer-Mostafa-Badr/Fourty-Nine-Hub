@@ -144,10 +144,6 @@ class MessagesRemoteDataSourceImplementation
           mediaIds.add(id);
         }
       }
-
-      // if (mediaIds.isNotEmpty) {
-      //   await Future.delayed(const Duration(seconds: 6), () {});
-      // }
       
 
 

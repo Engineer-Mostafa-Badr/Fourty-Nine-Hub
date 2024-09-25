@@ -1,7 +1,11 @@
 // Nasr
 
+import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,6 +26,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swipe_to/swipe_to.dart';
+import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../widgets_contacts/recived_contacts.dart';
 
@@ -39,35 +45,43 @@ class MessageCard extends StatelessWidget {
     final chatRoomCubit = context.read<ChatRoomCubit>();
 
     return messageEntity.byMe
-        ? messageEntity.sharedContacts.isNotEmpty? SentContactsCard(messageEntity: messageEntity): messageEntity.media.isEmpty
-            ? _buildMineMessage(
-                width: width, messageEntity: messageEntity, context: context)
-            : messageEntity.media[0].type == FileTypeEnum.document
-                ? SentFileCard(
-                    messageEntity: messageEntity,
-                  )
-                : _buildSendImageCard(
-                    isArabic: isArabic,
-                    chatRoomCubit: chatRoomCubit,
-                    context: context,
+        ? messageEntity.sharedContacts.isNotEmpty
+            ? SentContactsCard(messageEntity: messageEntity)
+            : messageEntity.media.isEmpty
+                ? _buildMineMessage(
                     width: width,
-                  )
-        :messageEntity.sharedContacts.isNotEmpty? ReceivedContactsCard(messageEntity: messageEntity):  messageEntity.media.isEmpty
-            ? _buildOtherMessage(
-                width: width, messageEntity: messageEntity, context: context)
-            : messageEntity.media[0].type == FileTypeEnum.document
-                ? ReceivedFileCard(
                     messageEntity: messageEntity,
-                  )
-                : _buildReceiveImageCard(
-                    isArabic: isArabic,
-                    chatRoomCubit: chatRoomCubit,
-                    context: context,
+                    context: context)
+                : messageEntity.media[0].type == FileTypeEnum.document
+                    ? SentFileCard(
+                        messageEntity: messageEntity,
+                      )
+                    : _buildSendMediaCard(
+                        isArabic: isArabic,
+                        chatRoomCubit: chatRoomCubit,
+                        context: context,
+                        width: width,
+                      )
+        : messageEntity.sharedContacts.isNotEmpty
+            ? ReceivedContactsCard(messageEntity: messageEntity)
+            : messageEntity.media.isEmpty
+                ? _buildOtherMessage(
                     width: width,
-                  );
+                    messageEntity: messageEntity,
+                    context: context)
+                : messageEntity.media[0].type == FileTypeEnum.document
+                    ? ReceivedFileCard(
+                        messageEntity: messageEntity,
+                      )
+                    : _buildReceiveMediaCard(
+                        isArabic: isArabic,
+                        chatRoomCubit: chatRoomCubit,
+                        context: context,
+                        width: width,
+                      );
   }
 
-  SwipeTo _buildSendImageCard(
+  SwipeTo _buildSendMediaCard(
       {required bool isArabic,
       required ChatRoomCubit chatRoomCubit,
       required BuildContext context,
@@ -126,7 +140,7 @@ class MessageCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: _buildImagesGridCard(context),
+                child: _buildMediaGridCard(context),
               ),
             ],
           ),
@@ -135,7 +149,7 @@ class MessageCard extends StatelessWidget {
     );
   }
 
-  SwipeTo _buildReceiveImageCard(
+  SwipeTo _buildReceiveMediaCard(
       {required bool isArabic,
       required ChatRoomCubit chatRoomCubit,
       required BuildContext context,
@@ -165,10 +179,10 @@ class MessageCard extends StatelessWidget {
           const Sizer(width: 5),
           Padding(
             padding: const EdgeInsets.only(
-              left: 8,
+              // left: 8,
               top: 6,
               bottom: 6,
-              right: 60,
+              // right: 60,
             ),
             child: Container(
               decoration: BoxDecoration(
@@ -195,7 +209,7 @@ class MessageCard extends StatelessWidget {
                   ),
                 ],
               ),
-              width: MediaQuery.of(context).size.width * 0.7,
+              width: MediaQuery.of(context).size.width * 0.72,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -203,7 +217,7 @@ class MessageCard extends StatelessWidget {
                       ? ReplyRecivedMessageCard(
                           width: width, messageEntity: messageEntity)
                       : const SizedBox(),
-                  _buildImagesGridCard(context),
+                  _buildMediaGridCard(context),
                 ],
               ),
             ),
@@ -213,7 +227,7 @@ class MessageCard extends StatelessWidget {
     );
   }
 
-  Padding _buildImagesGridCard(BuildContext context) {
+  Padding _buildMediaGridCard(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -221,13 +235,13 @@ class MessageCard extends StatelessWidget {
         children: [
           // Conditional Layout for Images based on count
           if (messageEntity.media.length == 1)
-            OneImageCard(messageEntity: messageEntity),
+            OneMediaCard(messageEntity: messageEntity),
           if (messageEntity.media.length == 2)
-            TowImagesCard(messageEntity: messageEntity),
+            TowMediaCard(messageEntity: messageEntity),
           if (messageEntity.media.length == 3)
-            ThreeImagesCard(messageEntity: messageEntity),
+            ThreeMediaCard(messageEntity: messageEntity),
           if (messageEntity.media.length >= 4)
-            FourOrMoreImagesCard(messageEntity: messageEntity),
+            FourOrMoreMediaCard(messageEntity: messageEntity),
           const SizedBox(height: 6),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -750,8 +764,8 @@ class ReplySendMessageCard extends StatelessWidget {
   }
 }
 
-class FourOrMoreImagesCard extends StatelessWidget {
-  const FourOrMoreImagesCard({
+class FourOrMoreMediaCard extends StatelessWidget {
+  const FourOrMoreMediaCard({
     super.key,
     required this.messageEntity,
   });
@@ -774,13 +788,23 @@ class FourOrMoreImagesCard extends StatelessWidget {
           ),
           itemBuilder: (context, index) {
             if (index < 4) {
-              return CustomChachedNetworkImage(
-                messageEntity: messageEntity,
-                index: index,
-              );
-            } else {
-              return const SizedBox(); // Empty container for extra images
+              if (messageEntity.media[index].type == FileTypeEnum.video) {
+                return Expanded(
+                  child: CustomVideoCard(
+                    index: index,
+                    messageEntity: messageEntity,
+                    videoUrl: messageEntity.media[index].url,
+                    height: null,
+                  ),
+                );
+              } else {
+                return CustomChachedNetworkImage(
+                  messageEntity: messageEntity,
+                  index: index,
+                );
+              }
             }
+            return null;
           },
         ),
         if (messageEntity.media.length > 4)
@@ -816,8 +840,8 @@ class FourOrMoreImagesCard extends StatelessWidget {
   }
 }
 
-class ThreeImagesCard extends StatelessWidget {
-  const ThreeImagesCard({
+class ThreeMediaCard extends StatelessWidget {
+  const ThreeMediaCard({
     super.key,
     required this.messageEntity,
   });
@@ -828,12 +852,19 @@ class ThreeImagesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CustomChachedNetworkImage(
-          messageEntity: messageEntity,
-          index: 0,
-          height: MediaQuery.of(context).size.height * 0.3,
-          width: double.infinity,
-        ),
+        messageEntity.media[0].type == FileTypeEnum.video
+            ? CustomVideoCard(
+                index: 0,
+                messageEntity: messageEntity,
+                videoUrl: messageEntity.media[0].url,
+                height: MediaQuery.of(context).size.height * 0.2,
+              )
+            : CustomChachedNetworkImage(
+                messageEntity: messageEntity,
+                index: 0,
+                height: MediaQuery.of(context).size.height * 0.2,
+                width: double.infinity,
+              ),
         Row(
           children: messageEntity.media.sublist(1).map((media) {
             return Expanded(
@@ -841,11 +872,18 @@ class ThreeImagesCard extends StatelessWidget {
                 padding: const EdgeInsets.all(4.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: CustomChachedNetworkImage(
-                    messageEntity: messageEntity,
-                    index: messageEntity.media.indexOf(media),
-                    height: MediaQuery.of(context).size.height * 0.2,
-                  ),
+                  child: media.type == FileTypeEnum.video
+                      ? CustomVideoCard(
+                          messageEntity: messageEntity,
+                          videoUrl: media.url,
+                          index: messageEntity.media.indexOf(media),
+                          height: MediaQuery.of(context).size.height * 0.2,
+                        )
+                      : CustomChachedNetworkImage(
+                          messageEntity: messageEntity,
+                          index: messageEntity.media.indexOf(media),
+                          height: MediaQuery.of(context).size.height * 0.2,
+                        ),
                 ),
               ),
             );
@@ -856,8 +894,8 @@ class ThreeImagesCard extends StatelessWidget {
   }
 }
 
-class TowImagesCard extends StatelessWidget {
-  const TowImagesCard({
+class TowMediaCard extends StatelessWidget {
+  const TowMediaCard({
     super.key,
     required this.messageEntity,
   });
@@ -868,23 +906,40 @@ class TowImagesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: messageEntity.media.map((media) {
-        return Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: CustomChachedNetworkImage(
-              messageEntity: messageEntity,
+        if (media.type == FileTypeEnum.video) {
+          return Expanded(
+            child: CustomVideoCard(
               index: messageEntity.media.indexOf(media),
+              messageEntity: messageEntity,
+              videoUrl: media.url,
               height: MediaQuery.of(context).size.height * 0.3,
             ),
-          ),
-        );
+          );
+        } else {
+          return Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: CustomChachedNetworkImage(
+                messageEntity: messageEntity,
+                index: messageEntity.media.indexOf(media),
+                height: MediaQuery.of(context).size.height * 0.3,
+              ),
+            ),
+          );
+        }
       }).toList(),
     );
   }
 }
 
-class OneImageCard extends StatelessWidget {
-  const OneImageCard({
+generateThumbnaill({required String videoUrl}) async {
+  return await VideoThumbnail.thumbnailData(
+    video: videoUrl,
+  );
+}
+
+class OneMediaCard extends StatefulWidget {
+  const OneMediaCard({
     super.key,
     required this.messageEntity,
   });
@@ -892,13 +947,97 @@ class OneImageCard extends StatelessWidget {
   final MessageEntity messageEntity;
 
   @override
+  State<OneMediaCard> createState() => _OneMediaCardState();
+}
+
+class _OneMediaCardState extends State<OneMediaCard> {
+  @override
   Widget build(BuildContext context) {
-    return CustomChachedNetworkImage(
-      messageEntity: messageEntity,
-      index: 0,
-      height: MediaQuery.of(context).size.height * 0.4,
-      width: double.infinity,
-    );
+    if (widget.messageEntity.media[0].type == FileTypeEnum.video) {
+      return CustomVideoCard(
+        index: 0,
+        messageEntity: widget.messageEntity,
+        videoUrl: widget.messageEntity.media[0].url,
+        height: MediaQuery.of(context).size.height * 0.4,
+      );
+    } else {
+      return CustomChachedNetworkImage(
+        messageEntity: widget.messageEntity,
+        index: 0,
+        height: MediaQuery.of(context).size.height * 0.4,
+        width: double.infinity,
+      );
+    }
+  }
+}
+
+class CustomVideoCard extends StatelessWidget {
+  const CustomVideoCard({
+    super.key,
+    required this.videoUrl,
+    required this.messageEntity,
+    required this.index,
+    required this.height,
+  });
+
+  final String videoUrl;
+  final MessageEntity messageEntity;
+  final int index;
+  final double? height;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: generateThumbnaill(videoUrl: videoUrl),
+        builder: (context, snapshot) {
+          return InkWell(
+            onTap: () {
+              context.push(
+                Routes.IMAGESPAGEVIEW,
+                extra: ImagesPageViewParams(
+                  messageEntity: messageEntity,
+                  index: index,
+                ),
+              );
+            },
+            child: SizedBox(
+              height: height,
+              width: double.infinity,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: snapshot.hasData
+                    ? Stack(
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            child: Image.memory(
+                              snapshot.data as Uint8List,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: CircleAvatar(
+                              radius: 23,
+                              backgroundColor: Colors.black.withOpacity(0.5),
+                              child: const Icon(
+                                Icons.play_arrow,
+                                size: 36,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    : const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.PRIMARY_COLOR,
+                        ),
+                      ),
+              ),
+            ),
+          );
+        });
   }
 }
 

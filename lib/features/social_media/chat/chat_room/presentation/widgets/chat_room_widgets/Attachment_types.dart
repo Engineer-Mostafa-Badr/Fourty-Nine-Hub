@@ -31,15 +31,16 @@ class AttachmentTypes extends StatelessWidget {
           icon: Icons.insert_drive_file_outlined,
           onTap: () async {
             await chatRoomCubit.pickDocuments();
-            if(chatRoomCubit.media.isNotEmpty){
-              List<File> tempMedia = [...chatRoomCubit.media]; // spread operator
+            if (chatRoomCubit.media.isNotEmpty) {
+              List<File> tempMedia = [
+                ...chatRoomCubit.media
+              ]; // spread operator
               chatRoomCubit.media.clear();
               for (var media in tempMedia) {
                 chatRoomCubit.media.add(media);
                 await chatRoomCubit.sendMessage();
                 chatRoomCubit.media.clear();
               }
-
             }
             context.pop();
           },
@@ -49,7 +50,10 @@ class AttachmentTypes extends StatelessWidget {
           label: LocaleKeys.camera.tr(),
           icon: Icons.camera_alt,
           onTap: () async {
-            context.push(Routes.CHATROOMCAMERAPICKER);
+            context.push(Routes.CHATROOMCAMERAPICKER,
+                extra: CameraPickerViewPrams(
+                  chatRoomCubit: chatRoomCubit,
+                ));
           },
         ),
         _buildAttachmentTypeItem(
@@ -78,7 +82,8 @@ class AttachmentTypes extends StatelessWidget {
             label: LocaleKeys.contact.tr(),
             icon: Icons.person,
             onTap: () {
-              context.push(Routes.SELECTCONTACTSTOSHARE,
+              context.push(
+                Routes.SELECTCONTACTSTOSHARE,
                 extra: chatRoomCubit,
               );
             }),

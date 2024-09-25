@@ -123,10 +123,9 @@ class UploadFile {
           "fileName": file.path.split('/').last,
           "subcategoryId": subCategoryId,
         },
-        
       ); // mark as deleveerd , database, creating new chat
 
-      uploadUrlResponse.fold(
+      await uploadUrlResponse.fold(
         (l) {
           CliLogger.error("Can't get upload URL");
         },

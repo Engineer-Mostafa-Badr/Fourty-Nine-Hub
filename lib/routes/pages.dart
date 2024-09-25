@@ -808,7 +808,7 @@ class AppPages {
                 GoRoute(
                   path: Paths.CHATROOMCAMERAPICKER,
                   name: Routes.CHATROOMCAMERAPICKER,
-                  builder: (context, state) => const CameraPickerView(),
+                  builder: (context, state) =>  CameraPickerView(prams: state.extra as CameraPickerViewPrams,),
                 ),
                 GoRoute(
                   path: Paths.MEDIASLIDER,

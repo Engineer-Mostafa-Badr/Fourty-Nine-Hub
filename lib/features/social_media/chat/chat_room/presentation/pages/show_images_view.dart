@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:go_router/go_router.dart';
 
@@ -32,10 +33,17 @@ class ShowImagesView extends StatelessWidget {
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: CustomChachedNetworkImage(
-              messageEntity: messageEntity,
-              index: index,
-            ),
+            child: messageEntity.media[index].type == FileTypeEnum.video
+                ? CustomVideoCard(
+                    index: index,
+                    messageEntity: messageEntity,
+                    videoUrl: messageEntity.media[index].url,
+                    height: MediaQuery.of(context).size.height * 0.6,
+                  )
+                : CustomChachedNetworkImage(
+                    messageEntity: messageEntity,
+                    index: index,
+                  ),
           );
         },
       ),
