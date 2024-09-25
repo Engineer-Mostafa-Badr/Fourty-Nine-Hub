@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_entity.dart';
@@ -32,6 +33,7 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
   final GetMainCategoryDetailsUseCase _getMainCategoryDetailsUseCase;
   final GetAllRestaurantUseCase _getAllRestaurantUseCase;
   final GetNearByRestaurantsUseCase _getNearByRestaurantsUseCase;
+
   // final GetTrendingRestaurantsUseCase _getTrendingRestaurantsUseCase;
   final GetBannerByIdUseCase _getBannerByIdUseCase;
   final GetNumOfResturantUseCase _getNumOfResturantUseCase;
@@ -40,6 +42,7 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
   final IsResturantUsecase _isResturantUseCase;
   final GetMealCategoriesWithCountRestaurantsUseCase
       _getMealCategoriesWithCountRestaurantsUseCase;
+
   RestaurantsListCubit(
     this._getMealCategoriesWithCountRestaurantsUseCase,
     this._getBannerByIdUseCase,
@@ -166,9 +169,9 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
             failure: failure, status: RestaurantsListStates.error)), (data) {
       emit(state.copyWith(
           mealCategories: data, status: RestaurantsListStates.initState));
-      if (state.mealCategories?.isNotEmpty ?? false) {
-        getSubCategoryRestaurants(id: state.mealCategories?.first.id ?? "");
-      }
+      // if (state.mealCategories?.isNotEmpty ?? false) {
+      //   getSubCategoryRestaurants(id: state.mealCategories?.first.id ?? "");
+      // }
     });
   }
 

@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
@@ -79,46 +81,50 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                   fontWeight: FontWeight.bold,
                   fontSize: 45.sp),
             ),
-            PositionedDirectional(
-              start: 0,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  context.read<UserCubit>().isLoggedIn
-                      ? InkWell(
-                          onTap: () async {
-                            final result = await widget.onFavorite();
-                            if (result == true) {
-                              print(result);
-                              setState(() {
-                                widget.category.isFavorite =
-                                    !widget.category.isFavorite!;
-                                print(widget.category.isFavorite);
-                                widget.isFavorite = result;
-                                print("===================$result");
-                              });
-                            }
-                          },
+            context.read<UserCubit>().isLoggedIn
+                ? PositionedDirectional(
+                    start: 0,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Flexible(
                           child: IconButton(
+                            padding: EdgeInsets.zero,
+
                             color: AppColors.SECONDARY_COLOR,
-                            onPressed: () async => await widget.onFavorite(),
+                            onPressed: () async {
+                              final result = await widget.onFavorite();
+                              if (result == true) {
+                                print(result);
+                                setState(() {
+                                  widget.category.isFavorite =
+                                      !widget.category.isFavorite!;
+                                  print(widget.category.isFavorite);
+                                  widget.isFavorite = result;
+                                  print("===================$result");
+                                });
+                              }
+                            },
                             icon: Icon(widget.category.isFavorite == true
                                 ? Icons.favorite
                                 : Icons.favorite_border),
                           ),
+                        ),
+                        Flexible(
+                          child: Label(
+                            text:
+                                '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
+                            style: Styles.mediumText(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
                         )
-                      : const SizedBox.shrink(),
-                  Label(
-                    text:
-                        '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
-                    style: Styles.mediumText(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      ],
                     ),
                   )
-                ],
-              ),
-            ),
+                : const SizedBox.shrink(),
           ],
         ),
       ),

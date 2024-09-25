@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
@@ -19,7 +17,6 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/get_soc
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:icons_launcher/utils/cli_logger.dart';
 import 'core/service/background_service.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
@@ -28,8 +25,6 @@ import 'features/authentication/presentation/controllers/user_cubit/user_cubit.d
 import 'firebase_options.dart';
 import 'routes/pages.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

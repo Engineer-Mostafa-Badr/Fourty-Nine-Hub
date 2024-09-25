@@ -16,7 +16,7 @@ abstract class RestaurantListRepo {
     required double lat,
     required double lng,
   });
-  Future<Either<Failure, List<Restaurant>>> getAllRestaurantsWithMenu(
+  Future<Either<Failure, List<Restaurant2Model>>> getAllRestaurantsWithMenu(
       {required PostCommentsParams params});
   Future<Either<Failure, IsRestaurantModel>> isRestaurant();
 
@@ -25,7 +25,7 @@ abstract class RestaurantListRepo {
     required double lat,
     required double lng,
   });
-  Future<Either<Failure, List<RestaurantEntity>>> getSubCategoryRestaurants(
+  Future<Either<Failure, List<Restaurant2Model>>> getSubCategoryRestaurants(
       {required String id});
   Future<Either<Failure, List<FoodCategoryEntity>>>
       getMealCategoriesWithCountRestaurants(
