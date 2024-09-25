@@ -590,7 +590,9 @@ class CodegenLoader extends AssetLoader{
   "customPage": "صفحة مخصصة",
   "activatePage": "تنشيط الصفحة",
   "pagePreview": "معاينة الصفحة",
-  "service": "خدمة"
+  "service": "خدمة",
+  "atLeast3atMost8items": "الرجاء تحديد 3 عناصر على الأقل و8 عناصر على الأكثر",
+  "failedToLoadCategories": "فشل تحميل الفئات"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1169,7 +1171,9 @@ static const Map<String,dynamic> en = {
   "customPage": "Custom Page",
   "activatePage": "Activate Page",
   "pagePreview": "Page Preview",
-  "service": "Service"
+  "service": "Service",
+  "atLeast3atMost8items": "Please select at least 3 and at most 8 items.",
+  "failedToLoadCategories": "Failed to load categories"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -576,5 +576,7 @@
   "customPage":"صفحة مخصصة",
   "activatePage":"تنشيط الصفحة",
   "pagePreview":"معاينة الصفحة",
-  "service":"خدمة"
+  "service":"خدمة",
+  "atLeast3atMost8items":"الرجاء تحديد 3 عناصر على الأقل و8 عناصر على الأكثر",
+  "failedToLoadCategories":"فشل تحميل الفئات"
 }

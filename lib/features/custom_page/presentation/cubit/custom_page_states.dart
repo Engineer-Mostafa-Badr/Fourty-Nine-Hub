@@ -2,6 +2,7 @@ import 'package:fourtyninehub/features/custom_page/domain/entity/navigate_bar_en
 import 'package:fourtyninehub/features/custom_page/domain/entity/social_page_entity.dart';
 
 import '../../../../../../core/error/failure.dart';
+import '../../domain/entity/favourite_categ_entity.dart';
 import '../../domain/entity/sub_tab_entity.dart';
 
 enum CustomPageStates { loading, initial, error, success}
@@ -12,6 +13,7 @@ class CustomPageState {
   final SocialPageEntity? social;
   final SubTabEntity? subTab;
   final NavigateBarEntity? navigateBar;
+  final FavouriteCatEntity? favourite;
 
   const CustomPageState({
     this.status = CustomPageStates.loading,
@@ -19,13 +21,15 @@ class CustomPageState {
     this.social,
     this.subTab,
     this.navigateBar,
+    this.favourite
   });
   CustomPageState copyWith(
       {CustomPageStates? status,
       Failure? failure,
         SocialPageEntity? social,
         SubTabEntity? subTab,
-        NavigateBarEntity? navigateBar
+        NavigateBarEntity? navigateBar,
+        FavouriteCatEntity? favourite
       }) {
     return CustomPageState(
       status: status ?? this.status,
@@ -33,6 +37,7 @@ class CustomPageState {
       social: social ?? this.social,
       subTab: subTab ?? this.subTab,
       navigateBar: navigateBar ?? this.navigateBar,
+      favourite: favourite ?? this.favourite,
     );
   }
 }

@@ -6,12 +6,15 @@ import 'package:fourtyninehub/features/custom_page/data/model/social_page_model.
 import 'package:fourtyninehub/features/custom_page/data/model/sub_tab_model.dart';
 
 import '../../../../core/error/failure.dart';
+import '../../domain/entity/favourite_categ_entity.dart';
 import '../../domain/entity/navigate_bar_entity.dart';
 import '../../domain/entity/social_page_entity.dart';
 import '../../domain/entity/sub_tab_entity.dart';
+import '../../domain/use_case/update_favourite_cat_use_case.dart';
 import '../../domain/use_case/update_navigate_bar_use_case.dart';
 import '../../domain/use_case/update_social_page_use_case.dart';
 import '../../domain/use_case/update_sub_tab_use_case.dart';
+import '../model/favourite_cat_model.dart';
 
 abstract class CustomPageRemoteDataSource {
   Future<Either<Failure, SocialPageEntity>> fetchSocialPage();
@@ -20,6 +23,8 @@ abstract class CustomPageRemoteDataSource {
   Future<Either<Failure,bool>>updateSubTab(SubTabParams params);
   Future<Either<Failure,NavigateBarEntity>>fetchNavigateBar();
   Future<Either<Failure,bool>>updateNavigateBar(NavigateBarParams params);
+  Future<Either<Failure,FavouriteCatEntity>>fetchFavouriteCat();
+  Future<Either<Failure,bool>>updateFavouriteCat(FavouriteCatParams params);
 }
 
 class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
@@ -84,6 +89,28 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
   @override
   Future<Either<Failure, bool>> updateNavigateBar(NavigateBarParams params) async {
     var response = await _apiConsumer.put(EndPoints.navigateBar,
+        data: params.toJson()
+    );
+
+    return response.fold(
+          (failure)=>Left(failure),
+          (response)=>Right(response['status']),
+    );
+  }
+
+  @override
+  Future<Either<Failure, FavouriteCatEntity>> fetchFavouriteCat() async {
+    var response = await _apiConsumer.get(EndPoints.favouriteCat);
+
+    return response.fold(
+          (failure)=>Left(failure),
+          (response)=>Right(FavouriteCatModel.fromJson(response['data'])),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateFavouriteCat(FavouriteCatParams params) async {
+    var response = await _apiConsumer.put(EndPoints.favouriteCat,
         data: params.toJson()
     );
 

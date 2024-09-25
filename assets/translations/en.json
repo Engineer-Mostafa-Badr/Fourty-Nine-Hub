@@ -575,5 +575,7 @@
   "customPage":"Custom Page",
   "activatePage":"Activate Page",
   "pagePreview":"Page Preview",
-  "service":"Service"
+  "service":"Service",
+  "atLeast3atMost8items":"Please select at least 3 and at most 8 items.",
+  "failedToLoadCategories":"Failed to load categories"
 }

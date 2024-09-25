@@ -106,6 +106,7 @@ class EndPoints {
   static const socialPage='/navigators/socialPage';
   static const subTab='/navigators/subTap';
   static const navigateBar='/navigators/navigatorsBar';
+  static const favouriteCat='/navigators/navigateCategories';
 
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';

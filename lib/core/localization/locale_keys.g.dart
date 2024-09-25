@@ -571,5 +571,7 @@ abstract class  LocaleKeys {
   static const activatePage = 'activatePage';
   static const pagePreview = 'pagePreview';
   static const service = 'service';
+  static const atLeast3atMost8items = 'atLeast3atMost8items';
+  static const failedToLoadCategories = 'failedToLoadCategories';
 
 }
