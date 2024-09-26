@@ -29,10 +29,10 @@ class UIConst {
   static const String quraanWeb = 'https://surahquran.com/';
   static const String azkar = 'https://www.islambook.com/azkar/';
 
-  static const String whiteBoard = 'https://app.ziteboard.com/';
   static const String appSign =
-      'dd479bbb383c327108e440f645190b64b3761ca18180dae46eca9aa8c9c69f8d';
-  static const int appId = 1528306616;
+      'c36fcee81d507f8b23d90f66b5d93119735f6c3c451a8562f8163a76cc24943c';
+  static const String whiteBoard = 'https://app.ziteboard.com/';
+  static const int appId = 20063182;
 
   //Chat
   static const String chatNormalId = '668e7dc4e8cfec5bcc752afc';

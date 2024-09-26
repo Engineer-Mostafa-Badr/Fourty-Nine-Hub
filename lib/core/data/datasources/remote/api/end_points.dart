@@ -678,8 +678,10 @@ class EndPoints {
 
   //lives
   static String allLiveTopics = '/stream-topic';
+  static String createLive = '/stream';
 
-
+//secrets
+  static String getSecrets = '/app-manager-dashboard/apiKeys';
   static String deleteChatMessage = '/chat/message';
 
   static String changeChatMuteState(String chatId) {

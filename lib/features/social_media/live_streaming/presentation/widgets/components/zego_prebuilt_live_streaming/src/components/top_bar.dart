@@ -308,13 +308,13 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15.0),
-                              color: Colors.redAccent,
+                              color: AppColors.SECONDARY_COLOR,
                             ),
                             child: Center(
                               child: Text(
                                 LocaleKeys.EndMeetingForAll.localize,
                                 style: const TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                    fontSize: 20, fontWeight: FontWeight.bold,color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -334,13 +334,13 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15.0),
-                            color: AppColors.BARRIER_COLOR,
+                            color: AppColors.PRIMARY_COLOR,
                           ),
                           child: Center(
                             child: Text(
                               LocaleKeys.leaveMeeting.localize,
                               style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                  fontSize: 20, fontWeight: FontWeight.bold,color: Colors.white),
                               textAlign: TextAlign.center,
                             ),
                           ),

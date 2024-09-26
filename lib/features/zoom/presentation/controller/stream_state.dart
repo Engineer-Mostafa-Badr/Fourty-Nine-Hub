@@ -17,11 +17,17 @@ enum StreamsStates {
 
 extension MeetingStateX on StreamState {
   bool get isInitial => status == StreamsStates.initial;
+
   bool get isLoading => status == StreamsStates.loading;
+
   bool get isSuccess => status == StreamsStates.success;
+
   bool get isFailure => status == StreamsStates.failure;
+
   bool get isOpenWhiteBoard => status == StreamsStates.openWhiteBoard;
+
   bool get isChangeTopic => status == StreamsStates.changeTopic;
+
   bool get isGotScheduledMeeting => status == StreamsStates.gotscheduledMeeting;
 }
 
@@ -30,23 +36,27 @@ class StreamState extends Equatable {
   final List<ScheduledMeeting>? scheduledMeeting;
   final List<GiftData> selectedGifts;
   final String? errorMessage;
-  final String topic; 
+  final String topic;
+  final String topicId;
   final String? goalDescription;
   final Failure? failure;
+
   const StreamState({
     this.status = StreamsStates.initial,
     this.errorMessage,
     this.failure,
     this.topic = '',
+    this.topicId = '',
     this.scheduledMeeting,
     this.selectedGifts = const [],
-    this.goalDescription= '',
+    this.goalDescription = '',
   });
 
   StreamState copyWith({
     StreamsStates? status,
     String? errorMessage,
     String? topic,
+    String? topicId,
     String? goalDescription,
     Failure? failure,
     List<ScheduledMeeting>? scheduledMeetings,
@@ -57,6 +67,7 @@ class StreamState extends Equatable {
         errorMessage: errorMessage ?? this.errorMessage,
         failure: failure ?? this.failure,
         topic: topic ?? this.topic,
+        topicId: topicId ?? this.topicId,
         scheduledMeeting: scheduledMeetings ?? scheduledMeeting,
         selectedGifts: selectedGifts ?? this.selectedGifts,
         goalDescription: goalDescription ?? this.goalDescription,
@@ -70,6 +81,7 @@ class StreamState extends Equatable {
         topic,
         goalDescription,
         scheduledMeeting,
+        topicId,
         selectedGifts,
       ];
 }

@@ -4,9 +4,10 @@ import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity
 import '../../../../../core/error/failure.dart';
 import '../entity/live_entity.dart';
 import '../entity/live_create_response_entity.dart';
+import '../usecases/create_live_use_case.dart';
 
 abstract class LiveRepository {
-  Future<Either<Failure, LiveCreateResponseEntity>> createLive();
+  Future<Either<Failure, LiveCreateResponseEntity>> createLive(CreateLiveParams params);
   Future<Either<Failure, List<LiveEntity>>> getAllRooms();
   Future<Either<Failure, List<TopicEntity>>> getAllTopics();
 }
