@@ -573,5 +573,14 @@ abstract class  LocaleKeys {
   static const service = 'service';
   static const atLeast3atMost8items = 'atLeast3atMost8items';
   static const failedToLoadCategories = 'failedToLoadCategories';
+  static const nOFoundUsers = 'nOFoundUsers';
+  static const chatWith = 'chatWith';
+  static const Unfollow = 'Unfollow';
+  static const stopSeeing = 'stopSeeing';
+  static const unblock = 'unblock';
+  static const youCanRemove = 'youCanRemove';
+  static const fromBlockedList = 'fromBlockedList';
+  static const unfriend = 'unfriend';
+  static const fromFriendsList = 'fromFriendsList';
 
 }

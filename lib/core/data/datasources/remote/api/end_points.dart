@@ -456,7 +456,7 @@ class EndPoints {
   }
 
   static String deleteFriend(String userId) {
-    return '/friends/deleteFriend/$userId?subCategory=${Constants.facebookSubCategory}';
+    return '/friends/deleteFriend/$userId';
   }
 
   static String commentOnTwitterPost(String postId) {
@@ -523,8 +523,8 @@ class EndPoints {
     return '/follow/make-follow/$userId?subCategory=${Constants.instagramSubCategory}';
   }
 
-  static String removeFollow(String userId) {
-    return '/follow/unFollow/$userId?subCategory=${Constants.instagramSubCategory}';
+  static String deleteFollow(String userId) {
+    return '/follow/delete-follower/$userId?subCategory=${Constants.instagramSubCategory}';
   }
 
   static String greetMessage(String userId) {

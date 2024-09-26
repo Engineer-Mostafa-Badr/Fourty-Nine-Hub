@@ -577,5 +577,14 @@
   "pagePreview":"Page Preview",
   "service":"Service",
   "atLeast3atMost8items":"Please select at least 3 and at most 8 items.",
-  "failedToLoadCategories":"Failed to load categories"
+  "failedToLoadCategories":"Failed to load categories",
+  "nOFoundUsers": "No Found Users",
+  "chatWith": "Chat with",
+  "Unfollow": "Unfollow",
+  "stopSeeing": "Stop seeing posts while keeping him as a friend\"",
+  "unblock": "Unblock",
+  "youCanRemove": "You can remove",
+  "fromBlockedList": "from blocked list",
+  "unfriend": "Unfriend",
+  "fromFriendsList": "from friends list"
 }

@@ -592,7 +592,16 @@ class CodegenLoader extends AssetLoader{
   "pagePreview": "معاينة الصفحة",
   "service": "خدمة",
   "atLeast3atMost8items": "الرجاء تحديد 3 عناصر على الأقل و8 عناصر على الأكثر",
-  "failedToLoadCategories": "فشل تحميل الفئات"
+  "failedToLoadCategories": "فشل تحميل الفئات",
+  "nOFoundUsers": "لم يتم العثور على أي مستخدمين",
+  "chatWith": "الدردشة مع",
+  "Unfollow": "إلغاء المتابعة",
+  "stopSeeing": "التوقف عن رؤية المنشورات مع الاحتفاظ به كصديق",
+  "unblock": "إلغاء الحظر",
+  "youCanRemove": "يمكنك الإزالة",
+  "fromBlockedList": "من قائمة المحظورين",
+  "unfriend": "إلغاء الصداقة",
+  "fromFriendsList": "من قائمة الأصدقاء"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1173,7 +1182,16 @@ static const Map<String,dynamic> en = {
   "pagePreview": "Page Preview",
   "service": "Service",
   "atLeast3atMost8items": "Please select at least 3 and at most 8 items.",
-  "failedToLoadCategories": "Failed to load categories"
+  "failedToLoadCategories": "Failed to load categories",
+  "nOFoundUsers": "No Found Users",
+  "chatWith": "Chat with",
+  "Unfollow": "Unfollow",
+  "stopSeeing": "Stop seeing posts while keeping him as a friend\"",
+  "unblock": "Unblock",
+  "youCanRemove": "You can remove",
+  "fromBlockedList": "from blocked list",
+  "unfriend": "Unfriend",
+  "fromFriendsList": "from friends list"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
