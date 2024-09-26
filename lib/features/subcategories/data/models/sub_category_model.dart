@@ -7,6 +7,7 @@ class SubCategoryModel extends SubCategoryEntity {
       required super.name,
       required super.image,
       super.numberOfContent,
+      super.hasAuction,
       required super.isFavorite});
 
   factory SubCategoryModel.fromJson(Map<String, dynamic> json) {
@@ -16,6 +17,7 @@ class SubCategoryModel extends SubCategoryEntity {
       numberOfContent: json['numberOfAds'] ?? 0,
       image: json['picture'] ?? '',
       isFavorite: json['isFavorite'] ?? false,
+      hasAuction: json['has_auction'] ?? false,
     );
   }
 
