@@ -9,7 +9,8 @@ import '../../../../requests_history/domain/entities/address_entity.dart';
 class AdEntity {
   final String id;
   final String title;
-  bool? isUser;
+  String? type;
+  bool? hasAuction;
   bool? isFavourite;
   final String description;
   final List<String> images;
@@ -36,8 +37,9 @@ class AdEntity {
       required this.title,
       required this.description,
       required this.images, this.price,
-        this.isUser,
+        this.type,
         this.isFavourite=false,
+        this.hasAuction=false,
       required this.address,
        this.phone,
       this.statistics,

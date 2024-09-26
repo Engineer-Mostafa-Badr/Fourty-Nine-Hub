@@ -648,5 +648,7 @@
   "deactivate": "Deactivate",
   "tel": "Tel",
   "chats": "Chats",
-  "deleteAd": "Delete"
+  "deleteAd": "Delete",
+  "rent": "Rent",
+  "sale": "Sale"
 }

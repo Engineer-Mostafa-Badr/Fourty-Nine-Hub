@@ -39,19 +39,19 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
     _tabController = TabController(length: 2, vsync: this);
     context.read<AdvertisementCubit>().loadData(
           subCategoryId: widget.params.subCategory.id,
-      filter: 'provider'
+      filter: widget.params.subCategory.hasAuction==true?'sale':'provider'
         );
 
     _tabController.addListener(() {
         if(_tabController.index==0){
           context.read<AdvertisementCubit>().loadData(
               subCategoryId: widget.params.subCategory.id,
-              filter: 'provider'
+              filter: widget.params.subCategory.hasAuction==true?'sale':'provider'
           );
         }else{
           context.read<AdvertisementCubit>().loadData(
               subCategoryId: widget.params.subCategory.id,
-              filter: 'user'
+              filter: widget.params.subCategory.hasAuction==true?'rent':'user'
           );
         }
 
@@ -98,18 +98,18 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                   if(i==1){
                     controller.loadData(
                         subCategoryId: widget.params.subCategory.id,
-                        filter: 'user'
+                        filter: widget.params.subCategory.hasAuction==true?'rent':'user'
                     );
                   }else{
                     controller.loadData(
                         subCategoryId: widget.params.subCategory.id,
-                        filter: 'provider'
+                        filter: widget.params.subCategory.hasAuction==true?'sale':'provider'
                     );
                   }
                 },
                 tabs: [
-                  Tab(text: LocaleKeys.provider.localize),
-                  Tab(text: LocaleKeys.user.localize),
+                  Tab(text: widget.params.subCategory.hasAuction==true?LocaleKeys.sale.localize:LocaleKeys.provider.localize),
+                  Tab(text: widget.params.subCategory.hasAuction==true?LocaleKeys.rent.localize:LocaleKeys.user.localize),
                 ],
               ),
               state.status==AdsStates.success?Expanded(child:

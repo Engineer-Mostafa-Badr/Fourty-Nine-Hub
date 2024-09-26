@@ -98,6 +98,20 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   void createAd(
       {required CategorizationEntity categorize,
       required BuildContext context}) async {
+    print(categorize.subCategory.hasAuction);
+
+    String type = '';
+    if(categorize.subCategory.hasAuction==false&&state.isUser==false){
+      type="provider";
+    }else if(categorize.subCategory.hasAuction==false&&state.isUser==true){
+      type="user";
+    }else if(categorize.subCategory.hasAuction==true&&state.isSale==false){
+      print(state.isSale);
+      type="rent";
+    }else if(categorize.subCategory.hasAuction==true&&state.isSale==true){
+      print(state.isSale);
+      type="sale";
+    }
     if ((formState.currentState?.validate() ?? false) &&
         (state.images?.isNotEmpty ?? false)) {
       List<CreateAdEntity> details = [];
@@ -110,7 +124,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       final response = await _createAdUseCase(AdModel(
           id: 'id',
           title: title ?? '',
-          isUser: state.isUser,
+          type: type,
+          // isUser: categorize.subCategory.hasAuction==true?state.isSale:state.isUser,
           description: description ?? '',
           phone: phone ?? '',
           images: state.images?.map((e) => e.mediaId).toList() ?? [],

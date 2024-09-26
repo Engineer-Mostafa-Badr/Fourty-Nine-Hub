@@ -636,5 +636,7 @@ abstract class  LocaleKeys {
   static const tel = 'tel';
   static const chats = 'chats';
   static const deleteAd = 'deleteAd';
+  static const rent = 'rent';
+  static const sale = 'sale';
 
 }
