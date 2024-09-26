@@ -4,9 +4,12 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_meal_list_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -14,34 +17,39 @@ import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
+import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../domain/entities/restaurant_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SubCatigoriesRestaurantCard extends StatelessWidget {
+class SubCatigoriesRestaurantCard extends StatefulWidget {
   final Restaurant2Model? item;
   final bool isVert;
 
   const SubCatigoriesRestaurantCard({super.key, this.isVert = true, this.item});
 
   @override
+  State<SubCatigoriesRestaurantCard> createState() =>
+      _SubCatigoriesRestaurantCardState();
+}
+
+class _SubCatigoriesRestaurantCardState
+    extends State<SubCatigoriesRestaurantCard> {
+  @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () => context.push(Routes.RESTAURANTDETAILS, extra: item?.id),
-        child: isVert ? _buildVerticalCard(context) : _buildHorizontalCard());
+        onTap: () =>
+            context.push(Routes.RESTAURANTDETAILS, extra: widget.item?.id),
+        child: widget.isVert
+            ? _buildVerticalCard(context)
+            : _buildHorizontalCard());
   }
 
   Widget _buildVerticalCard(context) {
     return SizedBox(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width * 0.92,
-      height: MediaQuery
-          .of(context)
-          .size
-          .width * 1.1,
+      width: MediaQuery.of(context).size.width * 0.92,
+      height: MediaQuery.of(context).size.width * 1.1,
       // height: kToolbarHeight * 3,
-      child: PropertyCard(item!)
+      child: PropertyCard(widget.item!)
       /* Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -94,38 +102,38 @@ class SubCatigoriesRestaurantCard extends StatelessWidget {
           width: kToolbarHeight,
           child: SquareImage(
             radius: 5,
-            url: item!.restaurantMedia!.first.mediaKey,
+            url: widget.item!.restaurantMedia!.first.mediaKey,
           ),
         ),
         const Sizer(),
         Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Label(
+              text: widget.item?.name ?? "",
+              style: Styles.mediumText(fontWeight: FontWeight.w400),
+            ),
+            Label(
+                text: "", //item?.description,
+                style: Styles.mediumText(color: Colors.grey)),
+            Row(
               children: [
-                Label(
-                  text: item?.name ?? "",
-                  style: Styles.mediumText(fontWeight: FontWeight.w400),
+                const Icon(
+                  Icons.star_rounded,
+                  color: AppColors.ACCENT_COLOR,
                 ),
+                const Sizer(),
                 Label(
-                    text: "", //item?.description,
-                    style: Styles.mediumText(color: Colors.grey)),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.star_rounded,
-                      color: AppColors.ACCENT_COLOR,
-                    ),
-                    const Sizer(),
-                    Label(
-                        text: '${item?.totalRating} ',
-                        style: Styles.mediumText(fontWeight: FontWeight.w500)),
-                    Label(
-                        text: '(${item?.numberOfReviews}+)',
-                        style: Styles.mediumText()),
-                  ],
-                ),
+                    text: '${widget.item?.totalRating} ',
+                    style: Styles.mediumText(fontWeight: FontWeight.w500)),
+                Label(
+                    text: '(${widget.item?.numberOfReviews}+)',
+                    style: Styles.mediumText()),
               ],
-            ))
+            ),
+          ],
+        ))
       ],
     );
   }
@@ -157,43 +165,53 @@ class _PropertyCardState extends State<PropertyCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (widget.item.isPremium!) Expanded(
-                  flex: 1, child: _buildEliteBanner(widget.item)),
+              if (widget.item.subscriptionType!
+                      .split(' ')
+                      .first
+                      .toLowerCase() !=
+                  'no')
+                Expanded(flex: 1, child: _buildEliteBanner(widget.item)),
               Flexible(
                 flex: 4,
                 child: Stack(
                   children: [
+                    ImagesProfileForRestaurant(
+                      autoPlay: true,
+                      restaurantMedia: widget.item.restaurantMedia,
+                    ),
                     Positioned(
                       top: 0,
                       left: 0,
                       child: IconButton(
                         padding: EdgeInsets.zero,
                         icon: Icon(
-                          widget.item.subcategoryId!.isFavorite!
-                              ? Icons.favorite_border
-                              : Icons.favorite,
+                          widget.item.subcategoryId!.isFavorite ?? false
+                              ? Icons.favorite
+                              : Icons.favorite_border,
                           color: AppColors.SECONDARY_COLOR,
                         ),
                         onPressed: () {
-                          setState(() {
-                            // widget.item.isFavorite = !item.isFavorite!;
-                          });
+                          // setState(() {
+                          //   context
+                          //       .read<RestaurantsListCubit>()
+                          //       .toggleFavoriteSubcategory(
+                          //           widget.item.subcategoryId?.id ?? "");
+                          //   // widget.item.isFavorite = !item.isFavorite!;
+                          // });
                         },
                       ),
                     ),
-                    const Positioned(
-                      top: 10,
-                      right: 10,
-                      child: Icon(
-                        Icons.verified,
-                        color: AppColors.SECONDARY_COLOR,
-                        size: 24.0, // Adjusted size for responsiveness
-                      ),
-                    ),
-                    ImagesProfileForRestaurant(
-                      autoPlay: true,
-                      restaurantMedia: widget.item.restaurantMedia,
-                    ),
+                    false
+                        ? const Positioned(
+                            top: 10,
+                            right: 10,
+                            child: Icon(
+                              Icons.verified,
+                              color: AppColors.SECONDARY_COLOR,
+                              size: 24.0, // Adjusted size for responsiveness
+                            ),
+                          )
+                        : const Sizer(),
                   ],
                 ),
               ),
@@ -221,10 +239,11 @@ class _PropertyCardState extends State<PropertyCard> {
         ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4),
-      child: const Text(
-        'Premium',
+      child: Text(
+        item.subscriptionType!.split(' ').first,
+        // 'Premium',
         textAlign: TextAlign.start,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
           color: Colors.black,
@@ -288,17 +307,18 @@ class _PropertyCardState extends State<PropertyCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
               item.name!,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              item.subcategoryId!.name + ", " +
+              item.subcategoryId!.name +
+                  ", " +
                   (item.description ?? 'description...'),
               // 'القاهرة الجديدة, القاهرة',
               style: TextStyle(
@@ -307,8 +327,7 @@ class _PropertyCardState extends State<PropertyCard> {
               ),
             ),
             Text(
-              '${item.government!.governorateNameEn.toString()}, ${item.city!
-                  .cityNameEn.toString()}',
+              '${item.government!.governorateNameEn.toString()}, ${item.city!.cityNameEn.toString()}',
               // item.subcategoryId!.name ?? 'description',
               // 'القاهرة الجديدة, القاهرة',
               style: TextStyle(
@@ -325,11 +344,10 @@ class _PropertyCardState extends State<PropertyCard> {
                       Icons.star_rounded,
                       color: AppColors.ACCENT_COLOR,
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Label(
                         text: '${item.totalRating}',
-                        style:
-                        Styles.mediumText(fontWeight: FontWeight.w500)),
+                        style: Styles.mediumText(fontWeight: FontWeight.w500)),
                     Label(
                         text: '(${item.numberOfReviews}+)',
                         style: Styles.mediumText()),
@@ -337,7 +355,7 @@ class _PropertyCardState extends State<PropertyCard> {
                 ),
                 Text(
                   item.isActive! ? 'Available' : 'Not Available',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.red,
@@ -373,7 +391,9 @@ class PremiumAndRequestButtons extends StatelessWidget {
           _buildButton(
             label: 'Request',
             color: Colors.black,
-            onPressed: () {},
+            onPressed: () {
+              context.push(Routes.RESTAURANTDETAILS, extra: item.id);
+            },
           ),
         ],
       ),
@@ -426,7 +446,15 @@ class CallMessageReportButtons extends StatelessWidget {
             label: 'Report',
             icon: Icons.report,
             color: Colors.red,
-            onPressed: () {},
+            onPressed: () {
+              bottomSheet(
+                context: context,
+                widget: ReportView(
+                  id: item.id!,
+                  categoryId: '66af974f8bf69f9469944746',
+                ),
+              );
+            },
           ),
         ],
       ),

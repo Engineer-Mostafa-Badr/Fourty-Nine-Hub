@@ -1,4 +1,4 @@
-part of 'restaurants_list_cubit.dart';
+part of 'restaurants_meal_list_cubit.dart';
 
 enum RestaurantsListStates {
   initState,
@@ -10,7 +10,7 @@ enum RestaurantsListStates {
   success
 }
 
-extension RestaurantsListStateX on RestaurantsListState {
+extension RestaurantsListStateX on RestaurantsMealListState {
   bool get isInitial => status == RestaurantsListStates.initState;
   bool get isLoading => status == RestaurantsListStates.loading;
   bool get allRestaurants => status == RestaurantsListStates.allRestaurants;
@@ -23,7 +23,7 @@ extension RestaurantsListStateX on RestaurantsListState {
 }
 
 @immutable
-class RestaurantsListState {
+class RestaurantsMealListState {
   final RestaurantsListStates status;
   final Failure? failure;
   final List<RestaurantEntity>? nearByRestaurants;
@@ -36,7 +36,7 @@ class RestaurantsListState {
   final List<Restaurant2Model>? subCategories;
   final List<FoodCategoryEntity>? mealCategories;
   final List<SubCategoryEntity>? categories;
-  const RestaurantsListState({
+  const RestaurantsMealListState({
     this.status = RestaurantsListStates.loading,
     this.mealCategories,
     this.failure,
@@ -50,7 +50,7 @@ class RestaurantsListState {
     this.trendingRestaurants,
     this.categories,
   });
-  RestaurantsListState copyWith({
+  RestaurantsMealListState copyWith({
     RestaurantsListStates? status,
     Failure? failure,
     List<RestaurantEntity>? nearByRestaurants,
@@ -64,7 +64,7 @@ class RestaurantsListState {
     List<SubCategoryEntity>? categories,
     List<FoodCategoryEntity>? mealCategories,
   }) {
-    return RestaurantsListState(
+    return RestaurantsMealListState(
       status: status ?? this.status,
       mealCategories: mealCategories ?? this.mealCategories,
       numOfRestaurants: numOfRestaurants ?? this.numOfRestaurants,

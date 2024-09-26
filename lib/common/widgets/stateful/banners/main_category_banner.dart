@@ -76,7 +76,14 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
               text: widget.category.name,
-              style: TextStyle(
+              style: TextStyle( shadows: const [
+                Shadow(
+                  offset:
+                  Offset(1.0, 1.0),
+                  blurRadius: 4.0,
+                  color: Colors.black,
+                ),
+              ],
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 45.sp),
@@ -84,41 +91,43 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
             context.read<UserCubit>().isLoggedIn
                 ? PositionedDirectional(
                     start: 0,
-                    child: Column(
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Flexible(
-                          child: IconButton(
-                            padding: EdgeInsets.zero,
-
-                            color: AppColors.SECONDARY_COLOR,
-                            onPressed: () async {
-                              final result = await widget.onFavorite();
-                              if (result == true) {
-                                print(result);
-                                setState(() {
-                                  widget.category.isFavorite =
-                                      !widget.category.isFavorite!;
-                                  print(widget.category.isFavorite);
-                                  widget.isFavorite = result;
-                                  print("===================$result");
-                                });
-                              }
-                            },
-                            icon: Icon(widget.category.isFavorite == true
-                                ? Icons.favorite
-                                : Icons.favorite_border),
-                          ),
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          color: AppColors.SECONDARY_COLOR,
+                          onPressed: () async {
+                            final result = await widget.onFavorite();
+                            if (result == true) {
+                              print(result);
+                              setState(() {
+                                widget.category.isFavorite =
+                                    !widget.category.isFavorite!;
+                                print(widget.category.isFavorite);
+                                widget.isFavorite = result;
+                                print("===================$result");
+                              });
+                            }
+                          },
+                          icon: Icon(widget.category.isFavorite == true
+                              ? Icons.favorite
+                              : Icons.favorite_border),
                         ),
-                        Flexible(
-                          child: Label(
-                            text:
-                                '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
-                            style: Styles.mediumText(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                        Label(
+                          text:
+                              '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
+                          style: Styles.mediumText( shadows: const [
+                            Shadow(
+                              offset:
+                              Offset(1.0, 1.0),
+                              blurRadius: 4.0,
+                              color: Colors.black,
                             ),
+                          ],
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         )
                       ],
@@ -207,7 +216,14 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
           widget.onRegister?.call();
         },
         child: Text(Labels.register,
-            style: Styles.mediumText(
+            style: Styles.mediumText( shadows: const [
+              Shadow(
+                offset:
+                Offset(1.0, 1.0),
+                blurRadius: 4.0,
+                color: Colors.black,
+              ),
+            ],
                 color: Colors.white, fontWeight: FontWeight.bold)),
       );
     } else {

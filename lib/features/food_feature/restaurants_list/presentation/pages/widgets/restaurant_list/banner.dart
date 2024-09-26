@@ -4,7 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_bann
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_list_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_meal_list_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -20,14 +20,14 @@ class MealBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
+    return BlocBuilder<RestaurantsMealListCubit, RestaurantsMealListState>(
       builder: (context, state) {
         if (state.isLoading) {
           return Shimmer.fromColors(
             baseColor: Colors.grey[100]!,
             highlightColor: Colors.white,
             child: Container(
-              height: 150.h,
+              height: 110.h,
               width: double.infinity,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(10)),
@@ -70,13 +70,15 @@ class MealBanner extends StatelessWidget {
                 context.push(Routes.REGISTER);
               }
             },
-            onFavorite: () {},
+            onFavorite: () {
+              context
+                  .read<RestaurantsMealListCubit>()
+                  .toggleFavoriteCategory(state.mainCategory!.id);
+            },
             isFavorite: false,
-
-
           );
         } else {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
       },
     );

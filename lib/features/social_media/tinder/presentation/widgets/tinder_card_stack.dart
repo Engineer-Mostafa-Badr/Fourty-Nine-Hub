@@ -1072,7 +1072,8 @@ class _TinderCardStackState extends State<TinderCardStack> {
     bottomSheet(
       context: context,
       widget: ReportView(
-        id: context.read<UserCubit>().state.data!.id,
+        id: user.id!,
+        // id: context.read<UserCubit>().state.data!.id,
         categoryId: '66af974f8bf69f9469944746',
       ),
     );

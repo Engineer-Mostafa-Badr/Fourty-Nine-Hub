@@ -645,7 +645,11 @@ class CodegenLoader extends AssetLoader{
   "publish": "نشر",
   "addImages": "إضافة صور",
   "addImagesDesc": "الحد الأقصى لحجم الملف 5 ميجابايت مقبول بالتنسيقات التالية: jpg، Jpeg، png، gif",
-  "noAds": "لا توجد إعلانات في الوقت الحالي."
+  "noAds": "لا توجد إعلانات في الوقت الحالي.",
+  "write_story": "اكتب قصتك...",
+  "add_description": "أضف وصفًا...",
+  "text": "نص",
+  "picture": "صورة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1280,7 +1284,11 @@ static const Map<String,dynamic> en = {
   "publish": "Publish",
   "addImages": "Add Images",
   "addImagesDesc": "5MB maximum file size accepted in the following formats: jpg, Jpeg, png, gif",
-  "noAds": "There are no Ads at the moment."
+  "noAds": "There are no Ads at the moment.",
+  "write_story": "Write your story...",
+  "add_description": "Add a description...",
+  "text": "Text",
+  "picture": "Picture"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

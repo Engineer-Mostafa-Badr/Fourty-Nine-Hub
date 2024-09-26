@@ -10,7 +10,7 @@ Restaurant2Model _$Restaurant2ModelFromJson(Map<String, dynamic> json) =>
     Restaurant2Model(
       id: json['_id'] as String?,
       name: json['name'] as String?,
-      isPremium: json['isPremium'] as bool?,
+      subscriptionType: json['subscriptionType'] as String?,
       city: json['city'] == null
           ? null
           : CityModel.fromJson(json['city'] as Map<String, dynamic>),
@@ -47,7 +47,7 @@ Map<String, dynamic> _$Restaurant2ModelToJson(Restaurant2Model instance) =>
       'government': instance.government?.toJson(),
       'city': instance.city?.toJson(),
       'isActive': instance.isActive,
-      'isPremium': instance.isPremium,
+      'subscriptionType': instance.subscriptionType,
       'totalRating': instance.totalRating,
       'numberOfReviews': instance.numberOfReviews,
       'MENU': instance.menu?.map((e) => e.toJson()).toList(),

@@ -108,8 +108,8 @@ class Restaurant extends Equatable {
   @JsonKey(name: "isActive")
   final bool? isActive;
 
-  @JsonKey(name: "isPremium")
-  final bool? isPremium;
+  @JsonKey(name: "subscriptionType")
+  final String? subscriptionType;
 
   @JsonKey(name: "totalRating")
   final double? totalRating;
@@ -136,7 +136,7 @@ class Restaurant extends Equatable {
     this.government,
     this.city,
     this.isActive,
-    this.isPremium,
+    this.subscriptionType,
     this.totalRating,
     this.numberOfReviews,
     this.menu,
@@ -153,7 +153,7 @@ class Restaurant extends Equatable {
         government,
         city,
         isActive,
-        isPremium,
+        subscriptionType,
         totalRating,
         numberOfReviews,
         menu,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_list_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_meal_list_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_category_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -13,9 +13,9 @@ class MealCategories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
+    return BlocBuilder<RestaurantsMealListCubit, RestaurantsMealListState>(
         builder: (context, state) {
-      final controller = context.read<RestaurantsListCubit>();
+      final controller = context.read<RestaurantsMealListCubit>();
 
       if (state.mealCategories != null && state.mealCategories!.isNotEmpty) {
         return SizedBox(
@@ -37,7 +37,7 @@ class MealCategories extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => BlocProvider.value(
-                                  value: serviceLocator<RestaurantsListCubit>()
+                                  value: serviceLocator<RestaurantsMealListCubit>()
                                     ..getSubCategoryRestaurants(id: id),
                                   child: RestaurantForSelectedMeal(
                                     mealId: id,
