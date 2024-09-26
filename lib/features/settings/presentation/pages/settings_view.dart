@@ -42,6 +42,14 @@ class SettingsView extends StatelessWidget {
                 controller.logout();
                 context.push(Routes.HOME);
               }
+              if (state.status == SettingStates.success1) {
+                showSuccessMessage(
+                  context,
+                  LocaleKeys.disableAccount.localize,
+                );
+                controller.logout();
+                context.push(Routes.HOME);
+              }
             },
             builder: (BuildContext context, state) {
               print('Account isDisabled status: ${state.able?.isDisabled}');
@@ -59,17 +67,17 @@ class SettingsView extends StatelessWidget {
                         image: Assets.noPerson,
                         trailing:
                             Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
-                        label: state.able?.isDisabled == true
-                            ? 'Enable Account'
-                            : LocaleKeys.disableAccount.localize,
+                        label: state.able?.isDisabled == false
+                            ? LocaleKeys.disableAccount.localize
+                            : 'Enable Account',
                         onTap: () => showAreYouSure(
                             title: LocaleKeys.alert.localize,
                             subTitle: LocaleKeys.disable.localize,
                             action: () {
-                              if (state.able?.isDisabled == true) {
-                                context.read<SettingCubit>().enableAccount();
+                              if (state.able?.isDisabled == false) {
+                                return context.read<SettingCubit>().disableAccount();
                               } else {
-                                context.read<SettingCubit>().disableAccount();
+                                return context.read<SettingCubit>().enableAccount();
                               }
                             },
                             context: context)),
