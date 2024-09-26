@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -256,6 +255,8 @@ class _ListsViewState extends State<ListsView>
       listener: (context, state) {},
       builder: (context, state) {
         final controller = context.read<ListsCubit>();
+
+
         return Column(
           children: [
             _buildSortingWidget(
@@ -397,6 +398,14 @@ class _ListsViewState extends State<ListsView>
     required Function(String) deleteFriend,
     required Function(String) unfollowUser,
   }) {
+    if (list.isEmpty) {
+      return Center(
+        child: Text(
+          '', // Adjust this to your localization key
+          style: Styles.mediumText(),
+        ),
+      );
+    }
     return RefreshIndicator(
       onRefresh: () async {
         return Future.sync(() => controller.refresh());
@@ -405,7 +414,9 @@ class _ListsViewState extends State<ListsView>
         pagingController: controller,
         separatorBuilder: (context, index) => const Divider(),
         builderDelegate: PagedChildBuilderDelegate<UserFriendEntity>(
-          itemBuilder: (context, item, index) => ListItemCard(
+          itemBuilder: (context, item, index) {
+
+            return ListItemCard(
             type: type,
             user: item,
             removeRequest: removeRequest,
@@ -413,7 +424,8 @@ class _ListsViewState extends State<ListsView>
             unblockUser: unblockUser,
             deleteFriend: deleteFriend,
             unfollowUser: unfollowUser,
-          ),
+          );
+          },
         ),
       ),
     );
