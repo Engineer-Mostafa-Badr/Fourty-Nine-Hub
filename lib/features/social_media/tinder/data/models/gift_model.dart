@@ -60,7 +60,7 @@ class GiftData {
     this.nameEn,
     this.value,
     this.picture,
-    this.currentValue = 0,
+    this.currentValue = 1,
     this.maximumGoal = 100,
   });
 

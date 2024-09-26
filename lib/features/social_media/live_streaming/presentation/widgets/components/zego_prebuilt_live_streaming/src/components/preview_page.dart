@@ -1,5 +1,6 @@
 // Dart imports:
 import 'dart:core';
+import 'dart:ui';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/live_streaming_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/effects/beauty_effect_button.dart';
+
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/utils/permissions.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/utils/pop_up_manager.dart';
@@ -17,6 +19,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/internal/defines.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
+
 // Package imports:
 import 'package:permission_handler/permission_handler.dart';
 
@@ -27,6 +30,7 @@ import '../../../../../../../../../common/widgets/dialogs/show_bottom_sheet.dart
 import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../../../../core/messages/messages.dart';
 import '../../../../../../../../../res/style/const.dart';
 import '../../../../../../../../../res/style/styles.dart';
 import '../../../../../../../../../service_locator/service_locator.dart';
@@ -98,8 +102,11 @@ class _ZegoLiveStreamingPreviewPageState
     }
   }
 
+  final TextEditingController _titleController = TextEditingController();
+
   @override
   void dispose() {
+    _titleController.dispose();
     super.dispose();
   }
 
@@ -178,40 +185,53 @@ class _ZegoLiveStreamingPreviewPageState
                     isCircle: false,
                   ),
                   Expanded(
-                    child: TextFormField(
-                      // controller: _meetingIdController,
-                      keyboardType: TextInputType.text,
-                      textAlign: TextAlign.center,
-                      // validator: validateInput,
-                      maxLength: 50,
-                      style: Styles.mediumText(
-                          color: Colors.white, decorationThickness: 0),
-                      maxLines: null,
-                      // onChanged: onTextChanged,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.edit),
+                    child: Theme(
+                      data: Theme.of(context).copyWith(
+                          textSelectionTheme: const TextSelectionThemeData(
+                        selectionColor: AppColors.PRIMARY_COLOR,
+                        cursorColor: AppColors.PRIMARY_COLOR,
+                        selectionHandleColor: AppColors.PRIMARY_COLOR,
+                      )),
+                      child: TextFormField(
+                        controller: _titleController,
+                        selectionHeightStyle: BoxHeightStyle.tight,
+                        selectionWidthStyle: BoxWidthStyle.tight,
+                        selectionControls: materialTextSelectionControls,
 
-                        // errorText: _errorMessage,
-                        counterText: '',
-                        labelStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
-                        // hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
+                        keyboardType: TextInputType.text,
+                        textAlign: TextAlign.center,
+                        // validator: validateInput,
+                        maxLength: 50,
+                        style: Styles.mediumText(
+                            color: Colors.white, decorationThickness: 0),
+                        maxLines: null,
+                        // onChanged: onTextChanged,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.edit),
 
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10.0),
+                          // errorText: _errorMessage,
+                          counterText: '',
+                          labelStyle:
+                              TextStyle(color: AppColors.QUANTITY_COLOR),
+                          // hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
+
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10.0),
+                            ),
                           ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
                           ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Colors.transparent,
                         ),
-                        filled: true,
-                        fillColor: Colors.transparent,
                       ),
                     ),
                   ),
@@ -234,10 +254,9 @@ class _ZegoLiveStreamingPreviewPageState
                     child: InkWell(
                       onTap: () {
                         _showTopicSheet(
-                            context, context.read<StreamCubit>().topics,
-                            (topic) {
-                          context.read<StreamCubit>().setTopic(topic);
-                        });
+                          context,
+                          context.read<StreamCubit>().topics,
+                        );
                       },
                       child: Row(
                         children: [
@@ -250,6 +269,8 @@ class _ZegoLiveStreamingPreviewPageState
                           ),
                           BlocBuilder<StreamCubit, StreamState>(
                             builder: (context, state) {
+                              print(state.topicId);
+                              print(state.topic);
                               return Text(
                                 state.topic.isEmpty
                                     ? LocaleKeys.addTopic.localize
@@ -272,10 +293,13 @@ class _ZegoLiveStreamingPreviewPageState
                       // showGiftBottomSheet(context,
                       //     receiverId: '', forSelect: true);
                       Navigator.of(context).push(createCustomTransitionRoute(
-                        MultiBlocProvider(
-                          providers: [   BlocProvider.value(value: serviceLocator<StreamCubit>()),
-          BlocProvider(create:(context)=> GiftsCubit()..fetchGifts()),],
-                          child: const SelectLiveGoalsScreen()),
+                        MultiBlocProvider(providers: [
+                          BlocProvider.value(
+                              value: serviceLocator<StreamCubit>()),
+                          BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<GiftsCubit>()..fetchGifts()),
+                        ], child: const SelectLiveGoalsScreen()),
                         TransitionType.bottomToTop,
                       ));
                     },
@@ -310,8 +334,8 @@ class _ZegoLiveStreamingPreviewPageState
         ));
   }
 
-  Future<dynamic> _showTopicSheet(BuildContext context,
-      List<TopicEntity> topics, Function(String? value) onChanged) {
+  Future<dynamic> _showTopicSheet(
+      BuildContext context, List<TopicEntity> topics) {
     return showModalBottomSheet(
       context: context,
       builder: (context) => Padding(
@@ -333,8 +357,9 @@ class _ZegoLiveStreamingPreviewPageState
                   value: topic.name,
                   groupValue: state.topic.isEmpty ? null : state.topic,
                   onChanged: (value) {
-                    onChanged(value);
-                    context.pop();
+                    context.read<StreamCubit>().setTopic(topic.name, topic.id);
+                    Future.delayed(
+                        const Duration(milliseconds: 100), () => context.pop());
                     // print('new topic is ${state.topic}');
                   },
                 );
@@ -630,7 +655,7 @@ class _ZegoLiveStreamingPreviewPageState
       permissions.add(Permission.microphone);
     }
 
-    defaultAction() async {
+    defaultAction(String? title) async {
       await checkPermissions(
         context: context,
         permissions: permissions,
@@ -649,18 +674,26 @@ class _ZegoLiveStreamingPreviewPageState
             );
             return;
           }
-
-          widget.startedNotifier.value = true;
+          if (title != null && title.isNotEmpty) {
+            context.read<StreamCubit>().createLive(title: title);
+            widget.startedNotifier.value = true;
+          } else {
+            showErrorMessage(context, 'Please enter simple title');
+          }
+          // context.read<StreamCubit>().createLive(title: title)
         },
       );
     }
 
     return widget.config.preview.startLiveButtonBuilder?.call(context,
             () async {
-          defaultAction.call();
+          defaultAction.call(_titleController.text.trim());
         }) ??
         GestureDetector(
-          onTap: defaultAction,
+          onTap: () {
+            print(_titleController.text.trim());
+            defaultAction(_titleController.text.trim());
+          },
           child: Container(
             width: context.screenWidth / 1.5,
             height: 50,

@@ -28,6 +28,7 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
+import '../../../../secrets/controller/secrets_cubit.dart';
 
 class MeetingView extends StatelessWidget {
   const MeetingView({super.key});
@@ -253,6 +254,7 @@ class MeetingView extends StatelessWidget {
                               SizedBox(width: 15.h),
                               InkWell(
                                 onTap: () {
+
                                   //to unschedule
                                   joinRoom(context.read<StreamCubit>(),
                                       scheduledMeeting.roomId);
