@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -125,6 +126,7 @@ class _InstagramViewState extends State<InstagramView> {
               child: Icon(
                 i == 0 ? Icons.grid_4x4_outlined : Icons.person,
                 color: i == 0 ? AppColors.PRIMARY_COLOR : Colors.grey,
+                size: 40.w,
               ),
             ),
           ),

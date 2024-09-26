@@ -51,6 +51,7 @@ abstract class Styles {
       fontWeight: fontWeight,
       shadows: shadows,
       decorationColor: color,
+      decoration: decoration,
       color: color,
       decorationThickness: decorationThickness,
     );

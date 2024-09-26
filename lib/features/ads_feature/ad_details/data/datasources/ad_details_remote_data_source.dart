@@ -1,13 +1,14 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_model.dart';
 import 'package:fourtyninehub/res/assets/jsons.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../ads/data/models/Ad_model.dart';
 import '../../domain/usecases/make_ad_request_usecase.dart';
 
 abstract class AdDetailsRemoteDataSource {
-  Future<Either<Failure, AdModel>> getAdDetails({required String id});
+  Future<Either<Failure, AddDetailsModel>> getAdDetails({required String id});
   Future<Either<Failure, List<AdModel>>> getRelevantAds({required int id});
   Future<Either<Failure, bool>> makeAdRequest(
       {required AdRequestParams params});
@@ -18,11 +19,11 @@ class AdDetailsRemoteDataSourceImpl extends AdDetailsRemoteDataSource {
   AdDetailsRemoteDataSourceImpl(this._apiConsumer);
 
   @override
-  Future<Either<Failure, AdModel>> getAdDetails({required String id}) async {
+  Future<Either<Failure, AddDetailsModel>> getAdDetails({required String id}) async {
     final response = await _apiConsumer.get(EndPoints.adDetails(id));
 
     return response.fold((failure) => Left(failure), (data) {
-      final item = AdModel.fromJson(data['data']);
+      final item = AddDetailsModel.fromJson(data['data']);
       return Right(item);
     });
   }

@@ -87,7 +87,7 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
                                         extra: controller.suggestUserPagingController.itemList?[index].id);
                                   },
                                   child: Container(
-                                    width: 200,
+                                    width: 260.w,
                                     padding: const EdgeInsets.only(bottom: 10),
                                     margin: const EdgeInsetsDirectional.only(end: 10),
                                     decoration: BoxDecoration(
@@ -119,6 +119,7 @@ class _InstagramProfileSuggestPeopleState extends State<InstagramProfileSuggestP
                                             width: 120.w,
                                             height: 120.h,
                                             isCircle: true,
+                                            fit: BoxFit.fill,
                                           ),
                                         ),
                                         Padding(

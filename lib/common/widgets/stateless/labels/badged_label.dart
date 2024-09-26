@@ -62,31 +62,14 @@ class BadgedLabel extends StatelessWidget {
             //     : _buildLabelWidget()),
             //         customBorder: isBordered ? Border.all(color: borderColor, width: .5) : null,
             //     borderRadius: BorderRadius.circular(radius),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (close)
-                  Align(
-                    alignment: AlignmentDirectional.topEnd,
-                    child: GestureDetector(
-                        onTap: onRemove,
-                        child: const Icon(
-                          Icons.close,
-                          color: Colors.white,
-                          size: 15,
-                        )),
-                  ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.w.w, vertical: 3.h.w),
-                  child: isCentered
-                      ? Center(
-                          child: _buildLabelWidget(),
-                        )
-                      : _buildLabelWidget(),
-                )
-              ],
+            child: Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: 10.w.w, vertical: 3.h.w),
+              child: isCentered
+                  ? Center(
+                      child: _buildLabelWidget(),
+                    )
+                  : _buildLabelWidget(),
             )));
   }
 

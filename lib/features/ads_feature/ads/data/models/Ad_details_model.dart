@@ -1,31 +1,36 @@
+import 'package:fourtyninehub/features/ads_feature/ads/data/models/ad_details_prop_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/ad_statistics_model.dart';
-import 'package:fourtyninehub/features/ads_feature/create_ad/data/models/create_ad_model.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_details_entity.dart';
 
 import '../../../../authentication/data/models/user_model.dart';
 import '../../../../requests_history/data/models/address_model.dart';
-import '../../domain/entities/ad_entity.dart';
 
-class AdModel extends AdEntity {
-  AdModel(
+class AddDetailsModel extends AdDetailsEntity {
+  AddDetailsModel(
       {required super.id,
-      required super.title,
+        super.userId,
+        super.mainCategoryId,
+        super.subCategoryId,
+        required super.title,
       required super.description,
       required super.images,
+        super.isPrimary,
+        super.isDeleted,
        super.price,
         super.type,
+        super.status,
+        super.phone,
+        super.views,
+        super.requestsCount,
         super.isFavourite,
-        super.hasAuction,
       super.address,
       super.user,
-        super.mainCategoryId,
-        super.userId,
       super.statistics,
       required super.active,
-      required super.approved,
       required super.createdAt,
       required super.details,
-      super.subCategoryId, super.phone});
-  factory AdModel.fromJson(Map<String, dynamic> json) {
+       });
+  factory AddDetailsModel.fromJson(Map<String, dynamic> json) {
     List<String> images = [];
     try {
       images =
@@ -40,15 +45,23 @@ class AdModel extends AdEntity {
         user = UserModel.fromJson(json['user']);
       }
     } catch (e) {}
-    return AdModel(
+    return AddDetailsModel(
         id: json['_id'] ?? '',
+        userId: json['_id'] ?? '',
+        subCategoryId: json['subCategoryId']??'',
+        mainCategoryId: json['mainCategoryId']??'',
         title: json['title'] ?? '',
-        description: json['desc'] ?? json['description'],
+        description: json['desc']??'' ?? json['description']??'',
         images: images,
+        isPrimary: json['isPremium']??false,
+        isDeleted: json['isDeleted']??false,
+        status: json['status']??'',
+        phone: json['phone']??'',
+        requestsCount: json['requestsCount']??0,
+        type: json['type']??'',
+        views: json['views']??0,
         price: json['price'] ?? 0,
-        subCategoryId: json['subCategoryId'],
-        active: json['isActive'] ?? true,
-        approved: json['isApproved'] ?? true,
+        active: json['active'] ?? true,
         isFavourite: json['isFavorite'] ?? false,
         // phone: json['phone'] ?? '',
         statistics: json['statistics'] == null
@@ -59,33 +72,8 @@ class AdModel extends AdEntity {
         details: json['props'] == null
             ? []
             : (json['props'] as List)
-                .map((e) => CreateAdModel.fromJson(e))
+                .map((e) => AdDetailsPropModel.fromJson(e))
                 .toList(),
         createdAt: DateTime.parse(json['createdAt']));
   }
-  Map<String, dynamic> toJson() => {
-        "desc": description,
-        "phone": phone,
-        "title": title,
-    "type":type,
-        // "type": (hasAuction==false&&isUser==false)?"provider":(hasAuction==false&&isUser==true)?"user":(hasAuction==true&&isUser==false)?'rent':'sale',
-        "subCategoryId": subCategoryId,
-        "mainCategoryId": mainCategoryId,
-    if(price!=null)"price":price,
-        // "userId": userId,
-        "searchText": "testPropsAndAds",
-        "images": images,
-        "props": details.map((e) {
-
-          if(e.value.nameEn.isNotEmpty){
-            return {
-              "value":{
-                "ar":e.value.nameAr,
-                "en":e.value.nameEn
-              },
-              "propertyId":e.propId
-            };
-          }
-        }).toList()
-      };
 }

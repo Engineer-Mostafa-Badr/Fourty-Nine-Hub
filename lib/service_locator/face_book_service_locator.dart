@@ -273,6 +273,8 @@ class FaceBookServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
         ));
   }
 }

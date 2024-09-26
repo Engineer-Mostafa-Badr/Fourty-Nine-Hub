@@ -11,11 +11,13 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/api_error_page.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/message_button.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/saved_reels_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_posts.dart';
@@ -51,18 +53,14 @@ class _OtherAccountViewState extends State<OtherAccountView> {
       child: Scaffold(
         body: BlocBuilder<SocialPostsCubit, SocialPostsState>(builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();
-          return state.status == StateStatus.loading
-              ? const Center(
-                  child: CupertinoActivityIndicator(),
-                )
-              : state.status == StateStatus.error
+          return state.status == StateStatus.loading?Center(child: CircularProgressIndicator()): state.status == StateStatus.error
                   ? ApiErrorPage(
                       message: getFailureMessage(
                         state.failure ?? UnknownFailure(''),
                         context,
                       ),
                     )
-                  : CustomScrollView(
+                  :CustomScrollView(
                       slivers: [
                         SliverToBoxAdapter(
                             child: Container(
@@ -455,7 +453,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                  width: 110,
+                                  width: 210.w,
                                   child: AppButton(
                                       // height: 120.h,
                                       width: kToolbarHeight * 1.5,
@@ -471,7 +469,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 const Sizer(),
                                 (user.areFriends == true || user.isSenTRequest == true)
                                     ? PopupMenuButton(
-                                        // iconSize: 150,
+                                        // iconSize: 210,
                                         itemBuilder: (context) {
                                           return [
                                             if (user.isSenTRequest == true) ...[
@@ -510,7 +508,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                               style: Styles.mediumText(color: Colors.white),
                                             )))
                                     : SizedBox(
-                                        width: 110,
+                                        width: 210.w,
                                         child: AppButton(
                                             // height: 80.h,
                                             padding: 5,
@@ -645,34 +643,42 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               ])),
                     ),
                     if (loginUser?.id != widget.userId)
-                      PopupMenuButton(
-                          child: Container(
-                              width: 110,
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5), color: AppColors.SECONDARY_COLOR),
-                              child: Text(
-                                LocaleKeys.message.localize,
-                                style: Styles.mediumText(color: Colors.white),
-                              )),
-                          itemBuilder: (context) {
-                            return [
-                              PopupMenuItem<int>(
-                                value: 0,
-                                child: Text(LocaleKeys.normal.localize),
-                              ),
-                              PopupMenuItem<int>(
-                                value: 1,
-                                child: Text(LocaleKeys.anonymous.localize),
-                              ),
-                            ];
-                          },
-                          onSelected: (value) {
-                            !context.read<UserCubit>().isLoggedIn
-                                ? context.push(Routes.LOGIN)
-                                : context.push(Routes.CHAT);
-                          }),
+
+                      MessageButton(user: state.profileData!, normalPress: () async{
+                        if(context.read<UserCubit>().isLoggedIn){
+                          if(state.profileData?.areFriends==true){
+                            var result = await context.read<SocialPostsCubit>().createNormalChat(widget.userId,ChatCategoriesIds.social);
+                            if(result==true){
+                              context.push(Routes.CHAT);
+                            }
+                          }else{
+                            var result = await context.read<SocialPostsCubit>().createNormalChat(widget.userId,ChatCategoriesIds.greet);
+                            if(result==true){
+                              context.pop();
+                              context.push(Routes.CHAT);
+                            }else{
+                              showErrorMessage(context, getFailureMessage(state.failure!, context));
+                              context.pop();
+                            }
+                          }
+                        }else{
+                          context.push(Routes.LOGIN);
+                        }
+
+                      }, anonymousPress: () async{
+                        if(context.read<UserCubit>().isLoggedIn){
+                          var result = await context.read<SocialPostsCubit>().createAnonymousChat(widget.userId);
+                          if(result==true){
+                            context.pop();
+                            context.push(Routes.CHAT);
+                          }else{
+                            showErrorMessage(context, getFailureMessage(state.failure!, context));
+                            context.pop();
+                          }
+                        }else{
+                          context.push(Routes.LOGIN);
+                        }
+                      },),
                   ],
                 ),
                 Sizer(
