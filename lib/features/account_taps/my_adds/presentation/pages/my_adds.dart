@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 
@@ -13,8 +14,48 @@ import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../widgets/my_ad_card.dart';
 
-class MyAddsView extends StatelessWidget {
+class MyAddsView extends StatefulWidget {
   const MyAddsView({super.key});
+
+  @override
+  State<MyAddsView> createState() => _MyAddsViewState();
+}
+
+class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  late ScrollController _scrollController;
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 5, vsync: this);
+    _scrollController = ScrollController();
+
+    // Listen for tab changes
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        _scrollToSelectedTab(_tabController.index);
+      }
+    });
+  }
+
+  void _scrollToSelectedTab(int index) {
+    // The width of each tab (adjust as needed based on the UI)
+    double tabWidth = 100.w; // Example width, adjust based on your layout
+    // Scroll to the selected tab
+    _scrollController.animateTo(
+      tabWidth * index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,27 +82,34 @@ class MyAddsView extends StatelessWidget {
               onRefresh: () async => context.read<MyAddsCubit>().loadData(),
               child: Column(
                 children: [
-                  const TabBar(isScrollable: true, tabs: [
-                    Tab(
-                      text: 'Pick Me',
+                  SingleChildScrollView(
+                    controller: _scrollController,
+                    scrollDirection: Axis.horizontal,
+                    child: TabBar(
+                      padding: EdgeInsets.zero,
+                      labelPadding: EdgeInsetsDirectional.symmetric(horizontal: 20.w),
+                      tabAlignment: TabAlignment.start,
+                      controller: _tabController,
+                      onTap: (i){
+                        i==0?context.read<MyAddsCubit>().getPickMeTrips():i==1?context.read<MyAddsCubit>().getComeWithMeTrips():i==2?context.read<MyAddsCubit>().getMyAds():i==3?context.read<MyAddsCubit>().getMyAuctions():null;
+                      },
+                      isScrollable: true,
+                      tabs: const [
+                        Tab(text: 'Pick Me'),
+                        Tab(text: 'Come With Me'),
+                        Tab(text: 'Other'),
+                        Tab(text: 'Auctions'),
+                        Tab(text: 'Installment'),
+                      ],
                     ),
-                    Tab(
-                      text: 'Come With Me',
-                    ),
-                    Tab(
-                      text: 'Other',
-                    ),
-                    Tab(
-                      text: 'Auctions',
-                    ),
-                    Tab(
-                      text: 'Installment',
-                    ),
-                  ]),
+                  ),
                   Expanded(
                       child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: TabBarView(children: [
+                    child: TabBarView(
+                        controller: _tabController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
                       _buildMyPickMeTripsWidget(),
                       _buildMyComeWithmeWidget(),
                       _buildMyAdsWidget(),
@@ -80,13 +128,13 @@ class MyAddsView extends StatelessWidget {
 
   Widget _buildMyInstallmentsWidget() {
     return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
-      final controller = context.read<MyAddsCubit>();
+      context.read<MyAddsCubit>();
       if (state.myInstallments?.isEmpty ?? true) {
         return const EmptyPage();
       }
       return ListView.separated(
           itemCount: state.myInstallments?.length ?? 0,
-          separatorBuilder: (context, index) => Sizer(),
+          separatorBuilder: (context, index) => const Sizer(),
           itemBuilder: (context, index) {
             return InstallmentAdCard(
               isVertical: false,
@@ -98,13 +146,13 @@ class MyAddsView extends StatelessWidget {
 
   Widget _buildMyAuctionsWidget() {
     return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
-      final controller = context.read<MyAddsCubit>();
+      context.read<MyAddsCubit>();
       if (state.myAuctions?.isEmpty ?? true) {
         return const EmptyPage();
       }
       return ListView.separated(
           itemCount: state.myAuctions?.length ?? 0,
-          separatorBuilder: (context, index) => Sizer(),
+          separatorBuilder: (context, index) => const Sizer(),
           itemBuilder: (context, index) {
             return AuctionCard(
               isVertical: false,
@@ -122,7 +170,7 @@ class MyAddsView extends StatelessWidget {
       }
       return ListView.separated(
           itemCount: state.myAds?.length ?? 0,
-          separatorBuilder: (context, index) => Sizer(),
+          separatorBuilder: (context, index) => const Sizer(),
           itemBuilder: (context, index) {
             return MyAdCard(
               item: state.myAds![index],
@@ -140,7 +188,7 @@ class MyAddsView extends StatelessWidget {
       }
       return ListView.separated(
           itemCount: state.pickMeTrips?.length ?? 0,
-          separatorBuilder: (context, index) => Sizer(),
+          separatorBuilder: (context, index) => const Sizer(),
           itemBuilder: (context, index) {
             return TripCard(
               requests: state.pickMeTrips![index].requests,
@@ -162,7 +210,7 @@ class MyAddsView extends StatelessWidget {
       }
       return ListView.separated(
           itemCount: state.comeWithMeTrips?.length ?? 0,
-          separatorBuilder: (context, index) => Sizer(),
+          separatorBuilder: (context, index) => const Sizer(),
           itemBuilder: (context, index) {
             return TripCard(
               requests: state.comeWithMeTrips![index].requests,

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/widgets/story_view.dart';
@@ -12,6 +11,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../tinder/data/shared/shared.dart';
 import '../cubit/stories_cubit.dart';
 import 'more_stories.dart';
 import 'create_story_screen.dart';
@@ -28,9 +28,9 @@ class Stories extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         children: [
-          Sizer(),
+          const Sizer(),
           _buildYourStory(context),
-          Sizer(
+          const Sizer(
             width: 8,
           ),
           SizedBox(
@@ -44,7 +44,7 @@ class Stories extends StatelessWidget {
                         shrinkWrap: true,
                         itemBuilder: (context, index) =>
                             _buildOthersStories(context, state, index),
-                        separatorBuilder: (context, index) => Sizer(
+                        separatorBuilder: (context, index) => const Sizer(
                               width: 8,
                             ),
                         itemCount: state.users.length)

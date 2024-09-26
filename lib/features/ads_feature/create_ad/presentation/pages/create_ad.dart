@@ -68,6 +68,7 @@ class _CreateAdViewState extends State<CreateAdView> {
             key: controller.formState,
             child: ListView(
               children: [
+                // Label(text: widget.categorization.subCategory.hasAuction.toString()),
                 Row(
                   children: [
                     SquareImage(

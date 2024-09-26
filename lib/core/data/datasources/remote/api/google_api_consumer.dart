@@ -17,6 +17,7 @@ class GoogleApiConsumer extends ApiConsumer {
     String url, {
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? data,
+    Map<String, dynamic>? headers
   }) async {
     try {
       // dio.options.baseUrl ;
@@ -24,6 +25,7 @@ class GoogleApiConsumer extends ApiConsumer {
         url,
         data: data,
         queryParameters: queryParameters,
+        options: Options(headers: headers)
       );
       if (result.data['status'] == 'OK') {
         return Right(result.data['results'][0] as Map<String, dynamic>);
@@ -60,7 +62,7 @@ class GoogleApiConsumer extends ApiConsumer {
 
   @override
   Future<Either<Failure, Map<String, dynamic>>> delete(String url,
-      {Map<String, dynamic>? data, Map<String, dynamic>? queryParameters}) {
+      {Map<String, dynamic>? data, Map<String, dynamic>? queryParameters,Map<String, dynamic>? headers}) {
     // TODO: implement delete
     throw UnimplementedError();
   }
@@ -73,7 +75,7 @@ class GoogleApiConsumer extends ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> post(String url,
       {Map<String, dynamic>? data,
       FormData? formData,
-      Map<String, dynamic>? queryParameters}) {
+      Map<String, dynamic>? queryParameters,Map<String, dynamic>? headers}) {
     // TODO: implement post
     throw UnimplementedError();
   }

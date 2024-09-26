@@ -78,9 +78,9 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                   fontSize: 45.sp),
             ),
             PositionedDirectional(
-              start: 0.h,
-              bottom: 0.h,
-              child: Column(
+              start: 0,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   context.read<UserCubit>().isLoggedIn
                       ? IconButton(

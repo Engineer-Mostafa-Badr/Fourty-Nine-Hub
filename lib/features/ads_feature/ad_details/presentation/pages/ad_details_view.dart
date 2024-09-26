@@ -12,10 +12,9 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/detail_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_model.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_details_prop_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
-import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 
@@ -65,7 +64,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
               child: CircularProgressIndicator.adaptive(),
             );
           }
-          List<CreateAdEntity>? details = state.ad?.details.where((e) => e.value.nameAr!='price'&&e.value.nameAr!='السعر').toList();
+          List<AdDetailsPropEntity>? details = state.ad?.details.where((e) => e.nameAr!='الراتب'&&e.nameAr!='السعر').toList();
 
           return Column(
             children: [
@@ -195,7 +194,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
   }
 
 
-  Widget _buildAdInfoWidget({required AdModel ad}) {
+  Widget _buildAdInfoWidget({required AddDetailsModel ad}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -277,8 +276,8 @@ class _AdDetailsViewState extends State<AdDetailsView> {
     );
   }
 
-  Widget _buildDetailsWidget({required AdModel ad}) {
-    List<CreateAdEntity>? details = ad.details.where((e) => e.value.nameAr!='price'&&e.value.nameAr!='السعر').toList();
+  Widget _buildDetailsWidget({required AddDetailsModel ad}) {
+    List<AdDetailsPropEntity>? details = ad.details.where((e) => e.nameAr!='الراتب'&&e.nameAr!='السعر').toList();
 
     // List<DetailEntiy> details = ad.details.where((e) => e.label!='المرتب'&&e.label!='Salary'&&e.label!='price'&&e.label!='Price '&&e.label!='السعر ').toList();
 
@@ -303,8 +302,8 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         : Colors.white),
                 child: Row(
                   children: [
-                    Expanded(child: Label(text: "${getLang()=='ar'?detail.value.nameAr:detail.value.nameEn} : ",style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR))),
-                    Expanded(child: Label(text: getLang()=='ar'?detail.value.nameAr:detail.value.nameEn)),
+                    Expanded(child: Label(text: "${getLang()=='ar'?detail.nameAr:detail.nameEn} : ",style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR))),
+                    Expanded(child: Label(text: getLang()=='ar'?detail.valueAr:detail.valueEn)),
                   ],
                 ),
               );

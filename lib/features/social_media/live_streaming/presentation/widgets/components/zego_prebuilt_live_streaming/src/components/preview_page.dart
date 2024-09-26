@@ -5,6 +5,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/animations/create_custom_transition.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/live_streaming_cubit.dart';
@@ -20,6 +21,7 @@ import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
@@ -29,12 +31,15 @@ import '../../../../../../../../../res/style/const.dart';
 import '../../../../../../../../../res/style/styles.dart';
 import '../../../../../../../../../service_locator/service_locator.dart';
 import '../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../../../../../../zoom/presentation/bloc/meeting_cubit.dart';
-import '../../../../../../../../zoom/presentation/bloc/meeting_state.dart';
+import '../../../../../../../../zoom/presentation/controller/stream_cubit.dart';
+import '../../../../../../../../zoom/presentation/controller/stream_state.dart';
 import '../../../../../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../../../../tinder/data/shared/shared.dart';
+import '../../../../../../../tinder/presentation/cubit/gift_cubit.dart';
+import '../../../../../../domain/entity/topic_entity.dart';
 import '../../../../liveview/gifts/simple_gifts_sheet.dart';
 import '../config.dart';
+import 'select_live_goals_screen.dart';
 
 /// @nodoc
 /// user should be login before page enter
@@ -228,7 +233,9 @@ class _ZegoLiveStreamingPreviewPageState
                     ),
                     child: InkWell(
                       onTap: () {
-                        _showTopicSheet(context, topics, (topic) {
+                        _showTopicSheet(
+                            context, context.read<StreamCubit>().topics,
+                            (topic) {
                           context.read<StreamCubit>().setTopic(topic);
                         });
                       },
@@ -262,8 +269,15 @@ class _ZegoLiveStreamingPreviewPageState
                 Expanded(
                   child: InkWell(
                     onTap: () {
-                      showGiftBottomSheet(context,
-                          fromTinder: false, receiverId: '');
+                      // showGiftBottomSheet(context,
+                      //     receiverId: '', forSelect: true);
+                      Navigator.of(context).push(createCustomTransitionRoute(
+                        MultiBlocProvider(
+                          providers: [   BlocProvider.value(value: serviceLocator<StreamCubit>()),
+          BlocProvider(create:(context)=> GiftsCubit()..fetchGifts()),],
+                          child: const SelectLiveGoalsScreen()),
+                        TransitionType.bottomToTop,
+                      ));
                     },
                     child: Container(
                       // margin: EdgeInsets.only(left: constraints.maxWidth / 20),
@@ -296,8 +310,8 @@ class _ZegoLiveStreamingPreviewPageState
         ));
   }
 
-  Future<dynamic> _showTopicSheet(BuildContext context, List<String> topics,
-      Function(String? value) onChanged) {
+  Future<dynamic> _showTopicSheet(BuildContext context,
+      List<TopicEntity> topics, Function(String? value) onChanged) {
     return showModalBottomSheet(
       context: context,
       builder: (context) => Padding(
@@ -315,8 +329,8 @@ class _ZegoLiveStreamingPreviewPageState
               ),
               ...topics.map((topic) {
                 return RadioListTile<String>(
-                  title: Label(text: topic),
-                  value: topic,
+                  title: Label(text: topic.name),
+                  value: topic.name,
                   groupValue: state.topic.isEmpty ? null : state.topic,
                   onChanged: (value) {
                     onChanged(value);
@@ -324,7 +338,7 @@ class _ZegoLiveStreamingPreviewPageState
                     // print('new topic is ${state.topic}');
                   },
                 );
-              }).toList(),
+              }),
             ]);
           }),
         ),

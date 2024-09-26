@@ -567,7 +567,7 @@ class EndPoints {
   }
 
   static const createAd = '/ads/create-ads';
-  static const myAds = '/ads/allMyAds';
+  static const myAds = '/ads/allMyAds?limit=100';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const favouriteAds = '/ads-favourites/allFavouriteAds';
   static const favouriteSubCategories = '/favorite-sub-category';
@@ -681,6 +681,11 @@ class EndPoints {
   static String endMeeting(String id) => '/room-id/finish/$id';
 
   static String getScheduledMeetings(String id) => '/room-id/$id';
+
+  //lives
+  static String allLiveTopics = '/stream-topic';
+
+
   static String deleteChatMessage = '/chat/message';
 
   static String changeChatMuteState(String chatId) {

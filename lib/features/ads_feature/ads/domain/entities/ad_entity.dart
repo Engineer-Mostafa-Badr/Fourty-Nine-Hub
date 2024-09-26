@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import '../../../../../core/utils/duration_helper.dart';
 import '../../../../authentication/domain/entities/user_entity.dart';
 import '../../../../requests_history/domain/entities/address_entity.dart';
-import 'detail_entity.dart';
 
 class AdEntity {
   final String id;
@@ -16,6 +15,7 @@ class AdEntity {
   final List<String> images;
   final num? price;
   final bool active;
+  final bool approved;
   final AdStatisticsEntity? statistics;
   final AddressEntity? address;
   final UserEntity? user;
@@ -46,6 +46,7 @@ class AdEntity {
       this.mainCategoryId,
       this.userId,
       required this.active,
+      required this.approved,
       required this.details,
       required this.createdAt});
 }
