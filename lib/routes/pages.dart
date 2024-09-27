@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/l
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/carpool/presentation/views/carpool_view.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit/food_cart_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
@@ -1197,6 +1198,26 @@ class AppPages {
               );
             },
           ),
+          GoRoute(
+            path: Paths.CAR_POOL,
+            name: Routes.CAR_POOL,
+            builder: (context, state) {
+              return MultiBlocProvider(providers: [
+                BlocProvider<StartingLocationCubit>(
+                  create: (context) => StartingLocationCubit(fetchLocationCordinatesUseCase: serviceLocator()),
+                ),
+                BlocProvider<DestinationLocationCubit>(
+                  create: (context) => DestinationLocationCubit(fetchLocationCordinatesUseCase: serviceLocator()),
+                ),
+                BlocProvider<StartingLocationCubit>(
+                  create: (context) => StartingLocationCubit(fetchLocationCordinatesUseCase: serviceLocator()),
+                ),
+                BlocProvider<DestinationLocationCubit>(
+                  create: (context) => DestinationLocationCubit(fetchLocationCordinatesUseCase: serviceLocator()),
+                ),
+              ], child: const CarPoolView());
+            },
+          )
         ],
       ),
     ],

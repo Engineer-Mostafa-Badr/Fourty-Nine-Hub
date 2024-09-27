@@ -51,12 +51,10 @@ abstract class Routes {
   static const VISITAEMERGENCY = '/Visita/VisitaEmergency';
   static const CREATEDOCTOR = '/Visita/CreateDoctor';
   static const FILTERDOCTORSUBCATEGORY = '/Visita/FilterDoctorSubcategory';
-  static const FILTERDOCTORAREA =
-      '/Visita/FilterDoctorSubcategory/FilterDoctorCity/FilterDoctorArea';
+  static const FILTERDOCTORAREA = '/Visita/FilterDoctorSubcategory/FilterDoctorCity/FilterDoctorArea';
   static const VISITADOCTORLISTBYLOCATION =
       '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate/FilterDoctorCity/VisitaDoctorsList';
-  static const VISITADOCTORLISTBYCALL =
-      '/Visita/FilterDoctorSubcategory/VisitaDoctorsList';
+  static const VISITADOCTORLISTBYCALL = '/Visita/FilterDoctorSubcategory/VisitaDoctorsList';
   static const FILTERDOCTORGOVERNORATE = '/Visita/FilterDoctorGovernorate';
 
   static const FILTERDOCTORCITY = '/Visita/FilterDoctorCity';
@@ -69,8 +67,7 @@ abstract class Routes {
   static const EDITDOCTORPERSONALINFO = '/Visita/EditDoctorPersonalInfo';
   static const DOCTORSTATISTICS = '/Visita/DoctorStatistics';
   static const DOCTORTODAYAPPOINTMENTS = '/Visita/DoctorTodayAppointments';
-  static const DOCTORUNHANDLEDAPPOINTMENTS =
-      '/Visita/DoctorUnhandledAppointments';
+  static const DOCTORUNHANDLEDAPPOINTMENTS = '/Visita/DoctorUnhandledAppointments';
   static const ALLDOCTORRESERVATIONS = '/Visita/AllDoctorReservations';
   static const FOOD = '/Food';
 
@@ -106,8 +103,7 @@ abstract class Routes {
   static const INSTALLMENT = '/Installment';
   static const CREATEINSTALLMENT = '/Installment/CreateInstallment';
   static const INSTALLMENTDETAILS = '/Installment/Installment-details';
-  static const INSTALLMENTORDERDETAILS =
-      '/Installment/Installment-order-details';
+  static const INSTALLMENTORDERDETAILS = '/Installment/Installment-order-details';
   static const INSTALLMENTORDERS = '/Installment/Installment-orders';
   static const LOGIN = '/Login';
   static const REGISTER = '/Register';
@@ -135,6 +131,8 @@ abstract class Routes {
   static const AVAILABLE_TRIPS = '/AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = '/TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = '/TripJoinRequestHistory';
+
+  static const CAR_POOL = '/CarPool';
 
   static const SPOTLIGHT = '/Spotlight';
   static const SNAP = '/Snap';
@@ -262,6 +260,7 @@ abstract class Paths {
   static const AVAILABLE_TRIPS = 'AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = 'TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = 'TripJoinRequestHistory';
+  static const CAR_POOL = 'CarPool';
 
   static const SPOTLIGHT = 'Spotlight';
   static const SNAP = 'Snap';
