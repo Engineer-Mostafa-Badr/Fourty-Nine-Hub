@@ -21,9 +21,11 @@ class MyAddsView extends StatefulWidget {
   State<MyAddsView> createState() => _MyAddsViewState();
 }
 
-class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateMixin {
+class _MyAddsViewState extends State<MyAddsView>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late ScrollController _scrollController;
+
   @override
   void initState() {
     super.initState();
@@ -48,7 +50,6 @@ class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateM
       curve: Curves.easeInOut,
     );
   }
-
 
   @override
   void dispose() {
@@ -87,19 +88,32 @@ class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateM
                     scrollDirection: Axis.horizontal,
                     child: TabBar(
                       padding: EdgeInsets.zero,
-                      labelPadding: EdgeInsetsDirectional.symmetric(horizontal: 20.w),
+                      labelPadding:
+                          EdgeInsetsDirectional.symmetric(horizontal: 20.w),
                       tabAlignment: TabAlignment.start,
                       controller: _tabController,
-                      onTap: (i){
-                        i==0?context.read<MyAddsCubit>().getPickMeTrips():i==1?context.read<MyAddsCubit>().getComeWithMeTrips():i==2?context.read<MyAddsCubit>().getMyAds():i==3?context.read<MyAddsCubit>().getMyAuctions():null;
+                      onTap: (i) {
+                        i == 0
+                            ? context.read<MyAddsCubit>().getPickMeTrips()
+                            : i == 1
+                                ? context
+                                    .read<MyAddsCubit>()
+                                    .getComeWithMeTrips()
+                                : i == 2
+                                    ? context.read<MyAddsCubit>().getMyAds()
+                                    : i == 3
+                                        ? context
+                                            .read<MyAddsCubit>()
+                                            .getMyAuctions()
+                                        : null;
                       },
                       isScrollable: true,
                       tabs: const [
-                        Tab(text: 'Pick Me'),
-                        Tab(text: 'Come With Me'),
-                        Tab(text: 'Other'),
                         Tab(text: 'Auctions'),
                         Tab(text: 'Installment'),
+                        Tab(text: 'Trip join'),
+                        Tab(text: 'Carpool'),
+                        Tab(text: 'Other'),
                       ],
                     ),
                   ),
@@ -110,12 +124,12 @@ class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateM
                         controller: _tabController,
                         physics: const NeverScrollableScrollPhysics(),
                         children: [
-                      _buildMyPickMeTripsWidget(),
-                      _buildMyComeWithmeWidget(),
-                      _buildMyAdsWidget(),
-                      _buildMyAuctionsWidget(),
-                      _buildMyInstallmentsWidget(),
-                    ]),
+                          _buildMyAuctionsWidget(),
+                          _buildMyInstallmentsWidget(),
+                          _buildMyPickMeTripsWidget(),
+                          _buildMyComeWithmeWidget(),
+                          _buildMyAdsWidget(),
+                        ]),
                   )),
                 ],
               ),

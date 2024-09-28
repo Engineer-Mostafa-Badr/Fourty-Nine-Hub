@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_states.dart';
@@ -36,6 +37,70 @@ class GiftWalletView extends StatelessWidget {
                     WalletCardWidget(
                       balance: '${state.gift?.giftWallet.amount ?? ''}',
                       type: WalletTypes.giftWallet,
+                    ),
+                    const Sizer(),
+                    Label(
+                      text: LocaleKeys.luckyWheel.localize,
+                      style: Styles.headerText(),
+                    ),
+                    const Sizer(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsetsDirectional.symmetric(
+                                vertical: 15.h, horizontal: 15.w),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.r),
+                                color: Theme.of(context).primaryColor),
+                            child: Row(
+                              children: [
+                                Text(
+                                  LocaleKeys.money.localize,
+                                  style: Styles.mediumText(
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor),
+                                ),
+                                Spacer(),
+                                Text(
+                                  '${state.wheel?.amount.round() ?? 0}',
+                                  style: Styles.mediumText(
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Sizer(),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsetsDirectional.symmetric(
+                                vertical: 15.h, horizontal: 15.w),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.r),
+                                color: Theme.of(context).primaryColor),
+                            child: Row(
+                              children: [
+                                Text(
+                                  LocaleKeys.points.localize,
+                                  style: Styles.mediumText(
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor),
+                                ),
+                                Spacer(),
+                                Text(
+                                  '${state.wheel?.points.round() ?? 0}',
+                                  style: Styles.mediumText(
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     Sizer(),
                     Label(
