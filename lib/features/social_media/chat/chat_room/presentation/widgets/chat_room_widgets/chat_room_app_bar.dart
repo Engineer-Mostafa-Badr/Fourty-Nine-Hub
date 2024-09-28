@@ -16,8 +16,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const ChatRoomAppBar({super.key, required this.chatsCubit});
-  final ChatsCubit chatsCubit;
+  const ChatRoomAppBar({super.key, required this.chatRoomCubit});
+  final ChatRoomCubit chatRoomCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +101,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 if (value == 1) {
                   context.push(
                     Routes.ATTACHMENTSVIEW,
-                    extra: chatsCubit,
+                    extra: chatRoomCubit,
                   );
                 }
                 if (value == 6) {

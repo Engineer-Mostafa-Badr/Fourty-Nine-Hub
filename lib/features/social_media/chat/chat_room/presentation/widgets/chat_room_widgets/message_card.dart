@@ -58,7 +58,7 @@ class MessageCard extends StatelessWidget {
                         messageEntity: messageEntity,
                       )
                     : messageEntity.media[0].type == FileTypeEnum.audio
-                        ? SendVoiceMessageCard(
+                        ? VoiceMessageCard(
                             messageEntity: messageEntity,
                             isSend: true,
                           )
@@ -80,7 +80,7 @@ class MessageCard extends StatelessWidget {
                         messageEntity: messageEntity,
                       )
                     : messageEntity.media[0].type == FileTypeEnum.audio
-                        ? SendVoiceMessageCard(
+                        ? VoiceMessageCard(
                             messageEntity: messageEntity,
                             isSend: false,
                           )
@@ -550,8 +550,8 @@ class MessageCard extends StatelessWidget {
   }
 }
 
-class SendVoiceMessageCard extends StatelessWidget {
-  const SendVoiceMessageCard({
+class VoiceMessageCard extends StatelessWidget {
+  const VoiceMessageCard({
     super.key,
     required this.messageEntity,
     required this.isSend,
@@ -591,11 +591,19 @@ class SendVoiceMessageCard extends StatelessWidget {
               topLeft: const Radius.circular(12),
               topRight: const Radius.circular(12),
               bottomLeft: isArabic
-                  ? const Radius.circular(12)
-                  : const Radius.circular(0),
+                  ? isSend
+                      ? const Radius.circular(12)
+                      : const Radius.circular(0)
+                  : isSend
+                      ? const Radius.circular(12)
+                      : const Radius.circular(0),
               bottomRight: isArabic
-                  ? const Radius.circular(0)
-                  : const Radius.circular(12),
+                  ? isSend
+                      ? const Radius.circular(0)
+                      : const Radius.circular(12)
+                  : isSend
+                      ? const Radius.circular(0)
+                      : const Radius.circular(12),
             ),
             boxShadow: const [
               BoxShadow(

@@ -25,8 +25,8 @@ import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AttachementsView extends StatefulWidget {
-  const AttachementsView({super.key, required this.chatsCubit});
-  final ChatsCubit chatsCubit;
+  const AttachementsView({super.key, required this.chatRoomCubit});
+  final ChatRoomCubit chatRoomCubit;
 
   @override
   AttachementsViewState createState() => AttachementsViewState();
@@ -37,90 +37,89 @@ class AttachementsViewState extends State<AttachementsView> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: widget.chatsCubit),
-          BlocProvider(
-              create: (context) => serviceLocator<ChatRoomCubit>()
-                ..init(chat: widget.chatsCubit.selectedChat)),
-        ],
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: AppColors.PRIMARY_COLOR,
-            title: Text(
-              LocaleKeys.attachments.tr(),
-              style: Styles.headerText(
-                fontWeight: FontWeight.bold,
-                color: AppColors.BACKGROUND_COLOR,
+      child: BlocProvider.value(
+        value: widget.chatRoomCubit,
+        child: Builder(
+          builder: (context) {
+            return Scaffold(
+              appBar: AppBar(
+                elevation: 0,
+                backgroundColor: AppColors.PRIMARY_COLOR,
+                title: Text(
+                  LocaleKeys.attachments.tr(),
+                  style: Styles.headerText(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.BACKGROUND_COLOR,
+                  ),
+                ),
+                leading: IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    size: 26,
+                    color: AppColors.BACKGROUND_COLOR,
+                  ),
+                ),
+                bottom: TabBar(
+                  indicatorColor: AppColors.BACKGROUND_COLOR,
+                  indicatorWeight: 3,
+                  // indicatorPadding: const EdgeInsets.symmetric(horizontal: 2),
+                  unselectedLabelColor: AppColors.DIVIDER_GRAY_COLOR2,
+                  labelColor: AppColors.BACKGROUND_COLOR,
+                  tabs: [
+                    Tab(
+                      text: LocaleKeys.media.tr(),
+                    ),
+                    Tab(
+                      text: LocaleKeys.docs.tr(),
+                    ),
+                    Tab(
+                      text: LocaleKeys.links.tr(),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(
-                Icons.arrow_back,
-                size: 26,
-                color: AppColors.BACKGROUND_COLOR,
+              body: BlocBuilder<ChatRoomCubit, ChatRoomState>(
+                builder: (context, state) {
+                  log("state.messages ${state.messages?.length}");
+            
+                  return TabBarView(
+                    children: [
+                      state.messages == null
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.PRIMARY_COLOR,
+                              ),
+                            )
+                          : MediaAttachementsTab(
+                              messages: state.messages ?? [],
+                            ),
+                      state.messages == null
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.PRIMARY_COLOR,
+                              ),
+                            )
+                          : DocumentsAttachementsTab(
+                              messages: state.messages ?? [],
+                            ),
+                      state.messages == null
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.PRIMARY_COLOR,
+                              ),
+                            )
+                          : LinksAttachementsTab(
+                              messages: state.messages ?? [],
+                            ),
+                    ],
+                  );
+                },
               ),
-            ),
-            bottom: TabBar(
-              indicatorColor: AppColors.BACKGROUND_COLOR,
-              indicatorWeight: 3,
-              // indicatorPadding: const EdgeInsets.symmetric(horizontal: 2),
-              unselectedLabelColor: AppColors.DIVIDER_GRAY_COLOR2,
-              labelColor: AppColors.BACKGROUND_COLOR,
-              tabs: [
-                Tab(
-                  text: LocaleKeys.media.tr(),
-                ),
-                Tab(
-                  text: LocaleKeys.docs.tr(),
-                ),
-                Tab(
-                  text: LocaleKeys.links.tr(),
-                ),
-              ],
-            ),
-          ),
-          body: BlocBuilder<ChatRoomCubit, ChatRoomState>(
-            builder: (context, state) {
-              log("state.messages ${state.messages?.length}");
-
-              return TabBarView(
-                children: [
-                  state.messages == null
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.PRIMARY_COLOR,
-                          ),
-                        )
-                      : MediaAttachementsTab(
-                          messages: state.messages ?? [],
-                        ),
-                  state.messages == null
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.PRIMARY_COLOR,
-                          ),
-                        )
-                      : DocumentsAttachementsTab(
-                          messages: state.messages ?? [],
-                        ),
-                  state.messages == null
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.PRIMARY_COLOR,
-                          ),
-                        )
-                      : LinksAttachementsTab(
-                          messages: state.messages ?? [],
-                        ),
-                ],
-              );
-            },
-          ),
+            );
+          }
         ),
       ),
     );

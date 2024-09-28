@@ -826,7 +826,7 @@ class AppPages {
                 GoRoute(
                   path: Paths.ATTACHMENTSVIEW,
                   name: Routes.ATTACHMENTSVIEW,
-                  builder: (context, state) =>  AttachementsView(chatsCubit: state.extra as ChatsCubit,),
+                  builder: (context, state) =>  AttachementsView(chatRoomCubit: state.extra as ChatRoomCubit,),
                 ),
                 GoRoute(
                   path: Paths.SELECTCONTACTSTOSHARE,
