@@ -28,6 +28,7 @@ import 'package:go_router/go_router.dart';
 import 'package:swipe_to/swipe_to.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:voice_message_package/voice_message_package.dart';
 
 import '../widgets_contacts/recived_contacts.dart';
 
@@ -56,12 +57,17 @@ class MessageCard extends StatelessWidget {
                     ? SentFileCard(
                         messageEntity: messageEntity,
                       )
-                    : _buildSendMediaCard(
-                        isArabic: isArabic,
-                        chatRoomCubit: chatRoomCubit,
-                        context: context,
-                        width: width,
-                      )
+                    : messageEntity.media[0].type == FileTypeEnum.audio
+                        ? SendVoiceMessageCard(
+                            messageEntity: messageEntity,
+                            isSend: true,
+                          )
+                        : _buildSendMediaCard(
+                            isArabic: isArabic,
+                            chatRoomCubit: chatRoomCubit,
+                            context: context,
+                            width: width,
+                          )
         : messageEntity.sharedContacts.isNotEmpty
             ? ReceivedContactsCard(messageEntity: messageEntity)
             : messageEntity.media.isEmpty
@@ -73,12 +79,17 @@ class MessageCard extends StatelessWidget {
                     ? ReceivedFileCard(
                         messageEntity: messageEntity,
                       )
-                    : _buildReceiveMediaCard(
-                        isArabic: isArabic,
-                        chatRoomCubit: chatRoomCubit,
-                        context: context,
-                        width: width,
-                      );
+                    : messageEntity.media[0].type == FileTypeEnum.audio
+                        ? SendVoiceMessageCard(
+                            messageEntity: messageEntity,
+                            isSend: false,
+                          )
+                        : _buildReceiveMediaCard(
+                            isArabic: isArabic,
+                            chatRoomCubit: chatRoomCubit,
+                            context: context,
+                            width: width,
+                          );
   }
 
   SwipeTo _buildSendMediaCard(
@@ -539,6 +550,149 @@ class MessageCard extends StatelessWidget {
   }
 }
 
+class SendVoiceMessageCard extends StatelessWidget {
+  const SendVoiceMessageCard({
+    super.key,
+    required this.messageEntity,
+    required this.isSend,
+  });
+
+  final MessageEntity messageEntity;
+  final bool isSend;
+
+  @override
+  Widget build(BuildContext context) {
+    final chatRoomCubit = context.read<ChatRoomCubit>();
+    final isArabic = LocaleKeys.more.tr() == "More";
+    return SwipeTo(
+      onRightSwipe: !isArabic
+          ? null
+          : (details) {
+              chatRoomCubit.selectMessageForReplaying(messageEntity);
+            },
+      onLeftSwipe: isArabic
+          ? null
+          : (details) {
+              chatRoomCubit.selectMessageForReplaying(messageEntity);
+            },
+      child: Padding(
+        padding: EdgeInsets.only(
+          right: isSend ? 8 : MediaQuery.of(context).size.width * 0.3,
+          bottom: 6,
+          top: 6,
+          left: isSend ? MediaQuery.of(context).size.width * 0.3 : 8,
+        ),
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.65,
+          decoration: BoxDecoration(
+            color:
+                isSend ? AppColors.MESSAGE_COLOR : AppColors.BACKGROUND_COLOR,
+            borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(12),
+              topRight: const Radius.circular(12),
+              bottomLeft: isArabic
+                  ? const Radius.circular(12)
+                  : const Radius.circular(0),
+              bottomRight: isArabic
+                  ? const Radius.circular(0)
+                  : const Radius.circular(12),
+            ),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 8,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              messageEntity.hasReply
+                  ? isSend
+                      ? ReplySendMessageCard(
+                          width: MediaQuery.of(context).size.width * 0.65,
+                          messageEntity: messageEntity)
+                      : ReplyRecivedMessageCard(
+                          messageEntity: messageEntity,
+                          width: MediaQuery.of(context).size.width * 0.65,
+                        )
+                  : const SizedBox(),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.65,
+                child: VoiceMessageView(
+                  activeSliderColor: AppColors.PRIMARY_COLOR,
+                  circlesColor: AppColors.PRIMARY_COLOR,
+                  backgroundColor: isSend
+                      ? AppColors.MESSAGE_COLOR
+                      : AppColors.BACKGROUND_COLOR,
+                  innerPadding: 12,
+                  cornerRadius: 12,
+                  // notActiveSliderColor:
+                  //     AppColors.PRIMARY_COLOR.withOpacity(0.1),
+                  // size: ,
+                  controller: VoiceController(
+                    audioSrc: messageEntity.media[0].url,
+                    maxDuration: const Duration(minutes: 1000),
+                    // cacheKey: messageEntity.media[0].url,
+                    isFile: false,
+                    onComplete: () {},
+                    onPause: () {},
+                    onPlaying: () {},
+                    onError: (p0) {},
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Padding(
+                padding:
+                    const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Label(
+                      text: messageEntity.time,
+                      style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                    ),
+                    isSend ? const SizedBox(width: 4) : const SizedBox(),
+                    isSend
+                        ? Icon(
+                            _getMessageIcon(messageEntity),
+                            color: _getMessageIconColor(messageEntity),
+                            size: 12,
+                          )
+                        : const SizedBox(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  IconData _getMessageIcon(MessageEntity messageEntity) {
+    if (messageEntity.seen) {
+      return FontAwesomeIcons.checkDouble;
+    } else if (messageEntity.delivered) {
+      return FontAwesomeIcons.checkDouble;
+    } else {
+      return FontAwesomeIcons.check;
+    }
+  }
+
+  Color _getMessageIconColor(MessageEntity messageEntity) {
+    if (messageEntity.seen) {
+      return Colors.red;
+    } else if (messageEntity.delivered) {
+      return Colors.grey;
+    } else {
+      return Colors.grey;
+    }
+  }
+}
+
 class ReplyRecivedMessageCard extends StatelessWidget {
   const ReplyRecivedMessageCard({
     super.key,
@@ -603,7 +757,7 @@ class ReplyRecivedMessageCard extends StatelessWidget {
                 children: [
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: width * 0.55,
+                      maxWidth: width * 0.5,
                     ),
                     child: Text(
                       messageEntity.reply!.sender.name,
@@ -615,7 +769,7 @@ class ReplyRecivedMessageCard extends StatelessWidget {
                   ),
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: width * 0.55,
+                      maxWidth: width * 0.5,
                       maxHeight: 20,
                     ),
                     child: Text(
@@ -728,7 +882,7 @@ class ReplySendMessageCard extends StatelessWidget {
                 children: [
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: width * 0.7,
+                      maxWidth: width * 0.5,
                     ),
                     child: Text(
                       messageEntity.reply!.sender.name,
@@ -740,7 +894,7 @@ class ReplySendMessageCard extends StatelessWidget {
                   ),
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: width * 0.7,
+                      maxWidth: width * 0.5,
                       maxHeight: 20,
                     ),
                     child: Text(

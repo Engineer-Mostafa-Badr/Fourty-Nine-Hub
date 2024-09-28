@@ -112,7 +112,7 @@ class UploadFile {
       String? mediaId;
       CliLogger.info("Creating upload URL for: ${file.path}");
 
-      log("${file.type.name == 'document' ? file.type.name.substring(0, 3) : file.type.name}/${file.path.split('.').last}");
+      log("file name + path is : ${file.type.name == 'document' ? file.type.name.substring(0, 3) : file.type.name}/${file.path.split('.').last}");
       log("file path is : ${file.path.split('/').last}");
       final uploadUrlResponse = await serviceLocator<ApiConsumer>().post(
         EndPoints.mediaUrl,

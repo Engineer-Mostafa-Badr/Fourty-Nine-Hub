@@ -93,6 +93,7 @@ dependencies:
   path: 1.9.0
   open_file: ^3.3.1
   html: ^0.15.0
+  voice_message_package: ^2.2.1
   
   
 
