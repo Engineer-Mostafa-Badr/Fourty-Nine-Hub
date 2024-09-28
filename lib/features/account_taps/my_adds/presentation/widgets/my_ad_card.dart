@@ -19,6 +19,7 @@ import '../../../../../routes/routes.dart';
 class MyAdCard extends StatelessWidget {
   final AdEntity item;
   final Function(String) onDelete;
+
   const MyAdCard({super.key, required this.item, required this.onDelete});
 
   @override
@@ -36,25 +37,42 @@ class MyAdCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildAdInfo(context),
-            Sizer(height: 10.h,),
+            Sizer(
+              height: 10.h,
+            ),
             Container(
               padding: EdgeInsets.all(10.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Label(text: "${LocaleKeys.createdOn.localize} ${item.formatedDate}"),
-                  const Sizer(height: 15,),
+                  Label(
+                      text:
+                          "${LocaleKeys.createdOn.localize} ${item.formatedDate}"),
+                  const Sizer(
+                    height: 15,
+                  ),
                   _buildContactInfo(),
-                  const Sizer(height: 15,),
+                  const Sizer(
+                    height: 15,
+                  ),
                   Row(
                     children: [
                       BadgedLabel(
-                        label: item.approved==true ? LocaleKeys.active.localize : LocaleKeys.pending.localize,
+                        label: item.approved == true
+                            ? LocaleKeys.active.localize
+                            : LocaleKeys.pending.localize,
                         color: AppColors.SECONDARY_COLOR,
                         style: Styles.smallText(color: Colors.white),
                       ),
-                      if(item.approved==false)...[const Sizer(width: 15,),
-                      Expanded(child: Text(LocaleKeys.adReviewSoon.localize,)),]
+                      if (item.approved == false) ...[
+                        const Sizer(
+                          width: 15,
+                        ),
+                        Expanded(
+                            child: Text(
+                          LocaleKeys.adReviewSoon.localize,
+                        )),
+                      ]
                     ],
                   ),
                   const Sizer(),
@@ -62,14 +80,27 @@ class MyAdCard extends StatelessWidget {
                     children: [
                       Expanded(
                           child: AppButton(
-                              label: Labels.edit,
-                              onPressed: () => showAreYouSure(
-                                  title: LocaleKeys.deleteAd.localize,
-                                  subTitle: LocaleKeys.sureRemoveAd.localize,
-                                  action: () {
-                                    onDelete(item.id);
-                                  },
-                                  context: context),)),
+                        label: LocaleKeys.edit.localize,
+                        onPressed: () => showAreYouSure(
+                            title: LocaleKeys.deleteAd.localize,
+                            subTitle: LocaleKeys.sureRemoveAd.localize,
+                            action: () {
+                              //  onDelete(item.id);
+                            },
+                            context: context),
+                      )),
+                      const Sizer(),
+                      Expanded(
+                          child: AppButton(
+                        label: LocaleKeys.subscriptions.localize,
+                        onPressed: () => showAreYouSure(
+                            title: LocaleKeys.deleteAd.localize,
+                            subTitle: LocaleKeys.sureRemoveAd.localize,
+                            action: () {
+                              // onDelete(item.id);
+                            },
+                            context: context),
+                      )),
                     ],
                   ),
                 ],
@@ -104,71 +135,89 @@ class MyAdCard extends StatelessWidget {
       height: 160.h,
       padding: EdgeInsets.all(10.w),
       color: AppColors.GRAY_LIGHT_COLOR3,
-      child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Expanded(
-            child:ImageFromInternet(image: item.images.first,height: 160.h,)),
-                // SquareImage(radius: 10, source: NetworkImage(item.images.first))),
-        const Sizer(width: 20,),
+            child: ImageFromInternet(
+          image: item.images.first,
+          height: 160.h,
+        )),
+        // SquareImage(radius: 10, source: NetworkImage(item.images.first))),
+        const Sizer(
+          width: 20,
+        ),
         Expanded(
             flex: 2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Label(text: item.title,overflow: TextOverflow.ellipsis,maxLines: 2,),
-                Label(text: '${LocaleKeys.currency.localize} ${item.price}',overflow: TextOverflow.ellipsis,maxLines: 1,),
-                Label(text: item.description,overflow: TextOverflow.ellipsis,maxLines: 1,),
+                Label(
+                  text: item.title,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                ),
+                Label(
+                    text: '${LocaleKeys.currency.localize} ${item.price}',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    color: Theme.of(context).scaffoldBackgroundColor),
+                Label(
+                    text: item.description,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    color: Theme.of(context).scaffoldBackgroundColor),
               ],
             )),
         InkWell(
-          onTap: (){
+          onTap: () {
             bottomSheet(
                 context: context,
                 isScrollControlled: true,
                 widget: ListView(
                   shrinkWrap: true,
                   children: [
-                    if(item.approved==true)_buildOptionsWidget(
-                      label: LocaleKeys.markSsSold.localize,
-                      onTap: () {
-                        context.pop();
-                        showAreYouSure(
-                            title: 'Alert',
-                            subTitle:
-                            'Are you sure, you want to set this AD as soldout?',
-                            action: () =>context.pop(),
-                            context: context);
-                      },
-                      icon: Icons.hourglass_empty_rounded,
-                    ),
-                    if(item.approved==true)_buildOptionsWidget(
-                      label: LocaleKeys.deactivate.localize,
-                      onTap: () {
-                        showAreYouSure(
-                            title: 'Alert',
-                            subTitle:
-                            'Are you sure, you want to set this AD as soldout?',
-                            action: () {},
-                            context: context);
-                      },
-                      icon: Icons.refresh,
-                    ),
-
-                    if(item.approved==false)_buildOptionsWidget(
-                      label: LocaleKeys.deleteAd.localize,
-                      onTap: () {
-                        showAreYouSure(
-                            title: LocaleKeys.deleteAd.localize,
-                            subTitle: LocaleKeys.sureRemoveAd.localize,
-                            action: () {
-                              onDelete(item.id);
-                            },
-                            context: context);
-                      },
-                      icon: Icons.delete,
-                    ),
+                    if (item.approved == true)
+                      _buildOptionsWidget(
+                        label: LocaleKeys.markSsSold.localize,
+                        onTap: () {
+                          context.pop();
+                          showAreYouSure(
+                              title: 'Alert',
+                              subTitle:
+                                  'Are you sure, you want to set this AD as soldout?',
+                              action: () => context.pop(),
+                              context: context);
+                        },
+                        icon: Icons.hourglass_empty_rounded,
+                      ),
+                    if (item.approved == true)
+                      _buildOptionsWidget(
+                        label: LocaleKeys.deactivate.localize,
+                        onTap: () {
+                          showAreYouSure(
+                              title: 'Alert',
+                              subTitle:
+                                  'Are you sure, you want to set this AD as soldout?',
+                              action: () {},
+                              context: context);
+                        },
+                        icon: Icons.refresh,
+                      ),
+                    if (item.approved == false)
+                      _buildOptionsWidget(
+                        label: LocaleKeys.deleteAd.localize,
+                        onTap: () {
+                          showAreYouSure(
+                              title: LocaleKeys.deleteAd.localize,
+                              subTitle: LocaleKeys.sureRemoveAd.localize,
+                              action: () {
+                                onDelete(item.id);
+                              },
+                              context: context);
+                        },
+                        icon: Icons.delete,
+                      ),
                     _buildOptionsWidget(
                       label: LocaleKeys.cancel.localize,
                       onTap: () => context.pop(),
@@ -177,7 +226,7 @@ class MyAdCard extends StatelessWidget {
                   ],
                 ));
           },
-          child: const Icon(Icons.more_vert),
+          child:  Icon(Icons.more_vert,color: Theme.of(context).scaffoldBackgroundColor),
         )
       ]),
     );
@@ -230,8 +279,14 @@ class MyAdCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Label(text: '$value',style: Styles.mediumText(fontSize: 22),),
-              Label(text: label,style: Styles.mediumText(fontSize: 26),),
+              Label(
+                text: '$value',
+                style: Styles.mediumText(fontSize: 22),
+              ),
+              Label(
+                text: label,
+                style: Styles.mediumText(fontSize: 26),
+              ),
             ],
           ),
         )

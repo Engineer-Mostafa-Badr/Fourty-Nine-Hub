@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_list/presentation/widgets/installment_ad_card.dart';
@@ -29,7 +31,7 @@ class _MyAddsViewState extends State<MyAddsView>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _scrollController = ScrollController();
 
     // Listen for tab changes
@@ -61,7 +63,7 @@ class _MyAddsViewState extends State<MyAddsView>
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 4,
       child: Scaffold(
         appBar: const BackAppBar(
           label: 'My Ads',
@@ -87,9 +89,9 @@ class _MyAddsViewState extends State<MyAddsView>
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
                     child: TabBar(
-                      padding: EdgeInsets.zero,
-                      labelPadding:
-                          EdgeInsetsDirectional.symmetric(horizontal: 20.w),
+                     // padding: EdgeInsets.zero,
+                      // labelPadding:
+                      //     EdgeInsetsDirectional.symmetric(horizontal: 20.w),
                       tabAlignment: TabAlignment.start,
                       controller: _tabController,
                       onTap: (i) {
@@ -108,12 +110,12 @@ class _MyAddsViewState extends State<MyAddsView>
                                         : null;
                       },
                       isScrollable: true,
-                      tabs: const [
-                        Tab(text: 'Auctions'),
-                        Tab(text: 'Installment'),
-                        Tab(text: 'Trip join'),
-                        Tab(text: 'Carpool'),
-                        Tab(text: 'Other'),
+
+                      tabs:  [
+                        Tab(text: LocaleKeys.auction.localize),
+                        Tab(text: LocaleKeys.installments.localize),
+                        Tab(text: LocaleKeys.tripJoin.localize),
+                        const Tab(text: 'Other'),
                       ],
                     ),
                   ),
@@ -127,7 +129,6 @@ class _MyAddsViewState extends State<MyAddsView>
                           _buildMyAuctionsWidget(),
                           _buildMyInstallmentsWidget(),
                           _buildMyPickMeTripsWidget(),
-                          _buildMyComeWithmeWidget(),
                           _buildMyAdsWidget(),
                         ]),
                   )),
@@ -216,27 +217,27 @@ class _MyAddsViewState extends State<MyAddsView>
     });
   }
 
-  Widget _buildMyComeWithmeWidget() {
-    return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
-      final controller = context.read<MyAddsCubit>();
-      if (state.comeWithMeTrips?.isEmpty ?? true) {
-        return const EmptyPage();
-      }
-      return ListView.separated(
-          itemCount: state.comeWithMeTrips?.length ?? 0,
-          separatorBuilder: (context, index) => const Sizer(),
-          itemBuilder: (context, index) {
-            return TripCard(
-              requests: state.comeWithMeTrips![index].requests,
-              trip: state.comeWithMeTrips![index].trip,
-              showDelete: true,
-              onAccept: (String id) =>
-                  controller.acceptComeWithMeRequest(id: id),
-              onReject: (String id) =>
-                  controller.rejectComeWithMeRequest(id: id),
-              onDelete: (String id) => controller.deleteComeWithMe(id: id),
-            );
-          });
-    });
-  }
+  // Widget _buildMyComeWithmeWidget() {
+  //   return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
+  //     final controller = context.read<MyAddsCubit>();
+  //     if (state.comeWithMeTrips?.isEmpty ?? true) {
+  //       return const EmptyPage();
+  //     }
+  //     return ListView.separated(
+  //         itemCount: state.comeWithMeTrips?.length ?? 0,
+  //         separatorBuilder: (context, index) => const Sizer(),
+  //         itemBuilder: (context, index) {
+  //           return TripCard(
+  //             requests: state.comeWithMeTrips![index].requests,
+  //             trip: state.comeWithMeTrips![index].trip,
+  //             showDelete: true,
+  //             onAccept: (String id) =>
+  //                 controller.acceptComeWithMeRequest(id: id),
+  //             onReject: (String id) =>
+  //                 controller.rejectComeWithMeRequest(id: id),
+  //             onDelete: (String id) => controller.deleteComeWithMe(id: id),
+  //           );
+  //         });
+  //   });
+  // }
 }

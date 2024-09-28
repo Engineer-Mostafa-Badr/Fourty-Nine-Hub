@@ -421,6 +421,7 @@ class DrawerWidget extends StatelessWidget {
             : Icon(
                 icon,
                 size: 45.w,
+          color: AppColors.PRIMARY_COLOR,
               ),
         title: Label(
             text: label,

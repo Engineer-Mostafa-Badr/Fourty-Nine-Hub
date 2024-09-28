@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -25,11 +26,11 @@ class CompetitionCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap(context),
       child: Container(
-        margin: EdgeInsets.all(5),
-        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.all(5.w),
+        padding: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.grey, width: .5),
+          borderRadius: BorderRadius.circular(10.r),
+          border: Border.all(color: Colors.grey, width: .5.w),
         ),
         child: Column(
           children: [
@@ -76,7 +77,7 @@ class CompetitionCard extends StatelessWidget {
                 )
               ],
             ),
-            Sizer(),
+            const Sizer(),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -84,9 +85,10 @@ class CompetitionCard extends StatelessWidget {
                   Icons.info_outline,
                   color: Colors.grey,
                 ),
-                Sizer(),
+                Sizer(width: 10.w,),
                 Expanded(
                     child: Label(
+                      maxLines: 2,
                   text:
                       '${LocaleKeys.minimum.localize} ${competitionsWalletEntity.maxRequests} ${LocaleKeys.requestTransaction.localize}',
                   style: Styles.mediumText(color: Colors.grey),

@@ -9,9 +9,11 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../widgets/competition_card.dart';
 import '../widgets/wallet_card_widget.dart';
@@ -40,74 +42,59 @@ class GiftWalletView extends StatelessWidget {
                     ),
                     const Sizer(),
                     Label(
-                      text: LocaleKeys.luckyWheel.localize,
-                      style: Styles.headerText(),
-                    ),
-                    const Sizer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsetsDirectional.symmetric(
-                                vertical: 15.h, horizontal: 15.w),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.r),
-                                color: Theme.of(context).primaryColor),
-                            child: Row(
-                              children: [
-                                Text(
-                                  LocaleKeys.money.localize,
-                                  style: Styles.mediumText(
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor),
-                                ),
-                                Spacer(),
-                                Text(
-                                  '${state.wheel?.amount.round() ?? 0}',
-                                  style: Styles.mediumText(
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Sizer(),
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsetsDirectional.symmetric(
-                                vertical: 15.h, horizontal: 15.w),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.r),
-                                color: Theme.of(context).primaryColor),
-                            child: Row(
-                              children: [
-                                Text(
-                                  LocaleKeys.points.localize,
-                                  style: Styles.mediumText(
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor),
-                                ),
-                                Spacer(),
-                                Text(
-                                  '${state.wheel?.points.round() ?? 0}',
-                                  style: Styles.mediumText(
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Sizer(),
-                    Label(
                       text: LocaleKeys.competition.localize,
                       style: Styles.headerText(),
                     ),
-                    ListView.builder(
+                    Container(
+                      margin: EdgeInsets.all(5.w),
+                      padding: EdgeInsets.all(10.w),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.r),
+                        border: Border.all(color: Colors.grey, width: .5.w),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Label(
+                            text: LocaleKeys.luckyWheel.localize,
+                            style: Styles.mediumText(fontWeight: FontWeight.bold),
+                          ),
+                           Label(
+                            text: '${state.gift?.amount ??0}',
+                          ),
+                          const Sizer(),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Icon(
+                                Icons.info_outline,
+                                color: Colors.grey,
+                              ),
+                               Sizer(width: 10.w,),
+                              Expanded(
+                                  child: Label(
+                                    maxLines: 2,
+                                    text:
+                                    '${LocaleKeys.minimum.localize} 10000 ${LocaleKeys.requestTransaction.localize}',
+                                    style: Styles.mediumText(color: Colors.grey),
+                                  )),
+                            ],
+                          ),
+                          const Sizer(),
+                          AppButton(
+                            label: LocaleKeys.requestWithdraw.localize,
+                            color: AppColors.AUTH_CONTAINER_COLOR,
+                            // backColor: state.gift!.amount >= 10000 &&
+                            //     competitionsWalletEntity.isWinner == true
+                            //     ? Colors.red
+                            //     : Colors.red.withOpacity(.5),
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
+                    ),
+                    Sizer(),
+                    ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: state.gift?.competitionsWallet.length ?? 0,
@@ -119,7 +106,7 @@ class GiftWalletView extends StatelessWidget {
                             // onTap: (context) =>
                             //     controller.showGiftsHistory(context: context),
                           );
-                        })
+                        }, separatorBuilder: (BuildContext context, int index)=>const Sizer(),)
                   ],
                 ),
               ),
