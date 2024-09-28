@@ -243,36 +243,58 @@ class MessageCard extends StatelessWidget {
           if (messageEntity.media.length >= 4)
             FourOrMoreMediaCard(messageEntity: messageEntity),
           const SizedBox(height: 6),
+          ReadMoreLabel(
+            // trimLines: 5,
+            text: messageEntity.text,
+            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+            textAlign: TextAlign.left,
+          ),
+          const SizedBox(width: 8),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.6,
-                ),
-                child: Text(
-                  messageEntity.text,
-                  style: Styles.mediumText(
-                    color: AppColors.PRIMARY_COLOR,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-              const Spacer(),
               Label(
                 text: messageEntity.time,
                 style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
               ),
               const SizedBox(width: 4),
-              messageEntity.byMe
-                  ? Icon(
-                      _getMessageIcon(messageEntity),
-                      color: _getMessageIconColor(messageEntity),
-                      size: 12,
-                    )
-                  : const SizedBox(width: 4),
+              Icon(
+                _getMessageIcon(messageEntity),
+                color: _getMessageIconColor(messageEntity),
+                size: 12,
+              ),
             ],
           ),
+          // Row(
+          //   crossAxisAlignment: CrossAxisAlignment.end,
+          //   children: [
+          //     ConstrainedBox(
+          //       constraints: BoxConstraints(
+          //         maxWidth: MediaQuery.of(context).size.width * 0.6,
+          //       ),
+          //       child: Text(
+          //         messageEntity.text,
+          //         style: Styles.mediumText(
+          //           color: AppColors.PRIMARY_COLOR,
+          //         ),
+          //         textAlign: TextAlign.left,
+          //       ),
+          //     ),
+          //     const Spacer(),
+          //     Label(
+          //       text: messageEntity.time,
+          //       style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+          //     ),
+          //     const SizedBox(width: 4),
+          //     messageEntity.byMe
+          //         ? Icon(
+          //             _getMessageIcon(messageEntity),
+          //             color: _getMessageIconColor(messageEntity),
+          //             size: 12,
+          //           )
+          //         : const SizedBox(width: 4),
+          //   ],
+          // ),
         ],
       ),
     );
@@ -306,8 +328,10 @@ class MessageCard extends StatelessWidget {
                 constraints: BoxConstraints(maxWidth: width * 0.85),
                 child: Column(
                   children: [
-                    ReplySendMessageCard(
-                        width: width, messageEntity: messageEntity),
+                    messageEntity.hasReply
+                        ? ReplySendMessageCard(
+                            width: width, messageEntity: messageEntity)
+                        : const SizedBox(),
                     _buildSendTextMessage(messageEntity, isArabic),
                   ],
                 ),
@@ -367,7 +391,7 @@ class MessageCard extends StatelessWidget {
                     ],
                   )
                 : ReadMoreLabel(
-                    trimLines: 5,
+                    // trimLines: 5,
                     text: messageEntity.text,
                     style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
                     textAlign: TextAlign.left,
@@ -487,7 +511,7 @@ class MessageCard extends StatelessWidget {
                         children: [
                           Expanded(
                             child: ReadMoreLabel(
-                              trimLines: 5,
+                              // trimLines: 5,
                               text: messageEntity.text,
                               style: Styles.mediumText(
                                 color: AppColors.PRIMARY_COLOR,

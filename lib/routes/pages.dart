@@ -65,7 +65,7 @@ import 'package:fourtyninehub/features/settings/presentation/pages/settings_view
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
-import 'package:fourtyninehub/features/social_media/chat/attachments/presentation/pages/attachments_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/attachments_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/pages/broadcast_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_profile/presentation/pages/chat_profile_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
@@ -826,7 +826,7 @@ class AppPages {
                 GoRoute(
                   path: Paths.ATTACHMENTSVIEW,
                   name: Routes.ATTACHMENTSVIEW,
-                  builder: (context, state) => const AttachementsView(),
+                  builder: (context, state) =>  AttachementsView(chatsCubit: state.extra as ChatsCubit,),
                 ),
                 GoRoute(
                   path: Paths.SELECTCONTACTSTOSHARE,

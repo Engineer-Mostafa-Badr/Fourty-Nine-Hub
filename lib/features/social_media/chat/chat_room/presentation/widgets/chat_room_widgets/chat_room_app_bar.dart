@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,10 +12,12 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const ChatRoomAppBar({super.key});
+  const ChatRoomAppBar({super.key, required this.chatsCubit});
+  final ChatsCubit chatsCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -80,31 +84,34 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: Colors.white,
         ),
         PopupMenuButton(
-          icon: const Icon(
-            Icons.more_vert,
-            color: Colors.white,
-          ),
-          color: AppColors.BACKGROUND_COLOR,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16.0)),
-          ),
-          offset: const Offset(0, 50),
-          onSelected: (int value) async {
-            if (value == 0) {
-              context.push(Routes.VIEWCONTACT,
-                  extra: context.read<ChatsCubit>().selectedChat.name);
-            }
-            if (value == 1) {
-              context.push(Routes.ATTACHMENTSVIEW);
-            }
-            if (value == 6) {
-              _showMoreMenu(context);
-            }
-          },
-          itemBuilder: (context) {
-            return _mainMenuBuilder();
-          },
-        )
+              icon: const Icon(
+                Icons.more_vert,
+                color: Colors.white,
+              ),
+              color: AppColors.BACKGROUND_COLOR,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+              ),
+              offset: const Offset(0, 50),
+              onSelected: (int value) async {
+                if (value == 0) {
+                  context.push(Routes.VIEWCONTACT,
+                      extra: context.read<ChatsCubit>().selectedChat.name);
+                }
+                if (value == 1) {
+                  context.push(
+                    Routes.ATTACHMENTSVIEW,
+                    extra: chatsCubit,
+                  );
+                }
+                if (value == 6) {
+                  _showMoreMenu(context);
+                }
+              },
+              itemBuilder: (context) {
+                return _mainMenuBuilder();
+              },
+            )
       ],
     );
   }

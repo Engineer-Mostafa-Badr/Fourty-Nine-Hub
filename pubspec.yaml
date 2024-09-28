@@ -92,6 +92,8 @@ dependencies:
   image_filter_pro: ^0.1.11
   path: 1.9.0
   open_file: ^3.3.1
+  html: ^0.15.0
+  
   
 
   #for loading

@@ -34,7 +34,9 @@ class _ChatRoomViewState extends State<ChatRoomView> {
       ],
       child: Scaffold(
         backgroundColor: AppColors.BACKGROUND_COLOR,
-        appBar: const ChatRoomAppBar(),
+        appBar: ChatRoomAppBar(
+          chatsCubit: widget.chatsCubit,
+        ),
         body: Stack(
           children: [
             // Background image

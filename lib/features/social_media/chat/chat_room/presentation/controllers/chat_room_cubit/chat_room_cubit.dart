@@ -44,6 +44,9 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   List<MessageSharedContactsEntity> sharedContacts = [];
   List<MessageSharedContactsEntity> selectedContactsToShare = [];
   Map<String, MessageEntity> _messages = {};
+  List<MessageEntity> mediaMessages = [];
+  List<MessageEntity> documentMessages = [];
+  List<MessageEntity> linksMessages = [];
   MessageEntity? _replayMessage;
   late ChatEntity _chat;
 

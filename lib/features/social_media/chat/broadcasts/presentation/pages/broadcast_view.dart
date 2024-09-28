@@ -281,7 +281,7 @@ class _BroadcastViewState extends State<BroadcastView> {
                   children: [
                     Expanded(
                       child: ReadMoreLabel(
-                        trimLines: 6,
+                        // trimLines: 6,
                         text: message,
                         style: Styles.mediumText(
                           color: AppColors.PRIMARY_COLOR,

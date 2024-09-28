@@ -14,6 +14,7 @@ class MessagesListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chatRoomCubit = context.read<ChatRoomCubit>();
+    
     return BlocListener<ChatsCubit, ChatsState>(
       listener: (context, state) {
         if (state.isNewMessage && state.newMessage != null) {
