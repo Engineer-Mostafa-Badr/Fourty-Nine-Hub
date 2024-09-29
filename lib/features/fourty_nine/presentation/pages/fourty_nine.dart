@@ -280,6 +280,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               Expanded(
                 child: _buildRideSubCategoryItem(
                   service: state.data![0].service ?? RideServicesEnum.pickMe,
+                  title: 'Carpool',
                   image: state.data![0].image ?? '',
                   isFavorite: state.data![0].isFavorite,
                   numberOfAds: state.data![0].numberOfAds?.toInt(),
@@ -290,6 +291,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               Expanded(
                 child: _buildRideSubCategoryItem(
                   service: state.data![1].service ?? RideServicesEnum.comeWithYou,
+                  title: LocaleKeys.tripJoin.localize,
                   image: state.data![1].image ?? '',
                   route: Routes.AVAILABLE_TRIPS,
                   isFavorite: state.data![1].isFavorite,
@@ -377,6 +379,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
 
   Widget _buildRideSubCategoryItem({
     required RideServicesEnum service,
+    required String title,
     required String image,
     String? route,
     bool? isFavorite,
@@ -425,7 +428,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               child: Row(
                 children: [
                   Label(
-                    text: service.title(),
+                    // text: service.title(),
+                    text: title,
                     style: Styles.mediumText(
                       color: AppColors.AUTH_CONTAINER_COLOR,
                       fontSize: 65.sp,

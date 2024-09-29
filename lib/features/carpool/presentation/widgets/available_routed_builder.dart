@@ -181,7 +181,7 @@ class _AvailableRoutesBottomSheetState extends State<AvailableRoutesBottomSheet>
               ],
             ),
           ),
-          const Sizer(height: 20),
+          const Sizer(height: 30),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

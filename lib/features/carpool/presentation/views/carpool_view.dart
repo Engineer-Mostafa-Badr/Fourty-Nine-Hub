@@ -22,7 +22,7 @@ class CarPoolView extends StatelessWidget {
           title: Transform(
             transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
             child: Text(
-              'Car Pool',
+              'Carpool',
               style: Styles.headerText(),
             ),
           ),
