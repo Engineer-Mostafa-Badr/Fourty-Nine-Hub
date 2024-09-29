@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter/material.dart';
@@ -12,6 +14,8 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -62,216 +66,292 @@ class _CreateAdViewState extends State<CreateAdView> {
         appBar: BackAppBar(
           label: LocaleKeys.createAd.localize
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Form(
-            key: controller.formState,
-            child: ListView(
-              children: [
-                Row(
-                  children: [
-                    SquareImage(
-                      width: kToolbarHeight * .8,
-                      height: kToolbarHeight * .8,
-                      radius: 10,
-                      url: widget.categorization.subCategory.image,
-                    ),
-                    const Sizer(),
-                    Expanded(
-                        child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Label(
-                          text: widget.categorization.subCategory.name,
-                          style: Styles.mediumText(fontWeight: FontWeight.bold),
-                        ),
-                        Label(text: widget.categorization.mainCategory.name),
-                      ],
-                    )),
-                  ],
-                ),
-                const Divider(),
-                _buildImagePicker(),
-                const Sizer(),
-                Row(
-                  children: [
-                    Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              if(widget.categorization.subCategory.hasAuction==true){
-                                state.isSale = true;
-                              }else{
-                                state.isUser = true;
-                              }
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: (state.isUser == true&&state.isSale==true)
-                                    ? AppColors.PRIMARY_COLOR
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                                border:
-                                Border.all(color: AppColors.PRIMARY_COLOR)),
-                            alignment: AlignmentDirectional.center,
-                            child: Text(
-                              widget.categorization.subCategory.hasAuction==true?LocaleKeys.sale.localize:LocaleKeys.user.localize,
-                              style: Styles.mediumText(
-                                  color: (state.isUser == false||state.isSale==false)
-                                      ? AppColors.PRIMARY_COLOR
-                                      : Colors.white),
+        body: BlocBuilder<CreateAdCubit,CreateAdState>(
+          builder: (context,state){
+            if(state.status == CreateAdStates.success){
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Form(
+                  key: controller.formState,
+                  child: ListView(
+                    children: [
+                      Row(
+                        children: [
+                          SquareImage(
+                            width: kToolbarHeight * .8,
+                            height: kToolbarHeight * .8,
+                            radius: 10,
+                            url: widget.categorization.subCategory.image,
+                          ),
+                          const Sizer(),
+                          Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Label(
+                                    text: widget.categorization.subCategory.name,
+                                    style: Styles.mediumText(fontWeight: FontWeight.bold),
+                                  ),
+                                  Label(text: widget.categorization.mainCategory.name),
+                                ],
+                              )),
+                        ],
+                      ),
+                      const Divider(),
+                      _buildImagePicker(),
+                      const Sizer(),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    if(widget.categorization.subCategory.hasAuction==true){
+                                      state.isSale = true;
+                                    }else{
+                                      state.isUser = true;
+                                    }
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      color: (state.isUser == true&&state.isSale==true)
+                                          ? AppColors.PRIMARY_COLOR
+                                          : Colors.white,
+                                      borderRadius: BorderRadius.circular(15),
+                                      border:
+                                      Border.all(color: AppColors.PRIMARY_COLOR)),
+                                  alignment: AlignmentDirectional.center,
+                                  child: Text(
+                                    widget.categorization.subCategory.hasAuction==true?LocaleKeys.sale.localize:LocaleKeys.user.localize,
+                                    style: Styles.mediumText(
+                                        color: (state.isUser == false||state.isSale==false)
+                                            ? AppColors.PRIMARY_COLOR
+                                            : Colors.white),
+                                  ),
+                                ),
+                              )),
+                          const Sizer(),
+                          Expanded
+                            (
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if(widget.categorization.subCategory.hasAuction==true){
+                                    state.isSale = false;
+                                    print(state.isSale);
+                                    print(state.isSale);
+                                  }else{
+                                    state.isUser = false;
+                                  }
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    color: (state.isUser == false||state.isSale==false)
+                                        ? AppColors.PRIMARY_COLOR
+                                        : Colors.white,
+                                    borderRadius: BorderRadius.circular(15),
+                                    border:
+                                    Border.all(color: AppColors.PRIMARY_COLOR)),
+                                alignment: AlignmentDirectional.center,
+                                child: Text(
+                                  widget.categorization.subCategory.hasAuction==true?LocaleKeys.rent.localize:LocaleKeys.provider.localize,
+                                  style: Styles.mediumText(
+                                      color: (state.isUser == true&&state.isSale==true)
+                                          ? AppColors.PRIMARY_COLOR
+                                          : Colors.white),
+                                ),
+                              ),
                             ),
                           ),
-                        )),
-                    const Sizer(),
-                    Expanded
-                      (
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            if(widget.categorization.subCategory.hasAuction==true){
-                              state.isSale = false;
-                              print(state.isSale);
-                              print(state.isSale);
-                            }else{
-                              state.isUser = false;
-                            }
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              color: (state.isUser == false||state.isSale==false)
-                                  ? AppColors.PRIMARY_COLOR
-                                  : Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              border:
-                              Border.all(color: AppColors.PRIMARY_COLOR)),
-                          alignment: AlignmentDirectional.center,
-                          child: Text(
-                            widget.categorization.subCategory.hasAuction==true?LocaleKeys.rent.localize:LocaleKeys.provider.localize,
-                            style: Styles.mediumText(
-                                color: (state.isUser == true&&state.isSale==true)
-                                    ? AppColors.PRIMARY_COLOR
-                                    : Colors.white),
-                          ),
-                        ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                const Sizer(),
-                Label(text: LocaleKeys.adTitle.localize),
-                TextFormField(
-                  maxLines: null,
-                  onChanged: (v) =>controller.title = v,
-                  style: Styles.headerText(fontSize: 26),
-                  decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    contentPadding: const EdgeInsets.all(5),
-                    hintText: LocaleKeys.title.localize,
-                    hintStyle: Styles.mediumText(),
-                      prefix: Sizer(width: 20.w,)
+                      const Sizer(),
+                      Label(text: LocaleKeys.adTitle.localize),
+                      TextFormField(
+                        maxLines: null,
+                        onChanged: (v) =>controller.title = v,
+                        style: Styles.headerText(fontSize: 26),
+                        decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            contentPadding: const EdgeInsets.all(5),
+                            hintText: LocaleKeys.title.localize,
+                            hintStyle: Styles.mediumText(),
+                            prefix: Sizer(width: 20.w,)
+                        ),
+                        validator: (value) {
+                          if ((value == null || value.isEmpty)) {
+                            return LocaleKeys.required.localize;
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+                      const Sizer(),
+                      Label(text: LocaleKeys.desc.localize),
+                      TextFormField(
+                        maxLines: null,
+                        onChanged: (v) =>controller.description = v,
+                        style: Styles.headerText(fontSize: 26),
+                        decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            contentPadding: const EdgeInsets.all(5),
+                            hintText: LocaleKeys.desc.localize,
+                            hintStyle: Styles.mediumText(),
+                            prefix: Sizer(width: 20.w,)
+                        ),
+                        validator: (value) {
+                          if ((value == null || value.isEmpty)) {
+                            return LocaleKeys.required.localize;
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+                      const Sizer(),
+                      Label(text: LocaleKeys.phone.localize),
+                      TextFormField(
+                        maxLines: null,
+                        onChanged: (v) =>controller.phone = v,
+                        style: Styles.headerText(fontSize: 26),
+                        decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            contentPadding: const EdgeInsets.all(5),
+                            hintText: LocaleKeys.phone.localize,
+                            hintStyle: Styles.mediumText(),
+                            prefix: Sizer(width: 20.w,)
+                        ),
+                        validator: (value) {
+                          if ((value == null || value.isEmpty)) {
+                            return LocaleKeys.required.localize;
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+                      // const Sizer(),
+                      //
+                      // Label(text: LocaleKeys.governorate.localize),
+                      // SizedBox(
+                      //   width: double.infinity,
+                      //   child: DropdownButtonFormField<GovernorateEntity>(
+                      //     decoration: InputDecoration(
+                      //       contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                      //       border: OutlineInputBorder(
+                      //         borderRadius: BorderRadius.circular(8),
+                      //         borderSide: const BorderSide(
+                      //           color: Colors.grey, // Border color
+                      //           width: 1.0,         // Border width
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     hint: Text(LocaleKeys.selectGovernorate.tr()),
+                      //     value: null,
+                      //     onChanged: (GovernorateEntity? newValue) {
+                      //       // Handle selection
+                      //     },
+                      //     dropdownColor: Colors.white,
+                      //     items: state.governorates?.map<DropdownMenuItem<GovernorateEntity>>((GovernorateEntity government) {
+                      //       return DropdownMenuItem<GovernorateEntity>(
+                      //         value: government,
+                      //         child: Text(government.nameEn), // Change to city.nameAr for Arabic
+                      //       );
+                      //     }).toList(),
+                      //   ),
+                      // ),
+                      //
+                      // const Sizer(),
+                      // state.cities!=null?Column(
+                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                      //   children:[
+                      //     Label(text: LocaleKeys.city.localize),
+                      //     SizedBox(
+                      //       width: double.infinity,
+                      //       child: DropdownButtonFormField<CityEntity>(
+                      //         decoration: InputDecoration(
+                      //           contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                      //           border: OutlineInputBorder(
+                      //             borderRadius: BorderRadius.circular(8),
+                      //             borderSide: const BorderSide(
+                      //               color: Colors.grey, // Border color
+                      //               width: 1.0,         // Border width
+                      //             ),
+                      //           ),
+                      //         ),
+                      //         hint: Text(LocaleKeys.selectCity.tr()),
+                      //         value: null,
+                      //         onChanged: (CityEntity? newValue) {
+                      //           // Handle selection
+                      //         },
+                      //         dropdownColor: Colors.white,
+                      //         items: state.cities?.map<DropdownMenuItem<CityEntity>>((CityEntity city) {
+                      //           return DropdownMenuItem<CityEntity>(
+                      //             value: city,
+                      //             child: Text(city.nameEn), // Change to city.nameAr for Arabic
+                      //           );
+                      //         }).toList(),
+                      //       ),
+                      //     ),
+                      //
+                      //   ],
+                      // ):const SizedBox.shrink(),
+                      const Sizer(),
+                      Label(text: state.isPrice==true?LocaleKeys.price.localize:LocaleKeys.salary.localize),
+                      TextFormField(
+                        maxLines: null,
+                        onChanged: (v) =>controller.price = v,
+                        style: Styles.headerText(fontSize: 26),
+                        decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            contentPadding: const EdgeInsets.all(5),
+                            hintText: state.isPrice==true?LocaleKeys.price.localize:LocaleKeys.salary.localize,
+                            hintStyle: Styles.mediumText(),
+                            prefix: Sizer(width: 20.w,)
+                        ),
+                        validator: (value) {
+                          if ((value == null || value.isEmpty)) {
+                            return LocaleKeys.required.localize;
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+                      const Sizer(),
+                      ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final property = state.adProperties![index];
+                          return AdDynamicInputWidget(
+                            property: property,
+                            onChanged: (SelectionEntity v) =>
+                                controller.onChanged(v: v, index: index), onTextChanged: (String v) =>
+                              controller.onTextChanged(v: v, index: index),
+                          );
+                        },
+                        separatorBuilder: (context, index) => const Sizer(),
+                        shrinkWrap: true,
+                        itemCount: state.adProperties?.length ?? 0,
+                      ),
+                      const Sizer(),
+                      DefaultButton(
+                          label: LocaleKeys.publish.localize,
+                          onPressed: () {
+                            controller.createAd(
+                                categorize: widget.categorization, context: context);
+                          }),
+                    ],
                   ),
-                  validator: (value) {
-                    if ((value == null || value.isEmpty)) {
-                      return LocaleKeys.required.localize;
-                    } else {
-                      return null;
-                    }
-                  },
                 ),
-                const Sizer(),
-                Label(text: LocaleKeys.desc.localize),
-                TextFormField(
-                  maxLines: null,
-                  onChanged: (v) =>controller.description = v,
-                  style: Styles.headerText(fontSize: 26),
-                  decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    contentPadding: const EdgeInsets.all(5),
-                    hintText: LocaleKeys.desc.localize,
-                    hintStyle: Styles.mediumText(),
-                      prefix: Sizer(width: 20.w,)
-                  ),
-                  validator: (value) {
-                    if ((value == null || value.isEmpty)) {
-                      return LocaleKeys.required.localize;
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                const Sizer(),
-                Label(text: LocaleKeys.phone.localize),
-                TextFormField(
-                  maxLines: null,
-                  onChanged: (v) =>controller.phone = v,
-                  style: Styles.headerText(fontSize: 26),
-                  decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    contentPadding: const EdgeInsets.all(5),
-                    hintText: LocaleKeys.phone.localize,
-                    hintStyle: Styles.mediumText(),
-                      prefix: Sizer(width: 20.w,)
-                  ),
-                  validator: (value) {
-                    if ((value == null || value.isEmpty)) {
-                      return LocaleKeys.required.localize;
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                Sizer(),
-                Label(text: state.isPrice==true?LocaleKeys.price.localize:LocaleKeys.salary.localize),
-                TextFormField(
-                  maxLines: null,
-                  onChanged: (v) =>controller.price = v,
-                  style: Styles.headerText(fontSize: 26),
-                  decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    contentPadding: const EdgeInsets.all(5),
-                    hintText: state.isPrice==true?LocaleKeys.price.localize:LocaleKeys.salary.localize,
-                    hintStyle: Styles.mediumText(),
-                      prefix: Sizer(width: 20.w,)
-                  ),
-                  validator: (value) {
-                    if ((value == null || value.isEmpty)) {
-                      return LocaleKeys.required.localize;
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                const Sizer(),
-                ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final property = state.adProperties![index];
-                    return AdDynamicInputWidget(
-                      property: property,
-                      onChanged: (SelectionEntity v) =>
-                          controller.onChanged(v: v, index: index), onTextChanged: (String v) =>
-                        controller.onTextChanged(v: v, index: index),
-                    );
-                  },
-                  separatorBuilder: (context, index) => const Sizer(),
-                  shrinkWrap: true,
-                  itemCount: state.adProperties?.length ?? 0,
-                ),
-                const Sizer(),
-                DefaultButton(
-                    label: LocaleKeys.publish.localize,
-                    onPressed: () {
-                      controller.createAd(
-                          categorize: widget.categorization, context: context);
-                    }),
-              ],
-            ),
-          ),
+              );
+            }else{
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
         ),
       );
     });

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
@@ -8,6 +9,10 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/cre
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
 
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:go_router/go_router.dart';
@@ -22,6 +27,8 @@ part 'create_ad_state.dart';
 
 class CreateAdCubit extends Cubit<CreateAdState> {
   final GetAdPropertiesUsecase _getAdPropertiesUsecase;
+  final GetGovernoratesUseCase _governoratesUseCase;
+  final GetCitiesUseCase _citiesUseCase;
   final CreateAdUseCase _createAdUseCase;
 
   List<SelectionEntity> values = [];
@@ -29,14 +36,21 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   String? title, description, price, phone;
   final formState = GlobalKey<FormState>();
 
-  CreateAdCubit(this._getAdPropertiesUsecase, this._createAdUseCase)
+  CreateAdCubit(this._getAdPropertiesUsecase, this._createAdUseCase, this._governoratesUseCase, this._citiesUseCase)
       : super( CreateAdState());
 
   void loadData({required String subCategoryId}) async {
-    getAdProperties(subCategoryId: subCategoryId);
+    emit(state.copyWith(status: CreateAdStates.loading));
+
+    await Future.wait([
+    getAdProperties(subCategoryId: subCategoryId),
+    _getGovernorates(),
+    ]);
+    emit(state.copyWith(status: CreateAdStates.success));
+
   }
 
-  void getAdProperties({required String subCategoryId}) async {
+  Future<void> getAdProperties({required String subCategoryId}) async {
     final response = await _getAdPropertiesUsecase(subCategoryId);
     response.fold(
         (failure) => emit(
@@ -144,4 +158,28 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       });
     }
   }
+
+
+  Future<void> _getGovernorates() async {
+    final response = await _governoratesUseCase.call(const NoParams());
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure,status: CreateAdStates.error)),
+            (data) {
+              emit(state.copyWith(governorates: data));
+        });
+  }
+
+  Future<void> getCities(String governorateId) async {
+
+    emit(state.copyWith(status: CreateAdStates.loadCities));
+    final response = await _citiesUseCase.call(governorateId);
+
+    response.fold(
+          (failure) => emit(state.copyWith(failure: failure,status: CreateAdStates.error)),
+          (data) => emit(state.copyWith(cities: data,status: CreateAdStates.success)),
+    );
+  }
+
+
 }

@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
@@ -12,30 +14,32 @@ class MainCategoriesFlipCardsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mainCategories = FourtyNineSharedData.instance.mainCategories;
+    print(context.read<MainCategoriesCubit>().state.data?[0].image);
     return Scaffold(
       appBar: const BackAppBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // InkWell(
-          //     onTap: ()=>context.pop(),
-          //     child: Icon(Icons.arrow_back,size: 40.w,)),
           Expanded(
             child: CardSwiper(
               padding: EdgeInsets.only(left: 10.w,right: 10.w,bottom: 20.h),
-              cardsCount: mainCategories.length,
+              cardsCount: context.read<MainCategoriesCubit>().state.data?.length??0,
               cardBuilder:
                   (context, index, percentThresholdX, percentThresholdY) {
                 return GestureDetector(
                   onTap: () {
                     context.push(Routes.SUBCATEGORIES,
-                        extra: mainCategories[index]);
+                        extra: context.read<MainCategoriesCubit>().state.data?[index]);
                   },
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16.0),
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: CachedNetworkImageProvider(
+                            context.read<MainCategoriesCubit>().state.data?[index].cover??''                        ),
+                      ),
                       gradient: const LinearGradient(
                         colors: [Colors.black, Colors.white],
                         begin: Alignment.topCenter,
@@ -46,16 +50,7 @@ class MainCategoriesFlipCardsView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16.0),
                       child: Stack(
                         children: [
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            left: 0,
-                            bottom: 0,
-                            child: CachedNetworkImage(
-                              imageUrl: mainCategories[index].cover,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+
                           Positioned.fill(
                             child: DecoratedBox(
                               decoration: BoxDecoration(
@@ -77,7 +72,7 @@ class MainCategoriesFlipCardsView extends StatelessWidget {
                                       alignment:
                                           AlignmentDirectional.bottomStart,
                                       child: Text(
-                                        mainCategories[index].name,
+                                        context.read<MainCategoriesCubit>().state.data?[index].name??'',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 60.sp,
@@ -87,7 +82,7 @@ class MainCategoriesFlipCardsView extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      ' ${mainCategories[index].total} Ads',
+                                      ' ${context.read<MainCategoriesCubit>().state.data?[index].total??0} Ads',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 32.sp,
