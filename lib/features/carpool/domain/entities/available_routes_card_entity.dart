@@ -23,6 +23,7 @@ class AvailableRoutesCardEntity {
   num? price;
   num? timeLeft;
   bool? onlyWomanAllowed;
+  bool? womanDriver;
   PointLocationEntity? pointOne;
   PointLocationEntity? pointTwo;
   PointLocationEntity? pointThree;
@@ -31,6 +32,7 @@ class AvailableRoutesCardEntity {
     this.price,
     this.timeLeft,
     this.onlyWomanAllowed,
+    this.womanDriver,
     this.pointOne,
     this.pointTwo,
     this.pointThree,
@@ -39,6 +41,6 @@ class AvailableRoutesCardEntity {
 
   @override
   String toString() {
-    return 'AvailableRoutesCardEntity(price: $price, timeLeft: $timeLeft, onlyWomanAllowed: $onlyWomanAllowed, pointOne: $pointOne, pointTwo: $pointTwo, pointThree: $pointThree, pointFour: $pointFour)';
+    return 'AvailableRoutesCardEntity(price: $price, timeLeft: $timeLeft, onlyWomanAllowed: $onlyWomanAllowed, womanDriver: $womanDriver pointOne: $pointOne, pointTwo: $pointTwo, pointThree: $pointThree, pointFour: $pointFour)';
   }
 }
