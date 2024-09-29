@@ -29,7 +29,7 @@ class DocsTripJoinModel extends DocsTripJoinEntity {
       required super.vehicleId});
   factory DocsTripJoinModel.fromJson(Map<String, dynamic> json) {
       return DocsTripJoinModel(
-          id: json['id'] ??'',
+          id: json['_id'] ??'',
           fromAr: json['fromAr'] ??'',
           toAr: json['toAr'] ??'',
           fromEn: json['fromEn'] ??'',

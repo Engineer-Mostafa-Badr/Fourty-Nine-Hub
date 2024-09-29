@@ -112,6 +112,8 @@ class EndPoints {
   static const myAdsAuction='/ads/allMyAds/auction';
   static const myAdsInstallment='/ads/allMyAds/installment';
   static const myAdsTripJoin='/ride/come-with-you/my?subCategory=62ea00e269ea29c91dfc390c';
+  static String deleteMyTripJoin({required String id}) =>
+      '/ride/come-with-you/Delete/$id';
 
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';

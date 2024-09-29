@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:intl/intl.dart' as intl;
 
+import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
+import '../../../../../core/enums/wallet_types_enums.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../../domain/entity/docs_trip_join_entity.dart';
+import '../cubit/my_adds_cubit.dart';
 
 class MyAdsTripJoin extends StatelessWidget {
   const MyAdsTripJoin({
     super.key,
     required this.tripJoinCardEntity,
     this.premuimRequestOnTap,
-    this.requestOnTap,
+    this.deleteOnTap,
     this.callOnTap,
     this.messageOnTap,
     this.reportOnTap,
@@ -23,7 +31,7 @@ class MyAdsTripJoin extends StatelessWidget {
   });
   final DocsTripJoinEntity tripJoinCardEntity;
   final void Function()? premuimRequestOnTap;
-  final void Function()? requestOnTap;
+  final void Function()? deleteOnTap;
   final void Function()? callOnTap;
   final void Function()? messageOnTap;
   final void Function()? reportOnTap;
@@ -136,7 +144,18 @@ class MyAdsTripJoin extends StatelessWidget {
                         child: AvaialbleTripsButton(
                           title: 'Subscription',
                           color: AppColors.PRIMARY_COLOR,
-                          onTap: requestOnTap,
+                          onTap: (){
+                            serviceLocator<SubscriptionController>()
+                                .showSubscriptionPlans(
+                              wallets: [
+                                WalletTypes.mainWallet,
+                                WalletTypes.giftWallet,
+                                WalletTypes.balance,
+                              ],
+                              subCategoryId: tripJoinCardEntity.categoryId.id,
+                              title: 'Trip Join Ads',
+                            );
+                          },
                         ),
                       ),const Sizer(width: 5),
                       Expanded(
@@ -144,7 +163,17 @@ class MyAdsTripJoin extends StatelessWidget {
                         child: AvaialbleTripsButton(
                           title: 'Delete',
                           color: AppColors.SECONDARY_COLOR,
-                          onTap: requestOnTap,
+                          onTap: (){
+                            showAreYouSure(
+                              title: LocaleKeys.deleteAd.localize,
+                              subTitle: LocaleKeys.sureRemoveAd.localize,
+                              action: (){
+                                context
+                                    .read<MyAddsCubit>()
+                                    .deleteMyTripJoin(id: tripJoinCardEntity.id);
+                              }, context: context,
+                            );
+                          },
                         ),
                       ),
                     ],
@@ -207,21 +236,21 @@ class MyAdsTripJoin extends StatelessWidget {
               )
             ],
           ),
-          const Sizer(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: InkWell(
-              onTap: subscribeMessageOnTap,
-              child: Text(
-                'Subscribe to contact the client!',
-                style: Styles.headerText(
-                  color: Colors.red[300],
-                  fontSize: 30,
-                ),
-                textAlign: TextAlign.start,
-              ),
-            ),
-          )
+          // const Sizer(),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 10),
+          //   child: InkWell(
+          //     onTap: subscribeMessageOnTap,
+          //     child: Text(
+          //       'Subscribe to contact the client!',
+          //       style: Styles.headerText(
+          //         color: Colors.red[300],
+          //         fontSize: 30,
+          //       ),
+          //       textAlign: TextAlign.start,
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );
