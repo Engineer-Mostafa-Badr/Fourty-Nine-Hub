@@ -7,7 +7,6 @@ import 'package:fourtyninehub/features/ride/trip_details/domain/entities/trip_an
 import '../../../../../core/data/datasources/json_parser.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
-import '../../../../installment_feature/installment_list/domain/entities/installment_entity.dart';
 import '../../../../ride/trip_details/data/models/trip_and_request_model.dart';
 import '../../domain/entity/my_ads_auction.dart';
 import '../../domain/entity/my_ads_trip_join_entity.dart';

@@ -220,7 +220,6 @@ class _MyAddsViewState extends State<MyAddsView>
     return BlocProvider<MyAddsCubit>(
       create: (BuildContext context) =>serviceLocator()..getMyTripJoin(),
       child: BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
-        final controller = context.read<MyAddsCubit>();
         // if (state.pickMeTrips?.isEmpty ?? true) {
         //   return const EmptyPage();
         // }
@@ -283,7 +282,7 @@ class _MyAddsViewState extends State<MyAddsView>
                 },
               );
             });
-        }else if (state.tripJoin!.docs.isEmpty ?? true) {
+        }else if (state.tripJoin!.docs.isEmpty) {
           return const EmptyPage();
         }else{
           return const Center(child: CircularProgressIndicator());

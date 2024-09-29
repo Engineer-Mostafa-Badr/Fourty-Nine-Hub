@@ -36,7 +36,7 @@ class DocsTripJoinModel extends DocsTripJoinEntity {
           toEn: json['toEn'] ??'',
           distance: json['distance'] ??0,
           duration: json['duration'] ??0,
-          passengers: json['passengers'] ??0,
+          passengers: json['passengers'] ??1,
           price: json['price'] ??0,
           phone: json['phone'] ??'',
           time: json['time'] ??0,

@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/my_ads_trip_join_entity.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -71,18 +69,18 @@ class MyAdsTripJoin extends StatelessWidget {
                     children: [
                       const Icon(Icons.airline_seat_recline_extra_rounded),
                       const Sizer(),
-                      Text('${tripJoinCardEntity.passengers ?? 1} Seat', style: Styles.headerText()),
+                      Text('${tripJoinCardEntity.passengers} Seat', style: Styles.headerText()),
                       const Spacer(),
                       Visibility(
-                        visible: tripJoinCardEntity.isRepeat ?? false,
+                        visible: tripJoinCardEntity.isRepeat,
                         child: Icon(
-                          (tripJoinCardEntity.isRepeat ?? false) ? Icons.check_box : Icons.check_box_outline_blank,
+                          (tripJoinCardEntity.isRepeat) ? Icons.check_box : Icons.check_box_outline_blank,
                           color: AppColors.PRIMARY_COLOR,
                         ),
                       ),
                       const Sizer(),
                       Visibility(
-                        visible: tripJoinCardEntity.isRepeat ?? false,
+                        visible: tripJoinCardEntity.isRepeat,
                         child: Text('Repeated', style: Styles.headerText()),
                       ),
                       const Sizer(width: 20),
@@ -96,7 +94,7 @@ class MyAdsTripJoin extends StatelessWidget {
                       const Sizer(width: 13),
                       Flexible(
                         child: Text(
-                          tripJoinCardEntity.fromEn ?? '',
+                          tripJoinCardEntity.fromEn,
                           style: Styles.headerText(fontSize: 32),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
@@ -112,7 +110,7 @@ class MyAdsTripJoin extends StatelessWidget {
                       const Sizer(width: 13),
                       Flexible(
                         child: Text(
-                          tripJoinCardEntity.toAr ?? '',
+                          tripJoinCardEntity.toAr,
                           style: Styles.headerText(fontSize: 32),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
@@ -200,9 +198,9 @@ class MyAdsTripJoin extends StatelessWidget {
                 textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
                 child: Column(
                   children: [
-                    Text(tripJoinCardEntity.price.toStringAsFixed(0) ?? '',
+                    Text(tripJoinCardEntity.price.toStringAsFixed(0),
                         style: Styles.headerText(fontSize: 70, color: Colors.green[600])),
-                    Text(tripJoinCardEntity.status ?? '',
+                    Text(tripJoinCardEntity.status,
                         style: Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR)),
                   ],
                 ),
@@ -230,9 +228,6 @@ class MyAdsTripJoin extends StatelessWidget {
   }
 
   String _formatDate() {
-    if (tripJoinCardEntity.time == null) {
-      return '';
-    }
     return intl.DateFormat('dd MMM, hh:mm aaa')
         .format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.time));
   }
