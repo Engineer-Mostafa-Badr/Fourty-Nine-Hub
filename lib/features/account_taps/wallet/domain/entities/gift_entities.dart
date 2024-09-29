@@ -5,11 +5,14 @@ class GiftEntity {
   final GiftWalletEntity giftWallet;
   final String id;
   final num amount;
+  final bool wheelWinner;
   final List<CompetitionsWalletEntity> competitionsWallet;
 
   GiftEntity(
       {required this.giftWallet,
       required this.id,
       required this.amount,
-      required this.competitionsWallet});
+      required this.competitionsWallet,
+      required this.wheelWinner,
+      });
 }

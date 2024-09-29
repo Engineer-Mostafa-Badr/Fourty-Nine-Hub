@@ -8,12 +8,13 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_list/presentation/widgets/installment_ad_card.dart';
-import 'package:fourtyninehub/features/mazadat_feature/auction_list/presentation/widgets/auction_card.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/widgets/trip_card.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../widgets/build_item_auction_card.dart';
 import '../widgets/my_ad_card.dart';
 
 class MyAddsView extends StatefulWidget {
@@ -160,21 +161,30 @@ class _MyAddsViewState extends State<MyAddsView>
   }
 
   Widget _buildMyAuctionsWidget() {
-    return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
-      context.read<MyAddsCubit>();
-      if (state.myAuctions?.isEmpty ?? true) {
-        return const EmptyPage();
-      }
-      return ListView.separated(
-          itemCount: state.myAuctions?.length ?? 0,
-          separatorBuilder: (context, index) => const Sizer(),
-          itemBuilder: (context, index) {
-            return AuctionCard(
-              isVertical: false,
-              item: state.myAuctions![index],
-            );
-          });
-    });
+    return BlocProvider<MyAddsCubit>(
+      create: (BuildContext context) =>serviceLocator()..getMyAuctions(),
+      child: BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
+        context.read<MyAddsCubit>();
+        if (state.status ==MyAddsStates.loading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if(state.status ==MyAddsStates.initState) {
+          return ListView.separated(
+            itemCount: state.myAuctions?.length ?? 0,
+            separatorBuilder: (context, index) => const Sizer(),
+            itemBuilder: (context, index) {
+              return BuildItemAuctionCard(
+                isVertical: false,
+                item: state.myAuctions![index],
+              );
+            });
+        }else if (state.myAuctions?.isEmpty ?? true) {
+            return const EmptyPage();
+          }else{
+          return const Center(child: CircularProgressIndicator());
+        }
+      }),
+    );
   }
 
   Widget _buildMyAdsWidget() {

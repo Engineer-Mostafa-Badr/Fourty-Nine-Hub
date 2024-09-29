@@ -28,7 +28,7 @@ class GiftWalletView extends StatelessWidget {
           label: LocaleKeys.gift.localize,
         ),
         body: BlocProvider<GiftCubit>(
-          create: (_) => serviceLocator(),
+          create: (_) => serviceLocator()..loadData(),
           child: BlocBuilder<GiftCubit, GiftState>(builder: (context, state) {
             return SingleChildScrollView(
               child: Padding(
@@ -85,7 +85,7 @@ class GiftWalletView extends StatelessWidget {
                             label: LocaleKeys.requestWithdraw.localize,
                             color: AppColors.AUTH_CONTAINER_COLOR,
                             // backColor: state.gift!.amount >= 10000 &&
-                            //     competitionsWalletEntity.isWinner == true
+                            //     state.gift?.wheelWinner == true
                             //     ? Colors.red
                             //     : Colors.red.withOpacity(.5),
                             onPressed: () {},
@@ -93,7 +93,7 @@ class GiftWalletView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Sizer(),
+                    const Sizer(),
                     ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),

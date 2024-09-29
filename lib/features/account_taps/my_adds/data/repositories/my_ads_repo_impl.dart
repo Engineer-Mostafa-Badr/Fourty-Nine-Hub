@@ -3,9 +3,9 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
-import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
 import 'package:fourtyninehub/features/ride/trip_details/domain/entities/trip_and_request_entity.dart';
 
+import '../../domain/entity/my_ads_auction.dart';
 import '../../domain/repositories/my_ads_repo.dart';
 import '../datasources/my_add_remote_datasource.dart';
 
@@ -71,7 +71,7 @@ class MyAdsRepoImpl implements MyAdsRepo {
   }
 
   @override
-  Future<Either<Failure, List<AuctionEntity>>> getMyAuctions() {
+  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyAuctions() {
     return _remoteDatasource.getMyAuctions();
   }
 }

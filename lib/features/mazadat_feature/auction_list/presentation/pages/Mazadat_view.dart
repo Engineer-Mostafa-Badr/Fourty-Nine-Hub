@@ -27,32 +27,32 @@ class MazadatView extends StatelessWidget {
                 children: [
                   // _buildHorizontalCategories(context: context),
                   _buildViewType(context: context),
-                  Expanded(
-                      child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: state.isLoading
-                        ? const Center(
-                            child: CircularProgressIndicator.adaptive())
-                        : state.isGrid
-                            ? GridView.builder(
-                                itemBuilder: (context, index) => AuctionCard(
-                                      item: state.auctionList![index],
-                                    ),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        childAspectRatio: .8,
-                                        mainAxisSpacing: 10,
-                                        crossAxisSpacing: 10,
-                                        crossAxisCount: 2),
-                                itemCount: state.auctionList?.length ?? 0)
-                            : ListView.separated(
-                                itemBuilder: (context, index) => AuctionCard(
-                                      item: state.auctionList![index],
-                                      isVertical: false,
-                                    ),
-                                separatorBuilder: (context, index) => Sizer(),
-                                itemCount: state.auctionList?.length ?? 0),
-                  )),
+                  // Expanded(
+                  //     child: Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: state.isLoading
+                  //       ? const Center(
+                  //           child: CircularProgressIndicator.adaptive())
+                  //       : state.isGrid
+                  //           ? GridView.builder(
+                  //               itemBuilder: (context, index) => AuctionCard(
+                  //                     item: state.auctionList![index],
+                  //                   ),
+                  //               gridDelegate:
+                  //                   const SliverGridDelegateWithFixedCrossAxisCount(
+                  //                       childAspectRatio: .8,
+                  //                       mainAxisSpacing: 10,
+                  //                       crossAxisSpacing: 10,
+                  //                       crossAxisCount: 2),
+                  //               itemCount: state.auctionList?.length ?? 0)
+                  //           : ListView.separated(
+                  //               itemBuilder: (context, index) => AuctionCard(
+                  //                     item: state.auctionList![index],
+                  //                     isVertical: false,
+                  //                   ),
+                  //               separatorBuilder: (context, index) => Sizer(),
+                  //               itemCount: state.auctionList?.length ?? 0),
+                  // )),
                 ],
               ),
             );

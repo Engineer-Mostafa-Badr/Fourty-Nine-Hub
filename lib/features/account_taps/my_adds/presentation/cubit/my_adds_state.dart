@@ -1,6 +1,6 @@
 part of 'my_adds_cubit.dart';
 
-enum MyAddsStates { loading, error, initState }
+enum MyAddsStates { loading, error, initState ,success}
 
 class MyAddsState {
   final MyAddsStates? status;
@@ -8,7 +8,7 @@ class MyAddsState {
   final List<AdEntity>? myAds;
   final List<TripAndRequestEntity>? comeWithMeTrips;
   final List<TripAndRequestEntity>? pickMeTrips;
-  final List<AuctionEntity>? myAuctions;
+  final List<MyAuctionAdsEntity>? myAuctions;
   final List<InstallmentEntity>? myInstallments;
 
   const MyAddsState({
@@ -26,7 +26,7 @@ class MyAddsState {
     List<AdEntity>? myAds,
     List<TripAndRequestEntity>? comeWithMeTrips,
     List<TripAndRequestEntity>? pickMeTrips,
-    List<AuctionEntity>? myAuctions,
+    List<MyAuctionAdsEntity>? myAuctions,
     List<InstallmentEntity>? myInstallments,
   }) {
     return MyAddsState(

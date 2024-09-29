@@ -9,8 +9,8 @@ import '../../../../../core/error/failure.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
 
 import '../../../../installment_feature/installment_list/domain/entities/installment_entity.dart';
-import '../../../../mazadat_feature/auction_list/domain/entities/auction_entity.dart';
 import '../../../../ride/trip_details/domain/entities/trip_and_request_entity.dart';
+import '../../domain/entity/my_ads_auction.dart';
 import '../../domain/usecases/cancel_ad_usecase.dart';
 import '../../domain/usecases/delete_come_with_me_usecase.dart';
 import '../../domain/usecases/delete_pick_me_usecase.dart';
@@ -63,6 +63,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
   }
 
   Future<void> getMyAuctions() async {
+    emit(state.copyWith( status: MyAddsStates.loading));
     final response = await _getMyAuctionsUseCase(const NoParams());
     response.fold(
         (failure) =>
