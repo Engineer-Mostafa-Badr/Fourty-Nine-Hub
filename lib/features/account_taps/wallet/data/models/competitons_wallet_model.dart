@@ -11,10 +11,10 @@ class CompetitionsWalletModel extends CompetitionsWalletEntity {
 
   factory CompetitionsWalletModel.fromJson(Map<String, dynamic> json) {
     return CompetitionsWalletModel(
-      id: json['competition_id']['_id'] ?? '',
-      nameAr: json['competition_id']['nameAr'] ?? '',
-      nameEn: json['competition_id']['nameEn'] ?? '',
-      maxRequests: json['competition_id']['maxRequests'] ?? '',
+      id: json['competition_id']!=null?json['competition_id']['_id'] ?? '':'',
+      nameAr: json['competition_id']!=null?json['competition_id']['nameAr'] ?? '':'',
+      nameEn: json['competition_id']!=null?json['competition_id']['nameEn'] ?? '':'',
+      maxRequests: json['competition_id']!=null?json['competition_id']['maxRequests'] ?? 0:0,
       countOfRequest: json['countOfRequest'] ?? 0,
       isWinner: json['isWinner'] ?? false,
     );

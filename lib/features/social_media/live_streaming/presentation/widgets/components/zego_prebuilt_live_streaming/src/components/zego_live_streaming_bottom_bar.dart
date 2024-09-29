@@ -384,7 +384,7 @@ class ZoomParticipantsBuilder extends StatelessWidget {
               popUpManager: widgetBottom!.popUpManager,
               translationText: widgetBottom!.translationText,
               builder: widgetBottom!.config.memberButton.builder,
-              icon: Image.asset('assets/49-New-icons/persons.png'),
+              icon: Icon(Icons.person, color: Colors.white),
               backgroundColor: Colors.transparent,
               avatarBuilder: widgetBottom!.config.avatarBuilder,
               itemBuilder: widgetBottom!.config.memberList.itemBuilder,
@@ -485,7 +485,7 @@ class ZoomSharescreenBuilder extends StatelessWidget {
           builder: (context, screenShareOn, child) {
             log('-------------${screenShareOn}');
             if (!screenShareOn) {
-              context.read<StreamCubit>().closeWhiteBoard();
+              // context.read<StreamCubit>().closeWhiteBoard();
             }
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,

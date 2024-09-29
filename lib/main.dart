@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/get_ser
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
+import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'core/service/background_service.dart';
 import 'core/service/cache_service.dart';
@@ -82,6 +83,9 @@ class _MyAppState extends State<MyApp> {
           create: (context) => serviceLocator<UserCubit>(),
         ),
         BlocProvider(
+          create: (context) => serviceLocator<SecretsCubit>(),
+        ),
+        BlocProvider(
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
         ),
         BlocProvider(
@@ -139,6 +143,7 @@ class _MyAppState extends State<MyApp> {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (context, child) {
+            context.read<SecretsCubit>().state.secrets?.zegoAppId;
             return BlocBuilder<ThemeCubit, ThemeStates>(
               builder: (BuildContext context, state) {
                 return MaterialApp.router(

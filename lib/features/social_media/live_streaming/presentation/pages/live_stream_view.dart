@@ -13,6 +13,7 @@ import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 // import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_bottom_navigator.dart';
 
+import '../../../../../secrets/controller/secrets_cubit.dart';
 import '../widgets/liveview/super_gifts/gift_manager.dart';
 import '../widgets/liveview/super_gifts/gift_sheet.dart';
 import '../widgets/liveview/super_gifts/mp4_player_widget.dart';
@@ -44,6 +45,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
       ValueNotifier<Map<String, List<String>>>({});
   final requestIDNotifier = ValueNotifier<String>('');
   PKEvents? pkEvents;
+
   @override
   void initState() {
     super.initState();
@@ -57,7 +59,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
     );
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ZegoGiftManager().service.init(
-            appID: UIConst.appId,
+            appID: context.read<SecretsCubit>().state.secrets?.zegoAppId??0,
             liveID: widget.liveID,
             localUserID: context.read<UserCubit>().state.data!.id,
             localUserName: context.read<UserCubit>().state.data!.fullName,
@@ -118,8 +120,8 @@ class _LiveStreamViewState extends State<LiveStreamView> {
     final userId = context.read<UserCubit>().state.data!.id;
     return SafeArea(
       child: ZegoUIKitPrebuiltLiveStreaming(
-        appID: UIConst.appId /*input your AppID*/,
-        appSign: UIConst.appSign /*input your AppSign*/,
+        appID: context.read<SecretsCubit>().state.secrets!.zegoAppId,
+        appSign: context.read<SecretsCubit>().state.secrets!.zegoAppSign,
         userID: userId,
         userName: context.read<UserCubit>().state.data!.fullName,
         liveID: widget.liveID,
@@ -360,6 +362,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
               height: 50.h,
             )),
       );
+
   ZegoLiveStreamingMenuBarExtendButton get superGiftButton =>
       ZegoLiveStreamingMenuBarExtendButton(
         index: 1,

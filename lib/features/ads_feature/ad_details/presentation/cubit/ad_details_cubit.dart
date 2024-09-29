@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../ads/domain/usecases/get_ads_usecase.dart';

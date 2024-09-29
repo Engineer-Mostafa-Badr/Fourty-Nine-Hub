@@ -16,7 +16,7 @@ class ImageFromInternet extends StatelessWidget {
     this.borderRadius,
     this.fromFile = false,
     this.isCircle = false,
-    this.defaultLogo = false,
+    this.defaultLogo = false, this.fit,
   });
   final String image;
   final double? width;
@@ -25,6 +25,7 @@ class ImageFromInternet extends StatelessWidget {
   final bool? fromFile;
   final bool? isCircle;
   final bool? defaultLogo;
+  final BoxFit? fit;
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
@@ -37,7 +38,7 @@ class ImageFromInternet extends StatelessWidget {
           shape: isCircle == true ? BoxShape.circle : BoxShape.rectangle,
           image: DecorationImage(
             image: imageProvider,
-            fit: BoxFit.fill,
+            fit: fit??BoxFit.fill,
           ),
         ),
       ),

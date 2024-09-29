@@ -38,4 +38,14 @@ class AdsRepoImpl implements AdsRepo {
   Future<Either<Failure, bool>> requestPickMe({required RequestParams params}) {
     return _remoteDataSource.requestPickMe(params: params);
   }
+
+  @override
+  Future<Either<Failure, bool>> favouriteAd({required String params}) {
+    return _remoteDataSource.favouriteAd(params: params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> removeFavouriteAd({required String params}) {
+    return _remoteDataSource.removeFavouriteAd(params: params);
+  }
 }

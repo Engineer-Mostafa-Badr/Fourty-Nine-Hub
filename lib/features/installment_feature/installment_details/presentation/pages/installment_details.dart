@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
@@ -155,8 +156,8 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                         : Colors.white),
                 child: Row(
                   children: [
-                    Expanded(child: Label(text: detail.label)),
-                    Expanded(child: Label(text: detail.value)),
+                    Expanded(child: Label(text: getLang()=='ar'?detail.value.nameAr:detail.value.nameEn)),
+                    Expanded(child: Label(text: getLang()=='ar'?detail.value.nameAr:detail.value.nameEn)),
                   ],
                 ),
               );

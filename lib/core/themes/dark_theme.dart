@@ -15,6 +15,11 @@ ThemeData darkTheme() {
         color: AppColors.AUTH_CONTAINER_COLOR,
       ),
     ),
+    // textSelectionTheme: const TextSelectionThemeData(
+    //   selectionColor: AppColors.PRIMARY_COLOR,
+    //   cursorColor: AppColors.PRIMARY_COLOR,
+    //   selectionHandleColor: AppColors.PRIMARY_COLOR,
+    // ),
     textTheme: const TextTheme(
       bodyMedium: TextStyle(color: AppColors.AUTH_CONTAINER_COLOR),
       bodySmall: TextStyle(color: AppColors.AUTH_CONTAINER_COLOR),

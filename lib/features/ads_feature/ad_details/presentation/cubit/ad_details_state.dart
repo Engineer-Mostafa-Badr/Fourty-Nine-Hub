@@ -12,7 +12,7 @@ extension AdDetailsStateX on AdDetailsState {
 class AdDetailsState {
   final AdDetailsStates? status;
   final Failure? failure;
-  final AdModel? ad;
+  final AddDetailsModel? ad;
   final List<AdModel>? relevantAds;
   const AdDetailsState({
     this.ad,
@@ -23,7 +23,7 @@ class AdDetailsState {
   AdDetailsState copyWith({
     AdDetailsStates? status,
     Failure? failure,
-    AdModel? ad,
+    AddDetailsModel? ad,
     List<AdModel>? relevantAds,
   }) {
     return AdDetailsState(

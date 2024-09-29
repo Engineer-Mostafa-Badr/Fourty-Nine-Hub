@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -130,7 +131,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
   Widget _buildTabBar() {
     final user = context.read<UserCubit>().state.data;
     return Container(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(10.r),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: List.generate(
@@ -153,6 +154,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                   child: Icon(
                     i == 0 ? Icons.home : Icons.person,
                     color: i == 0 ? AppColors.PRIMARY_COLOR : Colors.grey,
+                    size: 40.w,
                   )),
             ),
           ),
