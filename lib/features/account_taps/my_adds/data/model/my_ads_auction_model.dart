@@ -25,7 +25,12 @@ class MyAuctionAdsModel extends MyAuctionAdsEntity {
       required super.user,
       required super.subscriptions,
       required super.images,
-      required super.subscriptionStatus});
+      required super.subscriptionStatus,
+      required super.chatCountLength,
+      required super.loveCountLength,
+      required super.phoneCountLength,
+      required super.viewCountLength,
+      });
 
 factory MyAuctionAdsModel.fromJson(Map<String, dynamic> json) {
   return MyAuctionAdsModel(
@@ -51,6 +56,10 @@ factory MyAuctionAdsModel.fromJson(Map<String, dynamic> json) {
         .map((e) => MyAuctionImageModel.fromJson(e))
         .toList(),
     subscriptionStatus: json['subscriptionStatus'],
+    phoneCountLength: json['phoneCountLength'] ??0,
+    chatCountLength: json['chatCountLength'] ??0,
+    loveCountLength: json['loveCountLength'] ??0,
+    viewCountLength: json['viewCountLength'] ??0,
   //  images: List<String>.from(json['images'] ?? []),
   );
 }

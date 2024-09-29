@@ -14,6 +14,7 @@ import '../../domain/entity/my_ads_auction.dart';
 import '../../domain/entity/my_ads_trip_join_entity.dart';
 import '../../domain/usecases/cancel_ad_usecase.dart';
 import '../../domain/usecases/delete_come_with_me_usecase.dart';
+import '../../domain/usecases/delete_my_installment_usecase.dart';
 import '../../domain/usecases/delete_my_trip_join_usecase.dart';
 import '../../domain/usecases/delete_pick_me_usecase.dart';
 import '../../domain/usecases/get_my_ads_usecase.dart';
@@ -39,6 +40,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
   final GetMyInstallmentUseCase _getMyInstallmentUseCase;
   final GetMyTripJoinUseCase _getMyTripJoinUseCase;
   final DeleteMyTripJoinUseCase _deleteMyTripJoinUseCase;
+  final DeleteMyInstallmentUseCase _deleteMyInstallmentUseCase;
 
   MyAddsCubit(
       this._getMyAdsUseCase,
@@ -54,7 +56,8 @@ class MyAddsCubit extends Cubit<MyAddsState> {
       this._rejectPickMeUseCase,
       this._getMyInstallmentUseCase,
       this._getMyTripJoinUseCase,
-      this._deleteMyTripJoinUseCase)
+      this._deleteMyTripJoinUseCase,
+      this._deleteMyInstallmentUseCase)
       : super(const MyAddsState());
 
   void loadData() async {
@@ -110,9 +113,24 @@ class MyAddsCubit extends Cubit<MyAddsState> {
           emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
       (r) {
         emit(
-        state.copyWith(status: MyAddsStates.success),
-      );
+          state.copyWith(status: MyAddsStates.success),
+        );
         getMyTripJoin();
+      },
+    );
+  }
+
+  Future<void> deleteMyInstallment({required String id}) async {
+    emit(state.copyWith(status: MyAddsStates.loading));
+    final response = await _deleteMyInstallmentUseCase(id);
+    response.fold(
+      (failure) =>
+          emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+      (r) {
+        emit(
+          state.copyWith(status: MyAddsStates.success),
+        );
+        getMyInstallment();
       },
     );
   }

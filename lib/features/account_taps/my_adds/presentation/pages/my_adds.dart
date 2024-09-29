@@ -141,24 +141,25 @@ class _MyAddsViewState extends State<MyAddsView>
   }
 
   Widget _buildMyInstallmentsWidget() {
-    return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
-      final controller = context.read<MyAddsCubit>();
-      context.read<MyAddsCubit>();
-      if (state.status == MyAddsStates.loading) {
-        return const Center(child: CircularProgressIndicator());
+    return BlocConsumer<MyAddsCubit, MyAddsState>(
+        listener: (BuildContext context, MyAddsState state) {
+      if (state.status == MyAddsStates.success) {
+        showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
       }
+    }, builder: (context, state) {
       if (state.status == MyAddsStates.initState) {
+        if (state.myInstallments!.isEmpty) {
+          return const EmptyPage();
+        }
         return ListView.separated(
             itemCount: state.myInstallments?.length ?? 0,
             separatorBuilder: (context, index) => const Sizer(),
             itemBuilder: (context, index) {
               return BuildItemAuctionCard(
                 item: state.myInstallments![index],
-                onDelete: (String id) => controller.cancelAd(id: id),
+               // onDelete: (String id) => controller.cancelAd(id: id),
               );
             });
-      } else if (state.myInstallments!.isEmpty) {
-        return const EmptyPage();
       } else {
         return const Center(child: CircularProgressIndicator());
       }
@@ -166,25 +167,27 @@ class _MyAddsViewState extends State<MyAddsView>
   }
 
   Widget _buildMyAuctionsWidget() {
-    return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
-      final controller = context.read<MyAddsCubit>();
-      context.read<MyAddsCubit>();
-      if (state.status == MyAddsStates.loading) {
-        return const Center(child: CircularProgressIndicator());
+    return BlocConsumer<MyAddsCubit, MyAddsState>(
+        listener: (BuildContext context, MyAddsState state) {
+      if (state.status == MyAddsStates.success) {
+        showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
       }
+    }, builder: (context, state) {
+
       if (state.status == MyAddsStates.initState) {
+       if (state.myAuctions?.isEmpty ?? true) {
+        return const EmptyPage();
+      }
         return ListView.separated(
             itemCount: state.myAuctions?.length ?? 0,
             separatorBuilder: (context, index) => const Sizer(),
             itemBuilder: (context, index) {
               return BuildItemAuctionCard(
                 item: state.myAuctions![index],
-                onDelete: (String id) => controller.cancelAd(id: id),
+               // onDelete: (String id) => controller.cancelAd(id: id),
               );
             });
-      } else if (state.myAuctions?.isEmpty ?? true) {
-        return const EmptyPage();
-      } else {
+      }  else {
         return const Center(child: CircularProgressIndicator());
       }
     });
@@ -216,13 +219,10 @@ class _MyAddsViewState extends State<MyAddsView>
         }
       },
       builder: (context, state) {
-        // if (state.pickMeTrips?.isEmpty ?? true) {
-        //   return const EmptyPage();
-        // }
-        if (state.status == MyAddsStates.loading) {
-          return const Center(child: CircularProgressIndicator());
-        }
         if (state.status == MyAddsStates.initState) {
+          if (state.tripJoin!.docs.isEmpty) {
+            return const EmptyPage();
+          }
           return RefreshIndicator(
             onRefresh: () async => context.read<MyAddsCubit>().getMyTripJoin(),
             child: ListView.separated(
@@ -270,36 +270,10 @@ class _MyAddsViewState extends State<MyAddsView>
                   );
                 }),
           );
-        } else if (state.tripJoin!.docs.isEmpty) {
-          return const EmptyPage();
         } else {
           return const Center(child: CircularProgressIndicator());
         }
       },
     );
   }
-
-// Widget _buildMyComeWithmeWidget() {
-//   return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
-//     final controller = context.read<MyAddsCubit>();
-//     if (state.comeWithMeTrips?.isEmpty ?? true) {
-//       return const EmptyPage();
-//     }
-//     return ListView.separated(
-//         itemCount: state.comeWithMeTrips?.length ?? 0,
-//         separatorBuilder: (context, index) => const Sizer(),
-//         itemBuilder: (context, index) {
-//           return TripCard(
-//             requests: state.comeWithMeTrips![index].requests,
-//             trip: state.comeWithMeTrips![index].trip,
-//             showDelete: true,
-//             onAccept: (String id) =>
-//                 controller.acceptComeWithMeRequest(id: id),
-//             onReject: (String id) =>
-//                 controller.rejectComeWithMeRequest(id: id),
-//             onDelete: (String id) => controller.deleteComeWithMe(id: id),
-//           );
-//         });
-//   });
-// }
 }

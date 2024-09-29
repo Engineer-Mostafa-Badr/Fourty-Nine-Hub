@@ -28,6 +28,7 @@ abstract class MyAdsRemoteDatasource {
   Future<Either<Failure, bool>> cancelAd({required String id});
   Future<Either<Failure, bool>> deactivateAd({required int id});
   Future<Either<Failure, bool>> deleteMyTripJoin({required String id});
+  Future<Either<Failure, bool>> deleteMyInstallment({required String id});
 }
 
 class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
@@ -149,6 +150,14 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
   @override
   Future<Either<Failure, bool>> deleteMyTripJoin({required String id}) async {
     final response = await _apiConsumer.delete(EndPoints.deleteMyTripJoin(id: id));
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteMyInstallment({required String id}) async {
+    final response = await _apiConsumer.delete(EndPoints.deleteMyInstallment(id: id));
     return response.fold(
             (failure) => Left(failure),
             (data) => Right(data['status']));

@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -19,13 +20,14 @@ import '../../../../../service_locator/service_locator.dart';
 import '../../../../account_taps/my_adds/domain/entity/my_ads_auction.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
+import '../cubit/my_adds_cubit.dart';
 
 class BuildItemAuctionCard extends StatelessWidget {
   final MyAuctionAdsEntity item;
-  final Function(String) onDelete;
+  //final Function(String) onDelete;
 
   const BuildItemAuctionCard(
-      {super.key, required this.item, required this.onDelete});
+      {super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,7 @@ class BuildItemAuctionCard extends StatelessWidget {
                   const Sizer(
                     height: 15,
                   ),
-                  //_buildContactInfo(context),
+                  _buildContactInfo(context),
                   const Sizer(
                     height: 15,
                   ),
@@ -88,16 +90,17 @@ class BuildItemAuctionCard extends StatelessWidget {
                     children: [
                       Expanded(
                           child: AppButton(
+                            backColor: AppColors.PRIMARY_COLOR,
                             color: AppColors.AUTH_CONTAINER_COLOR,
                             label: LocaleKeys.edit.localize,
-                            onPressed: () =>
-                                showAreYouSure(
-                                    title: LocaleKeys.deleteAd.localize,
-                                    subTitle: LocaleKeys.sureRemoveAd.localize,
-                                    action: () {
-                                      //  onDelete(item.id);
-                                    },
-                                    context: context),
+                            onPressed: () {}
+                                // showAreYouSure(
+                                //     title: LocaleKeys.deleteAd.localize,
+                                //     subTitle: LocaleKeys.sureRemoveAd.localize,
+                                //     action: () {
+                                //       //  onDelete(item.id);
+                                //     },
+                                //     context: context),
                           )),
                       const Sizer(),
                       Expanded(
@@ -115,14 +118,6 @@ class BuildItemAuctionCard extends StatelessWidget {
                                 subCategoryId: item.subCategory.id,
                                 title: 'Ads',
                               );
-                              // showAreYouSure(
-                              //   title: LocaleKeys.deleteAd.localize,
-                              //   subTitle: LocaleKeys.sureRemoveAd.localize,
-                              //   action: () {
-                              //
-                              //     // onDelete(item.id);
-                              //   },
-                              //   context: context);
                             },
                           )),
                     ],
@@ -263,13 +258,17 @@ class BuildItemAuctionCard extends StatelessWidget {
                       _buildOptionsWidget(
                         label: LocaleKeys.deleteAd.localize,
                         onTap: () {
-                          showAreYouSure(
-                              title: LocaleKeys.deleteAd.localize,
-                              subTitle: LocaleKeys.sureRemoveAd.localize,
-                              action: () {
-                                onDelete(item.id);
-                              },
-                              context: context);
+                          context
+                              .read<MyAddsCubit>()
+                              .deleteMyTripJoin(id: item.id);
+                          Navigator.pop(context);
+                          // showAreYouSure(
+                          //   title: LocaleKeys.deleteAd.localize,
+                          //   subTitle: LocaleKeys.sureRemoveAd.localize,
+                          //   action: (){
+                          //
+                          //   }, context: context,
+                          // );
                         },
                         icon: Icons.delete,
                       ),
@@ -290,292 +289,75 @@ class BuildItemAuctionCard extends StatelessWidget {
     );
   }
 
-  // Widget _buildContactInfo(context) {
-  //   return Row(
-  //     children: [
-  //       Expanded(
-  //           child: _buildContactItem(
-  //               icon: Icons.visibility_outlined,
-  //               label: LocaleKeys.view.localize,
-  //               value: item.statistics?.views ?? 0,
-  //               context: context)),
-  //       Expanded(
-  //           child: _buildContactItem(
-  //               icon: Icons.call_outlined,
-  //               label: LocaleKeys.tel.localize,
-  //               value: item.statistics?.calls ?? 0,
-  //               context: context)),
-  //       Expanded(
-  //           child: _buildContactItem(
-  //               icon: Icons.chat_bubble_outline,
-  //               label: LocaleKeys.chats.localize,
-  //               value: item.statistics?.chats ?? 0,
-  //               context: context)),
-  //       Expanded(
-  //           child: _buildContactItem(
-  //               icon: Icons.favorite_border_outlined,
-  //               label: LocaleKeys.like.localize,
-  //               value: item.statistics?.requests ?? 0,
-  //               context: context)),
-  //     ],
-  //   );
-  // }
+  Widget _buildContactInfo(context) {
+    return Row(
+      children: [
+        Expanded(
+            child: _buildContactItem(
+                icon: Icons.visibility_outlined,
+                label: LocaleKeys.view.localize,
+                value: item.viewCountLength,
+                context: context)),
+        Expanded(
+            child: _buildContactItem(
+                icon: Icons.call_outlined,
+                label: LocaleKeys.tel.localize,
+                value: item.phoneCountLength,
+                context: context)),
+        Expanded(
+            child: _buildContactItem(
+                icon: Icons.chat_bubble_outline,
+                label: LocaleKeys.chats.localize,
+                value: item.chatCountLength,
+                context: context)),
+        Expanded(
+            child: _buildContactItem(
+                icon: Icons.favorite_border_outlined,
+                label: LocaleKeys.like.localize,
+                value: item.loveCountLength,
+                context: context)),
+      ],
+    );
+  }
 
-  // Widget _buildContactItem({required IconData icon,
-  //   required String label,
-  //   required int value,
-  //   required context}) {
-  //   return Row(
-  //     children: [
-  //       Container(
-  //         padding: const EdgeInsets.all(5),
-  //         decoration: BoxDecoration(
-  //           borderRadius: BorderRadius.circular(5),
-  //           color: Theme
-  //               .of(context)
-  //               .primaryColor,
-  //         ),
-  //         child: Icon(
-  //           icon,
-  //           color: Theme
-  //               .of(context)
-  //               .scaffoldBackgroundColor,
-  //         ),
-  //       ),
-  //       const Sizer(),
-  //       Expanded(
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Label(
-  //               text: '$value',
-  //               style: Styles.mediumText(fontSize: 22),
-  //             ),
-  //             Label(
-  //               text: label,
-  //               style: Styles.mediumText(fontSize: 26),
-  //             ),
-  //           ],
-  //         ),
-  //       )
-  //     ],
-  //   );
-  // }
-
-// Widget _buildVerticalView({required BuildContext context}) {
-//   return Column(
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: [
-//       Expanded(
-//         child: SquareImage(
-//           width: double.infinity,
-//           radius: 10,
-//           // url: item.ad.images.isNotEmpty
-//           //     ? item.ad.images.first
-//           //     : UIC
-//           url:  UIConst.imagePlaceHolder,
-//         ),
-//       ),
-//       Row(
-//         children: [
-//           Expanded(
-//             child: Label(
-//               text:
-//               NumbersHelper.formatThousands(
-//                   number: 10),
-//                //   number: item.ad.price,
-//               style: Styles.mediumText(
-//                   fontWeight: FontWeight.bold,
-//                   color: AppColors.SECONDARY_COLOR),
-//               maxLines: 1,
-//             ),
-//           ),
-//           Sizer(),
-//           // IconAppButton(
-//           //     size: 20, icon: Icons.favorite_border, onPressed: () {}),
-//         ],
-//       ),
-//       Label(
-//         text: 'title',
-//       //  text: item.ad.title,
-//         style: Styles.mediumText(fontWeight: FontWeight.bold),
-//         maxLines: 1,
-//       ),
-//       Label(
-//         text: "description",
-//        // text: item.ad.desc,
-//         style: Styles.mediumText(),
-//         maxLines: 2,
-//       ),
-//       AppButton(
-//           label: 'Bidding',
-//           onPressed: () => context.push(Routes.MAZADDETAILS)),
-//     ],
-//   );
-// }
+  Widget _buildContactItem({required IconData icon,
+    required String label,
+    required int value,
+    required context}) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: Theme
+                .of(context)
+                .primaryColor,
+          ),
+          child: Icon(
+            icon,
+            color: Theme
+                .of(context)
+                .scaffoldBackgroundColor,
+          ),
+        ),
+        const Sizer(),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Label(
+                text: '$value',
+                style: Styles.mediumText(fontSize: 22),
+              ),
+              Label(
+                text: label,
+                style: Styles.mediumText(fontSize: 26),
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
 }
-// import 'package:flutter/material.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-// import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
-// import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-// import 'package:go_router/go_router.dart';
-// import '../../../../../common/functions/helper/numbers_helper.dart';
-// import '../../../../../common/widgets/dynamic/sizer.dart';
-// import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
-// import '../../../../../res/style/app_colors.dart';
-// import '../../../../../res/style/const.dart';
-// import '../../../../../res/style/styles.dart';
-// import '../../../../../routes/routes.dart';
-// import '../../../../account_taps/my_adds/domain/entity/my_ads_auction.dart';
-//
-// class BuildItemAuctionCard extends StatelessWidget {
-//   final MyAuctionAdsEntity item;
-//   final bool isVertical;
-//   const BuildItemAuctionCard({super.key, this.isVertical = true, required this.item});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return InkWell(
-//         onTap: () {
-//           context.push(Routes.MAZADDETAILS, extra: item.id);
-//         },
-//         child: _buildHorizontalView(context: context));
-//   }
-//
-//   Widget _buildHorizontalView({required BuildContext context}) {
-//     return Row(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         const Expanded(
-//             child: SquareImage(
-//               width: double.infinity,
-//               radius: 10,
-//                 url:  UIConst.imagePlaceHolder,
-//               // url: item.ad.images.isNotEmpty
-//               //     ? item.ad.images.first
-//               //     : UIConst.imagePlaceHolder,
-//             )),
-//         const Sizer(),
-//         Expanded(
-//           flex: 2,
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               Row(
-//                 children: [
-//                   Expanded(
-//                       child: Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           Label(
-//                             text: item.title,
-//                             style: Styles.mediumText(fontWeight: FontWeight.bold),
-//                             maxLines: 1,
-//                           ),
-//                           Label(
-//                             text: item.desc,
-//                             style: Styles.mediumText(),
-//                             maxLines: 2,
-//                           ),
-//                         ],
-//                       )),
-//                   Sizer(),
-//                   IconAppButton(
-//                       size: 20, icon: Icons.favorite_border, onPressed: () {}),
-//                 ],
-//               ),
-//               Label(
-//                 //  text: item.ad.address?.address ?? '',
-//                 text: 'address',
-//                 style: Styles.mediumText(),
-//                 maxLines: 1,
-//               ),
-//               Sizer(height: 5.h,),
-//               Row(
-//                 children: [
-//                   Expanded(
-//                     child: Label(
-//                       text:
-//                       NumbersHelper.formatThousands(number: item.price),
-//                       style: Styles.mediumText(
-//                           fontWeight: FontWeight.bold,
-//                           color: AppColors.SECONDARY_COLOR),
-//                       maxLines: 1,
-//                     ),
-//                   ),
-//                   Sizer(),
-//                   Expanded(
-//                     child: item.adminIgnore
-//                         ? AppButton(
-//                         label: 'Details',
-//                         color: AppColors.AUTH_CONTAINER_COLOR,
-//                         onPressed: () => context.push(Routes.MAZADDETAILS,
-//                             extra: item.id))
-//                         : AppButton(
-//                         label: 'Bidding',
-//                         color: AppColors.AUTH_CONTAINER_COLOR,
-//                         onPressed: () => context.push(Routes.MAZADDETAILS,
-//                             extra: item.id)),
-//                   ),
-//                 ],
-//               ),
-//             ],
-//           ),
-//         )
-//       ],
-//     );
-//   }
-//
-//   // Widget _buildVerticalView({required BuildContext context}) {
-//   //   return Column(
-//   //     crossAxisAlignment: CrossAxisAlignment.start,
-//   //     children: [
-//   //       Expanded(
-//   //         child: SquareImage(
-//   //           width: double.infinity,
-//   //           radius: 10,
-//   //           // url: item.ad.images.isNotEmpty
-//   //           //     ? item.ad.images.first
-//   //           //     : UIC
-//   //           url:  UIConst.imagePlaceHolder,
-//   //         ),
-//   //       ),
-//   //       Row(
-//   //         children: [
-//   //           Expanded(
-//   //             child: Label(
-//   //               text:
-//   //               NumbersHelper.formatThousands(
-//   //                   number: 10),
-//   //                //   number: item.ad.price,
-//   //               style: Styles.mediumText(
-//   //                   fontWeight: FontWeight.bold,
-//   //                   color: AppColors.SECONDARY_COLOR),
-//   //               maxLines: 1,
-//   //             ),
-//   //           ),
-//   //           Sizer(),
-//   //           // IconAppButton(
-//   //           //     size: 20, icon: Icons.favorite_border, onPressed: () {}),
-//   //         ],
-//   //       ),
-//   //       Label(
-//   //         text: 'title',
-//   //       //  text: item.ad.title,
-//   //         style: Styles.mediumText(fontWeight: FontWeight.bold),
-//   //         maxLines: 1,
-//   //       ),
-//   //       Label(
-//   //         text: "description",
-//   //        // text: item.ad.desc,
-//   //         style: Styles.mediumText(),
-//   //         maxLines: 2,
-//   //       ),
-//   //       AppButton(
-//   //           label: 'Bidding',
-//   //           onPressed: () => context.push(Routes.MAZADDETAILS)),
-//   //     ],
-//   //   );
-//   // }
-// }

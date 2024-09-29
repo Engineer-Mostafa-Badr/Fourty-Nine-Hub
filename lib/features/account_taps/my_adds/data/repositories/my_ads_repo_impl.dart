@@ -90,4 +90,9 @@ class MyAdsRepoImpl implements MyAdsRepo {
   Future<Either<Failure, bool>> deleteMyTripJoin({required String id}) {
     return _remoteDatasource.deleteMyTripJoin(id: id);
   }
+
+  @override
+  Future<Either<Failure, bool>> deleteMyInstallment({required String id}) {
+   return _remoteDatasource.deleteMyInstallment(id: id);
+  }
 }

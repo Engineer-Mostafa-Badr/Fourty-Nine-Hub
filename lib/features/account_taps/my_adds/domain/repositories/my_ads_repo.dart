@@ -22,4 +22,5 @@ abstract class MyAdsRepo {
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments();
   Future<Either<Failure, MyAdsTripJoinEntity>> getMyTripJoin();
   Future<Either<Failure, bool>> deleteMyTripJoin({required String id});
+  Future<Either<Failure, bool>> deleteMyInstallment({required String id});
 }

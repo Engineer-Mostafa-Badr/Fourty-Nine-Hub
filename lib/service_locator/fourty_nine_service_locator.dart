@@ -47,6 +47,7 @@ import '../features/account_taps/contact_us/domain/repositories/contact_us_repo.
 import '../features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
 import '../features/account_taps/my_adds/domain/usecases/cancel_ad_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/delete_come_with_me_usecase.dart';
+import '../features/account_taps/my_adds/domain/usecases/delete_my_installment_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/delete_my_trip_join_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/delete_pick_me_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/get_my_auctions_usecase.dart';
@@ -276,6 +277,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<DeleteMyInstallmentUseCase>(
+          () => DeleteMyInstallmentUseCase(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<GetMyInstallmentUseCase>(
           () => GetMyInstallmentUseCase(
         serviceLocator(),
@@ -362,6 +368,7 @@ class FourtyNineServiceLocator {
 
     serviceLocator.registerFactory<MyAddsCubit>(
       () => MyAddsCubit(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
