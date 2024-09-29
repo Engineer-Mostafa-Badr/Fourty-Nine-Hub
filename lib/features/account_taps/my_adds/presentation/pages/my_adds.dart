@@ -96,13 +96,13 @@ class _MyAddsViewState extends State<MyAddsView>
                       controller: _tabController,
                       onTap: (i) {
                         i == 0
-                            ? context.read<MyAddsCubit>().getPickMeTrips()
+                            ? context.read<MyAddsCubit>().getMyAuctions()
                             : i == 1
                                 ? context
                                     .read<MyAddsCubit>()
-                                    .getComeWithMeTrips()
+                                    .getMyInstallment()
                                 : i == 2
-                                    ? context.read<MyAddsCubit>().getMyAds()
+                                    ? context.read<MyAddsCubit>().getMyTripJoin()
                                     : i == 3
                                         ? context
                                             .read<MyAddsCubit>()
@@ -217,25 +217,79 @@ class _MyAddsViewState extends State<MyAddsView>
   }
 
   Widget _buildMyPickMeTripsWidget() {
-    return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
-      final controller = context.read<MyAddsCubit>();
-      if (state.pickMeTrips?.isEmpty ?? true) {
-        return const EmptyPage();
-      }
-      return ListView.separated(
-          itemCount: state.pickMeTrips?.length ?? 0,
-          separatorBuilder: (context, index) => const Sizer(),
-          itemBuilder: (context, index) {
-            return MyAdsTripJoin(
-              requests: state.pickMeTrips![index].requests,
-              trip: state.pickMeTrips![index].trip,
-              showDelete: true,
-              onAccept: (String id) => controller.acceptPickMeRequest(id: id),
-              onReject: (String id) => controller.rejectPickMeRequest(id: id),
-              onDelete: (String id) => controller.deletePickMeRequest(id: id),
-            );
-          });
-    });
+    return BlocProvider<MyAddsCubit>(
+      create: (BuildContext context) =>serviceLocator()..getMyTripJoin(),
+      child: BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
+        final controller = context.read<MyAddsCubit>();
+        // if (state.pickMeTrips?.isEmpty ?? true) {
+        //   return const EmptyPage();
+        // }
+        if (state.status ==MyAddsStates.loading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if(state.status ==MyAddsStates.initState) {
+          return ListView.separated(
+            itemCount: state.tripJoin?.docs.length ?? 0,
+            separatorBuilder: (context, index) => const Sizer(),
+            itemBuilder: (context, index) {
+              return MyAdsTripJoin(
+                tripJoinCardEntity: state.tripJoin!.docs[index],
+                reportOnTap: () {
+                 // _reportOnTap(context, index);
+                },
+                premuimRequestOnTap: () async {
+                  // if (await _userApproved(
+                  //   tripJoinCardEntity,
+                  //   tripJoinCardEntity.categoryId ?? '',
+                  //   'Trip Join Subscription',
+                  // )) {}
+                },
+                requestOnTap: () async {
+                  // await showModalBottomSheet(
+                  //   context: context,
+                  //   isDismissible: true,
+                  //   isScrollControlled: true,
+                  //   builder: (_) {
+                  //     return BlocProvider.value(
+                  //         value: BlocProvider.of<RequestTripJoinCubit>(context),
+                  //         child: RequstTripJoinBottomSheet(tripJoinCardEntity: tripJoinCardEntity));
+                  //   },
+                  // );
+                },
+                callOnTap: () async {
+                  // launchUrlString("tel://${tripJoinCardEntity.phone}");
+                  // return;
+                  // if (await _userApproved(
+                  //   tripJoinCardEntity,
+                  //   UIConst.chatNormalId,
+                  //   'Chat Subscription',
+                  // )) {
+                  //   launchUrlString("tel://${tripJoinCardEntity.phone}");
+                  // }
+                },
+                messageOnTap: () async {
+                  // if (await _userApproved(
+                  //   tripJoinCardEntity,
+                  //   UIConst.chatNormalId,
+                  //   'Chat Subscription',
+                  // )) {}
+                },
+                subscribeMessageOnTap: () async {
+                  // if (await _userApproved(
+                  //   tripJoinCardEntity,
+                  //   tripJoinCardEntity.categoryId ?? '',
+                  //   'Trip Join Subscription',
+                  // )) {}
+                },
+              );
+            });
+        }else if (state.tripJoin!.docs.isEmpty ?? true) {
+          return const EmptyPage();
+        }else{
+          return const Center(child: CircularProgressIndicator());
+        }
+      }),
+    );
   }
 
   // Widget _buildMyComeWithmeWidget() {

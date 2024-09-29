@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/data/model/my_ads_trip_join_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/ride/trip_details/domain/entities/trip_and_request_entity.dart';
 import '../../../../../core/data/datasources/json_parser.dart';
@@ -142,6 +143,6 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
     final response = await _apiConsumer.get(EndPoints.myAdsTripJoin);
     return response.fold(
             (failure) => Left(failure),
-            (data) => Right((data['data'])));
+            (data) => Right(MyAdsTripJoinModel.fromJson(data['data']['trips'])));
 }
 }

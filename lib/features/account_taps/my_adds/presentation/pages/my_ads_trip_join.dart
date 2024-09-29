@@ -1,251 +1,239 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_come_with_me_usecase.dart';
-import 'package:fourtyninehub/features/requests_history/domain/entities/trip_entity.dart';
-import 'package:go_router/go_router.dart';
-import 'package:google_static_maps_controller/google_static_maps_controller.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/my_ads_trip_join_entity.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:intl/intl.dart' as intl;
 
-import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
-import '../../../../../common/widgets/stateful/maps/static_map.dart';
-import '../../../../../common/widgets/stateless/buttons/app_button.dart';
-import '../../../../../res/style/app_colors.dart';
-import '../../../../../res/style/styles.dart';
-import '../../../../ride/trip_details/domain/entities/trip_request_entity.dart';
-import '../../../../ride/trip_details/presentation/widgets/trip_details.dart';
-
-
+import '../../domain/entity/docs_trip_join_entity.dart';
 
 class MyAdsTripJoin extends StatelessWidget {
-  final TripEntity trip;
-  final List<TripRequestEntity>? requests;
-  final Function(String)? onAccept;
-  final Function(String)? onReject;
-  final Function(String)? onDelete;
-  final bool showDelete;
-
-  final Function(RequestParams)? onRequest;
-  const MyAdsTripJoin(
-      {super.key,
-        required this.trip,
-        this.requests,
-        this.onAccept,
-        this.onDelete,
-        this.onRequest,
-        this.showDelete = false,
-        this.onReject});
-
+  const MyAdsTripJoin({
+    super.key,
+    required this.tripJoinCardEntity,
+    this.premuimRequestOnTap,
+    this.requestOnTap,
+    this.callOnTap,
+    this.messageOnTap,
+    this.reportOnTap,
+    this.subscribeMessageOnTap,
+  });
+  final DocsTripJoinEntity tripJoinCardEntity;
+  final void Function()? premuimRequestOnTap;
+  final void Function()? requestOnTap;
+  final void Function()? callOnTap;
+  final void Function()? messageOnTap;
+  final void Function()? reportOnTap;
+  final void Function()? subscribeMessageOnTap;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => bottomSheet(
-          context: context,
-          isScrollControlled: true,
-          widget: TripDetailsWidget(
-            trip: trip,
-          )),
-      child: Container(
-        padding: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey, width: .5),
-            borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(FontAwesomeIcons.car,
-                    color: AppColors.PRIMARY_COLOR),
-                Sizer(),
-                Label(
-                  text: trip.category?.name ?? '',
-                  style: Styles.mediumText(fontWeight: FontWeight.bold),
-                ),
-                const Spacer(),
-                if (showDelete)
-                  TextAppButton(
-                      label: 'Delete',
-                      onPressed: () {
-                        showAreYouSure(
-                            title: 'Alert!',
-                            subTitle:
-                            'Are you sure you want to delete this Ad!',
-                            action: () {
-                              if (onDelete != null) {
-                                onDelete!(trip.id);
-                              }
-                            },
-                            context: context);
-                      })
-              ],
-            ),
-            Row(
-              children: [
-                const Icon(
-                  Icons.location_searching,
-                  color: AppColors.PRIMARY_COLOR,
-                ),
-                Sizer(),
-                Expanded(child: Label(text: trip.fromAddress)),
-              ],
-            ),
-            Row(
-              children: [
-                const Icon(
-                  Icons.location_on,
-                  color: AppColors.SECONDARY_COLOR,
-                ),
-                Sizer(),
-                Expanded(child: Label(text: trip.toAddress)),
-              ],
-            ),
-            if (trip.offers.isNotEmpty)
-              Row(
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 5.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              CustomCard(
                 children: [
-                  TextAppButton(label: 'Offers', onPressed: () {}),
-                  Sizer(),
-                  Expanded(
-                    child: SizedBox(
-                      height: kToolbarHeight * .5,
-                      child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            final offer = trip.offers[index];
-                            return CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: 10,
-                              backgroundImage:
-                              NetworkImage(offer.profileImage ?? ''),
-                            );
-                          },
-                          separatorBuilder: (context, index) =>
-                          const SizedBox(),
-                          itemCount: trip.offers.length),
-                    ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.time_to_leave),
+                      const Sizer(),
+                      Text(
+                        '${tripJoinCardEntity.vehicleId.brand}, ${tripJoinCardEntity.vehicleId.model}',
+                        style: Styles.headerText(
+                          fontSize: 45,
+                          color: AppColors.SECONDARY_COLOR,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
                   ),
+                  const Sizer(),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.calendar_month),
+                      const Sizer(),
+                      Text(_formatDate(), style: Styles.headerText()),
+                    ],
+                  ),
+                  const Sizer(),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.airline_seat_recline_extra_rounded),
+                      const Sizer(),
+                      Text('${tripJoinCardEntity.passengers ?? 1} Seat', style: Styles.headerText()),
+                      const Spacer(),
+                      Visibility(
+                        visible: tripJoinCardEntity.isRepeat ?? false,
+                        child: Icon(
+                          (tripJoinCardEntity.isRepeat ?? false) ? Icons.check_box : Icons.check_box_outline_blank,
+                          color: AppColors.PRIMARY_COLOR,
+                        ),
+                      ),
+                      const Sizer(),
+                      Visibility(
+                        visible: tripJoinCardEntity.isRepeat ?? false,
+                        child: Text('Repeated', style: Styles.headerText()),
+                      ),
+                      const Sizer(width: 20),
+                    ],
+                  ),
+                  const Sizer(),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(Icons.trip_origin, color: AppColors.LIGHT_BLUE, size: 20),
+                      const Sizer(width: 13),
+                      Flexible(
+                        child: Text(
+                          tripJoinCardEntity.fromEn ?? '',
+                          style: Styles.headerText(fontSize: 32),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Sizer(),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.trip_origin, color: AppColors.CHECK_MARK_COLOR, size: 20),
+                      const Sizer(width: 13),
+                      Flexible(
+                        child: Text(
+                          tripJoinCardEntity.toAr ?? '',
+                          style: Styles.headerText(fontSize: 32),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Sizer(),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: AvaialbleTripsButton(
+                          title: 'Edit',
+                          color: AppColors.PRIMARY_COLOR,
+                          onTap: premuimRequestOnTap,
+                        ),
+                      ),
+                      const Sizer(width: 5),
+                      Expanded(
+                        flex: 3,
+                        child: AvaialbleTripsButton(
+                          title: 'Subscription',
+                          color: AppColors.PRIMARY_COLOR,
+                          onTap: requestOnTap,
+                        ),
+                      ),const Sizer(width: 5),
+                      Expanded(
+                        flex: 3,
+                        child: AvaialbleTripsButton(
+                          title: 'Delete',
+                          color: AppColors.SECONDARY_COLOR,
+                          onTap: requestOnTap,
+                        ),
+                      ),
+                    ],
+                  ),
+                  // const Sizer(),
+                  // Row(
+                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   children: [
+                  //     Expanded(
+                  //       flex: 3,
+                  //       child: AvaialbleTripsButton(
+                  //         title: 'Call',
+                  //         color:  AppColors.DARK_GRAY_COLOR,
+                  //         // color: (tripJoinCardEntity.isApproved ?? false)
+                  //         //     ? AppColors.PRIMARY_COLOR
+                  //         //     : AppColors.DARK_GRAY_COLOR,
+                  //         icon: Icons.call,
+                  //         onTap: callOnTap,
+                  //       ),
+                  //     ),
+                  //     const Sizer(width: 5),
+                  //     Expanded(
+                  //       flex: 3,
+                  //       child: AvaialbleTripsButton(
+                  //         title: 'Message',
+                  //         color: AppColors.DARK_GRAY_COLOR,
+                  //         // color: (tripJoinCardEntity.isApproved ?? false)
+                  //         //     ? AppColors.PRIMARY_COLOR
+                  //         //     : AppColors.DARK_GRAY_COLOR,
+                  //         icon: Icons.email,
+                  //         onTap: messageOnTap,
+                  //       ),
+                  //     ),
+                  //     const Sizer(width: 5),
+                  //     Expanded(
+                  //       flex: 3,
+                  //       child: AvaialbleTripsButton(
+                  //         title: 'Report',
+                  //         color: AppColors.SECONDARY_COLOR,
+                  //         icon: Icons.report,
+                  //         onTap: reportOnTap,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
-            Sizer(),
-            if (requests?.isNotEmpty ?? false)
-              ListView.builder(
-                  itemCount: requests?.length ?? 0,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return _buildRequestCard(request: requests![index]);
-                  }),
-            Sizer(),
-            StaticMapWidget(
-              height: kToolbarHeight * 1.5,
-              radius: 10,
-              markers: [
-                Marker(locations: [
-                  Location(trip.fromCoordinates[0], trip.fromCoordinates[1]),
-                  Location(trip.toCoordinates[0], trip.toCoordinates[1]),
-                ])
-              ],
-              paths: [
-                Location(trip.fromCoordinates[0], trip.fromCoordinates[1]),
-                Location(trip.toCoordinates[0], trip.toCoordinates[1]),
-              ],
-            ),
-            Sizer(),
-            if (onRequest != null)
-              AppButton(
-                  label: 'Request',
-                  onPressed: () {
-                    bottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        widget: _buildPhoneWidget(context));
-                  })
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPhoneWidget(BuildContext context) {
-    final formState = GlobalKey<FormState>();
-    late String phone;
-    return Form(
-      key: formState,
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(15), topLeft: Radius.circular(15))),
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            Label(
-                text: 'Contact Phone',
-                style: Styles.mediumText(fontWeight: FontWeight.bold)),
-            Sizer(),
-            FormTextField(
-                hint: 'Phone',
-                type: TextInputType.number,
-                style: TextStyle(
-                    fontSize: 20.sp,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold),
-                action: (v) => phone = v),
-            Sizer(),
-            AppButton(
-                label: 'Done',
-                onPressed: () {
-                  if (formState.currentState!.validate()) {
-                    context.pop();
-
-                    onRequest!(
-                        RequestParams(subCategoryId: trip.id, phone: phone));
-                  }
-                }),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRequestCard({required TripRequestEntity request}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(text: request.user?.fullName ?? ''),
-        Label(text: request.phone),
-        if (!request.isAccepted && !request.isRejected)
-          Row(
-            children: [
-              Expanded(
-                  child: AppButton(
-                      label: 'Reject',
-                      onPressed: () {
-                        if (onReject != null) {
-                          onReject!(request.id);
-                        }
-                      })),
-              Sizer(),
-              Expanded(
-                  child: AppButton(
-                      label: 'Accept',
-                      backColor: Colors.green,
-                      onPressed: () {
-                        if (onAccept != null) {
-                          onAccept!(request.id);
-                        }
-                      })),
+              Positioned.directional(
+                top: 5,
+                end: 20,
+                textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                child: Column(
+                  children: [
+                    Text(tripJoinCardEntity.price.toStringAsFixed(0) ?? '',
+                        style: Styles.headerText(fontSize: 70, color: Colors.green[600])),
+                    Text(tripJoinCardEntity.status ?? '',
+                        style: Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR)),
+                  ],
+                ),
+              )
             ],
           ),
-        if (request.isAccepted) const BadgedLabel(label: 'Accepted'),
-        if (request.isRejected) const BadgedLabel(label: 'Reject')
-      ],
+          const Sizer(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: InkWell(
+              onTap: subscribeMessageOnTap,
+              child: Text(
+                'Subscribe to contact the client!',
+                style: Styles.headerText(
+                  color: Colors.red[300],
+                  fontSize: 30,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            ),
+          )
+        ],
+      ),
     );
+  }
+
+  String _formatDate() {
+    if (tripJoinCardEntity.time == null) {
+      return '';
+    }
+    return intl.DateFormat('dd MMM, hh:mm aaa')
+        .format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.time));
   }
 }
