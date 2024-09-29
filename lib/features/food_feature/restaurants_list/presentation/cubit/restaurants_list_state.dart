@@ -33,7 +33,7 @@ class RestaurantsListState {
   final IsRestaurantModel? isResturant;
   final List<Restaurant>? allRestaurant;
   final List<RestaurantEntity>? trendingRestaurants;
-  final List<RestaurantEntity>? subCategories;
+  final List<Restaurant2Model>? subCategories;
   final List<FoodCategoryEntity>? mealCategories;
   final List<SubCategoryEntity>? categories;
   const RestaurantsListState({
@@ -54,7 +54,7 @@ class RestaurantsListState {
     RestaurantsListStates? status,
     Failure? failure,
     List<RestaurantEntity>? nearByRestaurants,
-    List<RestaurantEntity>? subCategories,
+    List<Restaurant2Model>? subCategories,
     List<Restaurant>? allRestaurant,
     int? numOfRestaurants,
     Banner? banner,

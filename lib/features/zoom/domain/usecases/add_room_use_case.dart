@@ -17,19 +17,19 @@ class AddRoomUseCase extends UseCase<bool, MeetingParams> {
 }
 
 class MeetingParams extends Equatable {
-  final String meetingId;
+  final String id;
   final DateTime? startedAt;
   final DateTime? endsAt;
   final String? title;
   const MeetingParams({
-    required this.meetingId,
+    required this.id,
     this.startedAt,
     this.endsAt,
     this.title,
   });
   //post method data
   Map<String, dynamic> toJson() => {
-        'roomId': meetingId,
+        'roomId': id,
         'title': title,
         'startDate': startedAt?.toUtc().toString(),
         'endDate': startedAt?.toUtc().toString(),
@@ -37,7 +37,7 @@ class MeetingParams extends Equatable {
 
   @override
   List<Object?> get props => [
-        meetingId,
+        id,
         startedAt,
         endsAt,
         title,

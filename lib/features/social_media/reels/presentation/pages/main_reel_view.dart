@@ -3172,14 +3172,14 @@ class ReelsScreenState extends State<ReelsScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<ReelsCubit, ReelsState>(
       builder: (context, state) {
-        if ((state.globalReels.isEmpty)) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        if (!serviceLocator<UserCubit>().isLoggedIn) {
-          return pleaseLoginWidget(context);
-        }
+        // if ((state.globalReels.isEmpty)) {
+        //   return const Center(
+        //     child: CircularProgressIndicator(),
+        //   );
+        // }
+        // if (!serviceLocator<UserCubit>().isLoggedIn) {
+        //   return pleaseLoginWidget(context);
+        // }
         return PageView.builder(
           physics: const BouncingScrollPhysics(),
           controller: _pageController,

@@ -59,7 +59,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
     );
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ZegoGiftManager().service.init(
-            appID: context.read<SecretsCubit>().state.secrets!.zegoAppId,
+            appID: context.read<SecretsCubit>().state.secrets?.zegoAppId??0,
             liveID: widget.liveID,
             localUserID: context.read<UserCubit>().state.data!.id,
             localUserName: context.read<UserCubit>().state.data!.fullName,

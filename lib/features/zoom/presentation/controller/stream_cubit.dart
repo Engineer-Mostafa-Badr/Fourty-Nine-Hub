@@ -9,11 +9,14 @@ import 'package:fourtyninehub/features/zoom/domain/usecases/end_room_use_case.da
 import 'package:fourtyninehub/features/zoom/domain/usecases/get_scheuled_rooms_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/join_room_use_case.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../routes/pages.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../social_media/live_streaming/domain/entity/live_entity.dart';
 import '../../../social_media/live_streaming/domain/entity/topic_entity.dart';
 import '../../../social_media/live_streaming/domain/usecases/create_live_use_case.dart';
+import '../../../social_media/live_streaming/domain/usecases/end_live_use_case.dart';
 import '../../../social_media/live_streaming/domain/usecases/get_all_lives_use_case.dart';
 import '../../../social_media/live_streaming/domain/usecases/get_all_topics_use_case.dart';
 import 'stream_state.dart';
@@ -27,6 +30,7 @@ final class StreamCubit extends Cubit<StreamState> {
     this.getAllTopicsUseCase,
     this.createLiveUseCase,
     this.getAllLivesUseCase,
+    this.endLiveUseCase,
   ) : super(const StreamState());
   final AddRoomUseCase addRoomUseCase;
   final JoinRoomUseCase joinRoomUseCase;
@@ -37,9 +41,10 @@ final class StreamCubit extends Cubit<StreamState> {
   final GetAllTopicsUseCase getAllTopicsUseCase;
   final CreateLiveUseCase createLiveUseCase;
   final GetAllLivesUseCase getAllLivesUseCase;
+  final EndLiveUseCase endLiveUseCase;
   String meetingId = '';
   List<TopicEntity> topics = [];
-
+  String liveId = '';
   String get genRandNo {
     int min = 10000000;
     int max = 99999999;
@@ -54,7 +59,7 @@ final class StreamCubit extends Cubit<StreamState> {
   }) async {
     meetingId = genRandNo;
     final response = await addRoomUseCase(MeetingParams(
-      meetingId: meetingId,
+      id: meetingId,
       endsAt: endTime,
       startedAt: startTime,
       title: title,
@@ -80,7 +85,7 @@ final class StreamCubit extends Cubit<StreamState> {
 
   Future<bool> joinNewMeeting(String roomId) async {
     emit(state.copyWith(status: StreamsStates.loading));
-    final response = await joinRoomUseCase(MeetingParams(meetingId: roomId));
+    final response = await joinRoomUseCase(MeetingParams(id: roomId));
     response.fold((l) {
       emit(state.copyWith(status: StreamsStates.failure, failure: l));
       showErrorMessage(
@@ -112,7 +117,7 @@ final class StreamCubit extends Cubit<StreamState> {
 
   Future<void> endRoom(String roomId) async {
     emit(state.copyWith(status: StreamsStates.loading));
-    await endRoomUseCase(MeetingParams(meetingId: roomId)).then((value) {
+    await endRoomUseCase(MeetingParams(id: roomId)).then((value) {
       // print('room Ended');
       emit(state.copyWith(status: StreamsStates.success));
     }).catchError((error) {
@@ -125,7 +130,7 @@ final class StreamCubit extends Cubit<StreamState> {
   Future<void> getScheduledMeetings() async {
     emit(state.copyWith(status: StreamsStates.loading));
     var result = await getScheduledRoomsUseCase(MeetingParams(
-      meetingId: UserCubit.to.state.data!.id,
+      id: UserCubit.to.state.data!.id,
     ));
     result.fold((l) {
       emit(state.copyWith(status: StreamsStates.failure, failure: l));
@@ -169,4 +174,11 @@ final class StreamCubit extends Cubit<StreamState> {
     isMinimized = !isMinimized;
     emit(state.copyWith(status: StreamsStates.success));
   }
+
+  //get all lives by pagination
+  final PagingController<int, LiveEntity> roomsPagingController =
+      PagingController(firstPageKey: 1);
+  int pageSize = 10;
+  int roomsLength = 0;
+  List<LiveEntity> rooms = [];
 }

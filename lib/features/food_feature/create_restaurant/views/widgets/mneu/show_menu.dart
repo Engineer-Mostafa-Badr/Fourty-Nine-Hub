@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter/material.dart';
@@ -111,78 +112,151 @@ class ShowMneu extends StatelessWidget {
               ],
               Sizer(),
               Container(
-                height: MediaQuery.of(context).size.width * .8,
-                width: MediaQuery.of(context).size.width,
+                // height: MediaQuery.of(context).size.width * 0.5,
+                // width: MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(width: .4)),
+                    border: Border.all(width: 1, color: Colors.grey)),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GestureDetector(
-                        onTap: () async {
-                          await createRestaurantCubit.uploadMealImage(context);
-                        },
-                        child: BlocBuilder<RestaurantMenuCubit,
-                            RestaurantMenuState>(
-                          builder: (context, state) {
-                            if (state is RestaurantMenuImagePicked) {
-                              imagePath = state.imagePath;
-                              return ImagePickerPlaceholder(
-                                image: Image.file(
-                                  File(imagePath),
-                                  fit: BoxFit.cover,
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: GestureDetector(
+                              onTap: () async {
+                                await createRestaurantCubit
+                                    .uploadMealImage(context);
+                              },
+                              child: BlocBuilder<RestaurantMenuCubit,
+                                  RestaurantMenuState>(
+                                builder: (context, state) {
+                                  if (state is RestaurantMenuImagePicked) {
+                                    imagePath = state.imagePath;
+                                    return ImagePickerPlaceholder(
+                                      image: Image.file(
+                                        File(imagePath),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  }
+                                  return Container(
+                                    // color: Colors.red,
+                                    height: 195.h,
+                                    child: ImagePickerPlaceholder(
+                                      // width: double.infinity,
+                                      tilte: LocaleKeys.photoForMeal.tr(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                          Sizer(),
+                          Expanded(
+                            flex: 3,
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return LocaleKeys.emptyFieldNotValid.tr();
+                                    }
+                                    return null;
+                                  },
+                                  maxLines: null,
+                                  controller: foodNameController,
+                                  decoration: InputDecoration(
+                                    constraints: BoxConstraints.loose(
+                                        Size.fromHeight(90.h)),
+                                    filled: false,
+                                    contentPadding: const EdgeInsets.all(10),
+                                    hintText: LocaleKeys.itemName.tr(),
+                                    hintStyle:
+                                        const TextStyle(color: Colors.red),
+                                    // Set the border color to grey
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          const BorderSide(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          const BorderSide(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide:
+                                          const BorderSide(color: Colors.red),
+                                      // Keep red for error state
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide:
+                                          const BorderSide(color: Colors.red),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                  ),
                                 ),
-                              );
-                            }
-                            return ImagePickerPlaceholder(
-                              tilte: LocaleKeys.photoForMeal.tr(),
-                            );
-                          },
-                        ),
-                      ),
-                      Sizer(),
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return LocaleKeys.emptyFieldNotValid.tr();
-                          }
-                          return null;
-                        },
-                        controller: foodNameController,
-                        decoration: InputDecoration(
-                          filled: false,
-                          contentPadding: const EdgeInsets.all(10),
-                          hintText: LocaleKeys.itemName.tr(),
-                          hintStyle: const TextStyle(color: Colors.red),
-                        ),
-                      ),
-                      Sizer(),
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return LocaleKeys.emptyFieldNotValid.tr();
-                          }
-                          return null;
-                        },
-                        controller: priceController,
-                        keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+                                Sizer(),
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return LocaleKeys.emptyFieldNotValid.tr();
+                                    }
+                                    return null;
+                                  },
+                                  maxLines: null,
+                                  controller: priceController,
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                          decimal: true),
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r"[0-9.]")),
+                                  ],
+                                  decoration: InputDecoration(
+                                    constraints: BoxConstraints.loose(
+                                        Size.fromHeight(90.h)),
+                                    filled: false,
+                                    contentPadding: const EdgeInsets.all(10),
+                                    hintText: LocaleKeys.price.tr(),
+                                    hintStyle:
+                                        const TextStyle(color: Colors.red),
+                                    // Set the border color to grey
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          const BorderSide(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          const BorderSide(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide:
+                                          const BorderSide(color: Colors.red),
+                                      // Keep red for error state
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide:
+                                          const BorderSide(color: Colors.red),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                         ],
-                        decoration: InputDecoration(
-                          filled: false,
-                          contentPadding: const EdgeInsets.all(10),
-                          hintText: LocaleKeys.price.tr(),
-                          hintStyle: const TextStyle(color: Colors.red),
-                        ),
                       ),
-                      Sizer(),
                       Sizer(),
                       ElevatedAppButton(
                         onPressed: () {
