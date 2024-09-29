@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/accept_come_with_me_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/accept_pick_me_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/get_my_trip_join_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/reject_come_with_me_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/reject_pick_me_usecase.dart';
 
@@ -10,6 +11,7 @@ import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
 
 import '../../../../ride/trip_details/domain/entities/trip_and_request_entity.dart';
 import '../../domain/entity/my_ads_auction.dart';
+import '../../domain/entity/my_ads_trip_join_entity.dart';
 import '../../domain/usecases/cancel_ad_usecase.dart';
 import '../../domain/usecases/delete_come_with_me_usecase.dart';
 import '../../domain/usecases/delete_pick_me_usecase.dart';
@@ -34,6 +36,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
   final CancelAdUseCase _cancelAdUseCase;
   final GetMyAuctionsUseCase _getMyAuctionsUseCase;
   final GetMyInstallmentUseCase _getMyInstallmentUseCase;
+  final GetMyTripJoinUseCase _getMyTripJoinUseCase;
   MyAddsCubit(
       this._getMyAdsUseCase,
       this._deleteComeWithMeUseCase,
@@ -45,7 +48,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
       this._rejectComeWithMeUseCase,
       this._cancelAdUseCase,
       this._getMyAuctionsUseCase,
-      this._rejectPickMeUseCase, this._getMyInstallmentUseCase)
+      this._rejectPickMeUseCase, this._getMyInstallmentUseCase, this._getMyTripJoinUseCase)
       : super(const MyAddsState());
 
   void loadData() async {
@@ -81,6 +84,15 @@ class MyAddsCubit extends Cubit<MyAddsState> {
             emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
             (r) => emit(
             state.copyWith(myInstallments: r, status: MyAddsStates.initState)));
+  }
+  Future<void> getMyTripJoin() async {
+    emit(state.copyWith( status: MyAddsStates.loading));
+    final response = await _getMyTripJoinUseCase(const NoParams());
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+            (r) => emit(
+            state.copyWith(tripJoin: r, status: MyAddsStates.initState)));
   }
 
   Future<void> getPickMeTrips() async {

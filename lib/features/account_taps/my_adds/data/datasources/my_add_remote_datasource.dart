@@ -9,6 +9,7 @@ import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
 import '../../../../installment_feature/installment_list/domain/entities/installment_entity.dart';
 import '../../../../ride/trip_details/data/models/trip_and_request_model.dart';
 import '../../domain/entity/my_ads_auction.dart';
+import '../../domain/entity/my_ads_trip_join_entity.dart';
 import '../model/my_ads_auction_model.dart';
 
 abstract class MyAdsRemoteDatasource {
@@ -17,6 +18,7 @@ abstract class MyAdsRemoteDatasource {
   Future<Either<Failure, List<TripAndRequestModel>>> getPickMeAds();
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyAuctions();
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments();
+  Future<Either<Failure, MyAdsTripJoinEntity>> getMyTripJoin();
   Future<Either<Failure, bool>> deleteComeWithMeAd({required String id});
   Future<Either<Failure, bool>> deletePickMeAd({required String id});
   Future<Either<Failure, bool>> acceptPickMeRequest({required String id});
@@ -134,4 +136,12 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
             .map((e) => MyAuctionAdsModel.fromJson(e))
             .toList()));
   }
+
+  @override
+  Future<Either<Failure, MyAdsTripJoinEntity>> getMyTripJoin() async {
+    final response = await _apiConsumer.get(EndPoints.myAdsTripJoin);
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right((data['data'])));
+}
 }
