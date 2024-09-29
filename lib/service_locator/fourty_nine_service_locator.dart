@@ -382,6 +382,8 @@ class FourtyNineServiceLocator {
       () => CreateAdCubit(
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
       ),
     );
     serviceLocator.registerFactory<AdDetailsCubit>(
