@@ -725,7 +725,7 @@ class CameraScreenState extends State<CameraScreen> {
                   MaterialPageRoute(
                     builder: (context) => BlocProvider(
                       create: (context) => serviceLocator<StoryCubit>(),
-                      child: StatusPrivacyScreen(),
+                      child: const StatusPrivacyScreen(),
                     ),
                   ));
             },

@@ -30,11 +30,11 @@ class SubscriptionController {
       this._subscribeUseCase,
       this._getActiveSubscriptionAmountsUseCase);
 
-  void checkIfUserSubscribed({
-    required Function onSubscribed,
-    required String subCategoryId,
-    String? title,
-  }) async {
+  void checkIfUserSubscribed(
+      {required Function onSubscribed,
+      required String subCategoryId,
+      String? title,
+      showRegular}) async {
     showLoadingDialog(context);
     final response = await _checkIfUserSubscribedUseCase(subCategoryId);
     AppPages.router.pop();
@@ -46,16 +46,21 @@ class SubscriptionController {
       if (data) {
         onSubscribed();
       } else {
-        showSubscriptionPlans(subCategoryId: subCategoryId, title: title);
+        showSubscriptionPlans(
+            subCategoryId: subCategoryId,
+            title: title,
+            showRegular: showRegular);
       }
     });
   }
 
   bool _isBottomSheetShown = false;
+
   Future<void> showSubscriptionPlans(
       {List<WalletTypes>? wallets,
-        required String subCategoryId,
-        String? title}) async {
+      required String subCategoryId,
+      String? title,
+      bool? showRegular}) async {
     if (!_isBottomSheetShown) {
       _isBottomSheetShown = true;
 
@@ -66,24 +71,27 @@ class SubscriptionController {
       Navigator.of(context).pop(); // Close loading dialog
 
       final plansResponse = await _getSubscriptionPlansUseCase(subCategoryId);
-      plansResponse.fold(
-              (l) {
-            showErrorMessage(context, Labels.errorHappened);
-            _isBottomSheetShown = false; // Reset flag on error
-          },
-              (plans) {
-            bottomSheet(
-              context: context,
-              backColor: Theme.of(context).scaffoldBackgroundColor,
-              widget: SubscriptionPlansWidget(
-                title: title,
-                subscribePlans: plans,
-                subCategoryId: subCategoryId,
-                paymentMenthods: wallets,
-              ),
-            );
-          }
-      );
+      plansResponse.fold((l) {
+        showErrorMessage(context, Labels.errorHappened);
+        _isBottomSheetShown = false; // Reset flag on error
+      }, (plans) {
+        bottomSheet(
+          context: context,
+          backColor: Theme.of(context).scaffoldBackgroundColor,
+          widget: SubscriptionPlansWidget(
+            showRegular: showRegular ?? true,
+            title: title,
+            subscribePlans: plans,
+            subCategoryId: subCategoryId,
+            paymentMenthods: wallets ??
+                [
+                  WalletTypes.balance,
+                  WalletTypes.mainWallet,
+                  WalletTypes.giftWallet
+                ],
+          ),
+        );
+      });
 
       _isBottomSheetShown = false; // Reset flag after bottom sheet is shown
     }

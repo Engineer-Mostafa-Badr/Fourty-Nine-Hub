@@ -5,6 +5,8 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.d
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 
+import '../../../../../res/style/styles.dart';
+
 class CreateRestaurantSubmitButton extends StatelessWidget {
   const CreateRestaurantSubmitButton({super.key});
 
@@ -20,7 +22,9 @@ class CreateRestaurantSubmitButton extends StatelessWidget {
               });
             },
             label: LocaleKeys.submit.tr(),
-          ),
+            textStyle:Styles.headerText(color: Colors.white),
+
+    ),
         ),
       ],
     );

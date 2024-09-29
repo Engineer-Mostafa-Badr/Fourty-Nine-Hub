@@ -347,7 +347,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
                                             alignment: Alignment.centerLeft,
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: 10.w),
-                                            height: 36.h,
+                                            height: 40.h,
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(10),

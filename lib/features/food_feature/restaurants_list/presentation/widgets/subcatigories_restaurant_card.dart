@@ -13,11 +13,14 @@ import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
+import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
+import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../../domain/entities/restaurant_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -317,9 +320,7 @@ class _PropertyCardState extends State<PropertyCard> {
               ),
             ),
             Text(
-              item.subcategoryId!.name +
-                  ", " +
-                  (item.description ?? 'description...'),
+              "${item.subcategoryId!.name}, ${item.description ?? 'description...'}",
               // 'القاهرة الجديدة, القاهرة',
               style: TextStyle(
                 fontSize: 14,
@@ -385,7 +386,26 @@ class PremiumAndRequestButtons extends StatelessWidget {
           _buildButton(
             label: 'Premium Request',
             color: Colors.red,
-            onPressed: () {},
+            onPressed: () async {
+              serviceLocator<SubscriptionController>().checkIfUserSubscribed(
+                showRegular: false,
+                title: "${item.subcategoryId!.name} Subscription",
+                onSubscribed: () {
+                  print('Subscribed');
+                  context.push(Routes.RESTAURANTDETAILS, extra: item.id);
+                },
+                subCategoryId: item.subcategoryId!.id,
+
+              );
+              // await serviceLocator<SubscriptionController>()
+              //     .showSubscriptionPlans(
+              //         subCategoryId: item.subcategoryId!.id,
+              //         wallets: [
+              //       WalletTypes.mainWallet,
+              //       WalletTypes.giftWallet,
+              //       WalletTypes.balance
+              //     ]);
+            },
           ),
           const SizedBox(width: 10),
           _buildButton(
@@ -451,7 +471,7 @@ class CallMessageReportButtons extends StatelessWidget {
                 context: context,
                 widget: ReportView(
                   id: item.id!,
-                  categoryId: '66af974f8bf69f9469944746',
+                  categoryId: item.subcategoryId!.id,
                 ),
               );
             },

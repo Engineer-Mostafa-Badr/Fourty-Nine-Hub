@@ -27,7 +27,7 @@ class MealBanner extends StatelessWidget {
             baseColor: Colors.grey[100]!,
             highlightColor: Colors.white,
             child: Container(
-              height: 110.h,
+              height: 150.h,
               width: double.infinity,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(10)),

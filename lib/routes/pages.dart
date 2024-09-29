@@ -1036,7 +1036,7 @@ class AppPages {
                           path: Paths.FOODCART,
                           name: Routes.FOODCART,
                           builder: (context, state) => BlocProvider.value(
-                                value: serviceLocator<FoodCartCubit>(),
+                                value: serviceLocator<RestaurantDetailsCubit>(),
                                 child: const FoodCartView(),
                               ))
                     ])

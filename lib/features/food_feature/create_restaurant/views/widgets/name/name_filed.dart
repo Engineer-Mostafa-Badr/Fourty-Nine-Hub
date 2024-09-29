@@ -16,8 +16,7 @@ class CreateRestaurantNameField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
-            onChanged: (value) =>
-                restaurantLoginCubit.saveTextEditingController(),
+            onChanged: (value) => restaurantLoginCubit.saveTextEditingController(),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return null;
@@ -26,32 +25,51 @@ class CreateRestaurantNameField extends StatelessWidget {
             },
             controller: restaurantLoginCubit.name,
             decoration: InputDecoration(
+              // Border when the field is not focused
               enabledBorder: OutlineInputBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
                 borderSide: BorderSide(
-                    color: state is ValidationState && (state.isName ?? true)
-                        ? Colors.red
-                        : Colors.grey),
+                  color: state is ValidationState && (state.isName ?? true)
+                      ? Colors.red
+                      : Colors.grey, // Use grey as the default border color
+                ),
               ),
+              // Border when the field is focused
+              focusedBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderSide: BorderSide(
+                  color: Colors.grey, // Grey border when focused
+                ),
+              ),
+              // Default border (same as enabledBorder)
               border: OutlineInputBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
                 borderSide: BorderSide(
-                    color: state is ValidationState && (state.isName ?? true)
-                        ? Colors.red
-                        : Colors.grey),
+                  color: state is ValidationState && (state.isName ?? true)
+                      ? Colors.red
+                      : Colors.grey,
+                ),
               ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
+              // Error border when validation fails
+              errorBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
                 borderSide: BorderSide(
-                    color: state is ValidationState && (state.isName ?? true)
-                        ? Colors.red
-                        : Colors.grey),
+                  color: Colors.red, // Red border when there's an error
+                ),
+              ),
+              // Error border when focused and invalid
+              focusedErrorBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderSide: BorderSide(
+                  color: Colors.red, // Keep red border when focused with an error
+                ),
               ),
               filled: false,
-              contentPadding: EdgeInsets.all(10),
-              hintText: LocaleKeys.restaurantName.tr(),
+              contentPadding: const EdgeInsets.all(10), // Padding inside the text field
+              hintText: LocaleKeys.restaurantName.tr(), // Hint text
             ),
-          ),
+          )
+,
           Visibility(
             visible: state is ValidationState && (state.isName ?? false),
             child: const Padding(

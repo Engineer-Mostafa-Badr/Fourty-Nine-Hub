@@ -28,6 +28,7 @@ import '../../../../../res/style/styles.dart';
 
 class AdDetailsView extends StatefulWidget {
   final String id;
+
   const AdDetailsView({super.key, required this.id});
 
   @override
@@ -47,43 +48,45 @@ class _AdDetailsViewState extends State<AdDetailsView> {
         // appBar: const BackAppBar(),
         body: BlocConsumer<AdDetailsCubit, AdDetailsState>(
             listener: (contex, state) {
-          if (state.isError) {
-            showErrorMessage(
-              context,
-              getFailureMessage(
-                state.failure!,
-                context,
-              ),
-            );
-          } else if (state.isSuccess) {
-            showSuccessMessage(context, Labels.success);
-          }
-        }, builder: (context, state) {
-          if (state.ad == null) {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(),
-            );
-          }
-          List<AdDetailsPropEntity>? details = state.ad?.details.where((e) => e.nameAr!='الراتب'&&e.nameAr!='السعر').toList();
+      if (state.isError) {
+        showErrorMessage(
+          context,
+          getFailureMessage(
+            state.failure!,
+            context,
+          ),
+        );
+      } else if (state.isSuccess) {
+        showSuccessMessage(context, Labels.success);
+      }
+    }, builder: (context, state) {
+      if (state.ad == null) {
+        return const Center(
+          child: CircularProgressIndicator.adaptive(),
+        );
+      }
+      List<AdDetailsPropEntity>? details = state.ad?.details
+          .where((e) => e.nameAr != 'الراتب' && e.nameAr != 'السعر')
+          .toList();
 
-          return Column(
-            children: [
-              Expanded(
-                child: ListView(
-                  children: [
-                    _buildAdInfoWidget(ad: state.ad!),
-                    const Sizer(),
-                    const Sizer(),
-                    if(details!.isNotEmpty)_buildDetailsWidget(ad: state.ad!),
-                    const Sizer(),
-                    _buildRelevantAdsWidget(),
-                  ],
-                ),
-              ),
-              _buildActionsWidget(),
-            ],
-          );
-        }));
+      return Column(
+        children: [
+          Expanded(
+            child: ListView(
+              children: [
+                _buildAdInfoWidget(ad: state.ad!),
+                const Sizer(),
+                const Sizer(),
+                if (details!.isNotEmpty) _buildDetailsWidget(ad: state.ad!),
+                const Sizer(),
+                _buildRelevantAdsWidget(),
+              ],
+            ),
+          ),
+          _buildActionsWidget(),
+        ],
+      );
+    }));
   }
 
   Widget _buildRelevantAdsWidget() {
@@ -103,8 +106,11 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             height: kToolbarHeight * 3.5,
             child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) =>
-                    AdCard(item: state.relevantAds![index], onFav: (String ) {  }, onRemoveFav: (String ) {  },),
+                itemBuilder: (context, index) => AdCard(
+                      item: state.relevantAds![index],
+                      onFav: (String) {},
+                      onRemoveFav: (String) {},
+                    ),
                 separatorBuilder: (context, index) => const Sizer(),
                 itemCount: state.relevantAds?.length ?? 0),
           ),
@@ -130,7 +136,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                   child: AvaialbleTripsButton(
                     title: 'Premium Request',
                     color: AppColors.SECONDARY_COLOR,
-                    onTap: (){},
+                    onTap: () {},
                   ),
                 ),
                 const Sizer(width: 5),
@@ -139,7 +145,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                   child: AvaialbleTripsButton(
                     title: 'Request',
                     color: AppColors.PRIMARY_COLOR,
-                    onTap: (){},
+                    onTap: () {},
                   ),
                 )
               ],
@@ -149,7 +155,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                 future: ButtonAvailability().isShowButton(
                     otherUserId: state.ad?.user?.id ?? '',
                     subcategoryId: state.ad?.subCategoryId ?? ''),
-                builder: (context,snap) {
+                builder: (context, snap) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -157,9 +163,11 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         flex: 3,
                         child: AvaialbleTripsButton(
                           title: 'Call',
-                          color:  snap.data==true?AppColors.SECONDARY_COLOR:AppColors.DARK_GRAY_COLOR,
+                          color: snap.data == true
+                              ? AppColors.SECONDARY_COLOR
+                              : AppColors.DARK_GRAY_COLOR,
                           icon: Icons.call,
-                          onTap: snap.data==true?(){}:(){},
+                          onTap: snap.data == true ? () {} : () {},
                         ),
                       ),
                       const Sizer(width: 5),
@@ -167,12 +175,13 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         flex: 3,
                         child: AvaialbleTripsButton(
                           title: 'Message',
-                          color: snap.data==true?AppColors.SECONDARY_COLOR:AppColors.DARK_GRAY_COLOR,
+                          color: snap.data == true
+                              ? AppColors.SECONDARY_COLOR
+                              : AppColors.DARK_GRAY_COLOR,
                           icon: Icons.email,
-                          onTap: snap.data==true?(){}:(){},
+                          onTap: snap.data == true ? () {} : () {},
                         ),
                       ),
-
                       const Sizer(width: 5),
                       Expanded(
                         flex: 3,
@@ -180,19 +189,17 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                           title: 'Report',
                           color: AppColors.SECONDARY_COLOR,
                           icon: Icons.report,
-                          onTap: (){},
+                          onTap: () {},
                         ),
                       ),
                     ],
                   );
-                }
-            ),
+                }),
           ],
         ),
       );
     });
   }
-
 
   Widget _buildAdInfoWidget({required AddDetailsModel ad}) {
     return Column(
@@ -206,23 +213,36 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                 itemCount: ad.images.length,
                 onIndexChanged: (i) {},
                 outer: false,
-                physics:ad.images.length>1?null:const NeverScrollableScrollPhysics() ,
+                physics: ad.images.length > 1
+                    ? null
+                    : const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) => Padding(
                   padding: EdgeInsets.only(bottom: 5.h),
-                  child: ImageFromInternet(image: ad.images[index],defaultLogo: true,),
+                  child: ImageFromInternet(
+                    image: ad.images[index],
+                    defaultLogo: true,
+                  ),
                 ),
                 pagination: SwiperPagination(
                     builder: SwiperCustomPagination(builder: (context, config) {
-                      return const DotSwiperPaginationBuilder(color: AppColors.GREY_DARK_COLOR, activeColor: AppColors.SECONDARY_COLOR, size: 10.0, activeSize: 10.0)
-                          .build(context, config);
-                    })),
+                  return const DotSwiperPaginationBuilder(
+                          color: AppColors.GREY_DARK_COLOR,
+                          activeColor: AppColors.SECONDARY_COLOR,
+                          size: 10.0,
+                          activeSize: 10.0)
+                      .build(context, config);
+                })),
               ),
               PositionedDirectional(
                 top: 10.h,
                 start: 10.w,
                 child: InkWell(
-                  onTap: ()=>context.pop(),
-                  child: Icon(Icons.arrow_back,color: Colors.white,size: 60.w,),
+                  onTap: () => context.pop(),
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                    size: 60.w,
+                  ),
                 ),
               )
             ],
@@ -239,7 +259,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                 children: [
                   Label(
                     text:
-                    '${NumbersHelper.formatThousands(number: ad.price??0)} ${LocaleKeys.currency.localize}',
+                        '${NumbersHelper.formatThousands(number: ad.price ?? 0)} ${LocaleKeys.currency.localize}',
                     style: Styles.mediumText(
                         fontWeight: FontWeight.bold,
                         color: AppColors.SECONDARY_COLOR),
@@ -248,14 +268,16 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                   Label(text: ad.formatedDate)
                 ],
               ),
-
-              Sizer(height: 8.h,),
+              Sizer(
+                height: 8.h,
+              ),
               Row(
                 children: [
-
                   Label(
                     text: "${LocaleKeys.title.localize} : ",
-                    style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR),
+                    style: Styles.mediumText(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.SECONDARY_COLOR),
                   ),
                   Label(
                     text: ad.title,
@@ -263,10 +285,14 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                   ),
                 ],
               ),
-              Sizer(height: 5.h,),
+              Sizer(
+                height: 5.h,
+              ),
               Label(
                 text: "${LocaleKeys.desc.localize} : ",
-                style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR),
+                style: Styles.mediumText(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.SECONDARY_COLOR),
               ),
               Label(text: ad.description),
             ],
@@ -277,7 +303,9 @@ class _AdDetailsViewState extends State<AdDetailsView> {
   }
 
   Widget _buildDetailsWidget({required AddDetailsModel ad}) {
-    List<AdDetailsPropEntity>? details = ad.details.where((e) => e.nameAr!='الراتب'&&e.nameAr!='السعر').toList();
+    List<AdDetailsPropEntity>? details = ad.details
+        .where((e) => e.nameAr != 'الراتب' && e.nameAr != 'السعر')
+        .toList();
 
     // List<DetailEntiy> details = ad.details.where((e) => e.label!='المرتب'&&e.label!='Salary'&&e.label!='price'&&e.label!='Price '&&e.label!='السعر ').toList();
 
@@ -302,8 +330,18 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         : Colors.white),
                 child: Row(
                   children: [
-                    Expanded(child: Label(text: "${getLang()=='ar'?detail.nameAr:detail.nameEn} : ",style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR))),
-                    Expanded(child: Label(text: getLang()=='ar'?detail.valueAr:detail.valueEn)),
+                    Expanded(
+                        child: Label(
+                            text:
+                                "${getLang() == 'ar' ? detail.nameAr : detail.nameEn} : ",
+                            style: Styles.mediumText(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.SECONDARY_COLOR))),
+                    Expanded(
+                        child: Label(
+                            text: getLang() == 'ar'
+                                ? detail.valueAr
+                                : detail.valueEn)),
                   ],
                 ),
               );
