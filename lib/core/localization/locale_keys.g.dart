@@ -621,6 +621,25 @@ abstract class  LocaleKeys {
   static const publish = 'publish';
   static const addImages = 'addImages';
   static const addImagesDesc = 'addImagesDesc';
+  static const write_story = 'write_story';
+  static const add_description = 'add_description';
+  static const text = 'text';
+  static const picture = 'picture';
+  static const create_story = 'create_story';
+  static const my_contacts = 'my_contacts';
+  static const my_contacts_except = 'my_contacts_except';
+  static const only_share_with = 'only_share_with';
+  static const status_privacy = 'status_privacy';
+  static const who_can_see_status = 'who_can_see_status';
+  static const one_contact = 'one_contact';
+  static const no_contacts_available = 'no_contacts_available';
+  static const privacy_settings_info = 'privacy_settings_info';
+  static const privacy_settings_help = 'privacy_settings_help';
+  static const choose_who_can_see_status = 'choose_who_can_see_status';
+  static const my_contacts_info = 'my_contacts_info';
+  static const my_contacts_except_info = 'my_contacts_except_info';
+  static const only_share_with_info = 'only_share_with_info';
+  static const noAds = 'noAds';
   static const currency = 'currency';
   static const friend = 'friend';
   static const view = 'view';
@@ -670,6 +689,5 @@ abstract class  LocaleKeys {
   static const deleteAd = 'deleteAd';
   static const rent = 'rent';
   static const sale = 'sale';
-  static const noAds = 'noAds';
 
 }

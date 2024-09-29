@@ -3,9 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart'; // Import localization keys
 import '../../../tinder/data/shared/shared.dart';
 import '../../data/models/followers_model.dart';
@@ -98,7 +96,7 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
       children: [
         Text(
           LocaleKeys.who_can_see_status.tr(), // Localized string
-          style: Theme.of(context).textTheme.headline6?.copyWith(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
         ),
@@ -187,7 +185,7 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
             Expanded(
               child: Text(
                 LocaleKeys.privacy_settings_info.tr(), // Localized string
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
             IconButton(
