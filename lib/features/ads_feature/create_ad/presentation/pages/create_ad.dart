@@ -68,7 +68,6 @@ class _CreateAdViewState extends State<CreateAdView> {
             key: controller.formState,
             child: ListView(
               children: [
-                // Label(text: widget.categorization.subCategory.hasAuction.toString()),
                 Row(
                   children: [
                     SquareImage(
@@ -100,13 +99,17 @@ class _CreateAdViewState extends State<CreateAdView> {
                         child: InkWell(
                           onTap: () {
                             setState(() {
-                              state.isUser = true;
+                              if(widget.categorization.subCategory.hasAuction==true){
+                                state.isSale = true;
+                              }else{
+                                state.isUser = true;
+                              }
                             });
                           },
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: state.isUser == true
+                                color: (state.isUser == true&&state.isSale==true)
                                     ? AppColors.PRIMARY_COLOR
                                     : Colors.white,
                                 borderRadius: BorderRadius.circular(15),
@@ -114,26 +117,33 @@ class _CreateAdViewState extends State<CreateAdView> {
                                 Border.all(color: AppColors.PRIMARY_COLOR)),
                             alignment: AlignmentDirectional.center,
                             child: Text(
-                              LocaleKeys.user.localize,
+                              widget.categorization.subCategory.hasAuction==true?LocaleKeys.sale.localize:LocaleKeys.user.localize,
                               style: Styles.mediumText(
-                                  color: state.isUser == false
+                                  color: (state.isUser == false||state.isSale==false)
                                       ? AppColors.PRIMARY_COLOR
                                       : Colors.white),
                             ),
                           ),
                         )),
                     const Sizer(),
-                    Expanded(
+                    Expanded
+                      (
                       child: InkWell(
                         onTap: () {
                           setState(() {
-                            state.isUser = false;
+                            if(widget.categorization.subCategory.hasAuction==true){
+                              state.isSale = false;
+                              print(state.isSale);
+                              print(state.isSale);
+                            }else{
+                              state.isUser = false;
+                            }
                           });
                         },
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                              color: state.isUser == false
+                              color: (state.isUser == false||state.isSale==false)
                                   ? AppColors.PRIMARY_COLOR
                                   : Colors.white,
                               borderRadius: BorderRadius.circular(15),
@@ -141,9 +151,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                               Border.all(color: AppColors.PRIMARY_COLOR)),
                           alignment: AlignmentDirectional.center,
                           child: Text(
-                            LocaleKeys.provider.localize,
+                            widget.categorization.subCategory.hasAuction==true?LocaleKeys.rent.localize:LocaleKeys.provider.localize,
                             style: Styles.mediumText(
-                                color: state.isUser == true
+                                color: (state.isUser == true&&state.isSale==true)
                                     ? AppColors.PRIMARY_COLOR
                                     : Colors.white),
                           ),
@@ -268,7 +278,6 @@ class _CreateAdViewState extends State<CreateAdView> {
   }
 
   Widget _buildImagePicker() {
-    final controller = context.read<CreateAdCubit>();
     return BlocBuilder<CreateAdCubit, CreateAdState>(builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
       return Column(

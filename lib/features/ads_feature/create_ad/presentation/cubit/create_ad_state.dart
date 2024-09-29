@@ -20,6 +20,7 @@ class CreateAdState {
   final MainCategoryEntity? selectedCategory;
   final SubCategoryEntity? selectedSubCategory;
   bool? isUser;
+  bool? isSale;
   final List<UploadFileEntity>? images;
 
   CreateAdState(
@@ -31,6 +32,7 @@ class CreateAdState {
       this.selectedSubCategory,
       this.status,
       this.isUser=true,
+      this.isSale=true,
       this.isPrice=true,
       this.images,
       this.subCategories});
@@ -44,6 +46,7 @@ class CreateAdState {
     MainCategoryEntity? selectedCategory,
     List<SelectionEntity>? selections,
     bool? isUser,
+    bool? isSale,
     bool? isPrice,
     SubCategoryEntity? selectedSubCategory,
     List<UploadFileEntity>? images,
@@ -58,6 +61,7 @@ class CreateAdState {
       selectedSubCategory: selectedSubCategory ?? this.selectedSubCategory,
       images: images ?? this.images,
       isUser: isUser ?? this.isUser,
+      isSale: isSale ?? this.isSale,
       isPrice: isPrice ?? this.isPrice,
       selections: selections ?? this.selections,
     );

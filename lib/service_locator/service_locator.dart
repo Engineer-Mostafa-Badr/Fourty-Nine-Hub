@@ -184,6 +184,7 @@ import 'package:fourtyninehub/service_locator/notification_service_locator.dart'
 import 'package:fourtyninehub/service_locator/payment_service_locator.dart';
 import 'package:fourtyninehub/service_locator/privacy_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
+import 'package:fourtyninehub/service_locator/secrets_service_locator.dart';
 import 'package:fourtyninehub/service_locator/setting_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
 import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
@@ -198,6 +199,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../core/data/datasources/local/shared_preferences/local_storage_consumer.dart';
 import '../core/localization/localization_service.dart';
+import '../features/social_media/tinder/presentation/cubit/gift_cubit.dart';
 import '../firebase_options.dart';
 import 'account_service_locator.dart';
 import 'auction_service_locator.dart';
@@ -276,7 +278,8 @@ class DI {
             )
         ]),
     );
-
+    //for gifts
+    serviceLocator.registerLazySingleton(() => GiftsCubit());
 //tinder getIt register
     serviceLocator.registerLazySingleton<CompetitionRepoImpl>(
       () => CompetitionRepoImpl(ApiService(Dio())),
@@ -369,8 +372,8 @@ class DI {
     SocialServiceLocator.execute(serviceLocator: serviceLocator);
     // Club Voice
     ClubVoiceServiceLocator.execute(serviceLocator: serviceLocator);
-    // Meeting
-    MeetingServiceLocator.execute(serviceLocator: serviceLocator);
+    // Stream
+    StreamServiceLocator.execute(serviceLocator: serviceLocator);
     // Subscriptions
     SubscriptionServiceLocator.execute(serviceLocator: serviceLocator);
     // Shipping
@@ -379,6 +382,8 @@ class DI {
     TripJoinServiceLocator.execute(serviceLocator: serviceLocator);
     //live
     LiveServiceLocator.execute(serviceLocator: serviceLocator);
+    //secrets
+    SecretsServiceLocator.execute(serviceLocator: serviceLocator);
     // notifications
     await NotificationsServiceLocator.execute(serviceLocator: serviceLocator);
     InstagramServiceLocator.execute(serviceLocator: serviceLocator);

@@ -485,7 +485,7 @@ class ZoomSharescreenBuilder extends StatelessWidget {
           builder: (context, screenShareOn, child) {
             log('-------------${screenShareOn}');
             if (!screenShareOn) {
-              context.read<StreamCubit>().closeWhiteBoard();
+              // context.read<StreamCubit>().closeWhiteBoard();
             }
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,

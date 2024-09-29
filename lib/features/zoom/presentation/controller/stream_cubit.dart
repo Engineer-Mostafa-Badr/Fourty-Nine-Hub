@@ -13,23 +13,30 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import '../../../../routes/pages.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../social_media/live_streaming/domain/entity/topic_entity.dart';
+import '../../../social_media/live_streaming/domain/usecases/create_live_use_case.dart';
+import '../../../social_media/live_streaming/domain/usecases/get_all_lives_use_case.dart';
 import '../../../social_media/live_streaming/domain/usecases/get_all_topics_use_case.dart';
 import 'stream_state.dart';
 
-class StreamCubit extends Cubit<StreamState> {
+final class StreamCubit extends Cubit<StreamState> {
   StreamCubit(
     this.addRoomUseCase,
     this.joinRoomUseCase,
     this.endRoomUseCase,
     this.getScheduledRoomsUseCase,
     this.getAllTopicsUseCase,
+    this.createLiveUseCase,
+    this.getAllLivesUseCase,
   ) : super(const StreamState());
   final AddRoomUseCase addRoomUseCase;
   final JoinRoomUseCase joinRoomUseCase;
   final EndRoomUseCase endRoomUseCase;
   final GetScheduledRoomsUseCase getScheduledRoomsUseCase;
+
   //for live_streaming
   final GetAllTopicsUseCase getAllTopicsUseCase;
+  final CreateLiveUseCase createLiveUseCase;
+  final GetAllLivesUseCase getAllLivesUseCase;
   String meetingId = '';
   List<TopicEntity> topics = [];
 
@@ -70,6 +77,7 @@ class StreamCubit extends Cubit<StreamState> {
   }
 
   bool isHost = false;
+
   Future<bool> joinNewMeeting(String roomId) async {
     emit(state.copyWith(status: StreamsStates.loading));
     final response = await joinRoomUseCase(MeetingParams(meetingId: roomId));
@@ -156,6 +164,7 @@ class StreamCubit extends Cubit<StreamState> {
   }
 
   bool isMinimized = false;
+
   void toggleMinimized() {
     isMinimized = !isMinimized;
     emit(state.copyWith(status: StreamsStates.success));
