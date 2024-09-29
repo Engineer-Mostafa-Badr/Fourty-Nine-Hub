@@ -9,7 +9,7 @@ class MyAddsState {
   final List<TripAndRequestEntity>? comeWithMeTrips;
   final List<TripAndRequestEntity>? pickMeTrips;
   final List<MyAuctionAdsEntity>? myAuctions;
-  final List<InstallmentEntity>? myInstallments;
+  final List<MyAuctionAdsEntity>? myInstallments;
 
   const MyAddsState({
     this.status,
@@ -27,7 +27,7 @@ class MyAddsState {
     List<TripAndRequestEntity>? comeWithMeTrips,
     List<TripAndRequestEntity>? pickMeTrips,
     List<MyAuctionAdsEntity>? myAuctions,
-    List<InstallmentEntity>? myInstallments,
+    List<MyAuctionAdsEntity>? myInstallments,
   }) {
     return MyAddsState(
       status: status ?? this.status,

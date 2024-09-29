@@ -84,10 +84,10 @@ class GiftWalletView extends StatelessWidget {
                           AppButton(
                             label: LocaleKeys.requestWithdraw.localize,
                             color: AppColors.AUTH_CONTAINER_COLOR,
-                            // backColor: state.gift!.amount >= 10000 &&
-                            //     state.gift?.wheelWinner == true
-                            //     ? Colors.red
-                            //     : Colors.red.withOpacity(.5),
+                            backColor: (state.gift?.amount ?? 0) >= 10000 && state.gift?.wheelWinner == true
+                                ? Colors.red
+                                : Colors.red.withOpacity(.5),
+
                             onPressed: () {},
                           ),
                         ],

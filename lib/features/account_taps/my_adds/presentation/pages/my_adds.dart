@@ -7,15 +7,14 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
-import 'package:fourtyninehub/features/installment_feature/installment_list/presentation/widgets/installment_ad_card.dart';
-import 'package:fourtyninehub/features/requests_history/presentation/widgets/trip_card.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../widgets/build_item_auction_card.dart';
-import '../widgets/my_ad_card.dart';
+import 'my_ads_other.dart';
+import 'my_ads_trip_join.dart';
 
 class MyAddsView extends StatefulWidget {
   const MyAddsView({super.key});
@@ -143,42 +142,54 @@ class _MyAddsViewState extends State<MyAddsView>
   }
 
   Widget _buildMyInstallmentsWidget() {
-    return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
-      context.read<MyAddsCubit>();
-      if (state.myInstallments?.isEmpty ?? true) {
-        return const EmptyPage();
-      }
-      return ListView.separated(
-          itemCount: state.myInstallments?.length ?? 0,
-          separatorBuilder: (context, index) => const Sizer(),
-          itemBuilder: (context, index) {
-            return InstallmentAdCard(
-              isVertical: false,
-              item: state.myInstallments![index],
-            );
-          });
-    });
-  }
-
-  Widget _buildMyAuctionsWidget() {
     return BlocProvider<MyAddsCubit>(
-      create: (BuildContext context) =>serviceLocator()..getMyAuctions(),
+      create: (BuildContext context) =>serviceLocator()..getMyInstallment(),
       child: BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
+        final controller = context.read<MyAddsCubit>();
         context.read<MyAddsCubit>();
         if (state.status ==MyAddsStates.loading) {
           return const Center(child: CircularProgressIndicator());
         }
         if(state.status ==MyAddsStates.initState) {
           return ListView.separated(
-            itemCount: state.myAuctions?.length ?? 0,
+            itemCount: state.myInstallments?.length ?? 0,
             separatorBuilder: (context, index) => const Sizer(),
             itemBuilder: (context, index) {
               return BuildItemAuctionCard(
-                isVertical: false,
-                item: state.myAuctions![index],
+                item: state.myInstallments![index],
+                onDelete: (String id) => controller.cancelAd(id: id),
               );
             });
-        }else if (state.myAuctions?.isEmpty ?? true) {
+        }else if (state.myInstallments!.isEmpty) {
+          return const EmptyPage();
+        }else{
+          return const Center(child: CircularProgressIndicator());
+        }
+      }),
+    );
+  }
+
+  Widget _buildMyAuctionsWidget() {
+    return BlocProvider<MyAddsCubit>(
+      create: (BuildContext context) =>serviceLocator()..getMyAuctions(),
+      child: BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
+        final controller = context.read<MyAddsCubit>();
+        context.read<MyAddsCubit>();
+        if (state.status ==MyAddsStates.loading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+       if(state.status ==MyAddsStates.initState) {
+          return ListView.separated(
+             itemCount: state.myAuctions?.length ?? 0,
+            separatorBuilder: (context, index) => const Sizer(),
+            itemBuilder: (context, index) {
+              return BuildItemAuctionCard(
+                item: state.myAuctions![index],
+                onDelete: (String id) => controller.cancelAd(id: id),
+              );
+            });
+       }
+        else if (state.myAuctions?.isEmpty ?? true) {
             return const EmptyPage();
           }else{
           return const Center(child: CircularProgressIndicator());
@@ -197,7 +208,7 @@ class _MyAddsViewState extends State<MyAddsView>
           itemCount: state.myAds?.length ?? 0,
           separatorBuilder: (context, index) => const Sizer(),
           itemBuilder: (context, index) {
-            return MyAdCard(
+            return MyAdsOther(
               item: state.myAds![index],
               onDelete: (String id) => controller.cancelAd(id: id),
             );
@@ -215,7 +226,7 @@ class _MyAddsViewState extends State<MyAddsView>
           itemCount: state.pickMeTrips?.length ?? 0,
           separatorBuilder: (context, index) => const Sizer(),
           itemBuilder: (context, index) {
-            return TripCard(
+            return MyAdsTripJoin(
               requests: state.pickMeTrips![index].requests,
               trip: state.pickMeTrips![index].trip,
               showDelete: true,

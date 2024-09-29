@@ -18,4 +18,5 @@ abstract class MyAdsRepo {
   Future<Either<Failure, bool>> acceptComeWithYouRequests({required String id});
   Future<Either<Failure, bool>> rejectComeWithYouRequests({required String id});
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyAuctions();
+  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments();
 }

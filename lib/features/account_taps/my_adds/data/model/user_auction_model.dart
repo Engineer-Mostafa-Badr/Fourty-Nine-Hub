@@ -6,16 +6,18 @@ class UserAuctionModel extends UserAuctionEntity {
       required super.firstName,
       required super.lastName,
       required super.email,
+      required super.image,
       required super.twitterDocumentation,
       required super.profile});
 
   factory UserAuctionModel.fromJson(Map<String, dynamic> json) {
     return UserAuctionModel(
-      id: json['_id'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      email: json['email'],
-      twitterDocumentation: json['twitter_documentation'],
+      id: json['_id'] ??'',
+      firstName: json['firstName'] ??'',
+      lastName: json['lastName'] ??'',
+      email: json['email'] ??'',
+      image: json['image'] ??'',
+      twitterDocumentation: json['twitter_documentation'] ??false,
       profile: UserAuctionProfileModel.fromJson(json['USER_PROFILE']),
     );
   }
@@ -27,7 +29,7 @@ class UserAuctionProfileModel extends UserAuctionProfile {
 
   factory UserAuctionProfileModel.fromJson(Map<String, dynamic> json) {
     return UserAuctionProfileModel(
-      id: json['_id'],
+      id: json['_id'] ??'',
       profilePictureKey: ProfilePictureKeyModel.fromJson(json['profilePictureKey']),
     );
   }
@@ -47,15 +49,15 @@ class ProfilePictureKeyModel extends ProfilePictureKey {
 
   factory ProfilePictureKeyModel.fromJson(Map<String, dynamic> json) {
     return ProfilePictureKeyModel(
-      id: json['_id'],
-      user: json['user'],
-      subcategoryId: json['subcategoryId'],
-      mimetype: json['mimetype'],
-      size: json['size'],
-      mediaKey: json['mediaKey'],
-      successUpload: json['successUpload'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
+      id: json['_id'] ??'',
+      user: json['user'] ??'',
+      subcategoryId: json['subcategoryId'] ??'',
+      mimetype: json['mimetype'] ??'',
+      size: json['size'] ??0,
+      mediaKey: json['mediaKey'] ??'',
+      successUpload: json['successUpload'] ??false,
+      createdAt: json['createdAt'] ??'',
+      updatedAt: json['updatedAt'] ??'',
     );
   }
 }

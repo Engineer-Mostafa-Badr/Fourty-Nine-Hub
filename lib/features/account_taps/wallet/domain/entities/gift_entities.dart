@@ -4,8 +4,8 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_
 class GiftEntity {
   final GiftWalletEntity giftWallet;
   final String id;
-  final num amount;
-  final bool wheelWinner;
+  final num? amount;
+  final bool? wheelWinner;
   final List<CompetitionsWalletEntity> competitionsWallet;
 
   GiftEntity(

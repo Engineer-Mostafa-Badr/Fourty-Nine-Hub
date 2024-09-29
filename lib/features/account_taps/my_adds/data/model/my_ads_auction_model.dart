@@ -2,59 +2,56 @@ import 'package:fourtyninehub/features/account_taps/my_adds/data/model/subscript
 import 'package:fourtyninehub/features/account_taps/my_adds/data/model/user_auction_model.dart';
 
 import '../../domain/entity/my_ads_auction.dart';
-import 'ads_model.dart';
+import 'my_auction_image_model.dart';
+import 'my_auction_main_category_model.dart';
+import 'my_auction_sub_category_model.dart';
 
 class MyAuctionAdsModel extends MyAuctionAdsEntity {
   MyAuctionAdsModel(
       {required super.id,
-      required super.name,
-      required super.adminIgnore,
       required super.userId,
-      required super.startPrice,
-      required super.isFinished,
-      required super.startDate,
-      required super.isApproved,
-      required super.supCategory,
-      required super.mainCategory,
-      required super.smallPrice,
-      required super.needPrice,
-      required super.adId,
-      required super.isPremium,
-      required super.isDeleted,
+      required super.title,
+      required super.desc,
+      required super.price,
       required super.createdAt,
-      required super.updatedAt,
-      required super.ad,
+      required super.phone,
+      required super.adminIgnore,
+      required super.isFavourite,
+      required super.subCategory,
+      required super.mainCategory,
+      required super.isApproved,
+      required super.isActive,
+      required super.isPremium,
       required super.user,
       required super.subscriptions,
-      required super.subscriptionStatus,
-      required super.images});
+      required super.images,
+      required super.subscriptionStatus});
 
 factory MyAuctionAdsModel.fromJson(Map<String, dynamic> json) {
   return MyAuctionAdsModel(
     id: json['_id'] ??'',
-    name: json['name']??'',
+    title: json['title'] ??'',
+    desc: json['desc'] ??'',
+      price: json['price'] ??0,
+    isActive: json['isActive'] ??false,
+    isFavourite: json['isFavorite'] ??false,
+    phone: json['phone'] ??'',
     adminIgnore: json['adminIgnore'] ??false,
     userId: json['user_id'] ??'',
-    startPrice: json['start_price'].toDouble(),
-    isFinished: json['is_finished'] ??false,
-    startDate: json['start_date'] ??'',
     isApproved: json['is_approved'] ??false,
-    supCategory: json['sup_category'] ??'',
-    mainCategory: json['main_category'] ??'',
-    smallPrice: json['small_price'].toDouble(),
-    needPrice: json['need_price'].toDouble(),
-    adId: json['ad_id'] ??'',
+    subCategory: MyAuctionSubCategoryModel.fromJson(json['subCategoryId']),
+    mainCategory: MyAuctionMainCategoryModel.fromJson(json['mainCategoryId']),
     isPremium: json['isPremium'] ??false,
-    isDeleted: json['isDeleted']  ??false,
-    createdAt: json['createdAt'] ??'',
-    updatedAt: json['updatedAt'] ??'',
-    ad: AdDataAuctionModel.fromJson(json['ads']),
+    createdAt: DateTime.parse(json['createdAt']),
     user: UserAuctionModel.fromJson(json['user']),
     subscriptions: (json['subscription'] as List)
         .map((e) => SubscriptionAdsAuctionModel.fromJson(e))
         .toList(),
+    images: (json['images'] as List)
+        .map((e) => MyAuctionImageModel.fromJson(e))
+        .toList(),
     subscriptionStatus: json['subscriptionStatus'],
-    images: List<String>.from(json['images'] ?? []),
+  //  images: List<String>.from(json['images'] ?? []),
   );
 }
 }

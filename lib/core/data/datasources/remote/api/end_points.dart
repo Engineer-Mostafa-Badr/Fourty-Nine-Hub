@@ -109,7 +109,8 @@ class EndPoints {
   static const favouriteCat='/navigators/navigateCategories';
 
   //My Ads
-  static const myAdsAuction='/auction/my-auction';
+  static const myAdsAuction='/ads/allMyAds/auction';
+  static const myAdsInstallment='/ads/allMyAds/installment';
 
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';

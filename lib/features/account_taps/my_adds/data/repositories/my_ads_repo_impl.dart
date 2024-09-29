@@ -74,4 +74,9 @@ class MyAdsRepoImpl implements MyAdsRepo {
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyAuctions() {
     return _remoteDatasource.getMyAuctions();
   }
+
+  @override
+  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments() {
+   return _remoteDatasource.getMyInstallments();
+  }
 }

@@ -16,7 +16,7 @@ abstract class MyAdsRemoteDatasource {
   Future<Either<Failure, List<TripAndRequestEntity>>> getComeWithMeAds();
   Future<Either<Failure, List<TripAndRequestModel>>> getPickMeAds();
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyAuctions();
-  Future<Either<Failure, List<InstallmentEntity>>> getMyInstallments();
+  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments();
   Future<Either<Failure, bool>> deleteComeWithMeAd({required String id});
   Future<Either<Failure, bool>> deletePickMeAd({required String id});
   Future<Either<Failure, bool>> acceptPickMeRequest({required String id});
@@ -120,14 +120,18 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
     final response = await _apiConsumer.get(EndPoints.myAdsAuction);
     return response.fold(
         (failure) => Left(failure),
-        (data) => Right((data['data'] as List)
+        (data) => Right((data['data']['ads'] as List)
             .map((e) => MyAuctionAdsModel.fromJson(e))
             .toList()));
   }
 
   @override
-  Future<Either<Failure, List<InstallmentEntity>>> getMyInstallments() {
-    // TODO: implement getMyInstallments
-    throw UnimplementedError();
+  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments()  async {
+    final response = await _apiConsumer.get(EndPoints.myAdsInstallment);
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right((data['data']['ads'] as List)
+            .map((e) => MyAuctionAdsModel.fromJson(e))
+            .toList()));
   }
 }

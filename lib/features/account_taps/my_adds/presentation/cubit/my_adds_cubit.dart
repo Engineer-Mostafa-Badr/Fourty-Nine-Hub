@@ -8,7 +8,6 @@ import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/reje
 import '../../../../../core/error/failure.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
 
-import '../../../../installment_feature/installment_list/domain/entities/installment_entity.dart';
 import '../../../../ride/trip_details/domain/entities/trip_and_request_entity.dart';
 import '../../domain/entity/my_ads_auction.dart';
 import '../../domain/usecases/cancel_ad_usecase.dart';
@@ -17,6 +16,7 @@ import '../../domain/usecases/delete_pick_me_usecase.dart';
 import '../../domain/usecases/get_my_ads_usecase.dart';
 import '../../domain/usecases/get_my_auctions_usecase.dart';
 import '../../domain/usecases/get_my_come_with_you_usecase.dart';
+import '../../domain/usecases/get_my_installments_usecase.dart';
 import '../../domain/usecases/get_my_pick_me_usecase.dart';
 
 part 'my_adds_state.dart';
@@ -33,6 +33,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
   final RejectPickMeUseCase _rejectPickMeUseCase;
   final CancelAdUseCase _cancelAdUseCase;
   final GetMyAuctionsUseCase _getMyAuctionsUseCase;
+  final GetMyInstallmentUseCase _getMyInstallmentUseCase;
   MyAddsCubit(
       this._getMyAdsUseCase,
       this._deleteComeWithMeUseCase,
@@ -44,7 +45,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
       this._rejectComeWithMeUseCase,
       this._cancelAdUseCase,
       this._getMyAuctionsUseCase,
-      this._rejectPickMeUseCase)
+      this._rejectPickMeUseCase, this._getMyInstallmentUseCase)
       : super(const MyAddsState());
 
   void loadData() async {
@@ -70,6 +71,16 @@ class MyAddsCubit extends Cubit<MyAddsState> {
             emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
         (r) => emit(
             state.copyWith(myAuctions: r, status: MyAddsStates.initState)));
+  }
+
+  Future<void> getMyInstallment() async {
+    emit(state.copyWith( status: MyAddsStates.loading));
+    final response = await _getMyInstallmentUseCase(const NoParams());
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+            (r) => emit(
+            state.copyWith(myInstallments: r, status: MyAddsStates.initState)));
   }
 
   Future<void> getPickMeTrips() async {
