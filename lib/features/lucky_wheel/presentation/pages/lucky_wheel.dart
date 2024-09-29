@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/lucky_wheel/domain/entities/wheel_entity.dart';
 import 'package:fourtyninehub/features/lucky_wheel/domain/entities/wheel_wallet_entity.dart';
@@ -15,12 +16,13 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../core/enums/wheel.dart';
 import '../../../../res/style/styles.dart';
 import '../../domain/entities/wheel_item_entity.dart';
 
 class LuckyWheelView extends StatelessWidget {
-   const LuckyWheelView({super.key});
+  const LuckyWheelView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +32,23 @@ class LuckyWheelView extends StatelessWidget {
         centerTitle: false,
         label: LocaleKeys.luckyWheel.localize,
       ),
-      body: BlocBuilder<WheelCubit, BasicState<WheelEntity>>(
+      body: BlocConsumer<WheelCubit, BasicState<WheelEntity>>(
+        listener: (BuildContext context, BasicState<WheelEntity> state) {
+          if (state.failure == null) {
+            showSuccessMessage(
+              context,
+              color: AppColors.SECONDARY_COLOR,
+              LocaleKeys.playedSpins.localize,
+            );
+          }
+        },
         builder: (context, state) {
           if (state.status != StateStatus.success) {
-            return  Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           return BlocBuilder<SpinWheelCubit, BasicState<WheelItemEntity>>(
             builder: (_, priceState) => Padding(
-              padding:  EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
                   BlocBuilder<WheelWalletCubit, BasicState<WheelWalletEntity>>(
@@ -46,7 +57,7 @@ class LuckyWheelView extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Container(
-                            padding:  EdgeInsetsDirectional.symmetric(
+                            padding: EdgeInsetsDirectional.symmetric(
                                 vertical: 15.h, horizontal: 15.w),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.r),
@@ -59,7 +70,7 @@ class LuckyWheelView extends StatelessWidget {
                                       color: Theme.of(context)
                                           .scaffoldBackgroundColor),
                                 ),
-                                 Spacer(),
+                                Spacer(),
                                 Text(
                                   '${state.data?.amount.round() ?? 0}',
                                   style: Styles.mediumText(
@@ -70,10 +81,10 @@ class LuckyWheelView extends StatelessWidget {
                             ),
                           ),
                         ),
-                         Sizer(),
+                        Sizer(),
                         Expanded(
                           child: Container(
-                            padding:  EdgeInsetsDirectional.symmetric(
+                            padding: EdgeInsetsDirectional.symmetric(
                                 vertical: 15.h, horizontal: 15.w),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.r),
@@ -86,7 +97,7 @@ class LuckyWheelView extends StatelessWidget {
                                       color: Theme.of(context)
                                           .scaffoldBackgroundColor),
                                 ),
-                                 Spacer(),
+                                Spacer(),
                                 Text(
                                   '${state.data?.points.round() ?? 0}',
                                   style: Styles.mediumText(
@@ -105,7 +116,7 @@ class LuckyWheelView extends StatelessWidget {
                         ? FortuneWheel(
                             selected: spinWheelCubit.controller.stream,
                             animateFirst: false,
-                            duration:  Duration(seconds: 3),
+                            duration: Duration(seconds: 3),
                             hapticImpact: HapticImpact.heavy,
                             onAnimationEnd: () {
                               spinWheelCubit.showPrize(context);
@@ -139,9 +150,11 @@ class LuckyWheelView extends StatelessWidget {
                       fontSize: 70.sp,
                       color: Theme.of(context).scaffoldBackgroundColor,
                     ),
-                    onPressed: () => spinWheelCubit.spin(state.data!),
+                    onPressed: () {
+                      return spinWheelCubit.spin(state.data!);
+                    },
                   ),
-                   SizedBox(height: 30.h),
+                  SizedBox(height: 30.h),
                 ],
               ),
             ),

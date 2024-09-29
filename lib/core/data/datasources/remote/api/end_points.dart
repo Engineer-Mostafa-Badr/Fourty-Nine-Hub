@@ -102,6 +102,17 @@ class EndPoints {
     return '/advertisementCompany?subCategory=66adecd7aa2ff24015872e9f';
   }
 
+  // Custom Page
+  static const socialPage='/navigators/socialPage';
+  static const subTab='/navigators/subTap';
+  static const navigateBar='/navigators/navigatorsBar';
+  static const favouriteCat='/navigators/navigateCategories';
+
+  //My Ads
+  static const myAdsAuction='/ads/allMyAds/auction';
+  static const myAdsInstallment='/ads/allMyAds/installment';
+  static const myAdsTripJoin='/ride/come-with-you/my?subCategory=62ea00e269ea29c91dfc390c';
+
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';
   static const fetchUsers = '/users/all-usernames';
@@ -450,7 +461,7 @@ class EndPoints {
   }
 
   static String deleteFriend(String userId) {
-    return '/friends/deleteFriend/$userId?subCategory=${Constants.facebookSubCategory}';
+    return '/friends/deleteFriend/$userId';
   }
 
   static String commentOnTwitterPost(String postId) {
@@ -517,8 +528,8 @@ class EndPoints {
     return '/follow/make-follow/$userId?subCategory=${Constants.instagramSubCategory}';
   }
 
-  static String removeFollow(String userId) {
-    return '/follow/unFollow/$userId?subCategory=${Constants.instagramSubCategory}';
+  static String deleteFollow(String userId) {
+    return '/follow/delete-follower/$userId?subCategory=${Constants.instagramSubCategory}';
   }
 
   static String greetMessage(String userId) {

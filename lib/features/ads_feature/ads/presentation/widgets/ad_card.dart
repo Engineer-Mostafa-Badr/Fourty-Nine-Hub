@@ -33,6 +33,7 @@ class AdCard extends StatefulWidget {
 class _AdCardState extends State<AdCard> {
   @override
   Widget build(BuildContext context) {
+
     List<CreateAdEntity> details = widget.item.details.where((e) => e.value.nameAr!='السعر'&&e.value.nameAr!='المرتب').toList();
     return InkWell(
       child: Container(

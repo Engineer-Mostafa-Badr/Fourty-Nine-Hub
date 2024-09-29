@@ -20,7 +20,10 @@ import '../widgets/posts/create_post_banner.dart';
 
 class SocialHomeView extends StatefulWidget {
   final String userId;
-  const SocialHomeView({super.key, required this.userId});
+  final bool hideAppBar;
+
+  const SocialHomeView(
+      {super.key, required this.userId, this.hideAppBar = false});
 
   @override
   State<SocialHomeView> createState() => _SocialHomeViewState();
@@ -58,23 +61,26 @@ class _SocialHomeViewState extends State<SocialHomeView>
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-          appBar: const HomeAppbar(
-            isWithBackArrow: true,
-          ),
-          drawer: const DrawerWidget(),
+          appBar: widget.hideAppBar
+              ? null
+              : const HomeAppbar(
+                  isWithBackArrow: true,
+                ),
+          drawer: widget.hideAppBar ? null : const DrawerWidget(),
           bottomNavigationBar: BottomNavigator(
             scrollController: scrollController,
             isScrollingDown: _isScrollingDown,
             mainCategory: 2,
             index: 2,
           ),
-          floatingActionButton: _isScrollingDown
+          floatingActionButton: _isScrollingDown || widget.hideAppBar
               ? null
               : const FloatingButton(
                   changeView: 2,
                 ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: _isScrollingDown || widget.hideAppBar
+              ? null
+              : FloatingActionButtonLocation.centerDocked,
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
               builder: (context, state) {
             return context.read<UserCubit>().isLoggedIn

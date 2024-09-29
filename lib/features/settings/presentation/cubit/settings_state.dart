@@ -4,7 +4,7 @@ import 'package:fourtyninehub/features/settings/domain/entities/disable_entity.d
 import '../../../../../core/error/failure.dart';
 
 
-enum SettingStates { loading, initial, error,success }
+enum SettingStates { loading, initial, error,success,success1 }
 
 class SettingState {
   final SettingStates status;

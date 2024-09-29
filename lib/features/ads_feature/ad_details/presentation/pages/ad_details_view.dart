@@ -259,7 +259,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                 children: [
                   Label(
                     text:
-                        '${NumbersHelper.formatThousands(number: ad.price ?? 0)} ${LocaleKeys.currency.localize}',
+                    NumbersHelper.formatThousands(number: ad.price??0),
                     style: Styles.mediumText(
                         fontWeight: FontWeight.bold,
                         color: AppColors.SECONDARY_COLOR),
@@ -285,16 +285,16 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                   ),
                 ],
               ),
-              Sizer(
-                height: 5.h,
+              Sizer(height: 5.h,),
+              Row(
+                children: [
+                  Label(
+                    text: "${LocaleKeys.desc.localize} : ",
+                    style: Styles.mediumText(fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR),
+                  ),
+                  Label(text: ad.description),
+                ],
               ),
-              Label(
-                text: "${LocaleKeys.desc.localize} : ",
-                style: Styles.mediumText(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.SECONDARY_COLOR),
-              ),
-              Label(text: ad.description),
             ],
           ),
         ),
