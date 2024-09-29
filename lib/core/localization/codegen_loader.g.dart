@@ -694,6 +694,8 @@ class CodegenLoader extends AssetLoader{
   "tel": "هاتف",
   "chats": "محادثة",
   "deleteAd": "حذف الإعلان",
+  "rent": "إيجار",
+  "sale": "بيع",
   "noAds": "لا توجد إعلانات في الوقت الحالي."
 };
 static const Map<String,dynamic> en = {
@@ -1378,7 +1380,9 @@ static const Map<String,dynamic> en = {
   "deactivate": "Deactivate",
   "tel": "Tel",
   "chats": "Chats",
-  "deleteAd": "Delete"
+  "deleteAd": "Delete",
+  "rent": "Rent",
+  "sale": "Sale"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
