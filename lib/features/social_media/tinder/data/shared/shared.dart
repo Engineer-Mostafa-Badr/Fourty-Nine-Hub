@@ -426,7 +426,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/live_streaming_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_cubit.dart';

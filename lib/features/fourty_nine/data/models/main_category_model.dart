@@ -29,6 +29,7 @@ class MainCategoryModel extends MainCategoryEntity {
           isFavorite: json['isFavorite'] ?? false,
           total: json['totalAds'] ?? 0,
           numberOfAdsCount: json['numberOfAdsCount'] ?? 0,
+          total: json['numberOfAdsCount'] ?? 0,
           subcategories: json['subCategories'] == null
               ? []
               : (json['subCategories'] as List)

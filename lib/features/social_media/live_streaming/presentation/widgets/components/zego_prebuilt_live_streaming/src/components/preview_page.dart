@@ -9,7 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/animations/create_custom_transition.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/live_streaming_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/effects/beauty_effect_button.dart';
 
 // Project imports:
@@ -665,7 +665,7 @@ class _ZegoLiveStreamingPreviewPageState
         popUpManager: widget.popUpManager,
         kickOutNotifier: widget.kickOutNotifier,
       ).then(
-        (value) {
+        (value) async {
           if (!widget.liveStreamingPageReady.value) {
             ZegoLoggerService.logInfo(
               'live streaming page is waiting room login',
@@ -675,7 +675,7 @@ class _ZegoLiveStreamingPreviewPageState
             return;
           }
           if (title != null && title.isNotEmpty) {
-            context.read<StreamCubit>().createLive(title: title);
+           await context.read<StreamCubit>().createLive(title: title);
             widget.startedNotifier.value = true;
           } else {
             showErrorMessage(context, 'Please enter simple title');

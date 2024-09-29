@@ -28,30 +28,37 @@ class CreateRestaurantCitiesDropdowns extends StatelessWidget {
                     enabledBorder: OutlineInputBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
                       borderSide: BorderSide(
-                          color: st is ValidationState && (st.isCity ?? true)
-                              ? Colors.red
-                              : Colors.grey),
+                        color: st is ValidationState && (st.isCity ?? true)
+                            ? Colors.red
+                            : Colors.grey,
+                      ),
                     ),
                     border: OutlineInputBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
                       borderSide: BorderSide(
-                          color: st is ValidationState && (st.isCity ?? true)
-                              ? Colors.red
-                              : Colors.grey),
+                        color: st is ValidationState && (st.isCity ?? true)
+                            ? Colors.red
+                            : Colors.grey,
+                      ),
                     ),
                     errorBorder: OutlineInputBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
                       borderSide: BorderSide(
-                          color: st is ValidationState && (st.isCity ?? true)
-                              ? Colors.red
-                              : Colors.grey),
+                        color: st is ValidationState && (st.isCity ?? true)
+                            ? Colors.red
+                            : Colors.grey,
+                      ),
                     ),
                     isDense: true,
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 5.h,
-                      horizontal: 10.w,
-                    ),
+                    // Makes the input field more compact
+                    constraints: BoxConstraints.loose(Size.fromHeight(90.h)),
+                    // contentPadding: EdgeInsets.symmetric(
+                    //   vertical: 0, // Set to zero to reduce height
+                    //   horizontal:
+                    //       10.w, // Keep horizontal padding for better appearance
+                    // ),
                   ),
+                  // Keeping the menuHeight the same since we're focusing on the widget's height
                   menuHeight: MediaQuery.of(context).size.height / 1.5,
                   menuStyle: const MenuStyle(
                     visualDensity: VisualDensity.comfortable,
@@ -84,7 +91,7 @@ class CreateRestaurantCitiesDropdowns extends StatelessWidget {
             ],
           );
         } else {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
       },
     );

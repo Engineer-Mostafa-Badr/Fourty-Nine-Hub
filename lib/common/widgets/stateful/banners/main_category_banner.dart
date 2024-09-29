@@ -78,41 +78,29 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                   fontSize: 45.sp),
             ),
             PositionedDirectional(
-              start: 0,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  context.read<UserCubit>().isLoggedIn
-                      ? IconButton(
-                        color: AppColors.SECONDARY_COLOR,
-                        onPressed: () async {
-                          final result = await widget.onFavorite();
-                          print("resutlt=${result}");
-                          if (result == true) {
-                            print(result);
-                            setState(() {
-                              widget.category.isFavorite =
-                              !widget.category.isFavorite!;
-                              print(widget.category.isFavorite);
-                              widget.isFavorite = result;
-                              print("===================$result");
-                            });
-                          }
-                        },
-                        icon: Icon(widget.category.isFavorite == true
-                            ? Icons.favorite
-                            : Icons.favorite_border),
-                      )
-                      : const SizedBox.shrink(),
-                  Label(
-                    text: '${widget.category.numberOfAdsCount} ${LocaleKeys.ads.localize}',
-                    style: Styles.mediumText(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+              start: 10.w,
+              child: context.read<UserCubit>().isLoggedIn
+                  ? IconButton(
+                    color: AppColors.SECONDARY_COLOR,
+                    onPressed: () async {
+                      final result = await widget.onFavorite();
+                      print("resutlt=${result}");
+                      if (result == true) {
+                        print(result);
+                        setState(() {
+                          widget.category.isFavorite =
+                          !widget.category.isFavorite!;
+                          print(widget.category.isFavorite);
+                          widget.isFavorite = result;
+                          print("===================$result");
+                        });
+                      }
+                    },
+                    icon: Icon(widget.category.isFavorite == true
+                        ? Icons.favorite
+                        : Icons.favorite_border),
                   )
-                ],
-              ),
+                  : const SizedBox.shrink(),
             ),
           ],
         ),
@@ -147,40 +135,26 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                   fontSize: 45.sp),
             ),
             PositionedDirectional(
-              start: 0,
-              child: Column(
-                children: [
-                  context.read<UserCubit>().isLoggedIn
-                      ? InkWell(
-                          onTap: () async {
-                            final result = await widget.onFavorite();
-                            if (result != null && result != widget.isFavorite) {
-                              setState(() {
-                                widget.isFavorite = result;
-                                print("===================$result");
-                              });
-                            }
-                          },
-                          child: Icon(
-                            widget.isFavorite == true
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            color: AppColors.SECONDARY_COLOR,
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                  Sizer(
-                    height: 15.h,
-                  ),
-                  Label(
-                    text: '${widget.category.total.toShortScale} ${Labels.ads}',
-                    style: Styles.mediumText(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  )
-                ],
-              ),
+              start: 10.w,
+              child: context.read<UserCubit>().isLoggedIn
+                  ? InkWell(
+                      onTap: () async {
+                        final result = await widget.onFavorite();
+                        if (result != null && result != widget.isFavorite) {
+                          setState(() {
+                            widget.isFavorite = result;
+                            print("===================$result");
+                          });
+                        }
+                      },
+                      child: Icon(
+                        widget.isFavorite == true
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: AppColors.SECONDARY_COLOR,
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
           ],
         ),
@@ -191,7 +165,10 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
   Widget _buildRegisterButton() {
     if (widget.canRegister) {
       return InkWell(
-        onTap: () => widget.onRegister?.call(),
+        onTap: () {
+          log('88888888888888888888888888');
+          widget.onRegister?.call();
+        },
         child: Text(Labels.register,
             style: Styles.mediumText(
                 color: Colors.white, fontWeight: FontWeight.bold)),

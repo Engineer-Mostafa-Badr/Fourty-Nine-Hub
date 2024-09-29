@@ -42,7 +42,7 @@ class MeetingDataSourceImpl extends MeetingDataSource {
   Future<Either<Failure, void>> endRoom(MeetingParams params) async {
     // print('deleted');
     final result =
-        await apiConsumer.put(EndPoints.endMeeting(params.meetingId));
+        await apiConsumer.put(EndPoints.endMeeting(params.id));
     return result.fold((l) => Left(l), (r) => Right(r));
     // throw Exception('UnImplemented Finish Func');
   }
@@ -51,7 +51,7 @@ class MeetingDataSourceImpl extends MeetingDataSource {
   Future<Either<Failure, List<ScheduledMeeting>>> getScheduledMeetings(
       MeetingParams params) async {
     final result =
-        await apiConsumer.get(EndPoints.getScheduledMeetings(params.meetingId));
+        await apiConsumer.get(EndPoints.getScheduledMeetings(params.id));
     return result.fold((l) {
       // throw MeetingErrorMessageModel.fromJson(l);
       return Left(l);
@@ -66,7 +66,7 @@ class MeetingDataSourceImpl extends MeetingDataSource {
   @override
   Future<Either<Failure, bool>> joinRoom(MeetingParams params) async {
     final result = await apiConsumer
-        .put(EndPoints.joinMeeting(params.meetingId), headers: {
+        .put(EndPoints.joinMeeting(params.id), headers: {
       'lang':
           AppPages.router.configuration.navigatorKey.currentContext!.isArabic
               ? 'ar'

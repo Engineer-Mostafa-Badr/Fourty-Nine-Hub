@@ -691,6 +691,9 @@ class EndPoints {
   static String allLiveTopics = '/stream-topic';
   static String createLive = '/stream';
 
+  static String endStream(String id) => '/stream/$id';
+  static String allLives = '/stream/explore';
+
 //secrets
   static String getSecrets = '/app-manager-dashboard/apiKeys';
   static String deleteChatMessage = '/chat/message';

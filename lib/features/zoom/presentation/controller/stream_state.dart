@@ -3,6 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 
+import '../../../social_media/live_streaming/domain/entity/live_create_response_entity.dart';
+import '../../../social_media/live_streaming/domain/entity/live_entity.dart';
 import '../../../social_media/tinder/data/models/gift_model.dart';
 
 enum StreamsStates {
@@ -34,13 +36,15 @@ extension MeetingStateX on StreamState {
 class StreamState extends Equatable {
   final StreamsStates? status;
   final List<ScheduledMeeting>? scheduledMeeting;
+  final List<LiveEntity>? allLives;
+  final LiveEntity? live;
   final List<GiftData> selectedGifts;
   final String? errorMessage;
   final String topic;
   final String topicId;
   final String? goalDescription;
   final Failure? failure;
-
+  final LiveCreateResponseEntity? liveCreateResponseEntity;
   const StreamState({
     this.status = StreamsStates.initial,
     this.errorMessage,
@@ -48,7 +52,10 @@ class StreamState extends Equatable {
     this.topic = '',
     this.topicId = '',
     this.scheduledMeeting,
+    this.live,
+    this.liveCreateResponseEntity,
     this.selectedGifts = const [],
+    this.allLives = const [],
     this.goalDescription = '',
   });
 
@@ -57,9 +64,12 @@ class StreamState extends Equatable {
     String? errorMessage,
     String? topic,
     String? topicId,
+    List<ScheduledMeeting>? scheduledMeetings,
     String? goalDescription,
     Failure? failure,
-    List<ScheduledMeeting>? scheduledMeetings,
+    LiveEntity? live,
+    LiveCreateResponseEntity? liveCreateResponseEntity,
+    List<LiveEntity>? lives,
     List<GiftData>? selectedGifts,
   }) =>
       StreamState(
@@ -69,6 +79,9 @@ class StreamState extends Equatable {
         topic: topic ?? this.topic,
         topicId: topicId ?? this.topicId,
         scheduledMeeting: scheduledMeetings ?? scheduledMeeting,
+        allLives: lives ?? allLives,
+        live: live ?? this.live,
+        liveCreateResponseEntity: liveCreateResponseEntity ?? liveCreateResponseEntity,
         selectedGifts: selectedGifts ?? this.selectedGifts,
         goalDescription: goalDescription ?? this.goalDescription,
       );
@@ -77,11 +90,14 @@ class StreamState extends Equatable {
   List<Object?> get props => [
         status,
         errorMessage,
+        liveCreateResponseEntity,
         failure,
         topic,
         goalDescription,
+        live,
         scheduledMeeting,
         topicId,
+        allLives,
         selectedGifts,
       ];
 }

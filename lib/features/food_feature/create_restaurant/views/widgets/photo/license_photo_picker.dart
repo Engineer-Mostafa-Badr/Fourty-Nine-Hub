@@ -52,7 +52,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                         borderColor: state is ValidationState &&
                                 (state.isCommercialFirstPage ?? true)
                             ? Colors.red
-                            : Colors.black,
+                            : Colors.grey,
                         tilte: LocaleKeys.firstPage.tr(),
                       );
                     },
@@ -81,7 +81,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                         borderColor: state is ValidationState &&
                                 (state.isCommercialSecondPage ?? true)
                             ? Colors.red
-                            : Colors.black,
+                            : Colors.grey,
                         tilte: LocaleKeys.secondPage.tr(),
                       );
                     },
@@ -110,7 +110,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                         borderColor: state is ValidationState &&
                                 (state.isCommercialThirdPage ?? true)
                             ? Colors.red
-                            : Colors.black,
+                            : Colors.grey,
                         tilte: LocaleKeys.thirdPage.tr(),
                       );
                     },
