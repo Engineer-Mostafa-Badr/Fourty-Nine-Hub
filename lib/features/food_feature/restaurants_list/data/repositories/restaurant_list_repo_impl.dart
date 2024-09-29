@@ -29,7 +29,7 @@ class RestaurantListRepoImpl implements RestaurantListRepo {
   }
 
   @override
-  Future<Either<Failure, List<RestaurantEntity>>> getSubCategoryRestaurants(
+  Future<Either<Failure, List<Restaurant2Model>>> getSubCategoryRestaurants(
       {required String id}) {
     return _remoteDataSource.getSubCategoryRestaurants(id: id);
   }

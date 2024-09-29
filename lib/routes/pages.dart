@@ -92,6 +92,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/pages/mai
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
+
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/instagram_profile.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
@@ -157,6 +158,7 @@ import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_re
 import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
+import '../features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_meal_list_cubit.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
 import '../features/fourty_nine/presentation/pages/fourty_nine.dart';
@@ -273,7 +275,7 @@ class AppPages {
                     path: Paths.ADS,
                     name: Routes.ADS,
                     builder: (context, state) => BlocProvider(
-                          create:(_)=> serviceLocator<AdvertisementCubit>(),
+                          create: (_) => serviceLocator<AdvertisementCubit>(),
                           child: AdsView(
                             params: state.extra as AdsViewParams,
                           ),
@@ -536,7 +538,7 @@ class AppPages {
                 GoRoute(
                     path: Paths.POLICY,
                     name: Routes.POLICY,
-                    builder: (context, state) =>  PolicyView()),
+                    builder: (context, state) => PolicyView()),
                 GoRoute(
                     path: Paths.Lists,
                     name: Routes.Lists,
@@ -989,9 +991,16 @@ class AppPages {
           GoRoute(
               path: Paths.FOOD,
               name: Routes.FOOD,
-              builder: (context, state) => BlocProvider<RestaurantsListCubit>(
-                    create: (context) => serviceLocator()..loadData(),
-                    child: const RestaurantsListsView(),
+              builder: (context, state) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider<RestaurantsListCubit>(
+                        create: (context) => serviceLocator()..loadData(),
+                      ),
+                      BlocProvider<RestaurantsMealListCubit>(
+                        create: (context) => serviceLocator(),
+                      ),
+                    ],
+                    child: RestaurantsListsView(),
                   ),
               routes: [
                 // CusineRestaurantsView
@@ -1027,7 +1036,7 @@ class AppPages {
                           path: Paths.FOODCART,
                           name: Routes.FOODCART,
                           builder: (context, state) => BlocProvider.value(
-                                value: serviceLocator<FoodCartCubit>(),
+                                value: serviceLocator<RestaurantDetailsCubit>(),
                                 child: const FoodCartView(),
                               ))
                     ])

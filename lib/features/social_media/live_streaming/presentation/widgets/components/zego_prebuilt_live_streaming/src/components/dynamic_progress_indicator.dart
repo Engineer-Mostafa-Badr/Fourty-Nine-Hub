@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-
 class DynamicProgressIndicator extends StatelessWidget {
-  final String responseValue; // e.g., "2/5" from the backend (could be any values)
+  final String
+      responseValue; // e.g., "2/5" from the backend (could be any values)
 
   const DynamicProgressIndicator({super.key, required this.responseValue});
 
@@ -20,7 +20,8 @@ class DynamicProgressIndicator extends StatelessWidget {
       value: progress, // The dynamic progress value
       backgroundColor: Colors.grey[300],
       valueColor: AlwaysStoppedAnimation<Color>(
-        getColorBasedOnValue(currentValue, maxValue), // Change color dynamically
+        getColorBasedOnValue(
+            currentValue, maxValue), // Change color dynamically
       ),
     );
   }

@@ -35,7 +35,7 @@ abstract class RestaurantsRemoteDataSource {
     required double lng,
   });
   Future<Either<Failure, int>> numOfRestaurants();
-  Future<Either<Failure, List<RestaurantEntity>>> getSubCategoryRestaurants(
+  Future<Either<Failure, List<Restaurant2Model>>> getSubCategoryRestaurants(
       {required String id});
   Future<Either<Failure, IsRestaurantModel>> isRestaurant();
 }
@@ -76,14 +76,14 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<RestaurantEntity>>> getSubCategoryRestaurants(
+  Future<Either<Failure, List<Restaurant2Model>>> getSubCategoryRestaurants(
       {required String id}) async {
     final response =
         await _apiConsumer.get(EndPoints.subCategoryRestaurants(id));
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data']['restaurant'] as List)
-            .map((e) => RestaurantModel.fromJson(e))
+            .map((e) => Restaurant2Model.fromJson(e))
             .toList()));
   }
 
