@@ -111,6 +111,7 @@ class EndPoints {
   //My Ads
   static const myAdsAuction='/ads/allMyAds/auction';
   static const myAdsInstallment='/ads/allMyAds/installment';
+  static const myAdsOther='/ads/allMyAds/other';
   static const myAdsTripJoin='/ride/come-with-you/my?subCategory=62ea00e269ea29c91dfc390c';
   static String deleteMyTripJoin({required String id}) =>
       '/ride/come-with-you/Delete/$id';

@@ -53,6 +53,7 @@ import '../features/account_taps/my_adds/domain/usecases/delete_pick_me_usecase.
 import '../features/account_taps/my_adds/domain/usecases/get_my_auctions_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/get_my_come_with_you_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/get_my_installments_usecase.dart';
+import '../features/account_taps/my_adds/domain/usecases/get_my_other_ads_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/get_my_pick_me_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/get_my_trip_join_usecase.dart';
 import '../features/ads_feature/ad_details/data/repositories/ad_details_repo_impl.dart';
@@ -287,6 +288,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<GetMyOtherAdsUseCase>(
+          () => GetMyOtherAdsUseCase(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<AcceptComeWithMeUseCase>(
       () => AcceptComeWithMeUseCase(
         serviceLocator(),
@@ -368,6 +374,7 @@ class FourtyNineServiceLocator {
 
     serviceLocator.registerFactory<MyAddsCubit>(
       () => MyAddsCubit(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

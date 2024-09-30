@@ -105,7 +105,7 @@ class _MyAddsViewState extends State<MyAddsView>
                                     : i == 3
                                         ? context
                                             .read<MyAddsCubit>()
-                                            .getMyAuctions()
+                                            .getMyOtherAds()
                                         : null;
                       },
                       isScrollable: true,
@@ -114,7 +114,7 @@ class _MyAddsViewState extends State<MyAddsView>
                         Tab(text: LocaleKeys.auction.localize),
                         Tab(text: LocaleKeys.installments.localize),
                         Tab(text: LocaleKeys.tripJoin.localize),
-                         const Tab(text: 'Other'),
+                        const Tab(text: 'Other'),
                       ],
                     ),
                   ),
@@ -157,7 +157,7 @@ class _MyAddsViewState extends State<MyAddsView>
             itemBuilder: (context, index) {
               return BuildItemAuctionCard(
                 item: state.myInstallments![index],
-               // onDelete: (String id) => controller.cancelAd(id: id),
+                // onDelete: (String id) => controller.cancelAd(id: id),
               );
             });
       } else {
@@ -173,41 +173,48 @@ class _MyAddsViewState extends State<MyAddsView>
         showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
       }
     }, builder: (context, state) {
-
       if (state.status == MyAddsStates.initState) {
-       if (state.myAuctions?.isEmpty ?? true) {
-        return const EmptyPage();
-      }
+        if (state.myAuctions?.isEmpty ?? true) {
+          return const EmptyPage();
+        }
         return ListView.separated(
             itemCount: state.myAuctions?.length ?? 0,
             separatorBuilder: (context, index) => const Sizer(),
             itemBuilder: (context, index) {
               return BuildItemAuctionCard(
                 item: state.myAuctions![index],
-               // onDelete: (String id) => controller.cancelAd(id: id),
+                // onDelete: (String id) => controller.cancelAd(id: id),
               );
             });
-      }  else {
+      } else {
         return const Center(child: CircularProgressIndicator());
       }
     });
   }
 
   Widget _buildMyAdsWidget() {
-    return BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
-      final controller = context.read<MyAddsCubit>();
-      if (state.myAds?.isEmpty ?? true) {
-        return const EmptyPage();
+    return BlocConsumer<MyAddsCubit, MyAddsState>(
+        listener: (BuildContext context, MyAddsState state) {
+      if (state.status == MyAddsStates.success) {
+        showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
       }
-      return ListView.separated(
-          itemCount: state.myAds?.length ?? 0,
-          separatorBuilder: (context, index) => const Sizer(),
-          itemBuilder: (context, index) {
-            return MyAdsOther(
-              item: state.myAds![index],
-              onDelete: (String id) => controller.cancelAd(id: id),
-            );
-          });
+    }, builder: (context, state) {
+      if (state.status == MyAddsStates.initState) {
+        if (state.myOtherAds?.isEmpty ?? true) {
+          return const EmptyPage();
+        }
+        return ListView.separated(
+            itemCount: state.myOtherAds?.length ?? 0,
+            separatorBuilder: (context, index) => const Sizer(),
+            itemBuilder: (context, index) {
+              return BuildItemAuctionCard(
+                item: state.myOtherAds![index],
+                // onDelete: (String id) => controller.cancelAd(id: id),
+              );
+            });
+      } else {
+        return const Center(child: CircularProgressIndicator());
+      }
     });
   }
 

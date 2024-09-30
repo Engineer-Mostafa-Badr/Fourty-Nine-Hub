@@ -10,6 +10,7 @@ class MyAddsState {
   final List<TripAndRequestEntity>? pickMeTrips;
   final List<MyAuctionAdsEntity>? myAuctions;
   final List<MyAuctionAdsEntity>? myInstallments;
+  final List<MyAuctionAdsEntity>? myOtherAds;
   final MyAdsTripJoinEntity? tripJoin;
 
   const MyAddsState({
@@ -20,7 +21,8 @@ class MyAddsState {
     this.pickMeTrips,
     this.myAuctions,
     this.myInstallments,
-    this.tripJoin
+    this.tripJoin,
+    this.myOtherAds,
   });
   MyAddsState copyWith({
     MyAddsStates? status,
@@ -30,6 +32,7 @@ class MyAddsState {
     List<TripAndRequestEntity>? pickMeTrips,
     List<MyAuctionAdsEntity>? myAuctions,
     List<MyAuctionAdsEntity>? myInstallments,
+    List<MyAuctionAdsEntity>? myOtherAds,
     MyAdsTripJoinEntity? tripJoin
   }) {
     return MyAddsState(
@@ -41,6 +44,7 @@ class MyAddsState {
       myAuctions: myAuctions ?? this.myAuctions,
       myInstallments: myInstallments ?? this.myInstallments,
       tripJoin: tripJoin ?? this.tripJoin,
+      myOtherAds: myOtherAds ?? this.myOtherAds,
     );
   }
 }

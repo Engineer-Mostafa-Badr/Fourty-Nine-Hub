@@ -95,4 +95,9 @@ class MyAdsRepoImpl implements MyAdsRepo {
   Future<Either<Failure, bool>> deleteMyInstallment({required String id}) {
    return _remoteDatasource.deleteMyInstallment(id: id);
   }
+
+  @override
+  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyOtherAds() {
+    return _remoteDatasource.getMyOtherAds();
+  }
 }

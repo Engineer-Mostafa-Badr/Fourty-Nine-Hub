@@ -8,7 +8,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
 import '../../../../../common/widgets/stateless/labels/badged_label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -160,7 +159,7 @@ class BuildItemAuctionCard extends StatelessWidget {
         Expanded(
           child: ImageFromInternet(
             image: (item.images.isNotEmpty)
-                ? item.images.first as String // Casting to String
+                ? item.images[0].photo // Casting to String
                 : '', // Provide a fallback image or handle the empty state
             height: 150.h,
             borderRadius: BorderRadius.circular(12),

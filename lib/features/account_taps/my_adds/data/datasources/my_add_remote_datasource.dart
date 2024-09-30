@@ -18,6 +18,7 @@ abstract class MyAdsRemoteDatasource {
   Future<Either<Failure, List<TripAndRequestModel>>> getPickMeAds();
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyAuctions();
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments();
+  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyOtherAds();
   Future<Either<Failure, MyAdsTripJoinEntity>> getMyTripJoin();
   Future<Either<Failure, bool>> deleteComeWithMeAd({required String id});
   Future<Either<Failure, bool>> deletePickMeAd({required String id});
@@ -161,5 +162,15 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
     return response.fold(
             (failure) => Left(failure),
             (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyOtherAds() async {
+    final response = await _apiConsumer.get(EndPoints.myAdsOther);
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right((data['data']['ads'] as List)
+            .map((e) => MyAuctionAdsModel.fromJson(e))
+            .toList()));
   }
 }

@@ -20,6 +20,7 @@ abstract class MyAdsRepo {
   Future<Either<Failure, bool>> rejectComeWithYouRequests({required String id});
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyAuctions();
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments();
+  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyOtherAds();
   Future<Either<Failure, MyAdsTripJoinEntity>> getMyTripJoin();
   Future<Either<Failure, bool>> deleteMyTripJoin({required String id});
   Future<Either<Failure, bool>> deleteMyInstallment({required String id});
