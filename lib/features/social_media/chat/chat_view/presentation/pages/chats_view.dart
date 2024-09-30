@@ -338,7 +338,6 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       length: ChatCategories.values.length,
       initialIndex: widget.initialTabIndex,
       child: SharedScaffold(
-
         mainCategoryId: 2,
         body: NestedAppbar(
           scrollController: ScrollController(),
@@ -729,7 +728,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  "Broadcasts",
+                  LocaleKeys.broadcasts.tr(),
                   style: Styles.mediumText(fontWeight: FontWeight.w600),
                 ),
               ),
@@ -739,7 +738,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   context.push(Routes.SEEALLBROADCASTS);
                 },
                 child: Text(
-                  "See all",
+                  LocaleKeys.seeAll.tr(),
                   style: Styles.smallText(
                     color: AppColors.PRIMARY_COLOR_DARK,
                     fontSize: 24,
@@ -787,7 +786,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
           Padding(
             padding: const EdgeInsets.only(left: 16, top: 24, right: 16),
             child: Text(
-              "My Broadcasts",
+              LocaleKeys.myBroadcasts.tr(),
               style: Styles.mediumText(fontWeight: FontWeight.w600),
             ),
           ),

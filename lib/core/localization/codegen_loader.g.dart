@@ -719,10 +719,15 @@ class CodegenLoader extends AssetLoader{
   "addACaption": "...اضافة تعليق",
   "and": "و",
   "otherContacts": "جهات اتصال اخرى",
-  "registered": "Registered",
-  "add": "Add",
-  "noDocs": "No Docs",
-  "noLinks": "No Links"
+  "registered": "مسجل",
+  "add": "اضافة",
+  "noDocs": "لا يوجد ملفات",
+  "noLinks": "لا يوجد روابط",
+  "seeAll": "مشاهدة الجميع",
+  "broadcasts": "القنوات",
+  "myBroadcasts": "قنواتي",
+  "channelInfo": "معلومات القناة",
+  "unfollow": "الغاء المتابعة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1435,7 +1440,12 @@ static const Map<String,dynamic> en = {
   "add": "Add",
   "noDocs": "No Docs",
   "noLinks": "No Links",
-  "noMedia": "No Media"
+  "noMedia": "No Media",
+  "seeAll": "See All",
+  "broadcasts": "Broadcasts",
+  "myBroadcasts": "My Broadcasts",
+  "channelInfo": "Channel Info",
+  "unfollow": "Unfollow"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

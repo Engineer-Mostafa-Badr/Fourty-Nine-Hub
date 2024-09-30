@@ -709,5 +709,10 @@
   "add": "Add",
   "noDocs": "No Docs",
   "noLinks": "No Links",
-  "noMedia": "No Media"
+  "noMedia": "No Media",
+  "seeAll": "See All",
+  "broadcasts": "Broadcasts",
+  "myBroadcasts": "My Broadcasts",
+  "channelInfo": "Channel Info",
+  "unfollow": "Unfollow"
 }
