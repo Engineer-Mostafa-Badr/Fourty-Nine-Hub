@@ -7,11 +7,13 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../tinder/data/shared/shared.dart';
 import '../../../tinder/presentation/pages/user_profile.dart';
 import '../../domain/usecases/twitter_report_usecase.dart';
 import '../bloc/twitter_bloc.dart';
@@ -61,12 +63,13 @@ class _ReportViewState extends State<ReportView> {
                       _buildHandleIndicator(),
                       SizedBox(height: 12.h),
                       _buildHeader(context, screenWidth),
-                      SizedBox(height: 10.h),
+                      SizedBox(height: 16),
                       if (reports.isEmpty)
                         Center(
                           child: Text(
                             LocaleKeys.noReportCategoriesAvailable.localize,
-                            style: const TextStyle(color: Colors.grey),
+                            textScaleFactor: 1.0,
+                            style: TextStyle(fontSize: 40.sp),
                           ),
                         )
                       else
@@ -77,8 +80,11 @@ class _ReportViewState extends State<ReportView> {
                           separatorBuilder: (context, i) =>
                               SizedBox(height: 10.h),
                           itemBuilder: (context, i) {
-                            return _buildReportOption(
-                                context, reports[i], screenWidth);
+                            return Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: _buildReportOption(
+                                  context, reports[i], screenWidth),
+                            );
                           },
                         ),
                       SizedBox(height: 20.h),
@@ -111,12 +117,12 @@ class _ReportViewState extends State<ReportView> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Label(
-          text: LocaleKeys.report.localize,
-          style: Styles.headerText(
-            fontSize: screenWidth * 0.1,
+        Text(
+          LocaleKeys.report.localize,
+          textScaleFactor: 1.0,
+          style: TextStyle(
+            fontSize: 55.sp,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
           ),
         ),
         const SizedBox(width: 10),
@@ -142,26 +148,29 @@ class _ReportViewState extends State<ReportView> {
         decoration: BoxDecoration(
           color: selectedReport == report
               ? AppColors.SECONDARY_COLOR.withOpacity(0.1)
-              : Colors.white,
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: selectedReport == report
                 ? AppColors.SECONDARY_COLOR
                 : Colors.grey[300]!,
-            width: 1.5,
+            width: 1,
           ),
         ),
         child: Row(
           children: [
             Expanded(
-              child: Label(
-                text: capitalizeAndSplit(report.name),
-                style: Styles.headerText(
-                  fontSize: screenWidth * 0.09,
+              child: Text(
+                capitalizeAndSplit(report.category),
+                textScaleFactor: 1.0,
+                style: TextStyle(
+                  fontSize: 45.sp,
                   fontWeight: FontWeight.bold,
                   color: selectedReport == report
                       ? AppColors.SECONDARY_COLOR
-                      : AppColors.DARK_GRAY_COLOR,
+                      : (isDarkTheme(context)
+                          ? Colors.white70
+                          : AppColors.DARK_GRAY_COLOR),
                 ),
                 maxLines: 3,
               ),
@@ -187,34 +196,48 @@ class _ReportViewState extends State<ReportView> {
     return Row(
       children: [
         Expanded(
-          child: TextField(
-            style: TextStyle(
-              fontSize: screenWidth * 0.04,
-              fontWeight: FontWeight.bold,
-              color: AppColors.PRIMARY_COLOR_LIGHT,
-            ),
-            onChanged: (value) {
-              setState(() {});
-            },
-            controller: reportTextController,
-            decoration: InputDecoration(
-              fillColor: AppColors.LIGHT_COLOR,
-              contentPadding: EdgeInsets.symmetric(
-                vertical: MediaQuery.of(context).size.height * 0.02,
-                horizontal: 16.0,
+          child: MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            // Disable scaling
+
+            child: TextField(
+              maxLines: null,
+              style: TextStyle(
+                fontSize: 35.sp,
+                fontWeight: FontWeight.bold,
+                color: isDarkTheme(context)
+                    ? Colors.white70
+                    : AppColors.PRIMARY_COLOR_LIGHT,
               ),
-              hintText: '${LocaleKeys.typeReportReason.localize}...',
-              hintStyle: TextStyle(
-                fontSize: screenWidth * 0.04,
-                color: AppColors.DARK_GRAY_COLOR,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
-                borderSide: const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
-                borderSide: const BorderSide(color: AppColors.PRIMARY_COLOR),
+              onChanged: (value) {
+                setState(() {});
+              },
+              controller: reportTextController,
+              decoration: InputDecoration(
+                fillColor: isDarkTheme(context)
+                    ? Colors.transparent
+                    : AppColors.LIGHT_COLOR,
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: MediaQuery.of(context).size.height * 0.02,
+                  horizontal: 16.0,
+                ),
+                hintText: '${LocaleKeys.typeReportReason.localize}...',
+                hintStyle: TextStyle(
+                  fontSize: 35.sp,
+                  color: isDarkTheme(context)
+                      ? Colors.white70
+                      : AppColors.DARK_GRAY_COLOR,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide:
+                      const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide:
+                      const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
+                ),
               ),
             ),
           ),
@@ -223,11 +246,11 @@ class _ReportViewState extends State<ReportView> {
         AnimatedOpacity(
           opacity: reportTextController.text.isNotEmpty ? 1.0 : 0.5,
           duration: const Duration(milliseconds: 300),
-          child: IconAppButton(
-            height: screenWidth * 0.1,
-            width: screenWidth * 0.1,
-            icon: Icons.send,
-            isCircle: true,
+          child: IconButton(
+            color: AppColors.PRIMARY_COLOR_DARK,
+            icon: Icon(
+              Icons.send,
+            ),
             onPressed: reportTextController.text.isNotEmpty
                 ? () async {
                     if (selectedReport == null) {

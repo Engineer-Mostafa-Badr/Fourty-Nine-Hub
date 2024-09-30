@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -58,12 +62,16 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                      tripJoinCardEntity.journeyPrice?.toStringAsFixed(0) ?? '',
-                      style: Styles.headerText(
-                          fontSize: 70, color: Colors.green[600])),
-                  Text(tripJoinCardEntity.status ?? '',
-                      style: Styles.headerText(
-                          fontSize: 30, color: AppColors.SECONDARY_COLOR)),
+                    tripJoinCardEntity.journeyPrice?.toStringAsFixed(0) ?? '',
+                    style: Styles.headerText(
+                        fontSize: 70, color: Colors.green[600]),
+                  ),
+                  Text(
+                    _localizeStatus(context, tripJoinCardEntity.status ?? ''),
+                    style: Styles.headerText(
+                        fontSize: 30,
+                        color: AppColors.getSecondryColor(context)),
+                  ),
                 ],
               )
             ],
@@ -78,7 +86,7 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
                 '${tripJoinCardEntity.brand}, ${tripJoinCardEntity.model}',
                 style: Styles.headerText(
                   fontSize: 45,
-                  color: AppColors.SECONDARY_COLOR,
+                  color: AppColors.getSecondryColor(context),
                 ),
                 textAlign: TextAlign.start,
               ),
@@ -100,8 +108,9 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
             children: [
               const Icon(Icons.airline_seat_recline_extra_rounded),
               const Sizer(),
-              Text('${tripJoinCardEntity.seatNumber ?? 1} Seat',
+              Text(' ${tripJoinCardEntity.seatNumber ?? 1} ',
                   style: Styles.headerText()),
+              Text(LocaleKeys.seat.localize, style: Styles.headerText()),
               const Spacer(),
               Visibility(
                 visible: tripJoinCardEntity.isRepeated ?? false,
@@ -115,7 +124,8 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
               const Sizer(),
               Visibility(
                 visible: tripJoinCardEntity.isRepeated ?? false,
-                child: Text('Repeated', style: Styles.headerText()),
+                child: Text(LocaleKeys.repeat.localize,
+                    style: Styles.headerText()),
               ),
               const Sizer(width: 20),
             ],
@@ -129,7 +139,9 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
               const Sizer(width: 13),
               Flexible(
                 child: Text(
-                  tripJoinCardEntity.startingAddressEn ?? '',
+                  context.isArabic
+                      ? tripJoinCardEntity.startingAddressAr ?? ''
+                      : tripJoinCardEntity.startingAddressEn ?? '',
                   style: Styles.headerText(fontSize: 32),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
@@ -146,7 +158,9 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
               const Sizer(width: 13),
               Flexible(
                 child: Text(
-                  tripJoinCardEntity.destinationAddressEn ?? '',
+                  context.isArabic
+                      ? tripJoinCardEntity.destinationAddressAr ?? ''
+                      : tripJoinCardEntity.destinationAddressEn ?? '',
                   style: Styles.headerText(fontSize: 32),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
@@ -161,7 +175,7 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: AvaialbleTripsButton(
-                  title: 'Call',
+                  title: LocaleKeys.call.localize,
                   color: (tripJoinCardEntity.isApproved ?? false)
                       ? AppColors.PRIMARY_COLOR
                       : AppColors.DARK_GRAY_COLOR,
@@ -173,7 +187,7 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: AvaialbleTripsButton(
-                  title: 'Message',
+                  title: LocaleKeys.message.localize,
                   color: (tripJoinCardEntity.isApproved ?? false)
                       ? AppColors.PRIMARY_COLOR
                       : AppColors.DARK_GRAY_COLOR,
@@ -185,8 +199,8 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: AvaialbleTripsButton(
-                  title: 'Report',
-                  color: AppColors.SECONDARY_COLOR,
+                  title: LocaleKeys.report.localize,
+                  color: AppColors.getSecondryColor(context),
                   icon: Icons.report,
                   onTap: reportOnTap,
                 ),
@@ -197,11 +211,12 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
           InkWell(
             onTap: subscribeCallback,
             child: Align(
-              alignment: Alignment.centerLeft,
+              alignment: AlignmentDirectional.centerStart,
               child: Text(
-                'Subscribe to contact the client',
+                LocaleKeys.subscribeToContactTheClient.localize,
                 textAlign: TextAlign.start,
-                style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
+                style: Styles.headerText(
+                    color: AppColors.getSecondryColor(context)),
               ),
             ),
           ),
@@ -209,8 +224,9 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
           InkWell(
             onTap: navigateToRequestHistoryCallback,
             child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text('Go to Request History', style: Styles.headerText()),
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(LocaleKeys.goToRequestHistory.localize,
+                  style: Styles.headerText()),
             ),
           ),
         ],
@@ -219,7 +235,18 @@ class TripJoinRequestNotificationWidget extends StatelessWidget {
   }
 
   String _formatDate(int timestamp) {
-    return DateFormat('dd MMM, hh:mm aaa')
+    return DateFormat('dd MMM, hh:mm aaa', getLang())
         .format(DateTime.fromMicrosecondsSinceEpoch(timestamp));
+  }
+
+  String _localizeStatus(BuildContext context, String text) {
+    switch (text.toLowerCase().trim()) {
+      case 'regular':
+        return context.isArabic ? 'عادي' : 'Regular';
+      case 'premium':
+        return context.isArabic ? 'مميز' : 'Premium';
+      default:
+        return text;
+    }
   }
 }

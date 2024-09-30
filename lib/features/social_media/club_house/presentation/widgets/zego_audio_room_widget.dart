@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 
 import '../../../../../core/constants/constants.dart';
 import '../../../../../core/enums/club_house_layout_mode_enum.dart';
+import '../../../../../secrets/controller/secrets_cubit.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import 'components/custom_extended_button.dart';
 import 'components/media_player.dart';
@@ -46,8 +47,8 @@ class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: ZegoUIKitPrebuiltLiveAudioRoom(
-        appID: UIConst.appId,
-        appSign: UIConst.appSign,
+        appID: context.read<SecretsCubit>().state.secrets!.zegoAppId,
+        appSign: context.read<SecretsCubit>().state.secrets!.zegoAppSign,
         userID: userId,
         userName: userName,
         roomID: widget.roomId,

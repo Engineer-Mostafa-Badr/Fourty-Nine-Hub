@@ -6,24 +6,26 @@ import '../../../subcategories/domain/entities/sub_category_entity.dart';
 class MainCategoryEntity extends Equatable {
   final String id;
   final String name;
+  final String? nameEn;
   final String image;
-  List<SubCategoryEntity>? subcategories;
+  final List<SubCategoryEntity>? subcategories;
   final String banner;
   final String cover;
+  final int? numberOfAdsCount;
   bool? isFavorite;
   final int total;
-  final String? favoriteName;
 
   MainCategoryEntity({
     required this.id,
     required this.name,
+    required this.nameEn,
     required this.image,
     this.subcategories,
     required this.banner,
     required this.cover,
     this.isFavorite = false,
     required this.total,
-    this.favoriteName,
+     this.numberOfAdsCount
   });
 
   factory MainCategoryEntity.fake() {
@@ -34,13 +36,14 @@ class MainCategoryEntity extends Equatable {
         banner: UIConst.imagePlaceHolder,
         cover: UIConst.imagePlaceHolder,
         isFavorite: false,
-        total: 9900000);
+        total: 9900000, nameEn: '');
   }
 
   @override
   List<Object?> get props => [
         id,
         name,
+    nameEn,
         image,
         banner,
         cover,

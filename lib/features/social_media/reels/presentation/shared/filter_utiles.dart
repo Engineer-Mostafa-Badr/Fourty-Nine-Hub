@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class Filter {
-  final String name;
+  final String enName;
+  final String arName;
   final ColorFilter? colorFilter;
   final String ffmpegFilter;
 
-  const Filter(this.name, this.colorFilter, {required this.ffmpegFilter});
+  const Filter(this.enName, this.arName, this.colorFilter,
+      {required this.ffmpegFilter});
 }
 
 class FilterLibrary {
@@ -33,9 +35,10 @@ class FilterLibrary {
       ];
 
   static List<Filter> get filters => [
-        const Filter('Normal', null, ffmpegFilter: ''),
+        const Filter('Normal', 'عادي', null, ffmpegFilter: ''),
         const Filter(
           'Sepia',
+          'سيبيا',
           ColorFilter.matrix([
             0.393,
             0.769,
@@ -63,6 +66,7 @@ class FilterLibrary {
         ),
         const Filter(
           'Grayscale',
+          'تدرج رمادي',
           ColorFilter.matrix([
             0.2126,
             0.7152,
@@ -90,6 +94,7 @@ class FilterLibrary {
         ),
         const Filter(
           'Invert',
+          'عكس',
           ColorFilter.matrix([
             -1, 0, 0, 0, 255, // Invert Red
             0, -1, 0, 0, 255, // Invert Green
@@ -100,6 +105,7 @@ class FilterLibrary {
         ),
         const Filter(
           'Vintage',
+          'قديم',
           ColorFilter.matrix([
             0.9,
             0.6,
@@ -127,6 +133,7 @@ class FilterLibrary {
         ),
         const Filter(
           'Brighten',
+          'تفتيح',
           ColorFilter.matrix([
             1.2,
             0,
@@ -153,6 +160,7 @@ class FilterLibrary {
         ),
         const Filter(
           'Cool',
+          'بارد',
           ColorFilter.matrix([
             1,
             0,
@@ -179,6 +187,7 @@ class FilterLibrary {
         ),
         const Filter(
           'Warm',
+          'دافئ',
           ColorFilter.matrix([
             1.1,
             0,
@@ -205,6 +214,7 @@ class FilterLibrary {
         ),
         const Filter(
           'Soft Glow',
+          'توهج ناعم',
           ColorFilter.matrix([
             1.2,
             0,
@@ -232,6 +242,7 @@ class FilterLibrary {
         ),
         const Filter(
           'Dreamy',
+          'حالِم',
           ColorFilter.matrix([
             0.9,
             0,
@@ -259,6 +270,7 @@ class FilterLibrary {
         ),
         const Filter(
           'Pink Haze',
+          'ضباب وردي',
           ColorFilter.matrix([
             1.2,
             0,
@@ -286,6 +298,7 @@ class FilterLibrary {
         ),
         const Filter(
           'Steel Blue',
+          'أزرق فولاذي',
           ColorFilter.matrix([
             1,
             0,
@@ -312,6 +325,7 @@ class FilterLibrary {
         ),
         const Filter(
           'Rustic',
+          'ريفي',
           ColorFilter.matrix([
             0.9,
             0.1,
@@ -339,6 +353,7 @@ class FilterLibrary {
         ),
         const Filter(
           'Noir',
+          'نوير',
           ColorFilter.matrix([
             0.3,
             0.3,
@@ -366,6 +381,7 @@ class FilterLibrary {
         ),
         const Filter(
           'Psychedelic',
+          'مخدر',
           ColorFilter.matrix([
             0.5,
             0.5,
@@ -393,6 +409,7 @@ class FilterLibrary {
         ),
         const Filter(
           'Neon Glow',
+          'توهج النيون',
           ColorFilter.matrix([
             1.5,
             0,
@@ -419,6 +436,7 @@ class FilterLibrary {
         ),
         const Filter(
           'Retro',
+          'ريترو',
           ColorFilter.matrix([
             1.0,
             0.4,

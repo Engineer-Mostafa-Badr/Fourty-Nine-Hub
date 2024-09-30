@@ -9,10 +9,12 @@ class MainCategoryModel extends MainCategoryEntity {
     required super.id,
     required super.name,
     required super.image,
+    super.nameEn,
     required super.banner,
     required super.cover,
     required super.isFavorite,
     required super.total,
+     super.numberOfAdsCount,
     super.subcategories,
   });
 
@@ -20,11 +22,13 @@ class MainCategoryModel extends MainCategoryEntity {
       MainCategoryModel(
           id: json['_id'],
           name: getLang() == 'ar' ? json['nameAr'] : json['nameEn'],
+          nameEn: json['nameEn'],
           image: json['image'] ?? UIConst.imagePlaceHolder,
           banner: json['banner'] ?? '',
           cover: json['cover'] ?? '',
           isFavorite: json['isFavorite'] ?? false,
           total: json['totalAds'] ?? 0,
+          numberOfAdsCount: json['numberOfAdsCount'] ?? 0,
           subcategories: json['subCategories'] == null
               ? []
               : (json['subCategories'] as List)

@@ -5,7 +5,8 @@ import 'package:fourtyninehub/features/food_feature/restaurant_details/presentat
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 
 class BuildFoodList extends StatelessWidget {
-  const BuildFoodList({super.key});
+  final String restaurantId;
+  const BuildFoodList({super.key, required this.restaurantId});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class BuildFoodList extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   RestaurantMenu? meal = state.meals?[index];
-                  return ItemCard(meal: meal);
+                  return ItemCard(meal: meal!,restaurantId: restaurantId,);
                 },
               ),
             )

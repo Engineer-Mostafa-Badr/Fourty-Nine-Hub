@@ -206,13 +206,6 @@ class HealthCubit extends Cubit<HealthState> {
 
   String? token;
 
-  ReelsRepository() {
-    _initializeToken();
-  }
-
-  Future<void> _initializeToken() async {
-    token = await TokenManager.getAccessToken();
-  }
 
   Future<void> _ensureTokenInitialized() async {
     token ??= await TokenManager.getAccessToken();

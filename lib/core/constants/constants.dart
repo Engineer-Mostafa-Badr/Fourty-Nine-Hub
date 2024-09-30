@@ -7,4 +7,5 @@ class Constants {
   static String clubVoiceSubCategory = '66e3093db21e9885fe787852';
   static String zoomSubCategory = '66e308f2b21e9885fe787851';
   static String liveSubCategory = '66e30965b21e9885fe787853';
+  static String reelSubCategory = '66684135dbb427ee42aa0141';
 }

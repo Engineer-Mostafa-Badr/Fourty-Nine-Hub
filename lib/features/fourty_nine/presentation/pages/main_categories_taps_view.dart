@@ -17,6 +17,37 @@ class MainCategoriesGridView extends StatefulWidget {
 
 class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
     with TickerProviderStateMixin {
+
+
+  late TabController _tabController;
+  late ScrollController _scrollController;
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: context.read<MainCategoriesTapsCubit>().mainCategories.length, vsync: this);
+    _scrollController = ScrollController();
+
+    // Listen for tab changes
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        _scrollToSelectedTab(_tabController.index);
+      }
+    });
+  }
+
+  // Scroll to the selected tab and make it the first tab in view
+  void _scrollToSelectedTab(int index) {
+    // Assuming each tab has a width of 140.w
+    double tabWidth = 235.w;
+    double targetScrollPosition = index * tabWidth;
+    _scrollController.animateTo(
+      targetScrollPosition,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final controller = context.read<MainCategoriesTapsCubit>();
@@ -26,102 +57,60 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
         child: Column(
           children: [
-            //  WalletWidget(),
+             // WalletWidget(),
             SizedBox(height: 10.h),
-            // SizedBox(
-            //   height: 30.h,
-            //   child:
-            //       BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
-            //     builder: (context, state) {
-            //       return ListView.separated(
-            //         scrollDirection: Axis.horizontal,
-            //         physics:  ScrollPhysics(),
-            //         itemBuilder: (context, index) {
-            //           final category = controller.mainCategories[index];
-            //           return GestureDetector(
-            //             onTap: () {
-            //               controller.selectMainCategory(index);
-            //             },
-            //             child: Container(
-            //               constraints:  BoxConstraints(
-            //                 minWidth: 120,
-            //               ),
-            //               padding:  EdgeInsets.symmetric(horizontal: 10),
-            //               decoration: BoxDecoration(
-            //                 borderRadius: BorderRadius.circular(20),
-            //                 color: index == state.selectedIndex
-            //                     ? AppColors.PRIMARY_COLOR
-            //                     : null,
-            //                 border: Border.all(
-            //                   color: index == state.selectedIndex
-            //                       ? Colors.white
-            //                       : Colors.red,
-            //                 ),
-            //               ),
-            //               child: Center(
-            //                 child: Text(
-            //                   category.name,
-            //                   style: Styles.mediumText(
-            //                       color: index == state.selectedIndex
-            //                           ? Colors.white
-            //                           : Colors.grey),
-            //                 ),
-            //               ),
-            //             ),
-            //           );
-            //         },
-            //         separatorBuilder: (context, index) =>  Sizer(),
-            //         itemCount: controller.mainCategories.length,
-            //       );
-            //     },
-            //   ),
-            // ),
             BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
                 builder: (context, state) {
               return SizedBox(
-                height: 60.h,
-                child: TabBar(
-                    isScrollable: true,
-                    onTap: (i) {
-                      controller.selectMainCategory(i);
-                    },
-                    padding: EdgeInsets.zero,
-                    labelPadding: const EdgeInsetsDirectional.only(end: 10),
-                    indicatorColor: Colors.transparent,
-                    dividerColor: Colors.transparent,
-                    tabAlignment: TabAlignment.start,
-                    controller: TabController(
-                        length: controller.mainCategories.length, vsync: this),
-                    tabs: List.generate(controller.mainCategories.length,
-                        (index) {
-                      final category = controller.mainCategories[index];
-                      return Container(
-                        // constraints:  BoxConstraints(
-                        //   minWidth: 120,
-                        // ),
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: index == state.selectedIndex
-                              ? AppColors.PRIMARY_COLOR
-                              : null,
-                          border: Border.all(
+                height: 70.h,
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  scrollDirection: Axis.horizontal,
+                  child: TabBar(
+                      isScrollable: true,
+                      controller: _tabController,
+                      onTap: (i) {
+                        controller.selectMainCategory(i);
+                      },
+                      padding: EdgeInsets.zero,
+                      labelPadding: const EdgeInsetsDirectional.only(end: 10),
+                      indicatorColor: Colors.transparent,
+                      dividerColor: Colors.transparent,
+                      tabAlignment: TabAlignment.start,
+                      tabs: List.generate(controller.mainCategories.length,
+                          (index) {
+                        final category = controller.mainCategories[index];
+                        return Container(
+                          width: 220.w,
+                          // height: 70.h,
+                          alignment: AlignmentDirectional.center,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
                             color: index == state.selectedIndex
-                                ? Colors.white
-                                : Colors.red,
+                                ? AppColors.PRIMARY_COLOR
+                                : null,
+                            border: Border.all(
+                              color: index == state.selectedIndex
+                                  ? AppColors.PRIMARY_COLOR
+                                  : Colors.red,
+                            ),
                           ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            category.name,
-                            style: Styles.mediumText(
-                                color: index == state.selectedIndex
-                                    ? Colors.white
-                                    : Colors.grey),
+                          child: Center(
+                            child: Text(
+                              category.name,
+                              style: Styles.mediumText(
+                                  color: index == state.selectedIndex
+                                      ? Colors.white
+                                      : Colors.grey),
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                      );
-                    })),
+                        );
+                      })),
+                ),
               );
             }),
             const Sizer(),

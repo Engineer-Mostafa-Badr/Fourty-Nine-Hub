@@ -142,11 +142,14 @@ import 'package:fourtyninehub/features/social_media/reels/data/models/get_commen
 import 'package:fourtyninehub/features/social_media/reels/data/models/like_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/save_reel_model.dart';
 import 'package:http/http.dart' as http;
+import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/utils/shared_pref.dart';
+import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../models/new_reels_model.dart';
 import '../models/share_reel_model.dart';
 
 class ReelsRepository {
+  // final ApiConsumer
   String? token;
 
   ReelsRepository() {
@@ -174,7 +177,17 @@ class ReelsRepository {
           'Content-Type': 'application/json',
         },
       );
-
+      var responseData = json.decode(response.body);
+      log("from ReelsRepository");
+      if (responseData['endPointSubscription'] != null &&
+          responseData['endPointSubscription'] == true &&
+          responseData['userSubscription'] == false) {
+        List<WalletTypes> wallets = (responseData['paymentMethod'] as List)
+            .map((e) => (e as String).toWalletType)
+            .toList();
+        await serviceLocator<SubscriptionController>().showSubscriptionPlans(
+            subCategoryId: responseData['subCategoryId'], wallets: wallets);
+      }
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return response;
       } else {
@@ -240,11 +253,13 @@ class ReelsRepository {
 
   Future<ReelsResponse> fetchReels({int page = 1, int limit = 3}) async {
     final url =
-        'https://49dev.com/api/v1/reels/explore?page=$page&limit=$limit';
+        'https://49dev.com/api/v1/reels/explore?page=$page&limit=$limit&subCategory=66684135dbb427ee42aa0141';
     final response = await _makeGetRequest(url: url, fromMethod: 'fetchReels');
     if (response != null) {
+      var responseData = json.decode(response.body);
       log("from ReelsRepository");
-      return ReelsResponse.fromJson(json.decode(response.body));
+
+      return ReelsResponse.fromJson(responseData);
     } else {
       log("from ReelsRepository Failed to load reels--------------");
       throw Exception('Failed to load reels');
@@ -254,7 +269,7 @@ class ReelsRepository {
   Future<ReelsResponse> fetchReelsForFollowers(
       {int page = 1, int limit = 3}) async {
     final url =
-        'https://49dev.com/api/v1/reels/followers?page=$page&limit=$limit';
+        'https://49dev.com/api/v1/reels/followers?page=$page&limit=$limit&subCategory=66684135dbb427ee42aa0141';
     final response = await _makeGetRequest(url: url, fromMethod: 'fetchReels');
     if (response != null) {
       log("from ReelsRepository");
@@ -358,8 +373,8 @@ class ReelsRepository {
 
   Future<ReelsForAudioResponse> fetchReelsWithSameAudio(String audioId,
       {int page = 1, int limit = 10}) async {
-    final url =
-        'https://49dev.com/api/v1/reels/audio/$audioId?page=$page&limit=$limit';
+    final url = 'https://49dev.com/api/v1/reels/audio/$audioId';
+    // 'https://49dev.com/api/v1/reels/audio/$audioId?page=$page&limit=$limit';
 
     final response =
         await _makeGetRequest(url: url, fromMethod: 'fetchReelsWithSameAudio');

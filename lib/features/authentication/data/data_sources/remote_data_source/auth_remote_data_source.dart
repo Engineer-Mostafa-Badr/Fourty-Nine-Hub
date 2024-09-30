@@ -22,8 +22,7 @@ abstract class AuthRemoteDataSource {
 
   Future<Either<Failure, UserTokensModel>> login(LoginParams loginParams);
 
-  Future<Either<Failure, UserTokensModel>> socialLogin(
-      SocialLoginParams params);
+  Future<Either<Failure, UserTokensModel>> socialLogin(SocialLoginParams params);
 
   Future<Either<Failure, void>> register(RegisterParams registerParams);
 
@@ -135,13 +134,11 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
       // Check if the user is null (i.e., the user canceled the sign-in)
       if (googleUser == null) {
-        return const Left(
-            SocialLoginFailure('Google sign-in was canceled by the user.'));
+        return const Left(SocialLoginFailure('Google sign-in was canceled by the user.'));
       }
 
       // Obtain the authentication details from the request
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
       // Create a new credential
       final OAuthCredential credential = GoogleAuthProvider.credential(
@@ -150,8 +147,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       );
 
       // Sign in to Firebase using the credential
-      final UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
 
       // Return the signed-in user's credentials
       return Right(userCredential);
@@ -173,8 +169,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, UserTokensModel>> socialLogin(
-      SocialLoginParams params) async {
+  Future<Either<Failure, UserTokensModel>> socialLogin(SocialLoginParams params) async {
     try {
       // Perform Google sign-in and get the user credentials
       final signInResult = await signInWithGoogle(idToken: params.idToken);

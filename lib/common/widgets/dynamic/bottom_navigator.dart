@@ -56,6 +56,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
               // Translated text
               index: 0,
               image: Assets.spotlightIcon,
+
               route: Routes.SPOTLIGHT,
             ),
           ]

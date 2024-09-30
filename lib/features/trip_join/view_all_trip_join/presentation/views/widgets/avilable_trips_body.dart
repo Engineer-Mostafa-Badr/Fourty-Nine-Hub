@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/view_all_trip_join_builder.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -40,8 +42,10 @@ class _AvailableTripsBodyState extends State<AvailableTripsBody> {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Users own cars/share the trip with them! ',
-                style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
+                LocaleKeys.userOwnCarsShareWithThem.localize,
+                style: Styles.headerText(
+                  color: AppColors.getSecondryColor(context),
+                ),
                 textAlign: TextAlign.start,
               ),
             ),

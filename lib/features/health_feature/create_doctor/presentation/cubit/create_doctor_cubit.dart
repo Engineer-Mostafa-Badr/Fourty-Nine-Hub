@@ -23,6 +23,7 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   final GetGovernoratesUseCase _getGovernoratesUseCase;
   final GetCitiesUseCase _getCitiesUseCase;
   final CreateDoctorUseCase _createDoctorUseCase;
+
   CreateDoctorCubit(
       this._shareCubit,
       this._getHealthSubcategoriesUseCase,
@@ -41,7 +42,19 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
       _saveTextEditingControllers();
       _saveWorkDays();
       String? checkFilledMessage = _createDoctorParams.isFilled();
-      emit(CreateDoctorError(checkFilledMessage ?? ""));
+      if (checkFilledMessage == null) {
+        emit(CreateDoctorLoading("Creating Account..."));
+        final response = await _createDoctorUseCase.call(_createDoctorParams);
+        emit(CreateDoctorCloseLoading());
+        response
+            .fold((failure) => emit(CreateDoctorError("Can't Create Doctor")),
+                (data) {
+          emit(CreateDoctorSuccess(
+              "You are submit successfully. Please wait admin approve and approval."));
+        });
+      } else {
+        emit(CreateDoctorError(checkFilledMessage));
+      }
     }
   }
 

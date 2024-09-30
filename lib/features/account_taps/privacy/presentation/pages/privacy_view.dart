@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/useCase/update_privacy_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/cubit/privacy_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/cubit/privacy_state.dart';
+
 import '../../../../../core/widget/custom_text_no_login.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -39,30 +40,16 @@ class PrivacyView extends StatelessWidget {
                               onChoose: (PrivacyStatus value) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            mapPrivacyStatusToString(value),
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
-                                        privacyFriendRequest: state.privacy
-                                                ?.privacyFriendRequest ??
-                                            false,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ?? '',
+                                        privacyCountry: mapPrivacyStatusToString(value),
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
                                         privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: state.privacy?.privacyEmail ?? '',
@@ -79,30 +66,16 @@ class PrivacyView extends StatelessWidget {
                               onChoose: (PrivacyStatus value) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            mapPrivacyStatusToString(value),
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
-                                        privacyFriendRequest:
-                                            state.privacy?.privacyFriendRequest ??
-                                                false,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ?? '',
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: mapPrivacyStatusToString(value),
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
                                         privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: state.privacy?.privacyEmail ?? '',
@@ -119,30 +92,16 @@ class PrivacyView extends StatelessWidget {
                               onChoose: (PrivacyStatus value) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
-                                        privacyFriendRequest:
-                                            state.privacy?.privacyFriendRequest ??
-                                                false,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ?? '',
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
                                         privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: mapPrivacyStatusToString(value),
@@ -159,30 +118,16 @@ class PrivacyView extends StatelessWidget {
                               onChoose: (PrivacyStatus value) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
-                                        privacyFriendRequest:
-                                            state.privacy?.privacyFriendRequest ??
-                                                false,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ?? '',
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
                                         privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: state.privacy?.privacyEmail ?? '',
@@ -199,30 +144,16 @@ class PrivacyView extends StatelessWidget {
                               onChoose: (PrivacyStatus value) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            mapPrivacyStatusToString(value),
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
-                                        privacyFriendRequest: state.privacy
-                                                ?.privacyFriendRequest ??
-                                            false,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ?? '',
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: mapPrivacyStatusToString(value),
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
                                         privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: state.privacy?.privacyEmail ?? '',
@@ -239,30 +170,16 @@ class PrivacyView extends StatelessWidget {
                               onChoose: (PrivacyStatus value) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            mapPrivacyStatusToString(value),
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
-                                        privacyFriendRequest:
-                                            state.privacy?.privacyFriendRequest ??
-                                                false,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ?? '',
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: mapPrivacyStatusToString(value),
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
                                         privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: state.privacy?.privacyEmail ?? '',
@@ -279,30 +196,16 @@ class PrivacyView extends StatelessWidget {
                               onChoose: (PrivacyStatus value) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
-                                        privacyFriendRequest:
-                                            state.privacy?.privacyFriendRequest ??
-                                                false,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ?? '',
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
                                         privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: state.privacy?.privacyEmail ?? '',
@@ -319,30 +222,16 @@ class PrivacyView extends StatelessWidget {
                               onChoose: (PrivacyStatus value) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            mapPrivacyStatusToString(value),
-                                        privacyFriendRequest:
-                                            state.privacy?.privacyFriendRequest ??
-                                                false,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ?? '',
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: mapPrivacyStatusToString(value),
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
                                         privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: state.privacy?.privacyEmail ?? '',
@@ -359,29 +248,16 @@ class PrivacyView extends StatelessWidget {
                               onChoose: (PrivacyStatus value) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            mapPrivacyStatusToString(value),
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
-                                        privacyFriendRequest: state.privacy
-                                                ?.privacyFriendRequest ??
-                                            false,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ?? '',
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: mapPrivacyStatusToString(value),
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
                                         privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: state.privacy?.privacyEmail ?? '',
@@ -394,37 +270,21 @@ class PrivacyView extends StatelessWidget {
                             ),
                             PrivacyMultiSelectItem(
                               label: LocaleKeys.receiveMessages.localize,
-                              privacy:
-                                  state.privacy?.privacyReceiveMessages ?? '',
+                              privacy: state.privacy?.privacyReceiveMessages ?? '',
                               onChoose: (PrivacyStatus value) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages:
-                                            mapPrivacyStatusToString(value),
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
-                                        privacyFriendRequest: state.privacy
-                                                ?.privacyFriendRequest ??
-                                            false,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ??
-                                                '',
-                                        privacyFollowRequest:
-                                            state.privacy?.privacyFollowRequest ?? false,
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: mapPrivacyStatusToString(value),
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                        privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: state.privacy?.privacyEmail ?? '',
                                         privacyCity: state.privacy?.privacyCity ?? '',
@@ -440,29 +300,16 @@ class PrivacyView extends StatelessWidget {
                               onChoose: (PrivacyStatus value) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            mapPrivacyStatusToString(value),
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
-                                        privacyFriendRequest: state.privacy
-                                                ?.privacyFriendRequest ??
-                                            false,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ?? '',
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: mapPrivacyStatusToString(value),
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
                                         privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: state.privacy?.privacyEmail ?? '',
@@ -479,30 +326,16 @@ class PrivacyView extends StatelessWidget {
                               onChoose: (PrivacyStatus value) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
-                                        privacyFriendRequest:
-                                            state.privacy?.privacyFriendRequest ??
-                                                false,
-                                        privacyFriendList:
-                                            mapPrivacyStatusToString(value),
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: mapPrivacyStatusToString(value),
                                         privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: state.privacy?.privacyEmail ?? '',
@@ -519,30 +352,16 @@ class PrivacyView extends StatelessWidget {
                               onChoose: (PrivacyStatus value) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
-                                        privacyFriendRequest:
-                                            state.privacy?.privacyFriendRequest ??
-                                                false,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ?? '',
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
                                         privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: mapPrivacyStatusToString(value),
                                         privacyEmail: state.privacy?.privacyEmail ?? '',
@@ -559,30 +378,16 @@ class PrivacyView extends StatelessWidget {
                               onChoose: (PrivacyStatus value) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
-                                        privacyFriendRequest:
-                                            state.privacy?.privacyFriendRequest ??
-                                                false,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ?? '',
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
                                         privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: state.privacy?.privacyEmail ?? '',
@@ -599,30 +404,16 @@ class PrivacyView extends StatelessWidget {
                               onChoose: (PrivacyStatus value) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
-                                        privacyFriendRequest:
-                                            state.privacy?.privacyFriendRequest ??
-                                                false,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ?? '',
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
                                         privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: state.privacy?.privacyEmail ?? '',
@@ -635,35 +426,20 @@ class PrivacyView extends StatelessWidget {
                             ),
                             PrivacyMultiSelectItem(
                               label: LocaleKeys.randomAppearance.localize,
-                              privacy:
-                                  state.privacy?.privacyRandomAppearance ?? '',
+                              privacy: state.privacy?.privacyRandomAppearance ?? '',
                               onChoose: (PrivacyStatus value) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
-                                        privacyFriendRequest:
-                                            state.privacy?.privacyFriendRequest ??
-                                                false,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ?? '',
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
                                         privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: state.privacy?.privacyEmail ?? '',
@@ -676,36 +452,21 @@ class PrivacyView extends StatelessWidget {
                             ),
                             PrivacySwitchItem(
                               label: LocaleKeys.friendRequest.localize,
-                              privacy:
-                                  state.privacy?.privacyFriendRequest ?? false,
+                              privacy: state.privacy?.privacyFriendRequest ?? false,
                               onPress: (v) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
                                         privacyFriendRequest: v,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ??
-                                                '',
-                                        privacyFollowRequest:
-                                            state.privacy?.privacyFollowRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
+                                        privacyFollowRequest: state.privacy?.privacyFollowRequest ?? false,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: state.privacy?.privacyEmail ?? '',
                                         privacyCity: state.privacy?.privacyCity ?? '',
@@ -717,35 +478,20 @@ class PrivacyView extends StatelessWidget {
                             ),
                             PrivacySwitchItem(
                               label: LocaleKeys.followRequest.localize,
-                              privacy:
-                                  state.privacy?.privacyFollowRequest ?? true,
+                              privacy: state.privacy?.privacyFollowRequest ?? true,
                               onPress: (v) {
                                 context.read<PrivacyCubit>().updateDataPrivacy(
                                     params: UpdatePrivacyParams(
-                                        privacyCountry:
-                                            state.privacy?.privacyCountry ?? '',
-                                        privacySocialStatus:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyReceiveMessages: state.privacy
-                                                ?.privacyReceiveMessages ??
-                                            '',
-                                        privacyPhone:
-                                            state.privacy?.privacyPhone ?? '',
-                                        privacyLastSeen:
-                                            state.privacy?.privacyLastSeen ??
-                                                '',
-                                        privacyLanguage:
-                                            state.privacy?.privacyLanguage ??
-                                                '',
-                                        privacyJob:
-                                            state.privacy?.privacyJob ?? '',
-                                        privacyIsMale:
-                                            state.privacy?.privacyIsMale ?? '',
-                                        privacyFriendRequest:
-                                            state.privacy?.privacyFriendRequest ??
-                                                false,
-                                        privacyFriendList:
-                                            state.privacy?.privacyFriendList ?? '',
+                                        privacyCountry: state.privacy?.privacyCountry ?? '',
+                                        privacySocialStatus: state.privacy?.privacyPhone ?? '',
+                                        privacyReceiveMessages: state.privacy?.privacyReceiveMessages ?? '',
+                                        privacyPhone: state.privacy?.privacyPhone ?? '',
+                                        privacyLastSeen: state.privacy?.privacyLastSeen ?? '',
+                                        privacyLanguage: state.privacy?.privacyLanguage ?? '',
+                                        privacyJob: state.privacy?.privacyJob ?? '',
+                                        privacyIsMale: state.privacy?.privacyIsMale ?? '',
+                                        privacyFriendRequest: state.privacy?.privacyFriendRequest ?? false,
+                                        privacyFriendList: state.privacy?.privacyFriendList ?? '',
                                         privacyFollowRequest: v,
                                         privacyFollowerList: state.privacy?.privacyFollowerList ?? '',
                                         privacyEmail: state.privacy?.privacyEmail ?? '',

@@ -14,6 +14,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../social_media/tinder/data/shared/shared.dart';
+
 class ReportViewTripJoin extends StatefulWidget {
   const ReportViewTripJoin({
     super.key,

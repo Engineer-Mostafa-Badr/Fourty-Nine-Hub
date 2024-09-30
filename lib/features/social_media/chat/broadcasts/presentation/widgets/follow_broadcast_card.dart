@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -56,7 +58,7 @@ class FollowBroadcastCard extends StatelessWidget {
             ),
             InkWell(
               child: Text(
-                "Follow",
+                LocaleKeys.follow.tr(),
                 style: Styles.mediumText(
                   fontSize: 22,
                   fontWeight: FontWeight.w600,

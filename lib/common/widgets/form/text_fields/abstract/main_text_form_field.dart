@@ -14,7 +14,6 @@ abstract class MainTextFormField extends StatefulWidget {
   final TextCapitalization textCapitalization;
   final EdgeInsetsGeometry? margin;
   final bool enabled;
-  final bool noBoarder;
   final int? maxLength;
   final List<TextInputFormatter>? inputFormatters;
   final bool expanded;
@@ -27,7 +26,6 @@ abstract class MainTextFormField extends StatefulWidget {
   final bool showScrollbar;
   final bool? obscureText;
   final bool readOnly;
-  final double? hintFontSize;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final ValueChanged<String>? onChanged;
@@ -35,43 +33,41 @@ abstract class MainTextFormField extends StatefulWidget {
   final Color? cursorColor;
   final TextStyle? style;
   final VoidCallback? onTap;
-  final BoxConstraints? constraints;
   final VoidCallback? onEditComplete;
-
-  const MainTextFormField(
-      {super.key,
-      this.currentFocusNode,
-      this.minLines,
-      this.constraints,
-      this.hintFontSize,
-      this.readOnly = false,
-      this.nextFocusNode,
-      required this.currentController,
-      this.noBoarder = false,
-      required this.hintText,
-      this.keyboardType,
-      required this.validator,
-      this.textCapitalization = TextCapitalization.none,
-      this.margin = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      this.enabled = true,
-      this.maxLength,
-      this.inputFormatters,
-      this.expanded = false,
-      this.maxLines,
-      this.contentPadding,
-      this.borderColor,
-      this.hintColor,
-      this.enableSuggestions = false,
-      this.showScrollbar = false,
-      this.obscureText,
-      this.suffixIcon,
-      this.onChanged,
-      this.fillColor,
-      this.cursorColor,
-      this.style,
-      this.prefixIcon,
-      this.onTap,
-      this.onEditComplete});
+  final String? label;
+  const MainTextFormField({
+    super.key,
+    this.currentFocusNode,
+    this.minLines,
+    this.readOnly = false,
+    this.nextFocusNode,
+    required this.currentController,
+    required this.hintText,
+    this.keyboardType,
+    required this.validator,
+    this.textCapitalization = TextCapitalization.none,
+    this.margin = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+    this.enabled = true,
+    this.maxLength,
+    this.inputFormatters,
+    this.expanded = false,
+    this.maxLines,
+    this.contentPadding,
+    this.borderColor,
+    this.hintColor,
+    this.enableSuggestions = false,
+    this.showScrollbar = false,
+    this.obscureText,
+    this.suffixIcon,
+    this.onChanged,
+    this.fillColor,
+    this.cursorColor,
+    this.style,
+    this.prefixIcon,
+    this.onTap,
+    this.onEditComplete,
+    this.label,
+  });
 
   @override
   State<MainTextFormField> createState() => _MainTextFormFieldState();
@@ -87,11 +83,9 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
             () {
               var selection = widget.currentController.selection;
               var length = widget.currentController.text.length;
-              var isLast = selection ==
-                  TextSelection.fromPosition(TextPosition(offset: length - 1));
+              var isLast = selection == TextSelection.fromPosition(TextPosition(offset: length - 1));
               if (isLast) {
-                selection =
-                    TextSelection.fromPosition(TextPosition(offset: length));
+                selection = TextSelection.fromPosition(TextPosition(offset: length));
               }
             },
         onEditingComplete: widget.onEditComplete,
@@ -109,42 +103,27 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         enableSuggestions: widget.enableSuggestions,
         style: const TextStyle(color: AppColors.QUANTITY_COLOR),
         textCapitalization: widget.textCapitalization,
-        textAlignVertical:
-            widget.expanded ? const TextAlignVertical(y: -0.8) : null,
+        textAlignVertical: widget.expanded ? const TextAlignVertical(y: -0.8) : null,
         obscureText: widget.obscureText ?? false,
         minLines: widget.minLines,
         decoration: InputDecoration(
-          fillColor: widget.fillColor ??
-              (widget.enabled ? Colors.white : Colors.white),
+          fillColor: widget.fillColor ?? (widget.enabled ? Colors.white : Colors.white),
           filled: true,
-          contentPadding:
-              widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 0, 16, 0),
+          contentPadding: widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 0, 16, 0),
           hintText: widget.hintText,
-          hintStyle: TextStyle(
-            color: widget.hintColor ?? AppColors.QUANTITY_COLOR,
-            fontSize: widget.hintFontSize,
-          ),
+          labelText: widget.label,
+          hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
           suffixIcon: widget.suffixIcon,
           prefixIcon: widget.prefixIcon,
           prefixIconColor: AppColors.QUANTITY_COLOR,
-          constraints: widget.constraints,
-          enabledBorder: widget.noBoarder
-              ? InputBorder.none
-              : OutlineInputBorder(
-                  borderRadius:
-                      const BorderRadius.all(Radius.circular(UIConst.radius)),
-                  borderSide: BorderSide(
-                      color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
-                ),
-          focusedBorder: widget.noBoarder
-              ? InputBorder.none
-              : OutlineInputBorder(
-                  borderRadius:
-                      const BorderRadius.all(Radius.circular((UIConst.radius))),
-                  borderSide: BorderSide(
-                      color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
-                ),
-          errorStyle: const TextStyle(color: Colors.red),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(UIConst.radius)),
+            borderSide: BorderSide(color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: const BorderRadius.all(Radius.circular((UIConst.radius))),
+            borderSide: BorderSide(color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
+          ),
           errorBorder: const OutlineInputBorder(
             borderSide: BorderSide(
               color: Colors.red,
@@ -152,26 +131,19 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
             ),
             borderRadius: BorderRadius.all(Radius.circular(UIConst.radius)),
           ),
-          focusedErrorBorder: widget.noBoarder
-              ? InputBorder.none
-              : const OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.red,
-                    width: 1,
-                  ),
-                  borderRadius:
-                      BorderRadius.all(Radius.circular(UIConst.radius)),
-                ),
+          focusedErrorBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.red,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(UIConst.radius)),
+          ),
           counterText: '',
-          border: widget.noBoarder ? InputBorder.none : InputBorder.none,
-          disabledBorder: widget.noBoarder
-              ? InputBorder.none
-              : OutlineInputBorder(
-                  borderRadius:
-                      const BorderRadius.all(Radius.circular(UIConst.radius)),
-                  borderSide: BorderSide(
-                      color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
-                ),
+          border: InputBorder.none,
+          disabledBorder: OutlineInputBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(UIConst.radius)),
+            borderSide: BorderSide(color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
+          ),
         ),
         validator: widget.validator,
         onChanged: (text) {
@@ -191,12 +163,10 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
       textFieldWidget = Scrollbar(child: textFieldWidget);
     }
 
-    // return Container(
-    //   height: 49,
-    //   margin: widget.margin,
-    //   child: textFieldWidget,
-    // );
-    return textFieldWidget;
+    return Container(
+      margin: widget.margin,
+      child: textFieldWidget,
+    );
   }
 
   TextDirection _getDirection(String v) {

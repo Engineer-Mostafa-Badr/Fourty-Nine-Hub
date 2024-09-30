@@ -42,6 +42,8 @@ class CreateRestaurantGovernorateDropdown extends StatelessWidget {
                                     ? Colors.red
                                     : Colors.grey),
                           ),
+                          constraints: BoxConstraints.loose(Size.fromHeight(90.h)),
+
                           border: OutlineInputBorder(
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(8)),

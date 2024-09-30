@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
@@ -62,7 +65,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
           return tinderCubit.state.mainCategoryResponse?.data != null
               ? Column(
                   children: [
-                    const Sizer(),
+                    Sizer(),
                     Container(
                       padding: EdgeInsets.symmetric(
                           vertical: padding, horizontal: padding),
@@ -95,11 +98,12 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                                             : AppColors.GREY_DARK_COLOR,
                                   ),
                                 ),
-                                const Sizer(),
+                                Sizer(),
                                 Text(
                                   '${tinderCubit.state.mainCategoryResponse!.data.mainCategory.numberOfAds} ${Labels.ads}',
-                                  style: Styles.mediumText(
-                                      color: Colors.white, fontSize: textSize),
+                                  textScaler: TextScaler.noScaling,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 30.sp),
                                 )
                               ],
                             ),
@@ -108,9 +112,13 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                           Expanded(
                             child: FittedBox(
                               child: Text(
-                                tinderCubit.state.mainCategoryResponse!.data
-                                    .mainCategory.nameEn,
-                                style: Styles.headerText(
+                                context.isArabic
+                                    ? tinderCubit.state.mainCategoryResponse!
+                                        .data.mainCategory.nameAr
+                                    : tinderCubit.state.mainCategoryResponse!
+                                        .data.mainCategory.nameEn,
+                                textScaler: TextScaler.noScaling,
+                                style: TextStyle(
                                     // color: AppColors.PRIMARY_COLOR,
                                     color: Colors.white,
                                     fontSize: textSize,
@@ -122,13 +130,16 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                         ],
                       ),
                     ),
-                    const Sizer(),
-                    Label(
-                      text: widget.params.subCategory.name,
-                      style: Styles.headerText(
-                          fontSize: textSize, color: AppColors.SECONDARY_COLOR),
+                    Sizer(),
+                    Text(
+                      widget.params.subCategory.name,
+                      textScaler: TextScaler.noScaling,
+                      style: TextStyle(
+                          fontSize: 40.sp,
+                          color: AppColors.SECONDARY_COLOR,
+                          fontWeight: FontWeight.bold),
                     ),
-                    const Sizer(),
+                    Sizer(),
                     Builder(builder: (context) {
                       String provider =
                           getServiceName(widget.params.subCategory.name);
@@ -140,7 +151,9 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                         indicatorColor: AppColors.SECONDARY_COLOR,
                         indicatorSize: TabBarIndicatorSize.tab,
                         tabs: [
-                          Tab(text: provider),
+                          Tab(
+                            text: provider,
+                          ),
                           Tab(text: user),
                         ],
                       );
@@ -151,10 +164,14 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                         children: [
                           Center(
                               child: Text(
-                                  'Provider: ${getServiceName(widget.params.subCategory.name)}')),
+                            'Provider: ${getServiceName(widget.params.subCategory.name)}',
+                            textScaler: TextScaler.noScaling,
+                          )),
                           Center(
                               child: Text(
-                                  'User: ${getUserName(widget.params.subCategory.name)}')),
+                            'User: ${getUserName(widget.params.subCategory.name)}',
+                            textScaler: TextScaler.noScaling,
+                          )),
                         ],
                       ),
                     ),

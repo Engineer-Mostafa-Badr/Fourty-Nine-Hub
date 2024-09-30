@@ -1,12 +1,10 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -18,20 +16,15 @@ class MainCategoryBanner extends StatefulWidget {
   final MainCategoryEntity category;
   final bool canRegister;
   final Function()? onRegister;
-  final bool? Function()? onFavorite;
-  // const MainCategoryBanner({
-  // final Function() onFavorite;
+  final Function() onFavorite;
   bool? isFavorite;
-  final bool noCount;
+
   MainCategoryBanner({
     super.key,
     this.canRegister = false,
-    // this.favoriteName,
     this.onRegister,
     required this.category,
     required this.onFavorite,
-    this.noCount = false,
-    // required this.onFavorite,
     this.isFavorite,
   });
 
@@ -40,11 +33,11 @@ class MainCategoryBanner extends StatefulWidget {
 }
 
 class _MainCategoryBannerState extends State<MainCategoryBanner> {
-  bool isFavorite = false;
+  // late bool _isFavorite;
 
   @override
   void initState() {
-    isFavorite = widget.category.isFavorite ?? false;
+    widget.isFavorite = widget.category.isFavorite ?? false;
     super.initState();
   }
 
@@ -54,10 +47,9 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
       imageUrl: widget.category.banner,
       height: MediaQuery.sizeOf(context).height * 0.13.h,
       imageBuilder: (context, i) => Container(
-        width: double.infinity,
         padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(10.r),
           color: widget.category.banner.isNotEmpty
               ? Colors.transparent
               : AppColors.PRIMARY_COLOR,
@@ -84,45 +76,29 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                   fontSize: 45.sp),
             ),
             PositionedDirectional(
-              start: 0.h,
-              bottom: 0.h,
-              child: Column(
-                children: [
-                  context.read<UserCubit>().isLoggedIn
-                      ? InkWell(
-                          onTap: () async {
-                            final result = widget.onFavorite!();
-                            if (result == true) {
-                              print(result);
-                              setState(() {
-                                widget.category.isFavorite =
-                                    !widget.category.isFavorite!;
-                                print(widget.category.isFavorite);
-                                widget.isFavorite = result;
-                                print("===================$result");
-                              });
-                            }
-                          },
-                          child: IconButton(
-                            color: AppColors.SECONDARY_COLOR,
-                            onPressed: () async => widget.onFavorite!(),
-                            icon: Icon(widget.category.isFavorite == true
-                                ? Icons.favorite
-                                : Icons.favorite_border),
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                  if(!widget.noCount)
-                  Label(
-                    text:
-                        '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
-                    style: Styles.mediumText(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+              start: 10.w,
+              child: context.read<UserCubit>().isLoggedIn
+                  ? IconButton(
+                    color: AppColors.SECONDARY_COLOR,
+                    onPressed: () async {
+                      final result = await widget.onFavorite();
+                      print("resutlt=${result}");
+                      if (result == true) {
+                        print(result);
+                        setState(() {
+                          widget.category.isFavorite =
+                          !widget.category.isFavorite!;
+                          print(widget.category.isFavorite);
+                          widget.isFavorite = result;
+                          print("===================$result");
+                        });
+                      }
+                    },
+                    icon: Icon(widget.category.isFavorite == true
+                        ? Icons.favorite
+                        : Icons.favorite_border),
                   )
-                ],
-              ),
+                  : const SizedBox.shrink(),
             ),
           ],
         ),
@@ -157,45 +133,26 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                   fontSize: 45.sp),
             ),
             PositionedDirectional(
-              start: 0,
-              child: Column(
-                children: [
-                  context.read<UserCubit>().isLoggedIn
-                      ? InkWell(
-                          onTap: () async {
-                            final result = widget.onFavorite!();
-                            if (result != null && result != widget.isFavorite) {
-                              setState(() {
-                                widget.isFavorite = result;
-                                print("===================$result");
-                              });
-                            }
-                          },
-                          child: Icon(
-                            widget.isFavorite == true
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            color: AppColors.SECONDARY_COLOR,
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                  if(!widget.noCount)
-                  Column(
-                    children: [
-                      Sizer(
-                    height: 15.h,
-                  ),
-                  Label(
-                    text: '${widget.category.total.toShortScale} ${Labels.ads}',
-                    style: Styles.mediumText(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  )
-                    ],
-                  )
-                ],
-              ),
+              start: 10.w,
+              child: context.read<UserCubit>().isLoggedIn
+                  ? InkWell(
+                      onTap: () async {
+                        final result = await widget.onFavorite();
+                        if (result != null && result != widget.isFavorite) {
+                          setState(() {
+                            widget.isFavorite = result;
+                            print("===================$result");
+                          });
+                        }
+                      },
+                      child: Icon(
+                        widget.isFavorite == true
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: AppColors.SECONDARY_COLOR,
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
           ],
         ),
@@ -206,7 +163,10 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
   Widget _buildRegisterButton() {
     if (widget.canRegister) {
       return InkWell(
-        onTap: () => widget.onRegister?.call(),
+        onTap: () {
+          log('88888888888888888888888888');
+          widget.onRegister?.call();
+        },
         child: Text(Labels.register,
             style: Styles.mediumText(
                 color: Colors.white, fontWeight: FontWeight.bold)),

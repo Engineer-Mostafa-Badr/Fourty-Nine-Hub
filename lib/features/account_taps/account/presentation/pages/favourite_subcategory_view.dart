@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
@@ -9,16 +10,14 @@ import 'package:fourtyninehub/features/account_taps/account/domain/entities/favo
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/favourite_sub_category_card.dart';
 
-class FavSubCategoryView extends StatefulWidget {
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../res/style/styles.dart';
+
+class FavSubCategoryView extends StatelessWidget {
   const FavSubCategoryView({
     super.key,
   });
 
-  @override
-  State<FavSubCategoryView> createState() => _FavTinderSubCategoryCardState();
-}
-
-class _FavTinderSubCategoryCardState extends State<FavSubCategoryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,11 +28,12 @@ class _FavTinderSubCategoryCardState extends State<FavSubCategoryView> {
           builder: (context, state) {
         final controller = context.read<FavouriteSubCategoryCubit>();
         return Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.w),
           child: PaginationView<FavouriteSubcategoryEntity>(
             build: (ScrollController scrollController,
                 List<FavouriteSubcategoryEntity> data) {
-              return GridView.builder(
+              if (data.isNotEmpty) {
+                return GridView.builder(
                 itemCount: data.length,
                 controller: scrollController,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -50,6 +50,15 @@ class _FavTinderSubCategoryCardState extends State<FavSubCategoryView> {
                   },
                 ),
               );
+              } else {
+                return Center(
+                  child: Label(
+                      style: Styles.mediumText(fontSize: 60.sp),
+                      maxLines: 3,
+                      textAlign: TextAlign.center,
+                      text:
+                      LocaleKeys.noFavouriteSubCategory.localize));
+              }
             },
             fetchData: (PaginationParams paginationParams) => context
                 .read<FavouriteSubCategoryCubit>()

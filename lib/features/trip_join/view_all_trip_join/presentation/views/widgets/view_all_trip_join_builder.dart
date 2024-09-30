@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/request_trip_join_cubit/request_trip_join_cubit.dart';
@@ -46,7 +48,7 @@ class _ViewAllTripJoinCardBuilderState
             height: MediaQuery.of(context).size.height * 0.8,
             width: double.infinity,
             alignment: Alignment.center,
-            child: const Text('There are no trips available till now'),
+            child: Text(LocaleKeys.noTripsAvailable.localize),
           );
         }
         return ListView.builder(
@@ -63,11 +65,25 @@ class _ViewAllTripJoinCardBuilderState
                   _reportOnTap(context, index);
                 },
                 premuimRequestOnTap: () async {
-                  if (await _userApproved(
+                  if (await _isPremuim(
                     tripJoinCardEntity,
                     tripJoinCardEntity.categoryId ?? '',
-                    'Trip Join Subscription',
-                  )) {}
+                    LocaleKeys.tripjoinPremuimSubscription.localize,
+                  )) {
+                    await showModalBottomSheet(
+                      context: context,
+                      isDismissible: true,
+                      isScrollControlled: true,
+                      builder: (_) {
+                        return BlocProvider.value(
+                            value:
+                                BlocProvider.of<RequestTripJoinCubit>(context),
+                            child: RequstTripJoinBottomSheet(
+                                tripJoinCardEntity: tripJoinCardEntity,
+                                isPremium: true));
+                      },
+                    );
+                  }
                 },
                 requestOnTap: () async {
                   await showModalBottomSheet(
@@ -88,7 +104,7 @@ class _ViewAllTripJoinCardBuilderState
                   if (await _userApproved(
                     tripJoinCardEntity,
                     UIConst.chatNormalId,
-                    'Chat Subscription',
+                    LocaleKeys.chatSubscription.localize,
                   )) {
                     launchUrlString("tel://${tripJoinCardEntity.phone}");
                   }
@@ -97,14 +113,14 @@ class _ViewAllTripJoinCardBuilderState
                   if (await _userApproved(
                     tripJoinCardEntity,
                     UIConst.chatNormalId,
-                    'Chat Subscription',
+                    LocaleKeys.chatSubscription.localize,
                   )) {}
                 },
                 subscribeMessageOnTap: () async {
                   if (await _userApproved(
                     tripJoinCardEntity,
                     tripJoinCardEntity.categoryId ?? '',
-                    'Trip Join Subscription',
+                    LocaleKeys.tripjoinPremuimSubscription.localize,
                   )) {}
                 },
               );
@@ -119,18 +135,36 @@ class _ViewAllTripJoinCardBuilderState
     );
   }
 
-  Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity,
+  Future<bool> _isPremuim(TripJoinCardEntity tripJoinCardEntity,
       String subCategoryId, String title) async {
-    if (tripJoinCardEntity.isApproved == null ||
-        tripJoinCardEntity.isApproved == false) {
+    if (tripJoinCardEntity.subscribedPremium == null ||
+        tripJoinCardEntity.subscribedPremium == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-        wallets: [WalletTypes.balance],
+        wallets: [
+          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
+        ],
         subCategoryId: subCategoryId,
         title: title,
       );
       return false;
     }
-    return false;
+    return true;
+  }
+
+  Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity,
+      String subCategoryId, String title) async {
+    if (tripJoinCardEntity.isApproved == null ||
+        tripJoinCardEntity.isApproved == false) {
+      await serviceLocator<SubscriptionController>().showSubscriptionPlans(
+        wallets: [
+          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
+        ],
+        subCategoryId: subCategoryId,
+        title: title,
+      );
+      return false;
+    }
+    return true;
   }
 
   void _reportOnTap(BuildContext context, int index) {

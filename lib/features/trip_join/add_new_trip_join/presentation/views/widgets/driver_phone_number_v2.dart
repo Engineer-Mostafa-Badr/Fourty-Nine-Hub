@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
 
 class DriverPhoneNumberV2 extends StatefulWidget {
@@ -35,7 +37,7 @@ class _DriverPhoneNumberV2State extends State<DriverPhoneNumberV2> {
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
         fillColor: Colors.transparent,
-        label: const Text('Phone Number'),
+        label: Text(LocaleKeys.phoneNumber.localize),
         isDense: true, // Added this
         contentPadding: const EdgeInsets.all(14),
       ),
@@ -53,9 +55,9 @@ class _DriverPhoneNumberV2State extends State<DriverPhoneNumberV2> {
     String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
     RegExp regExp = RegExp(pattern);
     if (value == null || value.isEmpty) {
-      return 'Please enter mobile number';
+      return LocaleKeys.youCantLeaveFieldEmpty.localize;
     } else if (!regExp.hasMatch(value)) {
-      return 'Please enter valid mobile number';
+      return LocaleKeys.enterValidPhoneNumber.localize;
     }
     return null;
   }

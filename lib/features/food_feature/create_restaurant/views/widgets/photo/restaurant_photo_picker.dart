@@ -63,7 +63,7 @@ class _CreateRestaurantProfilePhotoPickerState
                         borderColor: state is ValidationState &&
                                 (state.isRestaurantPhoto ?? true)
                             ? Colors.red
-                            : Colors.black,
+                            : Colors.grey,
                       );
                     }),
                   ),

@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/banner_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/wallet_home_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 
 import '../../../../core/error/failure.dart';
@@ -55,5 +56,10 @@ class FourtyNineRepositoryImpl implements FourtyNineRepository {
   @override
   Future<Either<Failure, BannerModel>> getBannerById({required String id}) {
     return _fourtyNineRemoteDataSource.getBannerById(id: id);
+  }
+
+  @override
+  Future<Either<Failure, WalletHomeEntity>> getWalletHome() {
+    return _fourtyNineRemoteDataSource.getWalletHome();
   }
 }

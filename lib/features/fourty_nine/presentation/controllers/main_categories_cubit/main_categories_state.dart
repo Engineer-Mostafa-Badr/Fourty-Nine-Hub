@@ -4,34 +4,28 @@ class MainCategoriesState {
   final StateStatus status;
   final Failure? failure;
   final int selectedIndex;
-  final GiftEntity? gift;
-  final WalletEntity? wallet;
-  final BalanceDataEntity? balance;
   final List<MainCategoryEntity>? data;
-  MainCategoriesState(
-      {this.status = StateStatus.initial,
-      this.failure,
-      this.selectedIndex = 0,
-      this.data,
-      this.wallet,
-      this.balance,
-      this.gift});
+  final WalletHomeEntity? wallet;
+  MainCategoriesState({
+    this.status = StateStatus.initial,
+    this.failure,
+    this.selectedIndex = 0,
+    this.data,
+    this.wallet,
+  });
 
   MainCategoriesState copyWith(
       {StateStatus? status,
       Failure? failure,
       int? selectedIndex,
-      GiftEntity? gift,
-      WalletEntity? wallet,
-      BalanceDataEntity? balance,
+      WalletHomeEntity? wallet,
       List<MainCategoryEntity>? data}) {
     return MainCategoriesState(
-        status: status ?? this.status,
-        failure: failure ?? this.failure,
-        selectedIndex: selectedIndex ?? this.selectedIndex,
-        data: data ?? this.data,
-        wallet: wallet ?? this.wallet,
-        balance: balance ?? this.balance,
-        gift: gift ?? this.gift);
+      status: status ?? this.status,
+      failure: failure ?? this.failure,
+      selectedIndex: selectedIndex ?? this.selectedIndex,
+      data: data ?? this.data,
+      wallet: wallet ?? this.wallet,
+    );
   }
 }

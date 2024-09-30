@@ -8,10 +8,14 @@ class RequstTripJoinUseCase {
   RequstTripJoinUseCase({
     required this.viewAllTripJoinRepo,
   });
-  Future<Either<Failure, bool>> call({
-    required String addId,
-    required String mobile,
-  }) {
-    return viewAllTripJoinRepo.requestTripJoin(addId: addId, mobile: mobile);
+  Future<Either<Failure, bool>> call(
+      {required String addId,
+      required String mobile,
+      bool premuimRequest = false}) {
+    return viewAllTripJoinRepo.requestTripJoin(
+      addId: addId,
+      mobile: mobile,
+      premuimRequest: premuimRequest,
+    );
   }
 }

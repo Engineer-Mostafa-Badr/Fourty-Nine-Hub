@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -16,7 +17,9 @@ import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 
 class InstagramView extends StatefulWidget {
-  const InstagramView({super.key});
+  final bool hideAppBar;
+
+  const InstagramView({super.key, this.hideAppBar = false});  // Default: show AppBar
 
   @override
   State<InstagramView> createState() => _InstagramViewState();
@@ -31,15 +34,13 @@ class _InstagramViewState extends State<InstagramView> {
     super.initState();
 
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
         if (!_isScrollingDown) {
           setState(() {
             _isScrollingDown = true;
           });
         }
-      } else if (scrollController.position.userScrollDirection ==
-          ScrollDirection.forward) {
+      } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
         if (_isScrollingDown) {
           setState(() {
             _isScrollingDown = false;
@@ -54,17 +55,15 @@ class _InstagramViewState extends State<InstagramView> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: const HomeAppbar(
-          isWithBackArrow: true,
-        ),
-        drawer: const DrawerWidget(),
-        floatingActionButton: _isScrollingDown
+        appBar: widget.hideAppBar
             ? null
-            : const FloatingButton(
-                changeView: 3,
-              ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: BottomNavigator(
+            : const HomeAppbar(isWithBackArrow: true),  // Conditionally show AppBar
+        drawer: widget.hideAppBar ? null : const DrawerWidget(),  // Conditionally show Drawer
+        floatingActionButton: _isScrollingDown || widget.hideAppBar
+            ? null
+            : const FloatingButton(changeView: 3),  // Conditionally show FAB
+        floatingActionButtonLocation:_isScrollingDown || widget.hideAppBar? null:FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar:  BottomNavigator(  // Conditionally show BottomNavigator
           scrollController: scrollController,
           isScrollingDown: _isScrollingDown,
           mainCategory: 3,
@@ -74,22 +73,21 @@ class _InstagramViewState extends State<InstagramView> {
           builder: (context, state) {
             return context.read<UserCubit>().isLoggedIn
                 ? Column(
-                    children: [
-                      _buildTabBar(context),
-                      Expanded(
-                        child:
-                            InstagramPosts(scrollController: scrollController),
-                      ),
-                    ],
-                  )
+              children: [
+                _buildTabBar(context),
+                Expanded(
+                  child: InstagramPosts(scrollController: scrollController),
+                ),
+              ],
+            )
                 : Column(
-                    children: [
-                      _buildTabBar(context),
-                      Expanded(
-                          child: InstagramGlobalPosts(
-                              scrollController: scrollController)),
-                    ],
-                  );
+              children: [
+                _buildTabBar(context),
+                Expanded(
+                    child: InstagramGlobalPosts(
+                        scrollController: scrollController)),
+              ],
+            );
           },
         ),
       ),
@@ -104,7 +102,7 @@ class _InstagramViewState extends State<InstagramView> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: List.generate(
           2,
-          (i) => GestureDetector(
+              (i) => GestureDetector(
             onTap: () {
               if (i == 1) {
                 print(context.read<UserCubit>().token);
@@ -116,15 +114,16 @@ class _InstagramViewState extends State<InstagramView> {
             child: Container(
               decoration: i == 0
                   ? const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                            color: AppColors.PRIMARY_COLOR, width: 2),
-                      ),
-                    )
+                border: Border(
+                  bottom: BorderSide(
+                      color: AppColors.PRIMARY_COLOR, width: 2),
+                ),
+              )
                   : null,
               child: Icon(
                 i == 0 ? Icons.grid_4x4_outlined : Icons.person,
                 color: i == 0 ? AppColors.PRIMARY_COLOR : Colors.grey,
+                size: 40.w,
               ),
             ),
           ),
@@ -133,3 +132,4 @@ class _InstagramViewState extends State<InstagramView> {
     );
   }
 }
+

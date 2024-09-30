@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -14,8 +15,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
@@ -76,9 +75,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
         child: BlocBuilder<WalletCubit, WalletState>(
           builder: (context, state) {
             final visibleSubscriptions = state.subscription?.isNotEmpty == true
-                ? (showMore
-                    ? state.subscription
-                    : state.subscription!.take(2).toList())
+                ? (showMore ? state.subscription : state.subscription!.take(2).toList())
                 : [];
 
             return RefreshIndicator(
@@ -105,8 +102,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                         const Sizer(),
                         Expanded(
                           child: Label(
-                            text:
-                                '${LocaleKeys.minimum.localize}500 ${LocaleKeys.transaction.localize}',
+                            text: '${LocaleKeys.minimum.localize}500 ${LocaleKeys.transaction.localize}',
                             style: Styles.mediumText(color: Colors.grey),
                           ),
                         ),
@@ -114,8 +110,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                     ),
                   ),
                   const Sizer(),
-                  state.wallet?.realAmount != null &&
-                          state.wallet!.realAmount! >= 500
+                  state.wallet?.realAmount != null && state.wallet!.realAmount! >= 500
                       ? AppButton(
                           label: LocaleKeys.withdraw.localize,
                           color: AppColors.AUTH_CONTAINER_COLOR,
@@ -124,11 +119,9 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    BlocProvider<PaymentCubit>(
-                                  create: (BuildContext context) =>
-                                      serviceLocator(),
-                                  child: const PaymentView(
+                                builder: (context) => BlocProvider<PaymentCubit>(
+                                  create: (BuildContext context) => serviceLocator(),
+                                  child: PaymentView(
                                     amountId: '',
                                     amount: 500,
                                   ),
@@ -174,15 +167,10 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(showMore
-                            ? Icons.arrow_drop_down_rounded
-                            : Icons.arrow_drop_up_rounded),
+                        Icon(showMore ? Icons.arrow_drop_down_rounded : Icons.arrow_drop_up_rounded),
                         Label(
-                          text: showMore
-                              ? LocaleKeys.showLess.localize
-                              : LocaleKeys.showMore.localize,
-                          style: Styles.smallText(
-                              color: Theme.of(context).primaryColor),
+                          text: showMore ? LocaleKeys.showLess.localize : LocaleKeys.showMore.localize,
+                          style: Styles.smallText(color: Theme.of(context).primaryColor),
                         ),
                       ],
                     ),
@@ -203,14 +191,9 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
                                 final item = data[index];
-                                final DateTime createdAt =
-                                    DateTime.parse(item.createdAt);
-                                final DateTime egyptTime = createdAt
-                                    .toUtc()
-                                    .add(const Duration(hours: 3));
-                                final String formattedDateTime =
-                                    DateFormat('dd/MM/yyyy, h:mm a')
-                                        .format(egyptTime);
+                                final DateTime createdAt = DateTime.parse(item.createdAt);
+                                final DateTime egyptTime = createdAt.toUtc().add(const Duration(hours: 3));
+                                final String formattedDateTime = DateFormat('dd/MM/yyyy, h:mm a').format(egyptTime);
                                 return WalletHistoryCard(
                                   title: '${item.transactionAmount}',
                                   subTitle: formattedDateTime,
@@ -224,13 +207,11 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                               itemCount: data.length,
                             )
                           : Center(
-                              child: Label(
-                                  text: LocaleKeys.noHistoryAvailable.localize),
+                              child: Label(text: LocaleKeys.noHistoryAvailable.localize),
                             );
                     },
                     fetchData: (PaginationParams paginationParams) {
-                      return context.read<WalletCubit>().fetchWalletHistory(
-                          paginationParams: paginationParams);
+                      return context.read<WalletCubit>().fetchWalletHistory(paginationParams: paginationParams);
                     },
                   ),
                 ],

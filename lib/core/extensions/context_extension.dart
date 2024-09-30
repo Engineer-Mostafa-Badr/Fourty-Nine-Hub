@@ -23,6 +23,8 @@ extension ContextExtensions on BuildContext {
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
 
   bool get isArabic => Localizations.localeOf(this).languageCode == 'ar';
+  TextDirection get textDirection =>
+      isArabic ? TextDirection.rtl : TextDirection.ltr;
 
   FocusScopeNode get foucsScopeNode => FocusScope.of(this);
 }

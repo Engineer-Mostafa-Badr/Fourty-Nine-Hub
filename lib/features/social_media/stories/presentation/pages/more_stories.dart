@@ -1,17 +1,821 @@
+// // // // // import 'package:easy_localization/easy_localization.dart';
+// // // // // import 'package:flutter/material.dart';
+// // // // // import 'package:flutter/widgets.dart';
+// // // // // import 'package:flutter_bloc/flutter_bloc.dart';
+// // // // // import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+// // // // // import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
+// // // // // import 'package:fourtyninehub/res/style/const.dart';
+// // // // // import 'package:fourtyninehub/service_locator/service_locator.dart';
+// // // // // import 'package:story_view/controller/story_controller.dart';
+// // // // // import 'package:story_view/widgets/story_view.dart';
+// // // // //
+// // // // // import '../../data/models/friends_stories_model.dart';
+// // // // // import '../../data/repositories/StoriesRpo.dart';
+// // // // // import '../cubit/stories_cubit.dart';
+// // // // //
+// // // // // StoryItem createStoryItem(Story storyData, StoryController controller) {
+// // // // //   switch (storyData.type) {
+// // // // //     case 'text':
+// // // // //       return StoryItem.text(
+// // // // //         title: storyData.content!,
+// // // // //         backgroundColor: Colors.deepOrange,
+// // // // //       );
+// // // // //     case 'image':
+// // // // //       return StoryItem.pageImage(
+// // // // //         url: storyData.content!,
+// // // // //         caption: storyData.caption != null && storyData.caption != 'null'
+// // // // //             ? Text(
+// // // // //                 storyData.caption!,
+// // // // //                 style: const TextStyle(color: Colors.white),
+// // // // //                 textAlign: TextAlign.center,
+// // // // //               )
+// // // // //             : null,
+// // // // //         controller: controller,
+// // // // //       );
+// // // // //     case 'video':
+// // // // //       return StoryItem.pageVideo(
+// // // // //         storyData.content!,
+// // // // //         caption: storyData.caption != null && storyData.caption != 'null'
+// // // // //             ? Text(
+// // // // //                 storyData.caption!,
+// // // // //                 style: const TextStyle(color: Colors.white),
+// // // // //                 textAlign: TextAlign.center,
+// // // // //               )
+// // // // //             : null,
+// // // // //         controller: controller,
+// // // // //       );
+// // // // //     default:
+// // // // //       return StoryItem.text(
+// // // // //         title: "Unknown story type",
+// // // // //         backgroundColor: Colors.red,
+// // // // //       );
+// // // // //   }
+// // // // // }
+// // // // //
+// // // // // class MoreStories extends StatefulWidget {
+// // // // //   const MoreStories({super.key});
+// // // // //
+// // // // //   @override
+// // // // //   MoreStoriesState createState() => MoreStoriesState();
+// // // // // }
+// // // // //
+// // // // // class MoreStoriesState extends State<MoreStories> {
+// // // // //   late StoryCubit _storyCubit;
+// // // // //
+// // // // //   @override
+// // // // //   void initState() {
+// // // // //     super.initState();
+// // // // //     // _storyCubit = StoryCubit(StoryRepository());
+// // // // //     _storyCubit = serviceLocator<StoryCubit>();
+// // // // //     _storyCubit.fetchStories();
+// // // // //   }
+// // // // //
+// // // // //   @override
+// // // // //   void dispose() {
+// // // // //     super.dispose();
+// // // // //   }
+// // // // //
+// // // // //   void _navigateToNextUser(int currentIndex) {
+// // // // //     if (currentIndex < _storyCubit.state.stories.length - 1) {
+// // // // //       // Navigate to the next user's stories
+// // // // //       Navigator.of(context).pushReplacement(
+// // // // //         MaterialPageRoute(
+// // // // //           builder: (context) => BlocProvider.value(
+// // // // //             value: serviceLocator<StoryCubit>(),
+// // // // //             child: MoreStoriesUserView(
+// // // // //               userIndex: currentIndex + 1,
+// // // // //               storyCubit: _storyCubit,
+// // // // //             ),
+// // // // //           ),
+// // // // //         ),
+// // // // //       );
+// // // // //     } else {
+// // // // //       Navigator.pop(context); // Close the story view after the last story
+// // // // //     }
+// // // // //   }
+// // // // //
+// // // // //   @override
+// // // // //   Widget build(BuildContext context) {
+// // // // //     return Scaffold(
+// // // // //       extendBodyBehindAppBar: true,
+// // // // //       body: BlocBuilder<StoryCubit, StoryState>(
+// // // // //         bloc: _storyCubit,
+// // // // //         builder: (context, state) {
+// // // // //           if (state.isLoading && state.stories.isEmpty) {
+// // // // //             return const Center(child: CircularProgressIndicator());
+// // // // //           } else if (state.stories.isNotEmpty) {
+// // // // //             return PageView.builder(
+// // // // //               itemCount: state.stories.length,
+// // // // //               itemBuilder: (context, userIndex) {
+// // // // //                 final userStory = state.stories[userIndex];
+// // // // //                 final userController = StoryController();
+// // // // //
+// // // // //                 return Stack(
+// // // // //                   key: UniqueKey(),
+// // // // //                   children: [
+// // // // //                     StoryView(
+// // // // //                       storyItems: userStory.stories
+// // // // //                               ?.map((story) =>
+// // // // //                                   createStoryItem(story, userController))
+// // // // //                               .toList() ??
+// // // // //                           [],
+// // // // //                       onStoryShow: (storyItem, storyIndex) {
+// // // // //                         print(
+// // // // //                             'onStoryShow --------------------------------------------');
+// // // // //                         final createdAt =
+// // // // //                             userStory.stories![storyIndex].createdAt;
+// // // // //                         context
+// // // // //                             .read<StoryCubit>()
+// // // // //                             .updateCurrentStoryCreatedAt(createdAt!);
+// // // // //
+// // // // //                         if (userIndex == state.stories.length - 1 &&
+// // // // //                             storyIndex == userStory.stories!.length - 1 &&
+// // // // //                             !state.hasReachedMax) {
+// // // // //                           _storyCubit.fetchStories(loadMore: true);
+// // // // //                         }
+// // // // //                       },
+// // // // //                       onComplete: () {
+// // // // //                         print(
+// // // // //                             'onComplete --------------------------------------------');
+// // // // //
+// // // // //                         _navigateToNextUser(userIndex);
+// // // // //                       },
+// // // // //                       progressPosition: ProgressPosition.top,
+// // // // //                       repeat: false,
+// // // // //                       controller: userController,
+// // // // //                     ),
+// // // // //                     Positioned(
+// // // // //                       top: kToolbarHeight,
+// // // // //                       left: 0,
+// // // // //                       right: 0,
+// // // // //                       child: Padding(
+// // // // //                         padding: EdgeInsets.symmetric(horizontal: 8.0),
+// // // // //                         child: Row(
+// // // // //                           crossAxisAlignment: CrossAxisAlignment.center,
+// // // // //                           children: [
+// // // // //                             IconButton(
+// // // // //                               onPressed: () {
+// // // // //                                 if (Navigator.canPop(context)) {
+// // // // //                                   Navigator.pop(context);
+// // // // //                                 }
+// // // // //                               },
+// // // // //                               icon: const Icon(
+// // // // //                                 Icons.arrow_back_ios,
+// // // // //                                 color: Colors.white,
+// // // // //                                 shadows: <Shadow>[
+// // // // //                                   Shadow(
+// // // // //                                     color: Colors.black,
+// // // // //                                     offset: Offset(2, 2),
+// // // // //                                     blurRadius: 9,
+// // // // //                                   ),
+// // // // //                                 ],
+// // // // //                               ),
+// // // // //                             ),
+// // // // //                             CircleAvatar(
+// // // // //                               minRadius: 25,
+// // // // //                               onBackgroundImageError: (exception, stackTrace) =>
+// // // // //                                   const NetworkImage(
+// // // // //                                 UIConst.profilePlaceHolder,
+// // // // //                               ),
+// // // // //                               backgroundImage: NetworkImage(
+// // // // //                                 userStory.user?.profilePictureUrl ?? '',
+// // // // //                               ),
+// // // // //                             ),
+// // // // //                             SizedBox(
+// // // // //                               width: 8,
+// // // // //                             ),
+// // // // //                             Column(
+// // // // //                               mainAxisAlignment: MainAxisAlignment.center,
+// // // // //                               crossAxisAlignment: CrossAxisAlignment.start,
+// // // // //                               children: [
+// // // // //                                 Text(
+// // // // //                                   capitalizeAndSplit2Only(
+// // // // //                                       '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
+// // // // //                                   style: const TextStyle(
+// // // // //                                     fontSize: 18.sp,
+// // // // //                                     color: Colors.white,
+// // // // //                                   ),
+// // // // //                                 ),
+// // // // //                                 SizedBox(
+// // // // //                                   height: 4.h,
+// // // // //                                 ),
+// // // // //                                 BlocConsumer<StoryCubit, StoryState>(
+// // // // //                                   listener: (context, state) {
+// // // // //                                     // TODO: implement listener
+// // // // //                                   },
+// // // // //                                   builder: (context, state) {
+// // // // //                                     if (state.currentStoryCreatedAt != null) {
+// // // // //                                       return Text(
+// // // // //                                         'Last Seen: ${DateFormat('hh:mm a').format(state.currentStoryCreatedAt!)}',
+// // // // //                                         style: const TextStyle(
+// // // // //                                           fontSize: 12.sp,
+// // // // //                                           color: Colors.white70,
+// // // // //                                         ),
+// // // // //                                       );
+// // // // //                                     }
+// // // // //                                     return Sizer();
+// // // // //                                   },
+// // // // //                                 ),
+// // // // //                               ],
+// // // // //                             ),
+// // // // //                             const Spacer(),
+// // // // //                             IconButton(
+// // // // //                               onPressed: () {},
+// // // // //                               icon: const Icon(
+// // // // //                                 Icons.more_vert,
+// // // // //                                 color: Colors.white,
+// // // // //                               ),
+// // // // //                             ),
+// // // // //                           ],
+// // // // //                         ),
+// // // // //                       ),
+// // // // //                     ),
+// // // // //                   ],
+// // // // //                 );
+// // // // //               },
+// // // // //             );
+// // // // //           } else if (state is StoryError) {
+// // // // //             return Center(
+// // // // //               child: Text("Failed to load stories: ${state.error}"),
+// // // // //             );
+// // // // //           }
+// // // // //           return Container();
+// // // // //         },
+// // // // //       ),
+// // // // //     );
+// // // // //   }
+// // // // //
+// // // // // // @override
+// // // // // // Widget build(BuildContext context) {
+// // // // // //   return Scaffold(
+// // // // // //     extendBodyBehindAppBar: true,
+// // // // // //     body: BlocBuilder<StoryCubit, StoryState>(
+// // // // // //       bloc: _storyCubit,
+// // // // // //       builder: (context, state) {
+// // // // // //         if (state.isLoading && state.stories.isEmpty) {
+// // // // // //           return const Center(child: CircularProgressIndicator());
+// // // // // //         } else if (state.stories.isNotEmpty) {
+// // // // // //           return PageView.builder(
+// // // // // //             itemCount: state.stories.length,
+// // // // // //             itemBuilder: (context, userIndex) {
+// // // // // //               final userStory = state.stories[userIndex];
+// // // // // //               final userController = StoryController();
+// // // // // //
+// // // // // //               return Container(
+// // // // // //                 color: Colors.black,
+// // // // // //                 height: double.infinity,
+// // // // // //                 child: Column(
+// // // // // //                   crossAxisAlignment: CrossAxisAlignment.stretch,
+// // // // // //                   children: [
+// // // // // //                     Padding(
+// // // // // //                       padding: EdgeInsets.only(top: 25,bottom: 4),
+// // // // // //                       child: Row(
+// // // // // //                         crossAxisAlignment: CrossAxisAlignment.center,
+// // // // // //                         children: [
+// // // // // //                           IconButton(
+// // // // // //                             onPressed: () {
+// // // // // //                               if (Navigator.canPop(context)) {
+// // // // // //                                 Navigator.pop(context);
+// // // // // //                               }
+// // // // // //                             },
+// // // // // //                             icon: const Icon(
+// // // // // //                               Icons.arrow_back_ios,
+// // // // // //                               color: Colors.white,
+// // // // // //                               shadows: <Shadow>[
+// // // // // //                                 Shadow(
+// // // // // //                                   color: Colors.black,
+// // // // // //                                   offset: Offset(2, 2),
+// // // // // //                                   blurRadius: 9,
+// // // // // //                                 ),
+// // // // // //                               ],
+// // // // // //                             ),
+// // // // // //                           ),
+// // // // // //                           CircleAvatar(
+// // // // // //                             minRadius: 25,
+// // // // // //                             onBackgroundImageError:
+// // // // // //                                 (exception, stackTrace) =>
+// // // // // //                                     const NetworkImage(
+// // // // // //                               UIConst.profilePlaceHolder,
+// // // // // //                             ),
+// // // // // //                             backgroundImage: NetworkImage(
+// // // // // //                               userStory.user?.profilePictureUrl ?? '',
+// // // // // //                             ),
+// // // // // //                           ),
+// // // // // //                           SizedBox(
+// // // // // //                             width: 8,
+// // // // // //                           ),
+// // // // // //                           Column(
+// // // // // //                             mainAxisAlignment: MainAxisAlignment.center,
+// // // // // //                             crossAxisAlignment: CrossAxisAlignment.start,
+// // // // // //                             children: [
+// // // // // //                               Text(
+// // // // // //                                 capitalizeAndSplit2Only('${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
+// // // // // //                                 style: const TextStyle(
+// // // // // //                                   fontSize: 18.sp,
+// // // // // //                                   color: Colors.white,
+// // // // // //                                 ),
+// // // // // //                               ),
+// // // // // //                               SizedBox(height: 4.h,),
+// // // // // //                               const Text(
+// // // // // //                                 'Last Seen: 8 minute ago',
+// // // // // //                                 style: TextStyle(
+// // // // // //                                   fontSize: 12.sp,
+// // // // // //                                   color: Colors.white70,
+// // // // // //                                 ),
+// // // // // //                               )
+// // // // // //                             ],
+// // // // // //                           ),
+// // // // // //                           const Spacer(),
+// // // // // //                           IconButton(onPressed: () {
+// // // // // //
+// // // // // //                           }, icon: const Icon(Icons.more_vert,color: Colors.white,))
+// // // // // //
+// // // // // //                         ],
+// // // // // //                       ),
+// // // // // //                     ),
+// // // // // //                     Expanded(
+// // // // // //                       child: StoryView(
+// // // // // //                         storyItems: userStory.stories
+// // // // // //                                 ?.map((story) =>
+// // // // // //                                     createStoryItem(story, userController))
+// // // // // //                                 .toList() ??
+// // // // // //                             [],
+// // // // // //                         onStoryShow: (storyItem, storyIndex) {
+// // // // // //                           print(
+// // // // // //                               'onStoryShow --------------------------------------------');
+// // // // // //
+// // // // // //                           // if (userIndex == state.stories.length -1 &&
+// // // // // //                           //     storyIndex == userStory.stories!.length-1 &&
+// // // // // //                           //     !state.hasReachedMax) {
+// // // // // //                           //   _storyCubit.fetchStories(loadMore: true);
+// // // // // //                           // }
+// // // // // //                         },
+// // // // // //                         onComplete: () {
+// // // // // //                           print(
+// // // // // //                               'onComplete --------------------------------------------');
+// // // // // //
+// // // // // //                           // _navigateToNextUser(userIndex);
+// // // // // //                         },
+// // // // // //                         progressPosition: ProgressPosition.top,
+// // // // // //                         repeat: false,
+// // // // // //                         controller: userController,
+// // // // // //                       ),
+// // // // // //                     ),
+// // // // // //                   ],
+// // // // // //                 ),
+// // // // // //               );
+// // // // // //             },
+// // // // // //           );
+// // // // // //         } else if (state is StoryError) {
+// // // // // //           return Center(
+// // // // // //             child: Text("Failed to load stories: ${state.error}"),
+// // // // // //           );
+// // // // // //         }
+// // // // // //         return Container();
+// // // // // //       },
+// // // // // //     ),
+// // // // // //   );
+// // // // // // }
+// // // // // }
+// // // // //
+// // // // // class MoreStoriesUserView extends StatefulWidget {
+// // // // //   final int userIndex;
+// // // // //   final StoryCubit storyCubit;
+// // // // //
+// // // // //   const MoreStoriesUserView(
+// // // // //       {super.key, required this.userIndex, required this.storyCubit});
+// // // // //
+// // // // //   @override
+// // // // //   State<MoreStoriesUserView> createState() => _MoreStoriesUserViewState();
+// // // // // }
+// // // // //
+// // // // // class _MoreStoriesUserViewState extends State<MoreStoriesUserView> {
+// // // // //   @override
+// // // // //   Widget build(BuildContext context) {
+// // // // //     final userStory = widget.storyCubit.state.stories[widget.userIndex];
+// // // // //     final userController = StoryController();
+// // // // //
+// // // // //     return Scaffold(
+// // // // //       extendBodyBehindAppBar: true,
+// // // // //       body: Container(
+// // // // //         color: Colors.black,
+// // // // //         height: double.infinity,
+// // // // //         child: Stack(
+// // // // //           children: [
+// // // // //             StoryView(
+// // // // //               storyItems: userStory.stories
+// // // // //                       ?.map((story) => createStoryItem(story, userController))
+// // // // //                       .toList() ??
+// // // // //                   [],
+// // // // //               onStoryShow: (storyItem, index) {
+// // // // //                 final createdAt = userStory.stories![index].createdAt;
+// // // // //                 context
+// // // // //                     .read<StoryCubit>()
+// // // // //                     .updateCurrentStoryCreatedAt(createdAt!);
+// // // // //               },
+// // // // //               onComplete: () {
+// // // // //                 if (widget.userIndex <
+// // // // //                     widget.storyCubit.state.stories.length - 1) {
+// // // // //                   Navigator.of(context).pushReplacement(
+// // // // //                     MaterialPageRoute(
+// // // // //                       builder: (context) => BlocProvider.value(
+// // // // //                         value: serviceLocator<StoryCubit>(),
+// // // // //                         child: MoreStoriesUserView(
+// // // // //                           userIndex: widget.userIndex + 1,
+// // // // //                           storyCubit: widget.storyCubit,
+// // // // //                         ),
+// // // // //                       ),
+// // // // //                     ),
+// // // // //                   );
+// // // // //                 } else {
+// // // // //                   Navigator.pop(context); // Close after the last story
+// // // // //                 }
+// // // // //               },
+// // // // //               progressPosition: ProgressPosition.top,
+// // // // //               repeat: false,
+// // // // //               controller: userController,
+// // // // //             ),
+// // // // //             Positioned(
+// // // // //               top: kToolbarHeight,
+// // // // //               left: 0,
+// // // // //               right: 0,
+// // // // //               child: Padding(
+// // // // //                 padding: EdgeInsets.symmetric(horizontal: 8.0),
+// // // // //                 child: Row(
+// // // // //                   crossAxisAlignment: CrossAxisAlignment.center,
+// // // // //                   children: [
+// // // // //                     IconButton(
+// // // // //                       onPressed: () {
+// // // // //                         if (Navigator.canPop(context)) {
+// // // // //                           Navigator.pop(context);
+// // // // //                         }
+// // // // //                       },
+// // // // //                       icon: const Icon(
+// // // // //                         Icons.arrow_back_ios,
+// // // // //                         color: Colors.white,
+// // // // //                         shadows: <Shadow>[
+// // // // //                           Shadow(
+// // // // //                             color: Colors.black,
+// // // // //                             offset: Offset(2, 2),
+// // // // //                             blurRadius: 9,
+// // // // //                           ),
+// // // // //                         ],
+// // // // //                       ),
+// // // // //                     ),
+// // // // //                     CircleAvatar(
+// // // // //                       minRadius: 25,
+// // // // //                       onBackgroundImageError: (exception, stackTrace) =>
+// // // // //                           const NetworkImage(
+// // // // //                         UIConst.profilePlaceHolder,
+// // // // //                       ),
+// // // // //                       backgroundImage: NetworkImage(
+// // // // //                         userStory.user?.profilePictureUrl ?? '',
+// // // // //                       ),
+// // // // //                     ),
+// // // // //                     SizedBox(
+// // // // //                       width: 8,
+// // // // //                     ),
+// // // // //                     Column(
+// // // // //                       mainAxisAlignment: MainAxisAlignment.center,
+// // // // //                       crossAxisAlignment: CrossAxisAlignment.start,
+// // // // //                       children: [
+// // // // //                         Text(
+// // // // //                           capitalizeAndSplit2Only(
+// // // // //                               '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
+// // // // //                           style: const TextStyle(
+// // // // //                             fontSize: 18.sp,
+// // // // //                             color: Colors.white,
+// // // // //                           ),
+// // // // //                         ),
+// // // // //                         SizedBox(
+// // // // //                           height: 4.h,
+// // // // //                         ),
+// // // // //                         BlocConsumer<StoryCubit, StoryState>(
+// // // // //                           listener: (context, state) {
+// // // // //                             // TODO: implement listener
+// // // // //                           },
+// // // // //                           builder: (context, state) {
+// // // // //                             if (state.currentStoryCreatedAt != null) {
+// // // // //                               return Text(
+// // // // //                                 'Last Seen: ${DateFormat('hh:mm a').format(state.currentStoryCreatedAt!)}',
+// // // // //                                 style: const TextStyle(
+// // // // //                                   fontSize: 12.sp,
+// // // // //                                   color: Colors.white70,
+// // // // //                                 ),
+// // // // //                               );
+// // // // //                             }
+// // // // //                             return Sizer();
+// // // // //                           },
+// // // // //                         ),
+// // // // //                       ],
+// // // // //                     ),
+// // // // //                     const Spacer(),
+// // // // //                     IconButton(
+// // // // //                       onPressed: () {},
+// // // // //                       icon: const Icon(
+// // // // //                         Icons.more_vert,
+// // // // //                         color: Colors.white,
+// // // // //                       ),
+// // // // //                     ),
+// // // // //                   ],
+// // // // //                 ),
+// // // // //               ),
+// // // // //             ),
+// // // // //           ],
+// // // // //         ),
+// // // // //       ),
+// // // // //     );
+// // // // //   }
+// // // // // }
+// // // //
 // // // // import 'package:easy_localization/easy_localization.dart';
 // // // // import 'package:flutter/material.dart';
-// // // // import 'package:flutter/widgets.dart';
 // // // // import 'package:flutter_bloc/flutter_bloc.dart';
 // // // // import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-// // // // import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
-// // // // import 'package:fourtyninehub/res/style/const.dart';
+// // // // import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
 // // // // import 'package:fourtyninehub/service_locator/service_locator.dart';
 // // // // import 'package:story_view/controller/story_controller.dart';
+// // // // import 'package:story_view/story_view.dart';
 // // // // import 'package:story_view/widgets/story_view.dart';
 // // // //
-// // // // import '../../data/models/friends_stories_model.dart';
-// // // // import '../../data/repositories/StoriesRpo.dart';
+// // // // import '../../../../../res/style/const.dart';
+// // // // import '../../../tinder/presentation/pages/user_profile.dart';
 // // // // import '../cubit/stories_cubit.dart';
+// // // //
+// // // // class StoryViewScreen extends StatefulWidget {
+// // // //   final int initialUserIndex;
+// // // //
+// // // //   const StoryViewScreen({
+// // // //     super.key,
+// // // //     this.initialUserIndex = 0,
+// // // //   });
+// // // //
+// // // //   @override
+// // // //   _StoryViewScreenState createState() => _StoryViewScreenState();
+// // // // }
+// // // //
+// // // // class _StoryViewScreenState extends State<StoryViewScreen> {
+// // // //   late PageController _pageController;
+// // // //   late int _currentUserIndex;
+// // // //   late List<UserStories> stories;
+// // // //
+// // // //   late StoryCubit _storyCubit;
+// // // //
+// // // //   @override
+// // // //   void initState() {
+// // // //     super.initState();
+// // // //     _storyCubit = serviceLocator<StoryCubit>();
+// // // //     _initializeStories();
+// // // //     _currentUserIndex = widget.initialUserIndex;
+// // // //     _pageController = PageController(initialPage: _currentUserIndex);
+// // // //   }
+// // // //
+// // // //   Future<void> _initializeStories() async {
+// // // //     try {
+// // // //       await _storyCubit.fetchStories();
+// // // //       setState(() {
+// // // //         stories = _storyCubit.state.stories;
+// // // //       });
+// // // //       print('Fetched ${stories.length} stories');
+// // // //     } catch (e) {
+// // // //       print('Error fetching stories: $e');
+// // // //       // Handle error (e.g., show error message to user)
+// // // //     }
+// // // //   }
+// // // //
+// // // //   @override
+// // // //   void dispose() {
+// // // //     _pageController.dispose();
+// // // //     super.dispose();
+// // // //   }
+// // // //
+// // // //   void _navigateToNextUser() {
+// // // //     if (_currentUserIndex < stories.length - 1) {
+// // // //       _pageController.nextPage(
+// // // //         duration: const Duration(milliseconds: 300),
+// // // //         curve: Curves.easeInOut,
+// // // //       );
+// // // //     } else {
+// // // //       Navigator.of(context).pop();
+// // // //     }
+// // // //   }
+// // // //
+// // // //   void _navigateToPreviousUser() {
+// // // //     if (_currentUserIndex > 0) {
+// // // //       _pageController.previousPage(
+// // // //         duration: const Duration(milliseconds: 300),
+// // // //         curve: Curves.easeInOut,
+// // // //       );
+// // // //     }
+// // // //   }
+// // // //
+// // // //   @override
+// // // //   Widget build(BuildContext context) {
+// // // //     return Scaffold(
+// // // //       extendBodyBehindAppBar: true,
+// // // //       body: stories.isNotEmpty
+// // // //           ? PageView.builder(
+// // // //               controller: _pageController,
+// // // //               itemCount: stories.length,
+// // // //               onPageChanged: (index) {
+// // // //                 setState(() {
+// // // //                   _currentUserIndex = index;
+// // // //                 });
+// // // //               },
+// // // //               itemBuilder: (context, index) {
+// // // //                 return UserStoryView(
+// // // //                   userStory: stories[index],
+// // // //                   onComplete: _navigateToNextUser,
+// // // //                   onPrevious: _navigateToPreviousUser,
+// // // //                 );
+// // // //               },
+// // // //             )
+// // // //           : Sizer(),
+// // // //     );
+// // // //   }
+// // // // }
+// // // //
+// // // // class UserStoryView extends StatefulWidget {
+// // // //   final UserStories userStory;
+// // // //   final VoidCallback onComplete;
+// // // //   final VoidCallback onPrevious;
+// // // //
+// // // //   const UserStoryView({
+// // // //     super.key,
+// // // //     required this.userStory,
+// // // //     required this.onComplete,
+// // // //     required this.onPrevious,
+// // // //   });
+// // // //
+// // // //   @override
+// // // //   _UserStoryViewState createState() => _UserStoryViewState();
+// // // // }
+// // // //
+// // // // class _UserStoryViewState extends State<UserStoryView> {
+// // // //   late StoryController _storyController;
+// // // //
+// // // //   @override
+// // // //   void initState() {
+// // // //     super.initState();
+// // // //     _storyController = StoryController();
+// // // //   }
+// // // //
+// // // //   @override
+// // // //   void dispose() {
+// // // //     _storyController.dispose();
+// // // //     super.dispose();
+// // // //   }
+// // // //
+// // // //   @override
+// // // //   Widget build(BuildContext context) {
+// // // //     return Stack(
+// // // //       children: [
+// // // //         StoryView(
+// // // //           storyItems: widget.userStory.stories
+// // // //                   ?.map((story) => createStoryItem(story, _storyController))
+// // // //                   .toList() ??
+// // // //               [],
+// // // //           controller: _storyController,
+// // // //           onComplete: widget.onComplete,
+// // // //           onVerticalSwipeComplete: (direction) {
+// // // //             if (direction == Direction.down) {
+// // // //               Navigator.of(context).pop();
+// // // //             }
+// // // //           },
+// // // //           progressPosition: ProgressPosition.top,
+// // // //         ),
+// // // //         _buildUserInfoBar(),
+// // // //         _buildNavigationOverlay(),
+// // // //       ],
+// // // //     );
+// // // //   }
+// // // //
+// // // //   Widget _buildUserInfoBar() {
+// // // //     return Positioned(
+// // // //       top: kToolbarHeight,
+// // // //       left: 0,
+// // // //       right: 0,
+// // // //       child: BlocProvider(
+// // // //         create: (context) => context.read<StoryCubit>(),
+// // // //         child: UserInfoBar(userStory: widget.userStory),
+// // // //       ),
+// // // //     );
+// // // //   }
+// // // //
+// // // //   Widget _buildNavigationOverlay() {
+// // // //     return GestureDetector(
+// // // //       onTapDown: (details) {
+// // // //         final screenWidth = MediaQuery.of(context).size.width;
+// // // //         if (details.globalPosition.dx < screenWidth / 2) {
+// // // //           _storyController.previous();
+// // // //         } else {
+// // // //           _storyController.next();
+// // // //         }
+// // // //       },
+// // // //       child: Container(
+// // // //         color: Colors.transparent,
+// // // //         child: Row(
+// // // //           children: [
+// // // //             Expanded(
+// // // //               child: GestureDetector(
+// // // //                 onTap: widget.onPrevious,
+// // // //                 child: Container(color: Colors.transparent),
+// // // //               ),
+// // // //             ),
+// // // //             Expanded(
+// // // //               child: GestureDetector(
+// // // //                 onTap: widget.onComplete,
+// // // //                 child: Container(color: Colors.transparent),
+// // // //               ),
+// // // //             ),
+// // // //           ],
+// // // //         ),
+// // // //       ),
+// // // //     );
+// // // //   }
+// // // // }
+// // // //
+// // // // class UserInfoBar extends StatelessWidget {
+// // // //   final UserStories userStory;
+// // // //
+// // // //   const UserInfoBar({super.key, required this.userStory});
+// // // //
+// // // //   @override
+// // // //   Widget build(BuildContext context) {
+// // // //     return Padding(
+// // // //       padding: EdgeInsets.symmetric(horizontal: 8.0),
+// // // //       child: Row(
+// // // //         crossAxisAlignment: CrossAxisAlignment.center,
+// // // //         children: [
+// // // //           _buildBackButton(context),
+// // // //           _buildUserAvatar(),
+// // // //           SizedBox(width: 8),
+// // // //           _buildUserInfo(context),
+// // // //           const Spacer(),
+// // // //           _buildMoreOptionsButton(),
+// // // //         ],
+// // // //       ),
+// // // //     );
+// // // //   }
+// // // //
+// // // //   Widget _buildBackButton(BuildContext context) {
+// // // //     return IconButton(
+// // // //       onPressed: () => Navigator.of(context).pop(),
+// // // //       icon: const Icon(
+// // // //         Icons.arrow_back_ios,
+// // // //         color: Colors.white,
+// // // //         shadows: [
+// // // //           Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 9)
+// // // //         ],
+// // // //       ),
+// // // //     );
+// // // //   }
+// // // //
+// // // //   Widget _buildUserAvatar() {
+// // // //     return CircleAvatar(
+// // // //       minRadius: 25,
+// // // //       backgroundImage: NetworkImage(userStory.user?.profilePictureUrl ?? ''),
+// // // //       onBackgroundImageError: (_, __) =>
+// // // //           const NetworkImage(UIConst.profilePlaceHolder),
+// // // //     );
+// // // //   }
+// // // //
+// // // //   Widget _buildUserInfo(BuildContext context) {
+// // // //     return Column(
+// // // //       mainAxisAlignment: MainAxisAlignment.center,
+// // // //       crossAxisAlignment: CrossAxisAlignment.start,
+// // // //       children: [
+// // // //         Text(
+// // // //           capitalizeAndSplit2Only(
+// // // //               '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
+// // // //           style: const TextStyle(fontSize: 18.sp, color: Colors.white),
+// // // //         ),
+// // // //         SizedBox(height: 4.h),
+// // // //         // BlocBuilder<StoryCubit, StoryState>(
+// // // //         //   builder: (context, state) {
+// // // //         //     if (state.currentStoryCreatedAt != null) {
+// // // //         //       return Text(
+// // // //         //         'Last Seen: ${DateFormat('hh:mm a').format(
+// // // //         //             state.currentStoryCreatedAt!)}',
+// // // //         //         style: const TextStyle(fontSize: 12.sp, color: Colors.white70),
+// // // //         //       );
+// // // //         //     }
+// // // //         //     return SizedBox.shrink();
+// // // //         //   },
+// // // //         // ),
+// // // //       ],
+// // // //     );
+// // // //   }
+// // // //
+// // // //   Widget _buildMoreOptionsButton() {
+// // // //     return IconButton(
+// // // //       onPressed: () {
+// // // //         // Implement more options functionality
+// // // //       },
+// // // //       icon: const Icon(Icons.more_vert, color: Colors.white),
+// // // //     );
+// // // //   }
+// // // // }
 // // // //
 // // // // StoryItem createStoryItem(Story storyData, StoryController controller) {
 // // // //   switch (storyData.type) {
@@ -51,482 +855,6 @@
 // // // //       );
 // // // //   }
 // // // // }
-// // // //
-// // // // class MoreStories extends StatefulWidget {
-// // // //   const MoreStories({super.key});
-// // // //
-// // // //   @override
-// // // //   MoreStoriesState createState() => MoreStoriesState();
-// // // // }
-// // // //
-// // // // class MoreStoriesState extends State<MoreStories> {
-// // // //   late StoryCubit _storyCubit;
-// // // //
-// // // //   @override
-// // // //   void initState() {
-// // // //     super.initState();
-// // // //     // _storyCubit = StoryCubit(StoryRepository());
-// // // //     _storyCubit = serviceLocator<StoryCubit>();
-// // // //     _storyCubit.fetchStories();
-// // // //   }
-// // // //
-// // // //   @override
-// // // //   void dispose() {
-// // // //     super.dispose();
-// // // //   }
-// // // //
-// // // //   void _navigateToNextUser(int currentIndex) {
-// // // //     if (currentIndex < _storyCubit.state.stories.length - 1) {
-// // // //       // Navigate to the next user's stories
-// // // //       Navigator.of(context).pushReplacement(
-// // // //         MaterialPageRoute(
-// // // //           builder: (context) => BlocProvider.value(
-// // // //             value: serviceLocator<StoryCubit>(),
-// // // //             child: MoreStoriesUserView(
-// // // //               userIndex: currentIndex + 1,
-// // // //               storyCubit: _storyCubit,
-// // // //             ),
-// // // //           ),
-// // // //         ),
-// // // //       );
-// // // //     } else {
-// // // //       Navigator.pop(context); // Close the story view after the last story
-// // // //     }
-// // // //   }
-// // // //
-// // // //   @override
-// // // //   Widget build(BuildContext context) {
-// // // //     return Scaffold(
-// // // //       extendBodyBehindAppBar: true,
-// // // //       body: BlocBuilder<StoryCubit, StoryState>(
-// // // //         bloc: _storyCubit,
-// // // //         builder: (context, state) {
-// // // //           if (state.isLoading && state.stories.isEmpty) {
-// // // //             return const Center(child: CircularProgressIndicator());
-// // // //           } else if (state.stories.isNotEmpty) {
-// // // //             return PageView.builder(
-// // // //               itemCount: state.stories.length,
-// // // //               itemBuilder: (context, userIndex) {
-// // // //                 final userStory = state.stories[userIndex];
-// // // //                 final userController = StoryController();
-// // // //
-// // // //                 return Stack(
-// // // //                   key: UniqueKey(),
-// // // //                   children: [
-// // // //                     StoryView(
-// // // //                       storyItems: userStory.stories
-// // // //                               ?.map((story) =>
-// // // //                                   createStoryItem(story, userController))
-// // // //                               .toList() ??
-// // // //                           [],
-// // // //                       onStoryShow: (storyItem, storyIndex) {
-// // // //                         print(
-// // // //                             'onStoryShow --------------------------------------------');
-// // // //                         final createdAt =
-// // // //                             userStory.stories![storyIndex].createdAt;
-// // // //                         context
-// // // //                             .read<StoryCubit>()
-// // // //                             .updateCurrentStoryCreatedAt(createdAt!);
-// // // //
-// // // //                         if (userIndex == state.stories.length - 1 &&
-// // // //                             storyIndex == userStory.stories!.length - 1 &&
-// // // //                             !state.hasReachedMax) {
-// // // //                           _storyCubit.fetchStories(loadMore: true);
-// // // //                         }
-// // // //                       },
-// // // //                       onComplete: () {
-// // // //                         print(
-// // // //                             'onComplete --------------------------------------------');
-// // // //
-// // // //                         _navigateToNextUser(userIndex);
-// // // //                       },
-// // // //                       progressPosition: ProgressPosition.top,
-// // // //                       repeat: false,
-// // // //                       controller: userController,
-// // // //                     ),
-// // // //                     Positioned(
-// // // //                       top: kToolbarHeight,
-// // // //                       left: 0,
-// // // //                       right: 0,
-// // // //                       child: Padding(
-// // // //                         padding: EdgeInsets.symmetric(horizontal: 8.0),
-// // // //                         child: Row(
-// // // //                           crossAxisAlignment: CrossAxisAlignment.center,
-// // // //                           children: [
-// // // //                             IconButton(
-// // // //                               onPressed: () {
-// // // //                                 if (Navigator.canPop(context)) {
-// // // //                                   Navigator.pop(context);
-// // // //                                 }
-// // // //                               },
-// // // //                               icon: const Icon(
-// // // //                                 Icons.arrow_back_ios,
-// // // //                                 color: Colors.white,
-// // // //                                 shadows: <Shadow>[
-// // // //                                   Shadow(
-// // // //                                     color: Colors.black,
-// // // //                                     offset: Offset(2, 2),
-// // // //                                     blurRadius: 9,
-// // // //                                   ),
-// // // //                                 ],
-// // // //                               ),
-// // // //                             ),
-// // // //                             CircleAvatar(
-// // // //                               minRadius: 25,
-// // // //                               onBackgroundImageError: (exception, stackTrace) =>
-// // // //                                   const NetworkImage(
-// // // //                                 UIConst.profilePlaceHolder,
-// // // //                               ),
-// // // //                               backgroundImage: NetworkImage(
-// // // //                                 userStory.user?.profilePictureUrl ?? '',
-// // // //                               ),
-// // // //                             ),
-// // // //                             SizedBox(
-// // // //                               width: 8,
-// // // //                             ),
-// // // //                             Column(
-// // // //                               mainAxisAlignment: MainAxisAlignment.center,
-// // // //                               crossAxisAlignment: CrossAxisAlignment.start,
-// // // //                               children: [
-// // // //                                 Text(
-// // // //                                   capitalizeAndSplit2Only(
-// // // //                                       '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
-// // // //                                   style: const TextStyle(
-// // // //                                     fontSize: 18.sp,
-// // // //                                     color: Colors.white,
-// // // //                                   ),
-// // // //                                 ),
-// // // //                                 SizedBox(
-// // // //                                   height: 4.h,
-// // // //                                 ),
-// // // //                                 BlocConsumer<StoryCubit, StoryState>(
-// // // //                                   listener: (context, state) {
-// // // //                                     // TODO: implement listener
-// // // //                                   },
-// // // //                                   builder: (context, state) {
-// // // //                                     if (state.currentStoryCreatedAt != null) {
-// // // //                                       return Text(
-// // // //                                         'Last Seen: ${DateFormat('hh:mm a').format(state.currentStoryCreatedAt!)}',
-// // // //                                         style: const TextStyle(
-// // // //                                           fontSize: 12.sp,
-// // // //                                           color: Colors.white70,
-// // // //                                         ),
-// // // //                                       );
-// // // //                                     }
-// // // //                                     return Sizer();
-// // // //                                   },
-// // // //                                 ),
-// // // //                               ],
-// // // //                             ),
-// // // //                             const Spacer(),
-// // // //                             IconButton(
-// // // //                               onPressed: () {},
-// // // //                               icon: const Icon(
-// // // //                                 Icons.more_vert,
-// // // //                                 color: Colors.white,
-// // // //                               ),
-// // // //                             ),
-// // // //                           ],
-// // // //                         ),
-// // // //                       ),
-// // // //                     ),
-// // // //                   ],
-// // // //                 );
-// // // //               },
-// // // //             );
-// // // //           } else if (state is StoryError) {
-// // // //             return Center(
-// // // //               child: Text("Failed to load stories: ${state.error}"),
-// // // //             );
-// // // //           }
-// // // //           return Container();
-// // // //         },
-// // // //       ),
-// // // //     );
-// // // //   }
-// // // //
-// // // // // @override
-// // // // // Widget build(BuildContext context) {
-// // // // //   return Scaffold(
-// // // // //     extendBodyBehindAppBar: true,
-// // // // //     body: BlocBuilder<StoryCubit, StoryState>(
-// // // // //       bloc: _storyCubit,
-// // // // //       builder: (context, state) {
-// // // // //         if (state.isLoading && state.stories.isEmpty) {
-// // // // //           return const Center(child: CircularProgressIndicator());
-// // // // //         } else if (state.stories.isNotEmpty) {
-// // // // //           return PageView.builder(
-// // // // //             itemCount: state.stories.length,
-// // // // //             itemBuilder: (context, userIndex) {
-// // // // //               final userStory = state.stories[userIndex];
-// // // // //               final userController = StoryController();
-// // // // //
-// // // // //               return Container(
-// // // // //                 color: Colors.black,
-// // // // //                 height: double.infinity,
-// // // // //                 child: Column(
-// // // // //                   crossAxisAlignment: CrossAxisAlignment.stretch,
-// // // // //                   children: [
-// // // // //                     Padding(
-// // // // //                       padding: EdgeInsets.only(top: 25,bottom: 4),
-// // // // //                       child: Row(
-// // // // //                         crossAxisAlignment: CrossAxisAlignment.center,
-// // // // //                         children: [
-// // // // //                           IconButton(
-// // // // //                             onPressed: () {
-// // // // //                               if (Navigator.canPop(context)) {
-// // // // //                                 Navigator.pop(context);
-// // // // //                               }
-// // // // //                             },
-// // // // //                             icon: const Icon(
-// // // // //                               Icons.arrow_back_ios,
-// // // // //                               color: Colors.white,
-// // // // //                               shadows: <Shadow>[
-// // // // //                                 Shadow(
-// // // // //                                   color: Colors.black,
-// // // // //                                   offset: Offset(2, 2),
-// // // // //                                   blurRadius: 9,
-// // // // //                                 ),
-// // // // //                               ],
-// // // // //                             ),
-// // // // //                           ),
-// // // // //                           CircleAvatar(
-// // // // //                             minRadius: 25,
-// // // // //                             onBackgroundImageError:
-// // // // //                                 (exception, stackTrace) =>
-// // // // //                                     const NetworkImage(
-// // // // //                               UIConst.profilePlaceHolder,
-// // // // //                             ),
-// // // // //                             backgroundImage: NetworkImage(
-// // // // //                               userStory.user?.profilePictureUrl ?? '',
-// // // // //                             ),
-// // // // //                           ),
-// // // // //                           SizedBox(
-// // // // //                             width: 8,
-// // // // //                           ),
-// // // // //                           Column(
-// // // // //                             mainAxisAlignment: MainAxisAlignment.center,
-// // // // //                             crossAxisAlignment: CrossAxisAlignment.start,
-// // // // //                             children: [
-// // // // //                               Text(
-// // // // //                                 capitalizeAndSplit2Only('${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
-// // // // //                                 style: const TextStyle(
-// // // // //                                   fontSize: 18.sp,
-// // // // //                                   color: Colors.white,
-// // // // //                                 ),
-// // // // //                               ),
-// // // // //                               SizedBox(height: 4.h,),
-// // // // //                               const Text(
-// // // // //                                 'Last Seen: 8 minute ago',
-// // // // //                                 style: TextStyle(
-// // // // //                                   fontSize: 12.sp,
-// // // // //                                   color: Colors.white70,
-// // // // //                                 ),
-// // // // //                               )
-// // // // //                             ],
-// // // // //                           ),
-// // // // //                           const Spacer(),
-// // // // //                           IconButton(onPressed: () {
-// // // // //
-// // // // //                           }, icon: const Icon(Icons.more_vert,color: Colors.white,))
-// // // // //
-// // // // //                         ],
-// // // // //                       ),
-// // // // //                     ),
-// // // // //                     Expanded(
-// // // // //                       child: StoryView(
-// // // // //                         storyItems: userStory.stories
-// // // // //                                 ?.map((story) =>
-// // // // //                                     createStoryItem(story, userController))
-// // // // //                                 .toList() ??
-// // // // //                             [],
-// // // // //                         onStoryShow: (storyItem, storyIndex) {
-// // // // //                           print(
-// // // // //                               'onStoryShow --------------------------------------------');
-// // // // //
-// // // // //                           // if (userIndex == state.stories.length -1 &&
-// // // // //                           //     storyIndex == userStory.stories!.length-1 &&
-// // // // //                           //     !state.hasReachedMax) {
-// // // // //                           //   _storyCubit.fetchStories(loadMore: true);
-// // // // //                           // }
-// // // // //                         },
-// // // // //                         onComplete: () {
-// // // // //                           print(
-// // // // //                               'onComplete --------------------------------------------');
-// // // // //
-// // // // //                           // _navigateToNextUser(userIndex);
-// // // // //                         },
-// // // // //                         progressPosition: ProgressPosition.top,
-// // // // //                         repeat: false,
-// // // // //                         controller: userController,
-// // // // //                       ),
-// // // // //                     ),
-// // // // //                   ],
-// // // // //                 ),
-// // // // //               );
-// // // // //             },
-// // // // //           );
-// // // // //         } else if (state is StoryError) {
-// // // // //           return Center(
-// // // // //             child: Text("Failed to load stories: ${state.error}"),
-// // // // //           );
-// // // // //         }
-// // // // //         return Container();
-// // // // //       },
-// // // // //     ),
-// // // // //   );
-// // // // // }
-// // // // }
-// // // //
-// // // // class MoreStoriesUserView extends StatefulWidget {
-// // // //   final int userIndex;
-// // // //   final StoryCubit storyCubit;
-// // // //
-// // // //   const MoreStoriesUserView(
-// // // //       {super.key, required this.userIndex, required this.storyCubit});
-// // // //
-// // // //   @override
-// // // //   State<MoreStoriesUserView> createState() => _MoreStoriesUserViewState();
-// // // // }
-// // // //
-// // // // class _MoreStoriesUserViewState extends State<MoreStoriesUserView> {
-// // // //   @override
-// // // //   Widget build(BuildContext context) {
-// // // //     final userStory = widget.storyCubit.state.stories[widget.userIndex];
-// // // //     final userController = StoryController();
-// // // //
-// // // //     return Scaffold(
-// // // //       extendBodyBehindAppBar: true,
-// // // //       body: Container(
-// // // //         color: Colors.black,
-// // // //         height: double.infinity,
-// // // //         child: Stack(
-// // // //           children: [
-// // // //             StoryView(
-// // // //               storyItems: userStory.stories
-// // // //                       ?.map((story) => createStoryItem(story, userController))
-// // // //                       .toList() ??
-// // // //                   [],
-// // // //               onStoryShow: (storyItem, index) {
-// // // //                 final createdAt = userStory.stories![index].createdAt;
-// // // //                 context
-// // // //                     .read<StoryCubit>()
-// // // //                     .updateCurrentStoryCreatedAt(createdAt!);
-// // // //               },
-// // // //               onComplete: () {
-// // // //                 if (widget.userIndex <
-// // // //                     widget.storyCubit.state.stories.length - 1) {
-// // // //                   Navigator.of(context).pushReplacement(
-// // // //                     MaterialPageRoute(
-// // // //                       builder: (context) => BlocProvider.value(
-// // // //                         value: serviceLocator<StoryCubit>(),
-// // // //                         child: MoreStoriesUserView(
-// // // //                           userIndex: widget.userIndex + 1,
-// // // //                           storyCubit: widget.storyCubit,
-// // // //                         ),
-// // // //                       ),
-// // // //                     ),
-// // // //                   );
-// // // //                 } else {
-// // // //                   Navigator.pop(context); // Close after the last story
-// // // //                 }
-// // // //               },
-// // // //               progressPosition: ProgressPosition.top,
-// // // //               repeat: false,
-// // // //               controller: userController,
-// // // //             ),
-// // // //             Positioned(
-// // // //               top: kToolbarHeight,
-// // // //               left: 0,
-// // // //               right: 0,
-// // // //               child: Padding(
-// // // //                 padding: EdgeInsets.symmetric(horizontal: 8.0),
-// // // //                 child: Row(
-// // // //                   crossAxisAlignment: CrossAxisAlignment.center,
-// // // //                   children: [
-// // // //                     IconButton(
-// // // //                       onPressed: () {
-// // // //                         if (Navigator.canPop(context)) {
-// // // //                           Navigator.pop(context);
-// // // //                         }
-// // // //                       },
-// // // //                       icon: const Icon(
-// // // //                         Icons.arrow_back_ios,
-// // // //                         color: Colors.white,
-// // // //                         shadows: <Shadow>[
-// // // //                           Shadow(
-// // // //                             color: Colors.black,
-// // // //                             offset: Offset(2, 2),
-// // // //                             blurRadius: 9,
-// // // //                           ),
-// // // //                         ],
-// // // //                       ),
-// // // //                     ),
-// // // //                     CircleAvatar(
-// // // //                       minRadius: 25,
-// // // //                       onBackgroundImageError: (exception, stackTrace) =>
-// // // //                           const NetworkImage(
-// // // //                         UIConst.profilePlaceHolder,
-// // // //                       ),
-// // // //                       backgroundImage: NetworkImage(
-// // // //                         userStory.user?.profilePictureUrl ?? '',
-// // // //                       ),
-// // // //                     ),
-// // // //                     SizedBox(
-// // // //                       width: 8,
-// // // //                     ),
-// // // //                     Column(
-// // // //                       mainAxisAlignment: MainAxisAlignment.center,
-// // // //                       crossAxisAlignment: CrossAxisAlignment.start,
-// // // //                       children: [
-// // // //                         Text(
-// // // //                           capitalizeAndSplit2Only(
-// // // //                               '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
-// // // //                           style: const TextStyle(
-// // // //                             fontSize: 18.sp,
-// // // //                             color: Colors.white,
-// // // //                           ),
-// // // //                         ),
-// // // //                         SizedBox(
-// // // //                           height: 4.h,
-// // // //                         ),
-// // // //                         BlocConsumer<StoryCubit, StoryState>(
-// // // //                           listener: (context, state) {
-// // // //                             // TODO: implement listener
-// // // //                           },
-// // // //                           builder: (context, state) {
-// // // //                             if (state.currentStoryCreatedAt != null) {
-// // // //                               return Text(
-// // // //                                 'Last Seen: ${DateFormat('hh:mm a').format(state.currentStoryCreatedAt!)}',
-// // // //                                 style: const TextStyle(
-// // // //                                   fontSize: 12.sp,
-// // // //                                   color: Colors.white70,
-// // // //                                 ),
-// // // //                               );
-// // // //                             }
-// // // //                             return Sizer();
-// // // //                           },
-// // // //                         ),
-// // // //                       ],
-// // // //                     ),
-// // // //                     const Spacer(),
-// // // //                     IconButton(
-// // // //                       onPressed: () {},
-// // // //                       icon: const Icon(
-// // // //                         Icons.more_vert,
-// // // //                         color: Colors.white,
-// // // //                       ),
-// // // //                     ),
-// // // //                   ],
-// // // //                 ),
-// // // //               ),
-// // // //             ),
-// // // //           ],
-// // // //         ),
-// // // //       ),
-// // // //     );
-// // // //   }
-// // // // }
 // // //
 // // // import 'package:easy_localization/easy_localization.dart';
 // // // import 'package:flutter/material.dart';
@@ -545,21 +873,17 @@
 // // // class StoryViewScreen extends StatefulWidget {
 // // //   final int initialUserIndex;
 // // //
-// // //   const StoryViewScreen({
-// // //     super.key,
-// // //     this.initialUserIndex = 0,
-// // //   });
+// // //   const StoryViewScreen({super.key, this.initialUserIndex = 0});
 // // //
 // // //   @override
 // // //   _StoryViewScreenState createState() => _StoryViewScreenState();
 // // // }
 // // //
 // // // class _StoryViewScreenState extends State<StoryViewScreen> {
-// // //   late PageController _pageController;
-// // //   late int _currentUserIndex;
-// // //   late List<UserStories> stories;
-// // //
-// // //   late StoryCubit _storyCubit;
+// // //   late final PageController _pageController;
+// // //   late final StoryCubit _storyCubit;
+// // //   late List<UserStories> stories = [];
+// // //   int _currentUserIndex = 0;
 // // //
 // // //   @override
 // // //   void initState() {
@@ -576,11 +900,17 @@
 // // //       setState(() {
 // // //         stories = _storyCubit.state.stories;
 // // //       });
-// // //       print('Fetched ${stories.length} stories');
-// // //     } catch (e) {
-// // //       print('Error fetching stories: $e');
-// // //       // Handle error (e.g., show error message to user)
+// // //       debugPrint('Fetched ${stories.length} stories');
+// // //     } catch (error) {
+// // //       debugPrint('Error fetching stories: $error');
+// // //       _showErrorSnackBar();
 // // //     }
+// // //   }
+// // //
+// // //   void _showErrorSnackBar() {
+// // //     ScaffoldMessenger.of(context).showSnackBar(
+// // //       SnackBar(content: Text(tr('error_fetching_stories'))),
+// // //     );
 // // //   }
 // // //
 // // //   @override
@@ -652,12 +982,14 @@
 // // // }
 // // //
 // // // class _UserStoryViewState extends State<UserStoryView> {
-// // //   late StoryController _storyController;
+// // //   late final StoryController _storyController;
+// // //   late DateTime _currentStoryCreatedAt;
 // // //
 // // //   @override
 // // //   void initState() {
 // // //     super.initState();
 // // //     _storyController = StoryController();
+// // //     _currentStoryCreatedAt = widget.userStory.stories!.first.createdAt!;
 // // //   }
 // // //
 // // //   @override
@@ -675,6 +1007,17 @@
 // // //                   ?.map((story) => createStoryItem(story, _storyController))
 // // //                   .toList() ??
 // // //               [],
+// // //           onStoryShow: (storyItem, index) {
+// // //             print('onStoryShow --------------------------------------------');
+// // //             // final createdAt = widget.userStory.stories![index].createdAt;
+// // //             //
+// // //             // serviceLocator<StoryCubit>()
+// // //             //     .updateCurrentStoryCreatedAt(createdAt!);
+// // //             // setState(() {
+// // //             _currentStoryCreatedAt =
+// // //                 widget.userStory.stories![index].createdAt!;
+// // //             // });
+// // //           },
 // // //           controller: _storyController,
 // // //           onComplete: widget.onComplete,
 // // //           onVerticalSwipeComplete: (direction) {
@@ -697,7 +1040,10 @@
 // // //       right: 0,
 // // //       child: BlocProvider(
 // // //         create: (context) => context.read<StoryCubit>(),
-// // //         child: UserInfoBar(userStory: widget.userStory),
+// // //         child: UserInfoBar(
+// // //           userStory: widget.userStory,
+// // //           createdAt: _currentStoryCreatedAt,
+// // //         ),
 // // //       ),
 // // //     );
 // // //   }
@@ -712,19 +1058,28 @@
 // // //           _storyController.next();
 // // //         }
 // // //       },
+// // //       onHorizontalDragEnd: (details) {
+// // //         if (details.primaryVelocity != null) {
+// // //           if (details.primaryVelocity! < 0) {
+// // //             widget.onComplete(); // Swipe left to go to the next user
+// // //           } else if (details.primaryVelocity! > 0) {
+// // //             widget.onPrevious(); // Swipe right to go to the previous user
+// // //           }
+// // //         }
+// // //       },
 // // //       child: Container(
 // // //         color: Colors.transparent,
 // // //         child: Row(
 // // //           children: [
 // // //             Expanded(
 // // //               child: GestureDetector(
-// // //                 onTap: widget.onPrevious,
+// // //                 onTap: _storyController.previous,
 // // //                 child: Container(color: Colors.transparent),
 // // //               ),
 // // //             ),
 // // //             Expanded(
 // // //               child: GestureDetector(
-// // //                 onTap: widget.onComplete,
+// // //                 onTap: _storyController.next,
 // // //                 child: Container(color: Colors.transparent),
 // // //               ),
 // // //             ),
@@ -738,10 +1093,15 @@
 // // // class UserInfoBar extends StatelessWidget {
 // // //   final UserStories userStory;
 // // //
-// // //   const UserInfoBar({super.key, required this.userStory});
+// // //   final DateTime createdAt;
+// // //
+// // //   const UserInfoBar(
+// // //       {super.key, required this.userStory, required this.createdAt});
 // // //
 // // //   @override
 // // //   Widget build(BuildContext context) {
+// // //     print(
+// // //         "$createdAt-----------------------------------------------------------");
 // // //     return Padding(
 // // //       padding: EdgeInsets.symmetric(horizontal: 8.0),
 // // //       child: Row(
@@ -750,7 +1110,7 @@
 // // //           _buildBackButton(context),
 // // //           _buildUserAvatar(),
 // // //           SizedBox(width: 8),
-// // //           _buildUserInfo(context),
+// // //           _buildUserInfo(),
 // // //           const Spacer(),
 // // //           _buildMoreOptionsButton(),
 // // //         ],
@@ -765,7 +1125,7 @@
 // // //         Icons.arrow_back_ios,
 // // //         color: Colors.white,
 // // //         shadows: [
-// // //           Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 9)
+// // //           Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 9),
 // // //         ],
 // // //       ),
 // // //     );
@@ -780,7 +1140,7 @@
 // // //     );
 // // //   }
 // // //
-// // //   Widget _buildUserInfo(BuildContext context) {
+// // //   Widget _buildUserInfo() {
 // // //     return Column(
 // // //       mainAxisAlignment: MainAxisAlignment.center,
 // // //       crossAxisAlignment: CrossAxisAlignment.start,
@@ -791,18 +1151,10 @@
 // // //           style: const TextStyle(fontSize: 18.sp, color: Colors.white),
 // // //         ),
 // // //         SizedBox(height: 4.h),
-// // //         // BlocBuilder<StoryCubit, StoryState>(
-// // //         //   builder: (context, state) {
-// // //         //     if (state.currentStoryCreatedAt != null) {
-// // //         //       return Text(
-// // //         //         'Last Seen: ${DateFormat('hh:mm a').format(
-// // //         //             state.currentStoryCreatedAt!)}',
-// // //         //         style: const TextStyle(fontSize: 12.sp, color: Colors.white70),
-// // //         //       );
-// // //         //     }
-// // //         //     return SizedBox.shrink();
-// // //         //   },
-// // //         // ),
+// // //         Text(
+// // //           serviceLocator<StoryCubit>().state.currentStoryCreatedAt.toString(),
+// // //           style: const TextStyle(fontSize: 18.sp, color: Colors.white),
+// // //         ),
 // // //       ],
 // // //     );
 // // //   }
@@ -855,7 +1207,6 @@
 // // //       );
 // // //   }
 // // // }
-// //
 // // import 'package:easy_localization/easy_localization.dart';
 // // import 'package:flutter/material.dart';
 // // import 'package:flutter_bloc/flutter_bloc.dart';
@@ -983,18 +1334,20 @@
 // //
 // // class _UserStoryViewState extends State<UserStoryView> {
 // //   late final StoryController _storyController;
-// //   late DateTime _currentStoryCreatedAt;
+// //   late final ValueNotifier<DateTime> _currentStoryCreatedAtNotifier;
 // //
 // //   @override
 // //   void initState() {
 // //     super.initState();
 // //     _storyController = StoryController();
-// //     _currentStoryCreatedAt = widget.userStory.stories!.first.createdAt!;
+// //     _currentStoryCreatedAtNotifier =
+// //         ValueNotifier<DateTime>(widget.userStory.stories!.first.createdAt!);
 // //   }
 // //
 // //   @override
 // //   void dispose() {
 // //     _storyController.dispose();
+// //     _currentStoryCreatedAtNotifier.dispose();
 // //     super.dispose();
 // //   }
 // //
@@ -1008,15 +1361,8 @@
 // //                   .toList() ??
 // //               [],
 // //           onStoryShow: (storyItem, index) {
-// //             print('onStoryShow --------------------------------------------');
-// //             // final createdAt = widget.userStory.stories![index].createdAt;
-// //             //
-// //             // serviceLocator<StoryCubit>()
-// //             //     .updateCurrentStoryCreatedAt(createdAt!);
-// //             // setState(() {
-// //             _currentStoryCreatedAt =
+// //             _currentStoryCreatedAtNotifier.value =
 // //                 widget.userStory.stories![index].createdAt!;
-// //             // });
 // //           },
 // //           controller: _storyController,
 // //           onComplete: widget.onComplete,
@@ -1040,9 +1386,14 @@
 // //       right: 0,
 // //       child: BlocProvider(
 // //         create: (context) => context.read<StoryCubit>(),
-// //         child: UserInfoBar(
-// //           userStory: widget.userStory,
-// //           createdAt: _currentStoryCreatedAt,
+// //         child: ValueListenableBuilder<DateTime>(
+// //           valueListenable: _currentStoryCreatedAtNotifier,
+// //           builder: (context, createdAt, child) {
+// //             return UserInfoBar(
+// //               userStory: widget.userStory,
+// //               createdAt: createdAt,
+// //             );
+// //           },
 // //         ),
 // //       ),
 // //     );
@@ -1092,16 +1443,16 @@
 // //
 // // class UserInfoBar extends StatelessWidget {
 // //   final UserStories userStory;
-// //
 // //   final DateTime createdAt;
 // //
-// //   const UserInfoBar(
-// //       {super.key, required this.userStory, required this.createdAt});
+// //   const UserInfoBar({
+// //     super.key,
+// //     required this.userStory,
+// //     required this.createdAt,
+// //   });
 // //
 // //   @override
 // //   Widget build(BuildContext context) {
-// //     print(
-// //         "$createdAt-----------------------------------------------------------");
 // //     return Padding(
 // //       padding: EdgeInsets.symmetric(horizontal: 8.0),
 // //       child: Row(
@@ -1152,8 +1503,8 @@
 // //         ),
 // //         SizedBox(height: 4.h),
 // //         Text(
-// //           serviceLocator<StoryCubit>().state.currentStoryCreatedAt.toString(),
-// //           style: const TextStyle(fontSize: 18.sp, color: Colors.white),
+// //           DateFormat('hh:mm a').format(createdAt),
+// //           style: const TextStyle(fontSize: 12.sp, color: Colors.white70),
 // //         ),
 // //       ],
 // //     );
@@ -1207,55 +1558,159 @@
 // //       );
 // //   }
 // // }
+//
+//
 // import 'package:easy_localization/easy_localization.dart';
+// import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+// import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
 // import 'package:fourtyninehub/service_locator/service_locator.dart';
-// import 'package:story_view/controller/story_controller.dart';
-// import 'package:story_view/story_view.dart';
-// import 'package:story_view/widgets/story_view.dart';
 //
+// // import 'package:story_view/story_view.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:story_view/story_view.dart';
+// import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 // import '../../../../../res/style/const.dart';
-// import '../../../tinder/presentation/pages/user_profile.dart';
+// import '../../../tinder/data/shared/shared.dart';
+// import '../../../twitter/presentation/widgets/report_view.dart';
 // import '../cubit/stories_cubit.dart';
+//
+//
+// class ReactionWidget extends StatelessWidget {
+//   final List<Map<String, dynamic>> reactions = [
+//     {'icon': '❤️', 'color': Colors.red, 'label': 'Love'},
+//     {'icon': '👍', 'color': Colors.blue, 'label': 'Like'},
+//     {'icon': '😂', 'color': Colors.amber, 'label': 'Haha'},
+//     {'icon': '😮', 'color': Colors.yellow, 'label': 'Wow'},
+//     {'icon': '😢', 'color': Colors.orange, 'label': 'Sad'},
+//     {'icon': '😠', 'color': Colors.redAccent, 'label': 'Angry'},
+//   ];
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       crossAxisAlignment: CrossAxisAlignment.center,
+//       mainAxisSize: MainAxisSize.min,
+//       children: [
+//         Expanded(
+//           flex: 6,
+//           child: Container(
+//             padding: EdgeInsets.symmetric(
+//                 horizontal: 16.0, vertical: 0.h), // Adjust padding as per need
+//             decoration: BoxDecoration(
+//               color: Colors.grey[800],
+//               borderRadius: BorderRadius.circular(25.0),
+//             ),
+//             clipBehavior: Clip.hardEdge,
+//             child: TextField(
+//               maxLines: null,
+//               onChanged: (value) {
+//                 print(value.toString() + "11111111111111111111111111111111111");
+//               },
+//               cursorColor: Colors.white,
+//               cursorErrorColor: Colors.red,
+//               decoration: InputDecoration(
+//                 fillColor: Colors.transparent,
+//                 hintText: 'Send message...',
+//                 hintStyle: TextStyle(
+//                   color: Colors.white54,
+//                   fontSize: 16.sp,
+//                 ),
+//                 border: InputBorder.none, // Remove default underline
+//               ),
+//               style: const TextStyle(
+//                 color: Colors.white,
+//               ),
+//             ),
+//           ),
+//         ),
+//         const SizedBox(width: 10),
+//         Expanded(
+//           flex: 4,
+//           child: ListView.builder(
+//             scrollDirection: Axis.horizontal,
+//             itemCount: reactions.length,
+//             shrinkWrap: true,
+//             itemBuilder: (context, index) {
+//               final reaction = reactions[index];
+//               return Padding(
+//                 padding: const EdgeInsets.symmetric(horizontal: 4.0),
+//                 child: GestureDetector(
+//                   onTap: () {
+//                     // Action for reaction
+//                     print('Selected: ${reaction['label']}');
+//                   },
+//                   child: Column(
+//                     mainAxisSize: MainAxisSize.min,
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     crossAxisAlignment: CrossAxisAlignment.center,
+//                     children: [
+//                       FloatingActionButton.small(
+//                         onPressed: () {},
+//                         child: Text(
+//                           reaction['icon'],
+//                           textScaler: const TextScaler.linear(2),
+//                         ),
+//                         backgroundColor: Colors.transparent,
+//                         elevation: 0,
+//                       )
+//
+//                       // Optionally add text below the icons
+//                       // Text(reaction['label'], style: TextStyle(color: Colors.white, fontSize: 12.sp)),
+//                     ],
+//                   ),
+//                 ),
+//               );
+//             },
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
 //
 // class StoryViewScreen extends StatefulWidget {
 //   final int initialUserIndex;
+//   final List<UserStories> stories;
 //
-//   const StoryViewScreen({super.key, this.initialUserIndex = 0});
+//   const StoryViewScreen(
+//       {super.key, this.initialUserIndex = 0, required this.stories});
 //
 //   @override
-//   _StoryViewScreenState createState() => _StoryViewScreenState();
+//   StoryViewScreenState createState() => StoryViewScreenState();
 // }
 //
-// class _StoryViewScreenState extends State<StoryViewScreen> {
+// class StoryViewScreenState extends State<StoryViewScreen> {
 //   late final PageController _pageController;
-//   late final StoryCubit _storyCubit;
-//   late List<UserStories> stories = [];
+//
+//   // late final StoryCubit _storyCubit;
+//   // late List<UserStories> stories = [];
 //   int _currentUserIndex = 0;
 //
 //   @override
 //   void initState() {
 //     super.initState();
-//     _storyCubit = serviceLocator<StoryCubit>();
-//     _initializeStories();
+//     // _storyCubit = serviceLocator<StoryCubit>();
+//     _pageController = PageController(initialPage: widget.initialUserIndex);
 //     _currentUserIndex = widget.initialUserIndex;
-//     _pageController = PageController(initialPage: _currentUserIndex);
+//     _initializeStories();
 //   }
 //
 //   Future<void> _initializeStories() async {
-//     try {
-//       await _storyCubit.fetchStories();
-//       setState(() {
-//         stories = _storyCubit.state.stories;
-//       });
-//       debugPrint('Fetched ${stories.length} stories');
-//     } catch (error) {
-//       debugPrint('Error fetching stories: $error');
-//       _showErrorSnackBar();
-//     }
+//     // try {
+//     //   // await _storyCubit.fetchStories();
+//     //   setState(() {
+//     //     // stories = _storyCubit.state.stories;
+//     //   });
+//     //   debugPrint('Fetched ${stories.length} stories');
+//     // } catch (error) {
+//     //   debugPrint('Error fetching stories: $error');
+//     //   _showErrorSnackBar();
+//     // }
 //   }
 //
 //   void _showErrorSnackBar() {
@@ -1271,7 +1726,7 @@
 //   }
 //
 //   void _navigateToNextUser() {
-//     if (_currentUserIndex < stories.length - 1) {
+//     if (_currentUserIndex < widget.stories.length - 1) {
 //       _pageController.nextPage(
 //         duration: const Duration(milliseconds: 300),
 //         curve: Curves.easeInOut,
@@ -1294,10 +1749,10 @@
 //   Widget build(BuildContext context) {
 //     return Scaffold(
 //       extendBodyBehindAppBar: true,
-//       body: stories.isNotEmpty
+//       body: widget.stories.isNotEmpty
 //           ? PageView.builder(
 //               controller: _pageController,
-//               itemCount: stories.length,
+//               itemCount: widget.stories.length,
 //               onPageChanged: (index) {
 //                 setState(() {
 //                   _currentUserIndex = index;
@@ -1305,13 +1760,14 @@
 //               },
 //               itemBuilder: (context, index) {
 //                 return UserStoryView(
-//                   userStory: stories[index],
+//                   currentUserId: serviceLocator<UserCubit>().state.data!.id,
+//                   userStory: widget.stories[index],
 //                   onComplete: _navigateToNextUser,
 //                   onPrevious: _navigateToPreviousUser,
 //                 );
 //               },
 //             )
-//           : Sizer(),
+//           : const Sizer(),
 //     );
 //   }
 // }
@@ -1320,34 +1776,39 @@
 //   final UserStories userStory;
 //   final VoidCallback onComplete;
 //   final VoidCallback onPrevious;
+//   final String currentUserId;
 //
 //   const UserStoryView({
 //     super.key,
 //     required this.userStory,
 //     required this.onComplete,
 //     required this.onPrevious,
+//     required this.currentUserId,
 //   });
 //
 //   @override
-//   _UserStoryViewState createState() => _UserStoryViewState();
+//   UserStoryViewState createState() => UserStoryViewState();
 // }
 //
-// class _UserStoryViewState extends State<UserStoryView> {
+// class UserStoryViewState extends State<UserStoryView> {
 //   late final StoryController _storyController;
 //   late final ValueNotifier<DateTime> _currentStoryCreatedAtNotifier;
+//   late final ValueNotifier<String> _currentStoryIdNotifier;
 //
 //   @override
 //   void initState() {
 //     super.initState();
 //     _storyController = StoryController();
 //     _currentStoryCreatedAtNotifier =
-//         ValueNotifier<DateTime>(widget.userStory.stories!.first.createdAt!);
+//         ValueNotifier<DateTime>(widget.userStory.userStories!.first.createdAt!);
+//     _currentStoryIdNotifier = ValueNotifier<String>('');
 //   }
 //
 //   @override
 //   void dispose() {
 //     _storyController.dispose();
 //     _currentStoryCreatedAtNotifier.dispose();
+//     _currentStoryIdNotifier.dispose();
 //     super.dispose();
 //   }
 //
@@ -1355,27 +1816,39 @@
 //   Widget build(BuildContext context) {
 //     return Stack(
 //       children: [
-//         StoryView(
-//           storyItems: widget.userStory.stories
-//                   ?.map((story) => createStoryItem(story, _storyController))
-//                   .toList() ??
-//               [],
-//           onStoryShow: (storyItem, index) {
-//             _currentStoryCreatedAtNotifier.value =
-//                 widget.userStory.stories![index].createdAt!;
-//           },
-//           controller: _storyController,
-//           onComplete: widget.onComplete,
-//           onVerticalSwipeComplete: (direction) {
-//             if (direction == Direction.down) {
-//               Navigator.of(context).pop();
-//             }
-//           },
-//           progressPosition: ProgressPosition.top,
-//         ),
+//         _buildStoryView(),
 //         _buildUserInfoBar(),
 //         _buildNavigationOverlay(),
+//         Positioned(
+//             bottom: 8,
+//             right: 0,
+//             left: 0,
+//             child: SizedBox(height: kToolbarHeight, child: ReactionWidget())),
 //       ],
+//     );
+//   }
+//
+//   Widget _buildStoryView() {
+//     return StoryView(
+//       storyItems: widget.userStory.userStories
+//               ?.map(
+//                   (story) => createStoryItem(context, story, _storyController))
+//               .toList() ??
+//           [],
+//       onStoryShow: (storyItem, index) {
+//         _currentStoryCreatedAtNotifier.value =
+//             widget.userStory.userStories![index].createdAt!;
+//         _currentStoryIdNotifier.value =
+//             widget.userStory.userStories![index].id ?? '';
+//       },
+//       controller: _storyController,
+//       onComplete: widget.onComplete,
+//       onVerticalSwipeComplete: (direction) {
+//         if (direction == Direction.down) {
+//           Navigator.of(context).pop();
+//         }
+//       },
+//       progressPosition: ProgressPosition.top,
 //     );
 //   }
 //
@@ -1384,86 +1857,111 @@
 //       top: kToolbarHeight,
 //       left: 0,
 //       right: 0,
-//       child: BlocProvider(
-//         create: (context) => context.read<StoryCubit>(),
-//         child: ValueListenableBuilder<DateTime>(
-//           valueListenable: _currentStoryCreatedAtNotifier,
-//           builder: (context, createdAt, child) {
-//             return UserInfoBar(
-//               userStory: widget.userStory,
-//               createdAt: createdAt,
-//             );
-//           },
-//         ),
+//       child: ValueListenableBuilder<DateTime>(
+//         valueListenable: _currentStoryCreatedAtNotifier,
+//         builder: (context, createdAt, child) {
+//           return ValueListenableBuilder(
+//             valueListenable: _currentStoryIdNotifier,
+//             builder: (BuildContext context, value, Widget? child) {
+//               return BlocProvider(
+//                 create: (context) => serviceLocator<StoryCubit>(),
+//                 child: UserInfoBar(
+//                   currentUserId: widget.currentUserId,
+//                   userStory: widget.userStory,
+//                   createdAt: createdAt,
+//                   currentStoryId: value,
+//                 ),
+//               );
+//             },
+//           );
+//         },
 //       ),
 //     );
 //   }
 //
 //   Widget _buildNavigationOverlay() {
-//     return GestureDetector(
-//       onTapDown: (details) {
-//         final screenWidth = MediaQuery.of(context).size.width;
-//         if (details.globalPosition.dx < screenWidth / 2) {
-//           _storyController.previous();
-//         } else {
-//           _storyController.next();
-//         }
-//       },
-//       onHorizontalDragEnd: (details) {
-//         if (details.primaryVelocity != null) {
-//           if (details.primaryVelocity! < 0) {
-//             widget.onComplete(); // Swipe left to go to the next user
-//           } else if (details.primaryVelocity! > 0) {
-//             widget.onPrevious(); // Swipe right to go to the previous user
+//     return Padding(
+//       padding: const EdgeInsets.only(top: kToolbarHeight * 2),
+//       child: GestureDetector(
+//         // onTapDown: (details) {
+//         //   final screenWidth = MediaQuery.of(context).size.width;
+//         //   if (details.globalPosition.dx < screenWidth / 2) {
+//         //     _storyController.previous();
+//         //   } else {
+//         //     _storyController.next();
+//         //   }
+//         // },
+//         onHorizontalDragEnd: (details) {
+//           if (details.primaryVelocity != null) {
+//             if (details.primaryVelocity! < 0) {
+//               widget.onComplete(); // Swipe left to go to the next user
+//             } else if (details.primaryVelocity! > 0) {
+//               widget.onPrevious(); // Swipe right to go to the previous user
+//             }
 //           }
-//         }
-//       },
-//       child: Container(
-//         color: Colors.transparent,
-//         child: Row(
-//           children: [
-//             Expanded(
-//               child: GestureDetector(
-//                 onTap: _storyController.previous,
-//                 child: Container(color: Colors.transparent),
+//         },
+//         onVerticalDragEnd: (DragEndDetails details) {
+//           if (details.primaryVelocity! < -300 ||
+//               details.primaryVelocity! > 300) {
+//             Navigator.of(context).pop();
+//           }
+//         },
+//         child: Container(
+//           color: Colors.transparent,
+//           child: Row(
+//             children: [
+//               Expanded(
+//                 child: GestureDetector(
+//                   onTap: _storyController.previous,
+//                   child: Container(color: Colors.transparent),
+//                 ),
 //               ),
-//             ),
-//             Expanded(
-//               child: GestureDetector(
-//                 onTap: _storyController.next,
-//                 child: Container(color: Colors.transparent),
+//               Expanded(
+//                 child: GestureDetector(
+//                   onTap: _storyController.next,
+//                   child: Container(color: Colors.transparent),
+//                 ),
 //               ),
-//             ),
-//           ],
+//             ],
+//           ),
 //         ),
 //       ),
 //     );
 //   }
 // }
 //
-// class UserInfoBar extends StatelessWidget {
+// class UserInfoBar extends StatefulWidget {
 //   final UserStories userStory;
 //   final DateTime createdAt;
+//   final String currentUserId;
+//   final String currentStoryId;
 //
 //   const UserInfoBar({
 //     super.key,
 //     required this.userStory,
 //     required this.createdAt,
+//     required this.currentUserId,
+//     required this.currentStoryId,
 //   });
 //
 //   @override
+//   State<UserInfoBar> createState() => _UserInfoBarState();
+// }
+//
+// class _UserInfoBarState extends State<UserInfoBar> {
+//   @override
 //   Widget build(BuildContext context) {
 //     return Padding(
-//       padding: EdgeInsets.symmetric(horizontal: 8.0),
+//       padding: const EdgeInsets.symmetric(horizontal: 8.0),
 //       child: Row(
 //         crossAxisAlignment: CrossAxisAlignment.center,
 //         children: [
 //           _buildBackButton(context),
 //           _buildUserAvatar(),
-//           SizedBox(width: 8),
+//           const SizedBox(width: 8),
 //           _buildUserInfo(),
 //           const Spacer(),
-//           _buildMoreOptionsButton(),
+//           _buildMoreOptionsButton(context),
 //         ],
 //       ),
 //     );
@@ -1485,7 +1983,8 @@
 //   Widget _buildUserAvatar() {
 //     return CircleAvatar(
 //       minRadius: 25,
-//       backgroundImage: NetworkImage(userStory.user?.profilePictureUrl ?? ''),
+//       backgroundImage:
+//           NetworkImage(widget.userStory.user?.profilePictureUrl ?? ''),
 //       onBackgroundImageError: (_, __) =>
 //           const NetworkImage(UIConst.profilePlaceHolder),
 //     );
@@ -1498,37 +1997,150 @@
 //       children: [
 //         Text(
 //           capitalizeAndSplit2Only(
-//               '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
-//           style: const TextStyle(fontSize: 18.sp, color: Colors.white),
+//               '${widget.userStory.user?.firstName ?? ''} ${widget.userStory.user?.lastName ?? ''}'),
+//           style: TextStyle(fontSize: 18.sp, color: Colors.white),
 //         ),
 //         SizedBox(height: 4.h),
 //         Text(
-//           DateFormat('hh:mm a').format(createdAt),
-//           style: const TextStyle(fontSize: 12.sp, color: Colors.white70),
+//           DateFormat('hh:mm a').format(widget.createdAt),
+//           style: TextStyle(fontSize: 12.sp, color: Colors.white70),
 //         ),
 //       ],
 //     );
 //   }
 //
-//   Widget _buildMoreOptionsButton() {
-//     return IconButton(
-//       onPressed: () {
-//         // Implement more options functionality
+//   Widget _buildMoreOptionsButton(context) {
+//     return PopupMenuButton<String>(
+//       icon: const Icon(
+//         Icons.more_vert,
+//         color: Colors.white,
+//         size: 35,
+//       ),
+//       onSelected: (String value) async {
+//         if (value == 'delete') {
+//           print('Deleting story with ID: ${widget.currentStoryId}');
+//
+//           // Call the delete method in the StoryCubit to delete from the backend
+//           await BlocProvider.of<StoryCubit>(context)
+//               .deleteStory(widget.currentStoryId);
+//
+//           // Remove the story from the local list
+//           // setState(() {
+//           //   // Find the story by ID and remove it
+//           //   widget.userStory.stories!
+//           //       .removeWhere((story) => story.id == widget.currentStoryId);
+//           //
+//           //   // If the entire UserStories object has no stories left, remove it from the list
+//           //   if (widget.userStory.stories!.isEmpty) {
+//           //     widget.userStory.stories!.removeWhere(
+//           //         (userStory) => userStory.id == widget.userStory.user?.id);
+//           //   }
+//           // });
+//
+//           Navigator.of(context).pop();
+//         } else if (value == 'report') {
+//           bottomSheet(
+//             context: context,
+//             widget: ReportView(
+//               id: widget.currentUserId,
+//               categoryId: '66684135dbb427ee42aa0141',
+//             ),
+//           );
+//         }
 //       },
-//       icon: const Icon(Icons.more_vert, color: Colors.white),
+//       itemBuilder: (BuildContext context) {
+//         return [
+//           if (widget.userStory.user?.id == widget.currentUserId)
+//             const PopupMenuItem<String>(
+//               value: 'delete',
+//               textStyle: TextStyle(color: Colors.white),
+//               child: Row(
+//                 children: [
+//                   Icon(Icons.delete, color: Colors.red),
+//                   SizedBox(width: 10),
+//                   Text('Delete'),
+//                 ],
+//               ),
+//             ),
+//           if (widget.userStory.user?.id != widget.currentUserId)
+//             const PopupMenuItem<String>(
+//               value: 'report',
+//               textStyle: TextStyle(color: Colors.white),
+//               child: Row(
+//                 children: [
+//                   Icon(Icons.report, color: Colors.orange),
+//                   SizedBox(width: 10),
+//                   Text('Report'),
+//                 ],
+//               ),
+//             ),
+//         ];
+//       },
+//       color: Colors.white,
+//       elevation: 0,
 //     );
 //   }
 // }
 //
-// StoryItem createStoryItem(Story storyData, StoryController controller) {
+// String getFirstSubstringBeforeTilde(String input) {
+//   if (input.contains('~')) {
+//     return input.split('~')[0];
+//   } else {
+//     return input; // Return the whole string if there's no tilde
+//   }
+// }
+//
+// String removeSubstringBeforeFirstTildeOnly(String input) {
+//   int tildeIndex = input.indexOf('~');
+//   if (tildeIndex != -1) {
+//     return input.substring(tildeIndex + 1);
+//   } else {
+//     return input; // Return the whole string if there's no tilde
+//   }
+// }
+//
+// final Map<String, Color> colorMap = {
+//   'Colors.red': Colors.red,
+//   'Colors.white': Colors.blueGrey,
+//   'Colors.black': Colors.black,
+//   'Colors.blue': Colors.blue,
+//   'Colors.green': Colors.green,
+//   'Colors.yellow': Colors.yellow,
+//   'Colors.orange': Colors.orange,
+//   'Colors.purple': Colors.purple,
+// };
+//
+// StoryItem createStoryItem(context, Story storyData, StoryController controller,
+//     {TextStyle? textStyle}) {
 //   switch (storyData.type) {
 //     case 'text':
 //       return StoryItem.text(
-//         title: storyData.content!,
-//         backgroundColor: Colors.deepOrange,
+// // title: colorMap[getFirstSubstringBeforeTilde(storyData.content!)].toString(),
+//         title: removeSubstringBeforeFirstTildeOnly(storyData.content!),
+//         backgroundColor:
+//             colorMap[getFirstSubstringBeforeTilde(storyData.content!)] ??
+//                 Colors.deepOrange,
+//         textStyle: textStyle ?? const TextStyle(),
+// // textOuterPadding: EdgeInsets.all(8),
+// // textStyle: TextStyle(
+// //   // fontSize: MediaQuery.of(context).size.width*0.1,
+// //   shadows: const [
+// //     Shadow(
+// //       offset: Offset(1.0, 1.0),
+// //       blurRadius: 4.0,
+// //       color: Colors.black,
+// //     ),
+// //   ],
+// // ),
 //       );
 //     case 'image':
 //       return StoryItem.pageImage(
+//         loadingWidget: const CupertinoActivityIndicator(
+//           color: Colors.white,
+//         ),
+//         errorWidget: const CupertinoActivityIndicator(
+//           color: Colors.white,
+//         ),
 //         url: storyData.content!,
 //         caption: storyData.caption != null && storyData.caption != 'null'
 //             ? Text(
@@ -1541,6 +2153,13 @@
 //       );
 //     case 'video':
 //       return StoryItem.pageVideo(
+//         loadingWidget: const CupertinoActivityIndicator(
+//           color: Colors.white,
+//         ),
+//         errorWidget: const CupertinoActivityIndicator(
+//           color: Colors.white,
+//         ),
+//         shown: false,
 //         storyData.content!,
 //         caption: storyData.caption != null && storyData.caption != 'null'
 //             ? Text(
@@ -1567,11 +2186,11 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:story_view/story_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:story_view/story_view.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../res/style/const.dart';
-import '../../../tinder/presentation/pages/user_profile.dart';
+import '../../../tinder/data/shared/shared.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import '../cubit/stories_cubit.dart';
 
@@ -1585,88 +2204,75 @@ class ReactionWidget extends StatelessWidget {
     {'icon': '😠', 'color': Colors.redAccent, 'label': 'Angry'},
   ];
 
-  ReactionWidget({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Expanded(
-          flex: 6,
-          child: Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: 16.0, vertical: 0.h), // Adjust padding as per need
-            decoration: BoxDecoration(
-              color: Colors.grey[800],
-              borderRadius: BorderRadius.circular(25.0),
-            ),
-            clipBehavior: Clip.hardEdge,
-            child: TextField(
-              maxLines: null,
-              onChanged: (value) {
-                print("${value}11111111111111111111111111111111111");
-              },
-              cursorColor: Colors.white,
-              cursorErrorColor: Colors.red,
-              decoration: InputDecoration(
-                fillColor: Colors.transparent,
-                hintText: 'Send message...',
-                hintStyle: TextStyle(
-                  color: Colors.white54,
-                  fontSize: 16.sp,
-                ),
-                border: InputBorder.none, // Remove default underline
-              ),
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+      // Disable text scaling
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            flex: 6,
+            child: _buildTextField(context),
           ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          flex: 4,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: reactions.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              final reaction = reactions[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                child: GestureDetector(
-                  onTap: () {
-                    // Action for reaction
-                    print('Selected: ${reaction['label']}');
-                  },
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      FloatingActionButton.small(
-                        onPressed: () {},
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                        child: Text(
-                          reaction['icon'],
-                          textScaler: const TextScaler.linear(2),
-                        ),
-                      )
+          const SizedBox(width: 10),
+          Expanded(
+            flex: 4,
+            child: _buildReactionsList(),
+          ),
+        ],
+      ),
+    );
+  }
 
-                      // Optionally add text below the icons
-                      // Text(reaction['label'], style: TextStyle(color: Colors.white, fontSize: 12.sp)),
-                    ],
-                  ),
-                ),
-              );
-            },
+  Widget _buildTextField(context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[800],
+        borderRadius: BorderRadius.circular(25.0),
+      ),
+      clipBehavior: Clip.hardEdge,
+      child: MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+        child: TextField(
+          maxLines: null,
+          onChanged: (value) => debugPrint(value),
+          cursorColor: Colors.white,
+          cursorErrorColor: Colors.red,
+          decoration: const InputDecoration(
+            fillColor: Colors.transparent,
+            hintText: 'Send message...',
+            hintStyle: TextStyle(
+              color: Colors.white54,
+            ),
+          ),
+          style: const TextStyle(
+            color: Colors.white,
           ),
         ),
-      ],
+      ),
+    );
+  }
+
+  Widget _buildReactionsList() {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: reactions.length,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        final reaction = reactions[index];
+        return FloatingActionButton.small(
+          onPressed: () {
+            debugPrint('Selected: ${reaction['label']}');
+          },
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: Text(reaction['icon']),
+        );
+      },
     );
   }
 }
@@ -1675,8 +2281,11 @@ class StoryViewScreen extends StatefulWidget {
   final int initialUserIndex;
   final List<UserStories> stories;
 
-  const StoryViewScreen(
-      {super.key, this.initialUserIndex = 0, required this.stories});
+  const StoryViewScreen({
+    super.key,
+    this.initialUserIndex = 0,
+    required this.stories,
+  });
 
   @override
   StoryViewScreenState createState() => StoryViewScreenState();
@@ -1684,37 +2293,13 @@ class StoryViewScreen extends StatefulWidget {
 
 class StoryViewScreenState extends State<StoryViewScreen> {
   late final PageController _pageController;
-
-  // late final StoryCubit _storyCubit;
-  // late List<UserStories> stories = [];
   int _currentUserIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    // _storyCubit = serviceLocator<StoryCubit>();
     _pageController = PageController(initialPage: widget.initialUserIndex);
     _currentUserIndex = widget.initialUserIndex;
-    _initializeStories();
-  }
-
-  Future<void> _initializeStories() async {
-    // try {
-    //   // await _storyCubit.fetchStories();
-    //   setState(() {
-    //     // stories = _storyCubit.state.stories;
-    //   });
-    //   debugPrint('Fetched ${stories.length} stories');
-    // } catch (error) {
-    //   debugPrint('Error fetching stories: $error');
-    //   _showErrorSnackBar();
-    // }
-  }
-
-  void _showErrorSnackBar() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(tr('error_fetching_stories'))),
-    );
   }
 
   @override
@@ -1745,27 +2330,30 @@ class StoryViewScreenState extends State<StoryViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      body: widget.stories.isNotEmpty
-          ? PageView.builder(
-              controller: _pageController,
-              itemCount: widget.stories.length,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentUserIndex = index;
-                });
-              },
-              itemBuilder: (context, index) {
-                return UserStoryView(
-                  currentUserId: serviceLocator<UserCubit>().state.data!.id,
-                  userStory: widget.stories[index],
-                  onComplete: _navigateToNextUser,
-                  onPrevious: _navigateToPreviousUser,
-                );
-              },
-            )
-          : const Sizer(),
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        body: widget.stories.isNotEmpty
+            ? PageView.builder(
+                controller: _pageController,
+                itemCount: widget.stories.length,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentUserIndex = index;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  return UserStoryView(
+                    currentUserId: serviceLocator<UserCubit>().state.data!.id,
+                    userStory: widget.stories[index],
+                    onComplete: _navigateToNextUser,
+                    onPrevious: _navigateToPreviousUser,
+                  );
+                },
+              )
+            : const Sizer(),
+      ),
     );
   }
 }
@@ -1814,14 +2402,18 @@ class UserStoryViewState extends State<UserStoryView> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // _buildStoryView(),
+        _buildStoryView(),
         _buildUserInfoBar(),
         _buildNavigationOverlay(),
         Positioned(
-            bottom: 8,
-            right: 0,
-            left: 0,
-            child: SizedBox(height: kToolbarHeight, child: ReactionWidget())),
+          bottom: 8,
+          right: 0,
+          left: 0,
+          child: SizedBox(
+            height: kToolbarHeight,
+            child: ReactionWidget(),
+          ),
+        ),
       ],
     );
   }
@@ -1881,20 +2473,12 @@ class UserStoryViewState extends State<UserStoryView> {
     return Padding(
       padding: const EdgeInsets.only(top: kToolbarHeight * 2),
       child: GestureDetector(
-        // onTapDown: (details) {
-        //   final screenWidth = MediaQuery.of(context).size.width;
-        //   if (details.globalPosition.dx < screenWidth / 2) {
-        //     _storyController.previous();
-        //   } else {
-        //     _storyController.next();
-        //   }
-        // },
         onHorizontalDragEnd: (details) {
           if (details.primaryVelocity != null) {
             if (details.primaryVelocity! < 0) {
-              widget.onComplete(); // Swipe left to go to the next user
+              widget.onComplete();
             } else if (details.primaryVelocity! > 0) {
-              widget.onPrevious(); // Swipe right to go to the previous user
+              widget.onPrevious();
             }
           }
         },
@@ -1904,31 +2488,28 @@ class UserStoryViewState extends State<UserStoryView> {
             Navigator.of(context).pop();
           }
         },
-        child: Container(
-          color: Colors.transparent,
-          child: Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: _storyController.previous,
-                  child: Container(color: Colors.transparent),
-                ),
+        child: Row(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: _storyController.previous,
+                child: Container(color: Colors.transparent),
               ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: _storyController.next,
-                  child: Container(color: Colors.transparent),
-                ),
+            ),
+            Expanded(
+              child: GestureDetector(
+                onTap: _storyController.next,
+                child: Container(color: Colors.transparent),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class UserInfoBar extends StatefulWidget {
+class UserInfoBar extends StatelessWidget {
   final UserStories userStory;
   final DateTime createdAt;
   final String currentUserId;
@@ -1942,11 +2523,6 @@ class UserInfoBar extends StatefulWidget {
     required this.currentStoryId,
   });
 
-  @override
-  State<UserInfoBar> createState() => _UserInfoBarState();
-}
-
-class _UserInfoBarState extends State<UserInfoBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -1981,8 +2557,7 @@ class _UserInfoBarState extends State<UserInfoBar> {
   Widget _buildUserAvatar() {
     return CircleAvatar(
       minRadius: 25,
-      backgroundImage:
-          NetworkImage(widget.userStory.user?.profilePictureUrl ?? ''),
+      backgroundImage: NetworkImage(userStory.user?.profilePictureUrl ?? ''),
       onBackgroundImageError: (_, __) =>
           const NetworkImage(UIConst.profilePlaceHolder),
     );
@@ -1995,19 +2570,19 @@ class _UserInfoBarState extends State<UserInfoBar> {
       children: [
         Text(
           capitalizeAndSplit2Only(
-              '${widget.userStory.user?.firstName ?? ''} ${widget.userStory.user?.lastName ?? ''}'),
-          style: TextStyle(fontSize: 18.sp, color: Colors.white),
+              '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
+          style: const TextStyle(color: Colors.white),
         ),
         SizedBox(height: 4.h),
         Text(
-          DateFormat('hh:mm a').format(widget.createdAt),
-          style: TextStyle(fontSize: 12.sp, color: Colors.white70),
+          DateFormat('hh:mm a').format(createdAt),
+          style: const TextStyle(color: Colors.white70),
         ),
       ],
     );
   }
 
-  Widget _buildMoreOptionsButton(context) {
+  Widget _buildMoreOptionsButton(BuildContext context) {
     return PopupMenuButton<String>(
       icon: const Icon(
         Icons.more_vert,
@@ -2016,31 +2591,15 @@ class _UserInfoBarState extends State<UserInfoBar> {
       ),
       onSelected: (String value) async {
         if (value == 'delete') {
-          print('Deleting story with ID: ${widget.currentStoryId}');
-
-          // Call the delete method in the StoryCubit to delete from the backend
+          debugPrint('Deleting story with ID: $currentStoryId');
           await BlocProvider.of<StoryCubit>(context)
-              .deleteStory(widget.currentStoryId);
-
-          // Remove the story from the local list
-          // setState(() {
-          //   // Find the story by ID and remove it
-          //   widget.userStory.stories!
-          //       .removeWhere((story) => story.id == widget.currentStoryId);
-          //
-          //   // If the entire UserStories object has no stories left, remove it from the list
-          //   if (widget.userStory.stories!.isEmpty) {
-          //     widget.userStory.stories!.removeWhere(
-          //         (userStory) => userStory.id == widget.userStory.user?.id);
-          //   }
-          // });
-
+              .deleteStory(currentStoryId);
           Navigator.of(context).pop();
         } else if (value == 'report') {
           bottomSheet(
             context: context,
             widget: ReportView(
-              id: widget.currentUserId,
+              id: currentUserId,
               categoryId: '66684135dbb427ee42aa0141',
             ),
           );
@@ -2048,45 +2607,45 @@ class _UserInfoBarState extends State<UserInfoBar> {
       },
       itemBuilder: (BuildContext context) {
         return [
-          if (widget.userStory.user?.id == widget.currentUserId)
+          if (userStory.user?.id == currentUserId)
             const PopupMenuItem<String>(
               value: 'delete',
-              textStyle: TextStyle(color: Colors.white),
               child: Row(
                 children: [
                   Icon(Icons.delete, color: Colors.red),
                   SizedBox(width: 10),
-                  Text('Delete'),
+                  Text(
+                    'Delete',
+                    textScaler: TextScaler.noScaling,
+                  ),
                 ],
               ),
             ),
-          if (widget.userStory.user?.id != widget.currentUserId)
+          if (userStory.user?.id != currentUserId)
             const PopupMenuItem<String>(
               value: 'report',
-              textStyle: TextStyle(color: Colors.white),
               child: Row(
                 children: [
                   Icon(Icons.report, color: Colors.orange),
                   SizedBox(width: 10),
-                  Text('Report'),
+                  Text(
+                    'Report',
+                    textScaler: TextScaler.noScaling,
+                  ),
                 ],
               ),
             ),
         ];
       },
-      color: Colors.white,
-      elevation: 0,
     );
   }
 }
 
-String getFirstSubstringBeforeTilde(String input) {
-  if (input.contains('~')) {
-    return input.split('~')[0];
-  } else {
-    return input; // Return the whole string if there's no tilde
-  }
-}
+// String capitalizeAndSplit2Only(String text) {
+//   return text.split(' ').map((str) {
+//     return str[0].toUpperCase() + str.substring(1).toLowerCase();
+//   }).join(' ');
+// }
 
 String removeSubstringBeforeFirstTildeOnly(String input) {
   int tildeIndex = input.indexOf('~');
@@ -2108,28 +2667,23 @@ final Map<String, Color> colorMap = {
   'Colors.purple': Colors.purple,
 };
 
+String getFirstSubstringBeforeTilde(String input) {
+  if (input.contains('~')) {
+    return input.split('~')[0];
+  } else {
+    return input; // Return the whole string if there's no tilde
+  }
+}
+
 StoryItem createStoryItem(context, Story storyData, StoryController controller,
     {TextStyle? textStyle}) {
   switch (storyData.type) {
     case 'text':
       return StoryItem.text(
-// title: colorMap[getFirstSubstringBeforeTilde(storyData.content!)].toString(),
         title: removeSubstringBeforeFirstTildeOnly(storyData.content!),
         backgroundColor:
             colorMap[getFirstSubstringBeforeTilde(storyData.content!)] ??
                 Colors.deepOrange,
-        textStyle: textStyle ?? const TextStyle(),
-// textOuterPadding: EdgeInsets.all(8),
-// textStyle: TextStyle(
-//   // fontSize: MediaQuery.of(context).size.width*0.1,
-//   shadows: const [
-//     Shadow(
-//       offset: Offset(1.0, 1.0),
-//       blurRadius: 4.0,
-//       color: Colors.black,
-//     ),
-//   ],
-// ),
       );
     case 'image':
       return StoryItem.pageImage(
@@ -2143,6 +2697,7 @@ StoryItem createStoryItem(context, Story storyData, StoryController controller,
         caption: storyData.caption != null && storyData.caption != 'null'
             ? Text(
                 storyData.caption!,
+                textScaler: TextScaler.noScaling,
                 style: const TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
               )
@@ -2157,11 +2712,11 @@ StoryItem createStoryItem(context, Story storyData, StoryController controller,
         errorWidget: const CupertinoActivityIndicator(
           color: Colors.white,
         ),
-        shown: false,
         storyData.content!,
         caption: storyData.caption != null && storyData.caption != 'null'
             ? Text(
                 storyData.caption!,
+                textScaler: TextScaler.noScaling,
                 style: const TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
               )

@@ -723,7 +723,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                   },
                   child: TextAppButton(
                       style: TextStyle(color: Theme.of(context).primaryColor),
-                      label: post.user.firstName,
+                      label: "${post.user.firstName} ${post.user.lastName}",
                       onPressed: () {
                         context.push(Routes.INSTAGRAMPROFILE,
                             extra: post.user.id);

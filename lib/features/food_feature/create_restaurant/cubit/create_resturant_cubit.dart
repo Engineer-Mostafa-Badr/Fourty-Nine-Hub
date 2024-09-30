@@ -10,7 +10,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/enti
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_meal_categories_with_count_restaurants_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/restaurant_shared_data.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_list_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_meal_list_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
@@ -30,6 +30,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   final GetGovernoratesUseCase _getGovernoratesUseCase;
   final GetCitiesUseCase _getCitiesUseCase;
   final CreateRestaurantUseCase _createREstaurant;
+
   CreateRestaurantCubit(
       this._shareCubit,
       this._getSubSubcategoriesUseCase,
@@ -43,7 +44,8 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
     await _getGovernorates();
   }
 
-  Future<void> submit() async {
+  Future<String> submit() async {
+    var res = 'fail';
     _validationState();
 
     if ((createRestaurantParams.name?.isNotEmpty ?? false) &&
@@ -64,25 +66,30 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
           AppPages.router.routerDelegate.navigatorKey.currentContext!
               .pushNamed(Routes.LOGIN);
         }
+        res = 'fail';
       }, (data) {
         emit(CreateRestaurantSuccess(LocaleKeys
             .youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval
             .tr()));
+        res = 'success';
 
         AppPages.router.routerDelegate.navigatorKey.currentContext!
-            .read<RestaurantsListCubit>()
+            .read<RestaurantsMealListCubit>()
             .loadData();
+
         AppPages.router.routerDelegate.pop();
       });
     } else {
+      res = 'fail';
       ScaffoldMessenger.of(
               AppPages.router.routerDelegate.navigatorKey.currentContext!)
           .showSnackBar(SnackBar(
         content: Text(LocaleKeys.completeAllFields.tr()),
         backgroundColor: Colors.red,
       ));
-      return;
+      return res;
     }
+    return res;
   }
 
   bool isSubCategory = false;
@@ -228,6 +235,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
 
   final name = TextEditingController();
   final phoneController = TextEditingController();
+
   saveTextEditingController() {
     createRestaurantParams.name = name.text;
   }

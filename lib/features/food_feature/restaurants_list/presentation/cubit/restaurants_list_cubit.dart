@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_entity.dart';
@@ -25,6 +26,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_subcategory.dart';
 import '../../../../../core/enums/main_services_enum.dart';
+import '../../../../../service_locator/service_locator.dart';
 
 part 'restaurants_list_state.dart';
 
@@ -32,6 +34,7 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
   final GetMainCategoryDetailsUseCase _getMainCategoryDetailsUseCase;
   final GetAllRestaurantUseCase _getAllRestaurantUseCase;
   final GetNearByRestaurantsUseCase _getNearByRestaurantsUseCase;
+
   // final GetTrendingRestaurantsUseCase _getTrendingRestaurantsUseCase;
   final GetBannerByIdUseCase _getBannerByIdUseCase;
   final GetNumOfResturantUseCase _getNumOfResturantUseCase;
@@ -40,6 +43,7 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
   final IsResturantUsecase _isResturantUseCase;
   final GetMealCategoriesWithCountRestaurantsUseCase
       _getMealCategoriesWithCountRestaurantsUseCase;
+
   RestaurantsListCubit(
     this._getMealCategoriesWithCountRestaurantsUseCase,
     this._getBannerByIdUseCase,
@@ -63,15 +67,17 @@ class RestaurantsListCubit extends Cubit<RestaurantsListState> {
   }
 
   void loadData() async {
-    Future.wait([
-      _getMainCategoryDetails(),
-      _isDoctor(),
-      _getMealCategoriesWithCountRestaurants(),
-      _getAllRestaurant(),
-      // getNearByRestaurants(),
-      // getNearByRestaurants(),
-      getNumOfRestaurants(),
-    ]);
+    if (serviceLocator<UserCubit>().isLoggedIn) {
+      Future.wait([
+        _getMainCategoryDetails(),
+        _isDoctor(),
+        _getMealCategoriesWithCountRestaurants(),
+        _getAllRestaurant(),
+        // getNearByRestaurants(),
+        // getNearByRestaurants(),
+        getNumOfRestaurants(),
+      ]);
+    }
   }
 
   Future<void> toggleFavoriteSubcategory(String subcategoryId) async {

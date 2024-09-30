@@ -22,8 +22,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
 
-class CreateResturantView extends StatelessWidget {
-  const CreateResturantView({super.key});
+class CreateRestaurantForm extends StatelessWidget {
+  const CreateRestaurantForm({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class CreateResturantView extends StatelessWidget {
       child: Scaffold(
         appBar: const HomeAppbar(),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(15.0),
+          padding: EdgeInsets.all(15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

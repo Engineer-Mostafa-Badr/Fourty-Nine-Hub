@@ -7,7 +7,6 @@ import 'package:fourtyninehub/features/competition/presentation/cubit/winner_cub
 import 'package:fourtyninehub/features/competition/presentation/view/widgets/winner_card.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
-import '../../../../res/style/styles.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../data/repository/competition_repo_impl.dart';
 
@@ -40,14 +39,6 @@ class Winners extends StatelessWidget {
                     );
                   },
                   itemCount: state.winnersModel.data!.length,
-                ),
-              );
-            } else if (state is WinnersErrorState) {
-              return Center(
-                child: Text(
-                  state.errMessage,
-                  textAlign: TextAlign.center,
-                  style: Styles.mediumText(),
                 ),
               );
             }

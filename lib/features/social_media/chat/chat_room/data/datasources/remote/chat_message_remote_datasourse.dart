@@ -143,11 +143,10 @@ class MessagesRemoteDataSourceImplementation
           mediaIds.add(id);
         }
       }
+      
 
-      // if (mediaIds.isNotEmpty) {
-      //   await Future.delayed(const Duration(seconds: 6), () {});
-      // }
 
+      _socket.connect();
       _socket.emit(
         SocketIOEvents.sendMessage,
         jsonEncode({
@@ -158,6 +157,7 @@ class MessagesRemoteDataSourceImplementation
           "groupId": null,
           "replyMessageId": params.replyMessageId,
           "oneTimeView": params.oneTimeView,
+          "sharedContacts": params.sharedContacts.map((contact) => contact.toJson()).toList(),
         }),
       );
 

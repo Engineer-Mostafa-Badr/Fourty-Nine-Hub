@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -25,96 +26,98 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
             text: LocaleKeys.theCommercialRegister.tr(),
             style: Styles.headerText(),
           ),
-          const Sizer(),
-          Row(
-            children: [
-              InkWell(
-                onTap: () async {
-                  await createRestaurantCubit.uploadLicenseFirstPageImage();
-                },
-                child:
-                    BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
-                  buildWhen: (previous, current) =>
-                      current is CreateRestaurantUploadLicenseFirstPageImage ||
-                      current is CreateRestaurantInitial,
-                  builder: (context, state) {
-                    if (state is CreateRestaurantUploadLicenseFirstPageImage) {
-                      return ImagePickerPlaceholder(
-                        image: Image.file(
-                          File(state.file.path),
-                          fit: BoxFit.cover,
-                        ),
-                      );
-                    }
-                    return ImagePickerPlaceholder(
-                      borderColor: state is ValidationState &&
-                              (state.isCommercialFirstPage ?? true)
-                          ? Colors.red
-                          : Colors.black,
-                      tilte: LocaleKeys.firstPage.tr(),
-                    );
+          Sizer(),
+          FittedBox(
+            child: Row(
+              children: [
+                InkWell(
+                  onTap: () async {
+                    await createRestaurantCubit.uploadLicenseFirstPageImage();
                   },
-                ),
-              ),
-              const Sizer(),
-              InkWell(
-                onTap: () async {
-                  await createRestaurantCubit.uploadLicenseSecondPageImage();
-                },
-                child:
-                    BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
-                  buildWhen: (previous, current) =>
-                      current is CreateRestaurantUploadLicenseSecondPageImage ||
-                      current is CreateRestaurantInitial,
-                  builder: (context, state) {
-                    if (state is CreateRestaurantUploadLicenseSecondPageImage) {
+                  child:
+                      BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
+                    buildWhen: (previous, current) =>
+                        current is CreateRestaurantUploadLicenseFirstPageImage ||
+                        current is CreateRestaurantInitial,
+                    builder: (context, state) {
+                      if (state is CreateRestaurantUploadLicenseFirstPageImage) {
+                        return ImagePickerPlaceholder(
+                          image: Image.file(
+                            File(state.file.path),
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      }
                       return ImagePickerPlaceholder(
-                        image: Image.file(
-                          File(state.file.path),
-                          fit: BoxFit.cover,
-                        ),
+                        borderColor: state is ValidationState &&
+                                (state.isCommercialFirstPage ?? true)
+                            ? Colors.red
+                            : Colors.grey,
+                        tilte: LocaleKeys.firstPage.tr(),
                       );
-                    }
-                    return ImagePickerPlaceholder(
-                      borderColor: state is ValidationState &&
-                              (state.isCommercialSecondPage ?? true)
-                          ? Colors.red
-                          : Colors.black,
-                      tilte: LocaleKeys.secondPage.tr(),
-                    );
-                  },
+                    },
+                  ),
                 ),
-              ),
-              const Sizer(),
-              InkWell(
-                onTap: () async {
-                  await createRestaurantCubit.uploadLicenseThiredPageImage();
-                },
-                child:
-                    BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
-                  buildWhen: (previous, current) =>
-                      current is CreateRestaurantUploadLicenseThiredPageImage ||
-                      current is CreateRestaurantInitial,
-                  builder: (context, state) {
-                    if (state is CreateRestaurantUploadLicenseThiredPageImage) {
+                Sizer(),
+                InkWell(
+                  onTap: () async {
+                    await createRestaurantCubit.uploadLicenseSecondPageImage();
+                  },
+                  child:
+                      BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
+                    buildWhen: (previous, current) =>
+                        current is CreateRestaurantUploadLicenseSecondPageImage ||
+                        current is CreateRestaurantInitial,
+                    builder: (context, state) {
+                      if (state is CreateRestaurantUploadLicenseSecondPageImage) {
+                        return ImagePickerPlaceholder(
+                          image: Image.file(
+                            File(state.file.path),
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      }
                       return ImagePickerPlaceholder(
-                        image: Image.file(
-                          File(state.file.path),
-                          fit: BoxFit.cover,
-                        ),
+                        borderColor: state is ValidationState &&
+                                (state.isCommercialSecondPage ?? true)
+                            ? Colors.red
+                            : Colors.grey,
+                        tilte: LocaleKeys.secondPage.tr(),
                       );
-                    }
-                    return ImagePickerPlaceholder(
-                      borderColor: state is ValidationState &&
-                              (state.isCommercialThirdPage ?? true)
-                          ? Colors.red
-                          : Colors.black,
-                      tilte: LocaleKeys.thirdPage.tr(),
-                    );
-                  },
+                    },
+                  ),
                 ),
-              ),
-            ],
+                Sizer(),
+                InkWell(
+                  onTap: () async {
+                    await createRestaurantCubit.uploadLicenseThiredPageImage();
+                  },
+                  child:
+                      BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
+                    buildWhen: (previous, current) =>
+                        current is CreateRestaurantUploadLicenseThiredPageImage ||
+                        current is CreateRestaurantInitial,
+                    builder: (context, state) {
+                      if (state is CreateRestaurantUploadLicenseThiredPageImage) {
+                        return ImagePickerPlaceholder(
+                          image: Image.file(
+                            File(state.file.path),
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      }
+                      return ImagePickerPlaceholder(
+                        borderColor: state is ValidationState &&
+                                (state.isCommercialThirdPage ?? true)
+                            ? Colors.red
+                            : Colors.grey,
+                        tilte: LocaleKeys.thirdPage.tr(),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
           Visibility(
             visible:

@@ -16,6 +16,7 @@ import '../cubit/restaurant_details_cubit.dart';
 
 class RestaurantDetailsView extends StatefulWidget {
   final String id;
+
   const RestaurantDetailsView({super.key, required this.id});
 
   @override
@@ -25,12 +26,15 @@ class RestaurantDetailsView extends StatefulWidget {
 class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
   @override
   void initState() {
-    context.read<RestaurantDetailsCubit>().loadData(id: widget.id);
+    // context.read<RestaurantDetailsCubit>().loadData(id: widget.id);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("${widget.id}aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    final controller =
+        context.read<RestaurantDetailsCubit>().loadData(id: widget.id);
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
@@ -42,7 +46,9 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
             if (state.restaurant != null)
               RestaurantHeader(restaurant: state.restaurant!),
             const Divider(),
-            const BuildFoodList(),
+            BuildFoodList(
+              restaurantId: widget.id,
+            ),
           ],
         );
       }),
@@ -52,19 +58,49 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
   Widget _buildBuscketButton() {
     return BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
         builder: (context, state) {
-      return Container(
+      return SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: ElevatedButton(
+            onPressed: () async {
+              // if (state.selectedMeals?.isNotEmpty ?? false) {
+              context.push(Routes.FOODCART);
+              // }
+            },
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              // Adjusted padding
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0), // Adjusted radius
+              ),
+              backgroundColor: AppColors.SECONDARY_COLOR,
+            ),
+            child: Text(
+              'View Cart',
+              style: Styles.headerText(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      );
+      /*Container(
           margin: const EdgeInsets.all(10),
           child: AppButton(
               color: AppColors.AUTH_CONTAINER_COLOR,
-              backColor: state.selectedMeals?.isNotEmpty ?? false
-                  ? AppColors.SECONDARY_COLOR
-                  : AppColors.SECONDARY_COLOR.withOpacity(.7),
+              backColor:
+                  // state.selectedMeals?.isNotEmpty ?? false
+                  //     ?
+                  AppColors.SECONDARY_COLOR,
+              // : AppColors.SECONDARY_COLOR.withOpacity(.7),
               label: 'View Cart - ${state.selectedMeals?.length ?? 0} Items',
-              onPressed: () {
-                if (state.selectedMeals?.isNotEmpty ?? false) {
-                  context.push(Routes.FOODCART);
-                }
-              }));
+              onPressed: () async {
+                // if (state.selectedMeals?.isNotEmpty ?? false) {
+                context.push(Routes.FOODCART);
+                // }
+              }));*/
     });
   }
 

@@ -26,6 +26,7 @@ void showErrorMessage(BuildContext context, String message) {
           Expanded(
             child: Text(
               message,
+              textScaleFactor: 1.0,
               style: const TextStyle(
                 fontWeight: FontWeight.w500,
                 color: Colors.black,
@@ -73,6 +74,7 @@ showSuccessMessage(
             Expanded(
               child: Text(
                 message,
+                textScaleFactor: 1.0,
                 style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   color: AppColors.QUANTITY_COLOR,

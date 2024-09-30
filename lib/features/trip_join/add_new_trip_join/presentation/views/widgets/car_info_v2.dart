@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_brands/fetch_car_brands_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_models/fetch_car_models_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_year_type/fetch_car_year_type_cubit.dart';
@@ -47,7 +49,7 @@ class _CarInfoV2State extends State<CarInfoV2> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15)),
                   fillColor: Colors.transparent,
-                  label: const Text('Brand'),
+                  label: Text(LocaleKeys.brand.localize),
                   isDense: true,
                   // Added this
                   contentPadding: const EdgeInsets.all(14),
@@ -63,7 +65,7 @@ class _CarInfoV2State extends State<CarInfoV2> {
                   log(value.toString(),
                       name: "==========================================");
                   if (value == null || value.isEmpty) {
-                    return 'Car Brand Required';
+                    return LocaleKeys.youCantLeaveFieldEmpty.localize;
                   }
                   return null;
                 },
@@ -99,7 +101,7 @@ class _CarInfoV2State extends State<CarInfoV2> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15)),
                   fillColor: Colors.transparent,
-                  label: const Text('Model'),
+                  label: Text(LocaleKeys.model.localize),
                   isDense: true,
                   // Added this
                   contentPadding: const EdgeInsets.all(14),
@@ -116,7 +118,7 @@ class _CarInfoV2State extends State<CarInfoV2> {
                   log(value.toString(),
                       name: "==========================================");
                   if (value == null || value.isEmpty) {
-                    return 'Car Model Required';
+                    return LocaleKeys.youCantLeaveFieldEmpty.localize;
                   }
                   return null;
                 },

@@ -101,6 +101,7 @@ class _ZegoLiveStreamingInRoomMessageInputBoardButtonState
                       payloadAttributes: widget
                           .hostManager.config.inRoomMessage.attributes
                           ?.call(),
+
                       rootNavigator: widget.hostManager.config.rootNavigator,
                     ),
                   )

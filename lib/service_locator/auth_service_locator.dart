@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/remote_data_source/wallet_datasource.dart';
 import 'package:fourtyninehub/features/authentication/data/repositories/wallet_repository.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_new_forget_password_use_case.dart';
@@ -12,6 +14,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/f
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_forgot_password_otp/verify_forgot_password_otp_cubit.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import '../features/authentication/data/data_sources/remote_data_source/auth_remote_data_source.dart';
 import '../features/authentication/data/data_sources/remote_data_source/user_remote_data_source.dart';
@@ -77,9 +80,10 @@ class AuthServiceLocator {
     // auth use cases
     serviceLocator.registerFactory(() => LoginUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => GetUserUseCase(serviceLocator()));
-    // serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
+    serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     serviceLocator.registerFactory(() => AttachTokenUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => SaveTokensUseCase(serviceLocator()));
+    // serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     serviceLocator.registerFactory(() => GetTokensUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => RegisterUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => VerifyOTPUseCase(serviceLocator()));
@@ -100,14 +104,18 @@ class AuthServiceLocator {
 
     // auth cubits
     serviceLocator.registerFactory<LoginCubit>(
-      () => LoginCubit(
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-      ),
+      () {
+        final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+        final GoogleSignIn googleSignIn = GoogleSignIn();
+        return LoginCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          googleSignIn: googleSignIn,
+          firebaseAuth: firebaseAuth,
+        );
+      },
     );
     serviceLocator.registerSingleton(
       UserCubit(serviceLocator(), serviceLocator(), serviceLocator(),

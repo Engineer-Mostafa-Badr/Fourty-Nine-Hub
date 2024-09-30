@@ -26,6 +26,8 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
                 return DropdownMenu<FoodCategoryEntity>(
                     inputDecorationTheme: InputDecorationTheme(
                       isDense: true,
+                      constraints: BoxConstraints.loose(Size.fromHeight(90.h)),
+
                       enabledBorder: OutlineInputBorder(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(8)),
@@ -33,7 +35,7 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
                             color: st is ValidationState &&
                                     (st.isSubCategory ?? true)
                                 ? Colors.red
-                                : Colors.black),
+                                : Colors.grey),
                       ),
                       border: OutlineInputBorder(
                         borderRadius:
@@ -42,7 +44,7 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
                             color: st is ValidationState &&
                                     (st.isSubCategory ?? true)
                                 ? Colors.red
-                                : Colors.black),
+                                : Colors.grey),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderRadius:
@@ -51,12 +53,12 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
                             color: st is ValidationState &&
                                     (st.isSubCategory ?? true)
                                 ? Colors.red
-                                : Colors.black),
+                                : Colors.grey),
                       ),
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 5.h,
-                        horizontal: 10.w,
-                      ),
+                      // contentPadding: EdgeInsets.symmetric(
+                      //   vertical: 5.h,
+                      //   horizontal: 10.w,
+                      // ),
                     ),
                     menuHeight: MediaQuery.of(context).size.height / 1.5,
                     menuStyle: const MenuStyle(

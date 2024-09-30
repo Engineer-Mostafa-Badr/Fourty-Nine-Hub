@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 
@@ -9,6 +11,7 @@ class ImagePickerPlaceholder extends StatelessWidget {
   final Widget? image;
   final Color? iconColor;
   final Color? borderColor;
+
   const ImagePickerPlaceholder(
       {super.key,
       this.tilte,
@@ -21,15 +24,11 @@ class ImagePickerPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width ?? 100,
-      height: height ?? 100,
+      width: height ?? 150.h,
+      height: width ?? 150.h,
       decoration: BoxDecoration(
-        border: Border.all(color: borderColor ?? Colors.black),
+        border: Border.all(color: borderColor ?? Colors.grey),
         borderRadius: BorderRadius.circular(UIConst.radius),
-        // image: image != null
-        //     ? DecorationImage(
-        //         image: FileImage(File(image!.path)), fit: BoxFit.cover)
-        //     : null
       ),
       child: _buildImage(),
     );
@@ -38,14 +37,16 @@ class ImagePickerPlaceholder extends StatelessWidget {
   Widget _buildImage() {
     if (image == null) {
       return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Icon(
-            Icons.camera_alt,
-            size: 50,
-            color: iconColor ?? AppColors.LIGHT_GRAY_COLOR,
+          Expanded(
+            child: Icon(
+              Icons.camera_alt,
+              size: 50,
+              color: iconColor ?? AppColors.LIGHT_GRAY_COLOR,
+            ),
           ),
-          _buildTitle(),
+          Expanded(child: _buildTitle()),
         ],
       );
     } else {
@@ -55,8 +56,8 @@ class ImagePickerPlaceholder extends StatelessWidget {
 
   Widget _buildTitle() {
     if (tilte == null || tilte!.isEmpty) {
-      return const SizedBox.shrink();
+      return SizedBox.shrink();
     }
-    return Text(tilte!);
+    return Center(child: Text(tilte!,textAlign: TextAlign.center,));
   }
 }

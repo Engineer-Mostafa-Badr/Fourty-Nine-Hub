@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/pages/meeting_view.dart';
 
 // Package imports:
 
@@ -26,6 +28,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../../../res/assets/assets.dart';
 import '../../../../../../../../../res/style/app_colors.dart';
+import '../../../../../../../../zoom/presentation/controller/stream_state.dart';
 
 /// @nodoc
 class ZegoLiveStreamingTopBar extends StatefulWidget {
@@ -82,6 +85,7 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
   }
 
   final ValueNotifier<bool> showTopBar = ValueNotifier(true);
+
   @override
   Widget build(BuildContext context) {
     return widget.isLiveStream ? _tiktokTopBar() : _zoomTopBar();
@@ -100,16 +104,26 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
         child: Row(
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IconButton(
-                style: IconButton.styleFrom(
-                    shape: const CircleBorder(),
-                    backgroundColor: Colors.grey.withOpacity(0.7)),
-                onPressed: () {
-                  context.pop();
-                },
-                icon: const Icon(
-                  Icons.close,
-                )),
+            BlocBuilder<StreamCubit, StreamState>(
+              builder: (context, state) {
+                return IconButton(
+                    style: IconButton.styleFrom(
+                        shape: const CircleBorder(),
+                        backgroundColor: Colors.grey.withOpacity(0.7)),
+                    onPressed: () async {
+                      for (var user in ZegoUIKit().getAllUsers()) {
+                        await ZegoUIKit().removeUserFromRoom([user.id]);
+                      }
+                      if (context.mounted) {
+                        await context.read<StreamCubit>().endLive();
+                        context.pop();
+                      }
+                    },
+                    icon: const Icon(
+                      Icons.close,
+                    ));
+              },
+            ),
             Expanded(
               child: Container(),
             ),
@@ -307,13 +321,15 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15.0),
-                              color: Colors.redAccent,
+                              color: AppColors.SECONDARY_COLOR,
                             ),
                             child: Center(
                               child: Text(
                                 LocaleKeys.EndMeetingForAll.localize,
                                 style: const TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -333,13 +349,15 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15.0),
-                            color: AppColors.BARRIER_COLOR,
+                            color: AppColors.PRIMARY_COLOR,
                           ),
                           child: Center(
                             child: Text(
                               LocaleKeys.leaveMeeting.localize,
                               style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
                               textAlign: TextAlign.center,
                             ),
                           ),

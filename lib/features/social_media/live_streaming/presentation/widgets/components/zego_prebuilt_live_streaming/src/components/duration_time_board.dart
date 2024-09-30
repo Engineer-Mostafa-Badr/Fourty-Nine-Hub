@@ -12,6 +12,10 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
+import '../../../../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../../../../res/style/app_colors.dart';
+import '../../../../../../../../../res/style/styles.dart';
+
 /// @nodoc
 class ZegoLiveStreamingDurationTimeBoard extends StatefulWidget {
   final ZegoLiveStreamingDurationConfig config;
@@ -86,15 +90,10 @@ class _ZegoLiveStreamingDurationTimeBoardState
 
         return elapsedTime.inSeconds <= 0
             ? Container()
-            : Text(
-                durationFormatString(elapsedTime),
+            : Label(
+                text: durationFormatString(elapsedTime),
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  decoration: TextDecoration.none,
-                  fontSize: widget.fontSize ?? 25.zR,
-                ),
-              );
+                style: Styles.mediumText(color: AppColors.SECONDARY_COLOR));
       },
     );
   }

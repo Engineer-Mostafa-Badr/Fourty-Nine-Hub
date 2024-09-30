@@ -17,6 +17,7 @@ abstract class ApiConsumer {
 
   Future<Either<Failure, Map<String, dynamic>>> get(
     String url, {
+    Map<String, dynamic>? headers,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? data,
   });
@@ -26,6 +27,7 @@ abstract class ApiConsumer {
     Map<String, dynamic>? data,
     FormData? formData,
     Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
   });
 
   Future<Either<Failure, Map<String, dynamic>>> put(
@@ -39,6 +41,7 @@ abstract class ApiConsumer {
     String url, {
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
   });
 
   void attachToken(UserTokensEntity? token);
@@ -69,15 +72,15 @@ class BaseApiConsumer extends ApiConsumer {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> delete(
-    String url, {
-    Map<String, dynamic>? data,
-    Map<String, dynamic>? queryParameters,
-  }) async {
+  Future<Either<Failure, Map<String, dynamic>>> delete(String url,
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) async {
     try {
       final result = await _dio.delete(
         url,
         data: data,
+        options: Options(headers: headers),
         queryParameters: queryParameters,
       );
       return Right(result.data as Map<String, dynamic>);
@@ -99,22 +102,21 @@ class BaseApiConsumer extends ApiConsumer {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> get(
-    String url, {
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? data,
-  }) async {
+  Future<Either<Failure, Map<String, dynamic>>> get(String url,
+      {Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? data,
+      Map<String, dynamic>? headers}) async {
     try {
-      final result = await _dio.get(
-        url,
-        data: data,
-        queryParameters: queryParameters,
-        // options: Options(headers: {
-        //   "Authorization":
-        //       'Bearer ${}'
-        // }
-        // )
-      );
+      final result = await _dio.get(url,
+          data: data,
+          queryParameters: queryParameters,
+          options: Options(headers: headers)
+          // options: Options(headers: {
+          //   "Authorization":
+          //       'Bearer ${}'
+          // }
+          // )
+          );
       // log(url);
       // log(_dio.options.headers['Authorization'], name: "Authorization$url");
       if (result.data['status']) {
@@ -144,18 +146,18 @@ class BaseApiConsumer extends ApiConsumer {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> post(
-    String url, {
-    Map<String, dynamic>? data,
-    FormData? formData,
-    Map<String, dynamic>? queryParameters,
-  }) async {
+  Future<Either<Failure, Map<String, dynamic>>> post(String url,
+      {Map<String, dynamic>? data,
+      FormData? formData,
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) async {
     try {
       log(data.toString());
       final result = await _dio.post(
         url,
         data: formData ?? data,
         queryParameters: queryParameters,
+        options: Options(headers: headers),
       );
 
       if (result.data['status']) {

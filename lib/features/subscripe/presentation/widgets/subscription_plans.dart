@@ -24,6 +24,7 @@ class SubscriptionPlansWidget extends StatefulWidget {
   final List<WalletTypes>? paymentMenthods;
   final String subCategoryId;
   final String? title;
+  final bool? showRegular;
 
   const SubscriptionPlansWidget({
     super.key,
@@ -31,6 +32,7 @@ class SubscriptionPlansWidget extends StatefulWidget {
     required this.subscribePlans,
     required this.subCategoryId,
     this.title,
+    this.showRegular,
   });
 
   @override
@@ -85,30 +87,31 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               // SizedBox(height: 20.h),
               Row(
                 children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => setState(() => _isPremium = false),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 12.h),
-                        decoration: BoxDecoration(
-                          color: !_isPremium
-                              ? AppColors.PRIMARY_COLOR
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        child: Text(
-                          LocaleKeys.regular.localize,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
+                  if (widget.showRegular!)
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => setState(() => _isPremium = false),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                          decoration: BoxDecoration(
                             color: !_isPremium
-                                ? AppColors.AUTH_CONTAINER_COLOR
-                                : Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold,
+                                ? AppColors.PRIMARY_COLOR
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: Text(
+                            LocaleKeys.regular.localize,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: !_isPremium
+                                  ? AppColors.AUTH_CONTAINER_COLOR
+                                  : Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
                   Expanded(
                     child: GestureDetector(
                       onTap: () => setState(() => _isPremium = true),
@@ -161,12 +164,12 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                     final walletPrice = selectedWallet?.name == 'mainWallet'
                         ? state.wallet?.realAmount ?? 0
                         : selectedWallet?.name == 'balance'
-                            ? state.balance?.balance ?? 0
-                            : state.gift?.giftWallet.amount ?? 0;
+                            ? state.wallet?.balance ?? 0
+                            : state.wallet?.giftWallet ?? 0;
                     print(walletPrice);
-                    print(state.gift?.giftWallet.amount);
+                    print(state.wallet?.giftWallet);
                     print(state.wallet?.realAmount);
-                    print(state.balance?.balance);
+                    print(state.wallet?.balance);
                     // print(walletPrice);
                     // print(selectedPlanPrice);
                     // print(_groupValue);

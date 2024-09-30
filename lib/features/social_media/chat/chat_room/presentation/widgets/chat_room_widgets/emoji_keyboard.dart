@@ -20,7 +20,7 @@ class EmojiKeyboard extends StatelessWidget {
       scrollController: scrollController,
       onEmojiSelected: onEmojiSelected,
       config: Config(
-        height: 256.h,
+        height: 500.h,
         checkPlatformCompatibility: true,
         emojiViewConfig: const EmojiViewConfig(
           backgroundColor: Colors.white,
