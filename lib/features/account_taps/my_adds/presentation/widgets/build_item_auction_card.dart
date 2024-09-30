@@ -158,11 +158,15 @@ class BuildItemAuctionCard extends StatelessWidget {
           .primaryColor,
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Expanded(
-            child: ImageFromInternet(
-              image: '${item.images.first}',
-              height: 150.h,
-              borderRadius: BorderRadius.circular(12),
-            )),
+          child: ImageFromInternet(
+            image: (item.images.isNotEmpty)
+                ? item.images.first as String // Casting to String
+                : '', // Provide a fallback image or handle the empty state
+            height: 150.h,
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+
         // SquareImage(radius: 10, source: NetworkImage(item.images.first))),
         const Sizer(
           width: 20,
@@ -231,13 +235,10 @@ class BuildItemAuctionCard extends StatelessWidget {
                       _buildOptionsWidget(
                         label: LocaleKeys.markSsSold.localize,
                         onTap: () {
-                          context.pop();
-                          showAreYouSure(
-                              title: LocaleKeys.alert.localize,
-                              subTitle:
-                              LocaleKeys.adSoldout.localize,
-                              action: () => context.pop(),
-                              context: context);
+                          context
+                              .read<MyAddsCubit>()
+                              .deleteMyInstallment(id: item.id);
+                          Navigator.pop(context);
                         },
                         icon: Icons.hourglass_empty_rounded,
                       ),
@@ -245,12 +246,10 @@ class BuildItemAuctionCard extends StatelessWidget {
                       _buildOptionsWidget(
                         label: LocaleKeys.deactivate.localize,
                         onTap: () {
-                          showAreYouSure(
-                              title: LocaleKeys.alert.localize,
-                              subTitle:
-                              LocaleKeys.adSoldout.localize,
-                              action: () {},
-                              context: context);
+                          context
+                              .read<MyAddsCubit>()
+                              .deleteMyInstallment(id: item.id);
+                          Navigator.pop(context);
                         },
                         icon: Icons.refresh,
                       ),
@@ -260,7 +259,7 @@ class BuildItemAuctionCard extends StatelessWidget {
                         onTap: () {
                           context
                               .read<MyAddsCubit>()
-                              .deleteMyTripJoin(id: item.id);
+                              .deleteMyInstallment(id: item.id);
                           Navigator.pop(context);
                           // showAreYouSure(
                           //   title: LocaleKeys.deleteAd.localize,

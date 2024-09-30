@@ -11,12 +11,14 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:intl/intl.dart' as intl;
 
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../../domain/entity/docs_trip_join_entity.dart';
 import '../cubit/my_adds_cubit.dart';
+import '../widgets/custom_button_count.dart';
 
 class MyAdsTripJoin extends StatelessWidget {
   const MyAdsTripJoin({
@@ -43,7 +45,8 @@ class MyAdsTripJoin extends StatelessWidget {
                       const Icon(Icons.time_to_leave),
                       const Sizer(),
                       Text(
-                        '${tripJoinCardEntity.vehicleId.brand}, ${tripJoinCardEntity.vehicleId.model}',
+                        '${tripJoinCardEntity.vehicleId
+                            .brand}, ${tripJoinCardEntity.vehicleId.model}',
                         style: Styles.headerText(
                           fontSize: 45,
                           color: AppColors.SECONDARY_COLOR,
@@ -67,7 +70,8 @@ class MyAdsTripJoin extends StatelessWidget {
                     children: [
                       const Icon(Icons.airline_seat_recline_extra_rounded),
                       const Sizer(),
-                      Text('${tripJoinCardEntity.passengers} ${LocaleKeys.seat.localize}',
+                      Text('${tripJoinCardEntity.passengers} ${LocaleKeys.seat
+                          .localize}',
                           style: Styles.headerText()),
                       const Spacer(),
                       Visibility(
@@ -82,7 +86,8 @@ class MyAdsTripJoin extends StatelessWidget {
                       const Sizer(),
                       Visibility(
                         visible: tripJoinCardEntity.isRepeat,
-                        child: Text(LocaleKeys.repeated.localize, style: Styles.headerText()),
+                        child: Text(LocaleKeys.repeated.localize,
+                            style: Styles.headerText()),
                       ),
                       const Sizer(width: 20),
                     ],
@@ -121,6 +126,8 @@ class MyAdsTripJoin extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const Sizer(),
+                  _buildContactInfo(context),
                   const Sizer(),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -165,54 +172,13 @@ class MyAdsTripJoin extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // const Sizer(),
-                  // Row(
-                  //   crossAxisAlignment: CrossAxisAlignment.center,
-                  //   children: [
-                  //     Expanded(
-                  //       flex: 3,
-                  //       child: AvaialbleTripsButton(
-                  //         title: 'Call',
-                  //         color:  AppColors.DARK_GRAY_COLOR,
-                  //         // color: (tripJoinCardEntity.isApproved ?? false)
-                  //         //     ? AppColors.PRIMARY_COLOR
-                  //         //     : AppColors.DARK_GRAY_COLOR,
-                  //         icon: Icons.call,
-                  //         onTap: callOnTap,
-                  //       ),
-                  //     ),
-                  //     const Sizer(width: 5),
-                  //     Expanded(
-                  //       flex: 3,
-                  //       child: AvaialbleTripsButton(
-                  //         title: 'Message',
-                  //         color: AppColors.DARK_GRAY_COLOR,
-                  //         // color: (tripJoinCardEntity.isApproved ?? false)
-                  //         //     ? AppColors.PRIMARY_COLOR
-                  //         //     : AppColors.DARK_GRAY_COLOR,
-                  //         icon: Icons.email,
-                  //         onTap: messageOnTap,
-                  //       ),
-                  //     ),
-                  //     const Sizer(width: 5),
-                  //     Expanded(
-                  //       flex: 3,
-                  //       child: AvaialbleTripsButton(
-                  //         title: 'Report',
-                  //         color: AppColors.SECONDARY_COLOR,
-                  //         icon: Icons.report,
-                  //         onTap: reportOnTap,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
                 ],
               ),
               Positioned.directional(
                 top: 5,
                 end: 20,
                 textDirection:
-                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                context.isArabic ? TextDirection.rtl : TextDirection.ltr,
                 child: Column(
                   children: [
                     Text(tripJoinCardEntity.price.toStringAsFixed(0),
@@ -226,21 +192,6 @@ class MyAdsTripJoin extends StatelessWidget {
               )
             ],
           ),
-          // const Sizer(),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 10),
-          //   child: InkWell(
-          //     onTap: subscribeMessageOnTap,
-          //     child: Text(
-          //       'Subscribe to contact the client!',
-          //       style: Styles.headerText(
-          //         color: Colors.red[300],
-          //         fontSize: 30,
-          //       ),
-          //       textAlign: TextAlign.start,
-          //     ),
-          //   ),
-          // )
         ],
       ),
     );
@@ -249,5 +200,85 @@ class MyAdsTripJoin extends StatelessWidget {
   String _formatDate() {
     return intl.DateFormat('dd MMM, hh:mm aaa')
         .format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.time));
+  }
+
+  Widget _buildContactInfo(context) {
+    return Row(
+      children: [
+        Expanded(
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const CustomButtonCount(),));
+              },
+              child: _buildContactItem(
+                  icon: Icons.call_outlined,
+                  label: LocaleKeys.tel.localize,
+                  value: 0, context: context),
+            )),
+        Expanded(
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const CustomButtonCount(),));
+              },
+              child: _buildContactItem(
+                  icon: Icons.chat_bubble_outline,
+                  label: LocaleKeys.chats.localize,
+                  value: 0, context: context),
+            )),
+        Expanded(
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const CustomButtonCount(),));
+              },
+              child: _buildContactItem(
+                  icon: Icons.favorite_border_outlined,
+                  label: LocaleKeys.like.localize,
+                  value: 0, context: context),
+            )),
+      ],
+    );
+  }
+
+  Widget _buildContactItem({
+    required IconData icon,
+    required String label,
+    required int value,
+    required context
+  }) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: Theme
+                .of(context)
+                .primaryColor,
+          ),
+          child: Icon(icon, color: Theme
+              .of(context)
+              .scaffoldBackgroundColor,),
+        ),
+        const Sizer(),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Label(
+                text: '$value',
+                style: Styles.mediumText(fontSize: 22),
+              ),
+              Label(
+                text: label,
+                style: Styles.mediumText(fontSize: 26),
+              ),
+            ],
+          ),
+        )
+      ],
+    );
   }
 }
