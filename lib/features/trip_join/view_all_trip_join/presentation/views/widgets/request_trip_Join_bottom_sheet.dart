@@ -19,7 +19,8 @@ class RequstTripJoinBottomSheet extends StatefulWidget {
   final TripJoinCardEntity tripJoinCardEntity;
   final bool isPremium;
   @override
-  State<RequstTripJoinBottomSheet> createState() => _RequstTripJoinBottomSheetState();
+  State<RequstTripJoinBottomSheet> createState() =>
+      _RequstTripJoinBottomSheetState();
 }
 
 class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
@@ -28,7 +29,8 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Form(
         key: formKey,
         child: Container(
@@ -49,7 +51,8 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
               TextFormField(
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15)),
                   fillColor: Colors.transparent,
                   label: Text(LocaleKeys.phone.localize),
                   isDense: true,
@@ -71,7 +74,8 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                           mobile: phoneNumber,
                           premuimRequest: widget.isPremium,
                         );
-                    Future.delayed(const Duration(seconds: 2)).then((value) => context.pop());
+                    Future.delayed(const Duration(seconds: 2))
+                        .then((value) => context.pop());
                   }
                 },
                 child: Stack(
@@ -81,34 +85,41 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                       padding: EdgeInsets.symmetric(vertical: 10.h),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
-                        color: widget.isPremium ? AppColors.SECONDARY_COLOR : AppColors.PRIMARY_COLOR,
+                        color: widget.isPremium
+                            ? AppColors.SECONDARY_COLOR
+                            : AppColors.PRIMARY_COLOR,
                       ),
                       alignment: Alignment.center,
-                      child: Text(LocaleKeys.sendRequest.localize, style: Styles.headerText(color: Colors.white)),
+                      child: Text(LocaleKeys.sendRequest.localize,
+                          style: Styles.headerText(color: Colors.white)),
                     ),
                     Positioned(
                       top: 5,
                       right: 20,
                       child: SizedBox(
                         height: 40.h,
-                        child: BlocBuilder<RequestTripJoinCubit, RequestTripJoinState>(
+                        child: BlocBuilder<RequestTripJoinCubit,
+                            RequestTripJoinState>(
                           builder: (context, state) {
                             if (state is RequestTripJoinLoading) {
                               return Center(
                                 child: SizedBox(
                                     height: 35.w,
                                     width: 35.w,
-                                    child: const CircularProgressIndicator(color: Colors.white)),
+                                    child: const CircularProgressIndicator(
+                                        color: Colors.white)),
                               );
                             }
                             if (state is RequestTripJoinSuccess) {
                               return Center(
-                                child: Icon(Icons.check, color: Colors.green[400], size: 35.w),
+                                child: Icon(Icons.check,
+                                    color: Colors.green[400], size: 35.w),
                               );
                             }
                             if (state is RequestTripJoinFailed) {
                               return Center(
-                                child: Icon(Icons.error, color: Colors.red[400], size: 35.w),
+                                child: Icon(Icons.error,
+                                    color: Colors.red[400], size: 35.w),
                               );
                             }
                             return const SizedBox();

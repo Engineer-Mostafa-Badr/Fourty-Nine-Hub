@@ -17,10 +17,13 @@ abstract class ViewAllTripJoinRemoteDataSource {
     required PaginationParams paginationParams,
   });
   Future<Either<Failure, bool>> requestTripJoin(
-      {required String addId, required String mobile, bool premuimRequest = false});
+      {required String addId,
+      required String mobile,
+      bool premuimRequest = false});
 }
 
-class ViewAllTripJoinRemoteDataSourceImp implements ViewAllTripJoinRemoteDataSource {
+class ViewAllTripJoinRemoteDataSourceImp
+    implements ViewAllTripJoinRemoteDataSource {
   final ApiConsumer apiConsumer;
 
   ViewAllTripJoinRemoteDataSourceImp({required this.apiConsumer});
@@ -52,7 +55,8 @@ class ViewAllTripJoinRemoteDataSourceImp implements ViewAllTripJoinRemoteDataSou
         List<TripJoinCardEntity> allCards = rawData.map<TripJoinCardEntity>(
           (e) {
             final tripJoinCardModel = TripJoinCardModel.fromJson(e);
-            tripJoinCardModel.subscribedPremium = data['data']['subscribedPremium'] as bool?;
+            tripJoinCardModel.subscribedPremium =
+                data['data']['subscribedPremium'] as bool?;
             return tripJoinCardModel;
           },
         ).toList();
@@ -64,7 +68,9 @@ class ViewAllTripJoinRemoteDataSourceImp implements ViewAllTripJoinRemoteDataSou
 
   @override
   Future<Either<Failure, bool>> requestTripJoin(
-      {required String addId, required String mobile, bool premuimRequest = false}) async {
+      {required String addId,
+      required String mobile,
+      bool premuimRequest = false}) async {
     final response = await apiConsumer.post(
       EndPoints.makeTripJoinRequest(addId),
       data: {

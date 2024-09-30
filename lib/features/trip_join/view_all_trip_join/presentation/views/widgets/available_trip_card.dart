@@ -72,20 +72,25 @@ class AvailableTripCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.airline_seat_recline_extra_rounded),
                       const Sizer(),
-                      Text(' ${tripJoinCardEntity.seatNumber ?? 1} ', style: Styles.headerText()),
-                      Text(LocaleKeys.seat.localize, style: Styles.headerText()),
+                      Text(' ${tripJoinCardEntity.seatNumber ?? 1} ',
+                          style: Styles.headerText()),
+                      Text(LocaleKeys.seat.localize,
+                          style: Styles.headerText()),
                       const Spacer(),
                       Visibility(
                         visible: tripJoinCardEntity.isRepeated ?? false,
                         child: Icon(
-                          (tripJoinCardEntity.isRepeated ?? false) ? Icons.check_box : Icons.check_box_outline_blank,
+                          (tripJoinCardEntity.isRepeated ?? false)
+                              ? Icons.check_box
+                              : Icons.check_box_outline_blank,
                           color: AppColors.PRIMARY_COLOR,
                         ),
                       ),
                       const Sizer(),
                       Visibility(
                         visible: tripJoinCardEntity.isRepeated ?? false,
-                        child: Text(LocaleKeys.repeat.localize, style: Styles.headerText()),
+                        child: Text(LocaleKeys.repeat.localize,
+                            style: Styles.headerText()),
                       ),
                       const Sizer(width: 20),
                     ],
@@ -94,7 +99,8 @@ class AvailableTripCard extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.trip_origin, color: AppColors.LIGHT_BLUE, size: 20),
+                      const Icon(Icons.trip_origin,
+                          color: AppColors.LIGHT_BLUE, size: 20),
                       const Sizer(width: 13),
                       Flexible(
                         child: Text(
@@ -112,7 +118,8 @@ class AvailableTripCard extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.trip_origin, color: AppColors.CHECK_MARK_COLOR, size: 20),
+                      const Icon(Icons.trip_origin,
+                          color: AppColors.CHECK_MARK_COLOR, size: 20),
                       const Sizer(width: 13),
                       Flexible(
                         child: Text(
@@ -195,11 +202,15 @@ class AvailableTripCard extends StatelessWidget {
               Positioned.directional(
                 top: 5,
                 end: 20,
-                textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                textDirection:
+                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
                 child: Column(
                   children: [
-                    Text(tripJoinCardEntity.journeyPrice?.toStringAsFixed(0) ?? '',
-                        style: Styles.headerText(fontSize: 70, color: Colors.green[600])),
+                    Text(
+                        tripJoinCardEntity.journeyPrice?.toStringAsFixed(0) ??
+                            '',
+                        style: Styles.headerText(
+                            fontSize: 70, color: Colors.green[600])),
                     Text(
                       _localizeStatus(context, tripJoinCardEntity.status ?? ''),
                       style: Styles.headerText(
@@ -237,7 +248,8 @@ class AvailableTripCard extends StatelessWidget {
       return '';
     }
     return intl.DateFormat('dd MMM, hh:mm aaa', context.locale.languageCode)
-        .format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate! * 1000000));
+        .format(DateTime.fromMicrosecondsSinceEpoch(
+            tripJoinCardEntity.publishDate! * 1000000));
   }
 
   String _localizeStatus(BuildContext context, String text) {

@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 
 T pr<T>(T variable, [String? title]) {
   if (kDebugMode) {
-    String message = _toRed('<salama dev ${title == null ? "" : " - $title"}> ') + _toGreen('$variable');
+    String message =
+        _toRed('< eslam dev ${title == null ? "" : " - $title"}> ') +
+            _toGreen('$variable');
     print(message);
   }
   return variable;
