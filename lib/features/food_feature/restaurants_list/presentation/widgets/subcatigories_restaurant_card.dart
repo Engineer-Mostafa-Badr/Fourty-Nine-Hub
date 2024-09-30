@@ -14,6 +14,7 @@ import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
+import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -21,6 +22,7 @@ import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
+import '../../../../trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
 import '../../domain/entities/restaurant_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -220,9 +222,9 @@ class _PropertyCardState extends State<PropertyCard> {
               ),
               Expanded(flex: 3, child: _buildDetailsSection(widget.item)),
               const SizedBox(height: 4),
-              Expanded(flex: 1, child: PremiumAndRequestButtons(widget.item)),
-              const SizedBox(height: 2),
-              Expanded(flex: 1, child: CallMessageReportButtons(widget.item)),
+              PremiumAndRequestButtons(widget.item),
+              const SizedBox(height: 4),
+              CallMessageReportButtons(widget.item),
               const SizedBox(height: 2),
             ],
           ),
@@ -380,7 +382,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 0),
       child: Row(
         children: [
           _buildButton(
@@ -395,7 +397,6 @@ class PremiumAndRequestButtons extends StatelessWidget {
                   context.push(Routes.RESTAURANTDETAILS, extra: item.id);
                 },
                 subCategoryId: item.subcategoryId!.id,
-
               );
               // await serviceLocator<SubscriptionController>()
               //     .showSubscriptionPlans(
@@ -407,7 +408,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
               //     ]);
             },
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 4),
           _buildButton(
             label: 'Request',
             color: Colors.black,
@@ -428,6 +429,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
     return Flexible(
       child: AppButton(
           height: 60.h,
+          padding: 0,
+          margin: 0,
           label: label,
           backColor: color,
           style: Styles.mediumText(color: Colors.white),
@@ -442,26 +445,48 @@ class CallMessageReportButtons extends StatelessWidget {
 
   const CallMessageReportButtons(this.item, {super.key});
 
+  Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity,
+      String subCategoryId, String title) async {
+    if (tripJoinCardEntity.isApproved == null ||
+        tripJoinCardEntity.isApproved == false) {
+      await serviceLocator<SubscriptionController>().showSubscriptionPlans(
+        wallets: [WalletTypes.balance],
+        subCategoryId: subCategoryId,
+        title: title,
+      );
+      return false;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 0),
       child: Row(
         children: [
           _buildElevatedButtonWithIcon(
             label: 'Call',
             icon: Icons.call,
-            onPressed: () {},
+            onPressed: () async {
+              // if (await _userApproved(
+              //   tripJoinCardEntity,
+              //   UIConst.chatNormalId,
+              //   'Chat Subscription',
+              // )) {
+              //   launchUrlString("tel://${tripJoinCardEntity.phone}");
+              // }
+            },
             color: Colors.grey,
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 4),
           _buildElevatedButtonWithIcon(
             label: 'Message',
             icon: Icons.message,
             onPressed: () {},
             color: Colors.grey,
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 4),
           _buildElevatedButtonWithIcon(
             label: 'Report',
             icon: Icons.report,
@@ -489,6 +514,8 @@ class CallMessageReportButtons extends StatelessWidget {
   }) {
     return Expanded(
         child: AppButton(
+            padding: 0,
+            margin: 0,
             height: 60.h,
             label: label,
             icon: icon,

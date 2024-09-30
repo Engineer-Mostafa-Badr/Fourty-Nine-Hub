@@ -74,7 +74,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               // Adjusted padding
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0), // Adjusted radius
+                borderRadius: BorderRadius.circular(8.0), // Adjusted radius
               ),
               backgroundColor: AppColors.SECONDARY_COLOR,
             ),
