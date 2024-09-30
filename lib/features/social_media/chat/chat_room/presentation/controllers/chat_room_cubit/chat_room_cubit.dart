@@ -237,7 +237,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       if (contacts != null) {
         for (var contact in contacts) {
           if (contact.phones.isNotEmpty) {
-            log(contact.toString());
+            // log(contact.toString());
             sharedContacts.add(MessageSharedContactsEntity(
               name: contact.displayName,
               phoneNumber: contact.phones[0].number,
