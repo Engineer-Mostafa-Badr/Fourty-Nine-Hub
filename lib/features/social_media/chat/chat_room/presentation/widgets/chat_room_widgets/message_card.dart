@@ -790,9 +790,9 @@ class ReplyRecivedMessageCard extends StatelessWidget {
                           ? messageEntity.reply!.media.isNotEmpty
                               ? messageEntity.reply!.media[0].type ==
                                       FileTypeEnum.image
-                                  ? "Photo"
+                                  ? LocaleKeys.photo.tr()
                                   : messageEntity.reply!.media[0].fileName ??
-                                      "File"
+                                      LocaleKeys.file.tr()
                               : messageEntity.reply!.text
                           : messageEntity.reply!.text,
                       overflow: TextOverflow.ellipsis,
@@ -915,9 +915,9 @@ class ReplySendMessageCard extends StatelessWidget {
                           ? messageEntity.reply!.media.isNotEmpty
                               ? messageEntity.reply!.media[0].type ==
                                       FileTypeEnum.image
-                                  ? "Photo"
+                                  ? LocaleKeys.photo.tr()
                                   : messageEntity.reply!.media[0].fileName ??
-                                      "File"
+                                      LocaleKeys.file.tr()
                               : messageEntity.reply!.text
                           : messageEntity.reply!.text,
                       overflow: TextOverflow.ellipsis,

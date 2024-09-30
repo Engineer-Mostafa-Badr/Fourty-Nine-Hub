@@ -727,7 +727,8 @@ class CodegenLoader extends AssetLoader{
   "broadcasts": "القنوات",
   "myBroadcasts": "قنواتي",
   "channelInfo": "معلومات القناة",
-  "unfollow": "الغاء المتابعة"
+  "unfollow": "الغاء المتابعة",
+  "file": "ملف"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1445,7 +1446,8 @@ static const Map<String,dynamic> en = {
   "broadcasts": "Broadcasts",
   "myBroadcasts": "My Broadcasts",
   "channelInfo": "Channel Info",
-  "unfollow": "Unfollow"
+  "unfollow": "Unfollow",
+  "file": "File"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

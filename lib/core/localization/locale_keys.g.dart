@@ -702,5 +702,6 @@ abstract class  LocaleKeys {
   static const myBroadcasts = 'myBroadcasts';
   static const channelInfo = 'channelInfo';
   static const unfollow = 'unfollow';
+  static const file = 'file';
 
 }
