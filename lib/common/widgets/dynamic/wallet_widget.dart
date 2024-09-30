@@ -13,6 +13,7 @@ import '../../../features/account_taps/wallet/presentation/pages/balance_wallet_
 import '../../../features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/styles.dart';
+import '../../../service_locator/service_locator.dart';
 import '../stateless/labels/label.dart';
 import 'sizer.dart';
 
@@ -33,80 +34,83 @@ class WalletWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
-      builder: (BuildContext context, state) {
-        return Container(
-          height: 90.h,
-          margin:
-              EdgeInsets.symmetric(vertical: 10.h, horizontal: margin?.w ?? 5.w),
-          padding: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: BorderRadius.circular(12.r),
-              boxShadow: const [
-                BoxShadow(
-                  color: AppColors.GRAY_LIGHT_COLOR3,
-                  blurRadius: 5,
-                  spreadRadius: 5,
-                )
-              ]),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                radius: 6.w,
-                backgroundColor: AppColors.SECONDARY_COLOR,
-              ),
-              const Sizer(),
-              buildItem(() {
+    return BlocProvider<MainCategoriesCubit>(
+      create: (BuildContext context) =>serviceLocator()..getWallet(),
+      child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+        builder: (BuildContext context, state) {
+          return Container(
+            height: 90.h,
+            margin:
+                EdgeInsets.symmetric(vertical: 10.h, horizontal: margin?.w ?? 5.w),
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: BorderRadius.circular(12.r),
+                boxShadow: const [
+                  BoxShadow(
+                    color: AppColors.GRAY_LIGHT_COLOR3,
+                    blurRadius: 5,
+                    spreadRadius: 5,
+                  )
+                ]),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 6.w,
+                  backgroundColor: AppColors.SECONDARY_COLOR,
+                ),
+                const Sizer(),
+                buildItem(() {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const BalanceWalletView()));
+                }, LocaleKeys.balance.tr(),
+                    '${state.wallet?.balance ?? ''}'),
+                Container(
+                  width: 2.w,
+                  margin: EdgeInsets.symmetric(horizontal: 5.w),
+                  color: Colors.grey,
+                  height: kToolbarHeight * 1.3.h,
+                ),
+                CircleAvatar(
+                  radius: 6.w,
+                  backgroundColor: AppColors.SECONDARY_COLOR,
+                ),
+                const Sizer(),
+            buildItem(
+                  () {
+                //context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const BalanceWalletView()));
-              }, LocaleKeys.balance.tr(),
-                  '${state.balance?.balance ?? ''}'),
-              Container(
-                width: 2.w,
-                margin: EdgeInsets.symmetric(horizontal: 5.w),
-                color: Colors.grey,
-                height: kToolbarHeight * 1.3.h,
-              ),
-              CircleAvatar(
-                radius: 6.w,
-                backgroundColor: AppColors.SECONDARY_COLOR,
-              ),
-              const Sizer(),
-          buildItem(
-                () {
-              //context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const GiftWalletView()));
-            },
-            LocaleKeys.gift.tr(),
-            '${state.gift?.giftWallet.amount ?? ''}',
-          ),
-              Container(
-                width: 2.h,
-                margin: EdgeInsets.symmetric(horizontal: 5.w),
-                color: Colors.grey,
-                height: kToolbarHeight * 1.3,
-              ),
-              CircleAvatar(
-                radius: 6.w,
-                backgroundColor: AppColors.SECONDARY_COLOR,
-              ),
-              const Sizer(),
-              buildItem(() {
-                context.push(Routes.WALLET, extra: WalletTypes.mainWallet);
+                        builder: (context) => const GiftWalletView()));
               },
-                  LocaleKeys.wallet.tr(),
-                  '${state.wallet?.realAmount?.floor() ?? ''}'),
-            ],
-          ),
-        );
-      },
+              LocaleKeys.gift.tr(),
+              '${state.wallet?.giftWallet ?? ''}',
+            ),
+                Container(
+                  width: 2.h,
+                  margin: EdgeInsets.symmetric(horizontal: 5.w),
+                  color: Colors.grey,
+                  height: kToolbarHeight * 1.3,
+                ),
+                CircleAvatar(
+                  radius: 6.w,
+                  backgroundColor: AppColors.SECONDARY_COLOR,
+                ),
+                const Sizer(),
+                buildItem(() {
+                  context.push(Routes.WALLET, extra: WalletTypes.mainWallet);
+                },
+                    LocaleKeys.wallet.tr(),
+                    '${state.wallet?.realAmount.floor() ?? ''}'),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 

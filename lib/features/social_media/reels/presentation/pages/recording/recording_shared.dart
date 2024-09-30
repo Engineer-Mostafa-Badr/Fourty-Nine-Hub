@@ -3,9 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
 import 'mix_voices.dart';
 import 'my_voice.dart';
 import 'other_voice.dart';
+
+
+import 'package:easy_localization/easy_localization.dart';
 
 class ReelsRecordingScreen extends StatefulWidget {
   final String? voiceUrl;
@@ -14,11 +18,7 @@ class ReelsRecordingScreen extends StatefulWidget {
   final String? advertisementType;
 
   const ReelsRecordingScreen(
-      {super.key,
-      this.voiceUrl,
-      this.comeFromCompany,
-      this.totalPrice,
-      this.advertisementType});
+      {super.key, this.voiceUrl, this.comeFromCompany, this.totalPrice, this.advertisementType});
 
   @override
   ReelsRecordingScreenState createState() => ReelsRecordingScreenState();
@@ -29,15 +29,20 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
     viewportFraction: 0.3,
   );
 
-  final List<String> options = ['My Voice', 'Other Voice', 'Mix Voices'];
+  final List<String> options = [
+    LocaleKeys.reel_voices_my_voice.tr(),
+    LocaleKeys.reel_voices_other_voice.tr(),
+    LocaleKeys.reel_voices_mix_voices.tr()
+  ];
+
   int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           Expanded(
             child: Builder(
@@ -79,7 +84,6 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
       ),
       bottomNavigationBar: Container(
         height: kToolbarHeight,
-        color: Colors.black,
         child: PageView.builder(
           controller: _controller,
           itemCount: options.length,
@@ -87,7 +91,6 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
             setState(() {
               selectedIndex = index;
             });
-            // _navigateToScreen(index);
           },
           itemBuilder: (context, index) {
             bool isSelected = index == selectedIndex;
@@ -96,11 +99,11 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
               child: Center(
                 child: Text(
                   options[index],
+                  textScaleFactor: 1.0,
                   style: TextStyle(
-                    fontSize: 18.sp,
-                    color: isSelected ? Colors.white : Colors.grey,
-                    fontWeight:
-                        isSelected ? FontWeight.bold : FontWeight.normal,
+                    // color: isSelected? Colors.black:Colors.black,
+                    fontSize: isSelected ? 35.sp : 30.sp,
+                    fontWeight:FontWeight.bold,
                   ),
                 ),
               ),
@@ -111,6 +114,109 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
     );
   }
 }
+
+// class ReelsRecordingScreen extends StatefulWidget {
+//   final String? voiceUrl;
+//   final String? comeFromCompany;
+//   final String? totalPrice;
+//   final String? advertisementType;
+//
+//   const ReelsRecordingScreen(
+//       {super.key,
+//       this.voiceUrl,
+//       this.comeFromCompany,
+//       this.totalPrice,
+//       this.advertisementType});
+//
+//   @override
+//   ReelsRecordingScreenState createState() => ReelsRecordingScreenState();
+// }
+//
+// class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
+//   final PageController _controller = PageController(
+//     viewportFraction: 0.3,
+//   );
+//
+//   final List<String> options = ['My Voice', 'Other Voice', 'Mix Voices'];
+//   int selectedIndex = 0;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         mainAxisSize: MainAxisSize.max,
+//         children: <Widget>[
+//           Expanded(
+//             child: Builder(
+//               builder: (context) {
+//                 switch (selectedIndex) {
+//                   case 0:
+//                     return MyVoiceVideoRecordingScreen(
+//                       advertisementType: widget.advertisementType,
+//                       comeFrom: widget.comeFromCompany,
+//                       totalPrice: widget.totalPrice,
+//                     );
+//                   case 1:
+//                     return OtherVoiceVideoRecordingScreen(
+//                       voiceUrl: widget.voiceUrl ?? '',
+//                       advertisementType: widget.advertisementType,
+//                       comeFrom: widget.comeFromCompany,
+//                       totalPrice: widget.totalPrice,
+//                     );
+//                   case 2:
+//                     return MixVoiceVideoRecordingScreen(
+//                       voiceUrl: widget.voiceUrl ?? '',
+//                       advertisementType: widget.advertisementType,
+//                       comeFrom: widget.comeFromCompany,
+//                       totalPrice: widget.totalPrice,
+//                     );
+//                 }
+//                 return MyVoiceVideoRecordingScreen(
+//                   advertisementType: widget.advertisementType,
+//                   comeFrom: widget.comeFromCompany,
+//                   totalPrice: widget.totalPrice,
+//                 );
+//               },
+//             ),
+//           ),
+//           SizedBox(
+//             height: 20.h,
+//           ),
+//         ],
+//       ),
+//       bottomNavigationBar: Container(
+//         height: kToolbarHeight,
+//         child: PageView.builder(
+//           controller: _controller,
+//           itemCount: options.length,
+//           onPageChanged: (int index) {
+//             setState(() {
+//               selectedIndex = index;
+//             });
+//             // _navigateToScreen(index);
+//           },
+//           itemBuilder: (context, index) {
+//             bool isSelected = index == selectedIndex;
+//             return Transform.scale(
+//               scale: isSelected ? 1.2 : 1.0,
+//               child: Center(
+//                 child: Text(
+//                   options[index],
+//                   textScaleFactor: 1.0,
+//                   style: TextStyle(
+//                     fontSize: isSelected ? 35.sp : 30.sp,
+//                     fontWeight: isSelected ? FontWeight.bold : FontWeight.w100,
+//                   ),
+//                 ),
+//               ),
+//             );
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class ProgressPainter extends CustomPainter {
   final double progress;
@@ -164,7 +270,12 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Video Playback')),
+      appBar: AppBar(
+          title: Text(
+        'Video Playback',
+        textScaleFactor: 1.0,
+        style: TextStyle(fontSize: 45.sp),
+      )),
       body: Center(
         child: _controller.value.isInitialized
             ? AspectRatio(
@@ -182,75 +293,76 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
     super.dispose();
   }
 }
-
-class HorizontalTextWheelPicker extends StatefulWidget {
-  final List<String> options;
-  final Function(int) onSelectedItemChanged;
-
-  const HorizontalTextWheelPicker({
-    super.key,
-    required this.options,
-    required this.onSelectedItemChanged,
-  });
-
-  @override
-  HorizontalTextWheelPickerState createState() =>
-      HorizontalTextWheelPickerState();
-}
-
-class HorizontalTextWheelPickerState extends State<HorizontalTextWheelPicker> {
-  late int selectedItemIndex;
-  late FixedExtentScrollController _scrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedItemIndex = 1; // Set the second item as initially selected
-    _scrollController =
-        FixedExtentScrollController(initialItem: selectedItemIndex);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 50.h,
-      child: RotatedBox(
-        quarterTurns: 3,
-        child: ListWheelScrollView.useDelegate(
-          controller: _scrollController,
-          itemExtent: 100,
-          // Adjust this for the size of each item
-          diameterRatio: 1.5,
-          onSelectedItemChanged: (index) {
-            setState(() {
-              selectedItemIndex = index;
-            });
-            widget.onSelectedItemChanged(index);
-          },
-          physics: const FixedExtentScrollPhysics(),
-          childDelegate: ListWheelChildBuilderDelegate(
-            builder: (context, index) {
-              final isSelected = index == selectedItemIndex;
-              return RotatedBox(
-                quarterTurns: 1,
-                child: Center(
-                  child: FittedBox(
-                    child: Text(
-                      widget.options[index],
-                      style: TextStyle(
-                        fontSize: 20.sp,
-                        color: isSelected ? Colors.white : Colors.white38,
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-            childCount: widget.options.length,
-          ),
-        ),
-      ),
-    );
-  }
-}
+//
+// class HorizontalTextWheelPicker extends StatefulWidget {
+//   final List<String> options;
+//   final Function(int) onSelectedItemChanged;
+//
+//   const HorizontalTextWheelPicker({
+//     super.key,
+//     required this.options,
+//     required this.onSelectedItemChanged,
+//   });
+//
+//   @override
+//   HorizontalTextWheelPickerState createState() =>
+//       HorizontalTextWheelPickerState();
+// }
+//
+// class HorizontalTextWheelPickerState extends State<HorizontalTextWheelPicker> {
+//   late int selectedItemIndex;
+//   late FixedExtentScrollController _scrollController;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     selectedItemIndex = 1; // Set the second item as initially selected
+//     _scrollController =
+//         FixedExtentScrollController(initialItem: selectedItemIndex);
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//       width: double.infinity,
+//       height: 50.h,
+//       child: RotatedBox(
+//         quarterTurns: 3,
+//         child: ListWheelScrollView.useDelegate(
+//           controller: _scrollController,
+//           itemExtent: 100,
+//           // Adjust this for the size of each item
+//           diameterRatio: 1.5,
+//           onSelectedItemChanged: (index) {
+//             setState(() {
+//               selectedItemIndex = index;
+//             });
+//             widget.onSelectedItemChanged(index);
+//           },
+//           physics: const FixedExtentScrollPhysics(),
+//           childDelegate: ListWheelChildBuilderDelegate(
+//             builder: (context, index) {
+//               final isSelected = index == selectedItemIndex;
+//               return RotatedBox(
+//                 quarterTurns: 1,
+//                 child: Center(
+//                   child: FittedBox(
+//                     child: Text(
+//                       widget.options[index],
+//                       textScaleFactor: 1.0,
+//                       style: TextStyle(
+//                         fontSize: 30.sp,
+//                         color: isSelected ? Colors.white : Colors.white38,
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//               );
+//             },
+//             childCount: widget.options.length,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

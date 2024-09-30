@@ -1,33 +1,49 @@
 // Dart imports:
 import 'dart:core';
+import 'dart:ui';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/animations/create_custom_transition.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/effects/beauty_effect_button.dart';
+
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/utils/permissions.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/utils/pop_up_manager.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/core/host_manager.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/internal/defines.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:go_router/go_router.dart';
+
 // Package imports:
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:shimmer/shimmer.dart';
 
+import '../../../../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../../../../core/messages/messages.dart';
 import '../../../../../../../../../res/style/const.dart';
 import '../../../../../../../../../res/style/styles.dart';
+import '../../../../../../../../../service_locator/service_locator.dart';
 import '../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../../../../../../zoom/presentation/controller/stream_cubit.dart';
+import '../../../../../../../../zoom/presentation/controller/stream_state.dart';
 import '../../../../../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../../../../tinder/data/shared/shared.dart';
+import '../../../../../../../tinder/presentation/cubit/gift_cubit.dart';
+import '../../../../../../domain/entity/topic_entity.dart';
 import '../../../../liveview/gifts/simple_gifts_sheet.dart';
 import '../config.dart';
+import 'select_live_goals_screen.dart';
 
 /// @nodoc
 /// user should be login before page enter
@@ -86,8 +102,11 @@ class _ZegoLiveStreamingPreviewPageState
     }
   }
 
+  final TextEditingController _titleController = TextEditingController();
+
   @override
   void dispose() {
+    _titleController.dispose();
     super.dispose();
   }
 
@@ -166,40 +185,53 @@ class _ZegoLiveStreamingPreviewPageState
                     isCircle: false,
                   ),
                   Expanded(
-                    child: TextFormField(
-                      // controller: _meetingIdController,
-                      keyboardType: TextInputType.text,
-                      textAlign: TextAlign.center,
-                      // validator: validateInput,
-                      maxLength: 50,
-                      style: Styles.mediumText(
-                          color: Colors.white, decorationThickness: 0),
-                      maxLines: null,
-                      // onChanged: onTextChanged,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.edit),
+                    child: Theme(
+                      data: Theme.of(context).copyWith(
+                          textSelectionTheme: const TextSelectionThemeData(
+                        selectionColor: AppColors.PRIMARY_COLOR,
+                        cursorColor: AppColors.PRIMARY_COLOR,
+                        selectionHandleColor: AppColors.PRIMARY_COLOR,
+                      )),
+                      child: TextFormField(
+                        controller: _titleController,
+                        selectionHeightStyle: BoxHeightStyle.tight,
+                        selectionWidthStyle: BoxWidthStyle.tight,
+                        selectionControls: materialTextSelectionControls,
 
-                        // errorText: _errorMessage,
-                        counterText: '',
-                        labelStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
-                        // hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
+                        keyboardType: TextInputType.text,
+                        textAlign: TextAlign.center,
+                        // validator: validateInput,
+                        maxLength: 50,
+                        style: Styles.mediumText(
+                            color: Colors.white, decorationThickness: 0),
+                        maxLines: null,
+                        // onChanged: onTextChanged,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.edit),
 
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10.0),
+                          // errorText: _errorMessage,
+                          counterText: '',
+                          labelStyle:
+                              TextStyle(color: AppColors.QUANTITY_COLOR),
+                          // hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
+
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10.0),
+                            ),
                           ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
                           ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Colors.transparent,
                         ),
-                        filled: true,
-                        fillColor: Colors.transparent,
                       ),
                     ),
                   ),
@@ -219,27 +251,57 @@ class _ZegoLiveStreamingPreviewPageState
                     decoration: BoxDecoration(
                       color: Colors.grey.withOpacity(0.7),
                     ),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          'assets/49-New-icons/hash.png',
-                          width: 25,
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(LocaleKeys.addTopic.localize,
-                            style: const TextStyle(color: Colors.white)),
-                      ],
+                    child: InkWell(
+                      onTap: () {
+                        _showTopicSheet(
+                          context,
+                          context.read<StreamCubit>().topics,
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/49-New-icons/hash.png',
+                            width: 25,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          BlocBuilder<StreamCubit, StreamState>(
+                            builder: (context, state) {
+                              print(state.topicId);
+                              print(state.topic);
+                              return Text(
+                                state.topic.isEmpty
+                                    ? LocaleKeys.addTopic.localize
+                                    : state.topic,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                Sizer(),
+                const Sizer(),
                 Expanded(
                   child: InkWell(
                     onTap: () {
-                      showSimpleGiftBottomSheet(
-                          context, context.read<UserCubit>().state.data!.id);
+                      // showGiftBottomSheet(context,
+                      //     receiverId: '', forSelect: true);
+                      Navigator.of(context).push(createCustomTransitionRoute(
+                        MultiBlocProvider(providers: [
+                          BlocProvider.value(
+                              value: serviceLocator<StreamCubit>()),
+                          BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<GiftsCubit>()..fetchGifts()),
+                        ], child: const SelectLiveGoalsScreen()),
+                        TransitionType.bottomToTop,
+                      ));
                     },
                     child: Container(
                       // margin: EdgeInsets.only(left: constraints.maxWidth / 20),
@@ -270,6 +332,43 @@ class _ZegoLiveStreamingPreviewPageState
             )
           ],
         ));
+  }
+
+  Future<dynamic> _showTopicSheet(
+      BuildContext context, List<TopicEntity> topics) {
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: BlocProvider.value(
+          value: serviceLocator<StreamCubit>(),
+          child:
+              BlocBuilder<StreamCubit, StreamState>(builder: (context, state) {
+            return Column(mainAxisSize: MainAxisSize.min, children: [
+              Label(
+                text: LocaleKeys.selectATopic.localize,
+                style: Styles.headerText(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              ...topics.map((topic) {
+                return RadioListTile<String>(
+                  title: Label(text: topic.name),
+                  value: topic.name,
+                  groupValue: state.topic.isEmpty ? null : state.topic,
+                  onChanged: (value) {
+                    context.read<StreamCubit>().setTopic(topic.name, topic.id);
+                    Future.delayed(
+                        const Duration(milliseconds: 100), () => context.pop());
+                    // print('new topic is ${state.topic}');
+                  },
+                );
+              }),
+            ]);
+          }),
+        ),
+      ),
+    );
   }
 
   Scaffold zoomPreviewScreen(BuildContext context) {
@@ -556,7 +655,7 @@ class _ZegoLiveStreamingPreviewPageState
       permissions.add(Permission.microphone);
     }
 
-    defaultAction() async {
+    defaultAction(String? title) async {
       await checkPermissions(
         context: context,
         permissions: permissions,
@@ -566,7 +665,7 @@ class _ZegoLiveStreamingPreviewPageState
         popUpManager: widget.popUpManager,
         kickOutNotifier: widget.kickOutNotifier,
       ).then(
-        (value) {
+        (value) async {
           if (!widget.liveStreamingPageReady.value) {
             ZegoLoggerService.logInfo(
               'live streaming page is waiting room login',
@@ -575,18 +674,26 @@ class _ZegoLiveStreamingPreviewPageState
             );
             return;
           }
-
-          widget.startedNotifier.value = true;
+          if (title != null && title.isNotEmpty) {
+           await context.read<StreamCubit>().createLive(title: title);
+            widget.startedNotifier.value = true;
+          } else {
+            showErrorMessage(context, 'Please enter simple title');
+          }
+          // context.read<StreamCubit>().createLive(title: title)
         },
       );
     }
 
     return widget.config.preview.startLiveButtonBuilder?.call(context,
             () async {
-          defaultAction.call();
+          defaultAction.call(_titleController.text.trim());
         }) ??
         GestureDetector(
-          onTap: defaultAction,
+          onTap: () {
+            print(_titleController.text.trim());
+            defaultAction(_titleController.text.trim());
+          },
           child: Container(
             width: context.screenWidth / 1.5,
             height: 50,
@@ -841,3 +948,5 @@ class _ZegoLiveStreamingPreviewPageState
         !v;
   }
 }
+
+final List<String> topics = ['Athletics', 'Sport', 'Cinema', 'Fun'];

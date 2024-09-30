@@ -21,6 +21,7 @@ import '../../../features/competition/data/repository/competition_repo_impl.dart
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_state.dart';
 import '../../../features/competition/presentation/view/special_ads_view.dart';
+import '../../../features/custom_page/presentation/page/custom_page.dart';
 import '../../../features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
@@ -71,7 +72,15 @@ class DrawerWidget extends StatelessWidget {
                         image: Assets.azkar,
                         label: LocaleKeys.azkar.localize,
                         onTap: () => context.push(Routes.AZKAAR)),
-
+                    drawerListTile(
+                        icon: Icons.maps_home_work_rounded,
+                        label: LocaleKeys.customPage.localize,
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const CustomPage()));
+                        }),
                     drawerListTile(
                         // icon: Icons.star_rounded,
                         image: Assets.favorite_main_category_icon,
@@ -211,7 +220,6 @@ class DrawerWidget extends StatelessWidget {
     required BuildContext context,
     required UserEntity? user,
   }) {
-
     log(user?.id.toString() ?? "UserId", name: "UserId");
     return Column(
       children: [
@@ -225,70 +233,101 @@ class DrawerWidget extends StatelessWidget {
                 ..fetchCompetition(context),
           child: BlocBuilder<CompetitionCubit, CompetitionState>(
             builder: (BuildContext context, state) {
-              if(state is CompetitionSuccessState) {
+              if (state is CompetitionSuccessState) {
                 int calculateSumOfRequests() {
-                  List<int> indicesToSum = [1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13];
+                  // Create a list of indices, excluding 0, 9, and 10
+                  List<int> indicesToSum = List.generate(
+                          state.competitionModel.data?.length ?? 0,
+                          (index) => index)
+                      .where((index) => index != 0 && index != 9 && index != 10)
+                      .toList();
 
+                  // Use fold to sum the values, handling null values with ?? 0
                   return indicesToSum.fold(0, (sum, index) {
-                    return sum + (state.competitionModel.data![index].countOfRequest ?? 0);
+                    return sum +
+                        (state.competitionModel.data?[index].countOfRequest ??
+                            0);
                   });
                 }
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Evenly distribute space
-                  crossAxisAlignment: CrossAxisAlignment.start, // Align items at the start
-                  children: [
-                    counterItem(
-                      icon: Icons.ads_click,
-                      label: LocaleKeys.specialAds.localize,
-                      value: '${state.competitionModel.data![10].countOfRequest}',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const SpecialAdsView()),
-                        );
-                      },
-                      context: context,
-                    ),
-                    counterItem(
-                      icon: Icons.person_add,
-                      label: LocaleKeys.friends.localize,
-                      value: '${state.competitionModel.data![0].countOfRequest}',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const SpecialAdsView()),
-                        );
-                      },
-                      context: context,
-                    ),
-                    counterItem(
-                      icon: FontAwesomeIcons.car,
-                      label: LocaleKeys.ride.localize,
-                      value: '${state.competitionModel.data![9].countOfRequest}',
-                      context: context,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const SpecialAdsView()),
-                        );
-                      },
-                    ),
-                    counterItem(
-                      icon: Icons.more_horiz,
-                      label: LocaleKeys.more.localize,
-                      value: '${calculateSumOfRequests()}',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const SpecialAdsView()),
-                        );
-                      },
-                      context: context,
-                    ),
-                  ],
-                )
-                ;
 
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  // Evenly distribute space
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // Align items at the start
+                  children: [
+                    state.competitionModel.data![10].competitionId?.nameEn !=
+                            null
+                        ? counterItem(
+                            icon: Icons.ads_click,
+                            label: LocaleKeys.specialAds.localize,
+                            value:
+                                '${state.competitionModel.data![10].countOfRequest}',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SpecialAdsView()),
+                              );
+                            },
+                            context: context,
+                          )
+                        : const SizedBox.shrink(),
+                    state.competitionModel.data![0].competitionId?.nameEn !=
+                            null
+                        ? counterItem(
+                            icon: Icons.person_add,
+                            label: LocaleKeys.friends.localize,
+                            value:
+                                '${state.competitionModel.data![0].countOfRequest}',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SpecialAdsView()),
+                              );
+                            },
+                            context: context,
+                          )
+                        : const SizedBox.shrink(),
+                    state.competitionModel.data![9].competitionId?.nameEn !=
+                            null
+                        ? counterItem(
+                            icon: FontAwesomeIcons.car,
+                            label: LocaleKeys.ride.localize,
+                            value:
+                                '${state.competitionModel.data![9].countOfRequest}',
+                            context: context,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SpecialAdsView()),
+                              );
+                            },
+                          )
+                        : const SizedBox.shrink(),
+                    state.competitionModel.data != null
+                        ? counterItem(
+                            icon: Icons.more_horiz,
+                            label: LocaleKeys.more.localize,
+                            value: '${calculateSumOfRequests()}',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SpecialAdsView()),
+                              );
+                            },
+                            context: context,
+                          )
+                        : const SizedBox.shrink(),
+                  ],
+                );
               }
               return const SizedBox.shrink();
             },
@@ -381,7 +420,8 @@ class DrawerWidget extends StatelessWidget {
               )
             : Icon(
                 icon,
-                size: 40.w,
+                size: 45.w,
+          color: AppColors.PRIMARY_COLOR,
               ),
         title: Label(
             text: label,
@@ -495,12 +535,6 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
-
-
-
-
-
-
   Widget accountWidget({
     required BuildContext context,
     required UserEntity? user,
@@ -543,7 +577,8 @@ class DrawerWidget extends StatelessWidget {
                       }
                       return ImageFromInternet(
                         isCircle: true,
-                        image: user?.profilePicture ?? UIConst.profilePlaceHolder,
+                        image:
+                            user?.profilePicture ?? UIConst.profilePlaceHolder,
                       );
                     },
                   ),

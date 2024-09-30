@@ -18,9 +18,11 @@ import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/ge
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/make_ad_request_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/datasources/ads_remote_data_source.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/repositories/ads_repo.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/favourite_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_all_comewithme_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_all_pickme_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/remove_favourite_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_come_with_me_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_pick_me_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
@@ -35,6 +37,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_banner_b
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/add_main_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_wallet_home_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/remove_main_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
@@ -47,7 +50,9 @@ import '../features/account_taps/my_adds/domain/usecases/delete_come_with_me_use
 import '../features/account_taps/my_adds/domain/usecases/delete_pick_me_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/get_my_auctions_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/get_my_come_with_you_usecase.dart';
+import '../features/account_taps/my_adds/domain/usecases/get_my_installments_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/get_my_pick_me_usecase.dart';
+import '../features/account_taps/my_adds/domain/usecases/get_my_trip_join_usecase.dart';
 import '../features/ads_feature/ad_details/data/repositories/ad_details_repo_impl.dart';
 import '../features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import '../features/ads_feature/ads/data/repositories/ads_repo_impl.dart';
@@ -260,6 +265,16 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<GetMyTripJoinUseCase>(
+          () => GetMyTripJoinUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<GetMyInstallmentUseCase>(
+          () => GetMyInstallmentUseCase(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<AcceptComeWithMeUseCase>(
       () => AcceptComeWithMeUseCase(
         serviceLocator(),
@@ -280,6 +295,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<GetWalletHomeUseCase>(
+      () => GetWalletHomeUseCase(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<RejectPickMeUseCase>(
       () => RejectPickMeUseCase(
         serviceLocator(),
@@ -292,6 +312,17 @@ class FourtyNineServiceLocator {
     );
     serviceLocator.registerLazySingleton<MakeAdRequestUsecase>(
       () => MakeAdRequestUsecase(
+        serviceLocator(),
+      ),
+    );
+
+    serviceLocator.registerLazySingleton<FavouriteAdUseCase>(
+      () => FavouriteAdUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<RemoveFavouriteAdUseCase>(
+      () => RemoveFavouriteAdUseCase(
         serviceLocator(),
       ),
     );
@@ -336,13 +367,13 @@ class FourtyNineServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
       )..loadData(),
     );
 
     serviceLocator.registerFactory<MainCategoriesCubit>(
       () => MainCategoriesCubit(
-        serviceLocator(),
-        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
@@ -356,11 +387,15 @@ class FourtyNineServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
       ),
     );
     // CreateAdCubit
     serviceLocator.registerFactory<CreateAdCubit>(
       () => CreateAdCubit(
+        serviceLocator(),
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
       ),

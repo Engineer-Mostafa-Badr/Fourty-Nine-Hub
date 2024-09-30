@@ -583,6 +583,13 @@ class SnapView extends StatelessWidget {
 // }
 
 //============================================================================================
+class Filter1 {
+  final String name;
+  final ColorFilter? colorFilter;
+  final String ffmpegFilter;
+
+  const Filter1(this.name, this.colorFilter, {required this.ffmpegFilter});
+}
 
 class AdvancedSnapchatCameraScreen extends StatefulWidget {
   @override
@@ -3087,7 +3094,7 @@ class MyVoiceVideoRecordingScreenState
                     ),
                   ),
                   FittedBox(
-                    child: Text(filters[index].name,
+                    child: Text(filters[index].enName,
                         style: const TextStyle(color: Colors.white)),
                   ),
                 ],

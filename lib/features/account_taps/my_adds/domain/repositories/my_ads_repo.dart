@@ -2,8 +2,9 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
-import '../../../../mazadat_feature/auction_list/domain/entities/auction_entity.dart';
 import '../../../../ride/trip_details/domain/entities/trip_and_request_entity.dart';
+import '../entity/my_ads_auction.dart';
+import '../entity/my_ads_trip_join_entity.dart';
 
 abstract class MyAdsRepo {
   Future<Either<Failure, List<AdEntity>>> getAds();
@@ -17,5 +18,7 @@ abstract class MyAdsRepo {
   Future<Either<Failure, bool>> rejectPickMeRequest({required String id});
   Future<Either<Failure, bool>> acceptComeWithYouRequests({required String id});
   Future<Either<Failure, bool>> rejectComeWithYouRequests({required String id});
-  Future<Either<Failure, List<AuctionEntity>>> getMyAuctions();
+  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyAuctions();
+  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments();
+  Future<Either<Failure, MyAdsTripJoinEntity>> getMyTripJoin();
 }

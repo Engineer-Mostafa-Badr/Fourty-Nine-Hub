@@ -8,6 +8,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locales.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 
 class WinnerCard extends StatelessWidget {
   WinnerCard({super.key, required this.isWinner, required this.model});
@@ -20,25 +21,25 @@ class WinnerCard extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
+        const Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Icon(
+            Icon(
               Icons.star,
               size: 14,
               color: AppColors.ACCENT_COLOR,
             ),
             Column(
               children: [
-                const Icon(
+                Icon(
                   FontAwesomeIcons.crown,
                   color: AppColors.ACCENT_COLOR,
                 ),
                 Sizer(),
               ],
             ),
-            const Icon(
+            Icon(
               Icons.star,
               size: 14,
               color: AppColors.ACCENT_COLOR,
@@ -49,15 +50,19 @@ class WinnerCard extends StatelessWidget {
           radius: isWinner ? 42 : 35,
           backgroundColor:
               isWinner ? AppColors.ACCENT_COLOR : AppColors.PRIMARY_COLOR,
-          child: CircleAvatar(
-            radius: isWinner ? 40 : 33,
-            backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(
-                '${model.userId?.userProfile?.profilePictureKey?.mediaKey}' ??
-                    ''),
+          child: ImageFromInternet(
+            isCircle: true,
+            image: '${model.userId?.userProfile?.profilePictureKey?.mediaKey}',
           ),
+          // child: CircleAvatar(
+          //   radius: isWinner ? 40 : 33,
+          //   backgroundColor: Colors.white,
+          //   backgroundImage: NetworkImage(
+          //       '${model.userId?.userProfile?.profilePictureKey?.mediaKey}' ??
+          //           ''),
+          // ),
         ),
-        Sizer(),
+        const Sizer(),
         Label(
             text: model.userId?.fullName ?? '',
             style: Styles.mediumText(fontWeight: FontWeight.w500)),

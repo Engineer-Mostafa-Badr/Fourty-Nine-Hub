@@ -1,12 +1,11 @@
-import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
@@ -17,21 +16,23 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/get_ser
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
+import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:icons_launcher/utils/cli_logger.dart';
 import 'core/service/background_service.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'firebase_options.dart';
 import 'routes/pages.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await CacheServiceImpl.init();
   await DI.execute();
 
@@ -80,6 +81,9 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider(
           create: (context) => serviceLocator<UserCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<SecretsCubit>(),
         ),
         BlocProvider(
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
@@ -139,13 +143,14 @@ class _MyAppState extends State<MyApp> {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (context, child) {
+            context.read<SecretsCubit>().state.secrets?.zegoAppId;
             return BlocBuilder<ThemeCubit, ThemeStates>(
               builder: (BuildContext context, state) {
                 return MaterialApp.router(
                   builder: (context, child) {
                     return MediaQuery(
                       data: MediaQuery.of(context)
-                          .copyWith(textScaler: const TextScaler.linear(1.0)),
+                          .copyWith(textScaler:  TextScaler.noScaling),
                       child: child!,
                     );
                   },

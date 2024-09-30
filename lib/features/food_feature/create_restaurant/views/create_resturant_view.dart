@@ -22,8 +22,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
 
-class CreateResturantView extends StatelessWidget {
-  CreateResturantView({super.key});
+class CreateRestaurantForm extends StatelessWidget {
+  const CreateRestaurantForm({super.key});
 
   @override
   Widget build(BuildContext context) {

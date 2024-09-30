@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class WalletCardWidget extends StatelessWidget {
@@ -20,9 +19,9 @@ class WalletCardWidget extends StatelessWidget {
     return Container(
       height: kToolbarHeight * 2,
       width: double.infinity,
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          color: AppColors.PRIMARY_COLOR,
+          color:Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
@@ -34,27 +33,27 @@ class WalletCardWidget extends StatelessWidget {
                 if (type == WalletTypes.balance)
                   Label(
                     text: LocaleKeys.yourBalance.localize,
-                    style: Styles.mediumText(color: Colors.white),
+                    style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
                   ),
                 if (type == WalletTypes.giftWallet)
                   Label(
                     text: LocaleKeys.yourGift.localize,
-                    style: Styles.mediumText(color: Colors.white),
+                    style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
                   ),
                 if (type == WalletTypes.mainWallet)
                   Label(
                     text: LocaleKeys.yourWallet.localize,
-                    style: Styles.mediumText(color: Colors.white),
+                    style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
                   ),
                 Label(
                   text: balance,
                   style:
-                      Styles.headerText(color: Colors.white, fontSize: 50.sp),
+                      Styles.headerText(color: Theme.of(context).scaffoldBackgroundColor, fontSize: 50.sp),
                 ),
                 Label(
                   text: LocaleKeys.hUB.localize,
                   style: Styles.mediumText(
-                      fontWeight: FontWeight.w300, color: Colors.white),
+                      fontWeight: FontWeight.w300, color: Theme.of(context).scaffoldBackgroundColor),
                 )
               ],
             ),

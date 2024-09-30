@@ -14,17 +14,18 @@ class JsonParser implements ApiConsumer {
 
   @override
   Future<Either<Failure, Map<String, dynamic>>> delete(String url,
-      {Map<String, dynamic>? data, Map<String, dynamic>? queryParameters}) {
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) {
     // TODO: implement delete
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> get(
-    String url, {
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? data,
-  }) async {
+  Future<Either<Failure, Map<String, dynamic>>> get(String url,
+      {Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? data,
+      Map<String, dynamic>? headers}) async {
     try {
       final response = jsonDecode(await rootBundle.loadString(url));
 
@@ -42,9 +43,8 @@ class JsonParser implements ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> post(String url,
       {Map<String, dynamic>? data,
       FormData? formData,
-      Map<String, dynamic>? queryParameters,
-      Options? options
-      }) {
+      Map<String, dynamic>? headers,
+      Map<String, dynamic>? queryParameters}) {
     // TODO: implement post
     throw UnimplementedError();
   }

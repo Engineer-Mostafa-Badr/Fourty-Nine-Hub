@@ -1,10 +1,14 @@
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
+
 class AdPropertiesEntity {
-  final String label;
+  final String id;
+  final String nameAr;
+  final String nameEn;
   final String type;
-  final List<String> values;
+  final List<SelectionEntity> values;
   AdPropertyType get adPropertyType => getAdPropertyTypeValue(type);
   AdPropertiesEntity(
-      {required this.label, required this.type, required this.values});
+      {required this.id,required this.nameAr,required this.nameEn, required this.type, required this.values});
 }
 
 enum AdPropertyType { select, dropdown, number, text, image, file }
@@ -15,7 +19,7 @@ extension AdPropertyTypeX on AdPropertyType {
   bool get isNumber => this == AdPropertyType.number;
   bool get isText => this == AdPropertyType.text;
   bool get isImage => this == AdPropertyType.image;
-  bool get isFille => this == AdPropertyType.file;
+  bool get isFile => this == AdPropertyType.file;
 }
 
 AdPropertyType getAdPropertyTypeValue(String type) {

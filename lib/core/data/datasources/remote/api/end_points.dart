@@ -50,6 +50,7 @@ class EndPoints {
 
   static String getBannerByID({required String id}) => '/categories/main/$id';
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
+  static const getWalletHome = '/main-wallet/user-wallets-amount';
 
   static String getMainCategoryDetails(String id) => '/categories/main/$id';
 
@@ -100,6 +101,17 @@ class EndPoints {
   static String postCompanyAd() {
     return '/advertisementCompany?subCategory=66adecd7aa2ff24015872e9f';
   }
+
+  // Custom Page
+  static const socialPage='/navigators/socialPage';
+  static const subTab='/navigators/subTap';
+  static const navigateBar='/navigators/navigatorsBar';
+  static const favouriteCat='/navigators/navigateCategories';
+
+  //My Ads
+  static const myAdsAuction='/ads/allMyAds/auction';
+  static const myAdsInstallment='/ads/allMyAds/installment';
+  static const myAdsTripJoin='/ride/come-with-you/my?subCategory=62ea00e269ea29c91dfc390c';
 
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';
@@ -275,6 +287,14 @@ class EndPoints {
     return '/ride/pick-me/request/$id';
   }
 
+  static String favouriteAd(String id) {
+    return '/ads-favourites/adToFavourites/$id';
+  }
+
+  static String removeFavouriteAd(String id) {
+    return '/ads-favourites/reomveAdFromFavourites/$id';
+  }
+
   static String requestComeWithMe(String id) {
     return '/ride/come-with-you/request/$id';
   }
@@ -441,7 +461,7 @@ class EndPoints {
   }
 
   static String deleteFriend(String userId) {
-    return '/friends/deleteFriend/$userId?subCategory=${Constants.facebookSubCategory}';
+    return '/friends/deleteFriend/$userId';
   }
 
   static String commentOnTwitterPost(String postId) {
@@ -508,8 +528,8 @@ class EndPoints {
     return '/follow/make-follow/$userId?subCategory=${Constants.instagramSubCategory}';
   }
 
-  static String removeFollow(String userId) {
-    return '/follow/unFollow/$userId?subCategory=${Constants.instagramSubCategory}';
+  static String deleteFollow(String userId) {
+    return '/follow/delete-follower/$userId?subCategory=${Constants.instagramSubCategory}';
   }
 
   static String greetMessage(String userId) {
@@ -548,11 +568,11 @@ class EndPoints {
   }
 
   static String getSubcategoryAdProps(String id) {
-    return '/ads/PropsBySubCategoryId/$id';
+    return '/ads/PropsByMainCategoryId/$id';
   }
 
   static const createAd = '/ads/create-ads';
-  static const myAds = '/ads/allMyAds';
+  static const myAds = '/ads/allMyAds?limit=100';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const favouriteAds = '/ads-favourites/allFavouriteAds';
   static const favouriteSubCategories = '/favorite-sub-category';
@@ -666,6 +686,16 @@ class EndPoints {
   static String endMeeting(String id) => '/room-id/finish/$id';
 
   static String getScheduledMeetings(String id) => '/room-id/$id';
+
+  //lives
+  static String allLiveTopics = '/stream-topic';
+  static String createLive = '/stream';
+
+  static String endStream(String id) => '/stream/$id';
+  static String allLives = '/stream/explore';
+
+//secrets
+  static String getSecrets = '/app-manager-dashboard/apiKeys';
   static String deleteChatMessage = '/chat/message';
 
   static String changeChatMuteState(String chatId) {

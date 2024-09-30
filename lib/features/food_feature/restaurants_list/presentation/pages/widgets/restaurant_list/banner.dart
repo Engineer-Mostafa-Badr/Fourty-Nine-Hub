@@ -4,19 +4,23 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_bann
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_list_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_meal_list_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../../service_locator/service_locator.dart';
+import '../../../../../create_restaurant/cubit/create_resturant_cubit.dart';
+import '../../../../../create_restaurant/views/create_resturant_view.dart';
+
 class MealBanner extends StatelessWidget {
   const MealBanner({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
+    return BlocBuilder<RestaurantsMealListCubit, RestaurantsMealListState>(
       builder: (context, state) {
         if (state.isLoading) {
           return Shimmer.fromColors(
@@ -40,7 +44,7 @@ class MealBanner extends StatelessWidget {
                     banner: state.mainCategory?.banner ?? "",
                     cover: state.mainCategory?.cover ?? "",
                     isFavorite: state.mainCategory?.isFavorite ?? false,
-                    total: state.mainCategory?.total ?? 0,
+                    total: state.mainCategory?.total ?? 0, nameEn: '',
                   )
                 : MainCategoryEntity(
                     id: state.banner?.id ?? "",
@@ -49,19 +53,32 @@ class MealBanner extends StatelessWidget {
                     banner: state.banner?.banner ?? "",
                     cover: state.banner?.cover ?? "",
                     isFavorite: false,
-                    total: state.banner?.numberOfAds ?? 0),
+                    total: state.banner?.numberOfAds ?? 0, nameEn: ''),
             canRegister: state.isResturant?.isRestaurant == true ? false : true,
             onRegister: () {
               if (context.read<UserCubit>().isLoggedIn) {
-                context.push(Routes.CREATERESTURANT);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BlocProvider<CreateRestaurantCubit>(
+                        create: (context) => serviceLocator(),
+                        child: const CreateRestaurantForm(),
+                      ),
+                    ));
+                // context.push(Routes.CREATERESTURANT);
               } else {
                 context.push(Routes.REGISTER);
               }
             },
-            onFavorite: () {},
+            onFavorite: () {
+              context
+                  .read<RestaurantsMealListCubit>()
+                  .toggleFavoriteCategory(state.mainCategory!.id);
+            },
+            isFavorite: false,
           );
         } else {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
       },
     );

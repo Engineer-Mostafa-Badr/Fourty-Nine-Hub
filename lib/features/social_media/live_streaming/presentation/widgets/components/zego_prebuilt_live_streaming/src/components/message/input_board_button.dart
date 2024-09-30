@@ -102,6 +102,7 @@ class _ZegoLiveStreamingInRoomMessageInputBoardButtonState
                       payloadAttributes: widget
                           .hostManager.config.inRoomMessage.attributes
                           ?.call(),
+
                       rootNavigator: widget.hostManager.config.rootNavigator,
                     ),
                   )
@@ -113,6 +114,7 @@ class _ZegoLiveStreamingInRoomMessageInputBoardButtonState
                   );
                 }
               : null,
+              
           icon: buttonIcon,
           iconSize: widget.iconSize ?? Size(72.w, 72.h),
           buttonSize: widget.buttonSize ?? Size(96.w, 96.h),

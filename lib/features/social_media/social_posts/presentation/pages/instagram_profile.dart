@@ -8,13 +8,20 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/media_view.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/message_button.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/saved_reels_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/instagram_suggest_people.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_reels.dart';
@@ -63,7 +70,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                     SliverToBoxAdapter(
                         child: Container(
                             width: double.infinity,
-                            padding: EdgeInsetsDirectional.only(
+                            padding: const EdgeInsetsDirectional.only(
                                 top: 35, end: 10, start: 10),
                             child: Row(
                                 mainAxisAlignment:
@@ -73,43 +80,46 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                     children: [
                                       IconButton(
                                           onPressed: () => context.pop(),
-                                          icon: const Icon(
+                                          icon: Icon(
                                             Icons.arrow_back,
                                             color: Colors.black,
+                                            size: 45.w,
                                           )),
                                       Label(
                                           text:
                                               '${state.profileData?.email.split('@')[0]}',
                                           style: Styles.mediumText(
                                               color: Colors.grey)),
-                                      Sizer(
-                                        width: 4,
-                                      ),
-                                      const Icon(
+
+                                      if(state.profileData?.isDocument==true)...[
+                                        Sizer(
+                                          width: 8.w,
+                                        ),Icon(
                                         Icons.verified,
-                                        size: 20,
+                                        size: 35.w,
                                         color: AppColors.PRIMARY_COLOR_DARK,
-                                      )
+                                      )]
                                     ],
                                   ),
                                   if (loginUser?.id != widget.userId)
                                     PopupMenuButton(
-                                        icon: const Icon(
+                                        icon: Icon(
                                           Icons.more_vert,
                                           color: Colors.black,
+                                          size: 45.w,
                                         ),
                                         itemBuilder: (context) {
                                           return [
                                             PopupMenuItem<int>(
                                               value: 4,
-                                              child: const Text("Report"),
+                                              child: Text(LocaleKeys.report.localize),
                                               onTap: () {
                                                 bottomSheet(
                                                     context: context,
                                                     widget: ReportView(
                                                       id: widget.userId,
                                                       categoryId:
-                                                          '66b77e77bb35968b535dc944',
+                                                          Constants.facebookSubCategory,
                                                     ));
                                               },
                                             ),
@@ -120,8 +130,8 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                                 child: Text(state.profileData
                                                             ?.isBlock ==
                                                         true
-                                                    ? 'UnBlock'
-                                                    : 'Block'),
+                                                    ? LocaleKeys.unBlock.localize
+                                                    : LocaleKeys.block.localize),
                                                 onTap: () async {
                                                   // context.pop();
                                                   var result = await controller
@@ -139,13 +149,13 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                                           ?.isBlock = true;
                                                       showSuccessMessage(
                                                           context,
-                                                          'Blocked user successfully.');
+                                                          LocaleKeys.blockedSuccessfully.localize);
                                                     } else {
                                                       state.profileData
                                                           ?.isBlock = false;
                                                       showSuccessMessage(
                                                           context,
-                                                          'Unblocked user successfully.');
+                                                          LocaleKeys.unBlockedSuccessfully.localize);
                                                     }
                                                   }
                                                 },
@@ -190,7 +200,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                       child: state.profileData?.isBlock == false
                           ? Column(
                               children: [
-                                Sizer(),
+                                const Sizer(),
                                 TabBar(
                                     labelStyle: Styles.mediumText(),
                                     isScrollable: true,
@@ -198,8 +208,8 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                     // labelPadding: EdgeInsetsDirectional.only(end: 100),
                                     indicatorSize: TabBarIndicatorSize.tab,
                                     labelPadding:
-                                        EdgeInsetsDirectional.symmetric(
-                                            horizontal: 50),
+                                    EdgeInsetsDirectional.symmetric(
+                                            horizontal: 90.w),
                                     onTap: (i) {
                                       controller.changeUserPage(i);
                                     },
@@ -207,13 +217,13 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                       Tab(
                                         icon: Image.asset(
                                           Assets.userMedia,
-                                          width: 30,
+                                          width: 55.w,
                                         ),
                                       ),
                                       Tab(
                                         icon: Image.asset(
                                           Assets.userReels,
-                                          width: 30,
+                                          width: 55.w,
                                         ),
                                       ),
                                       if (context
@@ -225,18 +235,18 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                         Tab(
                                           icon: Image.asset(
                                             Assets.savedReels,
-                                            width: 30,
+                                            width: 55.w,
                                           ),
                                         ),
                                     ]),
                                 // _buildAccountPages(state.profileData!),
                               ],
                             )
-                          : const Center(
+                          : Center(
                               child: Padding(
-                                padding: EdgeInsets.only(top: 25.0),
+                                padding: EdgeInsets.only(top: 50.0.h),
                                 child: Label(
-                                  text: 'You have blocked this user.',
+                                  text: LocaleKeys.youHaveBlockedThisUser.localize,
                                 ),
                               ),
                             ),
@@ -280,29 +290,59 @@ class _InstagramProfileState extends State<InstagramProfile> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               children: [
                 Stack(
                   alignment: AlignmentDirectional.bottomEnd,
                   children: [
                     state.newImage != null
-                        ? CircleAvatar(
-                            radius: 40,
-                            child: CircleAvatar(
-                              radius: 40,
-                              backgroundColor: Colors.white,
-                              backgroundImage:
-                                  FileImage(File(state.newImage!.file.path)),
-                            ),
-                          )
-                        : ImageFromInternet(
-                            image: user.profilePicture ??
-                                UIConst.profilePlaceHolder,
-                            height: 80.h,
-                            width: 80,
-                            isCircle: true,
+                        ? InkWell(
+                      onTap: (){
+                        showDialog(
+                          context: context,
+                          builder: (context) => ImageDetailsScreen(
+                            image: state.newImage!.file.path,
+                            fromPost: true,
+                            isFile: true,
+                            onRemoveImage: () {
+                              context.pop();
+                            },
                           ),
+                        );
+                      },
+                      child: CircleAvatar(
+                              radius: 40.r,
+                              child: CircleAvatar(
+                                radius: 40.r,
+                                backgroundColor: Colors.white,
+                                backgroundImage:
+                                    FileImage(File(state.newImage!.file.path)),
+                              ),
+                            ),
+                        )
+                        : InkWell(
+                      onTap: (){
+                        showDialog(
+                          context: context,
+                          builder: (context) => ImageDetailsScreen(
+                            image: user.profilePicture!,
+                            fromPost: true,
+                            isFile: false,
+                            onRemoveImage: () {
+                              context.pop();
+                            },
+                          ),
+                        );
+                      },
+                      child: ImageFromInternet(
+                              image: user.profilePicture ??
+                                  UIConst.profilePlaceHolder,
+                              height: 100.h,
+                              width: 100.w,
+                              isCircle: true,
+                            ),
+                        ),
                     if (loginUser?.id == user.id)
                       InkWell(
                         onTap: () {
@@ -313,7 +353,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                 children: <Widget>[
                                   ListTile(
                                     leading: const Icon(Icons.photo_library),
-                                    title: const Text('Gallery'),
+                                    title: Text(LocaleKeys.gallery.localize),
                                     onTap: () async {
                                       Navigator.pop(context);
                                       await controller.uploadPhoto(
@@ -323,7 +363,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                   ),
                                   ListTile(
                                     leading: const Icon(Icons.camera_alt),
-                                    title: const Text('Camera'),
+                                    title: Text(LocaleKeys.camera.localize),
                                     onTap: () async {
                                       Navigator.pop(context);
                                       await controller.uploadPhoto(
@@ -337,7 +377,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                           );
                         },
                         child: Container(
-                            padding: EdgeInsets.all(5),
+                            padding: EdgeInsets.all(8.w),
                             decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: AppColors.PRIMARY_COLOR),
@@ -349,7 +389,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                       )
                   ],
                 ),
-                Sizer(
+                const Sizer(
                   width: 20,
                 ),
                 Expanded(
@@ -358,27 +398,27 @@ class _InstagramProfileState extends State<InstagramProfile> {
                     children: [
                       _buildCounter(
                         value: '${user.instagramPosts ?? 0} ',
-                        label: 'Post',
+                        label: LocaleKeys.post.localize ,
                       ),
-                      Sizer(),
+                      const Sizer(),
                       _buildCounter(
                         value: '${user.friendsCount} ',
-                        label: 'Friend',
+                        label: LocaleKeys.friend.localize,
                       ),
-                      Sizer(),
+                      const Sizer(),
                       _buildCounter(
                         value: '${user.followersCount} ',
-                        label: 'Follower',
+                        label: LocaleKeys.follower.localize,
                       ),
                       Sizer(
-                        width: 5,
+                        width:8.w,
                       ),
                       _buildCounter(
                         value: '${user.totalView} ',
-                        label: 'View',
+                        label: LocaleKeys.view.localize,
                       ),
                       Sizer(
-                        width: 5,
+                        width: 8.w,
                       ),
                     ],
                   ),
@@ -387,11 +427,11 @@ class _InstagramProfileState extends State<InstagramProfile> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Sizer(),
+                const Sizer(),
                 RichText(
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -514,7 +554,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                       ),
                     ),
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Expanded(
                       child: Row(
                     children: [
@@ -538,16 +578,16 @@ class _InstagramProfileState extends State<InstagramProfile> {
               ),
             ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Column(
               children: [
                 if (loginUser?.id != widget.userId) ...[
-                  Sizer(),
+                  const Sizer(),
                   Row(
                     children: [
                       Expanded(
                         child: AppButton(
-                            height: 42.h,
+                            height: 62.h,
                             backColor: user.isFollowed == true
                                 ? AppColors.PRIMARY_COLOR
                                 : null,
@@ -558,43 +598,50 @@ class _InstagramProfileState extends State<InstagramProfile> {
                               onFollow();
                             }),
                       ),
-                      Sizer(),
-                      Expanded(
-                        child: PopupMenuButton(
-                            child: Container(
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: AppColors.SECONDARY_COLOR),
-                                child: Text(
-                                  'Message',
-                                  style: Styles.mediumText(color: Colors.white),
-                                )),
-                            itemBuilder: (context) {
-                              return const [
-                                PopupMenuItem<int>(
-                                  value: 0,
-                                  child: Text("Normal"),
-                                ),
-                                PopupMenuItem<int>(
-                                  value: 1,
-                                  child: Text("Anonymous"),
-                                ),
-                              ];
-                            },
-                            onSelected: (value) {
+                      const Sizer(),
+                      Expanded(child: MessageButton(user: state.profileData!,  normalPress: () async{
+                        if(context.read<UserCubit>().isLoggedIn){
+                          if(state.profileData?.areFriends==true){
+                            var result = await context.read<SocialPostsCubit>().createNormalChat(widget.userId,ChatCategoriesIds.social);
+                            if(result==true){
                               context.push(Routes.CHAT);
-                            }),
-                      ),
-                      Sizer(),
+                            }
+                          }else{
+                            var result = await context.read<SocialPostsCubit>().createNormalChat(widget.userId,ChatCategoriesIds.greet);
+                            if(result==true){
+                              context.pop();
+                              context.push(Routes.CHAT);
+                            }else{
+                              showErrorMessage(context, getFailureMessage(state.failure!, context));
+                              context.pop();
+                            }
+                          }
+                        }else{
+                          context.push(Routes.LOGIN);
+                        }
+
+                      }, anonymousPress: () async{
+                        if(context.read<UserCubit>().isLoggedIn){
+                          var result = await context.read<SocialPostsCubit>().createAnonymousChat(widget.userId);
+                          if(result==true){
+                            context.pop();
+                            context.push(Routes.CHAT);
+                          }else{
+                            showErrorMessage(context, getFailureMessage(state.failure!, context));
+                            context.pop();
+                          }
+                        }else{
+                          context.push(Routes.LOGIN);
+                        }
+                      })),
+                      const Sizer(),
                       InkWell(
                         onTap: showHideSuggestPeople,
                         child: Container(
-                          height: 42.h,
-                          width: 42,
-                          margin: EdgeInsets.all(0),
-                          padding: EdgeInsets.symmetric(horizontal: 0),
+                          height: kToolbarHeight * 1.h,
+                          width: 80.w,
+                          margin: const EdgeInsets.all(0),
+                          padding: const EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.r),
                             color: AppColors.PRIMARY_COLOR,
@@ -605,6 +652,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                   ? Icons.person_add
                                   : Icons.person,
                               color: Colors.white,
+                              size: 40.w,
                             ),
                           ),
                         ),
@@ -613,48 +661,60 @@ class _InstagramProfileState extends State<InstagramProfile> {
                   ),
                 ],
                 if (loginUser?.id == widget.userId) ...[
-                  Sizer(),
+                  const Sizer(),
                   Row(
                     children: [
                       Expanded(
                         child: InkWell(
                           onTap: getUserProfile,
                           child: Container(
-                            height: 42.h,
-                            margin: EdgeInsets.all(0),
-                            padding: EdgeInsets.symmetric(horizontal: 0),
+                            height: kToolbarHeight * 1.h,
+                            margin: const EdgeInsets.all(0),
+                            padding: EdgeInsets.symmetric(horizontal: 10.w),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10.r),
                               color: AppColors.PRIMARY_COLOR,
                             ),
                             child: Center(
                               child: Label(
-                                text: 'Edit Profile',
+                                text: LocaleKeys.editProfile.localize,
                                 style: Styles.mediumText(color: Colors.white),
                               ),
                             ),
                           ),
                         ),
                       ),
-                      Sizer(),
+                      const Sizer(),
                       Expanded(
-                        child: AppButton(
-                            height: 42.h,
-                            backColor: AppColors.PRIMARY_COLOR,
-                            label: 'Share Profile',
-                            style: Styles.mediumText(color: Colors.white),
-                            onPressed: () {
-                              onFollow();
-                            }),
+                        child: InkWell(
+                          onTap: (){
+                            onFollow();
+                          },
+                          child: Container(
+                            height: kToolbarHeight * 1.h,
+                            margin: const EdgeInsets.all(0),
+                            padding: EdgeInsets.symmetric(horizontal: 10.w),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.r),
+                              color: AppColors.PRIMARY_COLOR,
+                            ),
+                            child: Center(
+                              child: Label(
+                                text: LocaleKeys.shareProfile.localize,
+                                style: Styles.mediumText(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                      Sizer(),
+                      const Sizer(),
                       InkWell(
                         onTap: showHideSuggestPeople,
                         child: Container(
-                          height: 42.h,
-                          width: 42,
-                          margin: EdgeInsets.all(0),
-                          padding: EdgeInsets.symmetric(horizontal: 0),
+                          height: kToolbarHeight * 1.h,
+                          width: 80.w,
+                          margin: const EdgeInsets.all(0),
+                          padding: const EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.r),
                             color: AppColors.PRIMARY_COLOR,

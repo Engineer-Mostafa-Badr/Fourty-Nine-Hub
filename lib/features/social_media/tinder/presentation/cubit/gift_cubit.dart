@@ -124,7 +124,8 @@ class GiftsCubit extends Cubit<GiftsState> {
     try {
       await _ensureTokenInitialized();
       final newGifts = await _fetchGiftsFromApi(token!);
-      emit(GiftsLoaded([...state.gifts, ...newGifts]));
+      emit(GiftsLoaded(
+          [...state.gifts, ...newGifts!.gifts!], newGifts.length ?? 0));
       _currentPage++;
     } catch (e) {
       emit(GiftsError(e.toString()));
@@ -133,7 +134,7 @@ class GiftsCubit extends Cubit<GiftsState> {
     }
   }
 
-  Future<List<GiftData>> _fetchGiftsFromApi(String accessToken) async {
+  Future<GiftsData?> _fetchGiftsFromApi(String accessToken) async {
     final response = await _makeGetRequest(
       url:
           'https://49dev.com/api/v1/dashboard-gifts?limit=$_limit&page=$_currentPage',
@@ -143,7 +144,7 @@ class GiftsCubit extends Cubit<GiftsState> {
 
     if (response != null) {
       final giftApi = GiftApi.fromJson(jsonDecode(response.body));
-      return giftApi.data ?? [];
+      return giftApi.data;
     } else {
       throw Exception("Failed to fetch gifts");
     }
@@ -177,20 +178,21 @@ class GiftsCubit extends Cubit<GiftsState> {
 
 class GiftsState {
   final List<GiftData> gifts;
+  final int length;
 
-  GiftsState(this.gifts);
+  GiftsState(this.gifts, this.length);
 }
 
 class GiftsInitial extends GiftsState {
-  GiftsInitial() : super([]);
+  GiftsInitial() : super([], 0);
 }
 
 class GiftsLoaded extends GiftsState {
-  GiftsLoaded(super.gifts);
+  GiftsLoaded(super.gifts, super.length);
 }
 
 class GiftsError extends GiftsState {
   final String message;
 
-  GiftsError(this.message) : super([]);
+  GiftsError(this.message) : super([], 0);
 }

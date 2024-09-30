@@ -696,12 +696,15 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     required String gender,
     bool isLoadMore = false,
   }) async {
-    if (_isLoadingMore || !_hasMoreData) return;
+    // if (_isLoadingMore || _hasMoreData) {
+    //   print('if (_isLoadingMore || !_hasMoreData) {');
+    //   return;
+    // }
     emit(state.copyWith(userDataState: DataState.initial));
     // Check if the gender has changed
     if (state.gender != gender) {
       _currentPage = 1;
-      _hasMoreData = true;
+      // _hasMoreData = true;
       emit(state.copyWith(userData: [], gender: gender)); // Clear existing data
     }
 
@@ -712,7 +715,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
 
     if (userData != null) {
       if (userData.isEmpty) {
-        _hasMoreData = false;
+        // _hasMoreData = false;
       } else {
         _currentPage = page;
         final List<UserData> updatedUserData = isLoadMore
@@ -833,17 +836,23 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     }
   }
 
-  Future<void> fetchLastSeen({
+  Future<bool> fetchLastSeen({
     required String userId,
   }) async {
-    emit(state.copyWith(lastSeenModelState: DataState.initial));
+    emit(state.copyWith(
+        lastSeenModelState: DataState.initial,));
+
     final lastSeenModel = await tinderRepository.fetchLastSeen(userId);
     if (lastSeenModel != null) {
       emit(state.copyWith(
           lastSeenModel: lastSeenModel, lastSeenModelState: DataState.success));
-      // print(lastSeenModel.data!.first.status.toString()+"sssssssssssssssssssssssssssssssss");
+      return true;
+      // print(lastSeenModel.data!.status.toString() +
+      //     "sssssssssssssssssssssssssssssssss");
     } else {
+      print("sssssssssssssssssssssssssssssssss");
       emit(state.copyWith(lastSeenModelState: DataState.failure));
+      return false;
     }
   }
 

@@ -439,7 +439,7 @@ class TinderRepository {
     if (response != null) {
       final data = json.decode(response.body);
       final giftApi = GiftApi.fromJson(data);
-      return giftApi.data;
+      return giftApi.data!.gifts;
     }
     return null;
   }

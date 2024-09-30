@@ -1,65 +1,69 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart' show describeEnum;
+
+import '../localization/locale_keys.g.dart';
 
 enum ReportsEnum { nudity, frequent, fake, abuse, hated, illegal, politics }
 
 extension ReportsEnumExtention on ReportsEnum {
   String get name => describeEnum(this);
+
   String get category {
     switch (this) {
       case ReportsEnum.nudity:
-        return 'nudity';
+        return LocaleKeys.report_category_nudity.tr();
       case ReportsEnum.frequent:
-        return 'frequent';
+        return LocaleKeys.report_category_frequent.tr();
       case ReportsEnum.fake:
-        return 'fake';
+        return LocaleKeys.report_category_fake.tr();
       case ReportsEnum.abuse:
-        return 'abuse';
+        return LocaleKeys.report_category_abuse.tr();
       case ReportsEnum.hated:
-        return 'hated';
+        return LocaleKeys.report_category_hated.tr();
       case ReportsEnum.illegal:
-        return 'illegal';
+        return LocaleKeys.report_category_illegal.tr();
       case ReportsEnum.politics:
-        return 'politics';
+        return LocaleKeys.report_category_politics.tr();
     }
   }
 
   String get displayTitleEn {
     switch (this) {
       case ReportsEnum.nudity:
-        return 'This content contains explicit nudity and is inappropriate for general audiences.';
+        return LocaleKeys.report_nudity.tr();
       case ReportsEnum.frequent:
-        return 'Please investigate the frequency of this user\'s posts.';
+        return LocaleKeys.report_frequent.tr();
       case ReportsEnum.fake:
-        return 'The content in question is deceptive and should be verified for authenticity.';
+        return LocaleKeys.report_fake.tr();
       case ReportsEnum.abuse:
-        return 'The content reported involves abusive language or behavior.';
+        return LocaleKeys.report_abuse.tr();
       case ReportsEnum.hated:
-        return 'This report concerns content that promotes hate speech or discrimination.';
+        return LocaleKeys.report_hated.tr();
       case ReportsEnum.illegal:
-        return 'The content reported is suspected of promoting illegal activities.';
+        return LocaleKeys.report_illegal.tr();
       case ReportsEnum.politics:
-        return 'Illegal activities are strictly prohibited on our platform.';
+        return LocaleKeys.report_politics.tr();
     }
   }
 
   String get displayTitleAr {
     switch (this) {
       case ReportsEnum.nudity:
-        return 'يحتوي هذا المحتوى على عري صريح وهو غير مناسب للجماهير العامة.';
+        return LocaleKeys.report_nudity.tr();
       case ReportsEnum.frequent:
-        return 'النشر المفرط لنفس الرسالة يعطل تجربة المستخدم.';
+        return LocaleKeys.report_frequent.tr();
       case ReportsEnum.fake:
-        return 'يبرز هذا التقرير انتشار الأخبار الزائفة أو المعلومات المضللة.';
+        return LocaleKeys.report_fake.tr();
       case ReportsEnum.abuse:
-        return 'المحتوى المبلغ عنه يتضمن لغة أو سلوكاً مسيئاً.';
+        return LocaleKeys.report_abuse.tr();
       case ReportsEnum.hated:
-        return 'يتعلق هذا التقرير بمحتوى يروج لخطاب الكراهية أو التمييز.';
+        return LocaleKeys.report_hated.tr();
       case ReportsEnum.illegal:
-        return 'المحتوى المبلغ عنه مشتبه في ترويجه لأنشطة غير قانونية.';
+        return LocaleKeys.report_illegal.tr();
       case ReportsEnum.politics:
-        return 'يتضمن المحتوى المعني دعاية سياسية أو معلومات متحيزة.';
+        return LocaleKeys.report_politics.tr();
     }
   }
 }

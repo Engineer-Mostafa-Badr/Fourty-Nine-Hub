@@ -2,12 +2,17 @@
 import 'dart:core';
 
 // Flutter imports:
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_state.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_state.dart';
 
 // Package imports:
 
@@ -26,6 +31,13 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/config.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.defines.dart';
+import 'package:fourtyninehub/res/style/const.dart';
+
+import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../../../../res/style/app_colors.dart';
+import '../../../../../../../../../res/style/styles.dart';
+import '../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'dynamic_progress_indicator.dart';
 
 /// @nodoc
 class ZegoLiveStreamingLivePageSurface extends StatefulWidget {
@@ -50,8 +62,8 @@ class ZegoLiveStreamingLivePageSurface extends StatefulWidget {
   final ZegoUIKitPrebuiltLiveStreamingEvents events;
   final void Function(ZegoLiveStreamingEndEvent event) defaultEndAction;
   final Future<bool> Function(
-    ZegoLiveStreamingLeaveConfirmationEvent event,
-  ) defaultLeaveConfirmationAction;
+      ZegoLiveStreamingLeaveConfirmationEvent event,
+      ) defaultLeaveConfirmationAction;
 
   final ZegoLiveStreamingHostManager hostManager;
   final ZegoLiveStreamingStatusManager liveStatusManager;
@@ -108,6 +120,225 @@ class _ZegoLiveStreamingLivePageSurfaceState
             children: [
               durationTimeBoard(),
               if (!state.isOpenWhiteBoard) topBar(),
+              if (widget.isLiveStream)
+                Positioned.directional(
+                  textDirection: context.textDirection,
+                  end: 20,
+                  start: context.screenWidth / 4,
+                  top: 180.h,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                    state.selectedGifts.isEmpty? Container(
+                      width: context.screenWidth * 0.4,
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Label(text: "Add ",style: Styles.headerText(),),
+                                Image.asset(
+                                  'assets/49-New-icons/goal.png',
+                                  width: 70.w,
+                                ),
+                              ],
+                            ),
+                            const Sizer(),
+                            Label(text: "Live goals",style: Styles.headerText(),),
+                          ]
+                        ),
+                      )
+                    ):  GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+
+                              builder: (_) {
+                                return Container(
+                                    constraints:BoxConstraints(
+                                        maxHeight: context.screenHeight / 2,
+                                    ),
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.grey,
+                                      // borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              ImageFromInternet(
+                                                image: context
+                                                    .read<UserCubit>()
+                                                    .state
+                                                    .data!
+                                                    .profilePicture ??
+                                                    UIConst.imagePlaceHolder,
+                                                width: 130.w,
+                                                height: 130.h,
+                                                isCircle: true,
+                                              ),
+                                              SizedBox(width: 20.w),
+                                              Label(
+                                                text: context
+                                                    .read<UserCubit>()
+                                                    .state
+                                                    .data!
+                                                    .fullName,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.circular(10),
+                                              color: Colors.white10,
+                                            ),
+                                            child: Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                children: List.generate(
+                                                    state.selectedGifts.length,
+                                                        (index) =>
+                                                        Padding(
+                                                          padding:
+                                                          const EdgeInsets
+                                                              .symmetric(
+                                                              vertical: 15),
+                                                          child: Row(
+                                                            children: [
+                                                              SvgPicture
+                                                                  .network(
+                                                                state
+                                                                    .selectedGifts[
+                                                                index]
+                                                                    .picture!,
+                                                                height: 100.h,
+                                                                width: 100.w,
+                                                              ),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                                children: [
+                                                                  Label(
+                                                                      text: context
+                                                                          .isArabic
+                                                                          ? state
+                                                                          .selectedGifts[index]
+                                                                          .nameAr!
+                                                                          : state
+                                                                          .selectedGifts[index]
+                                                                          .nameEn!),
+                                                                  RichText(
+                                                                      text: TextSpan(
+                                                                          text: '0',
+                                                                          style: TextStyle(
+                                                                            color: Colors
+                                                                                .yellow,
+                                                                            fontSize: 30
+                                                                                .sp,
+                                                                          ),
+                                                                          children: [
+                                                                            TextSpan(
+                                                                              text: '/',
+                                                                              style: TextStyle(
+                                                                                color: Colors
+                                                                                    .white,
+                                                                                fontSize: 30
+                                                                                    .sp,
+                                                                              ),
+                                                                            ),
+                                                                            TextSpan(
+                                                                              text: state
+                                                                                  .selectedGifts[index]
+                                                                                  .currentValue
+                                                                                  .toString(),
+                                                                              style: TextStyle(
+                                                                                color: Colors
+                                                                                    .white,
+                                                                                fontSize: 30
+                                                                                    .sp,
+                                                                              ),
+                                                                            ),
+                                                                          ])),
+                                                                ],
+
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ))),
+                                          )
+                                        ]));
+                              });
+                        },
+                        child: Container(
+                          width: context.screenWidth * 0.4,
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              RichText(
+                                  text: TextSpan(
+                                      text: '0',
+                                      style: TextStyle(
+                                        color: Colors.yellow,
+                                        fontSize: 30.sp,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: '/',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 30.sp,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: context
+                                              .read<StreamCubit>()
+                                              .state
+                                              .selectedGifts[0]
+                                              .currentValue
+                                              .toString(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 30.sp,
+                                          ),
+                                        ),
+                                      ])),
+                              // const Sizer(width: 30,),
+                              SvgPicture.network(
+                                state.selectedGifts[0].picture!,
+                                height: 75.h,
+                                width: 75.w,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      participants()
+                    ],
+                  ),
+                ),
               bottomBar(),
               if (!state.isOpenWhiteBoard) messageList(),
               foreground(
@@ -121,6 +352,12 @@ class _ZegoLiveStreamingLivePageSurfaceState
     );
   }
 
+  Widget participants() =>
+      Container(
+          decoration: BoxDecoration(
+              color: Colors.grey, borderRadius: BorderRadius.circular(10)),
+          child: ZoomParticipantsBuilder(widgetTop: widget));
+
   Widget topBar() {
     final isCoHostEnabled = (widget.plugins?.isEnabled ?? false) &&
         widget.config.bottomMenuBar.audienceButtons
@@ -128,7 +365,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
     return Positioned(
       left: 0,
       right: 0,
-      top: 64.zR,
+      top: 64.h,
       child: ZegoLiveStreamingTopBar(
         config: widget.config,
         events: widget.events,
@@ -151,30 +388,26 @@ class _ZegoLiveStreamingLivePageSurfaceState
     final isCoHostEnabled = (widget.plugins?.isEnabled ?? false) &&
         widget.config.bottomMenuBar.audienceButtons
             .contains(ZegoLiveStreamingMenuBarButtonName.coHostControlButton);
-    return  Align(
-            alignment: Alignment.bottomCenter,
-            child: ZegoLiveStreamingBottomBar(
-              buttonSize: zegoLiveButtonSize,
-              config: widget.config,
-              events: widget.events,
-              defaultEndAction: widget.defaultEndAction,
-              defaultLeaveConfirmationAction:
-                  widget.defaultLeaveConfirmationAction,
-              hostManager: widget.hostManager,
-              hostUpdateEnabledNotifier:
-                  widget.hostManager.hostUpdateEnabledNotifier,
-              liveStatusNotifier: widget.liveStatusManager.notifier,
-              connectManager: widget.connectManager,
-              isLeaveRequestingNotifier:
-                  ZegoUIKitPrebuiltLiveStreamingController()
-                      .isLeaveRequestingNotifier,
-              popUpManager: widget.popUpManager,
-              isLiveStream: widget.isLiveStream,
-              isCoHostEnabled: isCoHostEnabled,
-              translationText: widget.config.innerText,
-            ),
-          );
-        
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: ZegoLiveStreamingBottomBar(
+        buttonSize: zegoLiveButtonSize,
+        config: widget.config,
+        events: widget.events,
+        defaultEndAction: widget.defaultEndAction,
+        defaultLeaveConfirmationAction: widget.defaultLeaveConfirmationAction,
+        hostManager: widget.hostManager,
+        hostUpdateEnabledNotifier: widget.hostManager.hostUpdateEnabledNotifier,
+        liveStatusNotifier: widget.liveStatusManager.notifier,
+        connectManager: widget.connectManager,
+        isLeaveRequestingNotifier: ZegoUIKitPrebuiltLiveStreamingController()
+            .isLeaveRequestingNotifier,
+        popUpManager: widget.popUpManager,
+        isLiveStream: widget.isLiveStream,
+        isCoHostEnabled: isCoHostEnabled,
+        translationText: widget.config.innerText,
+      ),
+    );
   }
 
   Widget messageList() {
@@ -203,10 +436,10 @@ class _ZegoLiveStreamingLivePageSurfaceState
           innerText: widget.config.innerText,
           avatarBuilder: widget.config.avatarBuilder,
           pseudoStream: ZegoUIKitPrebuiltLiveStreamingController()
-                  .message
-                  .private
-                  .streamControllerPseudoMessage
-                  ?.stream ??
+              .message
+              .private
+              .streamControllerPseudoMessage
+              ?.stream ??
               const Stream.empty(),
         ),
       ),

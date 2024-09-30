@@ -26,8 +26,8 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/internal/defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/internal/pk_combine_notifier.dart';
 
-import '../../../../../../../../zoom/presentation/bloc/meeting_cubit.dart';
-import '../../../../../../../../zoom/presentation/bloc/meeting_state.dart';
+import '../../../../../../../../zoom/presentation/controller/stream_cubit.dart';
+import '../../../../../../../../zoom/presentation/controller/stream_state.dart';
 import '../../../zego_uikit/src/services/defines/defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 

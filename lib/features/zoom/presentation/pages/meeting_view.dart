@@ -13,8 +13,8 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_state.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_state.dart';
 import 'package:fourtyninehub/features/zoom/presentation/pages/meeting_room.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/schedule_meeting_screen.dart';
@@ -28,6 +28,7 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
+import '../../../../secrets/controller/secrets_cubit.dart';
 
 class MeetingView extends StatelessWidget {
   const MeetingView({super.key});
@@ -253,6 +254,7 @@ class MeetingView extends StatelessWidget {
                               SizedBox(width: 15.h),
                               InkWell(
                                 onTap: () {
+
                                   //to unschedule
                                   joinRoom(context.read<StreamCubit>(),
                                       scheduledMeeting.roomId);

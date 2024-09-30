@@ -9,7 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/core/connect_manager.dart';
@@ -26,9 +26,12 @@ import '../../../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../../../core/messages/messages.dart';
 import '../inner_text.dart';
 import '../internal/pk_combine_notifier.dart';
+import 'live_page_surface.dart';
 import 'member/button.dart';
 import 'message/input_board_button.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+
+import 'top_bar.dart';
 
 /// @nodoc
 class ZegoLiveStreamingBottomBar extends StatefulWidget {
@@ -159,7 +162,7 @@ class _ZegoLiveStreamingBottomBarState
             color: Colors.white,
           ),
           ZoomParticipantsBuilder(
-            widget: widget,
+            widgetBottom: widget,
           ),
           ZoomChatBuilder(
             widget: widget,
@@ -202,13 +205,13 @@ class FakeTextFieldBuilder extends StatelessWidget {
             onSheetPop: (int key) {
               widget.popUpManager.removeAPopUpSheet(key);
             },
-            buttonSize: Size(context.screenWidth * 0.85, 40),
-            iconSize: Size(context.screenWidth * 0.85, 40),
+            buttonSize: Size(context.screenWidth * 0.8, 40),
+            iconSize: Size(context.screenWidth * 0.8, 40),
             enabledIcon: ButtonIcon(
                 icon: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
                 child: Label(
@@ -269,15 +272,15 @@ class ZoomMicrophoneBuilder extends StatelessWidget {
                   defaultOn: micDefaultOn,
                   muteMode: micDefaultOn,
                 ),
-                Text(
-                  micState.value
-                      ? LocaleKeys.mute.localize
-                      : LocaleKeys.unmute.localize,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20.zSP),
-                )
+                // Text(
+                //   micState.value
+                //       ? LocaleKeys.mute.localize
+                //       : LocaleKeys.unmute.localize,
+                //   style: TextStyle(
+                //       color: Colors.white,
+                //       fontWeight: FontWeight.w400,
+                //       fontSize: 20.zSP),
+                // )
               ],
             );
           }),
@@ -332,15 +335,15 @@ class ZoomCameraBuilder extends StatelessWidget {
                   ),
                   defaultOn: cameraDefaultOn,
                 ),
-                Text(
-                  cameraState.value
-                      ? LocaleKeys.startVideo.localize
-                      : LocaleKeys.stopVideo.localize,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20.zSP),
-                )
+                // Text(
+                //   cameraState.value
+                //       ? LocaleKeys.startVideo.localize
+                //       : LocaleKeys.stopVideo.localize,
+                //   style: TextStyle(
+                //       color: Colors.white,
+                //       fontWeight: FontWeight.w400,
+                //       fontSize: 20.zSP),
+                // )
               ],
             );
           }),
@@ -356,11 +359,13 @@ class ZoomIconButtons {
 }
 
 class ZoomParticipantsBuilder extends StatelessWidget {
-  final ZegoLiveStreamingBottomBar widget;
+  final ZegoLiveStreamingBottomBar? widgetBottom;
+  final ZegoLiveStreamingLivePageSurface? widgetTop;
   const ZoomParticipantsBuilder({
     super.key,
-    required this.widget,
-  });
+    this.widgetBottom,
+    this.widgetTop,
+  }) : assert(widgetBottom == null || widgetTop == null);
 
   @override
   Widget build(BuildContext context) {
@@ -369,27 +374,43 @@ class ZoomParticipantsBuilder extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ZegoLiveStreamingMemberButton(
-            config: widget.config.memberList,
-            events: widget.events.memberList,
-            isCoHostEnabled: widget.isCoHostEnabled,
-            hostManager: widget.hostManager,
-            connectManager: widget.connectManager,
-            popUpManager: widget.popUpManager,
-            translationText: widget.translationText,
-            builder: widget.config.memberButton.builder,
-            icon: Image.asset('assets/49-New-icons/persons.png'),
-            backgroundColor: Colors.transparent,
-            avatarBuilder: widget.config.avatarBuilder,
-            itemBuilder: widget.config.memberList.itemBuilder,
-          ),
-          Text(
-            LocaleKeys.participants.localize,
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w400,
-                fontSize: 20.zSP),
-          )
+          if (widgetTop == null)
+            ZegoLiveStreamingMemberButton(
+              config: widgetBottom!.config.memberList,
+              events: widgetBottom!.events.memberList,
+              isCoHostEnabled: widgetBottom!.isCoHostEnabled,
+              hostManager: widgetBottom!.hostManager,
+              connectManager: widgetBottom!.connectManager,
+              popUpManager: widgetBottom!.popUpManager,
+              translationText: widgetBottom!.translationText,
+              builder: widgetBottom!.config.memberButton.builder,
+              icon: Icon(Icons.person, color: Colors.white),
+              backgroundColor: Colors.transparent,
+              avatarBuilder: widgetBottom!.config.avatarBuilder,
+              itemBuilder: widgetBottom!.config.memberList.itemBuilder,
+            )
+          else
+            ZegoLiveStreamingMemberButton(
+              config: widgetTop!.config.memberList,
+              events: widgetTop!.events.memberList,
+              isCoHostEnabled: true,
+              hostManager: widgetTop!.hostManager,
+              connectManager: widgetTop!.connectManager,
+              popUpManager: widgetTop!.popUpManager,
+              translationText: ZegoUIKitPrebuiltLiveStreamingInnerText(),
+              builder: widgetTop!.config.memberButton.builder,
+              icon: Image.asset('assets/49-New-icons/persons.png'),
+              backgroundColor: Colors.transparent,
+              avatarBuilder: widgetTop!.config.avatarBuilder,
+              itemBuilder: widgetTop!.config.memberList.itemBuilder,
+            ),
+          // Text(
+          //   LocaleKeys.participants.localize,
+          //   style: TextStyle(
+          //       color: Colors.white,
+          //       fontWeight: FontWeight.w400,
+          //       fontSize: 20.zSP),
+          // )
         ],
       ),
     );
@@ -430,17 +451,17 @@ class ZoomChatBuilder extends StatelessWidget {
                     // width: 20,
                   )),
                 ),
-                Positioned(
-                  bottom: 8.zH,
-                  right: 5,
-                  child: Text(
-                    LocaleKeys.chat.localize,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 25.zSP),
-                  ),
-                )
+                // Positioned(
+                //   bottom: 8.zH,
+                //   right: 5,
+                //   child: Text(
+                //     LocaleKeys.chat.localize,
+                //     style: TextStyle(
+                //         color: Colors.white,
+                //         fontWeight: FontWeight.w400,
+                //         fontSize: 25.zSP),
+                //   ),
+                // )
               ],
             ));
   }
@@ -464,7 +485,7 @@ class ZoomSharescreenBuilder extends StatelessWidget {
           builder: (context, screenShareOn, child) {
             log('-------------${screenShareOn}');
             if (!screenShareOn) {
-              context.read<StreamCubit>().closeWhiteBoard();
+              // context.read<StreamCubit>().closeWhiteBoard();
             }
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -483,18 +504,18 @@ class ZoomSharescreenBuilder extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 5.zH),
-                  child: Text(
-                    !screenShareOn
-                        ? LocaleKeys.share.localize
-                        : LocaleKeys.stopVideo.localize,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 25.zSP),
-                  ),
-                )
+                // Padding(
+                //   padding: EdgeInsets.only(top: 5.zH),
+                //   child: Text(
+                //     !screenShareOn
+                //         ? LocaleKeys.share.localize
+                //         : LocaleKeys.stopVideo.localize,
+                //     style: TextStyle(
+                //         color: Colors.white,
+                //         fontWeight: FontWeight.w400,
+                //         fontSize: 25.zSP),
+                //   ),
+                // )
               ],
             );
           }),
@@ -547,14 +568,14 @@ class ZoomWhiteBoardButton extends StatelessWidget {
             onTap: () async {
               await context.read<StreamCubit>().openWhiteBoard();
             }),
-        Text(
-          LocaleKeys.whiteBoard.localize,
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w400,
-            fontSize: 25.zSP,
-          ),
-        )
+        // Text(
+        //   LocaleKeys.whiteBoard.localize,
+        //   style: TextStyle(
+        //     color: Colors.white,
+        //     fontWeight: FontWeight.w400,
+        //     fontSize: 25.zSP,
+        //   ),
+        // )
       ],
     );
   }

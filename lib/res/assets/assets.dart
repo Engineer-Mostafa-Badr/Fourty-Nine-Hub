@@ -80,7 +80,7 @@ abstract class Assets {
   //drawer
   static String contact_us_icon = 'assets/settings/contact_us_icon.png';
   static String dashbboard_icon = 'assets/settings/dashbboard_icon.png';
-  static String favorite_ad_icon = 'assets/settings/favorite_ad_icon.png';
+  static String favorite_ad_icon = 'assets/settings/Icon awesome-heart.png';
   static String favorite_main_category_icon =
       'assets/settings/favorite_main_category_icon.png';
   static String favorite_sub_category_icon =

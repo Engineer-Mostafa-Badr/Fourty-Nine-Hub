@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -19,7 +20,10 @@ import '../widgets/posts/create_post_banner.dart';
 
 class SocialHomeView extends StatefulWidget {
   final String userId;
-  const SocialHomeView({super.key, required this.userId});
+  final bool hideAppBar;
+
+  const SocialHomeView(
+      {super.key, required this.userId, this.hideAppBar = false});
 
   @override
   State<SocialHomeView> createState() => _SocialHomeViewState();
@@ -57,23 +61,26 @@ class _SocialHomeViewState extends State<SocialHomeView>
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-          appBar: const HomeAppbar(
-            isWithBackArrow: true,
-          ),
-          drawer: const DrawerWidget(),
+          appBar: widget.hideAppBar
+              ? null
+              : const HomeAppbar(
+                  isWithBackArrow: true,
+                ),
+          drawer: widget.hideAppBar ? null : const DrawerWidget(),
           bottomNavigationBar: BottomNavigator(
             scrollController: scrollController,
             isScrollingDown: _isScrollingDown,
             mainCategory: 2,
             index: 2,
           ),
-          floatingActionButton: _isScrollingDown
+          floatingActionButton: _isScrollingDown || widget.hideAppBar
               ? null
               : const FloatingButton(
                   changeView: 2,
                 ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: _isScrollingDown || widget.hideAppBar
+              ? null
+              : FloatingActionButtonLocation.centerDocked,
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
               builder: (context, state) {
             return context.read<UserCubit>().isLoggedIn
@@ -130,7 +137,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
   Widget _buildTabBar() {
     final user = context.read<UserCubit>().state.data;
     return Container(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(10.r),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: List.generate(
@@ -153,6 +160,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                   child: Icon(
                     i == 0 ? Icons.home : Icons.person,
                     color: i == 0 ? AppColors.PRIMARY_COLOR : Colors.grey,
+                    size: 40.w,
                   )),
             ),
           ),

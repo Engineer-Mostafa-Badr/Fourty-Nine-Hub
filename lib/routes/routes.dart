@@ -11,6 +11,7 @@ abstract class Routes {
   static const ADdetails = '/Subcategories/ADS/AD-Details';
   static const CREATEAD = '/Subcategories/ADS/CreateAd';
   static const CREATECOMPANYAD = '/Subcategories/ADS/CreateCompanyAd';
+
   // static const CAMERA
 
   static const LUCKYWHEEL = '/LuckyWheel';
@@ -140,8 +141,7 @@ abstract class Routes {
   static const SPOTLIGHT = '/Spotlight';
   static const SNAP = '/Snap';
   static const SEEALLBROADCASTS = '/SeeAllBroadcasts';
-    static const BROADCAST = '/Broadcast';
-
+  static const BROADCAST = '/Broadcast';
 }
 
 abstract class Paths {
