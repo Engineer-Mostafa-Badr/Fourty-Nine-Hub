@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/utils/type_defs.dart';
 import '../../../../res/style/app_colors.dart';
@@ -11,10 +11,10 @@ class DefaultButton extends StatefulWidget {
     super.key,
     this.label,
     required this.onPressed,
-    this.padding = const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+    this.padding = const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
     this.margin = const EdgeInsets.only(),
     this.labelStyle = const TextStyle(
-      fontSize: 16.0,
+      fontSize: 16,
       color: Colors.white,
       height: 2,
       fontWeight: FontWeight.normal,
@@ -91,7 +91,7 @@ class _DefaultButtonState extends State<DefaultButton>
     return Container(
       margin: widget.margin,
       width: widget.width,
-      height: 110.zH,
+      height: 100.h,
       child: AnimatedSize(
         duration: const Duration(milliseconds: 300),
         curve: Curves.bounceInOut,

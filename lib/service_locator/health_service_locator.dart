@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/repos
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/create_doctor.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/datasources/remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/repositories/doctor_dashboard_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/repositories/doctor_dashboard_repo.dart';
@@ -25,8 +26,8 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/us
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_practicing_cirtification_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_profile_photo_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/all_doctor_reservations/all_doctor_reservations_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_statistics/doctor_statistics_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_statistics/doctor_statistics_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_today_appointments/doctor_today_appointments_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_unhandled_appotinments/doctor_unhandled_appotinments_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/edit_doctor_profile/edit_doctor_profile_cubit.dart';
@@ -36,15 +37,14 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/domain/repo
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_reviews.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/governorate_filter_cubit/doctor_governorate_filter_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/subcategory_filter_cubit/doctor_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/data/datasources/doctor_list_remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/data/repositories/doctor_list_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/repositories/doctor_list_repo.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/usecases/get_doctor_list_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/governorate_filter_cubit/doctor_governorate_filter_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/subcategory_filter_cubit/doctor_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/data/datasources/emergency_remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/data/repositories/emergency_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/domain/repositories/emergency_repo.dart';
@@ -59,11 +59,11 @@ import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_user_upcoming_appointments.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/is_doctor_approval_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/is_doctor_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/delete_favorite_category_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_subcategory.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/health_feature/booking/data/repositories/book_doctor_appointment_repo_impl.dart';

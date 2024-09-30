@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +9,7 @@ import 'package:go_router/go_router.dart';
 class ShowAllImages extends StatefulWidget {
   const ShowAllImages(
       {super.key, required this.images, required this.onRemoveImage});
-  final List<UploadFileEntity> images;
+  final List<dynamic> images;
   final Function onRemoveImage;
 
   @override
@@ -58,7 +58,7 @@ class _ShowAllImagesState extends State<ShowAllImages> {
             child: Stack(
               children: [
                 Container(
-                  height: 400,
+                  height: 400.h,
                   margin: const EdgeInsets.only(bottom: 10),
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -77,7 +77,7 @@ class _ShowAllImagesState extends State<ShowAllImages> {
                       setState(() {});
                     },
                     child: Container(
-                        height: 30,
+                        height: 30.h,
                         width: 30,
                         alignment: Alignment.center,
                         padding: const EdgeInsets.all(5),

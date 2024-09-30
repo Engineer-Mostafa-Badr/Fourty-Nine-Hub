@@ -3,7 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/end_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/get_scheuled_rooms_use_case.dart';
@@ -14,13 +14,13 @@ import '../../../../routes/pages.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'meeting_state.dart';
 
-class MeetingCubit extends Cubit<MeetingState> {
-  MeetingCubit(
+class StreamCubit extends Cubit<StreamState> {
+  StreamCubit(
     this.addRoomUseCase,
     this.joinRoomUseCase,
     this.endRoomUseCase,
     this.getScheduledRoomsUseCase,
-  ) : super(const MeetingState());
+  ) : super(const StreamState());
   final AddRoomUseCase addRoomUseCase;
   final JoinRoomUseCase joinRoomUseCase;
   final EndRoomUseCase endRoomUseCase;
@@ -46,13 +46,13 @@ class MeetingCubit extends Cubit<MeetingState> {
       startedAt: startTime,
       title: title,
     ));
-    emit(state.copyWith(status: MeetingStates.loading));
+    emit(state.copyWith(status: StreamsStates.loading));
     bool isAdd = false;
     response.fold(
-        (l) => emit(state.copyWith(status: MeetingStates.failure, failure: l)),
+        (l) => emit(state.copyWith(status: StreamsStates.failure, failure: l)),
         (r) async {
       print("object $r");
-      emit(state.copyWith(status: MeetingStates.success));
+      emit(state.copyWith(status: StreamsStates.success));
       if (startTime != null) {
         await getScheduledMeetings();
         isAdd = true;
@@ -63,12 +63,12 @@ class MeetingCubit extends Cubit<MeetingState> {
     return isAdd;
   }
 
+  bool isHost = false;
   Future<bool> joinNewMeeting(String roomId) async {
-    emit(state.copyWith(status: MeetingStates.loading));
+    emit(state.copyWith(status: StreamsStates.loading));
     final response = await joinRoomUseCase(MeetingParams(meetingId: roomId));
-    bool isAdd = false;
     response.fold((l) {
-      emit(state.copyWith(status: MeetingStates.failure, failure: l));
+      emit(state.copyWith(status: StreamsStates.failure, failure: l));
       showErrorMessage(
         _context(),
         getFailureMessage(
@@ -78,47 +78,47 @@ class MeetingCubit extends Cubit<MeetingState> {
       );
     }, (r) {
       print("object $r}");
-      isAdd = r;
+      isHost = r;
 
-      emit(state.copyWith(status: MeetingStates.success));
+      emit(state.copyWith(status: StreamsStates.success));
     });
-    print(isAdd);
-    return isAdd;
+    print(isHost);
+    return isHost;
   }
 
   BuildContext _context() =>
       AppPages.router.configuration.navigatorKey.currentContext!;
 
   @override
-  void onChange(Change<MeetingState> change) {
+  void onChange(Change<StreamState> change) {
     debugPrint('change is ${change.currentState.status}');
     debugPrint('change next ${change.nextState.status}');
     super.onChange(change);
   }
 
   Future<void> endRoom(String roomId) async {
-    emit(state.copyWith(status: MeetingStates.loading));
+    emit(state.copyWith(status: StreamsStates.loading));
     await endRoomUseCase(MeetingParams(meetingId: roomId)).then((value) {
       // print('room Ended');
-      emit(state.copyWith(status: MeetingStates.success));
+      emit(state.copyWith(status: StreamsStates.success));
     }).catchError((error) {
       // print('room Not Ended');
-      emit(state.copyWith(status: MeetingStates.failure));
+      emit(state.copyWith(status: StreamsStates.failure));
       throw '';
     });
   }
 
   Future<void> getScheduledMeetings() async {
-    emit(state.copyWith(status: MeetingStates.loading));
+    emit(state.copyWith(status: StreamsStates.loading));
     var result = await getScheduledRoomsUseCase(MeetingParams(
       meetingId: UserCubit.to.state.data!.id,
     ));
     result.fold((l) {
-      emit(state.copyWith(status: MeetingStates.failure, failure: l));
+      emit(state.copyWith(status: StreamsStates.failure, failure: l));
     }, (r) {
       CliLogger.info('first title is  ${r.first.title}');
       emit(state.copyWith(
-        status: MeetingStates.gotscheduledMeeting,
+        status: StreamsStates.gotscheduledMeeting,
         scheduledMeetings: r,
       ));
       // emit(state.copyWith(
@@ -129,15 +129,15 @@ class MeetingCubit extends Cubit<MeetingState> {
   }
 
   Future<void> openWhiteBoard() async {
-    emit(state.copyWith(status: MeetingStates.loading));
+    emit(state.copyWith(status: StreamsStates.loading));
     if (!ZegoUIKit.instance.getScreenSharingStateNotifier().value) {
       // print('state white board before is ${state.toString()}');
       await ZegoUIKit().startSharingScreen().then((value) =>
-          emit(state.copyWith(status: MeetingStates.openWhiteBoard)));
+          emit(state.copyWith(status: StreamsStates.openWhiteBoard)));
       // print('state white board after is ${state.toString()}');
     } else if (ZegoUIKit.instance.getScreenSharingStateNotifier().value &&
         !state.isOpenWhiteBoard) {
-      emit(state.copyWith(status: MeetingStates.openWhiteBoard));
+      emit(state.copyWith(status: StreamsStates.openWhiteBoard));
     } else {
       showErrorMessage(
           AppPages.router.configuration.navigatorKey.currentContext!,
@@ -146,17 +146,12 @@ class MeetingCubit extends Cubit<MeetingState> {
   }
 
   void closeWhiteBoard() {
-    emit(state.copyWith(status: MeetingStates.initial));
+    emit(state.copyWith(status: StreamsStates.initial));
   }
 
   bool isMinimized = false;
   void toggleMinimized() {
     isMinimized = !isMinimized;
-    emit(state.copyWith(status: MeetingStates.success));
-  }
-
-  void minimize() {
-    isMinimized = true;
-    emit(state.copyWith(status: MeetingStates.minimizing));
+    emit(state.copyWith(status: StreamsStates.success));
   }
 }

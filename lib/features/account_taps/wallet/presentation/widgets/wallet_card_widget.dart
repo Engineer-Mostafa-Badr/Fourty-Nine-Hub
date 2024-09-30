@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/enums/wallet_types_enums.dart';
-import '../../../../../res/strings/labels.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import 'semi_circle_indicator.dart';
 
 class WalletCardWidget extends StatelessWidget {
-  final double balance;
+  final String balance;
   final double? target;
   final WalletTypes type;
   const WalletCardWidget(
@@ -32,48 +33,49 @@ class WalletCardWidget extends StatelessWidget {
               children: [
                 if (type == WalletTypes.balance)
                   Label(
-                    text: 'Your Balance is',
+                    text: LocaleKeys.yourBalance.localize,
                     style: Styles.mediumText(color: Colors.white),
                   ),
                 if (type == WalletTypes.giftWallet)
                   Label(
-                    text: 'Your Gift is',
+                    text: LocaleKeys.yourGift.localize,
                     style: Styles.mediumText(color: Colors.white),
                   ),
                 if (type == WalletTypes.mainWallet)
                   Label(
-                    text: 'Your Wallet is',
+                    text: LocaleKeys.yourWallet.localize,
                     style: Styles.mediumText(color: Colors.white),
                   ),
                 Label(
-                  text: '${Labels.currency} ${balance.toStringAsFixed(0)}',
-                  style: Styles.headerText(color: Colors.white, fontSize: 25),
+                  text: balance,
+                  style:
+                      Styles.headerText(color: Colors.white, fontSize: 50.sp),
                 ),
                 Label(
-                  text: '49 HUB WALLET',
+                  text: LocaleKeys.hUB.localize,
                   style: Styles.mediumText(
                       fontWeight: FontWeight.w300, color: Colors.white),
                 )
               ],
             ),
           ),
-          if (target != null)
-            SizedBox(
-              width: kToolbarHeight * 2,
-              height: kToolbarHeight,
-              child: SemicircularIndicator(
-                color: Colors.white,
-                progress: balance / (target ?? 1),
-                strokeWidth: 10,
-                child: Text(
-                  '${((balance / (target ?? 1)) * 100).toStringAsFixed(0)} %',
-                  style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white),
-                ),
-              ),
-            ),
+          // if (target != null)
+          //   SizedBox(
+          //     width: kToolbarHeight * 2,
+          //     height: kToolbarHeight,
+          //     child: SemicircularIndicator(
+          //       color: Colors.white,
+          //       progress: balance,
+          //       strokeWidth: 10,
+          //       child: Text(
+          //         '${((balance / (target ?? 1)) * 100).toStringAsFixed(0)} %',
+          //         style: const TextStyle(
+          //             fontSize: 20.sp,
+          //             fontWeight: FontWeight.w600,
+          //             color: Colors.white),
+          //       ),
+          //     ),
+          //   ),
         ],
       ),
     );

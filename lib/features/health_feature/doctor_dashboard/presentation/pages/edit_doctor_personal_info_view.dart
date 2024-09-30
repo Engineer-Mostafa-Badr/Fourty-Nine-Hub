@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/personal_info/edit_doctor_phone_field.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/personal_info/edit_doctor_speciality_filed.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditDoctorPersonalInfoView extends StatelessWidget {
   const EditDoctorPersonalInfoView({super.key});
@@ -21,16 +22,16 @@ class EditDoctorPersonalInfoView extends StatelessWidget {
         padding: const EdgeInsets.all(18),
         children: [
           const EditDoctorSpecialityField(),
-          const Sizer(
-            height: 20,
+          Sizer(
+            height: 20.h,
           ),
           const EditDoctorNameField(),
-          const Sizer(
-            height: 20,
+          Sizer(
+            height: 20.h,
           ),
           const EditDoctorPhoneField(),
-          const Sizer(
-            height: 20,
+          Sizer(
+            height: 20.h,
           ),
           const EditDoctorAddressField(),
           Sizer(
@@ -38,7 +39,7 @@ class EditDoctorPersonalInfoView extends StatelessWidget {
           ),
           AppButton(
             label: Labels.update,
-            height: 50,
+            height: 50.h,
             onPressed: () {},
           )
         ],

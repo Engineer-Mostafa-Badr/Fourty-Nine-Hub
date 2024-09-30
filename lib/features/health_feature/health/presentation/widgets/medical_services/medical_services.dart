@@ -19,7 +19,7 @@ class HealthMedicalServices extends StatelessWidget {
     return BlocBuilder<HealthCubit, HealthState>(builder: (context, state) {
       if (state.medicalServices != null && state.medicalServices!.isNotEmpty) {
         return SizedBox(
-          height: 200,
+          height: 250,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -38,6 +38,7 @@ class HealthMedicalServices extends StatelessWidget {
                   itemCount: state.medicalServices!.length,
                 ),
               ),
+              const Sizer(),
             ],
           ),
         );

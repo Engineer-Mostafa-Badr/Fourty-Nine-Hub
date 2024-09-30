@@ -68,11 +68,11 @@ class EnterCarInfo extends StatelessWidget {
         Row(
           children: [
             Expanded(child: UploadImageWidget(action: () {}, label: 'Front')),
-            // const Sizer(),
+            // Sizer(),
             Expanded(child: UploadImageWidget(action: () {}, label: 'Back')),
-            // const Sizer(),
+            // Sizer(),
             Expanded(child: UploadImageWidget(action: () {}, label: 'Right')),
-            // const Sizer(),
+            // Sizer(),
             Expanded(child: UploadImageWidget(action: () {}, label: 'Left')),
           ],
         )

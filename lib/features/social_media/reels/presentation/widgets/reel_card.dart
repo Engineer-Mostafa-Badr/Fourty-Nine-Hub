@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_entity.dart';
 import 'reel_account_info.dart';
 import 'package:video_player/video_player.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'reel_actions.dart';
 
 class ReelCard extends StatefulWidget {
@@ -159,11 +159,11 @@ class _ControlsOverlay extends StatelessWidget {
               ];
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 // Using less vertical padding as the text is also longer
                 // horizontally, so it feels like it would need more spacing
                 // horizontally (matching the aspect ratio of the video).
-                vertical: 12,
+                vertical: 12.h,
                 horizontal: 16,
               ),
               child: Text('${controller.value.captionOffset.inMilliseconds}ms'),
@@ -187,15 +187,15 @@ class _ControlsOverlay extends StatelessWidget {
                   )
               ];
             },
-            child: const Padding(
+            child: Padding(
               padding: EdgeInsets.symmetric(
                 // Using less vertical padding as the text is also longer
                 // horizontally, so it feels like it would need more spacing
                 // horizontally (matching the aspect ratio of the video).
-                vertical: 12,
+                vertical: 12.h,
                 horizontal: 16,
               ),
-              child: Text(''),
+              child: const Text(''),
             ),
           ),
         ),

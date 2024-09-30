@@ -12,7 +12,6 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../common/widgets/stateless/images/profile_image.dart';
@@ -201,23 +200,33 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                       color: Colors.white,
                     ),
                     child: Row(children: [
-                      const ProfileImage(
+                      ProfileImage(
                         accountId: 0,
-                        userId: '',
+                        userId: state.postDetails?.user.id,
+                        imageURL: user?.profilePicture,
+                        fromProfile: true,
                       ),
                       const Sizer(),
                       Expanded(
-                          child: FormTextField(
-                              hint: 'Type your comment ....',
-                              height: kToolbarHeight * .7,
-                              action: (v) {
-                                setState(() {});
-                              },
-                              controller: commentTextController)),
+                          child: TextFormField(
+                        maxLines: null,
+                        controller: commentTextController,
+                        onChanged: (v) {
+                          setState(() {});
+                        },
+                        style: Styles.headerText(fontSize: 26),
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.all(5),
+                          hintText: 'Type your comment ....',
+                          hintStyle: Styles.mediumText(),
+                        ),
+                      )),
                       const Sizer(),
                       if (commentTextController.text.isNotEmpty)
                         IconAppButton(
                           icon: Icons.send,
+                          size: 20,
                           isCircle: true,
                           onPressed: () async {
                             CommentEntity data = await widget.onAddComment(

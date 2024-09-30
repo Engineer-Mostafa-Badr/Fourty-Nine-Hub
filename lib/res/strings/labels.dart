@@ -1,5 +1,4 @@
 abstract class Labels {
-  static const currency = 'L.E';
   static const welcomRegiesterResturant = 'Welcome to Resturant Registeration';
   static const highestBid = 'Highest bid';
   static const bid = 'bid';
@@ -63,6 +62,8 @@ abstract class Labels {
   static const withDrawel = 'Withdrawel';
   static const paymentAddress = 'Payment Address';
   static const appCompetitions = '49Hub Competition';
+  static const competitions = 'Competition';
+  static const winners = 'Winners';
   static const history = 'History';
   static const normalWallet = 'Wallet';
   static const balanceWallet = 'Balance';

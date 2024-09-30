@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../../res/style/app_colors.dart';
@@ -20,8 +21,8 @@ class CommentWidget extends StatelessWidget {
         ),
         child: Column(
           children: [
-            const SizedBox(
-              height: 40,
+            SizedBox(
+              height: 40.h,
             ),
             AppBar(
               automaticallyImplyLeading: false,
@@ -29,32 +30,32 @@ class CommentWidget extends StatelessWidget {
               elevation: 1,
               title: Row(
                 children: [
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: 20.h,
                     width: 20,
-                    child: Image(image: AssetImage('images/heart.png')),
+                    child: const Image(image: AssetImage('images/heart.png')),
                   ),
                   const SizedBox(
                     width: 5,
                   ),
-                  const Text(
+                  Text(
                     '150',
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                    style: TextStyle(color: Colors.grey, fontSize: 14.sp),
                   ),
                   const SizedBox(
                     width: 10,
                   ),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: 20.h,
                     width: 20,
-                    child: Image(image: AssetImage('images/wow.png')),
+                    child: const Image(image: AssetImage('images/wow.png')),
                   ),
                   const SizedBox(
                     width: 5,
                   ),
-                  const Text(
+                  Text(
                     '122',
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                    style: TextStyle(color: Colors.grey, fontSize: 14.sp),
                   ),
                   const SizedBox(
                     width: 10,
@@ -67,11 +68,11 @@ class CommentWidget extends StatelessWidget {
                         reactions: [
                           Reaction(
                             icon: Container(
-                              height: 25,
+                              height: 25.h,
                               width: 25,
-                              margin: const EdgeInsets.symmetric(
+                              margin: EdgeInsets.symmetric(
                                 horizontal: 5,
-                                vertical: 5,
+                                vertical: 5.h,
                               ),
                               child: const Image(
                                 image: AssetImage('images/like.png'),
@@ -81,11 +82,11 @@ class CommentWidget extends StatelessWidget {
                           ),
                           Reaction(
                             icon: Container(
-                              height: 25,
+                              height: 25.h,
                               width: 25,
-                              margin: const EdgeInsets.symmetric(
+                              margin: EdgeInsets.symmetric(
                                 horizontal: 5,
-                                vertical: 5,
+                                vertical: 5.h,
                               ),
                               child: const Image(
                                 image: AssetImage('images/heart.png'),
@@ -95,11 +96,11 @@ class CommentWidget extends StatelessWidget {
                           ),
                           Reaction(
                             icon: Container(
-                              height: 25,
+                              height: 25.h,
                               width: 25,
-                              margin: const EdgeInsets.symmetric(
+                              margin: EdgeInsets.symmetric(
                                 horizontal: 5,
-                                vertical: 5,
+                                vertical: 5.h,
                               ),
                               child: const Image(
                                 image: AssetImage('images/wow.png'),
@@ -109,11 +110,11 @@ class CommentWidget extends StatelessWidget {
                           ),
                           Reaction(
                             icon: Container(
-                              height: 25,
+                              height: 25.h,
                               width: 25,
-                              margin: const EdgeInsets.symmetric(
+                              margin: EdgeInsets.symmetric(
                                 horizontal: 5,
-                                vertical: 5,
+                                vertical: 5.h,
                               ),
                               child: const Image(
                                 image: AssetImage('images/sad.png'),
@@ -123,11 +124,11 @@ class CommentWidget extends StatelessWidget {
                           ),
                           Reaction(
                             icon: Container(
-                              height: 25,
+                              height: 25.h,
                               width: 25,
-                              margin: const EdgeInsets.symmetric(
+                              margin: EdgeInsets.symmetric(
                                 horizontal: 5,
-                                vertical: 5,
+                                vertical: 5.h,
                               ),
                               child: const Image(
                                 image: AssetImage('images/angry.png'),
@@ -160,8 +161,7 @@ class CommentWidget extends StatelessWidget {
               child: ListView.builder(
                 itemBuilder: (context, index) {
                   return Container(
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                    margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5.h),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -181,43 +181,43 @@ class CommentWidget extends StatelessWidget {
                               color: const Color(0xfff3f3f3),
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            child: const Column(
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   'Sara Ahmed',
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 12.sp,
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 Row(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       FontAwesomeIcons.earthAmericas,
                                       size: 14,
                                       color: Colors.grey,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 5,
                                     ),
                                     Text(
                                       '4:12 pm',
                                       style: TextStyle(
                                         color: Colors.grey,
-                                        fontSize: 12,
+                                        fontSize: 12.sp,
                                       ),
                                     ),
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 5,
                                 ),
                                 Text(
                                   'Gorgeous',
                                   style: TextStyle(
-                                    fontSize: 13,
+                                    fontSize: 13.sp,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.grey,
                                   ),
@@ -233,7 +233,7 @@ class CommentWidget extends StatelessWidget {
               ),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+              padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
               decoration: const BoxDecoration(
                 color: Colors.white,
               ),
@@ -241,7 +241,7 @@ class CommentWidget extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Container(
-                      height: 45,
+                      height: 45.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: const Color(0xfff3f3f3),
@@ -249,9 +249,9 @@ class CommentWidget extends StatelessWidget {
                       child: TextField(
                         controller: commentController,
                         textAlignVertical: TextAlignVertical.bottom,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.black,
-                          fontSize: 12,
+                          fontSize: 12.sp,
                         ),
                         decoration: InputDecoration(
                           hintText: 'Type your comment',
@@ -259,9 +259,9 @@ class CommentWidget extends StatelessWidget {
                             Icons.send,
                             color: AppColors.PRIMARY_COLOR,
                           ),
-                          hintStyle: const TextStyle(
+                          hintStyle: TextStyle(
                             color: Colors.grey,
-                            fontSize: 12,
+                            fontSize: 12.sp,
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),

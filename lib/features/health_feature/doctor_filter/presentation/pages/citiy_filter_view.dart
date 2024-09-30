@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/widgets/city_list_title.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 
@@ -39,9 +40,9 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
         label: LocaleKeys.city.localize,
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(
+        padding: EdgeInsets.symmetric(
           horizontal: 20,
-          vertical: 10,
+          vertical: 10.h,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,8 +54,8 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
               prefixIcon: const Icon(Icons.search),
               onChanged: (value) => doctorCityFilter.search(value),
             ),
-            const Sizer(
-              height: 30,
+            Sizer(
+              height: 30.h,
             ),
             BlocBuilder<DoctorCityFilterCubit, DoctorCityFilterState>(
               builder: (context, state) {

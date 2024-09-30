@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -20,7 +21,6 @@ class LoginCubit extends Cubit<LoginState> {
   final FacebookSignInUseCase _facebookSignInUseCase;
   final SaveTokensUseCase _saveTokens;
   final AttachTokenUseCase _attachToken;
-  final formKey = GlobalKey<FormState>();
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final emailFocusNode = FocusNode();
@@ -37,13 +37,15 @@ class LoginCubit extends Cubit<LoginState> {
 
   String? token;
 
-  Future<void> login() async {
+  Future<void> login(formKey) async {
+    String? token = await FirebaseMessaging.instance.getToken();
     if (formKey.currentState!.validate()) {
       emit(LoginLoading());
       final result = await _loginUseCase(
         LoginParams(
           email: emailTextController.text.trim(),
           password: passwordTextController.text.trim(),
+          token: token!,
         ),
       );
 
@@ -54,6 +56,9 @@ class LoginCubit extends Cubit<LoginState> {
           _attachToken(userToken); // attach to dio
           _saveTokens(userToken); // ensure tokens are saved before proceeding
           emit(LoginSuccess(userTokensEntity: userToken));
+          // print('*****************');
+          // print(token);
+          // print('*****************');
         },
       );
     }

@@ -16,6 +16,7 @@ import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorDetailsAccountHeader extends StatelessWidget {
   const DoctorDetailsAccountHeader({super.key});
@@ -55,8 +56,8 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                     text: doctor.description,
                     maxLines: 1,
                     style: Styles.mediumText()),
-                const Sizer(
-                  height: 30,
+                Sizer(
+                  height: 30.h,
                 ),
                 BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
                   buildWhen: (previous, current) =>
@@ -111,8 +112,8 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                     }
                   },
                 ),
-                const Sizer(
-                  height: 15,
+                Sizer(
+                  height: 15.h,
                 ),
                 Row(
                   children: [

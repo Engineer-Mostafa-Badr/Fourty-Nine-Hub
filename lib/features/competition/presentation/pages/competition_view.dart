@@ -11,6 +11,7 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../../account_taps/wallet/domain/entities/competition_entity.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CompetitionView extends StatelessWidget {
   final List<CompetitionEntity> list;
@@ -114,7 +115,7 @@ class CompetitionView extends StatelessWidget {
   Widget timeFrame() {
     return Container(
       height: kToolbarHeight * .6,
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.PRIMARY_COLOR),
       ),

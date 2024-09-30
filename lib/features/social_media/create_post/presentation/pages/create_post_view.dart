@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
@@ -57,9 +60,10 @@ class _CreatePostViewState extends State<CreatePostView> {
         return Stack(
           children: [
             Scaffold(
-              appBar: BackAppBar(label: 'Create Post', actions: [
+              appBar:
+                  BackAppBar(label: LocaleKeys.createPost.localize, actions: [
                 TextButton(
-                    child: const Label(text: 'Post'),
+                    child: Label(text: LocaleKeys.post.localize),
                     onPressed: () => controller.createPost(
                         context: context, type: widget.social)),
               ]),
@@ -73,27 +77,27 @@ class _CreatePostViewState extends State<CreatePostView> {
                           final res = await CustomVerticalSheetItem.normal<
                               PrivacyStatus>(context, [
                             CustomSheetModel(
-                              text: "Public",
+                              text: LocaleKeys.public.localize,
                               value: PrivacyStatus.public,
                               iconData: Icons.language,
                             ),
                             CustomSheetModel(
-                              text: "Friends",
+                              text: LocaleKeys.friends.localize,
                               value: PrivacyStatus.friends,
                               iconData: Icons.family_restroom,
                             ),
                             CustomSheetModel(
-                              text: "Followers",
+                              text: LocaleKeys.followers.localize,
                               value: PrivacyStatus.followers,
                               iconData: Icons.accessibility_sharp,
                             ),
                             CustomSheetModel(
-                              text: "Friends / Followers",
+                              text: LocaleKeys.friendsAndFollowers.localize,
                               value: PrivacyStatus.friendsAndFollowers,
                               iconData: Icons.supervised_user_circle_outlined,
                             ),
                             CustomSheetModel(
-                              text: "Only Me",
+                              text: LocaleKeys.onlyMe.localize,
                               value: PrivacyStatus.onlyMe,
                               iconData: Icons.lock,
                             ),
@@ -129,15 +133,16 @@ class _CreatePostViewState extends State<CreatePostView> {
                               const Sizer(),
                               Text(
                                 state.selectedPrivacy == 'onlyMe'
-                                    ? 'Only Me'
+                                    ? LocaleKeys.onlyMe.localize
                                     : state.selectedPrivacy == 'friends'
-                                        ? 'Friends'
+                                        ? LocaleKeys.friends.localize
                                         : state.selectedPrivacy == 'followers'
-                                            ? 'Followers'
+                                            ? LocaleKeys.followers.localize
                                             : state.selectedPrivacy ==
                                                     'friendsAndFollowers'
-                                                ? 'Friends / Followers'
-                                                : 'Public',
+                                                ? LocaleKeys.friendsAndFollowers
+                                                    .localize
+                                                : LocaleKeys.public.localize,
                                 style: Styles.mediumText(
                                     color: AppColors.PRIMARY_COLOR,
                                     fontSize: 24),
@@ -155,7 +160,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                   ),
                   if (widget.social != 'twitter')
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      padding: EdgeInsets.symmetric(vertical: 10.h),
                       child: Row(
                         children: [
                           if (state.selectedFeeling != null &&
@@ -163,8 +168,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                             Container(
                               margin:
                                   const EdgeInsetsDirectional.only(start: 10),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 5),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 5.h),
                               decoration: BoxDecoration(
                                 color: Colors.blue.withOpacity(0.3),
                                 borderRadius: BorderRadius.circular(5),
@@ -194,7 +199,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                                         child: Row(
                                           children: [
                                             Text(
-                                              'Feeling ',
+                                              '${LocaleKeys.feeling.localize} ',
                                               style: Styles.headerText(
                                                   fontSize: 24),
                                             ),
@@ -217,8 +222,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                             Container(
                               margin:
                                   const EdgeInsetsDirectional.only(start: 10),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 5),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 5.h),
                               decoration: BoxDecoration(
                                 color: Colors.blue.withOpacity(0.3),
                                 borderRadius: BorderRadius.circular(5),
@@ -263,7 +268,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Label(
-                        text: 'with: ',
+                        text: '${LocaleKeys.withKey.localize}: ',
                         style: Styles.headerText(),
                       ),
                     ),
@@ -373,7 +378,7 @@ class _CreatePostViewState extends State<CreatePostView> {
               controller:
                   context.read<CreatePostCubit>().postContentTextController,
               decoration: InputDecoration(
-                hintText: 'Type Here ... ',
+                hintText: '${LocaleKeys.typeHere.localize} ... ',
                 hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
                 floatingLabelAlignment: FloatingLabelAlignment.center,
                 fillColor: ((state.isBiggerThen150 == true &&
@@ -454,7 +459,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                           Container(
                             margin: const EdgeInsetsDirectional.only(
                                 end: 10, bottom: 10),
-                            // padding: const EdgeInsets.all(10),
+                            // padding: EdgeInsets.all(10),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
@@ -507,14 +512,14 @@ class _CreatePostViewState extends State<CreatePostView> {
     ];
     final controller = context.read<CreatePostCubit>();
     return SizedBox(
-      height: 30,
+      height: 30.h,
       child: ListView.separated(
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () => controller.selectColor(color: colors[index]),
               child: Container(
-                height: 30,
+                height: 30.h,
                 width: 30,
                 decoration: BoxDecoration(
                     color:
@@ -553,7 +558,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                     ),
                     const Sizer(),
                     Text(
-                      'Photo',
+                      LocaleKeys.photo.localize,
                       style: Styles.mediumText(
                           fontSize: 34, fontWeight: FontWeight.w500),
                     ),
@@ -586,7 +591,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                       ),
                       const Sizer(),
                       Text(
-                        'Activity',
+                        LocaleKeys.activity.localize,
                         style: Styles.mediumText(
                             fontSize: 34, fontWeight: FontWeight.w500),
                       ),
@@ -620,7 +625,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                       ),
                       const Sizer(),
                       Text(
-                        'Feeling',
+                        LocaleKeys.feeling.localize,
                         style: Styles.mediumText(
                             fontSize: 34, fontWeight: FontWeight.w500),
                       ),
@@ -654,7 +659,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                       ),
                       const Sizer(),
                       Text(
-                        'Tag People',
+                        LocaleKeys.tagPeople.localize,
                         style: Styles.mediumText(
                             fontSize: 34, fontWeight: FontWeight.w500),
                       ),

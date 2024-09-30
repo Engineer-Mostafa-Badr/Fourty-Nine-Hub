@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_comment_card.dart';
@@ -12,7 +15,6 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -56,7 +58,7 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
           iconTheme: const IconThemeData(color: Colors.grey),
           title: Label(
               text:
-                  '${controller.commentsPagingController.itemList?.length ?? 0} Comments',
+                  '${controller.commentsPagingController.itemList?.length ?? 0} ${LocaleKeys.comments.localize}',
               style: Styles.mediumText()),
           leading: IconButton(
               onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
@@ -66,7 +68,7 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
           children: [
             Expanded(
               child: PagedListView<int, CommentEntity>(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
                 pagingController: controller.commentsPagingController,
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(
@@ -75,12 +77,12 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                     noItemsFoundIndicatorBuilder: (context) {
                       print(
                           controller.commentsPagingController.itemList?.length);
-                      return const Padding(
-                          padding: EdgeInsets.only(top: 200),
+                      return Padding(
+                          padding: const EdgeInsets.only(top: 200),
                           child: Center(
                             child: Text(
-                              "No Comments",
-                              style: TextStyle(
+                              LocaleKeys.noComments.localize,
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,
                               ),
@@ -123,17 +125,25 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                     ),
                     const Sizer(),
                     Expanded(
-                        child: FormTextField(
-                            hint: 'Type your comment ....',
-                            height: kToolbarHeight * .7,
-                            action: (v) {
-                              setState(() {});
-                            },
-                            controller: commentTextController)),
+                        child: TextFormField(
+                      maxLines: null,
+                      controller: commentTextController,
+                      onChanged: (v) {
+                        setState(() {});
+                      },
+                      style: Styles.headerText(fontSize: 26),
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        contentPadding: const EdgeInsets.all(5),
+                        hintText: '${LocaleKeys.typeYourComment.localize} ....',
+                        hintStyle: Styles.mediumText(),
+                      ),
+                    )),
                     const Sizer(),
                     if (commentTextController.text.isNotEmpty)
                       IconAppButton(
                           icon: Icons.send,
+                          size: 20,
                           isCircle: true,
                           onPressed: () async {
                             CommentEntity data = await widget.onAddComment(

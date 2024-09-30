@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/food_order_entity.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';

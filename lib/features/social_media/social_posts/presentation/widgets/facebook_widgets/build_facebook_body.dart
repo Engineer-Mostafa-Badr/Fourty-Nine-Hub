@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
@@ -55,7 +58,6 @@ class FacebookBody extends StatelessWidget {
         return RefreshIndicator(
           onRefresh: () async {
             context.read<StoryCubit>().fetchStories(loadMore: true);
-
             controller.onRefresh();
           },
           child: CustomScrollView(
@@ -66,7 +68,7 @@ class FacebookBody extends StatelessWidget {
                   children: [
                     Container(
                       width: double.infinity,
-                      height: 5,
+                      height: 5.h,
                       color: AppColors.LIGHT_GRAY_COLOR,
                     ),
                     const Stories(),
@@ -83,12 +85,12 @@ class FacebookBody extends StatelessWidget {
                     pagingController: controller.feedPagingController,
                     builderDelegate: PagedChildBuilderDelegate<PostEntity>(
                       noItemsFoundIndicatorBuilder: (context) {
-                        return const Center(
+                        return Center(
                           child: Text(
-                            "No Posts",
+                            LocaleKeys.noPosts.localize,
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 18,
+                              fontSize: 18.sp,
                             ),
                           ),
                         );
@@ -256,7 +258,7 @@ class FacebookBody extends StatelessWidget {
                             ),
                             Container(
                               width: double.infinity,
-                              height: 5,
+                              height: 5.h,
                               color: AppColors.TXTFIELD_GRAY_COLOR2,
                             ),
                           ],

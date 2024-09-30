@@ -6,7 +6,7 @@ import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_state.dart
 import 'package:fourtyninehub/res/style/const.dart';
 
 import '../../../../service_locator/service_locator.dart';
-import '../../../social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import '../../../social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
 class MeetingRoom extends StatefulWidget {
   const MeetingRoom(
@@ -71,9 +71,9 @@ class _MeetingRoomState extends State<MeetingRoom> {
           ..showBackgroundTips = true;
 
     return SafeArea(
-      child: BlocProvider(
-        create: (context) => serviceLocator<MeetingCubit>(),
-        child: BlocBuilder<MeetingCubit, MeetingState>(
+      child: BlocProvider.value(
+        value: serviceLocator<StreamCubit>(),
+        child: BlocBuilder<StreamCubit, StreamState>(
           builder: (context, state) {
             // var cubit = context.read<MeetingCubit>();
             return ZegoUIKitPrebuiltLiveStreaming(

@@ -3,6 +3,7 @@ import '../../../../../../../common/widgets/stateless/labels/label.dart';
 
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OfferCard extends StatelessWidget {
   const OfferCard({super.key});
@@ -11,7 +12,7 @@ class OfferCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.symmetric(vertical: 5),
+      margin: EdgeInsets.symmetric(vertical: 5.h),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),

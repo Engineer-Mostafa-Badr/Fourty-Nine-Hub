@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -12,8 +14,8 @@ class BuildWithUsers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BackAppBar(
-          label: 'With users',
+        appBar: BackAppBar(
+          label: LocaleKeys.withUsers.localize,
         ),
         body: ListView(
           children: List.generate(
@@ -28,7 +30,7 @@ class BuildWithUsers extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 30,
-                      backgroundImage: NetworkImage(users[index].image),
+                      backgroundImage: NetworkImage(users[index].image ?? ''),
                     ),
                     const SizedBox(
                       width: 10,

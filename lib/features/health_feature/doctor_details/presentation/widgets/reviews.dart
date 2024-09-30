@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/presentatio
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/rate_card.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorDetailsReviewsWidget extends StatelessWidget {
   const DoctorDetailsReviewsWidget({super.key});
@@ -13,7 +14,7 @@ class DoctorDetailsReviewsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 500,
+      height: 500.h,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

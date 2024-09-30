@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -11,6 +15,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_ot
 import 'package:fourtyninehub/features/authentication/domain/use_cases/send_forget_password_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_forget_password_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_otp_use_case.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class AuthRemoteDataSource {
   const AuthRemoteDataSource();
@@ -95,11 +100,11 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     );
     return result.fold(
       (failure) => Left(failure),
-      (response) => Right(
-        UserTokensModel.fromJson(
+      (response) {
+        return Right(UserTokensModel.fromJson(
           response['data'],
-        ),
-      ),
+        ));
+      },
     );
   }
 
@@ -121,21 +126,96 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     );
   }
 
+  Future<Either<Failure, UserCredential>> signInWithGoogle({
+    required String idToken,
+  }) async {
+    try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // Check if the user is null (i.e., the user canceled the sign-in)
+      if (googleUser == null) {
+        return const Left(
+            SocialLoginFailure('Google sign-in was canceled by the user.'));
+      }
+
+      // Obtain the authentication details from the request
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Create a new credential
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in to Firebase using the credential
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      // Return the signed-in user's credentials
+      return Right(userCredential);
+    } catch (e) {
+      return Left(SocialLoginFailure('Failed to sign in with Google: $e'));
+    }
+  }
+
+  Future<String?> _getDeviceId() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.id; // Android device ID
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.identifierForVendor; // iOS device ID
+    }
+    return 'unknown_device';
+  }
+
   @override
   Future<Either<Failure, UserTokensModel>> socialLogin(
       SocialLoginParams params) async {
-    final result = await _apiConsumer.post(
-      EndPoints.socialLogin,
-      data: await params.toJson(),
-    );
-    return result.fold(
-      (failure) => Left(failure),
-      (response) => Right(
-        UserTokensModel.fromJson(
-          response['data'],
-        ),
-      ),
-    );
+    try {
+      // Perform Google sign-in and get the user credentials
+      final signInResult = await signInWithGoogle(idToken: params.idToken);
+
+      // Handle the result
+      return signInResult.fold(
+        (failure) => Left(failure), // If the sign-in failed, return the failure
+        (userCredential) async {
+          // If sign-in succeeded, obtain the tokens (idToken and accessToken)
+          final idToken = await userCredential.user?.getIdToken();
+          final accessToken = await userCredential.user?.getIdTokenResult();
+
+          // Get the device ID
+          final deviceId = await _getDeviceId();
+
+          // Prepare the social login data (including idToken, fcm, and deviceId)
+          final data = {
+            'idToken': idToken,
+            'fcm': accessToken?.token, // Use the FCM token if available
+            'deviceId': deviceId, // Use the actual device ID
+          };
+
+          // Call the API for social login
+          final result = await _apiConsumer.post(
+            EndPoints.socialLogin,
+            data: data,
+          );
+
+          // Handle the API response
+          return result.fold(
+            (failure) => Left(failure),
+            (response) {
+              final userData = response['data'];
+              return Right(UserTokensModel.fromJson(userData));
+            },
+          );
+        },
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: 'Social login failed: $e'));
+    }
   }
 
   @override

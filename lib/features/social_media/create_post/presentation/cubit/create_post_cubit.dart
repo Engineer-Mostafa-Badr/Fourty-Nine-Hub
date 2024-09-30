@@ -151,10 +151,11 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     emit(state.copyWith(selectedActivity: item));
   }
 
-  uploadPhoto() async {
+  uploadPhoto({bool isGallery = true}) async {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
     await upload.uploadImage(
+        isGallery: isGallery,
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) {
           print("file name ${data.file}");

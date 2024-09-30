@@ -6,6 +6,8 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.d
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
@@ -81,7 +83,7 @@ class _TwitterViewState extends State<TwitterView> {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Label(
-        text: 'Tweets',
+        text: LocaleKeys.Tweets.localize,
         style: Styles.headerText(),
       ),
     );
@@ -121,10 +123,10 @@ class _TwitterViewState extends State<TwitterView> {
                 pagingController: controller.postsPagingController,
                 builderDelegate: PagedChildBuilderDelegate<TwitterPostEntity>(
                   noItemsFoundIndicatorBuilder: (context) {
-                    return const Center(
+                    return Center(
                       child: Text(
-                        "No Posts",
-                        style: TextStyle(
+                        LocaleKeys.noPosts.localize,
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 18,
                         ),
@@ -173,8 +175,8 @@ class _TwitterViewState extends State<TwitterView> {
                                   .postsPagingController.itemList![index].id,
                         );
                         if (state.shareSuccess == true) {
-                          showSuccessMessage(
-                              context, "Post shared successfully");
+                          showSuccessMessage(context,
+                              LocaleKeys.postSharedSuccessfully.localize);
                         }
                         setState(() {});
                       },
@@ -207,14 +209,7 @@ class _TwitterViewState extends State<TwitterView> {
                                 controller.onCommentReact(params: params);
                               },
                               onGetReplies: (String id,
-                                  TwitterPostCommentEntity comment) async {
-                                // getCommentReplies(
-                                //   context: context,
-                                //   commentId: id,
-                                //   comment: comment,
-                                //   postId: postId, userData: userData,
-                                // );
-                              },
+                                  TwitterPostCommentEntity comment) async {},
                               newCommentId: '',
                               state: state,
                               onReport: (TwitterReportParams params) {
@@ -242,9 +237,6 @@ class _TwitterViewState extends State<TwitterView> {
                       },
                       deletePost: (String id) {
                         controller.deletePost(context: context, postId: id);
-                        // setState(() {
-                        //
-                        // });
                       },
                       hidePost: (String id) {
                         controller.hidePost(context: context, postId: id);
@@ -294,10 +286,6 @@ class _TwitterViewState extends State<TwitterView> {
           onRefresh: () async => controller.onGlobalRefresh(),
           child: CustomScrollView(
             slivers: [
-              // _buildTwitterTitle(),
-              // const BuildTwitterDocumentCard(),
-              // Expanded(child: TwitterGlobalPosts(userData: userData!,)),
-
               SliverToBoxAdapter(
                 child: _buildTwitterTitle(),
               ),
@@ -308,10 +296,10 @@ class _TwitterViewState extends State<TwitterView> {
                 pagingController: controller.globalPostsPagingController,
                 builderDelegate: PagedChildBuilderDelegate<TwitterPostEntity>(
                   noItemsFoundIndicatorBuilder: (context) {
-                    return const Center(
+                    return Center(
                       child: Text(
-                        "No Posts",
-                        style: TextStyle(
+                        LocaleKeys.noPosts.localize,
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 18,
                         ),
@@ -365,8 +353,8 @@ class _TwitterViewState extends State<TwitterView> {
                                   .itemList![index].id,
                         );
                         if (state.shareSuccess == true) {
-                          showSuccessMessage(
-                              context, "Post shared successfully");
+                          showSuccessMessage(context,
+                              LocaleKeys.postSharedSuccessfully.localize);
                         }
                         setState(() {});
                       },
@@ -399,14 +387,7 @@ class _TwitterViewState extends State<TwitterView> {
                                 controller.onCommentReact(params: params);
                               },
                               onGetReplies: (String id,
-                                  TwitterPostCommentEntity comment) async {
-                                // getCommentReplies(
-                                //   context: context,
-                                //   commentId: id,
-                                //   comment: comment,
-                                //   postId: postId, userData: userData,
-                                // );
-                              },
+                                  TwitterPostCommentEntity comment) async {},
                               newCommentId: '',
                               state: state,
                               onReport: (TwitterReportParams params) {
@@ -436,9 +417,6 @@ class _TwitterViewState extends State<TwitterView> {
                       },
                       deletePost: (String id) {
                         controller.deletePost(context: context, postId: id);
-                        // setState(() {
-                        //
-                        // });
                       },
                       hidePost: (String id) {
                         controller.hidePost(context: context, postId: id);

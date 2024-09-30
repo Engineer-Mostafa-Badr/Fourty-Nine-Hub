@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
@@ -25,6 +26,8 @@ abstract class SocialPostsRepo {
       {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getUserPosts(
       {required UserPostsParams params});
+  Future<Either<Failure, List<UserFriendEntity>>> searchUsers(
+      {required TwitterFeedParams params});
   Future<Either<Failure, bool>> reactOnPost({required PostReactParams params});
   Future<Either<Failure, bool>> reactOnComment(
       {required PostReactParams params});

@@ -78,7 +78,7 @@ class WalletHistory extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = list[index];
           return walletActionRow(
-              title: '${item.amount} ${Labels.currency}',
+              title: '${item.amount}',
               subTitle: item.description,
               onTap: () {},
               icon: FontAwesomeIcons.check);

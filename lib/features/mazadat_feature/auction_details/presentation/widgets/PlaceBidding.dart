@@ -3,6 +3,7 @@ import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/functions/helper/auth_helper.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -78,15 +79,14 @@ class _PlaceBiddingState extends State<PlaceBidding> {
                       text: Labels.yourbid,
                       style: Styles.headerText(color: AppColors.PRIMARY_COLOR)),
                   Label(
-                      text:
-                          '${Labels.currency} ${NumbersHelper.formatThousands(number: bidding)}',
+                      text: NumbersHelper.formatThousands(number: bidding),
                       style: Styles.headerText(
-                          fontSize: 30,
+                          fontSize: 30.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.PRIMARY_COLOR)),
                   Label(
-                      text:
-                          ' ${Labels.currency} ${NumbersHelper.formatThousands(number: widget.auction.currentPrice)}',
+                      text: NumbersHelper.formatThousands(
+                          number: widget.auction.currentPrice),
                       style: Styles.mediumText()),
                 ],
               )),

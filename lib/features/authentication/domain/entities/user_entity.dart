@@ -16,7 +16,7 @@ class UserEntity extends Equatable {
   final int? friendsCount;
   final int? followersCount;
   final int? followingCount;
-  final double? wallet;
+  final num? wallet;
   final bool? isRider;
   final bool? isDoctor;
   final bool? isRestaurant;

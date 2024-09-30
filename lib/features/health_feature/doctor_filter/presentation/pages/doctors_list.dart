@@ -4,6 +4,7 @@ import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -41,8 +42,8 @@ class _DoctorsListViewState extends State<DoctorsListView> {
             case DoctorsListLoaded _:
               if (state.doctors.isNotEmpty) {
                 return ListView.separated(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 10),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15, vertical: 10.h),
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) => DoctorCard(
                           doctor: state.doctors[index],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 abstract class Styles {
@@ -8,11 +8,13 @@ abstract class Styles {
       {double fontSize = 22,
       Color? color,
       TextDecoration? decoration,
+      double decorationThickness = 0,
       List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
-        fontSize: fontSize.zSP,
+        fontSize: fontSize.sp,
         color: color,
+        decorationThickness: decorationThickness,
         decoration: decoration,
         shadows: shadows,
         decorationColor: color ?? AppColors.PRIMARY_COLOR,
@@ -22,14 +24,16 @@ abstract class Styles {
   static TextStyle mediumText(
       {double fontSize = 28,
       Color? color,
+      double decorationThickness = 0,
       TextDecoration? decoration,
       List<Shadow>? shadows,
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
-        fontSize: fontSize.zSP,
+        fontSize: fontSize.sp,
         color: color,
         // overflow: TextOverflow.ellipsis,
         shadows: shadows,
+        decorationThickness: decorationThickness,
         decoration: decoration,
         fontWeight: fontWeight);
   }
@@ -39,13 +43,16 @@ abstract class Styles {
       TextDecoration? decoration,
       TextAlign textAlign = TextAlign.center,
       List<Shadow>? shadows,
+      double decorationThickness = 0,
       Color? color,
       FontWeight fontWeight = FontWeight.w600}) {
     return TextStyle(
-        fontSize: fontSize.zSP,
-        fontWeight: fontWeight,
-        shadows: shadows,
-        decorationColor: color,
-        color: color);
+      fontSize: fontSize.sp,
+      fontWeight: fontWeight,
+      shadows: shadows,
+      decorationColor: color,
+      color: color,
+      decorationThickness: decorationThickness,
+    );
   }
 }

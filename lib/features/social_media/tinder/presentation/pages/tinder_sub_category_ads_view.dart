@@ -88,9 +88,11 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                                   child: Icon(
                                     Icons.favorite,
                                     size: iconSize,
-                                    color: widget.params.subCategory.isFavorite
-                                        ? AppColors.SECONDARY_COLOR
-                                        : AppColors.GREY_DARK_COLOR,
+                                    color:
+                                        widget.params.subCategory.isFavorite ==
+                                                true
+                                            ? AppColors.SECONDARY_COLOR
+                                            : AppColors.GREY_DARK_COLOR,
                                   ),
                                 ),
                                 const Sizer(),

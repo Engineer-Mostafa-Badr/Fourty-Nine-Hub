@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -25,12 +26,12 @@ class RoomInfoWidget extends StatelessWidget {
       child: ListView(
         shrinkWrap: true,
         children: [
-          const SizedBox(
-            height: 30,
+          SizedBox(
+            height: 30.h,
           ),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
+            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10.h),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
@@ -67,21 +68,21 @@ class RoomInfoWidget extends StatelessWidget {
               ],
             ),
           ),
-          const Sizer(
-            height: 20,
+          Sizer(
+            height: 20.h,
           ),
           Container(
-            height: 45,
+            height: 45.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: const Color(0xfff3f3f3),
             ),
             child: TextField(
               textAlignVertical: TextAlignVertical.bottom,
-              style: const TextStyle(color: Colors.black, fontSize: 12),
+              style: TextStyle(color: Colors.black, fontSize: 12.sp),
               decoration: InputDecoration(
                 hintText: 'Room title',
-                hintStyle: const TextStyle(color: Colors.grey, fontSize: 12),
+                hintStyle: TextStyle(color: Colors.grey, fontSize: 12.sp),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
                   borderSide: const BorderSide(color: Color(0xfff3f3f3)),
@@ -93,11 +94,11 @@ class RoomInfoWidget extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: 10.h,
           ),
           Container(
-            height: 45,
+            height: 45.h,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -118,11 +119,11 @@ class RoomInfoWidget extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: 10.h,
           ),
           Container(
-            height: 45,
+            height: 45.h,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -143,8 +144,8 @@ class RoomInfoWidget extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: 10.h,
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -155,7 +156,7 @@ class RoomInfoWidget extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  padding: EdgeInsets.symmetric(vertical: 5.h),
                   child: const Row(
                     children: [
                       Text(
@@ -169,7 +170,7 @@ class RoomInfoWidget extends StatelessWidget {
                 ),
                 const Divider(),
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  padding: EdgeInsets.symmetric(vertical: 5.h),
                   child: const Row(
                     children: [
                       Text(
@@ -183,7 +184,7 @@ class RoomInfoWidget extends StatelessWidget {
                 ),
                 const Divider(),
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  padding: EdgeInsets.symmetric(vertical: 5.h),
                   child: const Row(
                     children: [
                       Text(
@@ -197,7 +198,7 @@ class RoomInfoWidget extends StatelessWidget {
                 ),
                 const Divider(),
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  padding: EdgeInsets.symmetric(vertical: 5.h),
                   child: const Row(
                     children: [
                       Text(
@@ -212,15 +213,15 @@ class RoomInfoWidget extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: 10.h,
           ),
           InkWell(
             onTap: () {
               context.push(Routes.CLUBHOUSECHAT);
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              padding: EdgeInsets.symmetric(vertical: 8.h),
               decoration: BoxDecoration(
                 color: AppColors.PRIMARY_COLOR,
                 borderRadius: BorderRadius.circular(20),
@@ -233,8 +234,8 @@ class RoomInfoWidget extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: 10.h,
           ),
         ],
       ),

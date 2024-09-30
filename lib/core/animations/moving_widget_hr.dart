@@ -32,7 +32,7 @@ class _MovingWidgetHrState extends State<MovingWidgetHr> {
     initWidth = 100;
     return Container(
       padding: const EdgeInsets.all(5),
-      // margin: const EdgeInsets.all(5),
+      // margin: EdgeInsets.all(5),
       height: kToolbarHeight * .8,
       width: double.infinity,
 

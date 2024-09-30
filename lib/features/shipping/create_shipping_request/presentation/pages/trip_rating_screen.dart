@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -65,17 +67,17 @@ class TripRatingScreen extends StatelessWidget {
                               width: 5,
                             ),
                             Text(
-                                "Rider(${model.driverId?.review?.ratingDriver?.toStringAsFixed(0) ?? 0})"),
+                                "${"Rider".tr()}(${model.driverId?.review?.ratingDriver?.toStringAsFixed(0) ?? 0})"),
                             const SizedBox(
                               width: 5,
                             ),
                             Text(
-                                "Trip(${model.driverId?.review?.ratingTrip?.toStringAsFixed(0) ?? 0})"),
+                                "${"Trip".tr()}(${model.driverId?.review?.ratingTrip?.toStringAsFixed(0) ?? 0})"),
                             const SizedBox(
                               width: 5,
                             ),
                             Text(
-                                "Service(${model.driverId?.review?.ratingService?.toStringAsFixed(0) ?? 0})"),
+                                "${"Service".tr()}(${model.driverId?.review?.ratingService?.toStringAsFixed(0) ?? 0})"),
                           ],
                         ),
                         const SizedBox(

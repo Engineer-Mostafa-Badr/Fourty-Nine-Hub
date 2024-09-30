@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/report_widget.dart';
 import 'package:fourtyninehub/res/style/const.dart';
-import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
 
+import '../../../../../core/constants/constants.dart';
 import '../../../../../core/enums/club_house_layout_mode_enum.dart';
+import '../../../twitter/presentation/widgets/report_view.dart';
 import 'components/custom_extended_button.dart';
 import 'components/media_player.dart';
 
@@ -160,7 +162,12 @@ class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
 
   CustomExtendedButton reportButton() {
     return CustomExtendedButton(
-      onTap: () => bottomSheet(context: context, widget: const ReportWidget()),
+      onTap: () => bottomSheet(
+          context: context,
+          widget: ReportView(
+            id: widget.roomId,
+            categoryId: Constants.clubVoiceSubCategory,
+          )),
       icon: Icons.report,
       color: Colors.red,
     );
@@ -320,9 +327,9 @@ class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
       isDismissible: true,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        const textStyle = TextStyle(
+        var textStyle = TextStyle(
           color: Colors.white,
-          fontSize: 16,
+          fontSize: 16.sp,
           fontWeight: FontWeight.w500,
         );
         final listMenu = ZegoUIKitPrebuiltLiveAudioRoomController()
@@ -334,8 +341,8 @@ class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
           padding: MediaQuery.of(context).viewInsets,
           duration: const Duration(milliseconds: 50),
           child: Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 0,
+            padding: EdgeInsets.symmetric(
+              vertical: 0.h,
               horizontal: 10,
             ),
             child: ListView.builder(
@@ -343,7 +350,7 @@ class _ZegoAudioRoomWidgetState extends State<ZegoAudioRoomWidget> {
               itemCount: listMenu.length,
               itemBuilder: (BuildContext context, int index) {
                 return SizedBox(
-                  height: 60,
+                  height: 60.h,
                   child: Center(child: listMenu[index]),
                 );
               },

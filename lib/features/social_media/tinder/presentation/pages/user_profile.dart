@@ -4,12 +4,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key});
@@ -59,13 +63,16 @@ class UserProfilePageState extends State<UserProfilePage> {
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            padding: EdgeInsets.symmetric(vertical: 20.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _buildSwipeCard(context),
                 _buildUserInfo(context),
                 _buildStats(context),
+                const Sizer(
+                  height: kToolbarHeight,
+                ),
               ],
             ),
           ),
@@ -142,27 +149,38 @@ class UserProfilePageState extends State<UserProfilePage> {
           const SizedBox(height: 8),
           Text(
             userId?.email ?? '',
-            style: Styles.headerText(
+            style: Styles.mediumText(
               fontWeight: FontWeight.w400,
-              color: AppColors.PRIMARY_COLOR,
+              color: Colors.black87,
             ),
           ),
           const Divider(),
           _buildListTile(
             icon: Icons.cake,
             iconColor: Colors.redAccent,
-            title: 'Date of Birth',
+            title: LocaleKeys.user_info_date_of_birth.tr(),
             subtitle: userId?.birthday ?? '',
           ),
           _buildListTile(
             icon: Icons.person,
             iconColor: Colors.redAccent,
-            title: 'Gender',
-            subtitle: userId?.gender ?? '',
+            title: LocaleKeys.user_info_gender.tr(),
+            subtitle: getGender(context, userId?.gender ?? ''),
           ),
         ],
       ),
     );
+  }
+
+  getGender(BuildContext context, String comingGender) {
+    if (comingGender.isNotEmpty) {
+      if (comingGender == 'male') {
+        return context.isArabic ? 'ذكر' : comingGender;
+      }
+      if (comingGender == 'female') {
+        return context.isArabic ? 'أُنثى' : comingGender;
+      }
+    }
   }
 
   ListTile _buildListTile({
@@ -182,7 +200,7 @@ class UserProfilePageState extends State<UserProfilePage> {
     final profileData = context.watch<TinderViewCubit>().state.profileUserData;
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10.0),
+      margin: EdgeInsets.symmetric(vertical: 10.h),
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: AppColors.PRIMARY_COLOR,
@@ -192,12 +210,12 @@ class UserProfilePageState extends State<UserProfilePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildStatItem(
-              'Followers', profileData?.followersCount.toString() ?? '0'),
-          _buildStatItem(
-              'Following', profileData?.followingCount.toString() ?? '0'),
-          _buildStatItem(
-              'Friends', profileData?.friendsCount.toString() ?? '0'),
+          _buildStatItem(LocaleKeys.user_info_followers.tr(),
+              profileData?.followersCount.toString() ?? '0'),
+          _buildStatItem(LocaleKeys.user_info_following.tr(),
+              profileData?.followingCount.toString() ?? '0'),
+          _buildStatItem(LocaleKeys.user_info_friends.tr(),
+              profileData?.friendsCount.toString() ?? '0'),
         ],
       ),
     );
@@ -307,7 +325,7 @@ class SwipeCardDemoState extends State<SwipeCardDemo> {
                 (dotIndex) => Expanded(
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                    height: 4,
+                    height: 4.h,
                     decoration: BoxDecoration(
                       color: (dotIndex == _currentStoryIndex)
                           ? Colors.red
@@ -342,7 +360,7 @@ String capitalizeAndSplit2Only(String name) {
   return parts.map(capitalize).join(' ');
 }
 
-String getTimeAgo(String lastSeen) {
+String getTimeAgo(BuildContext context, String lastSeen) {
   DateTime lastSeenTime = DateTime.parse(lastSeen);
   DateTime now = DateTime.now().toUtc();
 
@@ -353,16 +371,18 @@ String getTimeAgo(String lastSeen) {
     DateFormat timeFormat = DateFormat('h:mm a');
     String formattedDate = dateFormat.format(lastSeenTime);
     String formattedTime = timeFormat.format(lastSeenTime);
-    return 'Date: $formattedDate\nTime: $formattedTime';
+    return context.isArabic
+        ? '$formattedDate: $formattedTime'
+        : 'Date: $formattedDate\nTime: $formattedTime';
   } else if (difference.inMinutes < 1) {
-    return "Just now";
+    return context.isArabic ? 'الآن' : "Just now";
   } else if (difference.inMinutes == 1) {
-    return "1 minute ago";
+    return "1 ${context.isArabic ? 'دقيقه' : "minute ago"}";
   } else if (difference.inMinutes < 60) {
-    return "${difference.inMinutes} minutes ago";
+    return "${difference.inMinutes} ${context.isArabic ? 'دقائق' : 'minutes ago'}";
   } else if (difference.inHours == 1) {
-    return "1 hour ago";
+    return context.isArabic ? 'ساعة' : "1 hour ago";
   } else {
-    return "${difference.inHours} hours ago";
+    return "${difference.inHours} ${context.isArabic ? 'ساعة' : 'hours ago'}";
   }
 }

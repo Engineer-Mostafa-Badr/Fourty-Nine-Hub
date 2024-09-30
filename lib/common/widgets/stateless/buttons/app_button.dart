@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -39,12 +39,12 @@ class AppButton extends StatelessWidget {
     return InkWell(
       onTap: () => onPressed(),
       child: Container(
-        height: height ?? kToolbarHeight * .6,
+        height: height ?? kToolbarHeight * 1.2.h,
         width: width,
         margin: EdgeInsets.all(margin ?? 0),
         padding: EdgeInsets.symmetric(horizontal: padding ?? 0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius ?? 10.zR),
+          borderRadius: BorderRadius.circular(radius ?? 10.r),
           color: backColor ?? AppColors.SECONDARY_COLOR,
         ),
         child: widget ??
@@ -56,12 +56,12 @@ class AppButton extends StatelessWidget {
                   if (icon != null)
                     Icon(
                       icon,
-                      size: iconSize ?? 16,
+                      size: (iconSize ?? 30).sp,
                       color: textColor ?? Colors.white,
                     ),
                   if (icon != null)
-                    const Sizer(
-                      width: 3,
+                    Sizer(
+                      width: 10.w,
                     ),
                   Label(
                       text: label,

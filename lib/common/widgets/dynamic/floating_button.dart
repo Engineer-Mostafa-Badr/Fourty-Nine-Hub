@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../res/assets/assets.dart';
@@ -21,8 +21,8 @@ class FloatingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 90.zH, // Set the desired height
-      width: 90.zW,
+      height: 90.h, // Set the desired height
+      width: 90.h,
       child: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: onTap != null
@@ -32,6 +32,8 @@ class FloatingButton extends StatelessWidget {
                   context.push(Routes.SOCIAL);
                 } else if (changeView == 2) {
                   context.push(Routes.INSTAGRAM);
+                } else {
+                  context.push(Routes.HOME);
                 }
               },
         backgroundColor:
@@ -43,8 +45,8 @@ class FloatingButton extends StatelessWidget {
               )
             : Image.asset(
                 Assets.logo,
-                height: 50.zH, // Adjust size as needed
-                width: 50.zH, // Adjust size as needed
+                height: 50.h, // Adjust size as needed
+                width: 50.w, // Adjust size as needed
               ),
       ),
     );

@@ -18,6 +18,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
 import '../cubit/meal_cubit/restaurants_list_cubit.dart';
 import '../widgets/restaurant_card.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RestaurantsListsView extends StatelessWidget {
   const RestaurantsListsView({super.key});
@@ -95,9 +96,9 @@ class RestaurantsListsView extends StatelessWidget {
                                   },
                                   child: Container(
                                       alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      height: 36,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10.w),
+                                      height: 36.h,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         border: Border.all(

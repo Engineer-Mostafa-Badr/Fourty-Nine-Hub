@@ -73,6 +73,7 @@ class _CarInfoV2State extends State<CarInfoV2> {
               return ListTile(title: Text(value));
             },
             onSelected: (value) {
+              fetchCarModelsCubit.fetchCarModel(brand: value);
               fetchCarBrandsCubit.brand = value;
               setState(() {});
             },
@@ -138,43 +139,6 @@ class _CarInfoV2State extends State<CarInfoV2> {
             },
           ),
         ),
-        // TypeAheadField<String>(
-        //   builder: (context, controller, focusNode) {
-        //     controller.text = fetchCarYearTypeCubit.year ?? '';
-        //     return TextField(
-        //       controller: controller,
-        //       focusNode: focusNode,
-        //       // autofocus: true,
-        //       decoration: InputDecoration(
-        //         border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-        //         fillColor: Colors.transparent,
-        //         hintText: 'Year',
-        //       ),
-        //       keyboardType: TextInputType.number,
-        //       onChanged: (value) {
-        //         fetchCarYearTypeCubit.year = value;
-        //       },
-        //     );
-        //   },
-        //   itemBuilder: (context, value) {
-        //     return ListTile(title: Text(value));
-        //   },
-        //   onSelected: (value) {
-        //     fetchCarYearTypeCubit.year = value;
-        //     setState(() {});
-        //   },
-        //   suggestionsCallback: (search) {
-        //     fetchCarYearTypeCubit.getCarYears(
-        //       brand: fetchCarBrandsCubit.brand ?? '',
-        //       model: fetchCarModelsCubit.model ?? '',
-        //     );
-        //     return fetchCarYearTypeCubit.carYears.map((e) => e?.year ?? '2000').toList();
-        //     // return fetchCarYearTypeCubit.carYears
-        //     //     .map((e) => e?.year ?? '')
-        //     //     .where((element) => element.toLowerCase().contains(search.toLowerCase()))
-        //     //     .toList();
-        //   },
-        // ),
       ],
     );
   }

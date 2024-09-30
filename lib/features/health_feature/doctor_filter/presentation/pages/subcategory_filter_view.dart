@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/subcategory_filter_cubit/doctor_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/widgets/subcategories_list.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorSubcategoryFilterView extends StatelessWidget {
   const DoctorSubcategoryFilterView({super.key});
@@ -21,9 +22,9 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
         label: LocaleKeys.speciality.localize,
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(
+        padding: EdgeInsets.symmetric(
           horizontal: 20,
-          vertical: 10,
+          vertical: 10.h,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,8 +40,8 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
               ),
               onChanged: (value) => doctorSubcategoryFilter.search(value),
             ),
-            const Sizer(
-              height: 30,
+            Sizer(
+              height: 30.h,
             ),
             const DoctorsSubcategoriesFilterList()
           ],

@@ -6,11 +6,13 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+
+import '../../../../routes/routes.dart';
 
 class LogoutWidget extends StatefulWidget {
   const LogoutWidget({super.key});
@@ -39,7 +41,7 @@ class _LogoutWidgetState extends State<LogoutWidget> {
           children: [
             Expanded(
                 child: AppButton(
-              height: 50.zH,
+              height: 50.h,
               label: LocaleKeys.no.localize,
               color: AppColors.AUTH_CONTAINER_COLOR,
               onPressed: () => context.pop(),
@@ -48,14 +50,18 @@ class _LogoutWidgetState extends State<LogoutWidget> {
             const Sizer(),
             Expanded(
               child: AppButton(
-                height: 50.zH,
+                height: 50.h,
                 label: LocaleKeys.logout.localize,
                 color: AppColors.AUTH_CONTAINER_COLOR,
                 onPressed: () {
                   controller.logout();
+                  //Phoenix.rebirth(context);
+                  // setState(() {});
+                  // context.pop();
                   context.pop();
-                  context.pop();
-                  setState(() {});
+                  context.push(Routes.HOME);
+                  // context.read<MainCategoriesCubit>().loadData(context);
+                  // setState(() {});
                 },
               ),
             ),

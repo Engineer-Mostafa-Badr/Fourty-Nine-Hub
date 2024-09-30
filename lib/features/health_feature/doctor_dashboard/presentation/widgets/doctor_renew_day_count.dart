@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorRenewDayCountWidget extends StatelessWidget {
   const DoctorRenewDayCountWidget({super.key});
@@ -21,7 +22,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
         ),
         const Sizer(),
         Container(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+          padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Theme.of(context).primaryColor,

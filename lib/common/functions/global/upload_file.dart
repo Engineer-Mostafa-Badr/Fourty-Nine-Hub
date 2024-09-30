@@ -1,13 +1,16 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/core/extensions/file_extension.dart';
 
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -56,6 +59,102 @@ class UploadFile {
     return null;
   }
 
+  // static Future<String?> uploadPickedFile(
+  //     {required File file, required String subCategoryId}) async {
+  //   try {
+  //     final fileInBytes = await file.readAsBytes();
+  //     String? mediaId;
+  //     CliLogger.info("creating upload url for : ${file.path}");
+  //     final uploadUrlResponse =
+  //         await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
+  //       "type": "${file.type.name}/${file.path.split('.').last}",
+  //       "size": fileInBytes.length,
+  //       "subcategoryId": subCategoryId,
+  //     });
+
+  //     uploadUrlResponse.fold(
+  //       (l) {
+  //         CliLogger.error("can't get upload url");
+  //       },
+  //       (data) async {
+  //         CliLogger.info(
+  //             "upload url : ${data['data']['signedUrl']}\nmediaId : ${data['data']['mediaId']}");
+  //         final uploadUrl = data['data']['signedUrl'];
+  //         mediaId = data['data']['mediaId'];
+  //         Options options = Options(contentType: file.type.name, headers: {
+  //           'Accept': "*/*",
+  //           // 'Content-Type': 'application/octet-stream',
+  //           'Content-Length': fileInBytes.length,
+  //           'Connection': 'keep-alive',
+  //           'User-Agent': 'ClinicPlush',
+  //         });
+  //         CliLogger.info("uploading file : ${file.path}");
+  //         await Dio().put(uploadUrl, data: fileInBytes, options: options);
+  //         file.length();
+  //         fileInBytes.lengthInBytes;
+  //         CliLogger.success("file uploaded : ${file.path}");
+  //       },
+  //     );
+
+  //     return mediaId;
+  //   } catch (e) {
+  //     CliLogger.error("can't upload file $e");
+  //     return null;
+  //   }
+  // }
+
+  static Future<String?> uploadPickedFile({
+    required File file,
+    required String subCategoryId,
+  }) async {
+    try {
+      final fileInBytes = await file.readAsBytes();
+      String? mediaId;
+      CliLogger.info("Creating upload URL for: ${file.path}");
+
+      final uploadUrlResponse = await serviceLocator<ApiConsumer>().post(
+        EndPoints.mediaUrl,
+        data: {
+          "type": "${file.type.name}/${file.path.split('.').last}",
+          "size": fileInBytes.length,
+          "subcategoryId": subCategoryId,
+        },
+      );
+
+      uploadUrlResponse.fold(
+        (l) {
+          CliLogger.error("Can't get upload URL");
+        },
+        (data) async {
+          CliLogger.info(
+              "Upload URL: ${data['data']['signedUrl']}\nMediaId: ${data['data']['mediaId']}");
+          final uploadUrl = data['data']['signedUrl'];
+          mediaId = data['data']['mediaId'];
+
+          final options = Options(
+            contentType: file.type.name,
+            headers: {
+              'Accept': "*/*",
+              'Content-Type': 'application/octet-stream',
+              'Content-Length': fileInBytes.length,
+              'Connection': 'keep-alive',
+              'User-Agent': 'ClinicPlush',
+            },
+          );
+
+          CliLogger.info("Uploading file: ${file.path}");
+          await Dio().put(uploadUrl, data: fileInBytes, options: options);
+          CliLogger.success("File uploaded: ${file.path}");
+        },
+      );
+
+      return mediaId;
+    } catch (e) {
+      CliLogger.error("Can't upload file: $e");
+      return null;
+    }
+  }
+
   Future<void> sendBinaryFileData(
       {required XFile file, required String signedUrl}) async {
     Uint8List image = await file.readAsBytes();
@@ -78,5 +177,6 @@ class UploadFile {
 class UploadFileEntity {
   final String mediaId;
   final XFile file;
+
   UploadFileEntity({required this.mediaId, required this.file});
 }

@@ -39,6 +39,7 @@ class _ShippingBannerState extends State<ShippingBanner> {
   @override
   Widget build(BuildContext context) {
     return MainCategoryBanner(
+      noCount: true,
       onFavorite: () {
         if (isFavrote) {
           context
@@ -84,7 +85,7 @@ class _ShippingBannerState extends State<ShippingBanner> {
       ),
     );
     // return Container(
-    //   padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+    //   padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
     //   decoration: BoxDecoration(
     //     color: AppColors.YELLOW_COLOR,
     //     borderRadius: BorderRadius.circular(5),
@@ -102,8 +103,8 @@ class _ShippingBannerState extends State<ShippingBanner> {
     //             Icons.favorite_border,
     //             color: AppColors.SECONDARY_COLOR,
     //           ),
-    //           const Sizer(
-    //             height: 20,
+    //           Sizer
+    //             height: 20.h,
     //           ),
     //           Text(
     //             '${model.mainCategory?.driverLength?.toShortScale} ${"Driver"}',

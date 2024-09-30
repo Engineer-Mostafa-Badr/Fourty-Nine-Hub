@@ -1,18 +1,16 @@
-import 'package:fourtyninehub/features/account_taps/account/data/models/favouite_category_model/category_id.dart';
-
 class FavouriteCategoryEntity {
-  int? numberOfAds;
-  DateTime? updatedAt;
-  DateTime? createdAt;
-  String? userId;
-  String? id;
-  CategoryId? categoryId;
-  FavouriteCategoryEntity({
-    required this.id,
-    required this.numberOfAds,
-    required this.updatedAt,
-    required this.createdAt,
-    required this.userId,
-    required this.categoryId,
-  });
+  final String id;
+  final String banner;
+  final String cover;
+  final String name;
+  final num numberOfAds;
+  bool? isFavorite;
+
+  FavouriteCategoryEntity(
+      {required this.id,
+      required this.banner,
+      required this.cover,
+      required this.name,
+      required this.numberOfAds,
+      this.isFavorite = false});
 }

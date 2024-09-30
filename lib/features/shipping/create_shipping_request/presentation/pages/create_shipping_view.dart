@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
@@ -141,7 +143,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                 children: [
                                   ShippingBanner(
                                     model: state.model,
-                                    favoriteName: "Driver",
+                                    favoriteName: "Driver".tr(),
+                                    
                                   ),
                                   // const Sizer(),
                                   // لو هو مسجل
@@ -195,12 +198,12 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                           context.push(Routes.LOGIN);
                                         }
                                       },
-                                      child: const Padding(
+                                      child: Padding(
                                         padding: EdgeInsets.symmetric(
                                           horizontal: 10,
                                         ),
                                         child: Text(
-                                          "You can enjoy serving your clients using your car by clicking the register button above.",
+                                          "You can enjoy serving your clients using your car by clicking the register button above.".tr(),
                                           style: TextStyle(
                                             color: Colors.red,
                                           ),
@@ -329,7 +332,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                 if (state is SuccessCancelState) {
                   context.pop();
 
-                  showSuccessMessage(context, "تم اغلاق الرحلة بنجاح");
+                  showSuccessMessage(context, "The trip has been successfully closed.".tr());
                 }
                 if (state is FailureShippingState) {
                   showErrorMessage(
@@ -338,7 +341,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
               },
               child: TripCardWidget(
                 yourRequest: true,
-                title: "Your request",
+                title: "Your request".tr(),
                 buttons: false,
                 model: AllTripModel(
                     id: state.model.id,
@@ -396,8 +399,8 @@ class CustomTextField extends StatelessWidget {
         filled: true,
         prefixIcon: prefixIcon,
         hintText: hint,
-        hintStyle: const TextStyle(
-          fontSize: 18,
+        hintStyle: TextStyle(
+          fontSize: 18.sp,
         ),
       ),
       textAlign: TextAlign.right,
@@ -410,12 +413,12 @@ class NotFoundOffers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Center(
           child: Text(
-            "Your request has been sent. You'll receive offers shortly.",
+            "Your request has been sent. You'll receive offers shortly.".tr(),
             style: TextStyle(
               fontSize: 25,
             ),
@@ -438,16 +441,16 @@ class RequestOfferCard extends StatelessWidget {
       listener: (context, state) {
         log(state.toString(), name: "loadingState");
         if (state is SuccessAcceptState) {
-          showSuccessMessage(context, "تم الموافقة الطلب بنجاح");
+          showSuccessMessage(context, "The request has been successfully approved.".tr());
           context.read<GetAllRequestByMyTripCubit>().getAllRequest();
           context.pop();
         }
         if (state is SuccessDeclineState) {
-          showSuccessMessage(context, "تم رفض الطلب بنجاح");
+          showSuccessMessage(context, "The request was successfully rejected.".tr());
           context.read<GetAllRequestByMyTripCubit>().getAllRequest();
         }
         if (state is SuccessCompleteTripState) {
-          showSuccessMessage(context, "تم اكمال الرحلة");
+          showSuccessMessage(context, "Trip is completed".tr());
           context.read<GetAllRequestByMyTripCubit>().getAllRequest();
         }
         // if (state is SuccessCancelState) {
@@ -482,7 +485,7 @@ class RequestOfferCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6),
                       child: Text(
-                        isHistory ? "" : "New Offer",
+                        isHistory ? "" : "New Offer".tr(),
                         style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
@@ -525,8 +528,8 @@ class RequestOfferCard extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "car model",
+                        Text(
+                          "car model".tr(),
                           style: TextStyle(fontSize: 15),
                         ),
                         const SizedBox(
@@ -540,7 +543,7 @@ class RequestOfferCard extends StatelessWidget {
                           height: 5,
                         ),
                         Text(
-                          "${model.driverId?.trips ?? 0} Orders",
+                          "${model.driverId?.trips ?? 0} ${"Orders".tr()}",
                           style: const TextStyle(fontSize: 15),
                         )
                       ],
@@ -567,7 +570,7 @@ class RequestOfferCard extends StatelessWidget {
                             ],
                           ),
                         ),
-                        if (model.isPremium ?? false) const Text("Premium")
+                        if (model.isPremium ?? false) Text("Premium".tr())
                       ],
                     )
                   ],
@@ -590,7 +593,7 @@ class RequestOfferCard extends StatelessWidget {
                           },
                           style: Styles.mediumText(
                               fontSize: 28, color: Colors.white),
-                          label: "Complete Trip",
+                          label: "Complete Trip".tr(),
                           // backgroundColor: Colors.red,
                         )
                       : Row(
@@ -609,7 +612,7 @@ class RequestOfferCard extends StatelessWidget {
                                 },
                                 style: Styles.mediumText(
                                     fontSize: 28, color: Colors.white),
-                                label: "Decline",
+                                label: "Decline".tr(),
                                 // backgroundColor: Colors.red,
                               ),
                             ),
@@ -628,7 +631,7 @@ class RequestOfferCard extends StatelessWidget {
                                       .read<AcceptDeclineTripCubit>()
                                       .accept(loadingRequestId: model.id ?? "");
                                 },
-                                label: "Accept",
+                                label: "Accept".tr(),
                               ),
                             )
                           ],
@@ -788,8 +791,8 @@ class RequestOfferCard extends StatelessWidget {
                         .showSubscriptionPlans(
                             subCategoryId: "62c8bab18e28a58a3edf580d");
                   },
-                  child: const Text(
-                    "Subscribe to contact to the driver",
+                  child: Text(
+                    "Subscribe to contact to the driver".tr(),
                     style: TextStyle(fontSize: 16, color: Colors.red),
                   ),
                 )),

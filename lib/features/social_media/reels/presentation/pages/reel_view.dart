@@ -281,7 +281,7 @@
 // //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
 // //       crossAxisAlignment: CrossAxisAlignment.start,
 // //       children: [
-// //         const SizedBox(height: kToolbarHeight + 20),
+// //         SizedBox(height: kToolbarHeight + 20),
 // //         Expanded(
 // //           child: GestureDetector(
 // //             onTap: _togglePlayPause,
@@ -296,7 +296,7 @@
 // //     final height = MediaQuery.of(context).size.height;
 // //     final width = MediaQuery.of(context).size.width;
 // //     return Padding(
-// //       padding: const EdgeInsets.all(0.0),
+// //       padding: EdgeInsets.all(0.0),
 // //       child: SizedBox(
 // //         height: height / 2,
 // //         width: double.infinity,
@@ -311,7 +311,7 @@
 // //                   Row(
 // //                     children: [
 // //                       Container(
-// //                         // padding: const EdgeInsets.all(2),
+// //                         // padding: EdgeInsets.all(2),
 // //                         // Adjust padding as needed
 // //                         decoration: BoxDecoration(
 // //                           shape: BoxShape.circle,
@@ -330,7 +330,7 @@
 // //                           ),
 // //                         ),
 // //                       ),
-// //                       const SizedBox(width: 12),
+// //                       SizedBox(width: 12),
 // //                       Expanded(
 // //                         child: Column(
 // //                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -344,14 +344,14 @@
 // //                                       color: Colors.white,
 // //                                       fontWeight: FontWeight.bold),
 // //                                 ),
-// //                                 const SizedBox(width: 4),
+// //                                 SizedBox(width: 4),
 // //                                 widget.reel.user.verified
 // //                                     ? const Icon(
 // //                                         Icons.verified,
 // //                                         color: Colors.blue,
 // //                                         size: 25,
 // //                                       )
-// //                                     : const Sizer(),
+// //                                     : Sizer(),
 // //                               ],
 // //                             ),
 // //                             Row(
@@ -359,7 +359,7 @@
 // //                                 Text(widget.reel.name,
 // //                                     style: const TextStyle(
 // //                                         color: AppColors.DARK_GRAY_COLOR)),
-// //                                 const SizedBox(
+// //                                 SizedBox(
 // //                                   width: 16,
 // //                                 ),
 // //                                 FaIcon(
@@ -368,7 +368,7 @@
 // //                                   color: AppColors.PRIMARY_COLOR_DARK
 // //                                       .withOpacity(0.6),
 // //                                 ),
-// //                                 const SizedBox(
+// //                                 SizedBox(
 // //                                   width: 8,
 // //                                 ),
 // //                                 Text(widget.reel.viewCount.toString(),
@@ -383,14 +383,14 @@
 // //                   ),
 // //                   Row(
 // //                     children: [
-// //                       const SizedBox(
+// //                       SizedBox(
 // //                         width: 4,
 // //                       ),
 // //                       FaIcon(
 // //                         FontAwesomeIcons.music,
 // //                         color: AppColors.PRIMARY_COLOR_DARK.withOpacity(0.5),
 // //                       ),
-// //                       const SizedBox(
+// //                       SizedBox(
 // //                         width: 4,
 // //                       ),
 // //                       Container(
@@ -456,13 +456,13 @@
 // //             color: Colors.white,
 // //             size: 35,
 // //           ),
-// //           const SizedBox(height: 4),
+// //           SizedBox(height: 4.h),
 // //           count != 0
 // //               ? Text(
 // //                   '$count',
 // //                   style: const TextStyle(color: Colors.white),
 // //                 )
-// //               : const Sizer(),
+// //               : Sizer(),
 // //         ],
 // //       ),
 // //     );
@@ -553,7 +553,7 @@
 // //   Widget build(BuildContext context) {
 // //     return SizedBox(
 // //       width: 30,
-// //       height: 40,
+// //       height: 40.h,
 // //       child: ElevatedButton(
 // //         style: ElevatedButton.styleFrom(
 // //           backgroundColor: Colors.transparent,
@@ -615,7 +615,7 @@
 // //                   children: [
 // //                     Text('Original audio',
 // //                         style: TextStyle(
-// //                             fontSize: 18, fontWeight: FontWeight.bold)),
+// //                             fontSize: 18.sp, fontWeight: FontWeight.bold)),
 // //                     Text('rami_ezazi'),
 // //                     Text('1,341 reels'),
 // //                   ],
@@ -627,7 +627,7 @@
 // //             child: SizedBox(
 // //               width: double.infinity,
 // //               child: Padding(
-// //                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
+// //                 padding: EdgeInsets.symmetric(horizontal: 32.0),
 // //                 child: ElevatedButton(
 // //                   style: const ButtonStyle(
 // //                       backgroundColor:
@@ -641,7 +641,7 @@
 // //               ),
 // //             ),
 // //           ),
-// //           const SizedBox(height: 16),
+// //           SizedBox(height: 16.h),
 // //           Expanded(
 // //             child: GridView.builder(
 // //               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -748,7 +748,7 @@
 // //                   children: [
 // //                     Text('Original audio',
 // //                         style: TextStyle(
-// //                             fontSize: 18,
+// //                             fontSize: 18.sp,
 // //                             fontWeight: FontWeight.bold,
 // //                             color: Colors.white)),
 // //                     Text('rami_ezazi', style: TextStyle(color: Colors.white)),
@@ -762,7 +762,7 @@
 // //             child: SizedBox(
 // //               width: double.infinity,
 // //               child: Padding(
-// //                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
+// //                 padding: EdgeInsets.symmetric(horizontal: 32.0),
 // //                 child: ElevatedButton(
 // //                   style: const ButtonStyle(
 // //                       backgroundColor: MaterialStatePropertyAll(
@@ -777,7 +777,7 @@
 // //             ),
 // //           ),
 // //           Padding(
-// //             padding: const EdgeInsets.all(16.0),
+// //             padding: EdgeInsets.all(16.0),
 // //             child: Row(
 // //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
 // //               children: [
@@ -791,7 +791,7 @@
 // //                 ),
 // //                 Expanded(
 // //                   child: Padding(
-// //                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
+// //                     padding: EdgeInsets.symmetric(horizontal: 16.0),
 // //                     child: Slider(
 // //                       value: 0.2, // Current position
 // //                       onChanged: (value) {},
@@ -806,7 +806,7 @@
 // //           ),
 // //           Expanded(
 // //             child: GridView.builder(
-// //               padding: const EdgeInsets.all(8.0),
+// //               padding: EdgeInsets.all(8.0),
 // //               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
 // //                 crossAxisCount: 3,
 // //                 childAspectRatio: 0.7,
@@ -942,7 +942,7 @@
 //       children: [
 //         if (icon != null) ...[
 //           Icon(icon, color: textColor),
-//           const SizedBox(width: 12),
+//           SizedBox(width: 12),
 //         ],
 //         Expanded(
 //           child: Text(
@@ -965,7 +965,7 @@
 //     shape: RoundedRectangleBorder(
 //       borderRadius: BorderRadius.circular(10),
 //     ),
-//     margin: const EdgeInsets.all(16),
+//     margin: EdgeInsets.all(16),
 //     elevation: 10,
 //   );
 //   SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -1334,7 +1334,7 @@
 //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //       crossAxisAlignment: CrossAxisAlignment.start,
 //       children: [
-//         const SizedBox(height: kToolbarHeight + 20),
+//         SizedBox(height: kToolbarHeight + 20),
 //         Expanded(
 //           child: GestureDetector(
 //             onTap: _togglePlayPause,
@@ -1350,7 +1350,7 @@
 //     final height = MediaQuery.of(context).size.height;
 //     final width = MediaQuery.of(context).size.width;
 //     return Padding(
-//       padding: const EdgeInsets.all(0.0),
+//       padding: EdgeInsets.all(0.0),
 //       child: SizedBox(
 //         height: height * 0.8,
 //         width: double.infinity,
@@ -1365,7 +1365,7 @@
 //                   Row(
 //                     children: [
 //                       _buildUserAvatar(),
-//                       const SizedBox(width: 12),
+//                       SizedBox(width: 12),
 //                       Expanded(child: _buildUserInfo()),
 //                     ],
 //                   ),
@@ -1429,7 +1429,7 @@
 //             fontWeight: FontWeight.bold,
 //           ),
 //         ),
-//         const SizedBox(width: 4),
+//         SizedBox(width: 4),
 //         if (widget.reel.user.verified)
 //           const Icon(
 //             Icons.verified,
@@ -1448,13 +1448,13 @@
 //           widget.reel.name,
 //           style: const TextStyle(color: AppColors.DARK_GRAY_COLOR),
 //         ),
-//         const SizedBox(width: 16),
+//         SizedBox(width: 16),
 //         FaIcon(
 //           FontAwesomeIcons.eye,
 //           size: 20,
 //           color: AppColors.PRIMARY_COLOR_DARK.withOpacity(0.6),
 //         ),
-//         const SizedBox(width: 8),
+//         SizedBox(width: 8),
 //         Text(
 //           widget.reel.viewCount.toString(),
 //           style: const TextStyle(color: AppColors.DARK_GRAY_COLOR),
@@ -1467,12 +1467,12 @@
 //   Widget _buildAudioAndButtons(double width) {
 //     return Row(
 //       children: [
-//         const SizedBox(width: 4),
+//         SizedBox(width: 4),
 //         FaIcon(
 //           FontAwesomeIcons.music,
 //           color: AppColors.PRIMARY_COLOR_DARK.withOpacity(0.5),
 //         ),
-//         const SizedBox(width: 4),
+//         SizedBox(width: 4),
 //         Container(
 //           color: Colors.blueGrey.withOpacity(0.1),
 //           width: width / 2,
@@ -1578,14 +1578,14 @@
 //             color: iconColor ?? Colors.white,
 //             size: 35,
 //           ),
-//           const SizedBox(height: 4),
+//           SizedBox(height: 4.h),
 //           if (count != 0)
 //             Text(
 //               '$count',
 //               style: const TextStyle(color: Colors.white),
 //             )
 //           else
-//             const Sizer(),
+//             Sizer(),
 //         ],
 //       ),
 //     );
@@ -1806,7 +1806,7 @@
 // //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
 // //       crossAxisAlignment: CrossAxisAlignment.start,
 // //       children: [
-// //         const SizedBox(height: kToolbarHeight + 20),
+// //         SizedBox(height: kToolbarHeight + 20),
 // //         Expanded(
 // //           child: GestureDetector(
 // //             onTap: _togglePlayPause,
@@ -1822,7 +1822,7 @@
 // //     final height = MediaQuery.of(context).size.height;
 // //     final width = MediaQuery.of(context).size.width;
 // //     return Padding(
-// //       padding: const EdgeInsets.all(0.0),
+// //       padding: EdgeInsets.all(0.0),
 // //       child: SizedBox(
 // //         height: height * 0.8,
 // //         width: double.infinity,
@@ -1837,7 +1837,7 @@
 // //                   Row(
 // //                     children: [
 // //                       _buildUserAvatar(),
-// //                       const SizedBox(width: 12),
+// //                       SizedBox(width: 12),
 // //                       Expanded(child: _buildUserInfo()),
 // //                     ],
 // //                   ),
@@ -1901,7 +1901,7 @@
 // //             fontWeight: FontWeight.bold,
 // //           ),
 // //         ),
-// //         const SizedBox(width: 4),
+// //         SizedBox(width: 4),
 // //         if (widget.reel.user.verified)
 // //           const Icon(
 // //             Icons.verified,
@@ -1920,13 +1920,13 @@
 // //           widget.reel.name,
 // //           style: const TextStyle(color: AppColors.DARK_GRAY_COLOR),
 // //         ),
-// //         const SizedBox(width: 16),
+// //         SizedBox(width: 16),
 // //         FaIcon(
 // //           FontAwesomeIcons.eye,
 // //           size: 20,
 // //           color: AppColors.PRIMARY_COLOR_DARK.withOpacity(0.6),
 // //         ),
-// //         const SizedBox(width: 8),
+// //         SizedBox(width: 8),
 // //         Text(
 // //           widget.reel.viewCount.toString(),
 // //           style: const TextStyle(color: AppColors.DARK_GRAY_COLOR),
@@ -1939,12 +1939,12 @@
 // //   Widget _buildAudioAndButtons(double width) {
 // //     return Row(
 // //       children: [
-// //         const SizedBox(width: 4),
+// //         SizedBox(width: 4),
 // //         FaIcon(
 // //           FontAwesomeIcons.music,
 // //           color: AppColors.PRIMARY_COLOR_DARK.withOpacity(0.5),
 // //         ),
-// //         const SizedBox(width: 4),
+// //         SizedBox(width: 4),
 // //         Container(
 // //           color: Colors.blueGrey.withOpacity(0.1),
 // //           width: width / 2,
@@ -2057,14 +2057,14 @@
 // //             color: iconColor ?? Colors.white,
 // //             size: 35,
 // //           ),
-// //           const SizedBox(height: 4),
+// //           SizedBox(height: 4.h),
 // //           if (count != 0)
 // //             Text(
 // //               '$count',
 // //               style: const TextStyle(color: Colors.white),
 // //             )
 // //           else
-// //             const Sizer(),
+// //             Sizer(),
 // //         ],
 // //       ),
 // //     );
@@ -2156,7 +2156,7 @@
 //   Widget build(BuildContext context) {
 //     return SizedBox(
 //       width: 30,
-//       height: 40,
+//       height: 40.h,
 //       child: ElevatedButton(
 //         style: ElevatedButton.styleFrom(
 //           backgroundColor: Colors.transparent,
@@ -2231,7 +2231,7 @@
 // //                   children: [
 // //                     Text('Original audio',
 // //                         style: TextStyle(
-// //                             fontSize: 18, fontWeight: FontWeight.bold)),
+// //                             fontSize: 18.sp, fontWeight: FontWeight.bold)),
 // //                     Text('rami_ezazi'),
 // //                     Text('1,341 reels'),
 // //                   ],
@@ -2243,7 +2243,7 @@
 // //             child: SizedBox(
 // //               width: double.infinity,
 // //               child: Padding(
-// //                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
+// //                 padding: EdgeInsets.symmetric(horizontal: 32.0),
 // //                 child: ElevatedButton(
 // //                   style: const ButtonStyle(
 // //                       backgroundColor:
@@ -2257,7 +2257,7 @@
 // //               ),
 // //             ),
 // //           ),
-// //           const SizedBox(height: 16),
+// //           SizedBox(height: 16.h),
 // //           Expanded(
 // //             child: GridView.builder(
 // //               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -2361,7 +2361,7 @@
 // //                   children: [
 // //                     Text('Original audio',
 // //                         style: TextStyle(
-// //                             fontSize: 18,
+// //                             fontSize: 18.sp,
 // //                             fontWeight: FontWeight.bold,
 // //                             color: Colors.white)),
 // //                     Text('rami_ezazi', style: TextStyle(color: Colors.white)),
@@ -2375,7 +2375,7 @@
 // //             child: SizedBox(
 // //               width: double.infinity,
 // //               child: Padding(
-// //                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
+// //                 padding: EdgeInsets.symmetric(horizontal: 32.0),
 // //                 child: ElevatedButton(
 // //                   style: const ButtonStyle(
 // //                       backgroundColor: MaterialStatePropertyAll(
@@ -2390,7 +2390,7 @@
 // //             ),
 // //           ),
 // //           Padding(
-// //             padding: const EdgeInsets.all(16.0),
+// //             padding: EdgeInsets.all(16.0),
 // //             child: Row(
 // //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
 // //               children: [
@@ -2403,7 +2403,7 @@
 // //                 ),
 // //                 Expanded(
 // //                   child: Padding(
-// //                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
+// //                     padding: EdgeInsets.symmetric(horizontal: 16.0),
 // //                     child: Slider(
 // //                       value: 0.2,
 // //                       onChanged: (value) {},
@@ -2418,7 +2418,7 @@
 // //           ),
 // //           Expanded(
 // //             child: GridView.builder(
-// //               padding: const EdgeInsets.all(8.0),
+// //               padding: EdgeInsets.all(8.0),
 // //               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
 // //                 crossAxisCount: 3,
 // //                 childAspectRatio: 0.7,
@@ -2527,7 +2527,7 @@
 // //                   children: [
 // //                     Text('Original audio',
 // //                         style: TextStyle(
-// //                             fontSize: 18,
+// //                             fontSize: 18.sp,
 // //                             fontWeight: FontWeight.bold,
 // //                             color: Colors.white)),
 // //                     Text('rami_ezazi', style: TextStyle(color: Colors.white)),
@@ -2541,7 +2541,7 @@
 // //             child: SizedBox(
 // //               width: double.infinity,
 // //               child: Padding(
-// //                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
+// //                 padding: EdgeInsets.symmetric(horizontal: 32.0),
 // //                 child: ElevatedButton(
 // //                   style: const ButtonStyle(
 // //                       backgroundColor: MaterialStatePropertyAll(
@@ -2560,7 +2560,7 @@
 // //           ),
 // //           Expanded(
 // //             child: GridView.builder(
-// //               padding: const EdgeInsets.all(8.0),
+// //               padding: EdgeInsets.all(8.0),
 // //               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
 // //                 crossAxisCount: 3,
 // //                 childAspectRatio: 0.7,
@@ -2755,7 +2755,7 @@
 // //               : _duration != null
 // //                   ? _durationText
 // //                   : '',
-// //           style: const TextStyle(fontSize: 16.0),
+// //           style: const TextStyle(fontSize: 16.sp),
 // //         ),
 // //       ],
 // //     );
@@ -2873,7 +2873,7 @@
 // //                   children: [
 // //                     Text('Original audio',
 // //                         style: TextStyle(
-// //                             fontSize: 18,
+// //                             fontSize: 18.sp,
 // //                             fontWeight: FontWeight.bold,
 // //                             color: Colors.white)),
 // //                     Text('rami_ezazi', style: TextStyle(color: Colors.white)),
@@ -2887,7 +2887,7 @@
 // //             child: SizedBox(
 // //               width: double.infinity,
 // //               child: Padding(
-// //                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
+// //                 padding: EdgeInsets.symmetric(horizontal: 32.0),
 // //                 child: ElevatedButton(
 // //                   style: const ButtonStyle(
 // //                       backgroundColor: MaterialStatePropertyAll(
@@ -2902,7 +2902,7 @@
 // //             ),
 // //           ),
 // //           Padding(
-// //             padding: const EdgeInsets.all(16.0),
+// //             padding: EdgeInsets.all(16.0),
 // //             child: Row(
 // //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
 // //               children: [
@@ -2920,7 +2920,7 @@
 // //                 ),
 // //                 Expanded(
 // //                   child: Padding(
-// //                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
+// //                     padding: EdgeInsets.symmetric(horizontal: 16.0),
 // //                     child: ValueListenableBuilder<Duration>(
 // //                       valueListenable: _position,
 // //                       builder: (context, position, child) {
@@ -2960,7 +2960,7 @@
 // //           ),
 // //           Expanded(
 // //             child: GridView.builder(
-// //               padding: const EdgeInsets.all(8.0),
+// //               padding: EdgeInsets.all(8.0),
 // //               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
 // //                 crossAxisCount: 3,
 // //                 childAspectRatio: 0.7,
@@ -3006,6 +3006,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
@@ -3056,6 +3057,31 @@ class ReelView extends StatelessWidget {
         size: 24,
         onPressed: () => context.pop(),
       ),
+      actions: [
+        const Spacer(),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton(
+            onPressed: () async {
+              // context.pop();
+              //   await Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => const ReelsRecordingScreen(
+              //             // advertisementType: 'reel',
+              //             // comeFromCompany: 'company',
+              //             // totalPrice: '500',
+              //             ),
+              //       ));
+            },
+            icon: const FaIcon(
+              Icons.camera_alt_outlined,
+              color: Colors.white,
+              size: 35,
+            ),
+          ),
+        )
+      ],
     );
   }
 }
@@ -3134,7 +3160,7 @@ class ReelsScreenState extends State<ReelsScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<ReelsCubit, ReelsState>(
       builder: (context, state) {
-        if (state.reels.isEmpty) {
+        if (state.globalReels.isEmpty) {
           return const Center(
             child: CupertinoActivityIndicator(radius: 25),
           );
@@ -3143,17 +3169,18 @@ class ReelsScreenState extends State<ReelsScreen> {
           physics: const BouncingScrollPhysics(),
           controller: _pageController,
           scrollDirection: Axis.vertical,
-          itemCount: state.reels.length + (state.hasReachedMax ? 0 : 1),
+          itemCount: state.globalReels.length +
+              (state.globalReelsHasReachedMax ? 0 : 1),
           onPageChanged: _handlePageChange,
           itemBuilder: (context, index) {
-            if (index >= state.reels.length) {
+            if (index >= state.globalReels.length) {
               return const Center(
                 child: CupertinoActivityIndicator(radius: 25),
               );
             }
             return ReelItem(
-              key: ValueKey(state.reels[index].id),
-              reel: state.reels[index],
+              key: ValueKey(state.globalReels[index].id),
+              reel: state.globalReels[index],
               isVisible: _currentPage == index,
             );
           },
@@ -3165,7 +3192,7 @@ class ReelsScreenState extends State<ReelsScreen> {
   void _handlePageChange(int index) {
     setState(() => _currentPage = index);
     final reelsCubit = context.read<ReelsCubit>();
-    if (index == reelsCubit.state.reels.length - 1 && mounted) {
+    if (index == reelsCubit.state.globalReels.length - 1 && mounted) {
       reelsCubit.fetchReels();
     }
   }
@@ -3397,10 +3424,36 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
     return Padding(
       padding: const EdgeInsets.all(0.0),
       child: SizedBox(
-        height: height * 0.8,
+        height: height * 0.5,
         width: double.infinity,
         child: Stack(
           children: [
+            // Positioned(
+            //
+            //   top: 100,
+            //   right: 100,
+            //   child: Padding(
+            //     padding: EdgeInsets.all(8.0),
+            //     child: IconButton(
+            //
+            //       onPressed: () {
+            //         _pauseVideo();
+            //
+            //         Navigator.push(
+            //             context,
+            //             MaterialPageRoute(
+            //               builder: (context) => const ReelsRecordingScreen(),
+            //             ));
+            //       },
+            //       icon: const FaIcon(
+            //         Icons.camera_alt_outlined,
+            //         color: Colors.white,
+            //         size: 35,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+
             Positioned(
               bottom: 16,
               left: 4,
@@ -3418,11 +3471,18 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
                 ],
               ),
             ),
-            Positioned(
-              right: 8,
-              bottom: kToolbarHeight,
-              child: _buildActionButtons(),
-            ),
+
+            context.isArabic
+                ? Positioned(
+                    left: 8,
+                    bottom: 0,
+                    child: _buildActionButtons(),
+                  )
+                : Positioned(
+                    right: 8,
+                    bottom: 0,
+                    child: _buildActionButtons(),
+                  ),
           ],
         ),
       ),
@@ -3443,7 +3503,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
       child: CircleAvatar(
         radius: 30,
         backgroundImage: CachedNetworkImageProvider(
-          widget.reel.user.profilePictureSignedUrl,
+          widget.reel.user.profilePictureSignedUrl!,
         ),
       ),
     );
@@ -3508,17 +3568,16 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
     return Row(
       children: [
         const SizedBox(width: 4),
-        FaIcon(
-          FontAwesomeIcons.music,
-          color: AppColors.PRIMARY_COLOR_DARK.withOpacity(0.5),
-        ),
-        const SizedBox(width: 4),
+        // FaIcon(
+        //   FontAwesomeIcons.music,
+        //   color: AppColors.PRIMARY_COLOR_DARK.withOpacity(0.5),
+        // ),
         Container(
-          color: Colors.blueGrey.withOpacity(0.1),
+          color: Colors.blueGrey.withOpacity(0.2),
           width: width / 2,
           child: ScrollingText(text: widget.reel.audio.audioName),
         ),
-        const Spacer(),
+        const SizedBox(width: 4),
         RoundedButtonWithImage(
           imagePath: widget.reel.audio.audioPicture,
           onPressed: () {
@@ -3538,6 +3597,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
             );
           },
         ),
+        const Spacer(),
       ],
     );
   }
@@ -3546,6 +3606,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
     final reelsCubit = context.read<ReelsCubit>();
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         _buildActionButton(
@@ -3556,7 +3617,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
           () async {
             await _handleLikeAction(reelsCubit);
           },
-          iconColor: Colors.red,
+          iconColor: widget.reel.likeCount == 0 ? Colors.white : Colors.red,
         ),
         _buildActionButton(
           FontAwesomeIcons.comment,
@@ -3580,7 +3641,8 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
           () async {
             await _handleSaveAction(reelsCubit);
           },
-          iconColor: Colors.yellowAccent,
+          iconColor:
+              widget.reel.saveCount == 0 ? Colors.white : Colors.yellowAccent,
         ),
         _buildActionButton(
           Icons.card_giftcard,
@@ -3659,9 +3721,9 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
           FaIcon(
             icon,
             color: iconColor ?? Colors.white,
-            size: 35,
+            size: 30,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           if (count != 0)
             Text(
               '$count',
@@ -3737,8 +3799,15 @@ class ScrollingTextState extends State<ScrollingText>
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: textSize,
-              color: AppColors.DARK_GRAY_COLOR,
+              color: AppColors.UNSELECTED_GRAY_COLOR,
               decoration: TextDecoration.none,
+              shadows: const [
+                Shadow(
+                  offset: Offset(1.0, 1.0),
+                  blurRadius: 4.0,
+                  color: Colors.black,
+                ),
+              ],
             ),
           ),
         ),
@@ -3760,45 +3829,60 @@ class RoundedButtonWithImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 30,
-      height: 40,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: const BorderSide(color: Colors.white, width: 1),
-          ),
-          padding: EdgeInsets.zero,
-        ),
-        onPressed: onPressed,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Stack(
-            children: [
-              Image.network(
-                width: double.infinity,
-                height: double.infinity,
-                imagePath,
-                color: Colors.black,
-                fit: BoxFit.fill,
+        width: 100,
+        height: 50,
+        child: FittedBox(
+          child: ElevatedButton.icon(
+              onPressed: onPressed,
+              style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(
+                Colors.blueGrey.withOpacity(0.2),
+              )),
+              icon: const Icon(
+                FontAwesomeIcons.music,
+                color: Colors.white,
               ),
-              const Positioned(
-                bottom: 4,
-                right: 4,
-                child: Center(
-                  child: FaIcon(
-                    FontAwesomeIcons.music,
-                    size: 15,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+              label: const Text(
+                'Audio',
+                style: TextStyle(color: Colors.white),
+              )),
+        )
+        // ElevatedButton(
+        //   style: ElevatedButton.styleFrom(
+        //     backgroundColor: Colors.transparent,
+        //     shadowColor: Colors.transparent,
+        //     shape: RoundedRectangleBorder(
+        //       borderRadius: BorderRadius.circular(12),
+        //       side: const BorderSide(color: Colors.white, width: 1),
+        //     ),
+        //     padding: EdgeInsets.zero,
+        //   ),
+        //   onPressed: ,
+        //   child: ClipRRect(
+        //     borderRadius: BorderRadius.circular(12),
+        //     child: Stack(
+        //       children: [
+        //         Image.network(
+        //           width: double.infinity,
+        //           height: double.infinity,
+        //           imagePath,
+        //           fit: BoxFit.fill,
+        //         ),
+        //         const Positioned(
+        //           bottom: 4,
+        //           right: 4,
+        //           child: Center(
+        //             child: FaIcon(
+        //               FontAwesomeIcons.music,
+        //               size: 15,
+        //               color: Colors.white,
+        //             ),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+        );
   }
 }

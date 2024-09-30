@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorStatisticsView extends StatelessWidget {
   const DoctorStatisticsView({super.key});
@@ -34,8 +35,8 @@ class DoctorStatisticsView extends StatelessWidget {
                     homeVisitValue: statistics.homeVisit.appointmentsCount,
                   ),
                 ),
-                const Sizer(
-                  height: 20,
+                Sizer(
+                  height: 20.h,
                 ),
                 DoctorHistoryCard(
                   title: 'Total Earned',

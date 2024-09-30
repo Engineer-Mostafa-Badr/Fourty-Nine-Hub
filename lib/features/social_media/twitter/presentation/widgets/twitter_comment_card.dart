@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TwitterCommentCard extends StatefulWidget {
   final Color textColor;
@@ -74,42 +77,22 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                     text: widget.comment.sinceTime, style: Styles.mediumText()),
               ],
             )),
-            IconButton(
-                onPressed: () {
-                  bottomSheet(
-                      context: context,
-                      widget: ReportView(
-                        id: widget.comment.id,
-                        categoryId: '',
-                      ));
-                },
-                icon: const Icon(
-                  Icons.more_vert,
-                )),
-            if (user?.id == widget.comment.user.id) ...[
-              // const Sizer(),
-              GestureDetector(
-                  onTap: () {
-                    widget.comment.edit = !widget.comment.edit!;
-                    editTextController.text = widget.comment.content ?? '';
-                    setState(() {});
-                  },
-                  child: Icon(
-                    Icons.edit,
-                    color: widget.textColor,
-                    size: 20,
-                  )),
-              const Sizer()
-            ],
             GestureDetector(
-                onTap: () {
-                  widget.onDeleteComment(widget.comment.id);
-                },
-                child: Icon(
-                  Icons.close,
-                  color: widget.textColor,
-                  size: 20,
-                ))
+              onTap: () {
+                bottomSheet(
+                  context: context,
+                  widget: _buildPostOptions(
+                    isMyComment: widget.comment.user.id == user?.id,
+                    post: widget.comment,
+                  ),
+                );
+              },
+              child: Icon(
+                Icons.more_horiz_outlined,
+                color: widget.textColor,
+                size: 20,
+              ),
+            ),
           ],
         ),
         const Sizer(),
@@ -119,35 +102,50 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
           style: Styles.mediumText(),
         ),
         if (widget.comment.edit == true)
-          Row(
-            children: [
-              Expanded(
-                  child: FormTextField(
-                      hint: 'Type your comment ....',
-                      action: (v) {
+          SizedBox(
+            height: kToolbarHeight,
+            child: Row(
+              children: [
+                Expanded(
+                    child: TextFormField(
+                  maxLines: null,
+                  controller: editTextController,
+                  onChanged: (v) {
+                    setState(() {});
+                  },
+                  style: Styles.headerText(fontSize: 26),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.all(5),
+                    hintText: '${LocaleKeys.typeYourComment.localize} ....',
+                    hintStyle: Styles.mediumText(),
+                  ),
+                )),
+                const Sizer(),
+                if (editTextController.text.isNotEmpty)
+                  IconAppButton(
+                      icon: Icons.send,
+                      isCircle: true,
+                      size: 20,
+                      onPressed: () async {
+                        var result = await widget.onEditComment(
+                            TwitterPostCommentParams(
+                                postId: widget.comment.id,
+                                content: editTextController.text));
+                        if (result == true) {
+                          widget.comment.content = editTextController.text;
+                          widget.comment.edit = false;
+                        }
                         setState(() {});
-                      },
-                      controller: editTextController)),
-              const Sizer(),
-              if (editTextController.text.isNotEmpty)
-                IconAppButton(
-                    icon: Icons.send,
-                    isCircle: true,
-                    onPressed: () async {
-                      var result = await widget.onEditComment(
-                          TwitterPostCommentParams(
-                              postId: widget.comment.id,
-                              content: editTextController.text));
-                      if (result == true) {
-                        widget.comment.content = editTextController.text;
-                        widget.comment.edit = false;
-                      }
-                      setState(() {});
-                    })
-            ],
+                      })
+              ],
+            ),
           ),
+        Sizer(
+          height: 5.h,
+        ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             InkWell(
               onTap: () {
@@ -175,11 +173,82 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
             const Sizer(),
             TextAppButton(
                 style: Styles.mediumText(),
-                label: 'Reply',
+                label: LocaleKeys.reply.localize,
                 onPressed: widget.onCommentReply)
           ],
         ),
+        Sizer(
+          height: 5.h,
+        ),
       ],
+    );
+  }
+
+  Widget _buildPostOptions(
+      {required bool isMyComment, required TwitterPostCommentEntity post}) {
+    return SizedBox(
+      height: isMyComment ? 150 : 80,
+      child: Column(
+        children: [
+          if (!isMyComment)
+            listTile(
+                icon: Icons.report,
+                iconColor: Colors.red,
+                title: LocaleKeys.reportComment.localize,
+                subTitle: LocaleKeys.youWillReportComment.localize,
+                onTap: () async {
+                  Future.delayed(const Duration(milliseconds: 200), () {
+                    bottomSheet(
+                        context: context,
+                        widget: ReportView(
+                          id: post.id,
+                          categoryId: '66a3583454e6e337915514db',
+                        ));
+                  });
+                }),
+          if (isMyComment)
+            listTile(
+                icon: Icons.delete,
+                title: LocaleKeys.deleteComment.localize,
+                subTitle: LocaleKeys.youWillDeleteComment.localize,
+                onTap: () {
+                  widget.onDeleteComment(widget.comment.id);
+                }),
+          if (isMyComment)
+            listTile(
+                icon: Icons.visibility_off,
+                title: LocaleKeys.editComment.localize,
+                subTitle: LocaleKeys.youWillEditComment.localize,
+                onTap: () {
+                  widget.comment.edit = !widget.comment.edit!;
+                  editTextController.text = widget.comment.content ?? '';
+                  setState(() {});
+                }),
+        ],
+      ),
+    );
+  }
+
+  Widget listTile(
+      {required IconData icon,
+      Color? iconColor,
+      required String title,
+      required String subTitle,
+      required Function onTap}) {
+    return ListTile(
+      title: Label(text: title),
+      onTap: () {
+        onTap();
+        context.pop();
+      },
+      leading: Icon(
+        icon,
+        color: iconColor ?? Colors.black,
+      ),
+      subtitle: Label(
+        text: subTitle,
+        style: Styles.mediumText(color: Colors.grey),
+      ),
     );
   }
 }

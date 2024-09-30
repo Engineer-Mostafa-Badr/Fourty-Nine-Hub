@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -9,6 +10,10 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/ti
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../res/style/styles.dart';
 
 class BottomSheetContent extends StatefulWidget {
   final String? receiverId;
@@ -85,29 +90,32 @@ class BottomSheetContentState extends State<BottomSheetContent> {
   }
 
   Widget _buildGiftItem(BuildContext context, GiftData gift,
-      {required String? receiverId}) {
+      {required String? receiverId, bool fromTinder = true}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap: () => _handleGiftTap(context, gift, receiverId: receiverId),
+        onTap: () => fromTinder
+            ? _handleGiftTap(context, gift, receiverId: receiverId)
+                .then((value) {
+                context.pop();
+              })
+            : print('Gift selected'),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildGiftImage(gift),
-            const SizedBox(height: 8),
-            FittedBox(
-              child: Text(
-                gift.nameEn ?? 'No Name',
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                style: const TextStyle(fontSize: 16, color: Colors.white),
-              ),
+            SizedBox(height: 8.h),
+            Label(
+              text: gift.nameEn ?? 'No Name',
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              style: Styles.smallText(color: Colors.white),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4.h),
             FittedBox(
               child: Text(
                 '${gift.value ?? 0} 💰',
-                style: const TextStyle(color: Colors.white),
+                style: Styles.mediumText(color: Colors.white),
               ),
             ),
           ],
@@ -122,18 +130,18 @@ class BottomSheetContentState extends State<BottomSheetContent> {
       fit: BoxFit.scaleDown,
       placeholderBuilder: (BuildContext context) => Image.asset(
         'assets/images/icon.png',
-        width: 50,
-        height: 50,
+        width: 80.w,
+        height: 80.h,
       ),
-      width: 50,
-      height: 50,
+      width: 80.w,
+      height: 80.h,
     );
   }
 
   Future<void> _handleGiftTap(BuildContext context, GiftData gift,
       {required String? receiverId}) async {
     final data = await context.read<TinderViewCubit>().sendGift(
-          receiverId: receiverId!,
+          receiverId: receiverId ?? "",
           subCategoryId: '66af974f8bf69f9469944746',
           giftId: gift.sId ?? '',
         );
@@ -143,43 +151,79 @@ class BottomSheetContentState extends State<BottomSheetContent> {
 
   void _handleGiftResponse({
     required BuildContext context,
-    required String response,
+    required response,
     required GiftData gift,
   }) {
     const insufficientFundsMessage =
         'You do not have enough money in your wallet.';
     const successMessage = 'has been sent successfully!';
 
-    switch (response) {
-      case '{"success":false,"error":{"name":"Bad Request","httpCode":400,"message":"You does not have enough money in the wallet","data":{},"isOperational":true,"stack":"","domain":"49dev.com"}}':
-        _showDialog(
-          context: context,
-          icon: Icons.money_off,
-          title: 'Insufficient Funds',
-          message: insufficientFundsMessage,
-          isError: true,
-        );
-        break;
-      case '{"status":true,"message":"sent Gift Successfully"}':
-        _showDialog(
-          context: context,
-          icon: Icons.card_giftcard,
-          title: 'Gift Sent',
-          message: '$successMessage\nAmount deducted: ¥${gift.value}',
-          isError: false,
-          gift: gift,
-        );
-        break;
-      default:
-        _showDialog(
-          context: context,
-          icon: Icons.error,
-          title: 'Error',
-          message: 'Unexpected response format.',
-          isError: true,
-        );
-        break;
+    if (response.toString().contains('sent Gift Successfully')) {
+      _showDialog(
+        context: context,
+        icon: Icons.card_giftcard,
+        title: 'Gift Sent',
+        message: '$successMessage\nAmount deducted: ¥${gift.value}',
+        isError: false,
+        gift: gift,
+      );
+      return;
+    } else if (response
+        .toString()
+        .contains('You does not have enough money in the wallet')) {
+      _showDialog(
+        context: context,
+        icon: Icons.money_off,
+        title: 'Insufficient Funds',
+        message: insufficientFundsMessage,
+        isError: true,
+      );
+      return;
+    } else {
+      _showDialog(
+        context: context,
+        icon: Icons.error,
+        title: 'Error',
+        message: 'Unexpected error!',
+        isError: true,
+      );
+      return;
     }
+
+    // print("--------------_handleGiftResponse -> ${response["success"]}");
+    //
+    // switch (response["success"]) {
+    // // case '{"success":false,"error":{"name":"Bad Request","httpCode":400,"message":"You does not have enough money in the wallet","data":{},"isOperational":true,"stack":"","domain":"49dev.com"}}':
+    //   case false:
+    //     _showDialog(
+    //       context: context,
+    //       icon: Icons.money_off,
+    //       title: 'Insufficient Funds',
+    //       message: insufficientFundsMessage,
+    //       isError: true,
+    //     );
+    //     break;
+    // // case '{"status":true,"message":"sent Gift Successfully"}':
+    //   case true:
+    //     _showDialog(
+    //       context: context,
+    //       icon: Icons.card_giftcard,
+    //       title: 'Gift Sent',
+    //       message: '$successMessage\nAmount deducted: ¥${gift.value}',
+    //       isError: false,
+    //       gift: gift,
+    //     );
+    //     break;
+    //   default:
+    //     _showDialog(
+    //       context: context,
+    //       icon: Icons.error,
+    //       title: 'Error',
+    //       message: 'Unexpected error!',
+    //       isError: true,
+    //     );
+    //     break;
+    // }
   }
 
   void _showDialog({
@@ -231,13 +275,13 @@ class BottomSheetContentState extends State<BottomSheetContent> {
           gift.picture ?? '',
           fit: BoxFit.scaleDown,
           placeholderBuilder: (BuildContext context) =>
-              Image.asset('assets/images/icon.png', width: 50, height: 50),
+              Image.asset('assets/images/icon.png', width: 50, height: 50.h),
           width: 50,
-          height: 50,
+          height: 50.h,
         ),
         Text(
           "${gift.nameEn} gift $message",
-          style: const TextStyle(fontSize: 16, color: Colors.black87),
+          style: TextStyle(fontSize: 16.sp, color: Colors.black87),
           textAlign: TextAlign.left,
         ),
       ],
@@ -247,7 +291,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
   Widget _buildMessageContent(String message) {
     return Text(
       message,
-      style: const TextStyle(fontSize: 16, color: Colors.black87),
+      style: TextStyle(fontSize: 16.sp, color: Colors.black87),
       textAlign: TextAlign.left,
     );
   }
@@ -263,7 +307,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         ),
-        child: const Text('OK', style: TextStyle(fontSize: 16)),
+        child: Text('OK', style: TextStyle(fontSize: 16.sp)),
       ),
       if (isError)
         TextButton(
@@ -288,7 +332,8 @@ class BottomSheetContentState extends State<BottomSheetContent> {
   }
 }
 
-void showGiftBottomSheet(BuildContext context, {required String? receiverId}) {
+void showGiftBottomSheet(BuildContext context,
+    {String? receiverId, bool fromTinder = true}) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -323,15 +368,15 @@ void showGiftBottomSheet(BuildContext context, {required String? receiverId}) {
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(20)),
                   ),
-                  child: const FittedBox(
+                  child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
-                      'Send a gift 🎁',
-                      style: TextStyle(
+                      fromTinder ? 'Send a gift 🎁' : 'Select gifts 🎁🎁🎁',
+                      style: const TextStyle(
                           color: AppColors.ACCENT_COLOR,
                           fontWeight: FontWeight.w300),
                       textAlign: TextAlign.center,
-                      textScaler: TextScaler.linear(1.6),
+                      textScaler: const TextScaler.linear(1.6),
                     ),
                   ),
                 ),

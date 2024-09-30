@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/upload_image_info.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UploadDocuments extends StatelessWidget {
   const UploadDocuments({
@@ -30,7 +31,7 @@ class UploadDocuments extends StatelessWidget {
         const UploadImageInfo(isCarImage: true, isSuccess: true, number: 2),
         const UploadImageInfo(isCarImage: false, isSuccess: true),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5.h),
           child: CustomButton(
             onTap: () {
               showModalBottomSheet(
@@ -40,7 +41,7 @@ class UploadDocuments extends StatelessWidget {
                   });
             },
             title: 'Upload',
-            height: 30,
+            height: 30.h,
           ),
         ),
         const Sizer(),

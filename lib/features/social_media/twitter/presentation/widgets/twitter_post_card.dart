@@ -4,6 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
@@ -22,6 +24,7 @@ import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/const.dart';
 import '../../../../../../res/style/styles.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // ignore: must_be_immutable
 class TwitterPostCard extends StatefulWidget {
@@ -96,8 +99,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                   post: widget.post,
                   date: widget.post.sinceTime),
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
               decoration: BoxDecoration(
                   border: isShared == true
                       ? Border.all(color: AppColors.LIGHT_GRAY_COLOR)
@@ -133,8 +136,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                             date: widget.post.isShared == true
                                 ? widget.post.mainPost?.sinceTime ?? ''
                                 : widget.post.sinceTime),
-                        const SizedBox(
-                          height: 10,
+                        SizedBox(
+                          height: 10.h,
                         ),
                         _buildContent(
                             label: widget.post.isShared == true
@@ -163,7 +166,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
 
   Widget _buildTwitterStaticsWidget(TwitterPostEntity post, bool isMain) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
+      margin: EdgeInsets.symmetric(vertical: 5.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -258,11 +261,16 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (label != null) ReadMoreLabel(text: label),
-        const Sizer(),
+        if (label != null || label != '') ...[
+          ReadMoreLabel(
+            text: label ?? '',
+            style: Styles.headerText(fontSize: 30),
+          ),
+          const Sizer(),
+        ],
         if (myImages!.isNotEmpty)
           GridView.builder(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.only(right: 10, left: 10, bottom: 10),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -301,6 +309,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                     children: [
                       ImageFromInternet(
                         image: myImages?[index] ?? '',
+                        defaultLogo: true,
                       ),
                       if (index == 3 && myImages!.length > 4)
                         Container(
@@ -336,6 +345,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
   }) {
     final user = context.read<UserCubit>().state.data;
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         post.user.image != ''
             ? UserProfileImage(
@@ -409,9 +419,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           if (isMyPost)
             listTile(
                 icon: Icons.delete,
-                title: 'Delete Post',
-                subTitle:
-                    'Your post will be deleted, and you cannot get it again',
+                title: LocaleKeys.deletePost.localize,
+                subTitle: LocaleKeys.youWillDeletePost.localize,
                 onTap: () {
                   widget.deletePost(widget.post.id);
                   // context.pop();
@@ -421,8 +430,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 }),
           listTile(
               icon: Icons.visibility_off,
-              title: 'Hide Post',
-              subTitle: 'Your post will be hidden, you can get it again',
+              title: LocaleKeys.hidePost.localize,
+              subTitle: LocaleKeys.youWillHidePost.localize,
               onTap: () {
                 widget.hidePost(widget.post.id);
                 // context.pop();

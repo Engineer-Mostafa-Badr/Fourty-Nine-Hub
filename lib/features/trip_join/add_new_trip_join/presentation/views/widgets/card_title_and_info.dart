@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 List<Widget> cardTitleAndInfo({required String title}) {
   return [
     Text(
       title,
-      style: Styles.headerText(fontSize: 24, textAlign: TextAlign.start),
+      style: Styles.headerText(fontSize: 24.sp, textAlign: TextAlign.start),
     ),
     Text(
       'Location Suggestion',
-      style: Styles.headerText(fontSize: 20, textAlign: TextAlign.start),
+      style: Styles.headerText(fontSize: 20.sp, textAlign: TextAlign.start),
     ),
     Text(
       'Please Choose the address that match what you are searching for',
-      style: Styles.mediumText(fontSize: 14, fontWeight: FontWeight.w300),
+      style: Styles.mediumText(fontSize: 14.sp, fontWeight: FontWeight.w300),
     ),
   ];
 }

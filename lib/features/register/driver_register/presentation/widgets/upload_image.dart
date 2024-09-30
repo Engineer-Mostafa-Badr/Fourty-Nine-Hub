@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UploadImageWidget extends StatefulWidget {
   final String label;
@@ -20,8 +21,8 @@ class _UploadImageWidgetState extends State<UploadImageWidget> {
       onTap: () => widget.action(),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+        padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 10),
+        margin: EdgeInsets.symmetric(vertical: 15.h, horizontal: 10),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey, width: .5),
           borderRadius: BorderRadius.circular(10),
@@ -32,8 +33,8 @@ class _UploadImageWidgetState extends State<UploadImageWidget> {
             CircleAvatar(
               child: Icon(widget.icon ?? Icons.upload),
             ),
-            const Sizer(
-              height: 5,
+            Sizer(
+              height: 5.h,
             ),
             Label(
               text: widget.label,

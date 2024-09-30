@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -84,16 +86,14 @@ class _CreateTripFormState extends State<CreateTripForm> {
           FormField(
             validator: (value) {
               return shippingcubit.validation(
-                  message: "You have to select one sub category!",
+                  message: "You have to select one sub category!".tr(),
                   condition:
                       shippingcubit.requestModel.subcategoryEntity == null);
             },
             builder: (field) {
-              log(select.toString());
               return BlocBuilder<ShippingCubit, ShippingState>(
                 builder: (context, state) {
                   if (state is SuccessGetBannerState) {
-                    log(isSelect.toString(), name: "lkjdslkjsdlkfjsdf");
                     if (!isSelect) {
                       if (widget.selectedId != null) {
                         select = getSelectedSubCategory(
@@ -107,7 +107,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                           category: MainCategoryEntity(
                               id: state.model.mainCategory?.mainCategoryId ??
                                   "",
-                              name: "Choose your favorite sub category!",
+                              name: "Choose your favorite sub category!".tr(),
                               image: state.model.mainCategory?.cover ?? "",
                               isFavorite: true,
                               total:
@@ -164,7 +164,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                       child: DefaultTextFormField(
                         validator: (value) {
                           return shippingcubit.validation(
-                              message: "You have to fill your receipt point!",
+                              message: "You have to fill your receipt point!".tr(),
                               condition: receiptPoint.text.isEmpty);
                         },
                         currentController: receiptPoint,
@@ -179,7 +179,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                       child: DefaultTextFormField(
                         validator: (value) {
                           return shippingcubit.validation(
-                              message: "You have to fill your devlivery point!",
+                              message: "You have to fill your devlivery point!".tr(),
                               condition: deliveryPoint.text.isEmpty);
                         },
                         currentController: deliveryPoint,
@@ -200,7 +200,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                       child: DefaultTextFormField(
                         validator: (value) {
                           return shippingcubit.validation(
-                              message: "You have to fill your time!",
+                              message: "You have to fill your time!".tr(),
                               condition: time == null);
                         },
                         onTap: () async {
@@ -227,7 +227,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                       child: DefaultTextFormField(
                         validator: (value) {
                           return shippingcubit.validation(
-                              message: "You have to fill your date!",
+                              message: "You have to fill your date!".tr(),
                               condition: date == null);
                         },
                         onTap: () async {
@@ -245,7 +245,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                         // hint: "نقطة الاستلام",
                         hint: date != null
                             ? "${date!.year}/${date!.month}/${date!.day}"
-                            : "Pickup Date",
+                            : "Pickup Date".tr(),
                       ),
                     )
                   ],
@@ -257,7 +257,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                 TextFormField(
                   validator: (value) {
                     return shippingcubit.validation(
-                        message: "You have to fill your description!",
+                        message: "You have to fill your description!".tr(),
                         condition: decoration.text.isEmpty);
                   },
                   controller: decoration,
@@ -316,7 +316,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                       child: DefaultTextFormField(
                         validator: (value) {
                           return shippingcubit.validation(
-                              message: "You have to fill your offer price!",
+                              message: "You have to fill your offer price!".tr(),
                               condition: offerPrice.text.isEmpty);
                         },
                         currentController: offerPrice,
@@ -333,7 +333,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                       child: DefaultTextFormField(
                         validator: (value) {
                           return shippingcubit.validation(
-                            message: "You have to fill your phone!",
+                            message: "You have to fill your phone!".tr(),
                             condition: phone.text.isEmpty,
                           );
                         },
@@ -456,18 +456,13 @@ class _CreateTripFormState extends State<CreateTripForm> {
                       scrollController.jumpTo(0);
                       if (select != null) {
                         if (select!.id == category.subcategories![index].id) {
-                          log("lkjdslkjsdlkfjsdf kkkkkkkkk");
 
                           select = null;
                         } else {
-                          log("lkjdslkjsdlkfjsdf");
                           select = category.subcategories![index];
-                          log(select?.id ?? "", name: "lkjdslkjsdlkfjsdf");
                         }
                       } else {
-                        log("lkjdslkjsdlkfjsdf");
                         select = category.subcategories![index];
-                        log(select?.id ?? "", name: "lkjdslkjsdlkfjsdf");
                       }
                       if (select != null) {
                         shippingCubit.seSubCategoryRequest(
@@ -494,7 +489,6 @@ class _CreateTripFormState extends State<CreateTripForm> {
                           shippingCubit.seSubCategoryRequest(
                               subCategory: select!);
                         }
-                        log(select.toString());
                       });
                     },
                   ),

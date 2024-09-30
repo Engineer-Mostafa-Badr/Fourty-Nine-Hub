@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 
 class AvailableTripCard extends StatelessWidget {
   const AvailableTripCard({
@@ -16,6 +18,7 @@ class AvailableTripCard extends StatelessWidget {
     this.callOnTap,
     this.messageOnTap,
     this.reportOnTap,
+    this.subscribeMessageOnTap,
   });
   final TripJoinCardEntity tripJoinCardEntity;
   final void Function()? premuimRequestOnTap;
@@ -23,10 +26,11 @@ class AvailableTripCard extends StatelessWidget {
   final void Function()? callOnTap;
   final void Function()? messageOnTap;
   final void Function()? reportOnTap;
+  final void Function()? subscribeMessageOnTap;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: EdgeInsets.symmetric(vertical: 5.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -67,14 +71,20 @@ class AvailableTripCard extends StatelessWidget {
                       Text('${tripJoinCardEntity.seatNumber ?? 1} Seat',
                           style: Styles.headerText()),
                       const Spacer(),
-                      Icon(
-                        (tripJoinCardEntity.isRepeated ?? false)
-                            ? Icons.check_box
-                            : Icons.check_box_outline_blank,
-                        color: AppColors.PRIMARY_COLOR,
+                      Visibility(
+                        visible: tripJoinCardEntity.isRepeated ?? false,
+                        child: Icon(
+                          (tripJoinCardEntity.isRepeated ?? false)
+                              ? Icons.check_box
+                              : Icons.check_box_outline_blank,
+                          color: AppColors.PRIMARY_COLOR,
+                        ),
                       ),
                       const Sizer(),
-                      Text('Repeated', style: Styles.headerText()),
+                      Visibility(
+                        visible: tripJoinCardEntity.isRepeated ?? false,
+                        child: Text('Repeated', style: Styles.headerText()),
+                      ),
                       const Sizer(width: 20),
                     ],
                   ),
@@ -102,11 +112,13 @@ class AvailableTripCard extends StatelessWidget {
                       const Icon(Icons.trip_origin,
                           color: AppColors.CHECK_MARK_COLOR, size: 20),
                       const Sizer(width: 13),
-                      Text(
-                        tripJoinCardEntity.destinationAddressEn ?? '',
-                        style: Styles.headerText(fontSize: 32),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+                      Flexible(
+                        child: Text(
+                          tripJoinCardEntity.destinationAddressEn ?? '',
+                          style: Styles.headerText(fontSize: 32),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
                       ),
                     ],
                   ),
@@ -167,16 +179,18 @@ class AvailableTripCard extends StatelessWidget {
                           title: 'Report',
                           color: AppColors.SECONDARY_COLOR,
                           icon: Icons.report,
-                          onTap: messageOnTap,
+                          onTap: reportOnTap,
                         ),
                       ),
                     ],
                   ),
                 ],
               ),
-              Positioned(
+              Positioned.directional(
                 top: 5,
-                right: 20,
+                end: 20,
+                textDirection:
+                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
                 child: Column(
                   children: [
                     Text(
@@ -195,13 +209,16 @@ class AvailableTripCard extends StatelessWidget {
           const Sizer(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              'Subscribe to contact the client!',
-              style: Styles.headerText(
-                color: Colors.red[300],
-                fontSize: 30,
+            child: InkWell(
+              onTap: subscribeMessageOnTap,
+              child: Text(
+                'Subscribe to contact the client!',
+                style: Styles.headerText(
+                  color: Colors.red[300],
+                  fontSize: 30,
+                ),
+                textAlign: TextAlign.start,
               ),
-              textAlign: TextAlign.start,
             ),
           )
         ],
@@ -213,7 +230,7 @@ class AvailableTripCard extends StatelessWidget {
     if (tripJoinCardEntity.publishDate == null) {
       return '';
     }
-    return DateFormat('dd MMM yyyy hh:mm aaa').format(
+    return intl.DateFormat('dd MMM, hh:mm aaa').format(
         DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.publishDate!));
   }
 }

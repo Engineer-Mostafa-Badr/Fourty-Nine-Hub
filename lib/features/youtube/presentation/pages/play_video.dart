@@ -5,11 +5,10 @@ import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../res/style/const.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../common/widgets/stateful/videos/video_player.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-
 import '../widgets/youtube_video_card.dart';
 
 class PlayVideo extends StatelessWidget {
@@ -98,7 +97,7 @@ class PlayVideo extends StatelessWidget {
       required Function onTap}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 5),
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5.h),
       decoration: BoxDecoration(
           color: AppColors.LIGHT_GRAY_COLOR,
           borderRadius: BorderRadius.circular(15)),

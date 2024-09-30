@@ -4,6 +4,8 @@ import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
@@ -28,6 +30,7 @@ import '../../../../../../res/style/const.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 import '../../../domain/usecases/post_react_usecase.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FacebookGlobalPostCard extends StatefulWidget {
   final PostEntity post;
@@ -149,7 +152,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                           myPost.mainPost == null)
                         SizedBox(
                           width: double.infinity,
-                          height: 100,
+                          height: 100.h,
                           child: Center(
                             child: Row(
                               children: [
@@ -160,7 +163,8 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                                 ),
                                 const Sizer(),
                                 Label(
-                                  text: "This content is not available now.",
+                                  text: LocaleKeys
+                                      .thisContentIsNotAvailableNow.localize,
                                   style: Styles.headerText(
                                     color: Colors.black,
                                   ),
@@ -207,7 +211,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                             width: 5,
                           ),
                           Label(
-                            text: 'Comments',
+                            text: LocaleKeys.comments.localize,
                             style: Styles.mediumText(),
                           )
                         ],
@@ -237,7 +241,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                               ),
                               if (widget.from == 'posts') ...[
                                 Label(
-                                    text: 'Like',
+                                    text: LocaleKeys.like.localize,
                                     style:
                                         Styles.mediumText(color: Colors.grey)),
                               ],
@@ -248,7 +252,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                       Expanded(
                         child: _buildReactionPlaceHolder(
                             icon: FontAwesomeIcons.message,
-                            label: 'Comment',
+                            label: LocaleKeys.comment.localize,
                             onTap: () {
                               context.push(Routes.LOGIN);
                             }),
@@ -256,7 +260,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                       Expanded(
                         child: _buildReactionPlaceHolder(
                             icon: FontAwesomeIcons.share,
-                            label: 'Share',
+                            label: LocaleKeys.share.localize,
                             onTap: () async {
                               context.push(Routes.LOGIN);
                             }),
@@ -321,7 +325,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                           width: 5,
                         ),
                         Label(
-                          text: 'Comments',
+                          text: LocaleKeys.comments.localize,
                           style: Styles.mediumText(),
                         )
                       ],
@@ -345,7 +349,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                       Expanded(
                         child: _buildReactionPlaceHolder(
                             icon: FontAwesomeIcons.message,
-                            label: 'Comment',
+                            label: LocaleKeys.comment.localize,
                             onTap: () {
                               context.push(Routes.LOGIN);
                             }),
@@ -353,7 +357,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                     Expanded(
                       child: _buildReactionPlaceHolder(
                           icon: FontAwesomeIcons.share,
-                          label: 'Share',
+                          label: LocaleKeys.share.localize,
                           onTap: () async {
                             context.push(Routes.LOGIN);
                           }),
@@ -376,7 +380,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
       children: [
         Image.asset(
           image,
-          height: 20,
+          height: 20.h,
         ),
         const Sizer(
           width: 5,
@@ -386,39 +390,6 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
           style: Styles.mediumText(),
         )
       ],
-    );
-  }
-
-  Widget _buildPostOptions(
-      {required bool fromDetails, required PostEntity post}) {
-    return SizedBox(
-      height: widget.isMyPost ? 150 : 80,
-      child: Column(
-        children: [
-          if (widget.isMyPost)
-            listTile(
-                icon: Icons.delete,
-                title: 'Delete Post',
-                subTitle:
-                    'Your post will be deleted, and you cannot get it again',
-                onTap: () {
-                  widget.deletePost(post.id);
-                  if (fromDetails == true) {
-                    context.pop();
-                  }
-                }),
-          listTile(
-              icon: Icons.visibility_off,
-              title: 'Hide Post',
-              subTitle: 'Your post will be hidden, you can get it again',
-              onTap: () {
-                widget.hidePost(post.id);
-                if (fromDetails == true) {
-                  context.pop();
-                }
-              }),
-        ],
-      ),
     );
   }
 
@@ -448,7 +419,6 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
     required BuildContext context,
     required PostEntity post,
   }) {
-    final user = context.read<UserCubit>().state.data;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -456,21 +426,28 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             InkWell(
-              onTap: () {
-                if (widget.fromProfile == false &&
-                    context.read<UserCubit>().isLoggedIn) {
-                  context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-                } else {
-                  context.push(Routes.LOGIN);
-                }
-              },
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                backgroundImage: NetworkImage((post.user.image.isNotEmpty)
-                    ? post.user.image
-                    : UIConst.profilePlaceHolder),
-              ),
-            ),
+                onTap: () {
+                  if (widget.fromProfile == false &&
+                      context.read<UserCubit>().isLoggedIn) {
+                    context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                  } else {
+                    context.push(Routes.LOGIN);
+                  }
+                },
+                child: ImageFromInternet(
+                  image: (post.user.image != null) ? post.user.image : '',
+                  height: 45,
+                  width: 45,
+                  isCircle: true,
+                )
+
+                // CircleAvatar(
+                //   backgroundColor: Colors.white,
+                //   backgroundImage: NetworkImage((post.user.image!=null)
+                //       ? post.user.image??''
+                //       : UIConst.profilePlaceHolder),
+                // ),
+                ),
             const Sizer(),
             Expanded(
               child: Row(
@@ -623,10 +600,10 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
             images!.isEmpty
         ? Container(
             width: double.infinity,
-            height: 220,
+            height: 220.h,
             alignment: Alignment.center,
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+            margin: EdgeInsets.symmetric(vertical: 10.h),
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
             color: images.isEmpty
                 ? Color(int.parse(backgroundColor.substring(1), radix: 16))
                 : Colors.white,
@@ -640,14 +617,14 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
           )
         : Container(
             width: double.infinity,
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+            margin: EdgeInsets.symmetric(vertical: 10.h),
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ReadMoreLabel(text: content),
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: 10.h,
                 ),
                 if ((images?.isNotEmpty ?? false))
                   SizedBox(
@@ -696,6 +673,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                                     children: [
                                       ImageFromInternet(
                                         image: images[index],
+                                        defaultLogo: true,
                                       ),
                                       if (index == 3 && images.length > 4)
                                         Container(
@@ -752,7 +730,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
               color: AppColors.GREY_DARK_COLOR,
               size: 20,
             ),
-            // const Sizer(),
+            // Sizer(),
             Label(text: label, style: Styles.mediumText(color: Colors.grey))
           ],
         ),
@@ -768,7 +746,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
         children: [
           if (post.feeling != null || post.activity != null) ...[
             Text(
-              'feeling ${post.feeling != null ? post.feeling?.name ?? '' : ''}${post.activity != null ? ', ${post.activity?.name}' : ''}',
+              '${LocaleKeys.feeling.localize} ${post.feeling != null ? post.feeling?.name ?? '' : ''}${post.activity != null ? ', ${post.activity?.name}' : ''}',
               style: Styles.mediumText(),
             ),
             const SizedBox(
@@ -779,7 +757,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
             Row(
               children: [
                 Label(
-                  text: 'with: ',
+                  text: '${LocaleKeys.withKey.localize}: ',
                   style: Styles.mediumText(),
                 ),
                 GestureDetector(

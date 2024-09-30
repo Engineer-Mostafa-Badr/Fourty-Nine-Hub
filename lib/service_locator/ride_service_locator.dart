@@ -75,15 +75,14 @@ class RideServiceLocator {
         () => DriverDashboardRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<CreateShippingRepo>(
         () => CreateShippingRepoImpl(serviceLocator()));
-    serviceLocator.registerLazySingleton(
-        () => ReiderRequestRepository(dataSource: serviceLocator()));
+    serviceLocator.registerLazySingleton(() => ReiderRequestRepository(
+        dataSource: serviceLocator(), socket: serviceLocator()));
     // serviceLocator.registerLazySingleton<TripJoinRepo>(
     //     () => TripJoinRepoImp(tripJoinRemoteDataSource: serviceLocator()));
     // serviceLocator.registerLazySingleton<TripJoinRemoteDataSource>(
     //     () => TripJoinRemoteDataSourceImp(apiConsumer: serviceLocator()));
     // cubit
     serviceLocator.registerFactory<RiderequestCubit>(() => RiderequestCubit(
-          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
@@ -119,7 +118,7 @@ class RideServiceLocator {
         )..loadData());
     serviceLocator
         .registerFactory<LocationSocketCubit>(() => LocationSocketCubit(
-              socketIoService: serviceLocator(),
+              repository: serviceLocator(),
             ));
     serviceLocator
         .registerFactory<DriverRegisterCubit>(() => DriverRegisterCubit(

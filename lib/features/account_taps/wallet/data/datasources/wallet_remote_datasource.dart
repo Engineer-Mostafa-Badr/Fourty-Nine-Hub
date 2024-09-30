@@ -1,55 +1,160 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/data/models/competition_model.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/competition_entity.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_entity.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_history_entity.dart';
+import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
+import '../../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../domain/entities/wallet/main_category_entity.dart';
+import '../../domain/entities/wallet/wallet_history_entity.dart';
+import '../../domain/entities/wallet/wallet_subscription_entity.dart';
+import '../../domain/usecases/add_subscribe_use_case.dart';
+import '../../domain/usecases/delete_subscription_use_case.dart';
+import '../../domain/usecases/get_wallet_history_use_case.dart';
+import '../../domain/usecases/main_category_use_case.dart';
+import '../models/wallet/main_category_model.dart';
+import '../models/wallet/wallet_history_model.dart';
+import '../models/wallet/wallet_model.dart';
+import '../models/wallet/wallet_subscription_model.dart';
 
-import '../../../../../core/enums/wallet_types_enums.dart';
-import '../../../../../res/assets/jsons.dart';
-import '../models/wallet_history_model.dart';
+abstract class WalletRemoteDataSource {
+  Future<Either<Failure, WalletModel>> getWallet();
 
-abstract class WalletRemoteDataSouce {
-  Future<Either<Failure, WalletEntity>> getWallet();
-  Future<Either<Failure, List<WalletHistoryEntity>>> getWalletHistory(
-      {required WalletTypes type});
-  Future<Either<Failure, List<CompetitionEntity>>> getCompetitions();
+  Future<Either<Failure, List<WalletHistoryEntity>>> fetchHistoryWallet(
+      WalletHistoryParams params);
+
+  Future<Either<Failure, List<WalletSubscriptionEntity>>>
+      fetchSubscriptionWallet();
+
+  Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchMainCategory(
+      MainCategoryParams params);
+
+  Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchSubCategory(
+      MainCategoryParams params);
+
+  Future<Either<Failure, bool>> deleteSubscription(
+      DeleteSubscriptionParams params);
+
+  Future<Either<Failure, bool>> addSubscription(AddSubscriptionParams params);
 }
 
-class WalletRemoteDataSouceImpl implements WalletRemoteDataSouce {
-  final JsonParser _apiConsumer;
-  WalletRemoteDataSouceImpl(this._apiConsumer);
+class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
+  final ApiConsumer _apiConsumer;
+
+  WalletRemoteDataSourceImpl(this._apiConsumer);
+
   @override
-  Future<Either<Failure, List<CompetitionEntity>>> getCompetitions() async {
-    final response = await _apiConsumer.get(Jsons.competitionList);
+  // Future<Either<Failure, List<CompetitionEntity>>> getCompetitions() async {
+  //   final response = await _apiConsumer.get(Jsons.competitionList);
+  //   return response.fold(
+  //       (l) => Left(l),
+  //       (data) => Right((data['data']['items'] as List)
+  //           .map((e) => CompetitionModel.fromJson(e))
+  //           .toList()));
+  // }
+
+  @override
+  Future<Either<Failure, WalletModel>> getWallet() async {
+    final response = await _apiConsumer.get(EndPoints.getWallet);
+
     return response.fold(
-        (l) => Left(l),
-        (data) => Right((data['data']['items'] as List)
-            .map((e) => CompetitionModel.fromJson(e))
-            .toList()));
+      (failure) => Left(failure),
+      (response) => Right(WalletModel.fromJson(response['data'])),
+    );
   }
 
   @override
-  Future<Either<Failure, WalletEntity>> getWallet() {
-    // TODO: implement getWallet
-    throw UnimplementedError();
+  Future<Either<Failure, List<WalletHistoryEntity>>> fetchHistoryWallet(
+      WalletHistoryParams params) async {
+    final response = await _apiConsumer.get(EndPoints.getHistoryWallet(),
+        queryParameters: params.paginationParams.toJson());
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data'] as List)
+          .map((e) => WalletHistoryModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
   }
 
   @override
-  Future<Either<Failure, List<WalletHistoryEntity>>> getWalletHistory(
-      {required WalletTypes type}) async {
-    String json = Jsons.walletHistoryList;
-    if (type == WalletTypes.balance) {
-      json = Jsons.balanceHistoryList;
-    } else if (type == WalletTypes.giftWallet) {
-      json = Jsons.giftHistoryList;
-    }
-    final response = await _apiConsumer.get(json);
+  Future<Either<Failure, List<WalletSubscriptionModel>>>
+      fetchSubscriptionWallet() async {
+    final response = await _apiConsumer.get(EndPoints.getSubscription);
+
     return response.fold(
-        (l) => Left(l),
-        (data) => Right((data['data']['items'] as List)
-            .map((e) => WalletHistoryModel.fromJson(e))
-            .toList()));
+      (failure) => Left(failure),
+      (response) {
+        final list = (response['data'] as List)
+            .map((e) => WalletSubscriptionModel.fromJson(e))
+            .toList();
+        return Right(list);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchMainCategory(
+      MainCategoryParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.geMainCategoryWallet(),
+      queryParameters: params.paginationParams.toJson(),
+    );
+
+    return response.fold(
+      (failure) => Left(failure),
+      (response) {
+        final list = (response['data']['mainCategories'] as List)
+            .map((e) => MainCategoryWalletModel.fromJson(e))
+            .toList();
+        return Right(list);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchSubCategory(
+      MainCategoryParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.geSubCategoryWallet(params.id!),
+      queryParameters: params.paginationParams.toJson(),
+    );
+
+    return response.fold(
+      (failure) => Left(failure),
+      (response) {
+        final list = (response['data']['subcategories'] as List)
+            .map((e) => MainCategoryWalletModel.fromJson(e))
+            .toList();
+        return Right(list);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteSubscription(
+      DeleteSubscriptionParams params) async {
+    final response = await _apiConsumer.delete(
+      EndPoints.deleteSubscription(params.subscriptionId!),
+    );
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> addSubscription(
+      AddSubscriptionParams params) async {
+    final response =
+        await _apiConsumer.post(EndPoints.addSubscription(), data: {
+      'subCategoryId': params.subCategoryId,
+      'paymentMethodType': params.paymentMethod,
+      'isPremium': params.isPremium,
+      'period': params.period,
+      'periodType': params.periodType,
+    });
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
+    );
   }
 }

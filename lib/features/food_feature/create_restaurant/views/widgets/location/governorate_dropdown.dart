@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/crea
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreateRestaurantGovernorateDropdown extends StatelessWidget {
   const CreateRestaurantGovernorateDropdown(
@@ -71,7 +72,7 @@ class CreateRestaurantGovernorateDropdown extends StatelessWidget {
                   if (field.hasError)
                     Column(
                       children: [
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
                         Text(
                           field.errorText ?? "",
                           style: Styles.mediumText(color: Colors.red),

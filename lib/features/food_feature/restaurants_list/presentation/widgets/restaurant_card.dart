@@ -7,6 +7,7 @@ import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RestaurantCard extends StatelessWidget {
   final Restaurant? item;
@@ -41,8 +42,8 @@ class RestaurantCard extends StatelessWidget {
                       top: 10,
                       left: 10,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 2),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 2.h),
                         decoration: BoxDecoration(
                             color: AppColors.SECONDARY_COLOR,
                             borderRadius: BorderRadius.circular(5)),

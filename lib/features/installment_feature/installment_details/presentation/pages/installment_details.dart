@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
@@ -72,7 +73,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                       _buildPlansWidget(context: context),
                       AppButton(
                           label:
-                              '${Labels.buyWithInstallment} ${NumbersHelper.formatThousands(number: state.selectedPlan?.installment ?? 0)} ${Labels.currency} / ${Labels.month}',
+                              '${Labels.buyWithInstallment} ${NumbersHelper.formatThousands(number: state.selectedPlan?.installment ?? 0)} ${Labels.month}',
                           onPressed: () {
                             if (AuthHelper().isLoggedIn()) {
                               controller.buyWithInstallment(
@@ -147,7 +148,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
             itemBuilder: (context, index) {
               final detail = ad.details[index];
               return Container(
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
                 decoration: BoxDecoration(
                     color: index.isEven
                         ? AppColors.LIGHT_GRAY_COLOR
@@ -207,8 +208,8 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                         onTap: () => controller.changeInstallmentPlan(v: e),
                         child: Container(
                           margin: const EdgeInsets.all(3),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 2),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 2.h),
                           decoration: BoxDecoration(
                               color: e == state.selectedPlan
                                   ? AppColors.SECONDARY_COLOR
@@ -262,8 +263,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                 return WidgetSpan(
                     child: Container(
                   margin: const EdgeInsets.all(3),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2.h),
                   decoration: BoxDecoration(
                       color: e == 0 ? AppColors.SECONDARY_COLOR : null,
                       borderRadius: BorderRadius.circular(5),

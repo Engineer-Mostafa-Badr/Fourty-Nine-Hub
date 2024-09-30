@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/meal_category_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MealCategories extends StatelessWidget {
   const MealCategories({super.key});
@@ -19,7 +20,7 @@ class MealCategories extends StatelessWidget {
 
       if (state.mealCategories != null && state.mealCategories!.isNotEmpty) {
         return SizedBox(
-          height: 200,
+          height: 200.h,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -1,14 +1,11 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/detail_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_all_comewithme_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_all_pickme_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_come_with_me_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_pick_me_usecase.dart';
-import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
-import 'package:fourtyninehub/features/requests_history/domain/entities/address_entity.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../requests_history/domain/entities/trip_entity.dart';
@@ -17,13 +14,13 @@ import '../../domain/usecases/get_ads_usecase.dart';
 
 part 'ads_state.dart';
 
-class AdsCubit extends Cubit<AdsState> {
+class AdvertisementCubit extends Cubit<AdsState> {
   final GetAdsUseCase _getAdsUseCase;
   final GetAllPickMeUseCase _getAllPickMeUseCase;
   final GetAllComeWithMeUseCase _getAllComeWithMeUseCase;
   final RequestPickMeUseCase _requestPickMeUseCase;
   final RequestComeWithMeUseCase _requestComeWithMeUseCase;
-  AdsCubit(
+  AdvertisementCubit(
       this._getAdsUseCase,
       this._getAllComeWithMeUseCase,
       this._getAllPickMeUseCase,
@@ -31,60 +28,56 @@ class AdsCubit extends Cubit<AdsState> {
       this._requestPickMeUseCase)
       : super(const AdsState());
 
-  void loadData({required String subCategoryId}) async {
-    emit(state.copyWith(status: AdsStates.loading));
-    if (getRideServiceEnum(value: subCategoryId) == RideServicesEnum.pickMe) {
-      await getPickMeAds();
-    } else if (getRideServiceEnum(value: subCategoryId) ==
-        RideServicesEnum.comeWithYou) {
-      await getComeWithMeAds();
-    } else {
-      await getAds(subCategoryId: subCategoryId);
-    }
+  // void loadData({required String subCategoryId,required String filter}) async {
+  //   // emit(state.copyWith(status: AdsStates.loading));
+  //   if (getRideServiceEnum(value: subCategoryId) == RideServicesEnum.pickMe) {
+  //     await getPickMeAds();
+  //   } else if (getRideServiceEnum(value: subCategoryId) ==
+  //       RideServicesEnum.comeWithYou) {
+  //     await getComeWithMeAds();
+  //   } else {
+  //     await getAds(subCategoryId: subCategoryId,filter: filter);
+  //   }
+  // }
+
+  void loadData({required String subCategoryId, required String filter}) async {
+    await getAds(subCategoryId: subCategoryId, filter: filter, page: 1);
+    adsPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getAds(subCategoryId: subCategoryId, filter: filter, page: pageKey);
+    });
   }
 
-  Future<void> getAds({required String subCategoryId}) async {
-    final response = await _getAdsUseCase(subCategoryId);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: AdsStates.error)),
-        (data) => emit(state.copyWith(
-            ads: List.generate(
-                6,
-                (index) => AdModel(
-                    id: 'id',
-                    title: 'title',
-                    description: 'description',
-                    images: ['images'],
-                    price: 500,
-                    address: AddressEntity(
-                        id: '',
-                        coordinates: [],
-                        address: '',
-                        street: '',
-                        flat: '',
-                        building: '',
-                        firstName: '',
-                        lastName: '',
-                        phone: ''),
-                    phone: 'phone',
-                    user: const UserEntity(
-                        id: '',
-                        firstName: '',
-                        lastName: '',
-                        email: '',
-                        profilePicture: '',
-                        profileCover: '',
-                        friendsCount: null,
-                        followersCount: null,
-                        followingCount: null,
-                        wallet: 0),
-                    active: true,
-                    details: [
-                      DetailEntiy(label: 'label', type: 'type', value: 'value')
-                    ],
-                    createdAt: DateTime.now())),
-            status: AdsStates.initState)));
+  void onRefresh() async {
+    adsPagingController.refresh();
+  }
+
+  final PagingController<int, AdModel> adsPagingController =
+      PagingController(firstPageKey: 1);
+  getAds(
+      {required String subCategoryId,
+      required String filter,
+      required int page}) async {
+    final response = await _getAdsUseCase(GetAdsParams(
+        subCategoryId: subCategoryId, filter: filter, page: page, limit: 10));
+    response
+        .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
+            (data) async {
+      final isLastPage = data.length < 10;
+      if (page == 1) {
+        print("page == 1 $page");
+        adsPagingController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        adsPagingController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        adsPagingController.appendPage(data, nextPageKey);
+      }
+      emit(state.copyWith(ads: data, status: AdsStates.success));
+    });
   }
 
   Future<void> getPickMeAds() async {

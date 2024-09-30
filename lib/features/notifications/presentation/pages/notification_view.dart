@@ -1,124 +1,141 @@
-import 'package:dio/dio.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubit/notifications_state.dart';
-import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_card.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/all_notifications_seen/all_notfications_seen_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/delete_all_notifications/delete_all_notifications_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/delete_notification/delete_notification_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_seen/notification_seen_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/widgets/app_icon_builder.dart';
+import 'package:fourtyninehub/features/notifications/presentation/widgets/app_notification_builder.dart';
+import 'package:fourtyninehub/features/notifications/presentation/widgets/services_icon_builder.dart';
+import 'package:fourtyninehub/features/notifications/presentation/widgets/services_notification_builder.dart';
+import 'package:fourtyninehub/features/notifications/presentation/widgets/social_icon_builder.dart';
+import 'package:fourtyninehub/features/notifications/presentation/widgets/social_notification_builder.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
-import '../../../../core/utils/api_service.dart';
-import '../../../../res/assets/assets.dart';
 import '../../../../res/style/styles.dart';
-import '../../data/repository/notification_repo_impl.dart';
-import '../cubit/notifications_cubit.dart';
 
-class NotificationView extends StatelessWidget {
+class NotificationView extends StatefulWidget {
   const NotificationView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) =>
-          NotificationsCubit(NotificationRepoImpl(ApiService(Dio())))
-            ..fetchNotification('app'),
-      child: BlocBuilder<NotificationsCubit, NotificationsState>(
-        builder: (BuildContext context, state) {
-          return DefaultTabController(
-              length: 3,
-              child: Scaffold(
-                appBar: const HomeAppbar(
-                  color: Colors.red,
-                ),
-                body: state is NotificationsSuccessState
-                    ? Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Label(
-                                  text: LocaleKeys.notifications.localize,
-                                  //  text: state.notificationModel.data!.docs![0].bodyTranslationCode!,
-                                  style: Styles.headerText(),
-                                ),
-                                TextAppButton(
-                                    style: const TextStyle(
-                                        color: AppColors.SECONDARY_COLOR),
-                                    label: LocaleKeys.clearAll.localize,
-                                    onPressed: () {
-                                      showAreYouSure(
-                                          title: LocaleKeys.alert.localize,
-                                          subTitle: LocaleKeys
-                                              .clearNotification.localize,
-                                          action: () {},
-                                          context: context);
-                                    }),
-                              ],
-                            ),
-                            const Sizer(),
-                            TabBar(tabs: [
-                              Tab(
-                                icon: SvgPicture.asset(Assets.social,
-                                    height: 20, semanticsLabel: 'social'),
-                              ),
-                              Tab(
-                                icon: Image.asset(
-                                  Assets.hand,
-                                  height: 20,
-                                ),
-                              ),
-                              Tab(
-                                icon: Image.asset(
-                                  Assets.logo,
-                                  height: 20,
-                                ),
-                              ),
-                            ]),
-                            Expanded(
-                                child: TabBarView(children: [
-                              const SizedBox.shrink(),
-                              const SizedBox.shrink(),
-                              state.notificationModel.data!.docs!.isNotEmpty
-                                  ? _buildNotificationWidget(state: state)
-                                  : Center(
-                                      child: Text(
-                                        'There are no notifications.',
-                                        style: Styles.mediumText(fontSize: 35),
-                                      ),
-                                    ),
-                            ]))
-                          ],
-                        ))
-                    : const Center(child: CircularProgressIndicator()),
-              ));
-        },
-      ),
-    );
-  }
+  State<NotificationView> createState() => _NotificationViewState();
+}
 
-  Widget _buildNotificationWidget({
-    // required NotificationDoc notificationDoc,
-    required state,
-  }) {
-    return RefreshIndicator.adaptive(
-      onRefresh: () async {},
-      child: ListView.separated(
-          itemBuilder: (context, index) {
-            return NotificationCard(
-              notificationDoc: state.notificationModel.data!.docs[index],
-            );
-          },
-          separatorBuilder: (context, index) => const Divider(),
-          itemCount: state.notificationModel.data!.docs!.length),
+class _NotificationViewState extends State<NotificationView> {
+  @override
+  Widget build(BuildContext context) {
+    // serviceLocator<FirebaseHelper>().getToken();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<NotificationSeenCubit>(
+          create: (context) => NotificationSeenCubit(
+            notificationSeenUseCase: serviceLocator(),
+          ),
+        ),
+        BlocProvider<AllNotficationsSeenCubit>(
+          create: (context) => AllNotficationsSeenCubit(
+            allNotificationSeenUseCase: serviceLocator(),
+          ),
+        ),
+        BlocProvider<DeleteNotificationCubit>(
+          create: (context) => DeleteNotificationCubit(
+            deleteNotificationUseCase: serviceLocator(),
+          ),
+        ),
+        BlocProvider<DeleteAllNotificationsCubit>(
+          create: (context) => DeleteAllNotificationsCubit(
+            deleteAllNotificationsUseCase: serviceLocator(),
+          ),
+        ),
+      ],
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<NotificationSeenCubit, NotificationSeenState>(
+            listener: (context, state) {
+              if (state is NotificationSeenFailed) {
+                showErrorMessage(context, state.message);
+              }
+            },
+          ),
+          BlocListener<AllNotficationsSeenCubit, AllNotficationsSeenState>(
+            listener: (context, state) {
+              if (state is AllNotficationsSeenFailed) {
+                showErrorMessage(context, state.message);
+              }
+            },
+          ),
+          BlocListener<DeleteNotificationCubit, DeleteNotificationState>(
+            listener: (context, state) {
+              if (state is DeleteNotificationFailed) {
+                showErrorMessage(context, state.message);
+              }
+            },
+          ),
+          BlocListener<DeleteAllNotificationsCubit,
+              DeleteAllNotificationsState>(
+            listener: (context, state) {
+              if (state is DeleteAllNotificationsFailed) {
+                showErrorMessage(context, state.message);
+              }
+            },
+          ),
+        ],
+        child: DefaultTabController(
+          length: 3,
+          child: Scaffold(
+              appBar: const HomeAppbar(
+                color: Colors.red,
+              ),
+              body: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Label(
+                      text: LocaleKeys.notifications.localize,
+                      style: Styles.headerText(),
+                    ),
+                    const Sizer(),
+                    const TabBar(
+                      tabs: [
+                        SocialIconBuilder(),
+                        ServicesIconBuilder(),
+                        AppIconBuilder(),
+                      ],
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        children: [
+                          GestureDetector(
+                            onHorizontalDragStart: (_) {},
+                            onHorizontalDragEnd: (_) {},
+                            child: const SocialNotificationBuilder(),
+                          ),
+                          GestureDetector(
+                            onHorizontalDragStart: (_) {},
+                            onHorizontalDragEnd: (_) {},
+                            child: const ServicesNotificationBuilder(),
+                          ),
+                          GestureDetector(
+                            onHorizontalDragStart: (_) {},
+                            onHorizontalDragEnd: (_) {},
+                            child: const AppNotificationBuilder(),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )),
+        ),
+      ),
     );
   }
 }

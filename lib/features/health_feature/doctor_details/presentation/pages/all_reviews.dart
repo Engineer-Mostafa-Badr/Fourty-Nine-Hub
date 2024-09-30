@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/stateless/dynamic/rating_stars.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -38,7 +39,7 @@ class AllReviews extends StatelessWidget {
     required String label,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: EdgeInsets.symmetric(vertical: 10.h),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
         borderRadius: BorderRadius.circular(10),

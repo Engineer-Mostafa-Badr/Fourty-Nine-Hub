@@ -25,6 +25,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/request_document_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/share_twitter_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 part 'twitter_state.dart';
@@ -459,6 +460,7 @@ class TwitterCubit extends Cubit<TwitterState> {
 
   removeBackId() {
     print('Before: ${state.backId?.mediaId}');
+    UploadFileEntity backId = UploadFileEntity(mediaId: '', file: XFile(''));
     state.copyWith(backId: null);
     state.copyWith(status: StateStatus.success);
     print(state.backId?.mediaId);

@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/animations/create_custom_transition.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 // import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_state.dart';
@@ -18,9 +20,9 @@ import 'package:fourtyninehub/features/zoom/presentation/widgets/schedule_meetin
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
-
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
@@ -38,17 +40,19 @@ class MeetingView extends StatelessWidget {
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 16.zH),
-            BlocBuilder<MeetingCubit, MeetingState>(
+            SizedBox(height: 16.h),
+            BlocBuilder<StreamCubit, StreamState>(
               builder: (context, state) {
-                var cubit = context.read<MeetingCubit>();
+                var cubit = context.read<StreamCubit>();
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildMeetingItem(
                       color: AppColors.SECONDARY_COLOR,
-                      label: 'New \n Meeting'.tr(),
+                      label: context.isArabic
+                          ? '${LocaleKeys.meeting.localize} \n ${LocaleKeys.nnew.localize}'
+                          : '${LocaleKeys.nnew.localize} \n ${LocaleKeys.meeting.localize}',
                       icon: Icons.video_call,
                       twoLines: true,
                       onTap: () async {
@@ -74,7 +78,7 @@ class MeetingView extends StatelessWidget {
                     ),
                     _buildMeetingItem(
                         color: AppColors.PRIMARY_COLOR,
-                        label: 'join'.tr(),
+                        label: LocaleKeys.join.localize,
                         icon: Icons.add_box_rounded,
                         onTap: () {
                           // join meeting
@@ -85,7 +89,7 @@ class MeetingView extends StatelessWidget {
                         }),
                     _buildMeetingItem(
                       color: AppColors.PRIMARY_COLOR,
-                      label: 'Schedule'.tr(),
+                      label: LocaleKeys.schedule.localize,
                       icon: Icons.calendar_today_outlined,
                       onTap: () async {
                         _scheduleAMeeting(context);
@@ -93,7 +97,8 @@ class MeetingView extends StatelessWidget {
                     ),
                     _buildMeetingItem(
                         color: AppColors.PRIMARY_COLOR,
-                        label: 'Share\nScreen'.tr(),
+                        label:
+                            '${LocaleKeys.share.localize} \n ${LocaleKeys.screen.localize}',
                         icon: Icons.screen_share,
                         twoLines: true,
                         onTap: () {
@@ -109,7 +114,7 @@ class MeetingView extends StatelessWidget {
             ),
             const Divider(),
             SizedBox(
-              height: 40.zH,
+              height: 40.h,
             ),
             Align(
               alignment: Alignment.center,
@@ -117,17 +122,19 @@ class MeetingView extends StatelessWidget {
                 onTap: () {
                   _scheduleAMeeting(context);
                 },
-                child: const Text(
-                  'Add a calender',
+                child: Text(
+                  LocaleKeys.addAcalender.localize,
                   style: TextStyle(
-                      color: AppColors.PRIMARY_COLOR,
-                      fontSize: 16,
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR,
+                      fontSize: 32.sp,
                       fontWeight: FontWeight.w600),
                 ),
               ),
             ),
             SizedBox(
-              height: 10.zH,
+              height: 10.h,
             ),
             _scheduledMeetings()
           ],
@@ -138,7 +145,7 @@ class MeetingView extends StatelessWidget {
     return Container(
       constraints:
           const BoxConstraints(maxHeight: double.infinity, minHeight: 400),
-      child: BlocListener<MeetingCubit, MeetingState>(
+      child: BlocListener<StreamCubit, StreamState>(
         listener: (context, state) {
           if (state.isFailure) {
             showErrorMessage(
@@ -150,19 +157,18 @@ class MeetingView extends StatelessWidget {
           }
           if (state.isGotScheduledMeeting) {}
         },
-        child: BlocBuilder<MeetingCubit, MeetingState>(
+        child: BlocBuilder<StreamCubit, StreamState>(
           builder: (context, state) {
+            print('schedule state is  ${state.toString()}');
             CliLogger.warning('WARNING state is updated${state.status}');
             if (state.isLoading) {
               // print('data is loading');
-              return const Center(
-                child: CircularProgressIndicator.adaptive(),
-              );
+              return Container();
             }
             if (state.scheduledMeeting == null) {
               // print('data is null');
               return Container();
-            } else if (state.isGotScheduledMeeting) {
+            } else if (state.isGotScheduledMeeting || state.isSuccess) {
               return ListView.builder(
                   itemCount: state.scheduledMeeting!.length,
                   shrinkWrap: true,
@@ -176,16 +182,22 @@ class MeetingView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          color: Colors.grey[400],
+                          color: context.isDarkMode
+                              ? Colors.black87
+                              : Colors.grey[400],
                           width: double.maxFinite,
-                          padding: EdgeInsets.only(
-                            left: 30.zW,
-                            top: 5.zH,
-                            bottom: 5.zH,
+                          padding: EdgeInsetsDirectional.only(
+                            start: 30.w,
+                            top: 5.h,
+                            bottom: 5.h,
                           ),
                           child: Label(
                             text: formatDateString(scheduledMeeting.startDate),
-                            style: Styles.headerText(fontSize: 25),
+                            style: Styles.headerText(
+                                fontSize: 25,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.grey),
                           ),
                         ),
                         Padding(
@@ -198,43 +210,61 @@ class MeetingView extends StatelessWidget {
                                   Label(
                                     text: getHour(scheduledMeeting.startDate),
                                     style: Styles.headerText(
-                                        fontSize: 25, color: Colors.grey[600]),
+                                        fontSize: 25,
+                                        color: context.isDarkMode
+                                            ? Colors.white
+                                            : Colors.grey[600]),
                                   ),
                                   Label(
                                     text: getPeriod(scheduledMeeting.startDate),
                                     style: Styles.headerText(
-                                        fontSize: 18, color: Colors.grey[600]),
+                                        fontSize: 18,
+                                        color: context.isDarkMode
+                                            ? Colors.white
+                                            : Colors.grey[600]),
                                   ),
                                 ],
                               ),
                               Column(
                                 children: [
-                                  SizedBox(height: 5.zH),
+                                  SizedBox(height: 5.h),
                                   Label(
                                     text: scheduledMeeting.title,
-                                    style: Styles.headerText(fontSize: 25),
+                                    style: Styles.headerText(
+                                        fontSize: 25,
+                                        color: context.isDarkMode
+                                            ? Colors.white
+                                            : Colors.grey[600]),
                                   ),
-                                  SizedBox(height: 5.zH),
+                                  SizedBox(height: 5.h),
                                   Label(
                                     text:
-                                        'Meeting ID: ${scheduledMeeting.roomId}',
+                                        '${LocaleKeys.meetingId.localize} ${scheduledMeeting.roomId}',
                                     style: Styles.headerText(
-                                        fontSize: 20, color: Colors.grey[600]),
+                                        fontSize: 20,
+                                        color: context.isDarkMode
+                                            ? Colors.white
+                                            : Colors.grey[600]),
                                   ),
                                 ],
                               ),
-                              SizedBox(width: 15.zW),
+                              SizedBox(width: 15.h),
                               InkWell(
                                 onTap: () {
-                                  context.go(Routes.MEETINGROOM,
-                                      extra: ZegoArgs(
-                                          scheduledMeeting.roomId,
-                                          true,
-                                          context
-                                              .read<UserCubit>()
-                                              .state
-                                              .data!
-                                              .fullName));
+                                  //to unschedule
+                                  joinRoom(context.read<StreamCubit>(),
+                                      scheduledMeeting.roomId);
+                                  if (context.mounted) {
+                                    context.go(Routes.MEETINGROOM,
+                                        extra: ZegoArgs(
+                                            scheduledMeeting.roomId,
+                                            true,
+                                            context
+                                                .read<UserCubit>()
+                                                .state
+                                                .data!
+                                                .fullName));
+                                  }
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.all(8),
@@ -243,7 +273,7 @@ class MeetingView extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
-                                    'Start Now',
+                                    LocaleKeys.startNow.localize,
                                     style:
                                         Styles.smallText(color: Colors.white),
                                   ),
@@ -263,6 +293,10 @@ class MeetingView extends StatelessWidget {
     );
   }
 
+  Future<bool> joinRoom(StreamCubit cubit, String liveId) async {
+    return cubit.joinNewMeeting(liveId);
+  }
+
   String formatDateString(String dateString) {
     // Parse the input date string
     DateTime dateTime = DateTime.parse(dateString).toLocal();
@@ -275,11 +309,11 @@ class MeetingView extends StatelessWidget {
     // Compare the date and return the appropriate string
     if (dateTime.isAfter(today.subtract(const Duration(seconds: 1))) &&
         dateTime.isBefore(tomorrow)) {
-      return 'Today';
+      return LocaleKeys.tommorow.localize;
     } else if (dateTime
             .isAfter(tomorrow.subtract(const Duration(seconds: 1))) &&
         dateTime.isBefore(tomorrow.add(const Duration(days: 1)))) {
-      return 'Tomorrow';
+      return LocaleKeys.today.localize;
     } else {
       // Format the date as dd/MM
       return DateFormat('d/M').format(dateTime);
@@ -299,14 +333,14 @@ class MeetingView extends StatelessWidget {
     return period;
   }
 
-  Future<void> newMeeting(MeetingCubit cubit) async {
+  Future<void> newMeeting(StreamCubit cubit) async {
     cubit.createNewMeeting();
   }
 
   void _scheduleAMeeting(BuildContext context) {
     Navigator.of(context).push(createCustomTransitionRoute(
         BlocProvider.value(
-          value: serviceLocator<MeetingCubit>(),
+          value: serviceLocator<StreamCubit>(),
           child: const ScheduleMeetingScreen(),
         ),
         TransitionType.bottomToTop));
@@ -325,7 +359,7 @@ class MeetingView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            // height: 80,
+            // height: 80.h,
             // width: 80,
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
@@ -337,7 +371,7 @@ class MeetingView extends StatelessWidget {
             ),
           ),
           Sizer(
-            height: twoLines ? 10.zH : 30.zH,
+            height: twoLines ? 10.h : 30.h,
           ),
           Label(
               text: label,

@@ -39,6 +39,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/remove_friend_request_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/remove_suggest_user_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/search_users_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/send_greet_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/share_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
@@ -160,6 +161,11 @@ class FaceBookServiceLocator {
         ));
 
     serviceLocator
+        .registerLazySingleton<SearchUsersUsecase>(() => SearchUsersUsecase(
+              serviceLocator(),
+            ));
+
+    serviceLocator
         .registerLazySingleton<DeleteCommentUseCase>(() => DeleteCommentUseCase(
               serviceLocator(),
             ));
@@ -237,6 +243,7 @@ class FaceBookServiceLocator {
         ));
 
     serviceLocator.registerFactory<SocialPostsCubit>(() => SocialPostsCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

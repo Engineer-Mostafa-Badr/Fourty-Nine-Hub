@@ -13,7 +13,6 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_ot
 import 'package:fourtyninehub/features/authentication/domain/use_cases/send_forget_password_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_forget_password_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_otp_use_case.dart';
-
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
@@ -27,8 +26,15 @@ class AuthRepositoryImpl extends AuthRepository {
   );
 
   @override
-  Future<Either<Failure, UserTokensEntity>> login(LoginParams params) {
-    return _remoteDataSource.login(params);
+  Future<Either<Failure, UserTokensEntity>> login(LoginParams params) async {
+    final result = await _remoteDataSource.login(params);
+
+    return result.fold(
+      (failure) => Left(failure),
+      (token) {
+        return Right(token);
+      },
+    );
   }
 
   @override

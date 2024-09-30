@@ -15,6 +15,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../res/strings/labels.dart';
@@ -86,7 +87,7 @@ class _VisitaBookingState extends State<VisitaBooking> {
                       Expanded(
                         child: AppButton(
                             color: AppColors.LIGHT_COLOR,
-                            height: 50,
+                            height: 50.h,
                             label: "${Labels.premium} ${Labels.book}",
                             onPressed: () {
                               serviceLocator<SubscriptionController>()
@@ -109,7 +110,7 @@ class _VisitaBookingState extends State<VisitaBooking> {
                       const Sizer(),
                       Expanded(
                         child: AppButton(
-                            height: 50,
+                            height: 50.h,
                             color: AppColors.LIGHT_COLOR,
                             label: Labels.book,
                             backColor: AppColors.PRIMARY_COLOR,
@@ -117,9 +118,9 @@ class _VisitaBookingState extends State<VisitaBooking> {
                       ),
                     ],
                   ),
-                  // const Sizer(),
+                  // Sizer(),
                   //
-                  // const Sizer(),
+                  // Sizer(),
                 ],
               ),
             );

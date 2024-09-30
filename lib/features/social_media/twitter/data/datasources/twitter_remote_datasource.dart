@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
@@ -90,7 +91,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   Future<Either<Failure, TwitterPostEntity>> getTwitterPost(
       {required String postId}) async {
     final response = await _apiConsumer.get(
-        "${EndPoints.createTwitterPost}/$postId?subCategory=66a3583454e6e337915514db");
+        "/twitter/post/$postId?subCategory=${Constants.twitterSubCategory}");
 
     return response.fold((l) {
       return Left(l);

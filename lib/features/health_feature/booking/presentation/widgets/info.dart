@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BookDoctorAppointmentCardInfo extends StatelessWidget {
   final IconData icon;
@@ -15,7 +16,7 @@ class BookDoctorAppointmentCardInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
+      margin: EdgeInsets.symmetric(vertical: 5.h),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -31,9 +32,9 @@ class BookDoctorAppointmentCardInfo extends StatelessWidget {
                 color: AppColors.PRIMARY_COLOR,
               ),
               Container(
-                height: 2,
+                height: 2.h,
                 width: kToolbarHeight * .5,
-                margin: const EdgeInsets.symmetric(vertical: 5),
+                margin: EdgeInsets.symmetric(vertical: 5.h),
                 color: AppColors.SECONDARY_COLOR,
               )
             ],

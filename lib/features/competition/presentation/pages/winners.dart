@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/competition/presentation/cubit/winner_cubit/winner_cubit.dart';
+import 'package:fourtyninehub/features/competition/presentation/cubit/winner_cubit/winner_state.dart';
+import 'package:fourtyninehub/features/competition/presentation/view/widgets/winner_card.dart';
 
-import '../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/const.dart';
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/styles.dart';
+import '../../../../service_locator/service_locator.dart';
+import '../../data/repository/competition_repo_impl.dart';
 
 class Winners extends StatelessWidget {
   const Winners({super.key});
@@ -14,64 +17,44 @@ class Winners extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, childAspectRatio: .6),
-            itemBuilder: (context, index) {
-              return winnerCard(isWinner: true);
-            }),
+      appBar: BackAppBar(
+        centerTitle: false,
+        label: LocaleKeys.winners.localize,
       ),
-    );
-  }
-
-  Widget winnerCard({bool isWinner = false}) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Icon(
-              Icons.star,
-              size: 14,
-              color: AppColors.ACCENT_COLOR,
-            ),
-            Column(
-              children: [
-                Icon(
-                  FontAwesomeIcons.crown,
-                  color: AppColors.ACCENT_COLOR,
+      body: BlocProvider(
+        create: (context) =>
+            WinnerCubit(serviceLocator.get<CompetitionRepoImpl>())
+              ..fetchWinners(context),
+        child: BlocBuilder<WinnerCubit, WinnerState>(
+          builder: (BuildContext context, state) {
+            if (state is WinnersSuccessState) {
+              return Padding(
+                padding: const EdgeInsets.all(10),
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3, childAspectRatio: .6),
+                  itemBuilder: (context, index) {
+                    return WinnerCard(
+                      isWinner: true,
+                      model: state.winnersModel.data![index],
+                    );
+                  },
+                  itemCount: state.winnersModel.data!.length,
                 ),
-                Sizer(),
-              ],
-            ),
-            Icon(
-              Icons.star,
-              size: 14,
-              color: AppColors.ACCENT_COLOR,
-            ),
-          ],
+              );
+            } else if (state is WinnersErrorState) {
+              return Center(
+                child: Text(
+                  state.errMessage,
+                  textAlign: TextAlign.center,
+                  style: Styles.mediumText(),
+                ),
+              );
+            }
+            return const Center(child: CircularProgressIndicator());
+          },
         ),
-        CircleAvatar(
-          radius: isWinner ? 42 : 35,
-          backgroundColor:
-              isWinner ? AppColors.ACCENT_COLOR : AppColors.PRIMARY_COLOR,
-          child: CircleAvatar(
-            radius: isWinner ? 40 : 33,
-            backgroundColor: Colors.white,
-            backgroundImage: const NetworkImage(UIConst.profilePlaceHolder),
-          ),
-        ),
-        const Sizer(),
-        Label(
-            text: 'Farouk Shahin',
-            style: Styles.mediumText(fontWeight: FontWeight.w500)),
-        Label(text: '200\$', style: Styles.mediumText()),
-      ],
+      ),
     );
   }
 }

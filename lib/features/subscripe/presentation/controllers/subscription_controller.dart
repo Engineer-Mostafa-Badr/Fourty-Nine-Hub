@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/subscripe/domain/usecases/get_active_subs
 import 'package:fourtyninehub/features/subscripe/presentation/widgets/amounts.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+
 import '../../domain/usecases/check_if_user_subscribed_usecase.dart';
 import '../../domain/usecases/get_subscription_plans_usecase.dart';
 import '../../domain/usecases/subscribe_usecase.dart';
@@ -50,20 +51,26 @@ class SubscriptionController {
     });
   }
 
+  bool _isBottomSheetShown = false;
   Future<void> showSubscriptionPlans(
       {List<WalletTypes>? wallets,
       required String subCategoryId,
       String? title}) async {
-    showLoadingDialog(context);
-    final plansResponse = await _getSubscriptionPlansUseCase(subCategoryId);
-    AppPages.router.pop();
-    plansResponse.fold(
-        (l) => showErrorMessage(
-              context,
-              Labels.errorHappened,
-            ), (plans) {
-      bottomSheet(
-          isScrollControlled: true,
+    if (!_isBottomSheetShown) {
+      _isBottomSheetShown = true;
+
+      // Example wallets data or pass in your actual wallet list
+      //List<WalletTypes> wallets = [];
+
+      showLoadingDialog(context);
+      Navigator.of(context).pop(); // Close loading dialog
+
+      final plansResponse = await _getSubscriptionPlansUseCase(subCategoryId);
+      plansResponse.fold((l) {
+        showErrorMessage(context, Labels.errorHappened);
+        _isBottomSheetShown = false; // Reset flag on error
+      }, (plans) {
+        bottomSheet(
           context: context,
           backColor: Theme.of(context).scaffoldBackgroundColor,
           widget: SubscriptionPlansWidget(
@@ -71,8 +78,12 @@ class SubscriptionController {
             subscribePlans: plans,
             subCategoryId: subCategoryId,
             paymentMenthods: wallets,
-          ));
-    });
+          ),
+        );
+      });
+
+      _isBottomSheetShown = false; // Reset flag after bottom sheet is shown
+    }
   }
 
   Future<void> showActiveSubscriptionAmounts(

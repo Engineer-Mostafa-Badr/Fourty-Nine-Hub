@@ -4,6 +4,8 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
@@ -46,19 +48,19 @@ class _UserTweetsState extends State<UserTweets> {
       }, builder: (context, state) {
         final controller = context.read<TwitterCubit>();
         return PagedSliverList<int, TwitterPostEntity>(
-          // padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+          // padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
           pagingController: controller.userTweetsPagingController,
           // shrinkWrap: true,
           // physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           builderDelegate: PagedChildBuilderDelegate<TwitterPostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.userTweetsPagingController.itemList?.length);
-                return const Padding(
-                    padding: EdgeInsets.only(top: 200),
+                return Padding(
+                    padding: const EdgeInsets.only(top: 200),
                     child: Center(
                       child: Text(
-                        "No Posts",
-                        style: TextStyle(
+                        LocaleKeys.noTweets.localize,
+                        style: const TextStyle(
                           fontSize: 18,
                         ),
                       ),

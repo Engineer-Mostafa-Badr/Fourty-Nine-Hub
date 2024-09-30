@@ -4,6 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -11,6 +13,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../../res/style/styles.dart';
 import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreatePostBanner extends StatelessWidget {
   const CreatePostBanner({super.key});
@@ -24,9 +27,9 @@ class CreatePostBanner extends StatelessWidget {
         children: [
           context.read<UserCubit>().isLoggedIn
               ? UserProfileImage(
-                  userId: context.read<UserCubit>().state.data!.id,
+                  userId: context.read<UserCubit>().state.data?.id ?? '',
                   imageURL:
-                      context.read<UserCubit>().state.data!.profilePicture,
+                      context.read<UserCubit>().state.data?.profilePicture,
                   accountId: 0,
                 )
               : const ProfileImage(
@@ -44,13 +47,13 @@ class CreatePostBanner extends StatelessWidget {
                   : context.push(Routes.CREATEPOST, extra: 'facebook');
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+              padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey, width: .5),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Label(
-                text: 'What do you think about?',
+                text: LocaleKeys.whatDoYouThink.localize,
                 style: Styles.mediumText(color: Colors.grey),
               ),
             ),
@@ -65,13 +68,13 @@ class CreatePostBanner extends StatelessWidget {
               children: [
                 SvgPicture.asset(
                   Assets.reels,
-                  height: 20,
+                  height: 20.h,
                 ),
-                const Sizer(
-                  height: 3,
+                Sizer(
+                  height: 3.h,
                 ),
                 Label(
-                  text: 'Reel',
+                  text: LocaleKeys.reels.localize,
                   style: Styles.smallText(),
                 ),
               ],

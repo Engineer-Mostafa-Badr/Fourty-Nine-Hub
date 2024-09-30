@@ -21,7 +21,7 @@ class SubscriptoinAmountsWidget extends StatefulWidget {
 }
 
 class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
-  num groupValue = 0;
+  num? groupValue;
 
   String newIndex = '';
   num newAmount = 0;
@@ -35,12 +35,9 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
           style: Styles.headerText(color: Colors.red, fontSize: 40),
         ),
         const Sizer(),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            "Select amount to charge",
-            style: Styles.mediumText(),
-          ),
+        Text(
+          "select amount to charge",
+          style: Styles.mediumText(),
         ),
         const Sizer(),
         Expanded(
@@ -75,11 +72,13 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
         ElevatedAppButton(
           label: 'Charge Now',
           onPressed: () {
-            context.push(Routes.PAYMENT,
-                extra: PaymobLink(
-                    amountId: newIndex,
-                    // providerId: "667331f44fbaddc4357d612b",
-                    amount: newAmount));
+            if (groupValue != null) {
+              context.push(Routes.PAYMENT,
+                  extra: PaymobLink(
+                      amountId: newIndex,
+                      // providerId: "667331f44fbaddc4357d612b",
+                      amount: newAmount));
+            }
           },
         ),
       ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
@@ -64,7 +65,7 @@ class MazadatView extends StatelessWidget {
     return BlocBuilder<AuctionListCubit, AuctionListState>(
         builder: (context, state) {
       return Container(
-        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10),
         width: kToolbarHeight * 2,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
@@ -127,8 +128,8 @@ class MazadatView extends StatelessWidget {
             //   },
             //   child: Container(
             //     height: kToolbarHeight * .5,
-            //     margin: const EdgeInsets.only(left: 10),
-            //     padding: const EdgeInsets.symmetric(horizontal: 10),
+            //     margin: EdgeInsets.only(left: 10),
+            //     padding: EdgeInsets.symmetric(horizontal: 10),
             //     decoration: BoxDecoration(
             //         borderRadius: BorderRadius.circular(5),
             //         border: Border.all(color: AppColors.PRIMARY_COLOR),

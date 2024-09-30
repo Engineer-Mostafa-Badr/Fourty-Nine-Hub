@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
@@ -59,8 +60,8 @@ class DriverRequests extends StatelessWidget {
                                     .showActiveSubscriptionAmounts(
                                         walletType: WalletTypes.balance);
                               },
-                              child: const Text(
-                                "Subscribe to send offer / contact the client",
+                              child: Text(
+                                "Subscribe to send offer / contact the client".tr(),
                                 style:
                                     TextStyle(fontSize: 16, color: Colors.red),
                               ),

@@ -12,6 +12,7 @@ import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
   const BookDoctorAppointmentPatientInfoCard({super.key});
@@ -26,8 +27,7 @@ class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
           children: [
             Container(
               width: double.infinity,
-              padding:
-                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+              padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.0),
               decoration: BoxDecoration(
                 border: Border.all(color: AppColors.GREY_BORDER_COLOR),
                 borderRadius: BorderRadius.circular(8.0),

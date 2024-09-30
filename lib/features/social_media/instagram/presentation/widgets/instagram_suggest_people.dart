@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
@@ -51,16 +54,16 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Label(
-                        text: "Suggested For You",
+                        text: LocaleKeys.suggestedForYou.localize,
                         style: Styles.headerText(),
                       ),
                       Container(
                         alignment: AlignmentDirectional.topStart,
-                        height: 250,
+                        height: 250.h,
                         child: PagedListView<int, SuggestUserEntity>(
                           scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 5),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 8.h, horizontal: 5),
                           pagingController:
                               controller.suggestUserPagingController,
                           shrinkWrap: true,
@@ -71,12 +74,14 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                   noItemsFoundIndicatorBuilder: (context) {
                                     print(controller.suggestUserPagingController
                                         .itemList?.length);
-                                    return const Padding(
-                                        padding: EdgeInsets.only(top: 200),
+                                    return Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 200),
                                         child: Center(
                                           child: Label(
-                                            text: "No friends suggested",
-                                            style: TextStyle(
+                                            text: LocaleKeys
+                                                .noFriendsSuggested.localize,
+                                            style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 18,
                                             ),
@@ -89,7 +94,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                         .itemList![index];
                                     return InkWell(
                                       onTap: () {
-                                        context.push(Routes.OTHERSACCOUNT,
+                                        context.push(Routes.INSTAGRAMPROFILE,
                                             extra: controller
                                                 .suggestUserPagingController
                                                 .itemList?[index]
@@ -104,24 +109,46 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                 end: 10),
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(20),
+                                              BorderRadius.circular(4),
                                           border: Border.all(
                                               color: AppColors.DARK_GRAY_COLOR),
                                         ),
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                              CrossAxisAlignment.center,
                                           children: [
+                                            Align(
+                                              alignment:
+                                                  AlignmentDirectional.topEnd,
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  bool data = await controller
+                                                      .removeSuggestUser(
+                                                          context: context,
+                                                          userId: item.id);
+                                                  if (data == true) {
+                                                    controller
+                                                        .suggestUserPagingController
+                                                        .itemList
+                                                        ?.removeWhere((e) =>
+                                                            e.id ==
+                                                            controller
+                                                                .suggestUserPagingController
+                                                                .itemList?[
+                                                                    index]
+                                                                .id);
+                                                    setState(() {});
+                                                  }
+                                                },
+                                                child: const Icon(Icons.close),
+                                              ),
+                                            ),
                                             Expanded(
                                               child: ImageFromInternet(
                                                 image: item.profilePicture,
-                                                // height: 220,
-                                                width: 300,
-                                                borderRadius:
-                                                    const BorderRadius.only(
-                                                  topLeft: Radius.circular(20),
-                                                  topRight: Radius.circular(20),
-                                                ),
+                                                height: 120.h,
+                                                width: 120.w,
+                                                isCircle: true,
                                               ),
                                             ),
                                             Padding(
@@ -130,10 +157,10 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                       horizontal: 8.0),
                                               child: Column(
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                    CrossAxisAlignment.center,
                                                 children: [
-                                                  const SizedBox(
-                                                    height: 10,
+                                                  SizedBox(
+                                                    height: 10.h,
                                                   ),
                                                   Label(
                                                     text:
@@ -141,14 +168,15 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                     maxLines: 1,
                                                     style: Styles.mediumText(),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 10,
+                                                  SizedBox(
+                                                    height: 10.h,
                                                   ),
                                                   item.sendWelcomeSuccessfully ==
                                                           true
                                                       ? Label(
-                                                          text:
-                                                              "Message sent successfully",
+                                                          text: LocaleKeys
+                                                              .messageSentSuccessfully
+                                                              .localize,
                                                           style:
                                                               Styles.mediumText(
                                                                   color: Colors
@@ -195,20 +223,23 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                           title:
                                                                               Label(
                                                                             text:
-                                                                                'Enter Greet Message',
+                                                                                LocaleKeys.enterGreetMessage.localize,
                                                                             style:
                                                                                 Styles.headerText(),
                                                                           ),
                                                                           content:
-                                                                              TextFormField(
+                                                                              TextField(
+                                                                            // focusNode: focusNode,
+                                                                            maxLines:
+                                                                                null,
+                                                                            maxLength:
+                                                                                150,
+                                                                            onChanged:
+                                                                                (c) {},
                                                                             controller:
                                                                                 messageController,
-                                                                            onChanged:
-                                                                                (c) {
-                                                                              setState(() {});
-                                                                            },
                                                                             decoration: InputDecoration(
-                                                                                hintText: "Greet Message",
+                                                                                hintText: LocaleKeys.greetMessage.localize,
                                                                                 fillColor: Colors.white,
                                                                                 hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
                                                                           ),
@@ -218,7 +249,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                                 Navigator.of(context).pop(); // Close the dialog
                                                                               },
                                                                               child: Label(
-                                                                                text: 'Cancel',
+                                                                                text: LocaleKeys.cancel.localize,
                                                                                 style: Styles.headerText(),
                                                                               ),
                                                                             ),
@@ -227,7 +258,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                                 if (messageController.text.isNotEmpty) {
                                                                                   await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
                                                                                   controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
-                                                                                  showSuccessMessage(context, 'Message send successfully');
+                                                                                  showSuccessMessage(context, LocaleKeys.messageSentSuccessfully.localize);
                                                                                   Navigator.of(context).pop();
                                                                                   setState(() {});
                                                                                 }
@@ -238,7 +269,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                                 decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(15)),
                                                                                 alignment: Alignment.center,
                                                                                 child: Label(
-                                                                                  text: 'Send',
+                                                                                  text: LocaleKeys.send.localize,
                                                                                   style: Styles.headerText(color: Colors.white),
                                                                                 ),
                                                                               ),
@@ -252,14 +283,15 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                 child: item.sendWelcomeSuccessfully ==
                                                                         true
                                                                     ? Label(
-                                                                        text:
-                                                                            'Message send successfully',
+                                                                        text: LocaleKeys
+                                                                            .messageSentSuccessfully
+                                                                            .localize,
                                                                         style: Styles
                                                                             .headerText(),
                                                                       )
                                                                     : Container(
                                                                         height:
-                                                                            30,
+                                                                            25,
                                                                         alignment:
                                                                             Alignment.center,
                                                                         decoration:
@@ -268,7 +300,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                               ? Border.all()
                                                                               : null,
                                                                           borderRadius:
-                                                                              BorderRadius.circular(5),
+                                                                              BorderRadius.circular(4),
                                                                           color: item.followSuccessfully == false
                                                                               ? AppColors.PRIMARY_COLOR
                                                                               : Colors.white,
@@ -276,74 +308,16 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                                                         child:
                                                                             Label(
                                                                           text: item.followSuccessfully == false
-                                                                              ? 'Follow'
-                                                                              : "Send Greet Message",
+                                                                              ? LocaleKeys.follow.localize
+                                                                              : LocaleKeys.sendGreetMessage.localize,
                                                                           style: Styles.mediumText(
                                                                               color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
-                                                                              fontSize: 14,
+                                                                              fontSize: 22,
                                                                               fontWeight: FontWeight.bold),
                                                                         ),
                                                                       ),
                                                               ),
                                                             ),
-                                                            const SizedBox(
-                                                              width: 10,
-                                                            ),
-                                                            if (item.addedSuccessfully ==
-                                                                false)
-                                                              Expanded(
-                                                                child: InkWell(
-                                                                  onTap:
-                                                                      () async {
-                                                                    bool data = await controller.removeSuggestUser(
-                                                                        context:
-                                                                            context,
-                                                                        userId:
-                                                                            item.id);
-                                                                    if (data ==
-                                                                        true) {
-                                                                      controller
-                                                                          .suggestUserPagingController
-                                                                          .itemList
-                                                                          ?.removeWhere((e) =>
-                                                                              e.id ==
-                                                                              controller.suggestUserPagingController.itemList?[index].id);
-                                                                      setState(
-                                                                          () {});
-                                                                    }
-                                                                  },
-                                                                  child:
-                                                                      Container(
-                                                                    height: 30,
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              5),
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                    child:
-                                                                        Label(
-                                                                      text:
-                                                                          'Remove',
-                                                                      style: Styles.mediumText(
-                                                                          color: Colors
-                                                                              .black,
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontWeight:
-                                                                              FontWeight.bold),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            // Expanded(
-                                                            //     child: DefaultButton(
-                                                            //         onPressed: () {}))
                                                           ],
                                                         ),
                                                 ],

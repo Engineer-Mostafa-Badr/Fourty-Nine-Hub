@@ -15,6 +15,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateless/dynamic/rating_stars.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorCard extends StatelessWidget {
   final DoctorEntity doctor;
@@ -69,8 +70,8 @@ class DoctorCard extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12.0, vertical: 6.0),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.h),
                   decoration: BoxDecoration(
                     color: doctor.isPremium ? Colors.black : Colors.white,
                     borderRadius: BorderRadius.circular(20.0),
@@ -97,7 +98,7 @@ class DoctorCard extends StatelessWidget {
                       fontWeight: doctor.isPremium
                           ? FontWeight.bold
                           : FontWeight.normal,
-                      fontSize: 16.0,
+                      fontSize: 16.sp,
                     ),
                   ),
                 ),

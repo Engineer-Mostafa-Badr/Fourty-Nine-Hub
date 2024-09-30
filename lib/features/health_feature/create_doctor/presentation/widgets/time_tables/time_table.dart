@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Timetable extends StatelessWidget {
   final String title;
@@ -64,7 +65,7 @@ class _WeekWidgetState extends State<_WeekWidget> {
 
   Widget _buildDayWidget(DoctorDayEntity time) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
       child: Row(
         children: [
           Checkbox(
@@ -103,7 +104,7 @@ class _WeekWidgetState extends State<_WeekWidget> {
                 style: Styles.mediumText(),
                 children: [
                   TextSpan(
-                    text: time.from.display,
+                    text: time.from.formattedIn12Hour,
                     style: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR),
                   ),
                 ],
@@ -135,7 +136,7 @@ class _WeekWidgetState extends State<_WeekWidget> {
                 style: Styles.mediumText(),
                 children: [
                   TextSpan(
-                    text: time.to.display,
+                    text: time.to.formattedIn12Hour,
                     style: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR),
                   ),
                 ],

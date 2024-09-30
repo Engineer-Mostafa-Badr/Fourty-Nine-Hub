@@ -1,23 +1,25 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/media_view.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/saved_reels_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/instagram_suggest_people.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_reels.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -61,7 +63,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                         child: Container(
                             width: double.infinity,
                             padding: const EdgeInsetsDirectional.only(
-                                top: 25, end: 10, start: 10),
+                                top: 35, end: 10, start: 10),
                             child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -76,7 +78,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                           )),
                                       Label(
                                           text:
-                                              '@${state.profileData?.email.split('@')[0]}',
+                                              '${state.profileData?.email.split('@')[0]}',
                                           style: Styles.mediumText(
                                               color: Colors.grey)),
                                       const Sizer(
@@ -85,7 +87,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                       const Icon(
                                         Icons.verified,
                                         size: 20,
-                                        color: Colors.blue,
+                                        color: AppColors.PRIMARY_COLOR_DARK,
                                       )
                                     ],
                                   ),
@@ -97,21 +99,19 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                         ),
                                         itemBuilder: (context) {
                                           return [
-                                            if (loginUser?.id !=
-                                                state.profileData?.id)
-                                              PopupMenuItem<int>(
-                                                value: 4,
-                                                child: const Text("Report"),
-                                                onTap: () {
-                                                  bottomSheet(
-                                                      context: context,
-                                                      widget: ReportView(
-                                                        id: widget.userId,
-                                                        categoryId:
-                                                            '66b77e77bb35968b535dc944',
-                                                      ));
-                                                },
-                                              ),
+                                            PopupMenuItem<int>(
+                                              value: 4,
+                                              child: const Text("Report"),
+                                              onTap: () {
+                                                bottomSheet(
+                                                    context: context,
+                                                    widget: ReportView(
+                                                      id: widget.userId,
+                                                      categoryId:
+                                                          '66b77e77bb35968b535dc944',
+                                                    ));
+                                              },
+                                            ),
                                             if (loginUser?.id !=
                                                 state.profileData?.id)
                                               PopupMenuItem<int>(
@@ -203,11 +203,17 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                       controller.changeUserPage(i);
                                     },
                                     tabs: [
-                                      const Tab(
-                                        icon: Icon(Icons.menu),
+                                      Tab(
+                                        icon: Image.asset(
+                                          Assets.userMedia,
+                                          width: 30,
+                                        ),
                                       ),
-                                      const Tab(
-                                        icon: FaIcon(FontAwesomeIcons.youtube),
+                                      Tab(
+                                        icon: Image.asset(
+                                          Assets.userReels,
+                                          width: 30,
+                                        ),
                                       ),
                                       if (context
                                               .read<UserCubit>()
@@ -215,9 +221,11 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                               .data
                                               ?.id ==
                                           widget.userId)
-                                        const Tab(
-                                          icon: FaIcon(
-                                              FontAwesomeIcons.solidSave),
+                                        Tab(
+                                          icon: Image.asset(
+                                            Assets.savedReels,
+                                            width: 30,
+                                          ),
                                         ),
                                     ]),
                                 // _buildAccountPages(state.profileData!),
@@ -234,7 +242,9 @@ class _InstagramProfileState extends State<InstagramProfile> {
                     ),
                     state.profilePage == 0 &&
                             state.profileData?.isBlock == false
-                        ? const MediaView()
+                        ? MediaView(
+                            userId: widget.userId,
+                          )
                         : state.profilePage == 1 &&
                                 state.profileData?.isBlock == false
                             ? UserReels(
@@ -242,7 +252,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                               )
                             : state.profilePage == 2 &&
                                     state.profileData?.isBlock == false
-                                ? SavedReelsView(userData: state.profileData!)
+                                ? Container()
                                 : const SliverToBoxAdapter(
                                     child: SizedBox.shrink(),
                                   ),
@@ -261,44 +271,104 @@ class _InstagramProfileState extends State<InstagramProfile> {
       required GestureTapCallback? showHideSuggestPeople,
       required bool showSuggestPeople}) {
     final loginUser = context.read<UserCubit>().state.data;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 50,
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.white,
-                  backgroundImage: CachedNetworkImageProvider(
-                      user.profilePicture ?? UIConst.profilePlaceHolder),
-                ),
-              ),
-              const Sizer(
-                width: 20,
-              ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    print('followers${user.followers}');
+    return BlocBuilder<SocialPostsCubit, SocialPostsState>(
+        builder: (context, state) {
+      final controller = context.read<SocialPostsCubit>();
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              children: [
+                Stack(
+                  alignment: AlignmentDirectional.bottomEnd,
                   children: [
-                    _buildCounter(
-                      value: '${user.posts ?? 0} ',
-                      label: 'Post',
-                    ),
-                    const Sizer(),
-                    _buildCounter(
-                      value: '${user.friendsCount} ',
-                      label: 'Friend',
-                    ),
-                    const Sizer(),
-                    _buildCounter(
-                      value: '${user.followersCount} ',
-                      label: 'Follower',
-                    ),
-                    if (loginUser?.id == user.id) ...[
+                    state.newImage != null
+                        ? CircleAvatar(
+                            radius: 40,
+                            child: CircleAvatar(
+                              radius: 40,
+                              backgroundColor: Colors.white,
+                              backgroundImage:
+                                  FileImage(File(state.newImage!.file.path)),
+                            ),
+                          )
+                        : ImageFromInternet(
+                            image: user.profilePicture ??
+                                UIConst.profilePlaceHolder,
+                            height: 80.h,
+                            width: 80,
+                            isCircle: true,
+                          ),
+                    if (loginUser?.id == user.id)
+                      InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Wrap(
+                                children: <Widget>[
+                                  ListTile(
+                                    leading: const Icon(Icons.photo_library),
+                                    title: const Text('Gallery'),
+                                    onTap: () async {
+                                      Navigator.pop(context);
+                                      await controller.uploadPhoto(
+                                          isGallery: true);
+                                      // Reload user data if needed
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: const Icon(Icons.camera_alt),
+                                    title: const Text('Camera'),
+                                    onTap: () async {
+                                      Navigator.pop(context);
+                                      await controller.uploadPhoto(
+                                          isGallery: false);
+                                      // Reload user data if needed
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.PRIMARY_COLOR),
+                            child: Icon(
+                              Icons.camera_alt_outlined,
+                              color: Colors.white,
+                              size: 32.w,
+                            )),
+                      )
+                  ],
+                ),
+                const Sizer(
+                  width: 20,
+                ),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildCounter(
+                        value: '${user.instagramPosts ?? 0} ',
+                        label: 'Post',
+                      ),
+                      const Sizer(),
+                      _buildCounter(
+                        value: '${user.friendsCount} ',
+                        label: 'Friend',
+                      ),
+                      const Sizer(),
+                      _buildCounter(
+                        value: '${user.followersCount} ',
+                        label: 'Follower',
+                      ),
                       const Sizer(
                         width: 5,
                       ),
@@ -306,251 +376,309 @@ class _InstagramProfileState extends State<InstagramProfile> {
                         value: '${user.totalView} ',
                         label: 'View',
                       ),
-                    ],
-                    const Sizer(
-                      width: 5,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Sizer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Label(
-                          text: "${user.firstName} ${user.lastName}",
-                          style:
-                              Styles.headerText(fontWeight: FontWeight.w600)),
                       const Sizer(
                         width: 5,
                       ),
                     ],
                   ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Sizer(),
+                RichText(
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: "${user.firstName} ${user.lastName}",
+                          style: Styles.headerText(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black)),
+                      if (user.job.isNotEmpty)
+                        TextSpan(
+                            text: '\t(${user.job})',
+                            style: Styles.headerText(
+                                color: Colors.black, fontSize: 26)),
+                    ])),
+                Sizer(
+                  height: 4.h,
+                ),
+                Label(
+                    text: '@ ${user.email.split('@')[0]}',
+                    style: Styles.mediumText(color: Colors.grey)),
+                Sizer(
+                  height: 4.h,
+                ),
+                if (user.bio.isNotEmpty)
+                  Label(
+                      text: user.bio,
+                      style: Styles.mediumText(color: Colors.black)),
+                Sizer(
+                  height: 5.h,
+                ),
+                if (user.city.isNotEmpty ||
+                    user.job.isNotEmpty ||
+                    user.country.isNotEmpty ||
+                    user.phone.isNotEmpty)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (user.city.isNotEmpty || user.country.isNotEmpty) ...[
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Label(
+                                text:
+                                    '${user.country}${user.city.isNotEmpty ? ',' : ''} ${user.city}',
+                                style: Styles.headerText(
+                                    color: Colors.black, fontSize: 26),
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Sizer(
+                          height: 5.h,
+                        ),
+                      ],
+                      if (user.phone.isNotEmpty) ...[
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Label(
+                                text: user.phone,
+                                style: Styles.headerText(
+                                    color: Colors.black, fontSize: 26),
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Sizer(
+                          height: 5.h,
+                        ),
+                      ],
+                      if (user.job.isNotEmpty)
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Label(
+                                text: user.job,
+                                style: Styles.headerText(
+                                    color: Colors.black, fontSize: 26),
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
+              ],
+            ),
+          ),
+          if (user.followers != null && user.followers!.isNotEmpty)
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.h),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: user.followers!.length == 1
+                        ? 25
+                        : user.followers!.length == 2
+                            ? 40
+                            : 60,
+                    height: 32.h,
+                    child: Stack(
+                      children: List.generate(
+                        user.followers!.length < 3 ? user.followers!.length : 3,
+                        (index) => Positioned(
+                            top: 0,
+                            left: index == 0
+                                ? 0
+                                : index == 1
+                                    ? 16
+                                    : 32,
+                            child: const ProfileImage(
+                              userId: '',
+                              accountId: 0,
+                              imageURL: UIConst.profilePlaceHolder,
+                              withBorder: false,
+                            )),
+                      ),
+                    ),
+                  ),
+                  const Sizer(),
+                  Expanded(
+                      child: Row(
+                    children: [
+                      Expanded(
+                        child: RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text:
+                                  '${user.followers!.isNotEmpty ? '${user.followers![0].firstName} ${user.followers![0].lastName}' : ''} ${user.followers!.length > 1 ? '${user.followers![1].firstName} ${user.followers![1].lastName}' : ''}',
+                              style: Styles.mediumText(color: Colors.black)),
+                          if (user.followers!.length > 2)
+                            TextSpan(
+                                text:
+                                    '\tand ${user.followers!.length - 2} others',
+                                style: Styles.mediumText(color: Colors.grey)),
+                        ])),
+                      ),
+                    ],
+                  ))
                 ],
               ),
-              const Sizer(
-                height: 4,
-              ),
-              Label(
-                  text: '@ ${user.email.split('@')[0]}',
-                  style: Styles.mediumText(color: Colors.grey)),
-              const Sizer(
-                height: 4,
-              ),
-              const Sizer(
-                height: 5,
-              ),
-              Label(
-                  text: user.bio,
-                  style: Styles.mediumText(color: Colors.black)),
-              const Sizer(
-                height: 5,
-              ),
-              if (user.city.isNotEmpty ||
-                  user.job.isNotEmpty ||
-                  user.country.isNotEmpty ||
-                  user.phone.isNotEmpty)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (user.city.isNotEmpty || user.country.isNotEmpty) ...[
-                      Row(
-                        children: [
-                          Label(
-                              text: 'From',
-                              style: Styles.headerText(
-                                  color: Colors.grey, fontSize: 30)),
-                          const Sizer(
-                            height: 5,
-                          ),
-                          Expanded(
-                            child: Label(
-                              text:
-                                  '${user.country}${user.city.isNotEmpty ? ',' : ''} ${user.city}',
-                              style: Styles.headerText(
-                                  color: Colors.black, fontSize: 30),
-                              maxLines: 1,
-                            ),
-                          ),
-                        ],
+            ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              children: [
+                if (loginUser?.id != widget.userId) ...[
+                  const Sizer(),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: AppButton(
+                            height: 42.h,
+                            backColor: user.isFollowed == true
+                                ? AppColors.PRIMARY_COLOR
+                                : null,
+                            label:
+                                user.isFollowed == true ? 'unFollow' : 'Follow',
+                            style: Styles.mediumText(color: Colors.white),
+                            onPressed: () {
+                              onFollow();
+                            }),
                       ),
-                      const Sizer(
-                        height: 5,
-                      ),
-                    ],
-                    if (user.phone.isNotEmpty) ...[
-                      Row(
-                        children: [
-                          Label(
-                              text: 'Phone',
-                              style: Styles.headerText(
-                                  color: Colors.grey, fontSize: 30)),
-                          const Sizer(),
-                          Expanded(
-                            child: Label(
-                              text: user.phone,
-                              style: Styles.headerText(
-                                  color: Colors.black, fontSize: 30),
-                              maxLines: 1,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Sizer(
-                        height: 5,
-                      ),
-                    ],
-                    if (user.job.isNotEmpty)
-                      Row(
-                        children: [
-                          Label(
-                              text: 'Work',
-                              style: Styles.headerText(
-                                  color: Colors.grey, fontSize: 30)),
-                          const Sizer(),
-                          Expanded(
-                            child: Label(
-                              text: user.job,
-                              style: Styles.headerText(
-                                  color: Colors.black, fontSize: 30),
-                              maxLines: 1,
-                            ),
-                          ),
-                        ],
-                      ),
-                    if (loginUser?.id != widget.userId) ...[
                       const Sizer(),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: AppButton(
-                                height: 42,
-                                backColor: user.isFollowed == true
-                                    ? AppColors.PRIMARY_COLOR
-                                    : null,
-                                label: user.isFollowed == true
-                                    ? 'unFollow'
-                                    : 'Follow',
-                                style: Styles.mediumText(color: Colors.white),
-                                onPressed: () {
-                                  onFollow();
-                                }),
-                          ),
-                          const Sizer(),
-                          Expanded(
-                            child: PopupMenuButton(
-                                child: Container(
-                                    alignment: Alignment.center,
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: AppColors.SECONDARY_COLOR),
-                                    child: Text(
-                                      'Message',
-                                      style: Styles.mediumText(
-                                          color: Colors.white),
-                                    )),
-                                itemBuilder: (context) {
-                                  return const [
-                                    PopupMenuItem<int>(
-                                      value: 0,
-                                      child: Text("Normal"),
-                                    ),
-                                    PopupMenuItem<int>(
-                                      value: 1,
-                                      child: Text("Anonymous"),
-                                    ),
-                                  ];
-                                },
-                                onSelected: (value) {
-                                  context.push(Routes.CHAT);
-                                }),
-                          )
-                        ],
-                      ),
-                    ],
-                    if (loginUser?.id == widget.userId) ...[
-                      const Sizer(),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: getUserProfile,
-                              child: Container(
-                                height: 42,
-                                margin: const EdgeInsets.all(0),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.zR),
-                                  color: AppColors.PRIMARY_COLOR,
-                                ),
-                                child: Center(
-                                  child: Label(
-                                    text: 'Edit Profile',
-                                    style:
-                                        Styles.mediumText(color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const Sizer(),
-                          Expanded(
-                            child: AppButton(
-                                height: 42,
-                                backColor: AppColors.PRIMARY_COLOR,
-                                label: 'Share Profile',
-                                style: Styles.mediumText(color: Colors.white),
-                                onPressed: () {
-                                  onFollow();
-                                }),
-                          ),
-                          const Sizer(),
-                          InkWell(
-                            onTap: showHideSuggestPeople,
+                      Expanded(
+                        child: PopupMenuButton(
                             child: Container(
-                              height: 42,
-                              width: 42,
-                              margin: const EdgeInsets.all(0),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.zR),
-                                color: AppColors.PRIMARY_COLOR,
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  showSuggestPeople == false
-                                      ? Icons.person_add
-                                      : Icons.person,
-                                  color: Colors.white,
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: AppColors.SECONDARY_COLOR),
+                                child: Text(
+                                  'Message',
+                                  style: Styles.mediumText(color: Colors.white),
+                                )),
+                            itemBuilder: (context) {
+                              return const [
+                                PopupMenuItem<int>(
+                                  value: 0,
+                                  child: Text("Normal"),
                                 ),
+                                PopupMenuItem<int>(
+                                  value: 1,
+                                  child: Text("Anonymous"),
+                                ),
+                              ];
+                            },
+                            onSelected: (value) {
+                              context.push(Routes.CHAT);
+                            }),
+                      ),
+                      const Sizer(),
+                      InkWell(
+                        onTap: showHideSuggestPeople,
+                        child: Container(
+                          height: 42.h,
+                          width: 42,
+                          margin: const EdgeInsets.all(0),
+                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.r),
+                            color: AppColors.PRIMARY_COLOR,
+                          ),
+                          child: Center(
+                            child: Icon(
+                              showSuggestPeople == false
+                                  ? Icons.person_add
+                                  : Icons.person,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+                if (loginUser?.id == widget.userId) ...[
+                  const Sizer(),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: getUserProfile,
+                          child: Container(
+                            height: 42.h,
+                            margin: const EdgeInsets.all(0),
+                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.r),
+                              color: AppColors.PRIMARY_COLOR,
+                            ),
+                            child: Center(
+                              child: Label(
+                                text: 'Edit Profile',
+                                style: Styles.mediumText(color: Colors.white),
                               ),
                             ),
                           ),
-                        ],
+                        ),
+                      ),
+                      const Sizer(),
+                      Expanded(
+                        child: AppButton(
+                            height: 42.h,
+                            backColor: AppColors.PRIMARY_COLOR,
+                            label: 'Share Profile',
+                            style: Styles.mediumText(color: Colors.white),
+                            onPressed: () {
+                              onFollow();
+                            }),
+                      ),
+                      const Sizer(),
+                      InkWell(
+                        onTap: showHideSuggestPeople,
+                        child: Container(
+                          height: 42.h,
+                          width: 42,
+                          margin: const EdgeInsets.all(0),
+                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.r),
+                            color: AppColors.PRIMARY_COLOR,
+                          ),
+                          child: Center(
+                            child: Icon(
+                              showSuggestPeople == false
+                                  ? Icons.person_add
+                                  : Icons.person,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
-                    if (showSuggestPeople == true)
-                      const InstagramProfileSuggestPeople()
-                  ],
-                ),
-            ],
+                  ),
+                ],
+                if (showSuggestPeople == true)
+                  const InstagramProfileSuggestPeople()
+              ],
+            ),
           ),
-        )
-      ],
-    );
+        ],
+      );
+    });
   }
 
   Widget _buildCounter({required String value, required String label}) {
@@ -560,8 +688,8 @@ class _InstagramProfileState extends State<InstagramProfile> {
           value,
           style: Styles.headerText(),
         ),
-        const Sizer(
-          height: 2,
+        Sizer(
+          height: 2.h,
         ),
         Text(
           label,

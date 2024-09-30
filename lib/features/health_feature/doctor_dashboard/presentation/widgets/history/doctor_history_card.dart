@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateless/charts/bar_chart.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorHistoryCard extends StatelessWidget {
   final String title;
@@ -23,7 +24,7 @@ class DoctorHistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+      padding: EdgeInsets.symmetric(vertical: 40.h, horizontal: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Theme.of(context).scaffoldBackgroundColor,
@@ -49,8 +50,8 @@ class DoctorHistoryCard extends StatelessWidget {
               ),
             ],
           ),
-          const Sizer(
-            height: 30,
+          Sizer(
+            height: 30.h,
           ),
           CustomBarChart(
             data: [

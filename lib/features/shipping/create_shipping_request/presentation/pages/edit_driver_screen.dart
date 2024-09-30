@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
@@ -64,7 +66,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
             if (state is SuccessUpdateDriverState) {
               context.pushReplacementNamed(Routes.SHIPPING);
               // ! SUPER
-              showSuccessMessage(context, "Success update Driver");
+              showSuccessMessage(context, "Success update Driver".tr());
             }
           },
           child: BlocConsumer<GetDriverCubit, ShippingState>(
@@ -120,7 +122,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Welcome to Ship Register",
+                          "Welcome to Ship Register".tr(),
                           style: Styles.headerText(
                             fontSize: 40,
                             color: AppColors.PRIMARY_COLOR_DARK,
@@ -212,7 +214,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                                       .size
                                                       .width *
                                                   0.95,
-                                              hintText: "Sub Category",
+                                              hintText: "Sub Category".tr(),
                                               dropdownMenuEntries: state
                                                   .model.subCategories!
                                                   .map((e) => SubCategoryEntity(
@@ -338,8 +340,8 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          const Text(
-                                            "Car Picture",
+                                          Text(
+                                            "Car Picture".tr(),
                                             style: TextStyle(
                                                 fontSize: 17,
                                                 color: AppColors.PRIMARY_COLOR,
@@ -404,8 +406,8 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          const Label(
-                                            text: "ID",
+                                          Label(
+                                            text: "ID".tr(),
                                             style: TextStyle(
                                                 fontSize: 17,
                                                 color: AppColors.PRIMARY_COLOR,
@@ -725,7 +727,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                 // },
                                 currentController: idNumberController,
                                 currentFocusNode: idNumberFocusNode,
-                                hint: "ID Number",
+                                hint: "ID Number".tr(),
                               ),
                             ),
                             const SizedBox(
@@ -740,7 +742,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                 // },
                                 currentController: plateNumberController,
                                 currentFocusNode: plateNumberFocusNode,
-                                hint: "Plate information",
+                                hint: "Plate information".tr(),
                               ),
                             ),
                           ],
@@ -770,7 +772,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                           height: 10,
                         ),
                         CreateDoctorIDExpiryDatePicker(
-                          title: "Driving License Expiry Date",
+                          title: "Driving License Expiry Date".tr(),
                           textStyle: const TextStyle(
                               fontSize: 17,
                               color: AppColors.PRIMARY_COLOR,
@@ -794,7 +796,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                         ),
                         CreateDoctorIDExpiryDatePicker(
                           borderWidth: 1,
-                          title: "License Expiry Date",
+                          title: "License Expiry Date".tr(),
                           textStyle: const TextStyle(
                               fontSize: 17,
                               color: AppColors.PRIMARY_COLOR,
@@ -896,7 +898,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                               fontSize: 16,
                               color: Colors.white,
                             ),
-                            label: "Update",
+                            label: "Update".tr(),
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
                                 shippingcubit.model.firstName =

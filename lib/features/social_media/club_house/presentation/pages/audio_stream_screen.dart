@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/zego_audio_room_widget.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/services/uikit_service.dart';
 import 'package:go_router/go_router.dart';
-import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
+
+import '../../../../../core/localization/locale_keys.g.dart';
 
 class AudioStreamScreen extends StatelessWidget {
   final String liveId;
@@ -20,38 +24,71 @@ class AudioStreamScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     print('live id is $liveId');
     return SafeArea(
-      child: PopScope(
-        onPopInvoked: (pop) async {
-          // Show the confirmation dialog
-          await showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Are you sure?'),
-              content: const Text('Do you want to leave this screen?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: const Text('No'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    isHost
-                        ? _endRoom(context)
-                        : context.read<ClubVoiceCubit>().leaveRoom(liveId);
-                    Navigator.of(context).pop(true);
-                  },
-                  child: const Text('Yes'),
-                ),
-              ],
-            ),
-          );
-        },
-        child: Scaffold(
-          body: SingleChildScrollView(
+      child: Scaffold(
+        body: PopScope(
+          canPop: false,
+          // onPopInvoked: (pop) async {
+          //   await Future.delayed(Duration.zero);
+          //
+          //   // Show the confirmation dialog
+          //   if (context.mounted) {
+          //     bool? result = await showModalBottomSheet<bool>(
+          //       context: context,
+          //       builder: (context) => Container(
+          //         padding: const EdgeInsets.all(16.0),
+          //         child: Column(
+          //           mainAxisSize: MainAxisSize.min,
+          //           children: [
+          //             const Text(
+          //               'Are you sure?',
+          //               style: TextStyle(
+          //                   fontSize: 18, fontWeight: FontWeight.bold),
+          //             ),
+          //             const SizedBox(height: 10),
+          //             const Text('Do you want to leave this screen?'),
+          //             const SizedBox(height: 20),
+          //             Row(
+          //               mainAxisAlignment: MainAxisAlignment.end,
+          //               children: [
+          //                 TextButton(
+          //                   onPressed: () {
+          //                     // context
+          //                     //   .pop(false);
+          //                   }, // Close bottom sheet with "No"
+          //                   child: const Text('No'),
+          //                 ),
+          //                 TextButton(
+          //                   onPressed: () {
+          //                     if (isHost) {
+          //                       _endRoom(context);
+          //                     } else {
+          //                       context
+          //                           .read<ClubVoiceCubit>()
+          //                           .leaveRoom(liveId);
+          //                     }
+          //                     // context
+          //                     //     .pop(true); // Close bottom sheet with "Yes"
+          //                   },
+          //                   child: const Text('Yes'),
+          //                 ),
+          //               ],
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //     );
+          //     if (result == true) {
+          //       print('result is true');
+          //       // context.pop();
+          //     }
+          //     print('result is $result');
+          //   }
+          // },
+          child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(
-                  height: 20,
+                SizedBox(
+                  height: 20.h,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -71,7 +108,9 @@ class AudioStreamScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.redAccent),
                         child: Text(
-                          isHost ? 'End' : 'Leave',
+                          isHost
+                              ? LocaleKeys.end.localize
+                              : LocaleKeys.leave.localize,
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
@@ -81,20 +120,20 @@ class AudioStreamScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: 10.h,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Expanded(
                         child: Text(
                           roomSubject,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: 32.sp,
                           ),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,

@@ -19,6 +19,7 @@ class BookAppointmentParams {
   String phone = '';
   String notes = '';
   String appointmentId = '';
+  String subCategoryId = '';
   GenderType gender = GenderType.Male;
 
   set age(String age) {}

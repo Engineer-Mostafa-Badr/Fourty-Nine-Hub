@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/health_feature/emergency/presentation/cub
 import 'package:fourtyninehub/features/health_feature/emergency/presentation/widgets/subcategories_dropdown.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 
@@ -45,14 +46,14 @@ class HealthEmergencyView extends StatelessWidget {
           child: ListView(
             padding: const EdgeInsets.all(15.0),
             children: [
-              const Sizer(height: 30),
+              Sizer(height: 30.h),
               FirstNameTextFormField(
                 hintColor: AppColors.QUANTITY_COLOR,
                 currentFocusNode: emergencyCubit.firstNameFocusNode,
                 currentController: emergencyCubit.firstNameController,
                 nextFocusNode: emergencyCubit.phoneFocusNode,
               ),
-              const Sizer(height: 30),
+              Sizer(height: 30.h),
               // PhoneTextFormField(
               //   currentFocusNode: emergencyCubit.phoneFocusNode,
               //   nextFocusNode: emergencyCubit.locationFocusNode,
@@ -65,9 +66,9 @@ class HealthEmergencyView extends StatelessWidget {
                 currentController: emergencyCubit.phoneController,
                 onInputChanged: (value) {},
               ),
-              const Sizer(height: 30),
+              Sizer(height: 30.h),
               const HealthEmergencySubCategoriesDropdown(),
-              const Sizer(height: 30),
+              Sizer(height: 30.h),
               DefaultTextFormField(
                 hintColor: AppColors.QUANTITY_COLOR,
                 currentFocusNode: emergencyCubit.locationFocusNode,
@@ -75,7 +76,7 @@ class HealthEmergencyView extends StatelessWidget {
                 isRequired: true,
                 hint: LocaleKeys.address.localize,
               ),
-              const Sizer(height: 30),
+              Sizer(height: 30.h),
               ElevatedAppButton(
                 label: LocaleKeys.confirm.localize,
                 onPressed: () {

@@ -3,10 +3,15 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AdDynamicInputWidget extends StatefulWidget {
   final AdPropertiesEntity property;
@@ -42,11 +47,26 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
   }
 
   Widget _buildTextFieldWidget() {
-    return FormTextField(
-      label: widget.property.label,
-      height: kToolbarHeight * .8,
-      hint: 'Type here',
-      action: (String v) => widget.onChanged(v),
+    return TextFormField(
+      maxLines: null,
+      onChanged: (v) => widget.onChanged(v),
+      style: Styles.headerText(fontSize: 26),
+      decoration: InputDecoration(
+          fillColor: Colors.white,
+          contentPadding: const EdgeInsets.all(5),
+          hintText: widget.property.label,
+          hintStyle: Styles.mediumText(),
+          prefix: Sizer(
+            width: 20.w,
+          )),
+      // keyboardType: TextInputType.number,
+      validator: (value) {
+        if ((value == null || value.isEmpty)) {
+          return LocaleKeys.required.localize;
+        } else {
+          return null;
+        }
+      },
     );
   }
 
@@ -69,7 +89,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           },
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 5),
             margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey),

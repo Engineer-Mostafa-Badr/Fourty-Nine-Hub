@@ -53,7 +53,7 @@ class Biddings extends StatelessWidget {
           )),
           const Sizer(),
           Label(
-              text: '${item.bidding} ${Labels.currency}',
+              text: '${item.bidding}',
               style: Styles.headerText(color: AppColors.PRIMARY_COLOR))
         ],
       ),

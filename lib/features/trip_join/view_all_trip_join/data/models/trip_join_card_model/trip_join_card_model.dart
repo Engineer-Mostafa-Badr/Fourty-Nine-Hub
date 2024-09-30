@@ -3,8 +3,11 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entit
 import 'vehicle_id.dart';
 
 class TripJoinCardModel extends TripJoinCardEntity {
+  @override
   String? id;
+  @override
   String? userId;
+  @override
   String? categoryId;
   VehicleId? vehicleId;
   String? fromAr;
@@ -15,7 +18,8 @@ class TripJoinCardModel extends TripJoinCardEntity {
   int? duration;
   int? passengers;
   double? price;
-  int? phone;
+  @override
+  String? phone;
   int? time;
   String? countryCode;
   @override
@@ -25,6 +29,7 @@ class TripJoinCardModel extends TripJoinCardEntity {
   bool? isRepeat;
   DateTime? createdAt;
   DateTime? updatedAt;
+  String? allowStatus;
 
   TripJoinCardModel({
     this.id,
@@ -47,7 +52,11 @@ class TripJoinCardModel extends TripJoinCardEntity {
     this.createdAt,
     this.updatedAt,
     this.status,
+    this.allowStatus,
   }) : super(
+          id: id,
+          userId: userId,
+          categoryId: categoryId,
           brand: vehicleId?.brand,
           model: vehicleId?.model,
           journeyPrice: price,
@@ -58,13 +67,13 @@ class TripJoinCardModel extends TripJoinCardEntity {
           destinationAddressAr: toAr,
           startingAddressEn: fromEn,
           destinationAddressEn: toEn,
-          isApproved: isApproved,
+          isApproved: allowStatus == 'enable',
           publishDate: time,
         );
 
   @override
   String toString() {
-    return 'TripJoinCardModel(id: $id, userId: $userId, categoryId: $categoryId, vehicleId: $vehicleId, fromAr: $fromAr, toAr: $toAr, fromEn: $fromEn, toEn: $toEn, distance: $distance, duration: $duration, passengers: $passengers, price: $price, phone: $phone, time: $time, countryCode: $countryCode, isApproved: $isApproved, isRepeat: $isRepeat, createdAt: $createdAt, updatedAt: $updatedAt , status: $status)';
+    return 'TripJoinCardModel(id: $id, userId: $userId, categoryId: $categoryId, vehicleId: $vehicleId, fromAr: $fromAr, toAr: $toAr, fromEn: $fromEn, toEn: $toEn, distance: $distance, duration: $duration, passengers: $passengers, price: $price, phone: $phone, time: $time, countryCode: $countryCode, isApproved: $isApproved, isRepeat: $isRepeat, createdAt: $createdAt, updatedAt: $updatedAt , status: $status, allowStatus: $allowStatus)';
   }
 
   factory TripJoinCardModel.fromJson(Map<String, dynamic> json) {
@@ -84,7 +93,7 @@ class TripJoinCardModel extends TripJoinCardEntity {
       duration: json['duration'] as int?,
       passengers: json['passengers'] as int?,
       price: (json['price'] as num?)?.toDouble(),
-      phone: json['phone'] as int?,
+      phone: json['phone'].toString(),
       time: json['time'] as int?,
       countryCode: json['countryCode'] as String?,
       isApproved: json['isApproved'] as bool?,
@@ -95,6 +104,7 @@ class TripJoinCardModel extends TripJoinCardEntity {
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
+      allowStatus: json['allowStatus'] as String?,
     );
   }
 
@@ -119,5 +129,6 @@ class TripJoinCardModel extends TripJoinCardEntity {
         'isRepeat': isRepeat,
         'createdAt': createdAt?.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
+        'allowStatus': allowStatus,
       };
 }

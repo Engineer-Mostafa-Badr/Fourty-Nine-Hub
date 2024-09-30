@@ -10,10 +10,10 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/assets/assets.dart';
-import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 import '../cubit/share_app_cubit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ShareTheApp extends StatelessWidget {
   const ShareTheApp({super.key});
@@ -119,7 +119,7 @@ class ShareTheApp extends StatelessWidget {
               child: _buildStatisticsItem(
                   color: AppColors.PRIMARY_COLOR,
                   title: 'Balance',
-                  subTitle: '1500 ${Labels.currency}')),
+                  subTitle: '1500')),
         ],
       ),
     );
@@ -151,7 +151,7 @@ class ShareTheApp extends StatelessWidget {
 
   Widget _buildShareChannelsWidget() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10),
       margin: const EdgeInsets.symmetric(
         horizontal: 20,
       ),

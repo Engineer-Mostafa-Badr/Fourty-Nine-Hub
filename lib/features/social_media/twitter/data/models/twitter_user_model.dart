@@ -6,7 +6,7 @@ class TwitterUserModel extends TwitterUserEntity {
     required super.firstName,
     required super.lastName,
     required super.createdAt,
-    required super.image,
+    super.image,
     required super.email,
     required super.isDocumented,
   });
@@ -21,8 +21,9 @@ class TwitterUserModel extends TwitterUserEntity {
           '',
       image: json['image'] ??
           (json['profilePictureSignedUrl'] ??
-              json['USER_PROFILE']['image'] ??
-              ''),
+              (json['USER_PROFILE'] != null
+                  ? json['USER_PROFILE']['image']
+                  : '')),
       email: json['email'] ?? '',
       isDocumented: json['twitter_documentation'] ?? false,
       createdAt: json['createdAt'] is String

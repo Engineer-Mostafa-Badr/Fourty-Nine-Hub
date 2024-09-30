@@ -15,10 +15,10 @@ class ListsState {
   final ListsStates status;
   final Failure? failure;
   final ListTypes selectedList;
-  final List<UsersListEntity>? friends;
-  final List<UsersListEntity>? followers;
-  final List<UsersListEntity>? requests;
-  final List<UsersListEntity>? blocked;
+  final List<UserFriendEntity>? friends;
+  final List<UserFriendEntity>? followers;
+  final List<UserFriendEntity>? requests;
+  final List<UserFriendEntity>? blocked;
   const ListsState(
       {this.status = ListsStates.loading,
       this.selectedList = ListTypes.friends,
@@ -31,10 +31,10 @@ class ListsState {
     ListsStates? status,
     Failure? failure,
     ListTypes? selectedList,
-    List<UsersListEntity>? friends,
-    List<UsersListEntity>? followers,
-    List<UsersListEntity>? requests,
-    List<UsersListEntity>? blocked,
+    List<UserFriendEntity>? friends,
+    List<UserFriendEntity>? followers,
+    List<UserFriendEntity>? requests,
+    List<UserFriendEntity>? blocked,
   }) {
     return ListsState(
       status: status ?? this.status,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -190,8 +191,8 @@ class TripCard extends StatelessWidget {
             FormTextField(
                 hint: 'Phone',
                 type: TextInputType.number,
-                style: const TextStyle(
-                    fontSize: 20,
+                style: TextStyle(
+                    fontSize: 20.sp,
                     color: Colors.grey,
                     fontWeight: FontWeight.bold),
                 action: (v) => phone = v),

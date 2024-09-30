@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,7 +33,7 @@ class ShowMneu extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Label(
-                text: LocaleKeys.menu.tr(),
+                text: 'Menu',
                 style: Styles.headerText(color: Colors.red),
               ),
               if (createRestaurantCubit.menu.isNotEmpty) ...[
@@ -70,7 +71,7 @@ class ShowMneu extends StatelessWidget {
                                     e.foodName ?? "",
                                     style: Styles.headerText(color: Colors.red),
                                   ),
-                                  const Sizer(height: 50),
+                                  Sizer(height: 50.h),
                                   Text(
                                     "${e.price ?? ""}",
                                     style: Styles.headerText(color: Colors.red),

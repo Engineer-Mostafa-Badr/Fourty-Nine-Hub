@@ -7,6 +7,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../cubit/installment_list_cubit.dart';
 import '../widgets/installment_ad_card.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class InstallmentView extends StatelessWidget {
   const InstallmentView({super.key});
@@ -40,7 +41,7 @@ class InstallmentView extends StatelessWidget {
     return BlocBuilder<InstallmentListCubit, InstallmentListState>(
         builder: (context, state) {
       return Container(
-        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10),
         width: kToolbarHeight * 2,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
@@ -103,8 +104,8 @@ class InstallmentView extends StatelessWidget {
             //   },
             //   child: Container(
             //     height: kToolbarHeight * .5,
-            //     margin: const EdgeInsets.only(left: 10),
-            //     padding: const EdgeInsets.symmetric(horizontal: 10),
+            //     margin: EdgeInsets.only(left: 10),
+            //     padding: EdgeInsets.symmetric(horizontal: 10),
             //     decoration: BoxDecoration(
             //         borderRadius: BorderRadius.circular(5),
             //         border: Border.all(color: AppColors.PRIMARY_COLOR),

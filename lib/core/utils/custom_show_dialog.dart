@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 
@@ -18,8 +19,8 @@ Future customShowDialog(context) => showDialog(
               'Choose option',
               style: Styles.headerText(),
             ),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: 20.h,
             ),
             buildMaterial(
               iconData: Icons.camera,
@@ -29,8 +30,8 @@ Future customShowDialog(context) => showDialog(
                 Navigator.pop(context);
               },
             ),
-            const SizedBox(
-              height: 5,
+            SizedBox(
+              height: 5.h,
             ),
             buildMaterial(
               iconData: Icons.image,
@@ -61,8 +62,8 @@ Widget buildMaterial({
           Icon(
             iconData,
           ),
-          const SizedBox(
-            width: 10,
+          SizedBox(
+            width: 10.w,
           ),
           Text(
             text,

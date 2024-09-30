@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PickDateAndTimeWidget extends StatefulWidget {
   const PickDateAndTimeWidget({
@@ -55,7 +56,7 @@ class _PickDateAndTimeWidgetState extends State<PickDateAndTimeWidget> {
                     },
                     child: Container(
                       width: double.infinity,
-                      height: 45,
+                      height: 45.h,
                       padding: const EdgeInsets.symmetric(horizontal: 7),
                       alignment: Alignment.centerLeft,
                       decoration: BoxDecoration(
@@ -88,7 +89,7 @@ class _PickDateAndTimeWidgetState extends State<PickDateAndTimeWidget> {
           },
           child: Container(
             width: double.infinity,
-            height: 45,
+            height: 45.h,
             padding: const EdgeInsets.symmetric(horizontal: 7),
             alignment: Alignment.centerLeft,
             decoration: BoxDecoration(

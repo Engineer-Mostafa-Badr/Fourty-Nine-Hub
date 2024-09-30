@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -78,7 +80,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
           showErrorMessage(context, getFailureMessage(state.failure, context));
         }
         if (state is SuccessReportState) {
-          showSuccessMessage(context, 'you have reported this trip.');
+          showSuccessMessage(context, 'you have reported this trip.'.tr());
         }
       },
       builder: (context, state) {
@@ -108,7 +110,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                     Row(
                       children: [
                         Text(
-                          widget.title ?? 'New Ride',
+                          widget.title ?? 'New Ride'.tr(),
                           style: const TextStyle(
                             color: AppColors.PRIMARY_COLOR,
                             fontWeight: FontWeight.bold,
@@ -137,7 +139,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                             fontSize: widget.priceFontSize,
                           ),
                         ),
-                        if (!widget.noBracts) const Text("Premium")
+                        if (!widget.noBracts) Text("Premium".tr())
                       ],
                     ),
                   ],
@@ -237,7 +239,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                               .read<AcceptDeclineTripCubit>()
                               .cancel(tripId: widget.model.id ?? "");
                         },
-                        label: "Cancel Request",
+                        label: "Cancel Request".tr(),
                       )
                     : widget.buttons
                         ? Container()
@@ -252,13 +254,13 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                     child: AppButton(
                                       style: Styles.mediumText(
                                           fontSize: 28, color: Colors.white),
-                                      label: "Send Offer",
+                                      label: "Send Offer".tr(),
                                       onPressed: () {
                                         tripCubit.newOffer(
                                             id: widget.model.id ?? "",
                                             price: widget.model.price ?? 0,
                                             message:
-                                                "The request has been successfully approved.");
+                                                "The request has been successfully approved.".tr());
                                       },
                                       backColor: AppColors.PRIMARY_COLOR,
                                       color: Colors.white,

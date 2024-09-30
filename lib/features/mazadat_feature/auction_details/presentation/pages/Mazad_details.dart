@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:fourtyninehub/features/mazadat_feature/auction_details/domain/usecases/send_bidding_usecase.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_details/presentation/cubit/auction_details_cubit.dart';
@@ -124,7 +125,7 @@ class _MazadDetailsState extends State<MazadDetails> {
             itemBuilder: (context, index) {
               final detail = ad.details[index];
               return Container(
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
                 decoration: BoxDecoration(
                     color: index.isEven
                         ? AppColors.AUTH_CONTAINER_COLOR
@@ -195,7 +196,7 @@ class _MazadDetailsState extends State<MazadDetails> {
       return const SizedBox();
     }
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.symmetric(vertical: 10.h),
       child: Row(
         children: [
           CircleAvatar(
@@ -219,7 +220,7 @@ class _MazadDetailsState extends State<MazadDetails> {
           const Sizer(),
           AppButton(
               padding: 3,
-              height: 30,
+              height: 30.h,
               label: 'Follow',
               onPressed: () => controller.followUser(userId: auction?.id ?? ''))
         ],

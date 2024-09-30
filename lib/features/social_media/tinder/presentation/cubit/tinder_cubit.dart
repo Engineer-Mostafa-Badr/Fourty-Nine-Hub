@@ -839,12 +839,13 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     if (lastSeenModel != null) {
       emit(state.copyWith(
           lastSeenModel: lastSeenModel, lastSeenModelState: DataState.success));
+      // print(lastSeenModel.data!.first.status.toString()+"sssssssssssssssssssssssssssssssss");
     } else {
       emit(state.copyWith(lastSeenModelState: DataState.failure));
     }
   }
 
-  Future<String> sendGift({
+  Future<dynamic> sendGift({
     required String receiverId,
     required String giftId,
     required String subCategoryId,
@@ -853,7 +854,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     final response =
         await tinderRepository.sendGift(receiverId, giftId, subCategoryId);
     if (response != null) {
-      log(response);
+      log("$response--------------------------------------");
       emit(state.copyWith(sendGiftErrorDataState: DataState.success));
       return response;
     } else {

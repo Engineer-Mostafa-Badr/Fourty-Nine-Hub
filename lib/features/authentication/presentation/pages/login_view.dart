@@ -1,27 +1,36 @@
 import 'dart:developer';
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/service/background_service.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../common/widgets/stateless/buttons/default_button.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/localization/locales.dart';
 import '../../../../res/style/app_colors.dart';
@@ -40,6 +49,8 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   // AuthType selectedAuth = AuthType.LOGIN;
   ScrollController scrollController = ScrollController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -92,12 +103,14 @@ class _LoginViewState extends State<LoginView> {
                 state.userTokensEntity.accessToken);
             await TokenManager.saveRefreshToken(
                 state.userTokensEntity.refreshToken);
-
+            await BackgroundService.reStartWebSocketService(
+                state.userTokensEntity.accessToken);
             serviceLocator<UserCubit>()
               ..setLogin(true)
               ..attachToken()
               ..getUser().then((value) async {
                 serviceLocator<GetWalletCubit>().getWallet();
+                serviceLocator<WalletCubit>().getWallet();
                 String? accessToken = await TokenManager.getAccessToken();
                 String? refreshToken = await TokenManager.getRefreshToken();
                 debugPrint(
@@ -107,9 +120,14 @@ class _LoginViewState extends State<LoginView> {
                 debugPrint(
                     '/////////////////////////////////////////////////////////////////////////');
                 debugPrint(serviceLocator<UserCubit>().state.data.toString());
+                // Navigator.pop(context);
                 Navigator.pop(context);
-                Navigator.pop(context);
+                context.push(Routes.HOME);
               });
+            context.read<NotificationSocketIoCubit>().notificationListener();
+            context
+                .read<NotificationSocketIoCubit>()
+                .clearAllNotificationsAndRefeatchAfterLogin();
             showSuccessMessage(context, LocaleKeys.welcomeBack.localize);
           }
         },
@@ -120,19 +138,19 @@ class _LoginViewState extends State<LoginView> {
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             controller: scrollController,
             child: Padding(
-              padding: EdgeInsets.all(16.0.zW),
+              padding: EdgeInsets.all(16.0.w),
               child: Form(
-                  key: loginCubit.formKey,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  key: formKey,
+                  // autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     children: [
                       Image.asset(
                         Assets.logo,
-                        width: 200.zW,
-                        height: 200.zH,
+                        width: 200.h,
+                        height: 200.h,
                       ),
                       SizedBox(
-                        height: 60.zH,
+                        height: 60.h,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -147,12 +165,12 @@ class _LoginViewState extends State<LoginView> {
                             text: LocaleKeys.login.localize,
                             borderRadius: context.locale == Locales.english
                                 ? BorderRadius.only(
-                                    topLeft: Radius.circular(100.zR),
-                                    bottomLeft: Radius.circular(100.zR),
+                                    topLeft: Radius.circular(100.r),
+                                    bottomLeft: Radius.circular(100.r),
                                   )
                                 : BorderRadius.only(
-                                    topRight: Radius.circular(100.zR),
-                                    bottomRight: Radius.circular(100.zR),
+                                    topRight: Radius.circular(100.r),
+                                    bottomRight: Radius.circular(100.r),
                                   ),
                           ),
                           chooseAuthWidget(
@@ -176,7 +194,7 @@ class _LoginViewState extends State<LoginView> {
                         ],
                       ),
                       SizedBox(
-                        height: 60.zH,
+                        height: 60.h,
                       ),
                       widget.authType == AuthType.LOGIN
                           ? LoginWidget(
@@ -187,13 +205,13 @@ class _LoginViewState extends State<LoginView> {
                         height: widget.authType == AuthType.LOGIN
                             ? MediaQuery.of(context).viewInsets.bottom != 0.0
                                 ? 20
-                                : 100.zH
+                                : 100.h
                             : 0,
                       ),
                       widget.authType == AuthType.REGISTER
                           ? DefaultButton(
                               labelStyle: TextStyle(
-                                  fontSize: 35.zH,
+                                  fontSize: 35.sp,
                                   color: AppColors.AUTH_CONTAINER_COLOR),
                               label: LocaleKeys.register.localize,
                               width: double.infinity,
@@ -215,9 +233,9 @@ class _LoginViewState extends State<LoginView> {
                               width: double.infinity,
                               label: LocaleKeys.login.localize,
                               labelStyle: TextStyle(
-                                  fontSize: 35.zH,
+                                  fontSize: 35.sp,
                                   color: AppColors.AUTH_CONTAINER_COLOR),
-                              onPressed: loginCubit.login,
+                              onPressed: () => loginCubit.login(formKey),
                             ),
                     ],
                   )),
@@ -236,8 +254,8 @@ class _LoginViewState extends State<LoginView> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 70.zH,
-        width: 200.zW,
+        height: 70.h,
+        width: 200.h,
         decoration: BoxDecoration(
           color: active ? AppColors.PRIMARY_COLOR : const Color(0xFFEEEEEE),
           borderRadius: borderRadius,
@@ -271,32 +289,26 @@ class _LoginWidgetState extends State<LoginWidget> {
     return Column(
       children: [
         FormTextField(
-          validator: (v) {
-            return null;
-          },
-          constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+          constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
           fillColor: const Color(0xFFEEEEEE),
-          borderRadius: BorderRadius.circular(20.zR),
-          style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+          borderRadius: BorderRadius.circular(20.r),
+          style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
           controller: widget.loginCubit.emailTextController,
           // label: 'E-mail or phone number',
           hint: LocaleKeys.emailOrPhone.localize,
           prefix: Icon(
             Icons.email,
             color: AppColors.GREY_DARK_COLOR,
-            size: 40.zW,
+            size: 40.w,
           ),
           action: (v) {},
         ),
         const Sizer(),
         FormTextField(
-          validator: (v) {
-            return null;
-          },
-          constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+          constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
           fillColor: const Color(0xFFEEEEEE),
-          borderRadius: BorderRadius.circular(20.zR),
-          style: TextStyle(fontSize: 30.zW, color: AppColors.QUANTITY_COLOR),
+          borderRadius: BorderRadius.circular(20.r),
+          style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
           controller: widget.loginCubit.passwordTextController,
           // label: 'Password',
           hint: LocaleKeys.password.localize,
@@ -310,72 +322,75 @@ class _LoginWidgetState extends State<LoginWidget> {
             child: Icon(
               obsecure ? Icons.visibility_off : Icons.visibility,
               color: AppColors.GREY_DARK_COLOR,
-              size: 40.zW,
+              size: 40.w,
             ),
           ),
           action: (v) {},
         ),
-        const Sizer(),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             TextAppButton(
-                style: Styles.smallText(color: Theme.of(context).primaryColor),
+                style: Styles.smallText(
+                    fontSize: 40.sp, color: Theme.of(context).primaryColor),
                 label: LocaleKeys.forgetPassword.localize,
                 onPressed: () => context.push(Routes.FORGOTPASSWORD)),
           ],
         ),
-        // const Sizer(height: ,),
+        // Sizer(height: ,),
         // Spacer(),
         // DefaultButton(
         //   width: double.infinity,
         //   label: 'Login',
         //   onPressed: widget.loginCubit.login,
         // ),
-        // const Sizer(),
+        // Sizer(),
         // Column(
         //   children: [
-        //     const Sizer(),
-        //     Label(
-        //       text: 'Or Continue with',
-        //       style: Styles.mediumText(color: Colors.grey),
-        //     ),
-        //     const Sizer(),
-        //     Row(
-        //       children: [
-        //         Expanded(
-        //           child: AppButton(
-        //             label: 'Google',
-        //             backColor: AppColors.LIGHT_GRAY_COLOR,
-        //             textColor: Colors.black,
-        //             icon: FontAwesomeIcons.google,
-        //             onPressed: widget.loginCubit.signInWithGoogle,
-        //           ),
-        //         ),
-        //         const Sizer(),
-        //         Expanded(
-        //           child: AppButton(
-        //             label: 'Facebook',
-        //             backColor: AppColors.LIGHT_GRAY_COLOR,
-        //             textColor: Colors.black,
-        //             icon: FontAwesomeIcons.facebook,
-        //             onPressed: widget.loginCubit.signInWithFacebook,
-        //           ),
-        //         ),
-        //         if (Platform.isIOS) const Sizer(),
-        //         if (Platform.isIOS)
-        //           Expanded(
-        //             child: AppButton(
-        //               label: 'Apple',
-        //               backColor: AppColors.LIGHT_GRAY_COLOR,
-        //               textColor: Colors.black,
-        //               icon: FontAwesomeIcons.apple,
-        //               onPressed: widget.loginCubit.signInWithApple,
-        //             ),
-        //           ),
-        //       ],
-        //     ),
-        //     const Sizer(),
+        const Sizer(),
+        Label(
+          text: LocaleKeys.orContinueWith.localize,
+          style: Styles.mediumText(color: Colors.grey),
+        ),
+        const Sizer(),
+        Row(
+          children: [
+            Expanded(
+              child: AppButton(
+                label: LocaleKeys.google.localize,
+                backColor: AppColors.LIGHT_GRAY_COLOR,
+                textColor: Colors.black,
+                icon: FontAwesomeIcons.google,
+                // onPressed: widget.loginCubit.signInWithGoogle,
+                onPressed: () {
+                  signInWithGoogle();
+                },
+              ),
+            ),
+            const Sizer(),
+            Expanded(
+              child: AppButton(
+                label: LocaleKeys.facebook.localize,
+                backColor: AppColors.LIGHT_GRAY_COLOR,
+                textColor: Colors.black,
+                icon: FontAwesomeIcons.facebook,
+                onPressed: widget.loginCubit.signInWithFacebook,
+              ),
+            ),
+            if (Platform.isIOS) const Sizer(),
+            if (Platform.isIOS)
+              Expanded(
+                child: AppButton(
+                  label: 'Apple',
+                  backColor: AppColors.LIGHT_GRAY_COLOR,
+                  textColor: Colors.black,
+                  icon: FontAwesomeIcons.apple,
+                  onPressed: widget.loginCubit.signInWithApple,
+                ),
+              ),
+          ],
+        ),
+        //     Sizer(),
         //     RichText(
         //       text: TextSpan(
         //         children: [
@@ -417,72 +432,75 @@ class RegisterWidget extends StatefulWidget {
 
 class _RegisterWidgetState extends State<RegisterWidget> {
   bool obsecure = true;
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final registerCubit = context.read<RegisterCubit>();
     return BlocListener<RegisterCubit, RegisterState>(
       listener: (context, state) {},
       child: Padding(
-        padding: EdgeInsets.all(8.0.zW),
+        padding: EdgeInsets.all(8.0.w),
         child: Form(
-          key: registerCubit.formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+          key: formKey,
+          // autovalidateMode: AutovalidateMode.onUserInteraction,
           child: SingleChildScrollView(
             child: Column(
               children: [
                 FormTextField(
-                  constraints:
-                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20.zR),
+                  borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
+                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                   hint: LocaleKeys.firstName.localize,
                   prefix: Icon(
                     Icons.person_2_rounded,
                     color: AppColors.GREY_DARK_COLOR,
-                    size: 40.zW,
+                    size: 40.w,
                   ),
                   action: (v) {},
                 ),
+
                 Sizer(
-                  height: 30.zH,
+                  height: 30.h,
                 ),
                 FormTextField(
-                  constraints:
-                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20.zR),
+                  borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.lastNameController,
+                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                   // label: 'E-mail or phone number',
                   hint: LocaleKeys.lastName.localize,
                   prefix: Icon(
                     Icons.person_2_rounded,
                     color: AppColors.GREY_DARK_COLOR,
-                    size: 40.zW,
+                    size: 40.w,
                   ),
                   action: (v) {},
                 ),
                 Sizer(
-                  height: 30.zH,
+                  height: 30.h,
                 ),
                 FormTextField(
-                  constraints:
-                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.emailTextController,
                   // label: 'E-mail or phone number',
+                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                   hint: LocaleKeys.emailOrPhone.localize,
                   prefix: Icon(
                     Icons.email,
                     color: AppColors.GREY_DARK_COLOR,
-                    size: 40.zW,
+                    size: 40.w,
                   ),
                   action: (v) {},
                 ),
                 Sizer(
-                  height: 30.zH,
+                  height: 30.h,
                 ),
                 Row(
                   // crossAxisAlignment: CrossAxisAlignment.,
@@ -503,7 +521,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
                                     setState(() {});
                                   },
-                                  height: kToolbarHeight.zH,
+                                  height: kToolbarHeight.h,
                                   isCentered: true,
                                   close: false,
                                   isBordered: !registerCubit.isMale,
@@ -515,7 +533,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                       : Theme.of(context).primaryColor,
                                   label: 'male'.localize)),
                           SizedBox(
-                            width: 14.zW,
+                            width: 14.h,
                           ),
                           Expanded(
                             child: BadgedLabel(
@@ -524,7 +542,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
                                 setState(() {});
                               },
-                              height: kToolbarHeight.zH,
+                              height: kToolbarHeight.h,
                               isCentered: true,
                               isBordered: true,
                               close: false,
@@ -543,13 +561,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   ],
                 ),
                 Sizer(
-                  height: 30.zH,
+                  height: 30.h,
                 ),
                 FormTextField(
-                  constraints:
-                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
+                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.passwordTextController,
                   // label: 'Password',
                   hint: LocaleKeys.password.localize,
@@ -563,19 +581,19 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     child: Icon(
                       obsecure ? Icons.visibility_off : Icons.visibility,
                       color: AppColors.GREY_DARK_COLOR,
-                      size: 40.zW,
+                      size: 40.w,
                     ),
                   ),
                   action: (v) {},
                 ),
                 Sizer(
-                  height: 30.zH,
+                  height: 30.h,
                 ),
                 FormTextField(
-                  constraints:
-                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
+                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.confirmPasswordTextController,
                   // label: 'Password',
                   hint:
@@ -590,29 +608,29 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     child: Icon(
                       obsecure ? Icons.visibility_off : Icons.visibility,
                       color: AppColors.GREY_DARK_COLOR,
-                      size: 40.zW,
+                      size: 40.w,
                     ),
                   ),
                   action: (v) {},
                 ),
                 Sizer(
-                  height: 30.zH,
+                  height: 30.h,
                 ),
                 FormTextField(
                   validator: (p0) {
                     return null;
                   },
-                  constraints:
-                      const BoxConstraints(maxHeight: 52, minHeight: 52),
+                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   // controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
+                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                   hint: LocaleKeys.code.localize,
                   prefix: Container(
                     margin: const EdgeInsets.all(9),
                     width: 20,
-                    height: 20,
+                    height: 20.h,
                     decoration: const BoxDecoration(
                       color: Colors.grey,
                       shape: BoxShape.circle,
@@ -620,13 +638,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     child: Icon(
                       Icons.person,
                       color: AppColors.GREY_DARK_COLOR,
-                      size: 40.zW,
+                      size: 40.w,
                     ),
                   ),
                   action: (v) {},
                 ),
                 Sizer(
-                  height: 60.zH,
+                  height: 60.h,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -656,7 +674,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 //   text: 'Or Continue with',
                 //   style: Styles.mediumText(color: Colors.grey),
                 // ),
-                // const Sizer(),
+                // Sizer(),
                 // Row(
                 //   children: [
                 //     Expanded(
@@ -668,7 +686,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 //         onPressed: () {},
                 //       ),
                 //     ),
-                //     const Sizer(),
+                //     Sizer(),
                 //     Expanded(
                 //       child: AppButton(
                 //         label: 'Facebook',
@@ -680,7 +698,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 //     ),
                 //   ],
                 // ),
-                // const Sizer(height: 20),
+                // Sizer(height: 20.h),
                 // RichText(
                 //   text: TextSpan(
                 //     children: [
@@ -701,8 +719,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 //     ],
                 //   ),
                 // ),
-                const SizedBox(
-                  height: 80,
+                SizedBox(
+                  height: 80.h,
                 )
               ],
             ),
@@ -710,5 +728,38 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         ),
       ),
     );
+  }
+}
+
+Future<UserCredential> signInWithGoogle() async {
+  try {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    if (googleUser == null) {
+      // The user canceled the sign-in process
+      throw Exception("User canceled sign-in");
+    }
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  } on FirebaseAuthException catch (e) {
+    // Handle error
+    print("Firebase sign-in failed: ${e.message}");
+    rethrow;
+  } catch (e) {
+    // Handle other errors
+    print("Sign-in failed: ${e.toString()}");
+    rethrow;
   }
 }

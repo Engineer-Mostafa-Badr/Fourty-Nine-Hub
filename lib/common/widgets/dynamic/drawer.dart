@@ -1,8 +1,7 @@
 import 'dart:developer';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
@@ -12,12 +11,17 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
+import '../../../features/competition/data/repository/competition_repo_impl.dart';
+import '../../../features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
+import '../../../features/competition/presentation/cubit/competition_cubit/competition_state.dart';
+import '../../../features/competition/presentation/view/special_ads_view.dart';
+import '../../../features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/const.dart';
@@ -36,9 +40,9 @@ class DrawerWidget extends StatelessWidget {
       create: (context) => GetWalletCubit(serviceLocator()),
       child: BlocBuilder<UserCubit, BasicState<UserEntity>>(
         builder: (context, state) {
-          var walletCubit = context.read<GetWalletCubit>();
+          context.read<GetWalletCubit>();
           return Drawer(
-            width: 600.zW,
+            width: 600.w,
             child: SafeArea(
               child: SingleChildScrollView(
                 child: Column(
@@ -56,7 +60,9 @@ class DrawerWidget extends StatelessWidget {
                     drawerListTile(
                         image: Assets.microphone,
                         label: LocaleKeys.advertiseYourCompany.localize,
-                        onTap: () => context.push(Routes.CREATECOMPANYAD)),
+                        onTap: () {
+                          return context.push(Routes.CREATECOMPANYAD);
+                        }),
                     drawerListTile(
                         image: Assets.quran,
                         label: LocaleKeys.quraan.localize,
@@ -71,7 +77,10 @@ class DrawerWidget extends StatelessWidget {
                         image: Assets.favorite_main_category_icon,
                         label: LocaleKeys.favouriteCategories.localize,
                         requireLogin: true,
-                        onTap: () => context.push(Routes.FAVOURITECATEGORIES)),
+                        onTap: () async {
+                          await context.push(Routes.FAVOURITECATEGORIES);
+                          context.read<MainCategoriesCubit>().loadData();
+                        }),
 
                     drawerListTile(
                         // icon: Icons.favorite,
@@ -158,7 +167,7 @@ class DrawerWidget extends StatelessWidget {
     required BuildContext context,
   }) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 20.zH),
+      margin: EdgeInsets.symmetric(vertical: 20.h.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -166,8 +175,8 @@ class DrawerWidget extends StatelessWidget {
             child: Column(
               children: [
                 IconAppButton(
-                  width: 100.zW,
-                  height: 100.zH,
+                  width: 100.h,
+                  height: 100.h,
                   isCircle: true,
                   icon: Icons.person,
                   onPressed: () => context.push(Routes.LOGIN),
@@ -182,8 +191,8 @@ class DrawerWidget extends StatelessWidget {
             child: Column(
               children: [
                 IconAppButton(
-                    width: 100.zW,
-                    height: 100.zH,
+                    width: 100.h,
+                    height: 100.h,
                     isCircle: true,
                     icon: Icons.person_add,
                     onPressed: () => context.push(Routes.REGISTER)),
@@ -209,99 +218,154 @@ class DrawerWidget extends StatelessWidget {
         const Divider(
           color: Colors.grey,
         ),
-        Row(
-          children: [
-            counterItem(
-                icon: Icons.ads_click,
-                label: LocaleKeys.specialAds.localize,
-                value: '+8',
-                onTap: () {},
-                context: context),
-            counterItem(
-                icon: Icons.person_add,
-                label: LocaleKeys.friends.localize,
-                value: '+110',
-                onTap: () {},
-                context: context),
-            counterItem(
-              icon: FontAwesomeIcons.car,
-              label: LocaleKeys.ride.localize,
-              value: '+5',
-              context: context,
-              onTap: () {},
-            ),
-            counterItem(
-              icon: Icons.more_horiz,
-              label: LocaleKeys.more.localize,
-              value: '+1K',
-              onTap: () => context.go(Routes.COMPETITIONS),
-              context: context,
-            ),
-          ],
+        BlocProvider(
+          create: (BuildContext context) =>
+              CompetitionCubit(serviceLocator.get<CompetitionRepoImpl>())
+                ..fetchCompetition(context),
+          child: BlocBuilder<CompetitionCubit, CompetitionState>(
+            builder: (BuildContext context, state) {
+              if (state is CompetitionSuccessState) {
+                int calculateSumOfRequests() {
+                  List<int> indicesToSum = [1, 2, 3, 4, 5, 6, 7, 8, 11, 12];
+
+                  return indicesToSum.fold(0, (sum, index) {
+                    return sum +
+                        (state.competitionModel.data![index].countOfRequest ??
+                            0);
+                  });
+                }
+
+                return Row(
+                  mainAxisAlignment:
+                      MainAxisAlignment.spaceEvenly, // Evenly distribute space
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start, // Align items at the start
+                  children: [
+                    counterItem(
+                      icon: Icons.ads_click,
+                      label: LocaleKeys.specialAds.localize,
+                      value:
+                          '${state.competitionModel.data![10].countOfRequest}',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SpecialAdsView()),
+                        );
+                      },
+                      context: context,
+                    ),
+                    counterItem(
+                      icon: Icons.person_add,
+                      label: LocaleKeys.friends.localize,
+                      value:
+                          '${state.competitionModel.data![0].countOfRequest}',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SpecialAdsView()),
+                        );
+                      },
+                      context: context,
+                    ),
+                    counterItem(
+                      icon: FontAwesomeIcons.car,
+                      label: LocaleKeys.ride.localize,
+                      value:
+                          '${state.competitionModel.data![9].countOfRequest}',
+                      context: context,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SpecialAdsView()),
+                        );
+                      },
+                    ),
+                    counterItem(
+                      icon: Icons.more_horiz,
+                      label: LocaleKeys.more.localize,
+                      value: '${calculateSumOfRequests()}',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SpecialAdsView()),
+                        );
+                      },
+                      context: context,
+                    ),
+                  ],
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
         ),
       ],
     );
   }
 
-  Widget walletCircularProgress({
-    required BuildContext context,
-  }) {
-    return InkWell(
-      onTap: () {
-        context.push(Routes.WALLET);
-      },
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: AppColors.LIGHT_GRAY_COLOR),
-        child: Row(
-          children: [
-            Expanded(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Label(
-                    text: LocaleKeys.wallet.localize,
-                    style: Styles.mediumText(fontWeight: FontWeight.bold)),
-                Label(
-                    text: 'Earn Money with 49Hub',
-                    style: Styles.mediumText(fontWeight: FontWeight.w400)),
-              ],
-            )),
-            SizedBox(
-              height: kTextTabBarHeight,
-              width: kTextTabBarHeight,
-              child: Stack(
-                children: [
-                  const Positioned.fill(
-                    child: CircularProgressIndicator(
-                      value: .3,
-                      strokeWidth: 5,
-                      color: AppColors.PRIMARY_COLOR,
-                      backgroundColor: Colors.white,
-                    ),
-                  ),
-                  Positioned.fill(
-                      child: Center(
-                          child: RichText(
-                              text: TextSpan(children: [
-                    TextSpan(text: '300\n', style: Styles.mediumText()),
-                    TextSpan(
-                        text: '/1002',
-                        style: Styles.mediumText(
-                          fontSize: 8,
-                        ))
-                  ]))))
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget walletCircularProgress({
+  //   required BuildContext context,
+  // }) {
+  //   return InkWell(
+  //     onTap: () {
+  //       context.push(Routes.WALLET);
+  //     },
+  //     child: Container(
+  //       padding: const EdgeInsets.all(10),
+  //       margin: const EdgeInsets.all(5),
+  //       decoration: BoxDecoration(
+  //           borderRadius: BorderRadius.circular(5),
+  //           color: AppColors.LIGHT_GRAY_COLOR),
+  //       child: Row(
+  //         children: [
+  //           Expanded(
+  //               child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Label(
+  //                   text: LocaleKeys.wallet.localize,
+  //                   style: Styles.mediumText(fontWeight: FontWeight.bold)),
+  //               Label(
+  //                   text: 'Earn Money with 49Hub',
+  //                   style: Styles.mediumText(fontWeight: FontWeight.w400)),
+  //             ],
+  //           )),
+  //           SizedBox(
+  //             height: kTextTabBarHeight,
+  //             width: kTextTabBarHeight,
+  //             child: Stack(
+  //               children: [
+  //                 const Positioned.fill(
+  //                   child: CircularProgressIndicator(
+  //                     value: .3,
+  //                     strokeWidth: 5,
+  //                     color: AppColors.PRIMARY_COLOR,
+  //                     backgroundColor: Colors.white,
+  //                   ),
+  //                 ),
+  //                 Positioned.fill(
+  //                     child: Center(
+  //                         child: RichText(
+  //                             text: TextSpan(children: [
+  //                   TextSpan(text: '300\n', style: Styles.mediumText()),
+  //                   TextSpan(
+  //                       text: '/1002',
+  //                       style: Styles.mediumText(
+  //                         fontSize: 8.sp,
+  //                       ))
+  //                 ]))))
+  //               ],
+  //             ),
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget drawerListTile(
       {IconData? icon,
@@ -314,19 +378,19 @@ class DrawerWidget extends StatelessWidget {
       return const SizedBox();
     }
     return Padding(
-      padding: EdgeInsets.only(top: 10.zH),
+      padding: EdgeInsets.only(top: 10.h),
       child: ListTile(
         onTap: () => onTap(),
         leading: image != null && icon == null
             ? Image.asset(
                 image,
-                width: 40.zW,
-                height: 40.zH,
+                width: 40.h,
+                height: 40.h,
                 fit: BoxFit.cover,
               )
             : Icon(
                 icon,
-                size: 40.zW,
+                size: 40.w,
               ),
         title: Label(
             text: label,
@@ -340,7 +404,7 @@ class DrawerWidget extends StatelessWidget {
             : null,
         trailing: Icon(
           Icons.arrow_forward_ios,
-          size: 28.zW,
+          size: 28.w,
         ),
       ),
     );
@@ -353,10 +417,10 @@ class DrawerWidget extends StatelessWidget {
       // ),
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.all(20.zW),
-        margin: EdgeInsets.all(10.zW),
+        padding: EdgeInsets.all(20.w),
+        margin: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.zR),
+            borderRadius: BorderRadius.circular(10.r),
             color: AppColors.LIGHT_GRAY_COLOR),
         child: Row(
           children: [
@@ -392,34 +456,48 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget counterItem(
-      {required IconData icon,
-      required String label,
-      required String value,
-      required context,
-      required Function onTap}) {
+  Widget counterItem({
+    required IconData icon,
+    required String label,
+    required String value,
+    required BuildContext context,
+    required Function onTap,
+  }) {
     return Expanded(
       child: InkWell(
         onTap: () => onTap(),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            CircleAvatar(
-              backgroundColor: AppColors.GREY_BORDER_COLOR,
-              radius: 45.zW,
-              child: Icon(
-                icon,
-                size: 40.zW,
-                color: AppColors.QUANTITY_COLOR,
+            SizedBox(
+              width: 80.r, // Fixed width for CircleAvatar
+              height: 80.r, // Fixed height for CircleAvatar
+              child: CircleAvatar(
+                backgroundColor: AppColors.GREY_BORDER_COLOR,
+                radius: 40.r, // Radius to fit within the Container
+                child: Icon(
+                  icon,
+                  size: 30.sp,
+                  color: AppColors.QUANTITY_COLOR,
+                ),
               ),
             ),
-            Label(
-              text: value,
+            Text(
+              value,
               style: Styles.smallText(
                 color: Theme.of(context).primaryColor,
                 fontWeight: FontWeight.bold,
               ),
+              textAlign: TextAlign.center,
             ),
-            Label(text: label, style: Styles.mediumText(color: Colors.grey)),
+            Padding(
+              padding: EdgeInsets.only(left: 5.w),
+              child: Text(
+                label,
+                style: Styles.smallText(color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ],
         ),
       ),
@@ -430,14 +508,14 @@ class DrawerWidget extends StatelessWidget {
     required BuildContext context,
     required UserEntity? user,
   }) {
-    var walletCubit = context.read<GetWalletCubit>();
+    context.read<GetWalletCubit>();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
           SizedBox(
-            height: kToolbarHeight * 2.5.zH,
-            width: kToolbarHeight * 2.5.zW,
+            height: kToolbarHeight * 2.5.h,
+            width: kToolbarHeight * 2.5.w,
             child: Stack(
               alignment: AlignmentDirectional.bottomEnd,
               children: [
@@ -466,11 +544,10 @@ class DrawerWidget extends StatelessWidget {
                           ),
                         );
                       }
-                      return CircleAvatar(
-                        // backgroundColor: Colors.transparent,
-                        backgroundImage: CachedNetworkImageProvider(
-                          user?.profilePicture ?? UIConst.profilePlaceHolder,
-                        ),
+                      return ImageFromInternet(
+                        isCircle: true,
+                        image:
+                            user?.profilePicture ?? UIConst.profilePlaceHolder,
                       );
                     },
                   ),
@@ -514,7 +591,7 @@ class DrawerWidget extends StatelessWidget {
                     right: 0,
                     child: Icon(
                       Icons.camera_alt_outlined,
-                      size: 40.zW,
+                      size: 40.w,
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
@@ -540,7 +617,7 @@ class DrawerWidget extends StatelessWidget {
                     Icon(
                       Icons.verified,
                       color: AppColors.PRIMARY_COLOR,
-                      size: 40.zW,
+                      size: 40.w,
                     ),
                 ],
               ),
@@ -549,23 +626,23 @@ class DrawerWidget extends StatelessWidget {
               //   style: Styles.mediumText(),
               // ),
               Sizer(
-                height: 10.zH,
+                height: 10.h,
               ),
-              InkWell(
+              GestureDetector(
                 onTap: () {
-                  context.push(
-                    Routes.WALLET,
-                  );
+                  // context.push(
+                  //   Routes.WALLET,
+                  // );
                 },
                 child: Row(
                   children: [
                     Icon(
                       Icons.wallet,
-                      size: 35.zW,
+                      size: 35.w,
                     ),
                     Sizer(
-                      width: 8.zW,
-                      height: 8.zH,
+                      width: 8.h,
+                      height: 8.h,
                     ),
                     Expanded(
                       child: Label(

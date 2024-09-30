@@ -320,6 +320,7 @@ class TinderRepository {
         return response;
       } else {
         log('Failed to post data: ${response.statusCode} ${response.body}');
+        return response;
       }
     } catch (e) {
       log('Error posting data: $e');
@@ -368,6 +369,7 @@ class TinderRepository {
         url: uri.toString(), fromMethod: 'fetchUserProfile');
     if (response != null) {
       final data = json.decode(response.body);
+      print("${response.body}fetchUserProfile");
       return ProfileUserModel.fromJson(data);
     }
     return null;
@@ -402,18 +404,18 @@ class TinderRepository {
   }
 
   Future<LastSeenModel?> fetchLastSeen(String userId) async {
-    final url =
-        'https://49dev.com/api/v1/users/last-seen/$userId?status=online';
+    final url = 'https://49dev.com/api/v1/users/last-seen/$userId';
     final response =
         await _makeGetRequest(url: url, fromMethod: 'fetchLastSeen');
     if (response != null) {
       final data = json.decode(response.body);
+      print("${response.body}vvvvvvvvvvvvvvvvv");
       return LastSeenModel.fromJson(data);
     }
     return null;
   }
 
-  Future<String?> sendGift(
+  Future<dynamic> sendGift(
       String receiverId, String giftId, String subCategoryId) async {
     const url =
         'https://49dev.com/api/v1/tinder/sendGifts?subCategory=66af974f8bf69f9469944746';
@@ -422,7 +424,10 @@ class TinderRepository {
       "giftId": giftId,
     });
     final response = await _makePostRequest(url: url, body: data);
-    return response?.body;
+    final s = await json.decode(response!.body);
+
+    log('-------->${s["success"]}');
+    return s;
   }
 
   Future<List<GiftData>?> fetchGifts() async {

@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
@@ -11,6 +13,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UserReels extends StatefulWidget {
   const UserReels({super.key, required this.userData});
@@ -38,7 +41,7 @@ class _UserReelsState extends State<UserReels> {
       }, builder: (context, state) {
         final controller = context.read<InstagramCubit>();
         return PagedSliverList<int, PostEntity>(
-          // padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+          // padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
           pagingController: controller.userReelsPagingController,
           // shrinkWrap: true,
           // physics: const BouncingScrollPhysics(
@@ -46,10 +49,10 @@ class _UserReelsState extends State<UserReels> {
           builderDelegate: PagedChildBuilderDelegate<PostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.userReelsPagingController.itemList?.length);
-                return const Center(
+                return Center(
                   child: Text(
-                    "No Reels",
-                    style: TextStyle(
+                    LocaleKeys.noReels.localize,
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 18,
                     ),
@@ -64,7 +67,7 @@ class _UserReelsState extends State<UserReels> {
                     ? Container(
                         color: Colors.black,
                         width: double.infinity,
-                        height: 400,
+                        height: 400.h,
                         child: InstagramReelCard(
                           item: post,
                           playVideo: false,

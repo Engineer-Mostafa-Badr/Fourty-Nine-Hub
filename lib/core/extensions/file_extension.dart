@@ -7,10 +7,46 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 enum FileTypeEnum {
   video,
   image,
-  doc,
+  document,
   audio,
   temp,
   unknown,
+}
+
+extension FileTypeEnumExtensionOnString on String {
+  FileTypeEnum getFileTypeEnum() {
+    switch (toLowerCase()) {
+      case 'video':
+      case 'videos':
+        return FileTypeEnum.video;
+      case 'image':
+      case 'images':
+      case 'photos':
+      case 'photo':
+      case 'img':
+        return FileTypeEnum.image;
+      case 'document':
+      case 'docs':
+      case 'documents':
+      case 'doc':
+        return FileTypeEnum.document;
+      case 'audio':
+      case 'audios':
+      case 'music':
+      case 'musics':
+      case 'voice':
+      case 'voices':
+      case 'record':
+      case 'records':
+        return FileTypeEnum.audio;
+      case 'temp':
+      case 'temps':
+      case 'tmp':
+        return FileTypeEnum.temp;
+      default:
+        return FileTypeEnum.unknown;
+    }
+  }
 }
 
 const List<String> docsExtensions = [
@@ -67,7 +103,7 @@ extension FileTypeChecker on File {
     if (tempExtensions.contains(extension)) {
       return FileTypeEnum.temp;
     } else if (docsExtensions.contains(extension)) {
-      return FileTypeEnum.doc;
+      return FileTypeEnum.document;
     } else if (audioExtensions.contains(extension)) {
       return FileTypeEnum.audio;
     } else if (videosExtensions.contains(extension)) {
@@ -87,7 +123,7 @@ extension FileTypeChecker on File {
 
   bool get isAudio => type == FileTypeEnum.audio;
 
-  bool get isDoc => type == FileTypeEnum.doc;
+  bool get isDoc => type == FileTypeEnum.document;
 
   bool get isTemp => type == FileTypeEnum.temp;
 }

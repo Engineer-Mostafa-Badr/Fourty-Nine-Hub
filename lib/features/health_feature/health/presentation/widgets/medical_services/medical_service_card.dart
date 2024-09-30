@@ -23,7 +23,7 @@ class HealthMedicalServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         if (context.read<HealthCubit>().state.mainCategory != null) {
           context.push(
@@ -34,73 +34,78 @@ class HealthMedicalServiceCard extends StatelessWidget {
           );
         }
       },
-      child: Container(
-        width: 200,
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          children: [
-            Expanded(
-                child: SizedBox(
-              width: double.infinity,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: SquareImage(
-                      fit: BoxFit.fitWidth,
-                      radius: 10,
-                      url: subCategory.image,
-                    ),
-                  ),
-                  Positioned(
-                      top: 5,
-                      right: 5,
-                      child: IconAppButton(
-                          size: 20,
-                          icon: subCategory.isFavorite
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: ThemeCubit.get(context).isDarkTheme
-                              ? AppColors.QUANTITY_COLOR
-                              : AppColors.PRIMARY_COLOR_DARK,
-                          onPressed: () {
-                            context
-                                .read<HealthCubit>()
-                                .toggleFavoriteMedicalService(subCategory.id);
-                          }))
-                ],
-              ),
-            )),
-            const Sizer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
+      child: Card(
+        elevation: 1,
+        child: Container(
+          width: 200,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: SizedBox(
+                width: double.infinity,
+                child: Stack(
                   children: [
-                    Label(
-                      text: subCategory.name,
-                      style: Styles.mediumText(fontWeight: FontWeight.bold),
+                    Positioned.fill(
+                      child: SquareImage(
+                        fit: BoxFit.fitWidth,
+                        radius: 10,
+                        url: subCategory.image,
+                      ),
                     ),
-                    Label(
-                      text:
-                          '${subCategory.numberOfContent.toShortScale} ${LocaleKeys.ads.localize}',
-                      style: Styles.mediumText(),
-                    ),
+                    Positioned(
+                        top: 5,
+                        right: 5,
+                        child: IconAppButton(
+                            size: 20,
+                            icon: subCategory.isFavorite == true
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: ThemeCubit.get(context).isDarkTheme
+                                ? AppColors.QUANTITY_COLOR
+                                : AppColors.PRIMARY_COLOR_DARK,
+                            onPressed: () {
+                              print(
+                                  "555555555555555555555555555555555555555555555555${subCategory.id}");
+                              context
+                                  .read<HealthCubit>()
+                                  .toggleFavoriteMedicalService(subCategory.id);
+                            }))
                   ],
                 ),
-                IconAppButton(
-                  icon: Icons.add,
-                  isCircle: true,
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  backColor: AppColors.PRIMARY_COLOR,
-                  onPressed: () {},
-                )
-              ],
-            ),
-          ],
+              )),
+              const Sizer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      Label(
+                        text: subCategory.name,
+                        style: Styles.mediumText(fontWeight: FontWeight.bold),
+                      ),
+                      Label(
+                        text:
+                            '${subCategory.numberOfContent.toShortScale} ${LocaleKeys.ads.localize}',
+                        style: Styles.mediumText(),
+                      ),
+                    ],
+                  ),
+                  IconAppButton(
+                    icon: Icons.add,
+                    isCircle: true,
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    backColor: AppColors.PRIMARY_COLOR,
+                    onPressed: () {},
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

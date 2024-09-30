@@ -221,7 +221,7 @@ class MessageCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    return messageEntity.byMe!
+    return messageEntity.byMe
         ? _buildMineMessage(width: width, messageEntity: messageEntity)
         : _buildOtherMessage(
             width: width, messageEntity: messageEntity, context: context);
@@ -260,7 +260,7 @@ class MessageCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Expanded(
-                    child: messageEntity.isDeleted!
+                    child: messageEntity.isDeleted
                         ? Row(
                             children: [
                               const Padding(
@@ -278,7 +278,7 @@ class MessageCard extends StatelessWidget {
                           )
                         : ReadMoreLabel(
                             trimLines: 5,
-                            text: messageEntity.text!,
+                            text: messageEntity.text,
                             style: Styles.mediumText(
                                 color: AppColors.PRIMARY_COLOR),
                             textAlign: TextAlign.left,
@@ -288,14 +288,14 @@ class MessageCard extends StatelessWidget {
                   Row(
                     children: [
                       Label(
-                        text: '${messageEntity.formattedCreatedAt}',
+                        text: '$messageEntity',
                         style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
                       ),
                       const SizedBox(width: 4),
                       Icon(
-                        messageEntity.seen!
+                        messageEntity.seen
                             ? FontAwesomeIcons.checkDouble
-                            : messageEntity.delivered!
+                            : messageEntity.delivered
                                 ? FontAwesomeIcons.checkDouble
                                 : FontAwesomeIcons.check,
                         color: Colors.red,
@@ -352,7 +352,7 @@ class MessageCard extends StatelessWidget {
                 Expanded(
                   child: ReadMoreLabel(
                     trimLines: 5,
-                    text: messageEntity.text!,
+                    text: messageEntity.text,
                     style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
                     textAlign: TextAlign.left,
                   ),
@@ -361,14 +361,14 @@ class MessageCard extends StatelessWidget {
                 Row(
                   children: [
                     Label(
-                      text: '${messageEntity.formattedCreatedAt}',
+                      text: '$messageEntity',
                       style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
                     ),
                     const SizedBox(width: 4),
                     Icon(
-                      messageEntity.seen!
+                      messageEntity.seen
                           ? FontAwesomeIcons.checkDouble
-                          : messageEntity.delivered!
+                          : messageEntity.delivered
                               ? FontAwesomeIcons.checkDouble
                               : FontAwesomeIcons.check,
                       color: Colors.red,

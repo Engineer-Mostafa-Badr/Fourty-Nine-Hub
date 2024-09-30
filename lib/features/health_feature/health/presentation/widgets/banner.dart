@@ -16,22 +16,19 @@ class HealthBanner extends StatefulWidget {
 class _HealthBannerState extends State<HealthBanner> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HealthCubit, HealthState>(
+    return BlocConsumer<HealthCubit, HealthState>(
       builder: (context, state) {
         if (state.mainCategory != null) {
           return MainCategoryBanner(
+              isFavorite: state.mainCategory!.isFavorite,
               onFavorite: () {
                 return null;
-              },
-              // isFavorite: state.mainCategory!.isFavorite ?? false,
-              //   onFavorite: () async {
-              // // context.read<HealthCubit>().toggleFavoriteMedicalService(state.mainCategory!.id);
-              // print(state.mainCategory!.id);
-              // setState(() {
 
-              // });
-              //  return await  state.mainCategory!.isFavorite == true ? context.read<HealthCubit>().deleteMedicalService(state.mainCategory!.id) : context.read<HealthCubit>().toggleFavoriteMedicalService(state.mainCategory!.id);
-              //   },
+                // print(state.mainCategory!.id);
+                // context
+                //     .read<HealthCubit>()
+                //     .toggleFavoriteCategory(state.mainCategory!.id);
+              },
               category: state.mainCategory!,
               canRegister: state.isDoctor == true ? false : true,
               onRegister: () {
@@ -45,6 +42,7 @@ class _HealthBannerState extends State<HealthBanner> {
           return const SizedBox.shrink();
         }
       },
+      listener: (BuildContext context, HealthState state) {},
     );
   }
 }

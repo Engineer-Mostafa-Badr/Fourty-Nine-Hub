@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
@@ -39,7 +40,7 @@ class _StartTextFieldAndFindButonState
     return Form(
       key: formKey,
       child: SizedBox(
-        // height: 45,
+        height: 80.h,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -65,7 +66,7 @@ class _StartTextFieldAndFindButonState
                       address: startingController.text);
                 }
               },
-              height: 45,
+              height: double.infinity,
             ),
           ],
         ),
@@ -82,10 +83,10 @@ class _StartTextFieldAndFindButonState
       );
     }
     if (state is StartingLocationLoading) {
-      return const SizedBox(
+      return SizedBox(
         width: 10,
-        height: 10,
-        child: Center(
+        height: 10.h,
+        child: const Center(
           child: CircularProgressIndicator(
             color: AppColors.PRIMARY_COLOR,
             strokeWidth: 3,

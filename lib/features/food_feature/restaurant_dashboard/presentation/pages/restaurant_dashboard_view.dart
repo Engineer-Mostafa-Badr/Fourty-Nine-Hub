@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../res/strings/labels.dart';
@@ -32,10 +33,10 @@ class RestaurantDashboardView extends StatelessWidget {
                           style: Styles.headerText(),
                         )),
                         if (state.connected)
-                          const SizedBox(
-                            height: 15,
-                            width: 15,
-                            child: CircularProgressIndicator.adaptive(),
+                          SizedBox(
+                            height: 15.h,
+                            width: 15.w,
+                            child: const CircularProgressIndicator.adaptive(),
                           ),
                         Switch(
                             value: state.connected,

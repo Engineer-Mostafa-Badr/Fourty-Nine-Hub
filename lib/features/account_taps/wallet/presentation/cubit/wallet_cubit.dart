@@ -1,70 +1,136 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/competition_entity.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_competitions_usecase.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/main_category_entity.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/delete_subscription_use_case.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_usecase.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../../core/enums/wallet_types_enums.dart';
-import '../../domain/entities/wallet_history_entity.dart';
+import '../../../../../common/models/public/pagination_params.dart';
+import '../../domain/entities/wallet/wallet_entity.dart';
+import '../../domain/entities/wallet/wallet_history_entity.dart';
+import '../../domain/entities/wallet/wallet_subscription_entity.dart';
+import '../../domain/usecases/add_subscribe_use_case.dart';
+import '../../domain/usecases/get_subscription_use_case.dart';
+import '../../domain/usecases/main_category_use_case.dart';
+import '../../domain/usecases/sub_category_use_case.dart';
 
 part 'wallet_state.dart';
 
 class WalletCubit extends Cubit<WalletState> {
-  final GetCompetitionsUsecase _getCompetitionsUsecase;
-  final GetWalletHistoryUseCase _getWalletHistoryUseCase;
   final GetWalletUseCase _getWalletUseCase;
+  final GetWalletHistoryUseCase _walletHistoryUseCase;
+  final GetSubscriptionWalletUseCase _subscriptionWalletUseCase;
+  final MainCategoryUseCase _mainCategoryUseCase;
+  final SubCategoryUseCase _subCategoryUseCase;
+  final DeleteSubscriptionUseCase _deleteSubscriptionUseCase;
+  final AddSubscriptionUseCase _addSubscriptionUseCase;
 
-  WalletCubit(this._getCompetitionsUsecase, this._getWalletHistoryUseCase,
-      this._getWalletUseCase)
+  WalletCubit(
+      this._getWalletUseCase,
+      this._walletHistoryUseCase,
+      this._subscriptionWalletUseCase,
+      this._mainCategoryUseCase,
+      this._subCategoryUseCase,
+      this._deleteSubscriptionUseCase,
+      this._addSubscriptionUseCase)
       : super(const WalletState());
 
-  void loadData() async {
-    await getBalanceWalletHistory();
-    await getNormalWalletHistory();
-    await getCompetitions();
+  loadData() async {
+    await getWallet();
+    // await fetchWalletHistory();
+    await fetchWalletSubscription();
   }
 
-  Future<void> getBalanceWalletHistory() async {
-    final response = await _getWalletHistoryUseCase.call(WalletTypes.balance);
+  WalletEntity? da;
+  Future<WalletEntity> getWallet() async {
+    final response = await _getWalletUseCase.call(const NoParams());
     response.fold((l) {
       emit(state.copyWith(failure: l, status: WalletStates.error));
     }, (data) {
-      emit(state.copyWith(balanceHistory: data));
+      da = data;
+      emit(state.copyWith(wallet: data));
+    });
+    return da!;
+  }
+
+  onSelectWallet(WalletTypes wallet) {
+    emit(state.copyWith(
+      selectedWallet: wallet,
+    ));
+  }
+
+  Future<List<WalletHistoryEntity>> fetchWalletHistory(
+      {required PaginationParams paginationParams}) async {
+    final response = await _walletHistoryUseCase(
+      WalletHistoryParams(paginationParams: paginationParams),
+    );
+    List<WalletHistoryEntity> category = [];
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: WalletStates.error));
+    }, (data) {
+      category = data;
+      emit(state.copyWith(history: data));
+    });
+    return category;
+  }
+
+  Future<void> fetchWalletSubscription() async {
+    final response = await _subscriptionWalletUseCase(const NoParams());
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: WalletStates.error));
+    }, (data) {
+      emit(state.copyWith(subscription: data));
     });
   }
 
-  Future<void> getNormalWalletHistory() async {
-    final response =
-        await _getWalletHistoryUseCase.call(WalletTypes.mainWallet);
+  Future<List<MainCategoryWalletEntity>> fetchMainCategoryWallet(
+      {required PaginationParams paginationParams}) async {
+    List<MainCategoryWalletEntity> category = [];
+    final response = await _mainCategoryUseCase(
+      MainCategoryParams(
+        paginationParams: paginationParams,
+      ),
+    );
     response.fold((l) {
       emit(state.copyWith(failure: l, status: WalletStates.error));
     }, (data) {
-      emit(state.copyWith(walletHistory: data));
+      category = data;
     });
+    return category;
   }
 
-  Future<void> getCompetitions() async {
-    final response = await _getCompetitionsUsecase.call(const NoParams());
+  Future<List<MainCategoryWalletEntity>> fetchSubCategoryWallet(
+      {required PaginationParams paginationParams, required String id}) async {
+    List<MainCategoryWalletEntity> category = [];
+    final response = await _subCategoryUseCase(
+      MainCategoryParams(
+        id: id,
+        paginationParams: paginationParams,
+      ),
+    );
     response.fold((l) {
       emit(state.copyWith(failure: l, status: WalletStates.error));
     }, (data) {
-      emit(state.copyWith(competitions: data));
+      category = data;
+      // emit(state.copyWith(mainCategory: data,status: WalletStates.initial));
     });
+    return category;
   }
 
-  void showGiftsHistory({
-    required BuildContext context,
-  }) async {
-    final response =
-        await _getWalletHistoryUseCase.call(WalletTypes.giftWallet);
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: WalletStates.error));
-    }, (data) {
-      context.push(Routes.WALLETHISTORY, extra: data);
+  deleteSubscription({required String subscriptionId}) async {
+    await _deleteSubscriptionUseCase(
+        DeleteSubscriptionParams(subscriptionId: subscriptionId));
+    fetchWalletSubscription();
+  }
+
+  Future<void> addSubscription({required AddSubscriptionParams params}) async {
+    var response = await _addSubscriptionUseCase(params);
+    return response.fold(
+        (l) => emit(state.copyWith(failure: l, status: WalletStates.error)),
+        (data) {
+      fetchWalletSubscription();
+      emit(state.copyWith(status: WalletStates.initial));
     });
   }
 }

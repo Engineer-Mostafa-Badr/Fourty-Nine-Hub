@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -8,7 +9,6 @@ import 'package:go_router/go_router.dart';
 import '../../../res/assets/assets.dart';
 import '../../../routes/routes.dart';
 import 'bottom_painter.dart';
-import '../../../../../../common/theme/cubit/cubit.dart';
 
 class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
   final int mainCategory;
@@ -30,7 +30,6 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         ? <BottomItemModel>[
             BottomItemModel(
               icon: FontAwesomeIcons.microphone,
-              height: 30,
               label: 'snap',
               // Translated text
               index: 0,
@@ -41,7 +40,6 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
               icon: FontAwesomeIcons.stream,
               label: 'live', // Translated text
               index: 0,
-              height: 25,
               image: Assets.live,
               route: Routes.LIVE,
             ),
@@ -49,7 +47,6 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
               icon: Icons.video_call,
               label: 'meet', // Translated text
               index: 0,
-              height: 25,
               image: Assets.zoomMeeting,
               route: Routes.ZOOM,
             ),
@@ -58,7 +55,6 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
               label: 'spotlight',
               // Translated text
               index: 0,
-              height: 25,
               image: Assets.spotlightIcon,
               route: Routes.SPOTLIGHT,
             ),
@@ -161,6 +157,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _CustomBottomNavigationBarState createState() =>
       _CustomBottomNavigationBarState(
         scrollController: scrollController,
@@ -171,8 +168,9 @@ class CustomBottomNavigationBar extends StatefulWidget {
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     with SingleTickerProviderStateMixin {
   final ScrollController scrollController;
-
   bool isScrollingDown;
+
+  double bottomNavBarHeight = 90.h; // Initial height of the bottom bar
 
   _CustomBottomNavigationBarState({
     required this.scrollController,
@@ -181,83 +179,79 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
 
   @override
   void initState() {
-    scrollController;
+    super.initState();
+
     scrollController.addListener(() {
       if (scrollController.position.userScrollDirection ==
           ScrollDirection.reverse) {
         if (!isScrollingDown) {
           setState(() {
             isScrollingDown = true;
+            bottomNavBarHeight = 0.0; // Hide the bottom bar
           });
         }
-      } else {
+      } else if (scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
         if (isScrollingDown) {
           setState(() {
             isScrollingDown = false;
+            bottomNavBarHeight = 90.h; // Show the bottom bar
           });
         }
       }
     });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    scrollController.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: BottomBarPainter(
-        color: Colors.black,
-      ),
-      child: Container(
-        padding: const EdgeInsets.only(bottom: 20, top: 10),
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          boxShadow: const [
-            BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2)
-          ],
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 400),
+      height: bottomNavBarHeight, // Use the dynamic height
+      child: CustomPaint(
+        painter: BottomBarPainter(
+          color: Colors.black,
         ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: List.generate(widget.items.length, (index) {
-                int index1 = context.isArabic ? 2 : 1;
-                int index2 = context.isArabic ? 1 : 2;
-                return GestureDetector(
-                  onTap: () {
-                    widget.onTap(index);
-                  },
-                  child: Padding(
-                    padding: index == index1
-                        ? const EdgeInsets.only(right: 10)
-                        : index == index2
-                            ? const EdgeInsets.only(left: 30)
-                            : EdgeInsets.zero,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(
-                          widget.items[index].image,
-                          height: widget.items[index].height,
-                          semanticsLabel: widget.items[index].label,
-                          color: ThemeCubit.get(context).isDarkTheme
-                              ? Colors.white
-                              : null,
-                        ),
-                        Text(
-                          widget.items[index].label,
-                        ),
-                      ],
+        child: Container(
+          padding: const EdgeInsets.only(bottom: 20, top: 10),
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            boxShadow: const [
+              BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2),
+            ],
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: List.generate(widget.items.length, (index) {
+                  int index1 = context.isArabic ? 2 : 1;
+                  int index2 = context.isArabic ? 1 : 2;
+                  return GestureDetector(
+                    onTap: () {
+                      widget.onTap(index);
+                    },
+                    child: Padding(
+                      padding: index == index1
+                          ? EdgeInsets.only(right: 30.w)
+                          : index == index2
+                              ? EdgeInsets.only(left: 60.w)
+                              : EdgeInsets.zero,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Expanded(
+                            child: SvgPicture.asset(
+                              widget.items[index].image,
+                              height: widget.items[index].height * 1.8.h,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+              ),
             ),
           ),
         ),

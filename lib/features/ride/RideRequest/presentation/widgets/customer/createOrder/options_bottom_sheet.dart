@@ -54,7 +54,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // const Sizer(),
+              // Sizer(),
               // AppButton(
               //     label: 'Requests History',
               //     icon: Icons.history,

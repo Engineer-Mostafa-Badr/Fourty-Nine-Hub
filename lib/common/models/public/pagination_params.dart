@@ -2,7 +2,7 @@ class PaginationParams {
   int limit;
   int page;
 
-  PaginationParams({this.limit = 10, required this.page}) {
+  PaginationParams({this.limit = 30, required this.page}) {
     if (page < 1 || limit < 1) {
       throw Exception(
           'Invalid pagination params: page and limit must be greater than 0');

@@ -12,6 +12,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchRestaurantCard extends StatefulWidget {
   const SearchRestaurantCard({
@@ -43,7 +44,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -62,9 +63,9 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
                   const Sizer(),
                   Text(
                     LocaleKeys.premium.tr(),
-                    style: const TextStyle(
+                    style: TextStyle(
                         color: Colors.black,
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold),
                   )
                 ],
@@ -77,8 +78,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
             ),
             Container(
               color: Colors.white,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +91,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
                       Label(
                           text: widget.restaurant?.name ?? "",
                           style: Styles.mediumText(
-                              fontSize: 18, fontWeight: FontWeight.w500)),
+                              fontSize: 18.sp, fontWeight: FontWeight.w500)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,14 +102,14 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
                               text: widget.restaurant?.subcategoryId?.name ??
                                   "${getLang() == "ar" ? state.selectedMealCategory?.nameAr : state.selectedMealCategory?.nameEn}",
                               style: Styles.mediumText(
-                                  fontSize: 15,
+                                  fontSize: 15.sp,
                                   color: AppColors.PRIMARY_COLOR_DARK),
                             );
                           }),
                           Label(
                             text: "${LocaleKeys.comma.tr()} ",
                             style: Styles.mediumText(
-                                fontSize: 15,
+                                fontSize: 15.sp,
                                 color: AppColors.PRIMARY_COLOR_DARK),
                           ),
                           Label(
@@ -119,7 +119,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
                                         .restaurant?.mainCategoryId?.nameEn) ??
                                 LocaleKeys.meal.tr(),
                             style: Styles.mediumText(
-                                fontSize: 15,
+                                fontSize: 15.sp,
                                 color: AppColors.PRIMARY_COLOR_DARK),
                           ),
                         ],
@@ -151,7 +151,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
                         text:
                             "${widget.restaurant?.menu?.length ?? 0} ${LocaleKeys.meals.tr()}",
                         style: Styles.mediumText(
-                          fontSize: 15,
+                          fontSize: 15.sp,
                           color: AppColors.PRIMARY_COLOR,
                         ),
                       ),

@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
+import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 
 // import 'dart:convert';
 // import 'package:flutter/services.dart' show rootBundle;
@@ -135,6 +136,9 @@ class BaseApiConsumer extends ApiConsumer {
       // } else {
       //   return Left(_getFailure(e));
       // }
+      if (e is DioException) {
+        pr(e.response?.data);
+      }
       return Left(_getFailure(e));
     }
   }
@@ -173,7 +177,7 @@ class BaseApiConsumer extends ApiConsumer {
         );
       } else {
         // if (e is DioException) {
-        //   print(' ========= ${e.response?.data}');
+        //   pr('${e.response?.data}');
         // }
         return Left(_getFailure(e));
       }

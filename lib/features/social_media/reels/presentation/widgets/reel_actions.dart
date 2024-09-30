@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -68,7 +68,7 @@ class ReelActions extends StatelessWidget {
             backgroundColor: Colors.blueGrey,
             child: Image.asset(
               Assets.coin,
-              height: 20,
+              height: 20.h,
             ),
           ),
         ),

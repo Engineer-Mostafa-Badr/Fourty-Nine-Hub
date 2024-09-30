@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
@@ -13,6 +16,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BuildPeopleYouMayKnow extends StatefulWidget {
   const BuildPeopleYouMayKnow({super.key});
@@ -47,7 +51,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
               children: [
                 Container(
                   width: double.infinity,
-                  height: 5,
+                  height: 5.h,
                   color: AppColors.LIGHT_GRAY_COLOR,
                 ),
                 Padding(
@@ -56,16 +60,16 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Label(
-                        text: "People you may know",
+                        text: LocaleKeys.peopleYouMayKnow.localize,
                         style: Styles.headerText(),
                       ),
                       Container(
                         alignment: AlignmentDirectional.topStart,
-                        height: 250,
+                        height: 350.h,
                         child: PagedListView<int, SuggestUserEntity>(
                           scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 5),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 8.h, horizontal: 5),
                           pagingController:
                               controller.suggestUserPagingController,
                           shrinkWrap: true,
@@ -76,12 +80,14 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                   noItemsFoundIndicatorBuilder: (context) {
                                     print(controller.suggestUserPagingController
                                         .itemList?.length);
-                                    return const Padding(
-                                        padding: EdgeInsets.only(top: 200),
+                                    return Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 200),
                                         child: Center(
                                           child: Label(
-                                            text: "No friends suggested",
-                                            style: TextStyle(
+                                            text: LocaleKeys
+                                                .noFriendsSuggested.localize,
+                                            style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 18,
                                             ),
@@ -101,7 +107,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                 .id);
                                       },
                                       child: Container(
-                                        width: 200,
+                                        width: 400.w,
                                         padding:
                                             const EdgeInsets.only(bottom: 10),
                                         margin:
@@ -121,8 +127,6 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                             Expanded(
                                               child: ImageFromInternet(
                                                 image: item.profilePicture,
-                                                // height: 220,
-                                                width: 300,
                                                 borderRadius:
                                                     const BorderRadius.only(
                                                   topLeft: Radius.circular(5),
@@ -138,8 +142,8 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  const SizedBox(
-                                                    height: 10,
+                                                  SizedBox(
+                                                    height: 10.h,
                                                   ),
                                                   Label(
                                                     text:
@@ -147,22 +151,15 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                     maxLines: 1,
                                                     style: Styles.mediumText(),
                                                   ),
-                                                  SizedBox(
-                                                    height: item.sendWelcomeSuccessfully ==
-                                                            true
-                                                        ? 30
-                                                        : item.followSuccessfully ==
-                                                                    true &&
-                                                                item.addedSuccessfully ==
-                                                                    true
-                                                            ? 20
-                                                            : 30,
+                                                  Sizer(
+                                                    height: 10.h,
                                                   ),
                                                   item.sendWelcomeSuccessfully ==
                                                           true
                                                       ? Label(
-                                                          text:
-                                                              "Message sent successfully",
+                                                          text: LocaleKeys
+                                                              .messageSentSuccessfully
+                                                              .localize,
                                                           style:
                                                               Styles.mediumText(
                                                                   color: Colors
@@ -233,20 +230,23 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                           title:
                                                                               Label(
                                                                             text:
-                                                                                'Enter Greet Message',
+                                                                                LocaleKeys.enterGreetMessage.localize,
                                                                             style:
                                                                                 Styles.headerText(),
                                                                           ),
                                                                           content:
-                                                                              TextFormField(
+                                                                              TextField(
+                                                                            // focusNode: focusNode,
+                                                                            maxLines:
+                                                                                null,
+                                                                            maxLength:
+                                                                                150,
+                                                                            onChanged:
+                                                                                (c) {},
                                                                             controller:
                                                                                 messageController,
-                                                                            onChanged:
-                                                                                (c) {
-                                                                              setState(() {});
-                                                                            },
                                                                             decoration: InputDecoration(
-                                                                                hintText: "Greet Message",
+                                                                                hintText: LocaleKeys.greetMessage.localize,
                                                                                 fillColor: Colors.white,
                                                                                 hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
                                                                           ),
@@ -255,9 +255,15 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                               onPressed: () {
                                                                                 Navigator.of(context).pop(); // Close the dialog
                                                                               },
-                                                                              child: Label(
-                                                                                text: 'Cancel',
-                                                                                style: Styles.headerText(),
+                                                                              child: Container(
+                                                                                width: 100,
+                                                                                padding: const EdgeInsets.all(2),
+                                                                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4), border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                                                                                alignment: Alignment.center,
+                                                                                child: Label(
+                                                                                  text: LocaleKeys.cancel.localize,
+                                                                                  style: Styles.headerText(color: Colors.red),
+                                                                                ),
                                                                               ),
                                                                             ),
                                                                             InkWell(
@@ -265,18 +271,18 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                                 if (messageController.text.isNotEmpty) {
                                                                                   await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
                                                                                   controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
-                                                                                  showSuccessMessage(context, 'Message send successfully');
+                                                                                  showSuccessMessage(context, LocaleKeys.messageSentSuccessfully.localize);
                                                                                   Navigator.of(context).pop();
                                                                                   setState(() {});
                                                                                 }
                                                                               },
                                                                               child: Container(
                                                                                 width: 100,
-                                                                                padding: const EdgeInsets.all(5),
-                                                                                decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(15)),
+                                                                                padding: const EdgeInsets.all(2),
+                                                                                decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(4)),
                                                                                 alignment: Alignment.center,
                                                                                 child: Label(
-                                                                                  text: 'Send',
+                                                                                  text: LocaleKeys.send.localize,
                                                                                   style: Styles.headerText(color: Colors.white),
                                                                                 ),
                                                                               ),
@@ -290,14 +296,15 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                 child: item.sendWelcomeSuccessfully ==
                                                                         true
                                                                     ? Label(
-                                                                        text:
-                                                                            'Message send successfully',
+                                                                        text: LocaleKeys
+                                                                            .messageSentSuccessfully
+                                                                            .localize,
                                                                         style: Styles
                                                                             .headerText(),
                                                                       )
                                                                     : Container(
                                                                         height:
-                                                                            30,
+                                                                            40.h,
                                                                         alignment:
                                                                             Alignment.center,
                                                                         decoration:
@@ -306,7 +313,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                               ? Border.all()
                                                                               : null,
                                                                           borderRadius:
-                                                                              BorderRadius.circular(5),
+                                                                              BorderRadius.circular(4),
                                                                           color: item.addedSuccessfully == false
                                                                               ? AppColors.PRIMARY_COLOR
                                                                               : item.addedSuccessfully == true && item.followSuccessfully == false
@@ -316,13 +323,13 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                         child:
                                                                             Label(
                                                                           text: item.addedSuccessfully == false
-                                                                              ? 'Add Friend'
+                                                                              ? LocaleKeys.addFriend.localize
                                                                               : item.addedSuccessfully == true && item.followSuccessfully == false
-                                                                                  ? 'Follow'
-                                                                                  : "Send Greet Message",
+                                                                                  ? LocaleKeys.follow.localize
+                                                                                  : LocaleKeys.sendGreetMessage.localize,
                                                                           style: Styles.mediumText(
                                                                               color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
-                                                                              fontSize: 14,
+                                                                              fontSize: 24,
                                                                               fontWeight: FontWeight.bold),
                                                                         ),
                                                                       ),
@@ -333,53 +340,55 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                             ),
                                                             if (item.addedSuccessfully ==
                                                                 false)
-                                                              Expanded(
-                                                                child: InkWell(
-                                                                  onTap:
-                                                                      () async {
-                                                                    bool data = await controller.removeSuggestUser(
-                                                                        context:
-                                                                            context,
-                                                                        userId:
-                                                                            item.id);
-                                                                    if (data ==
-                                                                        true) {
-                                                                      controller
-                                                                          .suggestUserPagingController
-                                                                          .itemList
-                                                                          ?.removeWhere((e) =>
-                                                                              e.id ==
-                                                                              controller.suggestUserPagingController.itemList?[index].id);
-                                                                      setState(
-                                                                          () {});
-                                                                    }
-                                                                  },
-                                                                  child:
-                                                                      Container(
-                                                                    height: 30,
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              5),
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                    child:
-                                                                        Label(
-                                                                      text:
-                                                                          'Remove',
-                                                                      style: Styles.mediumText(
-                                                                          color: Colors
-                                                                              .black,
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontWeight:
-                                                                              FontWeight.bold),
-                                                                    ),
+                                                              InkWell(
+                                                                onTap:
+                                                                    () async {
+                                                                  bool data = await controller.removeSuggestUser(
+                                                                      context:
+                                                                          context,
+                                                                      userId: item
+                                                                          .id);
+                                                                  if (data ==
+                                                                      true) {
+                                                                    controller
+                                                                        .suggestUserPagingController
+                                                                        .itemList
+                                                                        ?.removeWhere((e) =>
+                                                                            e.id ==
+                                                                            controller.suggestUserPagingController.itemList?[index].id);
+                                                                    setState(
+                                                                        () {});
+                                                                  }
+                                                                },
+                                                                child:
+                                                                    Container(
+                                                                  padding: EdgeInsets
+                                                                      .symmetric(
+                                                                          horizontal:
+                                                                              10.w),
+                                                                  height: 40.h,
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(4),
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                  child: Label(
+                                                                    text: LocaleKeys
+                                                                        .remove
+                                                                        .localize,
+                                                                    style: Styles.mediumText(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontSize:
+                                                                            22,
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
                                                                   ),
                                                                 ),
                                                               ),
@@ -411,7 +420,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                 ),
                 Container(
                   width: double.infinity,
-                  height: 5,
+                  height: 5.h,
                   color: AppColors.LIGHT_GRAY_COLOR,
                 ),
               ],

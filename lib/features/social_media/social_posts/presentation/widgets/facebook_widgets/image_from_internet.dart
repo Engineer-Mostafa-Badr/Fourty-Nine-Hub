@@ -5,19 +5,26 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../../res/style/const.dart';
+
 class ImageFromInternet extends StatelessWidget {
-  const ImageFromInternet(
-      {super.key,
-      required this.image,
-      this.width,
-      this.height,
-      this.borderRadius,
-      this.fromFile = false});
+  const ImageFromInternet({
+    super.key,
+    required this.image,
+    this.width,
+    this.height,
+    this.borderRadius,
+    this.fromFile = false,
+    this.isCircle = false,
+    this.defaultLogo = false,
+  });
   final String image;
   final double? width;
   final double? height;
   final BorderRadius? borderRadius;
   final bool? fromFile;
+  final bool? isCircle;
+  final bool? defaultLogo;
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
@@ -27,6 +34,7 @@ class ImageFromInternet extends StatelessWidget {
         width: width,
         decoration: BoxDecoration(
           borderRadius: borderRadius,
+          shape: isCircle == true ? BoxShape.circle : BoxShape.rectangle,
           image: DecorationImage(
             image: imageProvider,
             fit: BoxFit.fill,
@@ -39,16 +47,22 @@ class ImageFromInternet extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           borderRadius: borderRadius,
+          shape: isCircle == true ? BoxShape.circle : BoxShape.rectangle,
           color: AppColors.PRIMARY_COLOR,
           image: fromFile == true
               ? DecorationImage(
                   image: FileImage(File(image)),
-                  fit: BoxFit.contain,
+                  fit: BoxFit.fill,
                 )
-              : DecorationImage(
-                  image: AssetImage(Assets.logo),
-                  fit: BoxFit.contain,
-                ),
+              : defaultLogo == true
+                  ? DecorationImage(
+                      image: AssetImage(Assets.logo),
+                      fit: BoxFit.fill,
+                    )
+                  : const DecorationImage(
+                      image: NetworkImage(UIConst.profilePlaceHolder),
+                      fit: BoxFit.fill,
+                    ),
         ),
       ),
       placeholder: (context, url) => Container(
@@ -58,9 +72,10 @@ class ImageFromInternet extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: borderRadius,
           color: AppColors.PRIMARY_COLOR,
+          shape: isCircle == true ? BoxShape.circle : BoxShape.rectangle,
           image: DecorationImage(
             image: AssetImage(Assets.logo),
-            fit: BoxFit.contain,
+            fit: BoxFit.fill,
           ),
         ),
       ),

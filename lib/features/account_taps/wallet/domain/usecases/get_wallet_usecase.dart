@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_entity.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_entity.dart';
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';

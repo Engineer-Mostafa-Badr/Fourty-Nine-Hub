@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_subcategory_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
@@ -110,7 +111,9 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
     BuildContext context,
   ) {
     final subCategoryId = widget.subCategoryCardData.sId ?? '';
-    final subCategoryName = widget.subCategoryCardData.nameEn ?? '';
+    final subCategoryName = context.isArabic
+        ? widget.subCategoryCardData.nameAr
+        : widget.subCategoryCardData.nameEn;
     final subCategoryPicture = widget.subCategoryCardData.picture ?? '';
 
     return Padding(
@@ -122,14 +125,14 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                subCategoryName,
+                subCategoryName.toString(),
                 style: Styles.headerText(
                   fontSize: MediaQuery.of(context).size.width * 0.089,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
-                '${9355.toShortScale} ads',
+                '${9355.toShortScale} ${context.isArabic ? "إعلان" : "ads"}',
                 style: Styles.mediumText(
                   fontSize: MediaQuery.of(context).size.width * 0.07,
                 ),
@@ -153,7 +156,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
                           params: TinderSubAdsViewParams(
                             subCategory: SubCategoryEntity(
                               id: subCategoryId,
-                              name: subCategoryName,
+                              name: subCategoryName.toString(),
                               image: subCategoryPicture,
                               isFavorite: containsSpecificId(
                                   state.getFavCategoryModel?.data ?? [],

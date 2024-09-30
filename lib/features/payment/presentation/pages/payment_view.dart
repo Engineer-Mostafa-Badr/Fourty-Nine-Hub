@@ -5,10 +5,13 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/widgets/payment_fawry_widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PaymobLink {
@@ -68,6 +71,7 @@ class _PaymentViewState extends State<PaymentView> {
                         icon: Image.asset(
                           Assets.paymob,
                           fit: BoxFit.cover,
+                          height: 30.h,
                         ),
                         color: Colors.blue,
                         details: 'Enter your credit card details',
@@ -81,6 +85,7 @@ class _PaymentViewState extends State<PaymentView> {
                         icon: Image.asset(
                           Assets.fawry,
                           fit: BoxFit.cover,
+                          height: 30.h,
                         ),
                         color: Colors.orange,
                         details: 'Enter your Paymob link',
@@ -94,6 +99,7 @@ class _PaymentViewState extends State<PaymentView> {
                         icon: Image.asset(
                           Assets.instaPay,
                           fit: BoxFit.cover,
+                          height: 50.h,
                         ),
                         color: Colors.deepPurple,
                         details: 'Enter your bank account details',
@@ -102,10 +108,10 @@ class _PaymentViewState extends State<PaymentView> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20.0),
+                SizedBox(height: 20.h),
                 _buildPaymentBody(context),
                 if (_selectedPaymentMethod == 'Credit Card') ...[
-                  const SizedBox(height: 20.0),
+                  SizedBox(height: 20.h),
                 ],
               ],
             ),
@@ -147,12 +153,12 @@ class _PaymentViewState extends State<PaymentView> {
         }
       },
       child: Container(
-        height: 130,
+        height: 150.h,
         margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(15.r),
           border: Border.all(
             color: _selectedPaymentMethod == title ? color : Colors.grey,
             width: 2.0,
@@ -173,11 +179,7 @@ class _PaymentViewState extends State<PaymentView> {
             const Spacer(),
             Text(
               title,
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.bold,
-                fontSize: 16.0,
-              ),
+              style: Styles.mediumText(color: color),
               maxLines: 2,
               textAlign: TextAlign.center,
             ),
@@ -253,7 +255,7 @@ class _PaymentViewState extends State<PaymentView> {
               }
             },
           ),
-          const SizedBox(height: 15),
+          SizedBox(height: 15.h),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.PRIMARY_COLOR,
@@ -261,15 +263,14 @@ class _PaymentViewState extends State<PaymentView> {
             onPressed: () {},
             child: Text(
               "${widget.amount}",
-              style:
-                  const TextStyle(color: AppColors.LIGHT_COLOR, fontSize: 20),
+              style: TextStyle(color: AppColors.LIGHT_COLOR, fontSize: 20.sp),
             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               Label(
                 text: "Snap copy of bill payment",
                 style: Styles.headerText(),
@@ -316,12 +317,13 @@ class _PaymentViewState extends State<PaymentView> {
                             backgroundColor: Colors.green,
                           ),
                         );
+                        context.go(Routes.HOME);
                       }
                     },
-                    child: const Text(
+                    child: Text(
                       "Send for review and approval",
-                      style:
-                          TextStyle(color: AppColors.LIGHT_COLOR, fontSize: 20),
+                      style: TextStyle(
+                          color: AppColors.LIGHT_COLOR, fontSize: 20.sp),
                     ),
                   );
                 },

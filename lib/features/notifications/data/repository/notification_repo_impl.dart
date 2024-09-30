@@ -1,71 +1,64 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/data/models/notification_model.dart';
+import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import '../../../../core/utils/api_service.dart';
-import '../../../../core/utils/shared_pref.dart';
-import '../models/delete_notification_model.dart';
-import 'notification_repo.dart';
+import 'package:fourtyninehub/features/notifications/data/data_source/notifications_remote_data_source.dart';
+import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
+import 'package:fourtyninehub/features/notifications/domain/entities/unread_notifications_count_entity.dart';
+
+import '../../domain/repos/notification_repo.dart';
 
 class NotificationRepoImpl implements NotificationRepo {
-  final ApiService apiService;
-
-  NotificationRepoImpl(this.apiService);
+  final NotificationsRemoteDataSource notificationRemoteDataSource;
+  NotificationRepoImpl({
+    required this.notificationRemoteDataSource,
+  });
   @override
-  Future<Either<Failure, NotificationModel>> fetchNotifications(
-      String type) async {
-    String? accessToken = await TokenManager.getAccessToken();
-    String? refreshToken = await TokenManager.getRefreshToken();
-    try {
-      var data = await apiService.get(
-          url: 'api/v1/notifications?type=$type', token: accessToken);
-      var notification = NotificationModel.fromJson(data);
-      return right(notification);
-    } catch (e) {
-      return left(const CacheFailure());
-    }
+  Future<Either<Failure, List<NotificationEntity>>> fetchNotifications({
+    required String type,
+    required int page,
+    int limit = 10,
+  }) async {
+    return notificationRemoteDataSource.fetchNotifications(
+        type: type, page: page, limit: limit);
   }
 
   @override
-  Future<Either<Failure, DeleteNotificationModel>> deleteItemNotifications(
-      String id) async {
-    String? accessToken = await TokenManager.getAccessToken();
-    String? refreshToken = await TokenManager.getRefreshToken();
-    var data = await apiService.delete(
-        url: 'api/v1/notifications/$id', token: accessToken);
-    var notification = DeleteNotificationModel.fromJson(data);
-    return right(notification);
+  Future<void> setupInteractedMessage({
+    required BuildContext context,
+  }) async {
+    notificationRemoteDataSource.setupInteractedMessage(context: context);
+  }
+
+  @override
+  Future<void> notificationListener(
+      {required Function(Map<String, dynamic> data) notificationCallback}) {
+    return notificationRemoteDataSource.notificationListener(
+        notificationCallback: notificationCallback);
+  }
+
+  @override
+  Future<Either<Failure, UnreadNotificationsCountEntity>>
+      getUnreadNotificationsCount() {
+    return notificationRemoteDataSource.getUnreadNotificationsCount();
+  }
+
+  @override
+  Future<Either<Failure, bool>> notificationSeen({required String id}) {
+    return notificationRemoteDataSource.notificationSeen(id: id);
+  }
+
+  @override
+  Future<Either<Failure, bool>> allNotificationSeen({required String type}) {
+    return notificationRemoteDataSource.allNotificationSeen(type: type);
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteNotification({required String id}) {
+    return notificationRemoteDataSource.deleteNotification(id: id);
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteAllNotifications({required String type}) {
+    return notificationRemoteDataSource.deleteAllNotifications(type: type);
   }
 }
-
-// Failure handleApiError(dynamic error) {
-//   if (error is DioError) {
-//     // Handle Dio-specific errors
-//     if (error.response != null) {
-//       // Server errors (e.g., 500, 404, etc.)
-//       return ServerFailure(
-//         message: error.response?.statusMessage ?? 'Server error occurred',
-//         statusCode: error.response?.statusCode,
-//         errors: (error.response?.data['errors'] as List<dynamic>?)
-//             ?.map((e) => e.toString())
-//             .toList(),
-//       );
-//     } else if (error.type == DioErrorType.connectTimeout ||
-//         error.type == DioErrorType.receiveTimeout) {
-//       // Handle timeout errors
-//       return ServerFailure(message: 'Connection timeout');
-//     } else if (error.type == DioErrorType.response &&
-//         error.response?.statusCode == 401) {
-//       // Unauthorized error
-//       return UnauthorizedFailure();
-//     } else {
-//       // Other Dio errors
-//       return UnknownFailure('');
-//     }
-//   } else if (error is CacheException) {
-//     // Handle cache-related errors
-//     return CacheFailure();
-//   } else {
-//     // Fallback to an unknown failure for any other errors
-//     return UnknownFailure('');
-//   }
-// }

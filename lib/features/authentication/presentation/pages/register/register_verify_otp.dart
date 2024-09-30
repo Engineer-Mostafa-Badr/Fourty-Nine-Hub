@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/service/background_service.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
@@ -50,6 +51,13 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
               state.userTokensEntity.accessToken);
           await TokenManager.saveRefreshToken(
               state.userTokensEntity.refreshToken);
+          await BackgroundService.reStartWebSocketService(
+              state.userTokensEntity.accessToken);
+
+          context.read<NotificationSocketIoCubit>().notificationListener();
+          context
+              .read<NotificationSocketIoCubit>()
+              .clearAllNotificationsAndRefeatchAfterLogin();
 
           serviceLocator<UserCubit>()
             ..setLogin(true)
@@ -70,9 +78,8 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
               print(serviceLocator<UserCubit>().state.data.toString());
 
               // Navigate to the home screen
-              context.go(Routes.HOME);
-              context.pop();
-              context.pop();
+              Navigator.pop(context);
+              context.push(Routes.HOME);
 
               // Show the success dialog after navigation
               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -84,10 +91,10 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                         backgroundColor:
                             Theme.of(context).scaffoldBackgroundColor,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24.0.zR),
+                          borderRadius: BorderRadius.circular(24.0.r),
                         ),
                         child: Container(
-                          padding: EdgeInsets.all(30.0.zW),
+                          padding: EdgeInsets.all(30.0.w),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
@@ -95,15 +102,15 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                                 LocaleKeys.congratulations.localize,
                                 style: Styles.headerText(
                                     color: AppColors.SECONDARY_COLOR,
-                                    fontSize: 45),
+                                    fontSize: 45.sp),
                               ),
-                              SizedBox(height: 16.0.zH),
+                              SizedBox(height: 16.h),
                               Text(
                                 LocaleKeys.giftApp.localize,
                                 textAlign: TextAlign.center,
                                 style: Styles.mediumText(),
                               ),
-                              SizedBox(height: 40.0.zH),
+                              SizedBox(height: 40.h),
                               ElevatedButton(
                                 onPressed: () {
                                   Navigator.of(context)
@@ -113,14 +120,13 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                                   backgroundColor:
                                       Theme.of(context).primaryColor,
                                   shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(16.0.zR),
+                                    borderRadius: BorderRadius.circular(16.0.r),
                                   ),
                                 ),
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
-                                    horizontal: 40.0.zW,
-                                    vertical: 24.0.zH,
+                                    horizontal: 40.0.w,
+                                    vertical: 24.h,
                                   ),
                                   child: Text(
                                     LocaleKeys.close.localize,

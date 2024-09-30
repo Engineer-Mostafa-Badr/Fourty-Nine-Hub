@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
@@ -8,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FacebookAdvertisementCard extends StatelessWidget {
   const FacebookAdvertisementCard({super.key, required this.post});
@@ -18,7 +21,8 @@ class FacebookAdvertisementCard extends StatelessWidget {
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          border: Border.all(), borderRadius: BorderRadius.circular(15)),
+          border: Border.all(color: AppColors.DIVIDER_GRAY_COLOR),
+          borderRadius: BorderRadius.circular(5)),
       child: Column(
         children: [
           SizedBox(
@@ -62,13 +66,14 @@ class FacebookAdvertisementCard extends StatelessWidget {
                         children: [
                           ImageFromInternet(
                             image: post.images?[index] ?? '',
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(5),
+                            defaultLogo: true,
                           ),
 
                           // Container(
-                          //   margin: const EdgeInsetsDirectional.only(
+                          //   margin: EdgeInsetsDirectional.only(
                           //       end: 10, bottom: 10),
-                          //   padding: const EdgeInsets.all(10),
+                          //   padding: EdgeInsets.all(10),
                           //   decoration: BoxDecoration(
                           //     color: Colors.red,
                           //     borderRadius: BorderRadius.circular(15),
@@ -84,10 +89,10 @@ class FacebookAdvertisementCard extends StatelessWidget {
                             Container(
                               margin: const EdgeInsetsDirectional.only(
                                   end: 10, bottom: 10),
-                              // padding: const EdgeInsets.all(10),
+                              // padding: EdgeInsets.all(10),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: BorderRadius.circular(5),
                                 color: Colors.black.withOpacity(0.5),
                               ),
                               child: Center(
@@ -103,14 +108,14 @@ class FacebookAdvertisementCard extends StatelessWidget {
                       ),
                     )),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: 10.h,
           ),
           Label(
             text: post.description ?? '',
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: 10.h,
           ),
           GestureDetector(
             onTap: () {},
@@ -121,10 +126,10 @@ class FacebookAdvertisementCard extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: AppColors.PRIMARY_COLOR,
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Label(
-                text: 'Send Message',
+                text: LocaleKeys.sendMessage.localize,
                 style: Styles.headerText(
                   color: Colors.white,
                 ),

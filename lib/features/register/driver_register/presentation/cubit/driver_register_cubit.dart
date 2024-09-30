@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/car_type_model.dart';
 import 'package:fourtyninehub/features/register/driver_register/data/models/rider_info_model.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
@@ -30,9 +31,12 @@ class DriverRegisterCubit extends Cubit<DriverRegisterState> {
     emit(state.copyWith(status: DriverRegisterStatuses.loading));
     try {
       // -------------------------------load subcategories ---------------------------
+      final user = UserCubit.to.state.data?.id;
       final subCategories = await _getSubCategoriesUseCase.call(
           GetSubCategoriesParams(
-              mainCategoryId: id, paginationParams: PaginationParams.basic()));
+              mainCategoryId: id,
+              paginationParams: PaginationParams.basic(),
+              userId: user ?? ''));
       subCategories.fold((failure) {
         emit(state.copyWith(
           failure: failure,

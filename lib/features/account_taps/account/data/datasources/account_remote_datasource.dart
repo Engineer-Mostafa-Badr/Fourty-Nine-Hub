@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
@@ -7,7 +5,6 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_ad_entity.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_subcategory_entity.dart';
-import 'package:fourtyninehub/res/assets/jsons.dart';
 import '../../domain/entities/favourite_category_entity.dart';
 import '../models/favourite_ad_model.dart';
 import '../models/favourite_category_model1.dart';
@@ -30,14 +27,12 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
   @override
   Future<Either<Failure, List<FavouriteCategoryEntity>>>
       getFavouriteCategories() async {
-    final response = await _apiConsumer.get(EndPoints.favouriteCategoriesList);
-    log(response.toString(), name: "lskdjfslkdfjslkdfjslkdfjsdf");
-    return response.fold((failure) => Left(failure), (data) {
-      log(data.toString(), name: "kljjjjjjjjjjjjjjjjjjjjjjjjj");
-      return Right((data['data']['favorites'] as List)
-          .map((e) => FavouriteCategoryModel.fromJson(e))
-          .toList());
-    });
+    final response = await _apiConsumer.get(EndPoints.favouriteCategories);
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data']['favorites'] as List)
+            .map((e) => FavouriteCategoryModel.fromJson(e))
+            .toList()));
   }
 
   @override
@@ -53,10 +48,10 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
   @override
   Future<Either<Failure, List<FavouriteSubcategoryEntity>>>
       getFavouriteSubcategories() async {
-    final response = await _apiConsumer.get(Jsons.favouriteSubcategoriesList);
+    final response = await _apiConsumer.get(EndPoints.favouriteSubCategories);
     return response.fold(
         (failure) => Left(failure),
-        (data) => Right((data['data']['items'] as List)
+        (data) => Right((data['data'] as List)
             .map((e) => FavouriteSubcategoryModel.fromJson(e))
             .toList()));
   }

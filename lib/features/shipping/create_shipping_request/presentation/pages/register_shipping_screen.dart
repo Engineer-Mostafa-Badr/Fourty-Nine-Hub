@@ -1,8 +1,10 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
@@ -92,7 +94,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     // ),
                     // const Gap(30),
                     Text(
-                      "Welcome to Ship Register",
+                      "Welcome to Ship Register".tr(),
                       style: Styles.headerText(
                         fontSize: 40,
                         color: AppColors.PRIMARY_COLOR_DARK,
@@ -121,7 +123,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                     log(value.toString());
                                     return shippingcubit.validation(
                                       message:
-                                          "Choose your favorite Sub Category!",
+                                          "Choose your favorite Sub Category!".tr(),
                                       condition:
                                           shippingcubit.model.subCategoryId ==
                                               null,
@@ -179,7 +181,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                                   .size
                                                   .width *
                                               0.95,
-                                          hintText: "Sub Category",
+                                          hintText: "Sub Category".tr(),
                                           dropdownMenuEntries: state
                                               .model.subCategories!
                                               .map((e) => SubCategoryEntity(
@@ -241,7 +243,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                           child: FirstNameTextFormField(
                             validator: (String? value) {
                               if (value == null || value.isEmpty) {
-                                return "First name is required!";
+                                return "First name is required!".tr();
                               }
                               return null;
                             },
@@ -257,7 +259,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                           child: LastNameTextFormField(
                             validator: (String? value) {
                               if (value == null || value.isEmpty) {
-                                return "Last name is required!";
+                                return "Last name is required!".tr();
                               }
                               return null;
                             },
@@ -281,7 +283,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       currentController: phoneController,
                       validator: (p0) {
                         if (p0 == null || p0.isEmpty) {
-                          return "Phone is required!";
+                          return "Phone is required!".tr();
                         }
                         return null;
                       },
@@ -352,7 +354,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                         if (shippingcubit.model.carImageInFront == null &&
                             shippingcubit.model.idImageBehind == null &&
                             shippingcubit.model.idImageInFront == null) {
-                          return "This field is required!";
+                          return "This field is required!".tr();
                         }
                         return null;
                       },
@@ -369,8 +371,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Text(
-                                        "Car Picture",
+                                       Text(
+                                        "Car Picture".tr(),
                                         style: TextStyle(
                                             fontSize: 17,
                                             color: AppColors.PRIMARY_COLOR,
@@ -390,7 +392,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                             validator: (value) {
                                               return shippingcubit.validation(
                                                   message:
-                                                      "This field is required.",
+                                                      "This field is required.".tr(),
                                                   condition: shippingcubit.model
                                                           .carImageInFront ==
                                                       null);
@@ -429,8 +431,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Label(
-                                        text: "ID",
+                                      Label(
+                                        text: "ID".tr(),
                                         style: TextStyle(
                                             fontSize: 17,
                                             color: AppColors.PRIMARY_COLOR,
@@ -455,7 +457,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                                 validator: (value) {
                                                   return shippingcubit.validation(
                                                       message:
-                                                          "This field is required.",
+                                                          "This field is required.".tr(),
                                                       condition: shippingcubit
                                                               .model
                                                               .idImageInFront ==
@@ -476,7 +478,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                                 validator: (value) {
                                                   return shippingcubit.validation(
                                                       message:
-                                                          "This field is required.",
+                                                          "This field is required.".tr(),
                                                       condition: shippingcubit
                                                               .model
                                                               .idImageInFront ==
@@ -543,7 +545,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                         null ||
                                     shippingcubit.model.drivingImageInFront ==
                                         null) {
-                                  return "This field is required!";
+                                  return "This field is required!".tr();
                                 }
                                 return null;
                               },
@@ -563,7 +565,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           validator: (value) {
                                             return shippingcubit.validation(
                                                 message:
-                                                    "This field is required.",
+                                                    "This field is required.".tr(),
                                                 condition: shippingcubit
                                                         .model.idImageInFront ==
                                                     null);
@@ -583,7 +585,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           validator: (value) {
                                             return shippingcubit.validation(
                                                 message:
-                                                    "This field is required.",
+                                                    "This field is required.".tr(),
                                                 condition: shippingcubit
                                                         .model.idImageInFront ==
                                                     null);
@@ -633,7 +635,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                         null ||
                                     shippingcubit.model.licenseImageInFront ==
                                         null) {
-                                  return "This field is required!";
+                                  return "This field is required.".tr();
                                 }
                                 return null;
                               },
@@ -653,7 +655,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           validator: (value) {
                                             return shippingcubit.validation(
                                                 message:
-                                                    "This field is required.",
+                                                    "This field is required.".tr(),
                                                 condition: shippingcubit
                                                         .model.idImageInFront ==
                                                     null);
@@ -673,7 +675,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           validator: (value) {
                                             return shippingcubit.validation(
                                                 message:
-                                                    "This field is required.",
+                                                    "This field is required.".tr(),
                                                 condition: shippingcubit
                                                         .model.idImageInFront ==
                                                     null);
@@ -780,7 +782,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                           child: DefaultTextFormField(
                             validator: (p0) {
                               if (p0 == null || p0.isEmpty) {
-                                return "This field is required!";
+                                return "This field is required!".tr();
                               }
                               return null;
                             },
@@ -796,13 +798,13 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                           child: DefaultTextFormField(
                             validator: (p0) {
                               if (p0 == null || p0.isEmpty) {
-                                return "This field is required!";
+                                return "This field is required!".tr();
                               }
                               return null;
                             },
                             currentController: plateNumberController,
                             currentFocusNode: plateNumberFocusNode,
-                            hint: "Plate information",
+                            hint: "Plate information".tr(),
                           ),
                         ),
                       ],
@@ -823,7 +825,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       },
                       validator: (value) {
                         return shippingcubit.validation(
-                            message: "fill your id expiry date!",
+                            message: "fill your id expiry date!".tr(),
                             condition:
                                 shippingcubit.model.idExpiryDate == null);
                       },
@@ -902,7 +904,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //   height: 20,
                     // ),
                     CreateDoctorIDExpiryDatePicker(
-                      title: "Driving License Expiry Date",
+                      title: "Driving License Expiry Date".tr(),
                       // title: "" ExpiryDate",
                       textStyle: const TextStyle(
                           fontSize: 17,
@@ -916,7 +918,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       },
                       validator: (value) {
                         return shippingcubit.validation(
-                            message: "fill your driving license expiry date!",
+                            message: "fill your driving license expiry date!".tr(),
                             condition:
                                 shippingcubit.model.drivingExpiryDate == null);
                       },
@@ -990,7 +992,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     // ),
                     CreateDoctorIDExpiryDatePicker(
                       borderWidth: 1,
-                      title: "License Expiry Date",
+                      title: "License Expiry Date".tr(),
                       textStyle: const TextStyle(
                           fontSize: 17,
                           color: AppColors.PRIMARY_COLOR,
@@ -1000,7 +1002,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       },
                       validator: (value) {
                         return shippingcubit.validation(
-                            message: "fill your license expiry date!",
+                            message: "fill your license expiry date!".tr(),
                             condition:
                                 shippingcubit.model.licenseExpiryDate == null);
                       },
@@ -1031,7 +1033,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     FormField(
                       validator: (value) {
                         if (shippingcubit.model.model == null) {
-                          return "fill your car model!";
+                          return "fill your car model!".tr();
                         }
                         return null;
                       },

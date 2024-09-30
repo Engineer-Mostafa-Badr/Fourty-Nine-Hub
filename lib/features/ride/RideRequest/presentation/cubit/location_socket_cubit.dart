@@ -1,53 +1,42 @@
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/domain/repositories/reider_request_repository.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
-import 'package:fourtyninehub/main.dart';
 
 class LocationSocketCubit extends Cubit<RiderState> {
-  SocketIoService socketIoService;
-  LocationSocketCubit({required this.socketIoService}) : super(RiderInitial());
+  final ReiderRequestRepository repository;
+  LocationSocketCubit({required this.repository}) : super(RiderInitial());
 
   sendSubCategoryId(String id) {
-    var data = jsonEncode({
-      "subcategoryId": id,
-    });
-    socketIoService.socket?.emit("subcategory:driver", [data]);
+    repository.setSubCateogryId(subCategoryId: id);
   }
 
   updateDriverLocationOn() {
-    socketIoService.socket?.on(
-      "driver:location",
-      (data) {
-        log(data.toString());
-        updateDriverLocationEmit();
-      },
-    );
+    repository.updateDriverLocationOn();
   }
 
   updateDriverLocationEmit() {
-    if (socketIoService.socket == null) {
-      log("Socket is not connected");
-      return;
-    }
+    repository.updateDriverLocationEmit();
+  }
 
-    var data = jsonEncode({
-      "location": [12, 21],
-      "driverId": "string",
-      "subcategoryId": "string",
-    });
+  nearbyDriversEmit({
+    required List<dynamic> location,
+    required String subcategoryId,
+    required String tripId,
+  }) {
+    repository.nearbyDriversEmit(
+        location: location, subcategoryId: subcategoryId, tripId: tripId);
+    nearbyDriversOn();
+  }
 
-    socketIoService.socket!.emit("driver:location", [data]);
-    socketIoService.socket!.on(
-      "driver:location",
-      (data) {
-        log("-----------------------------------------------------",
-            name: "lllllllllllllllllllllll");
-        log(data.toString(), name: "lllllllllllllllllllllll");
-        log("-----------------------------------------------------",
-            name: "lllllllllllllllllllllll");
-      },
-    );
+  nearbyDriversOn() {
+    // var response = repository.nearbyDriversOn();
+    // log(response.drivers.toString() ?? "00000000000", name: "driversList");
   }
 }
+
+// const { location, subcategoryId , tripId} = JSON.parse(data) as {
+//         location: number[];
+//         subcategoryId: string;
+//         tripId : string;
+//       };

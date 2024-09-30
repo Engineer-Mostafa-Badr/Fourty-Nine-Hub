@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
@@ -25,7 +27,7 @@ class HealthSubCategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
             subCategory;
@@ -57,16 +59,20 @@ class HealthSubCategoryCard extends StatelessWidget {
                       right: 5,
                       child: IconAppButton(
                           size: 20,
-                          icon: subCategory.isFavorite
+                          icon: subCategory.isFavorite == true
                               ? Icons.favorite
                               : Icons.favorite_border,
                           color: ThemeCubit.get(context).isDarkTheme
-                              ? Theme.of(context).scaffoldBackgroundColor
+                              ? AppColors.QUANTITY_COLOR
                               : AppColors.PRIMARY_COLOR_DARK,
                           onPressed: () {
+                            log("${subCategory.isFavorite}777777777777777777777777777777777");
+
                             context
                                 .read<HealthCubit>()
                                 .toggleFavoriteSubcategory(subCategory.id);
+
+                            log("${subCategory.isFavorite}777777777777777777777777777777777");
                           })),
                 ],
               ),

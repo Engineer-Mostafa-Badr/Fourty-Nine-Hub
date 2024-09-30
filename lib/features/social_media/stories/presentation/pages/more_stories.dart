@@ -149,7 +149,7 @@
 // // // //                       left: 0,
 // // // //                       right: 0,
 // // // //                       child: Padding(
-// // // //                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
+// // // //                         padding: EdgeInsets.symmetric(horizontal: 8.0),
 // // // //                         child: Row(
 // // // //                           crossAxisAlignment: CrossAxisAlignment.center,
 // // // //                           children: [
@@ -181,7 +181,7 @@
 // // // //                                 userStory.user?.profilePictureUrl ?? '',
 // // // //                               ),
 // // // //                             ),
-// // // //                             const SizedBox(
+// // // //                             SizedBox(
 // // // //                               width: 8,
 // // // //                             ),
 // // // //                             Column(
@@ -192,12 +192,12 @@
 // // // //                                   capitalizeAndSplit2Only(
 // // // //                                       '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
 // // // //                                   style: const TextStyle(
-// // // //                                     fontSize: 18,
+// // // //                                     fontSize: 18.sp,
 // // // //                                     color: Colors.white,
 // // // //                                   ),
 // // // //                                 ),
-// // // //                                 const SizedBox(
-// // // //                                   height: 4,
+// // // //                                 SizedBox(
+// // // //                                   height: 4.h,
 // // // //                                 ),
 // // // //                                 BlocConsumer<StoryCubit, StoryState>(
 // // // //                                   listener: (context, state) {
@@ -208,12 +208,12 @@
 // // // //                                       return Text(
 // // // //                                         'Last Seen: ${DateFormat('hh:mm a').format(state.currentStoryCreatedAt!)}',
 // // // //                                         style: const TextStyle(
-// // // //                                           fontSize: 12,
+// // // //                                           fontSize: 12.sp,
 // // // //                                           color: Colors.white70,
 // // // //                                         ),
 // // // //                                       );
 // // // //                                     }
-// // // //                                     return const Sizer();
+// // // //                                     return Sizer();
 // // // //                                   },
 // // // //                                 ),
 // // // //                               ],
@@ -268,7 +268,7 @@
 // // // // //                   crossAxisAlignment: CrossAxisAlignment.stretch,
 // // // // //                   children: [
 // // // // //                     Padding(
-// // // // //                       padding: const EdgeInsets.only(top: 25,bottom: 4),
+// // // // //                       padding: EdgeInsets.only(top: 25,bottom: 4),
 // // // // //                       child: Row(
 // // // // //                         crossAxisAlignment: CrossAxisAlignment.center,
 // // // // //                         children: [
@@ -301,7 +301,7 @@
 // // // // //                               userStory.user?.profilePictureUrl ?? '',
 // // // // //                             ),
 // // // // //                           ),
-// // // // //                           const SizedBox(
+// // // // //                           SizedBox(
 // // // // //                             width: 8,
 // // // // //                           ),
 // // // // //                           Column(
@@ -311,15 +311,15 @@
 // // // // //                               Text(
 // // // // //                                 capitalizeAndSplit2Only('${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
 // // // // //                                 style: const TextStyle(
-// // // // //                                   fontSize: 18,
+// // // // //                                   fontSize: 18.sp,
 // // // // //                                   color: Colors.white,
 // // // // //                                 ),
 // // // // //                               ),
-// // // // //                               const SizedBox(height: 4,),
+// // // // //                               SizedBox(height: 4.h,),
 // // // // //                               const Text(
 // // // // //                                 'Last Seen: 8 minute ago',
 // // // // //                                 style: TextStyle(
-// // // // //                                   fontSize: 12,
+// // // // //                                   fontSize: 12.sp,
 // // // // //                                   color: Colors.white70,
 // // // // //                                 ),
 // // // // //                               )
@@ -440,7 +440,7 @@
 // // // //               left: 0,
 // // // //               right: 0,
 // // // //               child: Padding(
-// // // //                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
+// // // //                 padding: EdgeInsets.symmetric(horizontal: 8.0),
 // // // //                 child: Row(
 // // // //                   crossAxisAlignment: CrossAxisAlignment.center,
 // // // //                   children: [
@@ -472,7 +472,7 @@
 // // // //                         userStory.user?.profilePictureUrl ?? '',
 // // // //                       ),
 // // // //                     ),
-// // // //                     const SizedBox(
+// // // //                     SizedBox(
 // // // //                       width: 8,
 // // // //                     ),
 // // // //                     Column(
@@ -483,12 +483,12 @@
 // // // //                           capitalizeAndSplit2Only(
 // // // //                               '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
 // // // //                           style: const TextStyle(
-// // // //                             fontSize: 18,
+// // // //                             fontSize: 18.sp,
 // // // //                             color: Colors.white,
 // // // //                           ),
 // // // //                         ),
-// // // //                         const SizedBox(
-// // // //                           height: 4,
+// // // //                         SizedBox(
+// // // //                           height: 4.h,
 // // // //                         ),
 // // // //                         BlocConsumer<StoryCubit, StoryState>(
 // // // //                           listener: (context, state) {
@@ -499,12 +499,12 @@
 // // // //                               return Text(
 // // // //                                 'Last Seen: ${DateFormat('hh:mm a').format(state.currentStoryCreatedAt!)}',
 // // // //                                 style: const TextStyle(
-// // // //                                   fontSize: 12,
+// // // //                                   fontSize: 12.sp,
 // // // //                                   color: Colors.white70,
 // // // //                                 ),
 // // // //                               );
 // // // //                             }
-// // // //                             return const Sizer();
+// // // //                             return Sizer();
 // // // //                           },
 // // // //                         ),
 // // // //                       ],
@@ -630,7 +630,7 @@
 // // //                 );
 // // //               },
 // // //             )
-// // //           : const Sizer(),
+// // //           : Sizer(),
 // // //     );
 // // //   }
 // // // }
@@ -743,13 +743,13 @@
 // // //   @override
 // // //   Widget build(BuildContext context) {
 // // //     return Padding(
-// // //       padding: const EdgeInsets.symmetric(horizontal: 8.0),
+// // //       padding: EdgeInsets.symmetric(horizontal: 8.0),
 // // //       child: Row(
 // // //         crossAxisAlignment: CrossAxisAlignment.center,
 // // //         children: [
 // // //           _buildBackButton(context),
 // // //           _buildUserAvatar(),
-// // //           const SizedBox(width: 8),
+// // //           SizedBox(width: 8),
 // // //           _buildUserInfo(context),
 // // //           const Spacer(),
 // // //           _buildMoreOptionsButton(),
@@ -788,19 +788,19 @@
 // // //         Text(
 // // //           capitalizeAndSplit2Only(
 // // //               '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
-// // //           style: const TextStyle(fontSize: 18, color: Colors.white),
+// // //           style: const TextStyle(fontSize: 18.sp, color: Colors.white),
 // // //         ),
-// // //         const SizedBox(height: 4),
+// // //         SizedBox(height: 4.h),
 // // //         // BlocBuilder<StoryCubit, StoryState>(
 // // //         //   builder: (context, state) {
 // // //         //     if (state.currentStoryCreatedAt != null) {
 // // //         //       return Text(
 // // //         //         'Last Seen: ${DateFormat('hh:mm a').format(
 // // //         //             state.currentStoryCreatedAt!)}',
-// // //         //         style: const TextStyle(fontSize: 12, color: Colors.white70),
+// // //         //         style: const TextStyle(fontSize: 12.sp, color: Colors.white70),
 // // //         //       );
 // // //         //     }
-// // //         //     return const SizedBox.shrink();
+// // //         //     return SizedBox.shrink();
 // // //         //   },
 // // //         // ),
 // // //       ],
@@ -960,7 +960,7 @@
 // //                 );
 // //               },
 // //             )
-// //           : const Sizer(),
+// //           : Sizer(),
 // //     );
 // //   }
 // // }
@@ -1103,13 +1103,13 @@
 // //     print(
 // //         "$createdAt-----------------------------------------------------------");
 // //     return Padding(
-// //       padding: const EdgeInsets.symmetric(horizontal: 8.0),
+// //       padding: EdgeInsets.symmetric(horizontal: 8.0),
 // //       child: Row(
 // //         crossAxisAlignment: CrossAxisAlignment.center,
 // //         children: [
 // //           _buildBackButton(context),
 // //           _buildUserAvatar(),
-// //           const SizedBox(width: 8),
+// //           SizedBox(width: 8),
 // //           _buildUserInfo(),
 // //           const Spacer(),
 // //           _buildMoreOptionsButton(),
@@ -1148,12 +1148,12 @@
 // //         Text(
 // //           capitalizeAndSplit2Only(
 // //               '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
-// //           style: const TextStyle(fontSize: 18, color: Colors.white),
+// //           style: const TextStyle(fontSize: 18.sp, color: Colors.white),
 // //         ),
-// //         const SizedBox(height: 4),
+// //         SizedBox(height: 4.h),
 // //         Text(
 // //           serviceLocator<StoryCubit>().state.currentStoryCreatedAt.toString(),
-// //           style: const TextStyle(fontSize: 18, color: Colors.white),
+// //           style: const TextStyle(fontSize: 18.sp, color: Colors.white),
 // //         ),
 // //       ],
 // //     );
@@ -1311,7 +1311,7 @@
 //                 );
 //               },
 //             )
-//           : const Sizer(),
+//           : Sizer(),
 //     );
 //   }
 // }
@@ -1454,13 +1454,13 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: 8.0),
+//       padding: EdgeInsets.symmetric(horizontal: 8.0),
 //       child: Row(
 //         crossAxisAlignment: CrossAxisAlignment.center,
 //         children: [
 //           _buildBackButton(context),
 //           _buildUserAvatar(),
-//           const SizedBox(width: 8),
+//           SizedBox(width: 8),
 //           _buildUserInfo(),
 //           const Spacer(),
 //           _buildMoreOptionsButton(),
@@ -1499,12 +1499,12 @@
 //         Text(
 //           capitalizeAndSplit2Only(
 //               '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
-//           style: const TextStyle(fontSize: 18, color: Colors.white),
+//           style: const TextStyle(fontSize: 18.sp, color: Colors.white),
 //         ),
-//         const SizedBox(height: 4),
+//         SizedBox(height: 4.h),
 //         Text(
 //           DateFormat('hh:mm a').format(createdAt),
-//           style: const TextStyle(fontSize: 12, color: Colors.white70),
+//           style: const TextStyle(fontSize: 12.sp, color: Colors.white70),
 //         ),
 //       ],
 //     );
@@ -1559,17 +1559,117 @@
 //   }
 // }
 
-// import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
-// import 'package:story_view/story_view.dart';
-
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:story_view/story_view.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../res/style/const.dart';
 import '../../../tinder/presentation/pages/user_profile.dart';
+import '../../../twitter/presentation/widgets/report_view.dart';
 import '../cubit/stories_cubit.dart';
+
+class ReactionWidget extends StatelessWidget {
+  final List<Map<String, dynamic>> reactions = [
+    {'icon': '❤️', 'color': Colors.red, 'label': 'Love'},
+    {'icon': '👍', 'color': Colors.blue, 'label': 'Like'},
+    {'icon': '😂', 'color': Colors.amber, 'label': 'Haha'},
+    {'icon': '😮', 'color': Colors.yellow, 'label': 'Wow'},
+    {'icon': '😢', 'color': Colors.orange, 'label': 'Sad'},
+    {'icon': '😠', 'color': Colors.redAccent, 'label': 'Angry'},
+  ];
+
+  ReactionWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          flex: 6,
+          child: Container(
+            padding: EdgeInsets.symmetric(
+                horizontal: 16.0, vertical: 0.h), // Adjust padding as per need
+            decoration: BoxDecoration(
+              color: Colors.grey[800],
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            clipBehavior: Clip.hardEdge,
+            child: TextField(
+              maxLines: null,
+              onChanged: (value) {
+                print("${value}11111111111111111111111111111111111");
+              },
+              cursorColor: Colors.white,
+              cursorErrorColor: Colors.red,
+              decoration: InputDecoration(
+                fillColor: Colors.transparent,
+                hintText: 'Send message...',
+                hintStyle: TextStyle(
+                  color: Colors.white54,
+                  fontSize: 16.sp,
+                ),
+                border: InputBorder.none, // Remove default underline
+              ),
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          flex: 4,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: reactions.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final reaction = reactions[index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: GestureDetector(
+                  onTap: () {
+                    // Action for reaction
+                    print('Selected: ${reaction['label']}');
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      FloatingActionButton.small(
+                        onPressed: () {},
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        child: Text(
+                          reaction['icon'],
+                          textScaler: const TextScaler.linear(2),
+                        ),
+                      )
+
+                      // Optionally add text below the icons
+                      // Text(reaction['label'], style: TextStyle(color: Colors.white, fontSize: 12.sp)),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
 
 class StoryViewScreen extends StatefulWidget {
   final int initialUserIndex;
@@ -1584,6 +1684,7 @@ class StoryViewScreen extends StatefulWidget {
 
 class StoryViewScreenState extends State<StoryViewScreen> {
   late final PageController _pageController;
+
   // late final StoryCubit _storyCubit;
   // late List<UserStories> stories = [];
   int _currentUserIndex = 0;
@@ -1657,6 +1758,7 @@ class StoryViewScreenState extends State<StoryViewScreen> {
               },
               itemBuilder: (context, index) {
                 return UserStoryView(
+                  currentUserId: serviceLocator<UserCubit>().state.data!.id,
                   userStory: widget.stories[index],
                   onComplete: _navigateToNextUser,
                   onPrevious: _navigateToPreviousUser,
@@ -1672,12 +1774,14 @@ class UserStoryView extends StatefulWidget {
   final UserStories userStory;
   final VoidCallback onComplete;
   final VoidCallback onPrevious;
+  final String currentUserId;
 
   const UserStoryView({
     super.key,
     required this.userStory,
     required this.onComplete,
     required this.onPrevious,
+    required this.currentUserId,
   });
 
   @override
@@ -1685,21 +1789,24 @@ class UserStoryView extends StatefulWidget {
 }
 
 class UserStoryViewState extends State<UserStoryView> {
-  // late final StoryController _storyController;
+  late final StoryController _storyController;
   late final ValueNotifier<DateTime> _currentStoryCreatedAtNotifier;
+  late final ValueNotifier<String> _currentStoryIdNotifier;
 
   @override
   void initState() {
     super.initState();
-    // _storyController = StoryController();
+    _storyController = StoryController();
     _currentStoryCreatedAtNotifier =
-        ValueNotifier<DateTime>(widget.userStory.stories!.first.createdAt!);
+        ValueNotifier<DateTime>(widget.userStory.userStories!.first.createdAt!);
+    _currentStoryIdNotifier = ValueNotifier<String>('');
   }
 
   @override
   void dispose() {
-    // _storyController.dispose();
+    _storyController.dispose();
     _currentStoryCreatedAtNotifier.dispose();
+    _currentStoryIdNotifier.dispose();
     super.dispose();
   }
 
@@ -1710,108 +1817,136 @@ class UserStoryViewState extends State<UserStoryView> {
         // _buildStoryView(),
         _buildUserInfoBar(),
         _buildNavigationOverlay(),
+        Positioned(
+            bottom: 8,
+            right: 0,
+            left: 0,
+            child: SizedBox(height: kToolbarHeight, child: ReactionWidget())),
       ],
     );
   }
 
-  // Widget _buildStoryView() {
-  //   return StoryView(
-  //     storyItems: widget.userStory.stories
-  //             ?.map((story) => createStoryItem(story, _storyController))
-  //             .toList() ??
-  //         [],
-  //     onStoryShow: (storyItem, index) {
-  //       _currentStoryCreatedAtNotifier.value =
-  //           widget.userStory.stories![index].createdAt!;
-  //     },
-  //     controller: _storyController,
-  //     onComplete: widget.onComplete,
-  //     onVerticalSwipeComplete: (direction) {
-  //       if (direction == Direction.down) {
-  //         Navigator.of(context).pop();
-  //       }
-  //     },
-  //     progressPosition: ProgressPosition.top,
-  //   );
-  // }
+  Widget _buildStoryView() {
+    return StoryView(
+      storyItems: widget.userStory.userStories
+              ?.map(
+                  (story) => createStoryItem(context, story, _storyController))
+              .toList() ??
+          [],
+      onStoryShow: (storyItem, index) {
+        _currentStoryCreatedAtNotifier.value =
+            widget.userStory.userStories![index].createdAt!;
+        _currentStoryIdNotifier.value =
+            widget.userStory.userStories![index].id ?? '';
+      },
+      controller: _storyController,
+      onComplete: widget.onComplete,
+      onVerticalSwipeComplete: (direction) {
+        if (direction == Direction.down) {
+          Navigator.of(context).pop();
+        }
+      },
+      progressPosition: ProgressPosition.top,
+    );
+  }
 
   Widget _buildUserInfoBar() {
     return Positioned(
       top: kToolbarHeight,
       left: 0,
       right: 0,
-      child: BlocProvider(
-        create: (context) => context.read<StoryCubit>(),
-        child: ValueListenableBuilder<DateTime>(
-          valueListenable: _currentStoryCreatedAtNotifier,
-          builder: (context, createdAt, child) {
-            return UserInfoBar(
-              userStory: widget.userStory,
-              createdAt: createdAt,
-            );
-          },
-        ),
+      child: ValueListenableBuilder<DateTime>(
+        valueListenable: _currentStoryCreatedAtNotifier,
+        builder: (context, createdAt, child) {
+          return ValueListenableBuilder(
+            valueListenable: _currentStoryIdNotifier,
+            builder: (BuildContext context, value, Widget? child) {
+              return BlocProvider(
+                create: (context) => serviceLocator<StoryCubit>(),
+                child: UserInfoBar(
+                  currentUserId: widget.currentUserId,
+                  userStory: widget.userStory,
+                  createdAt: createdAt,
+                  currentStoryId: value,
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
 
   Widget _buildNavigationOverlay() {
-    return GestureDetector(
-      // onTapDown: (details) {
-      //   final screenWidth = MediaQuery.of(context).size.width;
-      //   if (details.globalPosition.dx < screenWidth / 2) {
-      //     _storyController.previous();
-      //   } else {
-      //     _storyController.next();
-      //   }
-      // },
-      onHorizontalDragEnd: (details) {
-        if (details.primaryVelocity != null) {
-          if (details.primaryVelocity! < 0) {
-            widget.onComplete(); // Swipe left to go to the next user
-          } else if (details.primaryVelocity! > 0) {
-            widget.onPrevious(); // Swipe right to go to the previous user
+    return Padding(
+      padding: const EdgeInsets.only(top: kToolbarHeight * 2),
+      child: GestureDetector(
+        // onTapDown: (details) {
+        //   final screenWidth = MediaQuery.of(context).size.width;
+        //   if (details.globalPosition.dx < screenWidth / 2) {
+        //     _storyController.previous();
+        //   } else {
+        //     _storyController.next();
+        //   }
+        // },
+        onHorizontalDragEnd: (details) {
+          if (details.primaryVelocity != null) {
+            if (details.primaryVelocity! < 0) {
+              widget.onComplete(); // Swipe left to go to the next user
+            } else if (details.primaryVelocity! > 0) {
+              widget.onPrevious(); // Swipe right to go to the previous user
+            }
           }
-        }
-      },
-      onVerticalDragEnd: (DragEndDetails details) {
-        if (details.primaryVelocity! < -300) {
-          Navigator.of(context).pop();
-        }
-      },
-      child: Container(
-        color: Colors.transparent,
-        child: Row(
-          children: [
-            Expanded(
-              child: GestureDetector(
-                // onTap: _storyController.previous,
-                child: Container(color: Colors.transparent),
+        },
+        onVerticalDragEnd: (DragEndDetails details) {
+          if (details.primaryVelocity! < -300 ||
+              details.primaryVelocity! > 300) {
+            Navigator.of(context).pop();
+          }
+        },
+        child: Container(
+          color: Colors.transparent,
+          child: Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: _storyController.previous,
+                  child: Container(color: Colors.transparent),
+                ),
               ),
-            ),
-            Expanded(
-              child: GestureDetector(
-                // onTap: _storyController.next,
-                child: Container(color: Colors.transparent),
+              Expanded(
+                child: GestureDetector(
+                  onTap: _storyController.next,
+                  child: Container(color: Colors.transparent),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class UserInfoBar extends StatelessWidget {
+class UserInfoBar extends StatefulWidget {
   final UserStories userStory;
   final DateTime createdAt;
+  final String currentUserId;
+  final String currentStoryId;
 
   const UserInfoBar({
     super.key,
     required this.userStory,
     required this.createdAt,
+    required this.currentUserId,
+    required this.currentStoryId,
   });
 
+  @override
+  State<UserInfoBar> createState() => _UserInfoBarState();
+}
+
+class _UserInfoBarState extends State<UserInfoBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -1824,7 +1959,7 @@ class UserInfoBar extends StatelessWidget {
           const SizedBox(width: 8),
           _buildUserInfo(),
           const Spacer(),
-          _buildMoreOptionsButton(),
+          _buildMoreOptionsButton(context),
         ],
       ),
     );
@@ -1846,7 +1981,8 @@ class UserInfoBar extends StatelessWidget {
   Widget _buildUserAvatar() {
     return CircleAvatar(
       minRadius: 25,
-      backgroundImage: NetworkImage(userStory.user?.profilePictureUrl ?? ''),
+      backgroundImage:
+          NetworkImage(widget.userStory.user?.profilePictureUrl ?? ''),
       onBackgroundImageError: (_, __) =>
           const NetworkImage(UIConst.profilePlaceHolder),
     );
@@ -1859,63 +1995,183 @@ class UserInfoBar extends StatelessWidget {
       children: [
         Text(
           capitalizeAndSplit2Only(
-              '${userStory.user?.firstName ?? ''} ${userStory.user?.lastName ?? ''}'),
-          style: const TextStyle(fontSize: 18, color: Colors.white),
+              '${widget.userStory.user?.firstName ?? ''} ${widget.userStory.user?.lastName ?? ''}'),
+          style: TextStyle(fontSize: 18.sp, color: Colors.white),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4.h),
         Text(
-          DateFormat('hh:mm a').format(createdAt),
-          style: const TextStyle(fontSize: 12, color: Colors.white70),
+          DateFormat('hh:mm a').format(widget.createdAt),
+          style: TextStyle(fontSize: 12.sp, color: Colors.white70),
         ),
       ],
     );
   }
 
-  Widget _buildMoreOptionsButton() {
-    return IconButton(
-      onPressed: () {
-        // Implement more options functionality
+  Widget _buildMoreOptionsButton(context) {
+    return PopupMenuButton<String>(
+      icon: const Icon(
+        Icons.more_vert,
+        color: Colors.white,
+        size: 35,
+      ),
+      onSelected: (String value) async {
+        if (value == 'delete') {
+          print('Deleting story with ID: ${widget.currentStoryId}');
+
+          // Call the delete method in the StoryCubit to delete from the backend
+          await BlocProvider.of<StoryCubit>(context)
+              .deleteStory(widget.currentStoryId);
+
+          // Remove the story from the local list
+          // setState(() {
+          //   // Find the story by ID and remove it
+          //   widget.userStory.stories!
+          //       .removeWhere((story) => story.id == widget.currentStoryId);
+          //
+          //   // If the entire UserStories object has no stories left, remove it from the list
+          //   if (widget.userStory.stories!.isEmpty) {
+          //     widget.userStory.stories!.removeWhere(
+          //         (userStory) => userStory.id == widget.userStory.user?.id);
+          //   }
+          // });
+
+          Navigator.of(context).pop();
+        } else if (value == 'report') {
+          bottomSheet(
+            context: context,
+            widget: ReportView(
+              id: widget.currentUserId,
+              categoryId: '66684135dbb427ee42aa0141',
+            ),
+          );
+        }
       },
-      icon: const Icon(Icons.more_vert, color: Colors.white),
+      itemBuilder: (BuildContext context) {
+        return [
+          if (widget.userStory.user?.id == widget.currentUserId)
+            const PopupMenuItem<String>(
+              value: 'delete',
+              textStyle: TextStyle(color: Colors.white),
+              child: Row(
+                children: [
+                  Icon(Icons.delete, color: Colors.red),
+                  SizedBox(width: 10),
+                  Text('Delete'),
+                ],
+              ),
+            ),
+          if (widget.userStory.user?.id != widget.currentUserId)
+            const PopupMenuItem<String>(
+              value: 'report',
+              textStyle: TextStyle(color: Colors.white),
+              child: Row(
+                children: [
+                  Icon(Icons.report, color: Colors.orange),
+                  SizedBox(width: 10),
+                  Text('Report'),
+                ],
+              ),
+            ),
+        ];
+      },
+      color: Colors.white,
+      elevation: 0,
     );
   }
 }
 
-// StoryItem createStoryItem(Story storyData, StoryController controller) {
-//   switch (storyData.type) {
-//     case 'text':
-//       return StoryItem.text(
-//         title: storyData.content!,
-//         backgroundColor: Colors.deepOrange,
-//       );
-//     case 'image':
-//       return StoryItem.pageImage(
-//         url: storyData.content!,
-//         caption: storyData.caption != null && storyData.caption != 'null'
-//             ? Text(
-//                 storyData.caption!,
-//                 style: const TextStyle(color: Colors.white),
-//                 textAlign: TextAlign.center,
-//               )
-//             : null,
-//         controller: controller,
-//       );
-//     case 'video':
-//       return StoryItem.pageVideo(
-//         storyData.content!,
-//         caption: storyData.caption != null && storyData.caption != 'null'
-//             ? Text(
-//                 storyData.caption!,
-//                 style: const TextStyle(color: Colors.white),
-//                 textAlign: TextAlign.center,
-//               )
-//             : null,
-//         controller: controller,
-//       );
-//     default:
-//       return StoryItem.text(
-//         title: "Unknown story type",
-//         backgroundColor: Colors.red,
-//       );
-//   }
-// }
+String getFirstSubstringBeforeTilde(String input) {
+  if (input.contains('~')) {
+    return input.split('~')[0];
+  } else {
+    return input; // Return the whole string if there's no tilde
+  }
+}
+
+String removeSubstringBeforeFirstTildeOnly(String input) {
+  int tildeIndex = input.indexOf('~');
+  if (tildeIndex != -1) {
+    return input.substring(tildeIndex + 1);
+  } else {
+    return input; // Return the whole string if there's no tilde
+  }
+}
+
+final Map<String, Color> colorMap = {
+  'Colors.red': Colors.red,
+  'Colors.white': Colors.blueGrey,
+  'Colors.black': Colors.black,
+  'Colors.blue': Colors.blue,
+  'Colors.green': Colors.green,
+  'Colors.yellow': Colors.yellow,
+  'Colors.orange': Colors.orange,
+  'Colors.purple': Colors.purple,
+};
+
+StoryItem createStoryItem(context, Story storyData, StoryController controller,
+    {TextStyle? textStyle}) {
+  switch (storyData.type) {
+    case 'text':
+      return StoryItem.text(
+// title: colorMap[getFirstSubstringBeforeTilde(storyData.content!)].toString(),
+        title: removeSubstringBeforeFirstTildeOnly(storyData.content!),
+        backgroundColor:
+            colorMap[getFirstSubstringBeforeTilde(storyData.content!)] ??
+                Colors.deepOrange,
+        textStyle: textStyle ?? const TextStyle(),
+// textOuterPadding: EdgeInsets.all(8),
+// textStyle: TextStyle(
+//   // fontSize: MediaQuery.of(context).size.width*0.1,
+//   shadows: const [
+//     Shadow(
+//       offset: Offset(1.0, 1.0),
+//       blurRadius: 4.0,
+//       color: Colors.black,
+//     ),
+//   ],
+// ),
+      );
+    case 'image':
+      return StoryItem.pageImage(
+        loadingWidget: const CupertinoActivityIndicator(
+          color: Colors.white,
+        ),
+        errorWidget: const CupertinoActivityIndicator(
+          color: Colors.white,
+        ),
+        url: storyData.content!,
+        caption: storyData.caption != null && storyData.caption != 'null'
+            ? Text(
+                storyData.caption!,
+                style: const TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              )
+            : null,
+        controller: controller,
+      );
+    case 'video':
+      return StoryItem.pageVideo(
+        loadingWidget: const CupertinoActivityIndicator(
+          color: Colors.white,
+        ),
+        errorWidget: const CupertinoActivityIndicator(
+          color: Colors.white,
+        ),
+        shown: false,
+        storyData.content!,
+        caption: storyData.caption != null && storyData.caption != 'null'
+            ? Text(
+                storyData.caption!,
+                style: const TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              )
+            : null,
+        controller: controller,
+      );
+    default:
+      return StoryItem.text(
+        title: "Unknown story type",
+        backgroundColor: Colors.red,
+      );
+  }
+}

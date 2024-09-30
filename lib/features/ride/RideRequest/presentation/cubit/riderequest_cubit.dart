@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/enums/main_services_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/address_search_params_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/params/expected_price_params.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/ride_request_model.dart';
@@ -17,7 +18,6 @@ import '../../data/models/car_type_model.dart';
 import '../../data/models/google_search_results.dart';
 import '../../domain/entity/address_search_params_entity.dart';
 import '../../domain/usecases/request/add_ride_request_usecase.dart';
-import '../../domain/usecases/request/get_car_types_use_case.dart';
 import '../../domain/usecases/request/get_near_by_places_usecase.dart';
 
 part 'riderequest_state.dart';
@@ -30,26 +30,23 @@ class RiderequestCubit extends Cubit<RiderequestState> {
   final service = MainServicesEnum.ride;
   final GetNearByPlacesUseCase _nearByPlacesUseCase;
   final GetExpectedPriceUseCase _expectedPriceUseCase;
-  final GetCarTypesUseCase _getCarTypesUseCase;
   final GetSubCategoriesUseCase _getSubCategoriesUseCase;
   final AddRideRequestUseCase _addNormalRequest;
 
-  RiderequestCubit(
-      this._nearByPlacesUseCase,
-      this._expectedPriceUseCase,
-      this._getCarTypesUseCase,
-      this._getSubCategoriesUseCase,
-      this._addNormalRequest)
+  RiderequestCubit(this._nearByPlacesUseCase, this._expectedPriceUseCase,
+      this._getSubCategoriesUseCase, this._addNormalRequest)
       : super(const RiderequestState());
 
 // get required initial data
   Future<void> loadData() async {
     emit(state.copyWith(status: RideRequestStatusesEnum.loading));
     // -------------------------------load subcategories ---------------------------
+    final user = UserCubit.to.state.data?.id;
     final subCategories = await _getSubCategoriesUseCase.call(
         GetSubCategoriesParams(
             mainCategoryId: service.id,
-            paginationParams: PaginationParams.basic()));
+            paginationParams: PaginationParams.basic(),
+            userId: user ?? ''));
     subCategories.fold((failure) {
       emit(state.copyWith(
         failure: failure,

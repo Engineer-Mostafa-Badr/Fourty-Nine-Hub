@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
@@ -48,6 +49,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   ) : super(RegisterInitial());
 
   Future<void> register() async {
+    String? token = await FirebaseMessaging.instance.getToken();
     log("message");
     if (state is RegisterLoading) return;
     if (formKey.currentState!.validate()) {
@@ -60,6 +62,7 @@ class RegisterCubit extends Cubit<RegisterState> {
           password: passwordTextController.text.trim(),
           confirmPassword: confirmPasswordTextController.text.trim(),
           isMale: isMale,
+          token: token!,
         ),
       );
       emit(

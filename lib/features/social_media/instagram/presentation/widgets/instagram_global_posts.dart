@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
@@ -9,9 +11,10 @@ import 'package:fourtyninehub/common/widgets/stateless/images/social_image_viewe
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_comments.dart';
@@ -38,6 +41,12 @@ class InstagramGlobalPosts extends StatefulWidget {
 
 class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
   @override
+  void dispose() {
+    widget.scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider<InstagramCubit>(
       create: (_) => serviceLocator()..loadGlobalData(),
@@ -59,21 +68,21 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
           child: CustomScrollView(
             controller: widget.scrollController,
             slivers: [
-              const SliverToBoxAdapter(
-                child: ChatStories(),
-              ),
+              // const SliverToBoxAdapter(
+              //   child: ChatStories(),
+              // ),
               PagedSliverList<int, PostEntity>(
                 pagingController: controller.globalFeedPagingController,
                 builderDelegate: PagedChildBuilderDelegate<PostEntity>(
                     noItemsFoundIndicatorBuilder: (context) {
                       print(controller
                           .globalFeedPagingController.itemList?.length);
-                      return const Center(
+                      return Center(
                         child: Text(
-                          "No Posts",
+                          LocaleKeys.noPosts.localize,
                           style: TextStyle(
                             color: Colors.black,
-                            fontSize: 18,
+                            fontSize: 18.sp,
                           ),
                         ),
                       );
@@ -142,16 +151,42 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                       );
                                     }),
                               ),
-                              const SizedBox(
-                                height: 10,
+                              SizedBox(
+                                height: 10.h,
                               ),
-                              Label(
-                                  text: controller.globalFeedPagingController
-                                          .itemList?[index].content ??
-                                      ''),
-                              const Sizer(
-                                height: 5,
-                              ),
+                              if (controller.globalFeedPagingController
+                                      .itemList![index].images!.length >
+                                  1) ...[
+                                Center(
+                                  child: SizedBox(
+                                    height: 8.h,
+                                    child: ListView.separated(
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: controller
+                                            .globalFeedPagingController
+                                            .itemList![index]
+                                            .images!
+                                            .length,
+                                        separatorBuilder: (context, index) =>
+                                            const Sizer(
+                                              width: 3,
+                                            ),
+                                        itemBuilder: (context, index) {
+                                          return CircleAvatar(
+                                            radius: 4,
+                                            backgroundColor:
+                                                state.pageIndex == index
+                                                    ? AppColors.SECONDARY_COLOR
+                                                    : AppColors.PRIMARY_COLOR,
+                                          );
+                                        }),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                              ],
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10.0),
@@ -378,41 +413,6 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                         ],
                                       ),
                                     ),
-                                    if (controller.globalFeedPagingController
-                                            .itemList![index].images!.length >
-                                        1)
-                                      Expanded(
-                                        child: Center(
-                                          child: SizedBox(
-                                            height: 8,
-                                            child: ListView.separated(
-                                                shrinkWrap: true,
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                itemCount: controller
-                                                    .globalFeedPagingController
-                                                    .itemList![index]
-                                                    .images!
-                                                    .length,
-                                                separatorBuilder:
-                                                    (context, index) =>
-                                                        const Sizer(
-                                                          width: 3,
-                                                        ),
-                                                itemBuilder: (context, index) {
-                                                  return CircleAvatar(
-                                                    radius: 4,
-                                                    backgroundColor:
-                                                        state.pageIndex == index
-                                                            ? AppColors
-                                                                .SECONDARY_COLOR
-                                                            : AppColors
-                                                                .PRIMARY_COLOR,
-                                                  );
-                                                }),
-                                          ),
-                                        ),
-                                      ),
                                     const Expanded(
                                       child: Row(
                                         mainAxisAlignment:
@@ -423,7 +423,60 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                   ],
                                 ),
                               ),
-                              const SizedBox()
+                              Sizer(
+                                height: 5.h,
+                              ),
+                              if (controller.globalFeedPagingController
+                                  .itemList![index].content!.isNotEmpty)
+                                Label(
+                                    text: controller.globalFeedPagingController
+                                            .itemList?[index].content ??
+                                        ''),
+                              if (controller.globalFeedPagingController
+                                  .itemList![index].content!.isEmpty) ...[
+                                InkWell(
+                                    onTap: () => context.push(Routes.LOGIN),
+                                    child: Label(
+                                        text: LocaleKeys.showComments.localize))
+                              ],
+                              if (controller.globalFeedPagingController
+                                      .itemList![index].content!.isEmpty &&
+                                  (controller.globalFeedPagingController
+                                          .itemList![index].firstComment !=
+                                      null))
+                                RichText(
+                                    text: TextSpan(children: [
+                                  TextSpan(
+                                      text:
+                                          '${controller.globalFeedPagingController.itemList?[index].firstComment?.firstName} ${controller.globalFeedPagingController.itemList?[index].firstComment?.lastName}\t\t',
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap =
+                                            () => context.push(Routes.LOGIN),
+                                      style: Styles.mediumText(
+                                          color: Colors.black)),
+                                  TextSpan(
+                                      text: controller
+                                                  .globalFeedPagingController
+                                                  .itemList![index]
+                                                  .firstComment ==
+                                              null
+                                          ? ''
+                                          : controller
+                                              .globalFeedPagingController
+                                              .itemList?[index]
+                                              .firstComment
+                                              ?.content,
+                                      style: Styles.mediumText(
+                                          color: Colors.grey)),
+                                ])),
+                              RichText(
+                                  text: TextSpan(children: [
+                                TextSpan(
+                                    text: controller.globalFeedPagingController
+                                        .itemList?[index].sinceTime,
+                                    style:
+                                        Styles.mediumText(color: Colors.grey)),
+                              ]))
                             ],
                           ),
                         );
@@ -431,13 +484,13 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                         return Column(
                           children: [
                             Container(
-                              height: 5,
+                              height: 5.h,
                               width: double.infinity,
                               color: AppColors.DIVIDER_GRAY_COLOR2,
                             ),
                             Container(
                               color: Colors.black,
-                              height: 300,
+                              height: 300.h,
                               width: double.infinity,
                               child: InstagramReelCard(
                                 item: controller.globalFeedPagingController
@@ -445,7 +498,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                               ),
                             ),
                             Container(
-                              height: 5,
+                              height: 5.h,
                               width: double.infinity,
                               color: AppColors.DIVIDER_GRAY_COLOR2,
                             ),
@@ -483,8 +536,8 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
           },
           child: CircleAvatar(
             backgroundColor: Colors.white,
-            backgroundImage: NetworkImage((post.user.image.isNotEmpty)
-                ? post.user.image
+            backgroundImage: NetworkImage((post.user.image != null)
+                ? post.user.image ?? ''
                 : UIConst.profilePlaceHolder),
           ),
         ),

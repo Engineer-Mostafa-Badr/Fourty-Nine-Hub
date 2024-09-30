@@ -1,7 +1,7 @@
 // import 'dart:async';
 // import 'dart:io';
 // import 'dart:typed_data';
-// import 'package:camera/camera.dart';
+// // import 'package:camera/camera.dart';
 // import 'package:easy_localization/easy_localization.dart';
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
@@ -13,53 +13,56 @@
 // import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 // import 'package:fourtyninehub/core/messages/messages.dart';
 // import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/camera_picker_cubit/camera_picker_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 // import 'package:fourtyninehub/res/style/app_colors.dart';
 // import 'package:fourtyninehub/res/style/styles.dart';
 // import 'package:fourtyninehub/routes/routes.dart';
 // import 'package:go_router/go_router.dart';
 // import 'package:icons_launcher/utils/cli_logger.dart';
+// import 'package:image_picker/image_picker.dart';
 // import 'package:path_provider/path_provider.dart';
 // import 'package:permission_handler/permission_handler.dart';
 // import 'package:pro_image_editor/pro_image_editor.dart';
 // import 'package:shimmer/shimmer.dart';
 // import 'package:image/image.dart' as img;
+// // import 'package:video_trimmer/video_trimmer.dart';
 
 // part 'media_slider.dart';
 
-// class CameraPickerView extends StatelessWidget {
+// class CameraPickerView extends StatefulWidget {
 //   final void Function(List<XFile> media)? onDone;
 
-//   const CameraPickerView({super.key, this.onDone});
+// //   const CameraPickerView({super.key, this.onDone});
+
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return BlocProvider(
+// //       create: (context) => CameraPickerCubit()..init(),
+// //       child: SafeArea(
+// //         child: Scaffold(
+// //           body: Column(
+// //             children: [
+// //               Expanded(flex: 4, child: _CamView(onDone: onDone)),
+// //               Expanded(flex: 1, child: _ImagesList()),
+// //             ],
+// //           ),
+// //         ),
+// //       ),
+// //     );
+// //   }
+// // }
+
+// // class _CamView extends StatefulWidget {
+// //   final void Function(List<XFile> media)? onDone;
+
+//   CameraPickerView({required this.onDone});
 
 //   @override
-//   Widget build(BuildContext context) {
-//     return BlocProvider(
-//       create: (context) => CameraPickerCubit()..init(),
-//       child: SafeArea(
-//         child: Scaffold(
-//           body: Column(
-//             children: [
-//               Expanded(flex: 4, child: _CamView(onDone: onDone)),
-//               Expanded(flex: 1, child: _ImagesList()),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
+//   State<CameraPickerView> createState() => _CamViewState();
 // }
 
-// class _CamView extends StatefulWidget {
-//   final void Function(List<XFile> media)? onDone;
-
-//   const _CamView({required this.onDone});
-
-//   @override
-//   State<_CamView> createState() => _CamViewState();
-// }
-
-// class _CamViewState extends State<_CamView> {
+// class _CamViewState extends State<CameraPickerView> {
 //   @override
 //   Widget build(BuildContext context) {
 //     final controller = context.read<CameraPickerCubit>();
@@ -87,7 +90,7 @@
 //           ),
 //         ),
 //         Positioned(
-//           top: 20.zH,
+//           top: 20.h,
 //           right: 0,
 //           left: 0,
 //           child: Padding(
@@ -150,7 +153,7 @@
 //           ),
 //         ),
 //         Positioned(
-//           bottom: 20.zH,
+//           bottom: 20.h,
 //           right: 0,
 //           left: 0,
 //           child: Padding(
@@ -169,12 +172,12 @@
 //                           final media =
 //                               context.read<CameraPickerCubit>().state.mediaList;
 //                           if (media != null && media.isNotEmpty) {
-//                             context
-//                                 .push(Routes.MEDIASLIDER,
-//                                 extra: MediaSliderViewParams(media: media))
-//                                 .then((value) => context
-//                                 .read<CameraPickerCubit>()
-//                                 .refreshMediaList());
+//                             // context
+//                             //     .push(Routes.MEDIASLIDER,
+//                             //         extra: MediaSliderViewParams(media: media))
+//                             //     .then((value) => context
+//                             //         .read<CameraPickerCubit>()
+//                             //         .refreshMediaList());
 //                           } else {
 //                             showErrorMessage(
 //                                 context, LocaleKeys.pickPhotoOrVideo);
@@ -253,44 +256,44 @@
 //     );
 //   }
 
-//   IconData _flashIcon(FlashMode flashMode) {
-//     switch (flashMode) {
-//       case FlashMode.off:
-//         return Icons.flash_off;
-//       case FlashMode.auto:
-//         return Icons.flash_auto;
-//       case FlashMode.always:
-//         return Icons.flash_on;
-//       case FlashMode.torch:
-//         return Icons.flashlight_on_rounded;
-//     }
-//   }
+// //   IconData _flashIcon(FlashMode flashMode) {
+// //     switch (flashMode) {
+// //       case FlashMode.off:
+// //         return Icons.flash_off;
+// //       case FlashMode.auto:
+// //         return Icons.flash_auto;
+// //       case FlashMode.always:
+// //         return Icons.flash_on;
+// //       case FlashMode.torch:
+// //         return Icons.flashlight_on_rounded;
+// //     }
+// //   }
 
-//   Widget get _pickIcon =>
-//       const Icon(Icons.circle, size: 80, color: Colors.white);
+// //   Widget get _pickIcon =>
+// //       const Icon(Icons.circle, size: 80, color: Colors.white);
 
-//   Widget _permissionButton(String label) {
-//     return InkWell(
-//         onTap: () async {
-//           openAppSettings().then((value) {
-//             if (value) {
-//               context.read<CameraPickerCubit>().init();
-//             }
-//           });
-//         },
-//         child: Center(
-//           child: Text(label, style: Styles.headerText()),
-//         ));
-//   }
-// }
+// //   Widget _permissionButton(String label) {
+// //     return InkWell(
+// //         onTap: () async {
+// //           openAppSettings().then((value) {
+// //             if (value) {
+// //               context.read<CameraPickerCubit>().init();
+// //             }
+// //           });
+// //         },
+// //         child: Center(
+// //           child: Text(label, style: Styles.headerText()),
+// //         ));
+// //   }
+// // }
 
-// class _BaseIcon extends StatelessWidget {
-//   final Color? color;
-//   final IconData icon;
-//   final double? iconSize;
-//   final void Function()? onTap;
+// // class _BaseIcon extends StatelessWidget {
+// //   final Color? color;
+// //   final IconData icon;
+// //   final double? iconSize;
+// //   final void Function()? onTap;
 
-//   const _BaseIcon(
+//   _BaseIcon(
 //       {super.key, this.color, required this.icon, this.onTap, this.iconSize});
 
 //   @override
@@ -298,10 +301,10 @@
 //     return InkWell(
 //       onTap: onTap,
 //       child: Container(
-//         padding: EdgeInsets.all(15.zH),
+//         padding: EdgeInsets.all(15.h),
 //         decoration: BoxDecoration(
 //           color: (color ?? AppColors.GREY_DARK_COLOR).withOpacity(0.5),
-//           borderRadius: BorderRadius.circular(50.zR),
+//           borderRadius: BorderRadius.circular(50.r),
 //         ),
 //         child: Icon(
 //           icon,
@@ -313,17 +316,17 @@
 //   }
 // }
 
-// class _ImagesList extends StatefulWidget {
-//   @override
-//   State<_ImagesList> createState() => _ImagesListState();
-// }
+// // class _ImagesList extends StatefulWidget {
+// //   @override
+// //   State<_ImagesList> createState() => _ImagesListState();
+// // }
 
 // class _ImagesListState extends State<_ImagesList> {
 //   @override
 //   Widget build(BuildContext context) {
 //     final controller = context.read<CameraPickerCubit>();
 //     return Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+//       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10.h),
 //       child: Column(
 //         crossAxisAlignment: CrossAxisAlignment.center,
 //         children: [
@@ -333,13 +336,13 @@
 //               builder: (context, constraints) {
 //                 return BlocBuilder<CameraPickerCubit, CameraPickerState>(
 //                   buildWhen: (previous, current) =>
-//                   current.status == CameraPickerStatus.updateMediaList,
+//                       current.status == CameraPickerStatus.updateMediaList,
 //                   builder: (context, state) {
 //                     return ListView.separated(
-//                       padding: const EdgeInsets.symmetric(vertical: 5),
+//                       padding: EdgeInsets.symmetric(vertical: 5.h),
 //                       scrollDirection: Axis.horizontal,
 //                       itemCount: state.mediaList?.length ?? 0,
-//                       separatorBuilder: (context, index) => const Sizer(),
+//                       separatorBuilder: (context, index) => Sizer(),
 //                       itemBuilder: (context, index) {
 //                         final file = File(state.mediaList![index].path);
 //                         if (file.isImage) {
@@ -393,10 +396,10 @@
 //               children: [
 //                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
 //                   buildWhen: (previous, current) =>
-//                   current.pickMode != previous.pickMode,
+//                       current.pickMode != previous.pickMode,
 //                   builder: (context, state) {
 //                     return ElevatedAppButton(
-//                       label: LocaleKeys.photo,
+//                       label: LocaleKeys.photo.tr(),
 //                       backColor: state.pickMode == PickMode.photo
 //                           ? AppColors.SECONDARY_COLOR
 //                           : null,
@@ -409,13 +412,13 @@
 //                     );
 //                   },
 //                 ),
-//                 const Sizer(),
+//                 Sizer(),
 //                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
 //                   buildWhen: (previous, current) =>
-//                   current.pickMode != previous.pickMode,
+//                       current.pickMode != previous.pickMode,
 //                   builder: (context, state) {
 //                     return ElevatedAppButton(
-//                       label: LocaleKeys.video,
+//                       label: LocaleKeys.video.tr(),
 //                       backColor: state.pickMode == PickMode.video
 //                           ? AppColors.SECONDARY_COLOR
 //                           : null,
@@ -435,21 +438,21 @@
 
 //   Widget _mediaContainer(
 //       {required ImageProvider image,
-//         required double width,
-//         required int index,
-//         required List<File> media,
-//         bool isPhoto = true}) {
+//       required double width,
+//       required int index,
+//       required List<File> media,
+//       bool isPhoto = true}) {
 //     return InkWell(
 //       onTap: () {
 //         if (mounted &&
 //             context.read<CameraPickerCubit>().state.status !=
 //                 CameraPickerStatus.startVideo) {
-//           context
-//               .push(Routes.MEDIASLIDER,
-//               extra:
-//               MediaSliderViewParams(media: media, initialIndex: index))
-//               .then((value) =>
-//               context.read<CameraPickerCubit>().refreshMediaList());
+//           // context
+//           //     .push(Routes.MEDIASLIDER,
+//           //         extra:
+//           //             MediaSliderViewParams(media: media, initialIndex: index))
+//           //     .then((value) =>
+//           //         context.read<CameraPickerCubit>().refreshMediaList());
 //         }
 //       },
 //       child: Container(
@@ -460,35 +463,35 @@
 //         ),
 //         child: !isPhoto
 //             ? const Center(
-//           child: Icon(
-//             Icons.play_arrow_rounded,
-//             color: Colors.white,
-//           ),
-//         )
+//                 child: Icon(
+//                   Icons.play_arrow_rounded,
+//                   color: Colors.white,
+//                 ),
+//               )
 //             : null,
 //       ),
 //     );
 //   }
 // }
 
-// class _VideoTimer extends StatefulWidget {
-//   final Duration duration;
+// // class _VideoTimer extends StatefulWidget {
+// //   final Duration duration;
 
-//   const _VideoTimer({required this.duration});
+//   _VideoTimer({required this.duration});
 
-//   @override
-//   State<_VideoTimer> createState() => __VideoTimerState();
-// }
+// //   @override
+// //   State<_VideoTimer> createState() => __VideoTimerState();
+// // }
 
-// class __VideoTimerState extends State<_VideoTimer> {
-//   Timer? _timer;
-//   String _timerText = '00 : 00';
+// // class __VideoTimerState extends State<_VideoTimer> {
+// //   Timer? _timer;
+// //   String _timerText = '00 : 00';
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     _startTimer();
-//   }
+// //   @override
+// //   void initState() {
+// //     super.initState();
+// //     _startTimer();
+// //   }
 
 //   void _startTimer() {
 //     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -497,70 +500,70 @@
 //         int seconds = (timer.tick % 60);
 //         setState(() {
 //           _timerText =
-//           '${minutes.toString().padLeft(2, '0')} : ${seconds.toString().padLeft(2, '0')}';
+//               '${minutes.toString().padLeft(2, '0')} : ${seconds.toString().padLeft(2, '0')}';
 //         });
 //         CliLogger.info(_timerText);
 //       }
 //     });
 //   }
 
-//   @override
-//   void dispose() {
-//     _timer?.cancel();
-//     super.dispose();
-//   }
+// //   @override
+// //   void dispose() {
+// //     _timer?.cancel();
+// //     super.dispose();
+// //   }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.all(8),
-//       decoration: BoxDecoration(
-//         color: AppColors.SECONDARY_COLOR.withOpacity(0.5),
-//         borderRadius: BorderRadius.circular(20),
-//       ),
-//       child: Text(
-//         _timerText,
-//         style: Styles.mediumText(color: Colors.white),
-//       ),
-//     );
-//   }
-// }
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return Container(
+// //       padding: const EdgeInsets.all(8),
+// //       decoration: BoxDecoration(
+// //         color: AppColors.SECONDARY_COLOR.withOpacity(0.5),
+// //         borderRadius: BorderRadius.circular(20),
+// //       ),
+// //       child: Text(
+// //         _timerText,
+// //         style: Styles.mediumText(color: Colors.white),
+// //       ),
+// //     );
+// //   }
+// // }
 
-// class _VideoCircularIndicator extends StatefulWidget {
-//   final Duration duration;
+// // class _VideoCircularIndicator extends StatefulWidget {
+// //   final Duration duration;
 
-//   const _VideoCircularIndicator({required this.duration});
+//   _VideoCircularIndicator({required this.duration});
 
-//   @override
-//   State<_VideoCircularIndicator> createState() =>
-//       __VideoCircularIndicatorState();
-// }
+// //   @override
+// //   State<_VideoCircularIndicator> createState() =>
+// //       __VideoCircularIndicatorState();
+// // }
 
-// class __VideoCircularIndicatorState extends State<_VideoCircularIndicator> {
-//   Timer? _timer;
-//   int _time = 0;
+// // class __VideoCircularIndicatorState extends State<_VideoCircularIndicator> {
+// //   Timer? _timer;
+// //   int _time = 0;
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     _startTimer();
-//   }
+// //   @override
+// //   void initState() {
+// //     super.initState();
+// //     _startTimer();
+// //   }
 
-//   void _startTimer() {
-//     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-//       if (timer.tick <= widget.duration.inSeconds) {
-//         setState(() {
-//           _time = timer.tick;
-//         });
-//       }
-//     });
-//   }
+// //   void _startTimer() {
+// //     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+// //       if (timer.tick <= widget.duration.inSeconds) {
+// //         setState(() {
+// //           _time = timer.tick;
+// //         });
+// //       }
+// //     });
+// //   }
 
-//   @override
-//   void dispose() {
-//     _timer?.cancel();
-//     super.dispose();
-//   }
+// //   @override
+// //   void dispose() {
+// //     _timer?.cancel();
+// //     super.dispose();
+// //   }
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -573,5 +576,19 @@
 //         backgroundColor: AppColors.SECONDARY_COLOR,
 //       ),
 //     );
+//   }
+// }
+
+// class MyWidget extends StatefulWidget {
+//   const MyWidget({super.key});
+
+//   @override
+//   State<MyWidget> createState() => _MyWidgetState();
+// }
+
+// class _MyWidgetState extends State<MyWidget> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Placeholder();
 //   }
 // }

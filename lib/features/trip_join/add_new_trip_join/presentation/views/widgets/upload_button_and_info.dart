@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UploadButtonAndInfo extends StatelessWidget {
   const UploadButtonAndInfo({
@@ -24,9 +25,9 @@ class UploadButtonAndInfo extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 5),
+        margin: EdgeInsets.symmetric(vertical: 5.h),
         width: double.infinity,
-        height: 45,
+        height: 45.h,
         padding: const EdgeInsets.symmetric(horizontal: 7),
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(

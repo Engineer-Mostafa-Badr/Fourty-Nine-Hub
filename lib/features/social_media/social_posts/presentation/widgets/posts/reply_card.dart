@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ReplyCard extends StatefulWidget {
   final Color textColor;
@@ -39,6 +44,7 @@ class _ReplyCardState extends State<ReplyCard> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.read<UserCubit>().state.data;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -69,36 +75,17 @@ class _ReplyCardState extends State<ReplyCard> {
             GestureDetector(
                 onTap: () {
                   bottomSheet(
-                      context: context,
-                      widget: ReportView(
-                        id: widget.reply.id,
-                        categoryId: '66a3583454e6e337915514db',
-                      ));
+                    context: context,
+                    widget: _buildPostOptions(
+                      isMyComment: widget.reply.user.id == user?.id,
+                      post: widget.reply,
+                    ),
+                  );
                 },
                 child: Icon(
-                  Icons.more_vert,
-                  color: widget.textColor,
-                )),
-            const Sizer(),
-            GestureDetector(
-                onTap: () {
-                  widget.reply.edit = !widget.reply.edit!;
-                  editTextController.text = widget.reply.content;
-                  setState(() {});
-                },
-                child: Icon(
-                  Icons.edit,
+                  Icons.more_horiz_outlined,
                   color: widget.textColor,
                   size: 20,
-                )),
-            const Sizer(),
-            GestureDetector(
-                onTap: () {
-                  widget.onDeleteReply(widget.reply.id);
-                },
-                child: Icon(
-                  Icons.close,
-                  color: widget.textColor,
                 )),
           ],
         ),
@@ -108,34 +95,50 @@ class _ReplyCardState extends State<ReplyCard> {
           style: Styles.mediumText(color: widget.textColor),
         ),
         if (widget.reply.edit == true)
-          Row(
-            children: [
-              Expanded(
-                  child: FormTextField(
-                      hint: 'Type your comment ....',
-                      action: (v) {
+          SizedBox(
+            height: kToolbarHeight,
+            child: Row(
+              children: [
+                Expanded(
+                    child: TextFormField(
+                  maxLines: null,
+                  controller: editTextController,
+                  onChanged: (v) {
+                    setState(() {});
+                  },
+                  style: Styles.headerText(fontSize: 26),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.all(5),
+                    hintText: '${LocaleKeys.typeYourReply.localize} ....',
+                    hintStyle: Styles.mediumText(),
+                  ),
+                )),
+                const Sizer(),
+                if (editTextController.text.isNotEmpty)
+                  IconAppButton(
+                      icon: Icons.send,
+                      size: 20,
+                      isCircle: true,
+                      onPressed: () async {
+                        var result = await widget.onEditComment(
+                            PostCommentParams(
+                                postId: widget.reply.id,
+                                content: editTextController.text));
+                        if (result == true) {
+                          widget.reply.content = editTextController.text;
+                          widget.reply.edit = false;
+                        }
                         setState(() {});
-                      },
-                      controller: editTextController)),
-              const Sizer(),
-              if (editTextController.text.isNotEmpty)
-                IconAppButton(
-                    icon: Icons.send,
-                    isCircle: true,
-                    onPressed: () async {
-                      var result = await widget.onEditComment(PostCommentParams(
-                          postId: widget.reply.id,
-                          content: editTextController.text));
-                      if (result == true) {
-                        widget.reply.content = editTextController.text;
-                        widget.reply.edit = false;
-                      }
-                      setState(() {});
-                    })
-            ],
+                      })
+              ],
+            ),
           ),
+        Sizer(
+          height: 5.h,
+        ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             BuildReactionsButtons(
               post: widget.reply,
@@ -143,7 +146,76 @@ class _ReplyCardState extends State<ReplyCard> {
             ),
           ],
         ),
+        const Sizer(),
       ],
+    );
+  }
+
+  Widget _buildPostOptions(
+      {required bool isMyComment, required CommentEntity post}) {
+    return SizedBox(
+      height: isMyComment ? 160 : 80,
+      child: Column(
+        children: [
+          if (!isMyComment)
+            listTile(
+                icon: Icons.report,
+                iconColor: Colors.red,
+                title: LocaleKeys.reportReply.localize,
+                subTitle: LocaleKeys.youWillReportReply.localize,
+                onTap: () async {
+                  Future.delayed(const Duration(milliseconds: 200), () {
+                    bottomSheet(
+                        context: context,
+                        widget: ReportView(
+                          id: post.id,
+                          categoryId: '66a3583454e6e337915514db',
+                        ));
+                  });
+                }),
+          if (isMyComment)
+            listTile(
+                icon: Icons.delete,
+                title: LocaleKeys.deleteReply.localize,
+                subTitle: LocaleKeys.youWillDeleteReply.localize,
+                onTap: () {
+                  widget.onDeleteReply(widget.reply.id);
+                }),
+          if (isMyComment)
+            listTile(
+                icon: Icons.visibility_off,
+                title: LocaleKeys.editReply.localize,
+                subTitle: LocaleKeys.youWillEditReply.localize,
+                onTap: () {
+                  widget.reply.edit = !widget.reply.edit!;
+                  editTextController.text = widget.reply.content;
+                  setState(() {});
+                }),
+        ],
+      ),
+    );
+  }
+
+  Widget listTile(
+      {required IconData icon,
+      Color? iconColor,
+      required String title,
+      required String subTitle,
+      required Function onTap}) {
+    return ListTile(
+      title: Label(text: title),
+      onTap: () {
+        onTap();
+        context.pop();
+      },
+      leading: Icon(
+        icon,
+        color: iconColor ?? Colors.black,
+      ),
+      subtitle: Label(
+        text: subTitle,
+        style: Styles.mediumText(color: Colors.grey),
+      ),
     );
   }
 }

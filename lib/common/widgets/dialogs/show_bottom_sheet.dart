@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void bottomSheet(
     {required BuildContext context,
     required Widget widget,
     Color? backColor,
     bool isFloating = false,
-    bool isScrollControlled = false}) {
+    bool isScrollControlled = false}) async {
   showModalBottomSheet(
       context: context,
       isScrollControlled: isScrollControlled,
       builder: (context) {
         return Container(
           width: double.infinity,
-          padding: EdgeInsets.all(30.zW),
-          // margin: const EdgeInsets.all(kToolbarHeight),
+          padding: EdgeInsets.all(30.w),
+          // margin: EdgeInsets.all(kToolbarHeight),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20.zR),
-              topRight: Radius.circular(20.zR),
+              topLeft: Radius.circular(20.r),
+              topRight: Radius.circular(20.r),
             ),
-            color: backColor ?? Theme.of(context).dialogBackgroundColor,
+            color: backColor ?? Theme.of(context).scaffoldBackgroundColor,
           ),
           child: widget,
         );

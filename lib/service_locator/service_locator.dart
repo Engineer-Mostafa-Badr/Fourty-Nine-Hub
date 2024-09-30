@@ -5,11 +5,11 @@
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // import 'package:fourtyninehub/core/api/api_client_helper.dart';
 // import 'package:fourtyninehub/core/api/api_client_helper_imp.dart';
-//
+// import 'package:fourtyninehub/core/api/end_points.dart';
 // import 'package:fourtyninehub/core/api/interceptors/subscription_interceptor.dart';
 // import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 // import 'package:fourtyninehub/core/service/base_repository.dart';
-// import 'package:fourtyninehub/core/service/socket_data_source.dart';
+// import 'package:fourtyninehub/core/service/socket_service.dart';
 // import 'package:fourtyninehub/features/social_media/reels/data/repositories/reels_repository_impl.dart';
 // import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
@@ -160,17 +160,17 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
+import 'package:fourtyninehub/core/data/datasources/local/database/local_database_data_source.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_client_helper.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_client_helper_imp.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/subscription_interceptor.dart';
-import 'package:fourtyninehub/core/data/datasources/local/database/local_database_data_source.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
+import 'package:fourtyninehub/core/utils/api_service.dart';
+import 'package:fourtyninehub/features/competition/data/repository/competition_repo_impl.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/repositories/reels_repository_impl.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
@@ -181,11 +181,14 @@ import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/face_book_service_locator.dart';
 import 'package:fourtyninehub/service_locator/instagram_service_locator.dart';
-import 'package:fourtyninehub/service_locator/payment_service_locator.dart';
 import 'package:fourtyninehub/service_locator/notification_service_locator.dart';
+import 'package:fourtyninehub/service_locator/payment_service_locator.dart';
+import 'package:fourtyninehub/service_locator/privacy_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
+import 'package:fourtyninehub/service_locator/setting_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
 import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
+import 'package:fourtyninehub/service_locator/transfer_money_service_locator.dart';
 import 'package:fourtyninehub/service_locator/trip_join_service_locator.dart';
 import 'package:fourtyninehub/service_locator/twitter_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
@@ -199,6 +202,8 @@ import '../core/localization/localization_service.dart';
 import '../firebase_options.dart';
 import 'account_service_locator.dart';
 import 'auction_service_locator.dart';
+import 'balance_service_locator.dart';
+import 'company_add_service_locator.dart';
 import 'food_service_locator.dart';
 import 'fourty_nine_service_locator.dart';
 import 'health_service_locator.dart';
@@ -237,7 +242,7 @@ class DI {
         OptionBuilder()
             .setTransports(['websocket'])
             .disableAutoConnect()
-            .setExtraHeaders({'authorization': token}) // optional
+            .setExtraHeaders({'Authorization': token}) // optional
             .build()));
     // database
     serviceLocator.registerLazySingleton<Database>(
@@ -271,6 +276,11 @@ class DI {
         ]),
     );
 
+//tinder getIt register
+    serviceLocator.registerLazySingleton<CompetitionRepoImpl>(
+      () => CompetitionRepoImpl(ApiService(Dio())),
+    );
+    // serviceLocator.registerLazySingleton<CompanyAdvertiseRepoImpl>(() => CompanyAdvertiseRepoImpl(ApiService(Dio())),);
     // Register the ReelsRepository
     serviceLocator.registerLazySingleton<ReelsRepository>(
       () => ReelsRepository(),
@@ -290,8 +300,8 @@ class DI {
     serviceLocator.registerFactory<StoryCubit>(
       () => StoryCubit(serviceLocator<StoryRepository>()),
     );
-    serviceLocator
-        .registerFactory<SliderCubit>(() => SliderCubit(serviceLocator()));
+    // serviceLocator
+    //     .registerFactory<SliderCubit>(() => SliderCubit(serviceLocator()));
     //
     // // Register the TinderRepository
     // serviceLocator.registerLazySingleton<TinderRepository>(
@@ -341,16 +351,11 @@ class DI {
     // Ride Customer
     await RideServiceLocator.execute(serviceLocator: serviceLocator);
     //Notification
-    await NotificationServiceLocator.execute(serviceLocator: serviceLocator);
+    // await NotificationServiceLocator.execute(serviceLocator: serviceLocator);
     // Subcategories
     SubcategoriesServiceLocator.execute(serviceLocator: serviceLocator);
     // Fourty-Nine
     FourtyNineServiceLocator.execute(serviceLocator);
-
-    // Socket service
-    serviceLocator.registerLazySingleton<ChatSocketServiceContract>(
-      () => ChatSocketServiceImplementation(),
-    );
 
     // Wheel
     WheelServiceLocator.execute(serviceLocator);
@@ -377,9 +382,16 @@ class DI {
     SocialServiceLocator.execute(serviceLocator: serviceLocator);
     // trip join
     TripJoinServiceLocator.execute(serviceLocator: serviceLocator);
+    // notifications
+    await NotificationsServiceLocator.execute(serviceLocator: serviceLocator);
     InstagramServiceLocator.execute(serviceLocator: serviceLocator);
     FaceBookServiceLocator.execute(serviceLocator: serviceLocator);
     TwitterServiceLocator.execute(serviceLocator: serviceLocator);
+    BalanceServiceLocator.execute(serviceLocator: serviceLocator);
+    CompanyAddServiceLocator.execute(serviceLocator: serviceLocator);
+    PrivacyServiceLocator.execute(serviceLocator: serviceLocator);
+    SettingServiceLocator.execute(serviceLocator: serviceLocator);
     PaymentProviderServiceLocator.execute(serviceLocator: serviceLocator);
+    TransferMoneyServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

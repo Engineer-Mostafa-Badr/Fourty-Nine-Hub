@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Sizer extends StatelessWidget {
   final double? height;
@@ -7,15 +7,15 @@ class Sizer extends StatelessWidget {
 
   const Sizer({
     super.key,
-    this.height,
-    this.width,
+    this.height = 15,
+    this.width = 15,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height ?? 20.zH,
-      width: width ?? 20.zW,
+      height: height?.h,
+      width: width?.w,
     );
   }
 }

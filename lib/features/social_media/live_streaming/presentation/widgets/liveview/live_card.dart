@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -74,7 +75,7 @@ class _LiveCardState extends State<LiveCard> {
           ),
           const Sizer(),
           AppButton(
-              height: 25,
+              height: 25.h,
               label: 'Follow',
               padding: 10,
               radius: 20,
@@ -132,8 +133,8 @@ class _LiveCardState extends State<LiveCard> {
         children: [
           Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              margin: const EdgeInsets.symmetric(vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
+              margin: EdgeInsets.symmetric(vertical: 10.h),
               decoration: BoxDecoration(
                   color: AppColors.LIGHT_GRAY_COLOR,
                   borderRadius: BorderRadius.circular(10)),
@@ -177,8 +178,8 @@ class _LiveCardState extends State<LiveCard> {
                 Icons.share,
                 color: Colors.white,
               ),
-              const Sizer(
-                height: 5,
+              Sizer(
+                height: 5.h,
               ),
               Label(
                 text: 'Share',
@@ -200,10 +201,10 @@ class _LiveCardState extends State<LiveCard> {
         children: [
           Image.asset(
             image,
-            height: 20,
+            height: 20.h,
           ),
-          const Sizer(
-            height: 5,
+          Sizer(
+            height: 5.h,
           ),
           Label(
             text: label,

@@ -8,6 +8,8 @@ import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/a
 import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/join_club_voice_use_case.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/usecases/search_club_voice_use_case.dart';
 
+import '../../../../../common/models/public/pagination_params.dart';
+
 class ClubVoiceRepositoryImpl extends ClubVoiceRepository {
   final ClubVoiceDataSource clubVoiceDataSource;
 
@@ -24,8 +26,9 @@ class ClubVoiceRepositoryImpl extends ClubVoiceRepository {
   }
 
   @override
-  Future<Either<Failure, List<ClubVoiceRoomEntity>>> getRooms() {
-    return clubVoiceDataSource.getRooms();
+  Future<Either<Failure, List<ClubVoiceRoomEntity>>> getRooms(
+      PaginationParams params) {
+    return clubVoiceDataSource.getRooms(params);
   }
 
   @override

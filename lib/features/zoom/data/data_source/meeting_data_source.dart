@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 // ignore: unused_import
 import 'package:fourtyninehub/core/data/models/meeting_error_message_model.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/zoom/data/model/schedule_meeting_model.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
@@ -74,7 +75,10 @@ class MeetingDataSourceImpl extends MeetingDataSource {
     return result.fold((l) {
       return Left(l);
     }, (r) {
-      return Right(r['status']);
+      return Right(_idEquality(r));
     });
   }
+
+  bool _idEquality(Map<String, dynamic> r) =>
+      r['data']['userId'] == UserCubit.to.state.data!.id;
 }

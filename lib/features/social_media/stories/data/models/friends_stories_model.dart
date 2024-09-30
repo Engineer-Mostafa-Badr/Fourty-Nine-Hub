@@ -58,18 +58,18 @@ class StoriesData {
 
 class UserStories {
   final UserData? user;
-  final List<Story>? stories;
+  final List<Story>? userStories;
 
   UserStories({
     this.user,
-    this.stories,
+    this.userStories,
   });
 
   factory UserStories.fromJson(Map<String, dynamic>? json) {
     if (json == null) return UserStories();
     return UserStories(
       user: json['user'] != null ? UserData.fromJson(json['user']) : null,
-      stories: (json['stories'] as List<dynamic>?)
+      userStories: (json['stories'] as List<dynamic>?)
           ?.map((e) => Story.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
@@ -78,7 +78,7 @@ class UserStories {
   Map<String, dynamic> toJson() {
     return {
       'user': user?.toJson(),
-      'stories': stories?.map((e) => e.toJson()).toList(),
+      'stories': userStories?.map((e) => e.toJson()).toList(),
     }..removeWhere((key, value) => value == null);
   }
 }

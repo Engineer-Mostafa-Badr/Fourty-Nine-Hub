@@ -44,7 +44,6 @@ class Reel {
   final int viewCount;
   final bool isLiked;
   bool isSaved;
-  final bool isFollowing;
   final User user;
   final Audio audio;
   final List<String> repost;
@@ -63,7 +62,6 @@ class Reel {
     required this.viewCount,
     required this.isLiked,
     required this.isSaved,
-    required this.isFollowing,
     required this.user,
     required this.audio,
     required this.repost,
@@ -87,7 +85,6 @@ class Reel {
       viewCount: json['viewCount'],
       isLiked: json['isLiked'],
       isSaved: json['isSaved'],
-      isFollowing: json['isFollowing'],
       user: User.fromJson(json['user']),
       audio: Audio.fromJson(json['audio']),
       repost: repostList,
@@ -105,7 +102,26 @@ class User {
   final String privacy;
   final bool story;
   final bool verified;
-  final String profilePictureSignedUrl;
+  final String? profilePictureSignedUrl;
+  final String? coverPictureSignedUrl;
+  final String? bio;
+  final String? birthday;
+  final String? country;
+  final String? countryPrivacy;
+  final String? job;
+  final String? jobPrivacy;
+  final String? city;
+  final String? cityPrivacy;
+  final String? gender;
+  final String? phone;
+  final String? phonePrivacy;
+  final bool isLoading;
+  final bool isRider;
+  final bool isDoctor;
+  final bool isRestaurant;
+  final bool isFollowed;
+  final bool areFriends;
+  final bool isSentRequest;
 
   User({
     required this.id,
@@ -115,19 +131,57 @@ class User {
     required this.privacy,
     required this.story,
     required this.verified,
-    required this.profilePictureSignedUrl,
+    this.profilePictureSignedUrl,
+    this.coverPictureSignedUrl,
+    this.bio,
+    this.birthday,
+    this.country,
+    this.countryPrivacy,
+    this.job,
+    this.jobPrivacy,
+    this.city,
+    this.cityPrivacy,
+    this.gender,
+    this.phone,
+    this.phonePrivacy,
+    this.isLoading = false,
+    this.isRider = false,
+    this.isDoctor = false,
+    this.isRestaurant = false,
+    required this.isFollowed,
+    required this.areFriends,
+    required this.isSentRequest,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['_id'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      isFriend: json['isFriend'],
-      privacy: json['privacy'],
-      story: json['story'],
-      verified: json['verified'],
+      id: json['_id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      isFriend: json['isFriend'] ?? false,
+      privacy: json['privacy'] ?? 'public',
+      story: json['story'] ?? false,
+      verified: json['verified'] ?? false,
       profilePictureSignedUrl: json['profilePictureSignedUrl'],
+      coverPictureSignedUrl: json['coverPictureSignedUrl'],
+      bio: json['bio'],
+      birthday: json['birthday'],
+      country: json['country'],
+      countryPrivacy: json['countryPrivacy'],
+      job: json['job'],
+      jobPrivacy: json['jobPrivacy'],
+      city: json['city'],
+      cityPrivacy: json['cityPrivacy'],
+      gender: json['gender'],
+      phone: json['phone'],
+      phonePrivacy: json['phonePrivacy'],
+      isLoading: json['isLoading'] ?? false,
+      isRider: json['isRider'] ?? false,
+      isDoctor: json['isDoctor'] ?? false,
+      isRestaurant: json['isRestaurant'] ?? false,
+      isFollowed: json['isFollowed'] ?? false,
+      areFriends: json['areFriends'] ?? false,
+      isSentRequest: json['isSenTRequest'] ?? false,
     );
   }
 }

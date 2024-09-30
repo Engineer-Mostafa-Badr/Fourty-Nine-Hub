@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -46,7 +46,7 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
         },
         builder: (context, state) {
           return Padding(
-            padding: EdgeInsets.all(20.zW),
+            padding: EdgeInsets.all(20.w),
             child: ListView(
               children: [
                 const Sizer(),
@@ -56,13 +56,10 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
                     controller: cubit.emailController,
                     label: LocaleKeys.email.localize,
                     hint: LocaleKeys.typeHere.localize,
-                    style: TextStyle(
-                      fontSize: 30.zW,
-                    ),
                     prefix: Icon(
                       Icons.person,
                       color: AppColors.GREY_DARK_COLOR,
-                      size: 40.zW,
+                      size: 40.w,
                     ),
                   ),
                 ),
@@ -71,7 +68,7 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
                   label: LocaleKeys.sendOTP.localize,
                   onPressed: cubit.sendForgetPasswordOTP,
                   labelStyle: TextStyle(
-                      fontSize: 35.zW, color: AppColors.AUTH_CONTAINER_COLOR),
+                      fontSize: 50.sp.w, color: AppColors.AUTH_CONTAINER_COLOR),
                 ),
               ],
             ),

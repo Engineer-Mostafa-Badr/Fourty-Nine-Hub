@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -17,8 +18,8 @@ class VendorCard extends StatelessWidget {
           radius: 20,
           backgroundImage: NetworkImage(UIConst.socialImagePlaceHolder),
         ),
-        const Sizer(
-          height: 5,
+        Sizer(
+          height: 5.h,
         ),
         Label(text: 'H&M', style: Styles.mediumText()),
       ],

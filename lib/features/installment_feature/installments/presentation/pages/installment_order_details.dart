@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -142,7 +143,7 @@ class InstallmentOrderDetails extends StatelessWidget {
             Label(
                 text: label,
                 style: Styles.mediumText(
-                    fontWeight: FontWeight.w500, fontSize: 18)),
+                    fontWeight: FontWeight.w500, fontSize: 18.sp)),
             ReadMoreLabel(text: description),
           ],
         )),

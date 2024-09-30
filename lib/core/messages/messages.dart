@@ -8,6 +8,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../common/widgets/stateless/buttons/default_button.dart';
 import '../../common/widgets/stateless/buttons/elevated_button.dart';
@@ -40,8 +41,8 @@ void showErrorMessage(BuildContext context, String message) {
       ),
       backgroundColor: Colors.white,
       behavior: SnackBarBehavior.floating,
-      padding: const EdgeInsets.symmetric(
-        vertical: 20,
+      padding: EdgeInsets.symmetric(
+        vertical: 20.h,
         horizontal: 20,
       ),
       margin: const EdgeInsets.only(
@@ -53,7 +54,12 @@ void showErrorMessage(BuildContext context, String message) {
   );
 }
 
-void showSuccessMessage(BuildContext context, String message) {
+showSuccessMessage(
+  BuildContext context,
+  String message, {
+  Color color = Colors.green,
+  IconData icon = Icons.check_circle,
+}) {
   WidgetsBinding.instance.addPostFrameCallback(
     (_) => ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -74,16 +80,16 @@ void showSuccessMessage(BuildContext context, String message) {
               ),
             ),
             const SizedBox(width: 10),
-            const Icon(
-              Icons.check_circle,
-              color: Colors.green,
+            Icon(
+              icon,
+              color: color,
             ),
           ],
         ),
         backgroundColor: Colors.white,
         behavior: SnackBarBehavior.floating,
-        padding: const EdgeInsets.symmetric(
-          vertical: 20,
+        padding: EdgeInsets.symmetric(
+          vertical: 20.h,
           horizontal: 20,
         ),
         margin: const EdgeInsets.only(
@@ -104,8 +110,8 @@ void showSuccessDialog(BuildContext context, String text) => showDialog(
         ),
         content: Text(
           text,
-          style: const TextStyle(
-            fontSize: 16,
+          style: TextStyle(
+            fontSize: 16.sp,
           ),
           textAlign: TextAlign.center,
         ),
@@ -127,8 +133,8 @@ Future<void> showPermissionDialog({required String message}) async =>
         ),
         content: Text(
           message,
-          style: const TextStyle(
-            fontSize: 16,
+          style: TextStyle(
+            fontSize: 16.sp,
           ),
           textAlign: TextAlign.center,
         ),
@@ -167,11 +173,11 @@ void showLoadingDialog(BuildContext context,
             mainAxisSize: MainAxisSize.min,
             children: [
               const CircularProgressIndicator.adaptive(),
-              const Sizer(height: 20),
+              Sizer(height: 20.h),
               Text(
                 message ?? Labels.loading,
-                style: const TextStyle(
-                  fontSize: 16,
+                style: TextStyle(
+                  fontSize: 16.sp,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -205,8 +211,8 @@ void showConfirmDialog(
       ),
       content: Text(
         text,
-        style: const TextStyle(
-          fontSize: 16,
+        style: TextStyle(
+          fontSize: 16.sp,
         ),
         textAlign: TextAlign.center,
       ),

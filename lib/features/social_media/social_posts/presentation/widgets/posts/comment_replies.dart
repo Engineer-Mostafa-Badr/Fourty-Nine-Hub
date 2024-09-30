@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/comment_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
@@ -17,6 +19,7 @@ import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CommentReplies extends StatefulWidget {
   final List<CommentEntity> replies;
@@ -57,7 +60,7 @@ class _CommentRepliesState extends State<CommentReplies> {
           iconTheme: const IconThemeData(color: Colors.grey),
           title: Label(
               text:
-                  '${controller.repliesPagingController.itemList?.length ?? 0} Replies',
+                  '${controller.repliesPagingController.itemList?.length ?? 0} ${LocaleKeys.replies.localize}',
               style: Styles.mediumText()),
           leading: IconButton(
               onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
@@ -67,7 +70,7 @@ class _CommentRepliesState extends State<CommentReplies> {
           children: [
             Expanded(
               child: PagedListView<int, CommentEntity>(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
                 pagingController: controller.repliesPagingController,
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(
@@ -76,12 +79,12 @@ class _CommentRepliesState extends State<CommentReplies> {
                     noItemsFoundIndicatorBuilder: (context) {
                       print(
                           controller.repliesPagingController.itemList?.length);
-                      return const Padding(
-                          padding: EdgeInsets.only(top: 200),
+                      return Padding(
+                          padding: const EdgeInsets.only(top: 200),
                           child: Center(
                             child: Text(
-                              "No Replies",
-                              style: TextStyle(
+                              LocaleKeys.noReplied.localize,
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,
                               ),
@@ -125,6 +128,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                     const Sizer(),
                     Expanded(
                         child: TextFormField(
+                      maxLines: null,
                       controller: replyTextController,
                       onChanged: (v) {
                         setState(() {});
@@ -133,7 +137,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         contentPadding: const EdgeInsets.all(5),
-                        hintText: 'Type your reply ....',
+                        hintText: '${LocaleKeys.typeYourReply.localize} ....',
                         hintStyle: Styles.mediumText(),
                       ),
                     )),
@@ -141,6 +145,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                     if (replyTextController.text.isNotEmpty)
                       IconAppButton(
                         icon: Icons.send,
+                        size: 20,
                         isCircle: true,
                         onPressed: () async {
                           CommentEntity data = await widget.onAddReply(

@@ -17,15 +17,17 @@ class CreateAdState {
   final List<AdPropertiesEntity>? adProperties;
   final MainCategoryEntity? selectedCategory;
   final SubCategoryEntity? selectedSubCategory;
+  bool? isUser;
   final List<UploadFileEntity>? images;
 
-  const CreateAdState(
+  CreateAdState(
       {this.failure,
       this.mainCategories,
       this.adProperties,
       this.selectedCategory,
       this.selectedSubCategory,
       this.status,
+      this.isUser = true,
       this.images,
       this.subCategories});
 
@@ -36,6 +38,7 @@ class CreateAdState {
     List<SubCategoryEntity>? subCategories,
     List<AdPropertiesEntity>? adProperties,
     MainCategoryEntity? selectedCategory,
+    bool? isUser,
     SubCategoryEntity? selectedSubCategory,
     List<UploadFileEntity>? images,
   }) {
@@ -48,6 +51,7 @@ class CreateAdState {
       selectedCategory: selectedCategory ?? this.selectedCategory,
       selectedSubCategory: selectedSubCategory ?? this.selectedSubCategory,
       images: images ?? this.images,
+      isUser: isUser ?? this.isUser,
     );
   }
 }

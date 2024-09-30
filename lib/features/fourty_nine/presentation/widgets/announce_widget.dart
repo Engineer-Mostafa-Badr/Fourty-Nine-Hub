@@ -4,7 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/carousel_slider.d
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/zego/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../core/states/basic_state.dart';
 
@@ -20,7 +20,7 @@ class AnnounceWidget extends StatelessWidget {
         return const SizedBox();
       } else {
         return CarouselSliderWidget(
-            height: 200.zH,
+            height: 200.h,
             autoPlay: true,
             widgets: state.data?.map((e) {
                   return _buildAnnounceItem(item: e);
@@ -34,7 +34,7 @@ class AnnounceWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20.zR),
+        borderRadius: BorderRadius.circular(20.r),
         child: Stack(
           children: [
             Positioned.fill(

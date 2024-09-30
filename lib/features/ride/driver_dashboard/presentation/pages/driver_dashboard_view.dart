@@ -44,7 +44,7 @@ class DriverDashboardView extends StatelessWidget {
                   //     item: state.statistics!,
                   //   ),
                   // _buildConectedStatus(context: context),
-                  // const Sizer(),
+                  // Sizer(),
                   Expanded(
                     child: ListView.builder(
                       itemCount: state.trips?.length ?? 0,

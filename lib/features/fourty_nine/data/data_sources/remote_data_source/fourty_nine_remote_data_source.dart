@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
@@ -10,6 +9,7 @@ import 'package:fourtyninehub/features/fourty_nine/data/models/parent_main_categ
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/parent_main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../../res/assets/jsons.dart';
@@ -20,12 +20,13 @@ abstract class FourtyNineRemoteDataSource {
       getParentMainCategories();
 
   Future<Either<Failure, List<MainCategoryModel>>> getMainCategories(
-      PaginationParams params);
+      MainCategoriesParams params);
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems();
 
   Future<Either<Failure, MainCategoryEntity>> getMainCategoryDetails(String id);
 
   Future<Either<Failure, bool>> addMainCategoryToFavorites(String id);
+  Future<Either<Failure, bool>> toggleSubCategoryToFavorites(String id);
 
   Future<Either<Failure, bool>> removeMainCategoryFromFavorites(String id);
   Future<Either<Failure, BannerModel>> getBannerById({required String id});
@@ -50,7 +51,7 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
 
   @override
   Future<Either<Failure, List<MainCategoryModel>>> getMainCategories(
-      PaginationParams params) async {
+      MainCategoriesParams params) async {
     final result = await _apiConsumer.get(
       EndPoints.getMainCategoriesWithoutSubcategories,
       queryParameters: params.toJson(),
@@ -93,6 +94,16 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
   Future<Either<Failure, bool>> addMainCategoryToFavorites(String id) async {
     final result =
         await _apiConsumer.post(EndPoints.addMainCategoryToFavorite(id));
+    return result.fold(
+      (failure) => Left(failure),
+      (data) => Right(data['status']),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> toggleSubCategoryToFavorites(String id) async {
+    final result =
+        await _apiConsumer.post(EndPoints.toggleSubCategoryToFavorites(id));
     return result.fold(
       (failure) => Left(failure),
       (data) => Right(data['status']),

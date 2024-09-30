@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/installment_feature/create_installment/presentation/cubit/create_installment_cubit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/error/failure.dart';
@@ -86,8 +87,8 @@ class CreateInstallmentView extends StatelessWidget {
                   child: ListView.separated(
                       shrinkWrap: true,
                       itemCount: state.plans?.length ?? 0,
-                      separatorBuilder: (context, index) => const Sizer(
-                            height: 5,
+                      separatorBuilder: (context, index) => Sizer(
+                            height: 5.h,
                           ),
                       itemBuilder: (context, index) {
                         final item = state.plans![index];

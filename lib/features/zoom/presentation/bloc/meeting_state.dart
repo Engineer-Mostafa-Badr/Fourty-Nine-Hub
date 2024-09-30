@@ -3,48 +3,52 @@ import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 
-enum MeetingStates {
+enum StreamsStates {
   initial,
   loading,
   success,
   gotscheduledMeeting,
   failure,
   openWhiteBoard,
-  minimizing
+  changeTopic
 }
 
-extension MeetingStateX on MeetingState {
-  bool get isInitial => status == MeetingStates.initial;
-  bool get isLoading => status == MeetingStates.loading;
-  bool get isSuccess => status == MeetingStates.success;
-  bool get isFailure => status == MeetingStates.failure;
-  bool get isOpenWhiteBoard => status == MeetingStates.openWhiteBoard;
-  bool get isMinimizing => status == MeetingStates.minimizing;
-  bool get isGotScheduledMeeting => status == MeetingStates.gotscheduledMeeting;
+extension MeetingStateX on StreamState {
+  bool get isInitial => status == StreamsStates.initial;
+  bool get isLoading => status == StreamsStates.loading;
+  bool get isSuccess => status == StreamsStates.success;
+  bool get isFailure => status == StreamsStates.failure;
+  bool get isOpenWhiteBoard => status == StreamsStates.openWhiteBoard;
+  bool get isChangeTopic => status == StreamsStates.changeTopic;
+  bool get isGotScheduledMeeting => status == StreamsStates.gotscheduledMeeting;
 }
 
-class MeetingState extends Equatable {
-  final MeetingStates? status;
+class StreamState extends Equatable {
+  final StreamsStates? status;
   final List<ScheduledMeeting>? scheduledMeeting;
   final String? errorMessage;
+  final String topic;
   final Failure? failure;
-  const MeetingState({
-    this.status = MeetingStates.initial,
+  const StreamState({
+    this.status = StreamsStates.initial,
     this.errorMessage,
     this.failure,
+    this.topic = '',
     this.scheduledMeeting,
   });
 
-  MeetingState copyWith({
-    MeetingStates? status,
+  StreamState copyWith({
+    StreamsStates? status,
     String? errorMessage,
+    String? topic,
     Failure? failure,
     List<ScheduledMeeting>? scheduledMeetings,
   }) =>
-      MeetingState(
+      StreamState(
         status: status,
         errorMessage: errorMessage ?? this.errorMessage,
         failure: failure ?? this.failure,
+        topic: topic ?? this.topic,
         scheduledMeeting: scheduledMeetings ?? scheduledMeeting,
       );
 
@@ -53,6 +57,7 @@ class MeetingState extends Equatable {
         status,
         errorMessage,
         failure,
+        topic,
         scheduledMeeting,
       ];
 }

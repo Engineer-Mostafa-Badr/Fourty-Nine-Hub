@@ -12,7 +12,9 @@ class DestinationLocationCubit extends Cubit<DestinationLocationState> {
   DestinationLocationCubit({
     required this.fetchLocationCordinatesUseCase,
   }) : super(DestinationLocationInitial());
+
   LocationEntity? destinationLocation;
+
   Future<void> getDestinationLocation({required String address}) async {
     emit(DestinationLocationLoading());
     final response =

@@ -12,6 +12,7 @@ import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/cubit/request_history_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/widgets/trip_card.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/assets/assets.dart';
 import '../../../../res/strings/labels.dart';
@@ -48,7 +49,7 @@ class HistoryRequestsView extends StatelessWidget {
                           TabBar(tabs: [
                             Tab(
                               text: 'Ride',
-                              icon: SvgPicture.asset(height: 20, Assets.ride),
+                              icon: SvgPicture.asset(height: 20.h, Assets.ride),
                             ),
                             Tab(
                               text: 'Ship',
@@ -57,15 +58,16 @@ class HistoryRequestsView extends StatelessWidget {
                             ),
                             Tab(
                               text: 'Health',
-                              icon: SvgPicture.asset(height: 20, Assets.health),
+                              icon:
+                                  SvgPicture.asset(height: 20.h, Assets.health),
                             ),
                             Tab(
                               text: 'Food',
-                              icon: SvgPicture.asset(height: 20, Assets.food),
+                              icon: SvgPicture.asset(height: 20.h, Assets.food),
                             ),
                             Tab(
                               text: 'Requests',
-                              icon: Image.asset(height: 20, Assets.hand),
+                              icon: Image.asset(height: 20.h, Assets.hand),
                             )
                           ]),
                           const Sizer(),

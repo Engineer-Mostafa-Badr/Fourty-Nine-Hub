@@ -15,9 +15,11 @@ class SubcategoryCardSelected extends StatefulWidget {
   final SubCategoryEntity item;
   final MainCategoryEntity mainCategory;
   final bool selected;
+  final bool isSmallCard;
   final void Function(bool?)? onChanged;
   const SubcategoryCardSelected(
       {super.key,
+      this.isSmallCard = false,
       this.onChanged,
       required this.item,
       required this.mainCategory,
@@ -34,15 +36,15 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    isFav = widget.item.isFavorite;
+    isFav = widget.item.isFavorite ?? false;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: kToolbarHeight * 2.5,
-      height: kToolbarHeight * 3,
-      margin: const EdgeInsets.only(bottom: 5, top: 5, right: 5, left: 5),
+      width: widget.isSmallCard ? 80 : kToolbarHeight * 2.5,
+      height: widget.isSmallCard ? 80 : kToolbarHeight * 3,
+      margin: const EdgeInsets.all(5),
       decoration: BoxDecoration(
           border: Border.all(
               color: widget.selected ? Colors.red : Colors.transparent,
@@ -62,33 +64,36 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
           Expanded(
             child: Stack(
               children: [
-                Positioned.fill(
+                Positioned(
                   child: SquareImage(
                     fit: BoxFit.cover,
                     radius: 5,
                     url: widget.item.image,
+                    height: widget.isSmallCard ? 60 : null,
+                    width: widget.isSmallCard ? 60 : null,
                   ),
                 ),
-                Positioned(
-                    top: 5,
-                    right: 5,
-                    child: IconAppButton(
-                        icon: isFav ? Icons.favorite : Icons.favorite_outline,
-                        color: isFav ? Colors.red : Colors.black,
-                        onPressed: () {
-                          log('llllll');
-                          setState(() {
-                            context
-                                .read<FavoriteShippingCubit>()
-                                .favorite(widget.item.id);
-                            isFav = !isFav;
-                            log(widget.item.isFavorite.toString());
-                          });
-                        }))
+                // if (!widget.isSmallCard)
+                //   Positioned(
+                //       top: 5,
+                //       right: 5,
+                //       child: IconAppButton(
+                //           icon: isFav ? Icons.favorite : Icons.favorite_outline,
+                //           color: isFav ? Colors.red : Colors.black,
+                //           onPressed: () {
+                //             log('llllll');
+                //             setState(() {
+                //               context
+                //                   .read<FavoriteShippingCubit>()
+                //                   .favorite(widget.item.id);
+                //               isFav = !isFav;
+                //               log(widget.item.isFavorite.toString());
+                //             });
+                //           }))
               ],
             ),
           ),
-          const Sizer(),
+          if (!widget.isSmallCard) const Sizer(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Row(
@@ -101,11 +106,14 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
                         text: widget.item.name,
                         style: Styles.mediumText(fontWeight: FontWeight.bold),
                       ),
-                      Label(text: '${widget.item.numberOfContent ?? 0} Driver')
+                      // if (!widget.isSmallCard)
+                        // Label(
+                        //     text: '${widget.item.numberOfContent ?? 0} Driver')
                     ],
                   ),
                 ),
-                Checkbox(value: widget.selected, onChanged: widget.onChanged)
+                if (!widget.isSmallCard)
+                  Checkbox(value: widget.selected, onChanged: widget.onChanged)
                 // IconAppButton(
                 //     icon: Icons.,
                 //     size: 20,

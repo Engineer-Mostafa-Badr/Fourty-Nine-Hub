@@ -2,12 +2,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/time_of_day_helper.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:intl/intl.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../res/style/styles.dart';
 
 class ScheduleMeetingScreen extends StatefulWidget {
   const ScheduleMeetingScreen({super.key});
@@ -116,7 +123,7 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0)
-              .add(const EdgeInsets.symmetric(vertical: 25)),
+              .add(EdgeInsets.symmetric(vertical: 25.h)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -126,18 +133,22 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                 children: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(color: AppColors.SECONDARY_COLOR),
+                    child: Label(
+                      text: LocaleKeys.cancel.localize,
+                      style: Styles.headerText(
+                        color: AppColors.SECONDARY_COLOR,
+                        fontSize: 25,
+                      ),
                     ),
                   ),
-                  Text(
-                    "Schedule Meeting",
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: AppColors.PRIMARY_COLOR,
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
+                  Label(
+                      text: LocaleKeys.scheduleAMeeting.localize,
+                      style: Styles.headerText(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR)),
                   TextButton(
                     onPressed: () async {
                       final title = _titleController.text;
@@ -145,18 +156,18 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                           _selectedDate != null &&
                           _endTime != null) {
                         if (_endTime!.isBefore(_startTime!)) {
-                          showErrorMessage(
-                              context, 'Start Date must be before End Date');
+                          showErrorMessage(context,
+                              LocaleKeys.startDateTimeValidation.localize);
 
                           return;
                         }
                         if (_startTime!.isBefore(TimeOfDay.now())) {
-                          showErrorMessage(
-                              context, 'Start Date must be in the future');
+                          showErrorMessage(context,
+                              LocaleKeys.startDateBeginValidation.localize);
 
                           return;
                         }
-                        await context.read<MeetingCubit>().createNewMeeting(
+                        await context.read<StreamCubit>().createNewMeeting(
                               startTime: _combineDateAndTime(
                                 _selectedDate!,
                                 _startTime!,
@@ -172,57 +183,63 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                           context.pushReplacementNamed(Routes.ZOOM);
                         }
                       } else {
-                        showErrorMessage(context, 'Please fill all fields');
+                        showErrorMessage(
+                            context, LocaleKeys.pleaseFillAllFields.localize);
                       }
                     },
-                    child: const Text(
-                      "Done",
-                      style: TextStyle(
+                    child: Label(
+                      text: LocaleKeys.done.localize,
+                      style: Styles.headerText(
+                        fontSize: 25,
                         color: AppColors.PRIMARY_COLOR,
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 16.0),
+              SizedBox(height: 16.h),
               // Meeting Title
               TextField(
                 focusNode: _focusNode,
                 controller: _titleController,
-                decoration: const InputDecoration(
-                  labelText: 'Meeting Title',
-                  border: OutlineInputBorder(),
-                  fillColor: Colors.white,
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  // labelText: 'Meeting Title',
+                  hintText: LocaleKeys.meetingTitle.localize,
+                  border: const OutlineInputBorder(),
+                  fillColor: context.isDarkMode
+                      ? AppColors.GREY_DARK_COLOR
+                      : AppColors.GREY_LIGHT_COLOR,
                 ),
               ),
-              const SizedBox(height: 16.0),
+              SizedBox(height: 16.h),
               // Date Picker
               _buildDateTimeSelection(
-                title: 'Date',
+                title: LocaleKeys.date.localize,
                 content: _selectedDate != null
                     ? _dateFormat.format(_selectedDate!)
                     : 'Select date',
                 onTap: () => _selectDate(context),
               ),
-              const SizedBox(height: 16.0),
+              SizedBox(height: 16.h),
               // Start Time Picker
               _buildDateTimeSelection(
-                title: 'From',
+                title: LocaleKeys.from.localize,
                 content: _startTime != null
                     ? _startTime!.format(context)
-                    : 'Select start time',
+                    : LocaleKeys.selectADate.localize,
                 onTap: () => _selectTime(context, true),
               ),
-              const SizedBox(height: 16.0),
+              SizedBox(height: 16.h),
               // End Time Picker
               _buildDateTimeSelection(
-                title: 'To',
+                title: LocaleKeys.to.localize,
                 content: _endTime != null
                     ? _endTime!.format(context)
                     : 'Select end time',
                 onTap: () => _selectTime(context, false),
               ),
-              const SizedBox(height: 16.0),
+              SizedBox(height: 16.h),
             ],
           ),
         ),
@@ -235,35 +252,37 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
     required String content,
     required VoidCallback onTap,
   }) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
+      splashColor: Colors.transparent,
       child: Column(
         children: [
           Container(
-            padding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+            padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
+                Label(
+                  text: title,
+                  style: Styles.headerText(
+                      fontSize: 25,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
+                      fontWeight: FontWeight.bold),
                 ),
                 Expanded(
                   child: Container(),
                 ),
-                Text(
-                  content,
-                  style: const TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.black54,
+                Label(
+                  text: content,
+                  style: Styles.headerText(
+                    fontSize: 20,
+                    color: context.isDarkMode ? Colors.white70 : Colors.black54,
                   ),
                 ),
-                const Icon(
+                Icon(
                   Icons.arrow_forward_ios_rounded,
-                  color: Colors.black54,
-                  size: 20,
+                  color: context.isDarkMode ? Colors.white70 : Colors.black54,
+                  size: 15,
                 )
               ],
             ),

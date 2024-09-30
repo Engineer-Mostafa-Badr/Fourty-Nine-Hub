@@ -4,12 +4,14 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dar
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/reports_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../tinder/presentation/pages/user_profile.dart';
 import '../../domain/usecases/twitter_report_usecase.dart';
 import '../bloc/twitter_bloc.dart';
@@ -39,55 +41,57 @@ class _ReportViewState extends State<ReportView> {
     List<ReportsEnum> reports = ReportsEnum.values;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return BlocProvider<TwitterCubit>(
-      create: (_) => serviceLocator<TwitterCubit>(),
-      child: BlocBuilder<TwitterCubit, TwitterState>(
-        builder: (context, state) {
-          final controller = context.read<TwitterCubit>();
-          final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    return Scaffold(
+      body: BlocProvider<TwitterCubit>(
+        create: (_) => serviceLocator<TwitterCubit>(),
+        child: BlocBuilder<TwitterCubit, TwitterState>(
+          builder: (context, state) {
+            final controller = context.read<TwitterCubit>();
+            final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
-          return Container(
-            color: Colors.transparent,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: bottomInset),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 12),
-                    _buildHandleIndicator(),
-                    const SizedBox(height: 12),
-                    _buildHeader(context, screenWidth),
-                    const SizedBox(height: 10),
-                    if (reports.isEmpty)
-                      const Center(
-                        child: Text(
-                          'No report categories available',
-                          style: TextStyle(color: Colors.grey),
+            return Container(
+              color: Colors.transparent,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: bottomInset),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 12.h),
+                      _buildHandleIndicator(),
+                      SizedBox(height: 12.h),
+                      _buildHeader(context, screenWidth),
+                      SizedBox(height: 10.h),
+                      if (reports.isEmpty)
+                        Center(
+                          child: Text(
+                            LocaleKeys.noReportCategoriesAvailable.localize,
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                        )
+                      else
+                        ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: reports.length,
+                          separatorBuilder: (context, i) =>
+                              SizedBox(height: 10.h),
+                          itemBuilder: (context, i) {
+                            return _buildReportOption(
+                                context, reports[i], screenWidth);
+                          },
                         ),
-                      )
-                    else
-                      ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: reports.length,
-                        separatorBuilder: (context, i) =>
-                            const SizedBox(height: 10),
-                        itemBuilder: (context, i) {
-                          return _buildReportOption(
-                              context, reports[i], screenWidth);
-                        },
-                      ),
-                    const SizedBox(height: 20),
-                    _buildTextFieldWithSendButton(
-                        context, screenWidth, controller, state),
-                    const SizedBox(height: 20),
-                  ],
+                      SizedBox(height: 20.h),
+                      _buildTextFieldWithSendButton(
+                          context, screenWidth, controller, state),
+                      SizedBox(height: 20.h),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -95,7 +99,7 @@ class _ReportViewState extends State<ReportView> {
   Widget _buildHandleIndicator() {
     return Container(
       width: 40,
-      height: 5,
+      height: 5.h,
       decoration: BoxDecoration(
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(10),
@@ -108,7 +112,7 @@ class _ReportViewState extends State<ReportView> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Label(
-          text: "Report",
+          text: LocaleKeys.report.localize,
           style: Styles.headerText(
             fontSize: screenWidth * 0.1,
             fontWeight: FontWeight.bold,
@@ -134,7 +138,7 @@ class _ReportViewState extends State<ReportView> {
         });
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10),
         decoration: BoxDecoration(
           color: selectedReport == report
               ? AppColors.SECONDARY_COLOR.withOpacity(0.1)
@@ -184,7 +188,7 @@ class _ReportViewState extends State<ReportView> {
       children: [
         Expanded(
           child: TextField(
-            style: Styles.headerText(
+            style: TextStyle(
               fontSize: screenWidth * 0.04,
               fontWeight: FontWeight.bold,
               color: AppColors.PRIMARY_COLOR_LIGHT,
@@ -199,7 +203,7 @@ class _ReportViewState extends State<ReportView> {
                 vertical: MediaQuery.of(context).size.height * 0.02,
                 horizontal: 16.0,
               ),
-              hintText: 'Type report reason...',
+              hintText: '${LocaleKeys.typeReportReason.localize}...',
               hintStyle: TextStyle(
                 fontSize: screenWidth * 0.04,
                 color: AppColors.DARK_GRAY_COLOR,
@@ -227,7 +231,8 @@ class _ReportViewState extends State<ReportView> {
             onPressed: reportTextController.text.isNotEmpty
                 ? () async {
                     if (selectedReport == null) {
-                      showErrorMessage(context, "Please select a reason!");
+                      showErrorMessage(
+                          context, LocaleKeys.pleaseSelectReason.localize);
                       context.pop();
                     } else {
                       var response = await controller.onReport(
@@ -241,7 +246,8 @@ class _ReportViewState extends State<ReportView> {
                       );
 
                       if (response == true) {
-                        showSuccessMessage(context, "Report sent successfully");
+                        showSuccessMessage(context,
+                            LocaleKeys.reportSentSuccessfully.localize);
                         context.pop();
                       } else {
                         showErrorMessage(

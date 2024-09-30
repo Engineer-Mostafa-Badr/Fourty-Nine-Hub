@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
@@ -16,7 +18,7 @@ class ShippingDetailsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(label: 'Shipping Details'),
+      appBar: BackAppBar(label: 'Shipping Details'.tr()),
       body: ListView(
         children: [
           _buildPickUpFromWidget(context: context),
@@ -37,7 +39,7 @@ class ShippingDetailsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(
-            text: 'Where to deliver',
+            text: 'Where to deliver'.tr(),
             style: Styles.headerText(),
           ),
           Row(
@@ -46,20 +48,20 @@ class ShippingDetailsWidget extends StatelessWidget {
                   flex: 3,
                   child: FormTextField(
                     controller: controller.toAddressTextController,
-                    hint: 'To Address',
+                    hint: 'To Address'.tr(),
                     prefix: const Icon(Icons.location_on),
                   )),
               const Sizer(),
               Expanded(
                   child: FormTextField(
-                hint: 'Entrance',
+                hint: 'Entrance'.tr(),
                 controller: controller.toEntranceTextController,
               )),
             ],
           ),
           const Sizer(),
           FormTextField(
-            hint: 'Phone Number',
+            hint: 'Phone Number'.tr(),
             prefix: const Icon(Icons.phone),
             controller: controller.toPhoneTextController,
           ),
@@ -76,17 +78,17 @@ class ShippingDetailsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(
-            text: 'What to deliver',
+            text: 'What to deliver'.tr(),
             style: Styles.headerText(),
           ),
           FormTextField(
-            hint: 'Notes',
+            hint: 'Notes'.tr(),
             maxLines: 3,
             controller: controller.toPhoneTextController,
           ),
           const Sizer(),
           FormTextField(
-            hint: 'Offer Price',
+            hint: 'Offer Price'.tr(),
             prefix: const Icon(Icons.monetization_on_outlined),
             controller: controller.offerTextController,
           ),
@@ -103,7 +105,7 @@ class ShippingDetailsWidget extends StatelessWidget {
                       color: Colors.red),
                   child: Center(
                       child: Label(
-                    text: 'Premium Request',
+                    text: 'Premium Request'.tr(),
                     style: Styles.mediumText(color: Colors.white),
                   )),
                 ),
@@ -119,7 +121,7 @@ class ShippingDetailsWidget extends StatelessWidget {
                       color: AppColors.PRIMARY_COLOR),
                   child: Center(
                       child: Label(
-                          text: 'Normal Request',
+                          text: 'Normal Request'.tr(),
                           style: Styles.mediumText(color: Colors.white))),
                 ),
               )),
@@ -138,7 +140,7 @@ class ShippingDetailsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(
-            text: 'Where to pick up',
+            text: 'Where to pick up'.tr(),
             style: Styles.headerText(),
           ),
           Row(
@@ -147,20 +149,20 @@ class ShippingDetailsWidget extends StatelessWidget {
                   flex: 3,
                   child: FormTextField(
                     controller: controller.fromAddressTextController,
-                    hint: 'From Address',
+                    hint: 'From Address'.tr(),
                     prefix: const Icon(Icons.location_on),
                   )),
               const Sizer(),
               Expanded(
                   child: FormTextField(
-                hint: 'Entrance',
+                hint: 'Entrance'.tr(),
                 controller: controller.fromEntranceTextController,
               )),
             ],
           ),
           const Sizer(),
           FormTextField(
-            hint: 'Phone Number',
+            hint: 'Phone Number'.tr(),
             prefix: const Icon(Icons.phone),
             controller: controller.fromPhoneTextController,
           ),

@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart
 import 'package:fourtyninehub/features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BookingDoctorProfileWidget extends StatelessWidget {
   const BookingDoctorProfileWidget({
@@ -17,7 +18,7 @@ class BookingDoctorProfileWidget extends StatelessWidget {
     final doctor = context.read<BookDoctorAppointmentCubit>().doctor;
     return Container(
       padding: const EdgeInsets.all(16.0),
-      margin: const EdgeInsets.symmetric(vertical: 5),
+      margin: EdgeInsets.symmetric(vertical: 5.h),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         color: Colors.white,
@@ -31,12 +32,12 @@ class BookingDoctorProfileWidget extends StatelessWidget {
             size: 50,
             imageURL: doctor.image,
           ),
-          const Sizer(height: 16),
+          Sizer(height: 16.h),
           Text(
             '${Labels.doctor} ${toBeginningOfSentenceCase(doctor.fullName)}',
             style: Styles.headerText(),
           ),
-          const Sizer(height: 8),
+          Sizer(height: 8.h),
           Text(
             doctor.description,
             overflow: TextOverflow.fade,

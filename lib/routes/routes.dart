@@ -41,6 +41,11 @@ abstract class Routes {
   static const CHATROOM = '/ChatRoom';
   static const CHATROOMCAMERAPICKER = '/ChatRoom/CameraPicker';
   static const MEDIASLIDER = '/ChatRoom/MediaSlider';
+  static const VIEWCONTACT = '/ChatRoom/ViewContact';
+  static const CHATPROFILEVIEW = '/ChatProfileView';
+  static const ATTACHMENTSVIEW = '/ChatRoom/AttachmentsView';
+  static const SELECTCONTACTSTOSHARE = '/ChatRoom/SelectContactsToShareView';
+  static const CONTACTSVIEW = '/ContactsView';
   static const MAZADAT = '/Mazadat';
   static const VISITA = '/Visita';
   static const VISITAEMERGENCY = '/Visita/VisitaEmergency';
@@ -134,9 +139,12 @@ abstract class Routes {
 
   static const TRIP_JOIN = '/TripJoin';
   static const AVAILABLE_TRIPS = '/AvailableTrips';
+  static const TRIP_JOIN_REQUEST_NOTIFICATIONS = '/TripJoinRequestNotification';
 
   static const SPOTLIGHT = '/Spotlight';
   static const SNAP = '/Snap';
+  static const SEEALLBROADCASTS = '/SeeAllBroadcasts';
+  static const BROADCAST = '/Broadcast';
 }
 
 abstract class Paths {
@@ -165,6 +173,9 @@ abstract class Paths {
   static const CREATEAUCTION = 'CreateAuction';
   static const CHAT = 'Chat';
   static const CHATROOM = 'ChatRoom';
+  static const VIEWCONTACT = 'ViewContact';
+  static const ATTACHMENTSVIEW = 'AttachmentsView';
+  static const CHATPROFILEVIEW = 'ChatProfileView';
   static const CHATROOMCAMERAPICKER = 'CameraPicker';
   static const MEDIASLIDER = 'MediaSlider';
   static const REELS = 'Reels';
@@ -205,6 +216,7 @@ abstract class Paths {
   static const SearchMeals = 'SearchMeals';
   static const SHIPPING = 'Shipping';
   static const SHIPPING_REGISTER = 'shippingRegister';
+  static const CONTACTS_VIEW = 'ContactsView';
 
   static const RIDE = 'Ride';
   static const CONTACTUS = 'ContactUs';
@@ -254,10 +266,16 @@ abstract class Paths {
 
   static const TRIP_JOIN = 'TripJoin';
   static const AVAILABLE_TRIPS = 'AvailableTrips';
+  static const TRIP_JOIN_REQUEST_NOTIFICATIONS = 'TripJoinRequestNotification';
 
   static const SPOTLIGHT = 'Spotlight';
   static const SNAP = 'Snap';
 
+  static const SELECTCONTACTSTOSHARE = 'SelectContactsToShareView';
+
+  static const SEEALLBROADCASTS = 'SeeAllBroadcasts';
+
+  static const BROADCAST = 'Broadcast';
   static const DASHBOARDDRIVERSCREEN = 'DASHBOARDDRIVERSCREEN';
   static const DRIVERREQUESTSDETIALS = 'DRIVERREQUESTSDETIALS';
   static const MyRating = 'MyRating';
