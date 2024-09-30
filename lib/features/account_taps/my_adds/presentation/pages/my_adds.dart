@@ -114,7 +114,7 @@ class _MyAddsViewState extends State<MyAddsView>
                         Tab(text: LocaleKeys.auction.localize),
                         Tab(text: LocaleKeys.installments.localize),
                         Tab(text: LocaleKeys.tripJoin.localize),
-                         Tab(text: LocaleKeys.other.localize),
+                         const Tab(text: 'Other'),
                       ],
                     ),
                   ),

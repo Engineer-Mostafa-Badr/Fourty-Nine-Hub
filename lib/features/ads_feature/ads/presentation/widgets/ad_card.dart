@@ -301,14 +301,14 @@ class _AdCardState extends State<AdCard> {
     );
   }
 
-  Widget _buildTag() {
-    // super premium
-    return const Icon(
-      Icons.workspace_premium_outlined,
-      size: 20,
-      color: AppColors.SECONDARY_COLOR,
-    );
-    // premium
-    // regular
-  }
+  // Widget _buildTag() {
+  //   // super premium
+  //   return const Icon(
+  //     Icons.workspace_premium_outlined,
+  //     size: 20,
+  //     color: AppColors.SECONDARY_COLOR,
+  //   );
+  //   // premium
+  //   // regular
+  // }
 }

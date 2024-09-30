@@ -9,13 +9,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/favourite_main_category_banner.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
-import '../../../../../service_locator/service_locator.dart';
-import '../../../../ads_feature/ads/presentation/cubit/ads_cubit.dart';
-import '../../../../subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../cubit/managers/favourite_categories_cubit.dart';
 
 class FavouriteCategoryView extends StatefulWidget {
