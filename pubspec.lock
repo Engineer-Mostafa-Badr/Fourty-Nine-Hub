@@ -57,14 +57,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.5.0"
-  asn1lib:
-    dependency: transitive
-    description:
-      name: asn1lib
-      sha256: "2ca377ad4d677bbadca278e0ba4da4e057b80a10b927bfc8f7d8bda8fe2ceb75"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.5.4"
   async:
     dependency: transitive
     description:
@@ -457,14 +449,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
-  encrypt:
-    dependency: transitive
-    description:
-      name: encrypt
-      sha256: "62d9aa4670cc2a8798bab89b39fc71b6dfbacf615de6cf5001fb39f7e4a996a2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.3"
   equatable:
     dependency: "direct main"
     description:
@@ -939,14 +923,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.0"
-  flutter_styled_toast:
-    dependency: transitive
-    description:
-      name: flutter_styled_toast
-      sha256: e667f13a665820eb0fa8506547e47eacbcddf1948d6d3036cfd3b089bd4b0516
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -1502,13 +1478,13 @@ packages:
     source: hosted
     version: "1.0.6"
   native_device_orientation:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: native_device_orientation
-      sha256: "744a03030fad5a332a54833cd34f1e2ee51ae9acf477b4ef85bacc8823af9937"
+      sha256: "0c330c068575e4be72cce5968ca479a3f8d5d1e5dfce7d89d5c13a1e943b338c"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.1"
+    version: "2.0.3"
   nested:
     dependency: transitive
     description:
@@ -1805,14 +1781,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.10.2+1"
-  pointycastle:
-    dependency: transitive
-    description:
-      name: pointycastle
-      sha256: "4be0097fcf3fd3e8449e53730c631200ebc7b88016acecab2b0da2f0149222fe"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.9.1"
   pool:
     dependency: transitive
     description:
@@ -2147,7 +2115,7 @@ packages:
     source: hosted
     version: "1.11.1"
   statemachine:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: statemachine
       sha256: "42ce52468879383c60d4983526114d91282b8b0c36657bc7d58be88975a02982"
@@ -2611,7 +2579,7 @@ packages:
     source: hosted
     version: "1.0.0+4"
   zego_express_engine:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: zego_express_engine
       sha256: "5d4f8f24445a57fb7b74139834e875701a534b581235f26577f2350fef0fb92f"
@@ -2626,22 +2594,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.13.1"
-  zego_uikit:
-    dependency: transitive
-    description:
-      name: zego_uikit
-      sha256: b15630afdd5d2b7d78fb9bd775c5ce334dfb03dcae949a459f529fa0b69af3e5
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.24.3"
-  zego_uikit_prebuilt_live_audio_room:
-    dependency: "direct main"
-    description:
-      name: zego_uikit_prebuilt_live_audio_room
-      sha256: "135633dce2672848d23e4b460cea9e35c2af1f057500949d2c0345b6954b4038"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.7.5"
   zego_uikit_signaling_plugin:
     dependency: "direct main"
     description:

@@ -39,88 +39,86 @@ class AttachementsViewState extends State<AttachementsView> {
       length: 3,
       child: BlocProvider.value(
         value: widget.chatRoomCubit,
-        child: Builder(
-          builder: (context) {
-            return Scaffold(
-              appBar: AppBar(
-                elevation: 0,
-                backgroundColor: AppColors.PRIMARY_COLOR,
-                title: Text(
-                  LocaleKeys.attachments.tr(),
-                  style: Styles.headerText(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.BACKGROUND_COLOR,
-                  ),
-                ),
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    size: 26,
-                    color: AppColors.BACKGROUND_COLOR,
-                  ),
-                ),
-                bottom: TabBar(
-                  indicatorColor: AppColors.BACKGROUND_COLOR,
-                  indicatorWeight: 3,
-                  // indicatorPadding: const EdgeInsets.symmetric(horizontal: 2),
-                  unselectedLabelColor: AppColors.DIVIDER_GRAY_COLOR2,
-                  labelColor: AppColors.BACKGROUND_COLOR,
-                  tabs: [
-                    Tab(
-                      text: LocaleKeys.media.tr(),
-                    ),
-                    Tab(
-                      text: LocaleKeys.docs.tr(),
-                    ),
-                    Tab(
-                      text: LocaleKeys.links.tr(),
-                    ),
-                  ],
+        child: Builder(builder: (context) {
+          return Scaffold(
+            appBar: AppBar(
+              elevation: 0,
+              backgroundColor: AppColors.PRIMARY_COLOR,
+              title: Text(
+                LocaleKeys.attachments.tr(),
+                style: Styles.headerText(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.BACKGROUND_COLOR,
                 ),
               ),
-              body: BlocBuilder<ChatRoomCubit, ChatRoomState>(
-                builder: (context, state) {
-                  log("state.messages ${state.messages?.length}");
-            
-                  return TabBarView(
-                    children: [
-                      state.messages == null
-                          ? const Center(
-                              child: CircularProgressIndicator(
-                                color: AppColors.PRIMARY_COLOR,
-                              ),
-                            )
-                          : MediaAttachementsTab(
-                              messages: state.messages ?? [],
-                            ),
-                      state.messages == null
-                          ? const Center(
-                              child: CircularProgressIndicator(
-                                color: AppColors.PRIMARY_COLOR,
-                              ),
-                            )
-                          : DocumentsAttachementsTab(
-                              messages: state.messages ?? [],
-                            ),
-                      state.messages == null
-                          ? const Center(
-                              child: CircularProgressIndicator(
-                                color: AppColors.PRIMARY_COLOR,
-                              ),
-                            )
-                          : LinksAttachementsTab(
-                              messages: state.messages ?? [],
-                            ),
-                    ],
-                  );
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
                 },
+                icon: const Icon(
+                  Icons.arrow_back,
+                  size: 26,
+                  color: AppColors.BACKGROUND_COLOR,
+                ),
               ),
-            );
-          }
-        ),
+              bottom: TabBar(
+                indicatorColor: AppColors.BACKGROUND_COLOR,
+                indicatorWeight: 3,
+                // indicatorPadding: const EdgeInsets.symmetric(horizontal: 2),
+                unselectedLabelColor: AppColors.DIVIDER_GRAY_COLOR2,
+                labelColor: AppColors.BACKGROUND_COLOR,
+                tabs: [
+                  Tab(
+                    text: LocaleKeys.media.tr(),
+                  ),
+                  Tab(
+                    text: LocaleKeys.docs.tr(),
+                  ),
+                  Tab(
+                    text: LocaleKeys.links.tr(),
+                  ),
+                ],
+              ),
+            ),
+            body: BlocBuilder<ChatRoomCubit, ChatRoomState>(
+              builder: (context, state) {
+                log("state.messages ${state.messages?.length}");
+
+                return TabBarView(
+                  children: [
+                    state.messages == null
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.PRIMARY_COLOR,
+                            ),
+                          )
+                        : MediaAttachementsTab(
+                            messages: state.messages ?? [],
+                          ),
+                    state.messages == null
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.PRIMARY_COLOR,
+                            ),
+                          )
+                        : DocumentsAttachementsTab(
+                            messages: state.messages ?? [],
+                          ),
+                    state.messages == null
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.PRIMARY_COLOR,
+                            ),
+                          )
+                        : LinksAttachementsTab(
+                            messages: state.messages ?? [],
+                          ),
+                  ],
+                );
+              },
+            ),
+          );
+        }),
       ),
     );
   }
@@ -167,7 +165,7 @@ class _DocumentsAttachementsTabState extends State<DocumentsAttachementsTab> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: documentMessages.isEmpty
-          ? const Center(child: Text("No Docs"))
+          ? Center(child: Text(LocaleKeys.noDocs.tr()))
           : ListView.builder(
               physics: const BouncingScrollPhysics(),
               itemCount: documentMessages.length,
@@ -218,7 +216,7 @@ class _LinksAttachementsTabState extends State<LinksAttachementsTab> {
   @override
   Widget build(BuildContext context) {
     return linkMessages.isEmpty
-        ? const Center(child: Text("No Links"))
+        ? Center(child: Text(LocaleKeys.noLinks.tr()))
         : Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: ListView.builder(
@@ -374,7 +372,7 @@ class _MediaAttachementsTabState extends State<MediaAttachementsTab> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: mediaMessages.isEmpty
-          ? const Center(child: Text("No Media"))
+          ? Center(child: Text(LocaleKeys.noMedia.tr()))
           : GridView.builder(
               shrinkWrap: true,
               physics: const BouncingScrollPhysics(),

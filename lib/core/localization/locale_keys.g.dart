@@ -689,5 +689,13 @@ abstract class  LocaleKeys {
   static const deleteAd = 'deleteAd';
   static const rent = 'rent';
   static const sale = 'sale';
+  static const viewAll = 'viewAll';
+  static const addACaption = 'addACaption';
+  static const and = 'and';
+  static const otherContacts = 'otherContacts';
+  static const registered = 'registered';
+  static const add = 'add';
+  static const noDocs = 'noDocs';
+  static const noLinks = 'noLinks';
 
 }

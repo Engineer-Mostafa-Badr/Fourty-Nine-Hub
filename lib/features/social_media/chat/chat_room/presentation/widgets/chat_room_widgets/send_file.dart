@@ -40,8 +40,10 @@ class _SentFileCardState extends State<SentFileCard> {
   @override
   void initState() {
     fileExtension =
-        extension(widget.messageEntity.media[0].fileName?? "Unknown").toUpperCase();
-    fileSize = formatFileSize(fileSizeInBytes:  widget.messageEntity.media[0].fileSize?? 100);
+        extension(widget.messageEntity.media[0].fileName ?? "Unknown")
+            .toUpperCase();
+    fileSize = formatFileSize(
+        fileSizeInBytes: widget.messageEntity.media[0].fileSize ?? 100);
     super.initState();
   }
 
@@ -58,15 +60,15 @@ class _SentFileCardState extends State<SentFileCard> {
       onRightSwipe: !isArabic
           ? null
           : (details) {
-        chatRoomCubit.selectMessageForReplaying(widget.messageEntity);
-      },
+              chatRoomCubit.selectMessageForReplaying(widget.messageEntity);
+            },
       onLeftSwipe: isArabic
           ? null
           : (details) {
-        chatRoomCubit.selectMessageForReplaying(widget.messageEntity);
-      },
+              chatRoomCubit.selectMessageForReplaying(widget.messageEntity);
+            },
       child: Padding(
-        padding: const EdgeInsets.only(right: 8, bottom: 6, top: 6),
+        padding: const EdgeInsets.only(right: 8, bottom: 6, top: 6, left: 8),
         child: Container(
           color: Colors.transparent,
           child: Column(
@@ -77,12 +79,14 @@ class _SentFileCardState extends State<SentFileCard> {
                 decoration: BoxDecoration(
                   color: AppColors.MESSAGE_COLOR,
                   borderRadius: BorderRadius.only(
-                    topLeft:const Radius.circular(12),
+                    topLeft: const Radius.circular(12),
                     topRight: const Radius.circular(12),
-                    bottomLeft:
-                    isArabic ? const Radius.circular(12) : const Radius.circular(0),
-                    bottomRight:
-                    isArabic ? const Radius.circular(0) : const Radius.circular(12),
+                    bottomLeft: isArabic
+                        ? const Radius.circular(12)
+                        : const Radius.circular(0),
+                    bottomRight: isArabic
+                        ? const Radius.circular(0)
+                        : const Radius.circular(12),
                   ),
                   boxShadow: [
                     BoxShadow(
@@ -99,11 +103,10 @@ class _SentFileCardState extends State<SentFileCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-
                     GestureDetector(
-                      onTap: () async{
+                      onTap: () async {
                         log("Downloading...");
-                       await downloadAndOpenFile(
+                        await downloadAndOpenFile(
                           fileUrl: widget.messageEntity.media[0].url,
                         );
                       },
@@ -114,7 +117,8 @@ class _SentFileCardState extends State<SentFileCard> {
                           children: [
                             widget.messageEntity.hasReply
                                 ? ReplySendMessageCard(
-                                width: double.infinity, messageEntity: widget.messageEntity)
+                                    width: double.infinity,
+                                    messageEntity: widget.messageEntity)
                                 : const SizedBox(),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -149,18 +153,18 @@ class _SentFileCardState extends State<SentFileCard> {
                                                   "fileName",
                                               overflow: TextOverflow.ellipsis,
                                               style: Styles.mediumText(
-                                                  color:
-                                                      AppColors.GREY_DARK_COLOR),
+                                                  color: AppColors
+                                                      .GREY_DARK_COLOR),
                                             ),
                                           ),
-                                Text(
-                                  '${fileSize ?? ''}'
-                                      ' - '
-                                      '$fileExtension',
-                                  style: Styles.smallText(
-                                      color: AppColors
-                                          .GREY_DARK_COLOR),
-                                )
+                                          Text(
+                                            '${fileSize ?? ''}'
+                                            ' - '
+                                            '$fileExtension',
+                                            style: Styles.smallText(
+                                                color:
+                                                    AppColors.GREY_DARK_COLOR),
+                                          )
                                         ],
                                       )
                                     ],
@@ -172,17 +176,16 @@ class _SentFileCardState extends State<SentFileCard> {
                         ),
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-
                           Label(
                             text: widget.messageEntity.time,
-                            style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                            style: Styles.smallText(
+                                color: AppColors.PRIMARY_COLOR),
                           ),
                           const SizedBox(width: 4),
                           Icon(
@@ -193,7 +196,6 @@ class _SentFileCardState extends State<SentFileCard> {
                         ],
                       ),
                     ),
-
                   ],
                 ),
               )
@@ -223,9 +225,4 @@ class _SentFileCardState extends State<SentFileCard> {
       return Colors.grey;
     }
   }
-
-
 }
-
-
-

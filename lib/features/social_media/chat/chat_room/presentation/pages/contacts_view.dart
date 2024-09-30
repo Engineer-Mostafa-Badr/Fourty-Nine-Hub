@@ -156,7 +156,7 @@ class ContactCardState extends State<ContactCard> {
           const Spacer(),
           widget.contact.isRegistered
               ? Text(
-                  'Registered',
+                  LocaleKeys.registered.tr(),
                   style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
                 )
               : ElevatedButton(
@@ -179,6 +179,7 @@ class ContactCardState extends State<ContactCard> {
                     backgroundColor: AppColors.PRIMARY_COLOR,
                   ),
                   child: isAdded
+                      // ignore: dead_code
                       ? const Center(
                           child: SizedBox(
                               width: 24,
@@ -188,7 +189,7 @@ class ContactCardState extends State<ContactCard> {
                               )),
                         )
                       : Text(
-                          'Add',
+                          LocaleKeys.add.tr(),
                           style: Styles.mediumText(
                               color: AppColors.BACKGROUND_COLOR),
                         ),

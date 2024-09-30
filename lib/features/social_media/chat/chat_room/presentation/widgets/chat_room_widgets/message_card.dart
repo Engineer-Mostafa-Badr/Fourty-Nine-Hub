@@ -109,11 +109,11 @@ class MessageCard extends StatelessWidget {
               chatRoomCubit.selectMessageForReplaying(messageEntity);
             },
       child: Padding(
-        padding: const EdgeInsets.only(
-          left: 60,
+        padding: EdgeInsets.only(
+          left: isArabic ? 60 : 8,
           top: 6,
           bottom: 6,
-          right: 8,
+          right: isArabic ? 8 : 60,
         ),
         child: Container(
           color: Colors.transparent,
@@ -576,105 +576,110 @@ class VoiceMessageCard extends StatelessWidget {
               chatRoomCubit.selectMessageForReplaying(messageEntity);
             },
       child: Padding(
-        padding: EdgeInsets.only(
-          right: isSend ? 8 : MediaQuery.of(context).size.width * 0.3,
+        padding: const EdgeInsets.only(
+          right: 8,
           bottom: 6,
           top: 6,
-          left: isSend ? MediaQuery.of(context).size.width * 0.3 : 8,
+          left: 8,
         ),
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.65,
-          decoration: BoxDecoration(
-            color:
-                isSend ? AppColors.MESSAGE_COLOR : AppColors.BACKGROUND_COLOR,
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(12),
-              topRight: const Radius.circular(12),
-              bottomLeft: isArabic
-                  ? isSend
-                      ? const Radius.circular(12)
-                      : const Radius.circular(0)
-                  : isSend
-                      ? const Radius.circular(12)
-                      : const Radius.circular(0),
-              bottomRight: isArabic
-                  ? isSend
-                      ? const Radius.circular(0)
-                      : const Radius.circular(12)
-                  : isSend
-                      ? const Radius.circular(0)
-                      : const Radius.circular(12),
-            ),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 8,
-                offset: Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              messageEntity.hasReply
-                  ? isSend
-                      ? ReplySendMessageCard(
-                          width: MediaQuery.of(context).size.width * 0.65,
-                          messageEntity: messageEntity)
-                      : ReplyRecivedMessageCard(
-                          messageEntity: messageEntity,
-                          width: MediaQuery.of(context).size.width * 0.65,
-                        )
-                  : const SizedBox(),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.65,
-                child: VoiceMessageView(
-                  activeSliderColor: AppColors.PRIMARY_COLOR,
-                  circlesColor: AppColors.PRIMARY_COLOR,
-                  backgroundColor: isSend
-                      ? AppColors.MESSAGE_COLOR
-                      : AppColors.BACKGROUND_COLOR,
-                  innerPadding: 12,
-                  cornerRadius: 12,
-                  // notActiveSliderColor:
-                  //     AppColors.PRIMARY_COLOR.withOpacity(0.1),
-                  // size: ,
-                  controller: VoiceController(
-                    audioSrc: messageEntity.media[0].url,
-                    maxDuration: const Duration(minutes: 1000),
-                    // cacheKey: messageEntity.media[0].url,
-                    isFile: false,
-                    onComplete: () {},
-                    onPause: () {},
-                    onPlaying: () {},
-                    onError: (p0) {},
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment:
+              isSend ? MainAxisAlignment.end : MainAxisAlignment.start,
+          children: [
+            isSend
+                ? const SizedBox()
+                : const CircleAvatar(
+                    radius: 15,
+                    backgroundColor: Colors.white,
+                    backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
                   ),
+            isSend ? const SizedBox() : const Sizer(width: 5),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.65,
+              decoration: BoxDecoration(
+                color: isSend
+                    ? AppColors.MESSAGE_COLOR
+                    : AppColors.BACKGROUND_COLOR,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(12),
+                  topRight: Radius.circular(12),
+                  bottomLeft: Radius.circular(12),
+                  bottomRight: Radius.circular(12),
                 ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 8,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
-              const SizedBox(width: 8),
-              Padding(
-                padding:
-                    const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Label(
-                      text: messageEntity.time,
-                      style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  messageEntity.hasReply
+                      ? isSend
+                          ? ReplySendMessageCard(
+                              width: MediaQuery.of(context).size.width * 0.65,
+                              messageEntity: messageEntity)
+                          : ReplyRecivedMessageCard(
+                              messageEntity: messageEntity,
+                              width: MediaQuery.of(context).size.width * 0.65,
+                            )
+                      : const SizedBox(),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.65,
+                    child: VoiceMessageView(
+                      activeSliderColor: AppColors.PRIMARY_COLOR,
+                      circlesColor: AppColors.PRIMARY_COLOR,
+                      backgroundColor: isSend
+                          ? AppColors.MESSAGE_COLOR
+                          : AppColors.BACKGROUND_COLOR,
+                      innerPadding: 12,
+                      cornerRadius: 12,
+                      // notActiveSliderColor:
+                      //     AppColors.PRIMARY_COLOR.withOpacity(0.1),
+                      // size: ,
+                      controller: VoiceController(
+                        audioSrc: messageEntity.media[0].url,
+                        maxDuration: const Duration(minutes: 1000),
+                        // cacheKey: messageEntity.media[0].url,
+                        isFile: false,
+                        onComplete: () {},
+                        onPause: () {},
+                        onPlaying: () {},
+                        onError: (p0) {},
+                      ),
                     ),
-                    isSend ? const SizedBox(width: 4) : const SizedBox(),
-                    isSend
-                        ? Icon(
-                            _getMessageIcon(messageEntity),
-                            color: _getMessageIconColor(messageEntity),
-                            size: 12,
-                          )
-                        : const SizedBox(),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 8),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 8.0, right: 8.0, bottom: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Label(
+                          text: messageEntity.time,
+                          style:
+                              Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                        ),
+                        isSend ? const SizedBox(width: 4) : const SizedBox(),
+                        isSend
+                            ? Icon(
+                                _getMessageIcon(messageEntity),
+                                color: _getMessageIconColor(messageEntity),
+                                size: 12,
+                              )
+                            : const SizedBox(),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

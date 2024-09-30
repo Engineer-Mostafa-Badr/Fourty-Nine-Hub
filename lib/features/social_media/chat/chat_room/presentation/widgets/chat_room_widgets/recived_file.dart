@@ -69,7 +69,7 @@ class _ReceivedFileCardState extends State<ReceivedFileCard> {
               chatRoomCubit.selectMessageForReplaying(widget.messageEntity);
             },
       child: Padding(
-        padding: const EdgeInsets.only(left: 8, bottom: 6, top: 6),
+        padding: const EdgeInsets.only(left: 8, bottom: 6, top: 6, right: 8),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -78,7 +78,9 @@ class _ReceivedFileCardState extends State<ReceivedFileCard> {
               backgroundColor: Colors.white,
               backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
             ),
-            const SizedBox(width: 8,),
+            const SizedBox(
+              width: 8,
+            ),
             Container(
               color: Colors.transparent,
               child: Column(
@@ -89,8 +91,8 @@ class _ReceivedFileCardState extends State<ReceivedFileCard> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
-                        topLeft:const Radius.circular(12),
-                        topRight:const Radius.circular(12),
+                        topLeft: const Radius.circular(12),
+                        topRight: const Radius.circular(12),
                         bottomLeft: isArabic
                             ? const Radius.circular(0)
                             : const Radius.circular(12),
@@ -110,9 +112,9 @@ class _ReceivedFileCardState extends State<ReceivedFileCard> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         GestureDetector(
-                          onTap: ()async {
+                          onTap: () async {
                             log("Downloading...");
-                          await  downloadAndOpenFile(
+                            await downloadAndOpenFile(
                               fileUrl: widget.messageEntity.media[0].url,
                             );
                           },
@@ -237,6 +239,4 @@ class _ReceivedFileCardState extends State<ReceivedFileCard> {
       return Colors.grey;
     }
   }
-
 }
-

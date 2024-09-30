@@ -202,7 +202,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                                 setState(() {});
                               },
                             ),
-                            hintText: 'Add a caption ...',
+                            hintText: LocaleKeys.addACaption.tr(),
                             hintStyle: const TextStyle(color: Colors.grey),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30.0),

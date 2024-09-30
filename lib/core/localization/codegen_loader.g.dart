@@ -714,7 +714,15 @@ class CodegenLoader extends AssetLoader{
   "chats": "محادثة",
   "deleteAd": "حذف الإعلان",
   "rent": "إيجار",
-  "sale": "بيع"
+  "sale": "بيع",
+  "viewAll": "عرض الكل",
+  "addACaption": "...اضافة تعليق",
+  "and": "و",
+  "otherContacts": "جهات اتصال اخرى",
+  "registered": "Registered",
+  "add": "Add",
+  "noDocs": "No Docs",
+  "noLinks": "No Links"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1418,7 +1426,16 @@ static const Map<String,dynamic> en = {
   "chats": "Chats",
   "deleteAd": "Delete",
   "rent": "Rent",
-  "sale": "Sale"
+  "sale": "Sale",
+  "viewAll": "View All",
+  "addACaption": "Add a caption...",
+  "and": "And",
+  "otherContacts": "Other Contacts",
+  "registered": "Registered",
+  "add": "Add",
+  "noDocs": "No Docs",
+  "noLinks": "No Links",
+  "noMedia": "No Media"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -52,7 +52,7 @@ class _SentContactsCardState extends State<SentContactsCard> {
               chatRoomCubit.selectMessageForReplaying(widget.messageEntity);
             },
       child: Padding(
-        padding: const EdgeInsets.only(right: 8, bottom: 6, top: 6),
+        padding: const EdgeInsets.only(right: 8, bottom: 6, top: 6, left: 8),
         child: Container(
           color: Colors.transparent,
           child: Column(
@@ -147,7 +147,7 @@ class _SentContactsCardState extends State<SentContactsCard> {
                                                       1
                                                   ? widget.messageEntity
                                                       .sharedContacts[0].name
-                                                  : "${widget.messageEntity.sharedContacts[0].name} and ${widget.messageEntity.sharedContacts.length - 1} other contact",
+                                                  : "${widget.messageEntity.sharedContacts[0].name} ${LocaleKeys.and.tr()} ${widget.messageEntity.sharedContacts.length - 1} ${LocaleKeys.otherContacts.tr()}",
                                               // overflow: TextOverflow.ellipsis,
                                               style: Styles.mediumText(
                                                   color: AppColors
@@ -200,7 +200,7 @@ class _SentContactsCardState extends State<SentContactsCard> {
                                                 widget.messageEntity));
                                   },
                                   child: Text(
-                                    "View all",
+                                   LocaleKeys.viewAll.tr(),
                                     // overflow: TextOverflow.ellipsis,
                                     style: Styles.mediumText(
                                         color: AppColors.PRIMARY_COLOR),

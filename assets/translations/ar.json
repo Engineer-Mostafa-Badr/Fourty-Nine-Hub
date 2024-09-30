@@ -699,5 +699,13 @@
   "chats": "محادثة",
   "deleteAd": "حذف الإعلان",
   "rent": "إيجار",
-  "sale": "بيع"
+  "sale": "بيع",
+  "viewAll": "عرض الكل",
+  "addACaption": "...اضافة تعليق",
+  "and": "و",
+  "otherContacts": "جهات اتصال اخرى",
+  "registered": "Registered",
+  "add": "Add",
+  "noDocs": "No Docs",
+  "noLinks": "No Links"
 }
