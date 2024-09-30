@@ -734,7 +734,6 @@ abstract class  LocaleKeys {
   static const add = 'add';
   static const noDocs = 'noDocs';
   static const noLinks = 'noLinks';
-  static const seeAll = 'seeAll';
   static const broadcasts = 'broadcasts';
   static const myBroadcasts = 'myBroadcasts';
   static const channelInfo = 'channelInfo';
