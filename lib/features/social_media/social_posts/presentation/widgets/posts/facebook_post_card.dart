@@ -130,9 +130,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                           ? 10
                           : 0),
                   decoration: BoxDecoration(
-                      border: myPost.isShared == true ? Border.all(
-                          color:
-                          AppColors.DIVIDER_GRAY_COLOR) : null),
+                      border: myPost.isShared == true
+                          ? Border.all(color: AppColors.DIVIDER_GRAY_COLOR)
+                          : null),
                   child: Column(
                     children: [
                       if (myPost.type != 'advertisement' &&
@@ -481,7 +481,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   }
                 },
                 child: ImageFromInternet(
-                  image: post.user.image??'',
+                  image: post.user.image ?? '',
                   isCircle: true,
                   width: 40,
                   height: 40.h,
@@ -503,7 +503,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TextAppButton(
-                              label: "${post.user.firstName} ${post.user.lastName}",
+                              label:
+                                  "${post.user.firstName} ${post.user.lastName}",
                               style: Styles.headerText(fontSize: 32),
                               onPressed: () {
                                 if (widget.fromProfile == false) {
@@ -616,7 +617,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     TextAppButton(
                         // style: TextStyle(color: Theme.of(context).primaryColor),
                         label: "${post.user.firstName} ${post.user.lastName}",
-                        style: Styles.headerText(fontSize: 32,color: Theme.of(context).primaryColor),
+                        style: Styles.headerText(
+                            fontSize: 32,
+                            color: Theme.of(context).primaryColor),
                         onPressed: () {
                           if (widget.fromProfile == false) {
                             context.push(Routes.OTHERSACCOUNT,
@@ -651,7 +654,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       required String content,
       List<String>? images}) {
     return (backgroundColor != null && backgroundColor != '#FFFFFFFF') &&
-            images!.isEmpty&&content.isNotEmpty
+            images!.isEmpty &&
+            content.isNotEmpty
         ? Container(
             width: double.infinity,
             height: 260.h,
@@ -676,10 +680,12 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if(content.isNotEmpty)...[ReadMoreLabel(text: content),
-                SizedBox(
-                  height: 10.h,
-                )],
+                if (content.isNotEmpty) ...[
+                  ReadMoreLabel(text: content),
+                  SizedBox(
+                    height: 10.h,
+                  )
+                ],
                 if ((images?.isNotEmpty ?? false))
                   SizedBox(
                     child: GridView.builder(

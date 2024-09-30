@@ -11,19 +11,20 @@ class ReelSearchView extends StatefulWidget {
 }
 
 class _ReelSearchViewState extends State<ReelSearchView> {
-
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      padding:  EdgeInsets.all(20.w),
+      padding: EdgeInsets.all(20.w),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,  // Number of columns
-        crossAxisSpacing: 10,  // Horizontal space between items
-        mainAxisSpacing: 10,   // Vertical space between items
+        crossAxisCount: 2, // Number of columns
+        crossAxisSpacing: 10, // Horizontal space between items
+        mainAxisSpacing: 10, // Vertical space between items
       ),
-      itemCount:4,
+      itemCount: 4,
       itemBuilder: (context, index) {
-        return const VideoGridItem(videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4');
+        return const VideoGridItem(
+            videoUrl:
+                'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4');
       },
     );
   }
@@ -60,42 +61,45 @@ class _VideoGridItemState extends State<VideoGridItem> {
   Widget build(BuildContext context) {
     return _controller.value.isInitialized
         ? AspectRatio(
-      aspectRatio: _controller.value.aspectRatio,
-      child: Stack(
-        children: [
-          VideoPlayer(_controller),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: VideoProgressIndicator(_controller, allowScrubbing: true),
-          ),
-          Center(
-            child: IconButton(
-              icon: Icon(
-                _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                color: Colors.white,
-                size: 30.0,
-              ),
-              onPressed: () {
-                setState(() {
-                  _controller.value.isPlaying
-                      ? _controller.pause()
-                      : _controller.play();
-                });
-              },
+            aspectRatio: _controller.value.aspectRatio,
+            child: Stack(
+              children: [
+                VideoPlayer(_controller),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child:
+                      VideoProgressIndicator(_controller, allowScrubbing: true),
+                ),
+                Center(
+                  child: IconButton(
+                    icon: Icon(
+                      _controller.value.isPlaying
+                          ? Icons.pause
+                          : Icons.play_arrow,
+                      color: Colors.white,
+                      size: 30.0,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _controller.value.isPlaying
+                            ? _controller.pause()
+                            : _controller.play();
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
-    )
+          )
         : Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-      ),
-    );
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+            ),
+          );
   }
 }

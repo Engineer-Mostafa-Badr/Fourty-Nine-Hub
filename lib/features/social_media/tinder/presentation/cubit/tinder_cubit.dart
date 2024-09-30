@@ -840,7 +840,8 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     required String userId,
   }) async {
     emit(state.copyWith(
-        lastSeenModelState: DataState.initial,));
+      lastSeenModelState: DataState.initial,
+    ));
 
     final lastSeenModel = await tinderRepository.fetchLastSeen(userId);
     if (lastSeenModel != null) {

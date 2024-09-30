@@ -11,25 +11,25 @@ class AdModel extends AdEntity {
       required super.title,
       required super.description,
       required super.images,
-       super.price,
-        super.type,
-        super.isFavourite,
-        super.hasAuction,
+      super.price,
+      super.type,
+      super.isFavourite,
+      super.hasAuction,
       super.address,
       super.user,
-        super.mainCategoryId,
-        super.userId,
+      super.mainCategoryId,
+      super.userId,
       super.statistics,
       required super.active,
       required super.approved,
       required super.createdAt,
       required super.details,
-      super.subCategoryId, super.phone});
+      super.subCategoryId,
+      super.phone});
   factory AdModel.fromJson(Map<String, dynamic> json) {
     List<String> images = [];
     try {
-      images =
-          (json['images'] as List).map((e) => e['photo'] as String).toList();
+      images = (json['images'] as List).map((e) => e['photo'] as String).toList();
     } catch (e) {}
     UserModel? user;
     try {
@@ -51,39 +51,29 @@ class AdModel extends AdEntity {
         approved: json['isApproved'] ?? true,
         isFavourite: json['isFavorite'] ?? false,
         // phone: json['phone'] ?? '',
-        statistics: json['statistics'] == null
-            ? null
-            : AdStatisticsModel.fromJson(json['statistics']),
+        statistics: json['statistics'] == null ? null : AdStatisticsModel.fromJson(json['statistics']),
         address: AddressModel.fromJson(json['address']),
         user: user,
-        details: json['props'] == null
-            ? []
-            : (json['props'] as List)
-                .map((e) => CreateAdModel.fromJson(e))
-                .toList(),
+        details: json['props'] == null ? [] : (json['props'] as List).map((e) => CreateAdModel.fromJson(e)).toList(),
         createdAt: DateTime.parse(json['createdAt']));
   }
   Map<String, dynamic> toJson() => {
         "desc": description,
         "phone": phone,
         "title": title,
-    "type":type,
+        "type": type,
         // "type": (hasAuction==false&&isUser==false)?"provider":(hasAuction==false&&isUser==true)?"user":(hasAuction==true&&isUser==false)?'rent':'sale',
         "subCategoryId": subCategoryId,
         "mainCategoryId": mainCategoryId,
-    if(price!=null)"price":price,
+        if (price != null) "price": price,
         // "userId": userId,
         "searchText": "testPropsAndAds",
         "images": images,
         "props": details.map((e) {
-
-          if(e.value.nameEn.isNotEmpty){
+          if (e.value.nameEn.isNotEmpty) {
             return {
-              "value":{
-                "ar":e.value.nameAr,
-                "en":e.value.nameEn
-              },
-              "propertyId":e.propId
+              "value": {"ar": e.value.nameAr, "en": e.value.nameEn},
+              "propertyId": e.propId
             };
           }
         }).toList()

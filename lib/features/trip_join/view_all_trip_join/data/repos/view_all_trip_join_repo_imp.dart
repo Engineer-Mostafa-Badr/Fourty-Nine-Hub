@@ -21,8 +21,13 @@ class ViewAllTripJoinRepoImp implements ViewAllTripJoinRepo {
 
   @override
   Future<Either<Failure, bool>> requestTripJoin(
-      {required String addId, required String mobile}) {
+      {required String addId,
+      required String mobile,
+      bool premuimRequest = false}) {
     return viewripJoinRemoteDataSource.requestTripJoin(
-        addId: addId, mobile: mobile);
+      addId: addId,
+      mobile: mobile,
+      premuimRequest: premuimRequest,
+    );
   }
 }

@@ -12,8 +12,6 @@ enum AuthStatus {
   authenticateCanceled,
 }
 
-
-
 @immutable
 sealed class LoginState {
   const LoginState();
@@ -37,14 +35,14 @@ final class LoginSuccess extends LoginState {
 
 final class SocialAuthState extends LoginState {
   final AuthStatus status;
-  final UserTokensEntity? userTokensEntity; // This will be used to store the token if available
+  final UserTokensEntity?
+      userTokensEntity; // This will be used to store the token if available
 
   const SocialAuthState({
     required this.status,
     this.userTokensEntity,
   });
 }
-
 
 // part of 'login_cubit.dart';
 //

@@ -85,7 +85,6 @@ class _ZegoLiveStreamingInRoomMessageInputBoardButtonState
         return ZegoTextIconButton(
           textStyle: const TextStyle(
               color: Colors.white, fontWeight: FontWeight.w200, fontSize: 12),
-      
           onPressed: chatLocalEnabled
               ? () {
                   final key = DateTime.now().millisecondsSinceEpoch;
@@ -114,7 +113,6 @@ class _ZegoLiveStreamingInRoomMessageInputBoardButtonState
                   );
                 }
               : null,
-              
           icon: buttonIcon,
           iconSize: widget.iconSize ?? Size(72.w, 72.h),
           buttonSize: widget.buttonSize ?? Size(96.w, 96.h),
