@@ -27,7 +27,6 @@ class _ServicesNotificationBuilderState extends State<ServicesNotificationBuilde
   late final ScrollController scrollController;
   late double scrollPosition;
   late double scrollMaxExtent;
-  int nextPage = 1;
   bool isLoading = false;
 
   late GetServicesNotificationsCubit getServicesNotificationsCubit;
@@ -84,7 +83,7 @@ class _ServicesNotificationBuilderState extends State<ServicesNotificationBuilde
                   await deleteAllNotificationsCubit.deleteAllNotifications(type: 'services');
                   getServicesNotificationsCubit.notifications = [];
                   getServicesNotificationsCubit.page = 1;
-                  await getServicesNotificationsCubit.getServicesNotifications();
+                  await getServicesNotificationsCubit.getServicesNotifications(languageCode: 'en');
                   await getUnreadNotificationsCountCubit.getUnreadNotificationsCount();
                 },
               );
@@ -93,6 +92,7 @@ class _ServicesNotificationBuilderState extends State<ServicesNotificationBuilde
             if (index < getServicesNotificationsCubit.notifications.length) {
               final NotificationEntity notificationEntity = getServicesNotificationsCubit.notifications[index];
               return NotificationCard(
+                type: 'services',
                 notificationEntity: notificationEntity,
                 index: index,
                 notificationSeenCallback: () {
@@ -124,8 +124,7 @@ class _ServicesNotificationBuilderState extends State<ServicesNotificationBuilde
         if (!isLoading && (getServicesNotificationsCubit.notifications.last.hasNextPage ?? false)) {
           isLoading = true;
           getServicesNotificationsCubit.page = getServicesNotificationsCubit.notifications.last.nextPageNumber!;
-          await getServicesNotificationsCubit.getServicesNotifications();
-          nextPage++;
+          await getServicesNotificationsCubit.getServicesNotifications(languageCode: 'en');
           isLoading = false;
         }
       }
@@ -136,7 +135,7 @@ class _ServicesNotificationBuilderState extends State<ServicesNotificationBuilde
     if (getServicesNotificationsCubit.notifications.isEmpty) {
       getServicesNotificationsCubit.page = 1;
       // getServicesNotificationsCubit.notifications = [];
-      getServicesNotificationsCubit.getServicesNotifications();
+      getServicesNotificationsCubit.getServicesNotifications(languageCode: 'en');
     }
   }
 }

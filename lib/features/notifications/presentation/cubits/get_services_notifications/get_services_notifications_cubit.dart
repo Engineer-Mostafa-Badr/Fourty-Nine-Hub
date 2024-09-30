@@ -19,14 +19,16 @@ class GetServicesNotificationsCubit extends Cubit<GetServicesNotificationsState>
   }) : super(GetServicesNotificationsInitial());
   List<NotificationEntity> notifications = [];
   int page = 1;
-  Future<void> getServicesNotifications() async {
+  Future<void> getServicesNotifications({
+    required String languageCode,
+  }) async {
     final getUnreadNotificationsCountCubit = context.read<GetUnreadNotificationsCountCubit>();
     getUnreadNotificationsCountCubit.getUnreadNotificationsCount();
     pr('getServicesNotifications is called');
     pr('pages: $page');
     pr('notifications: $notifications');
     emit(GetServicesNotificationsLoading());
-    final response = await getNotficationsUseCase.call(type: 'services', page: page);
+    final response = await getNotficationsUseCase.call(type: 'services', page: page, languageCode: languageCode);
     response.fold(
       (Failure failure) {
         emit(GetServicesNotificationsFailed(Labels.errorHappened));

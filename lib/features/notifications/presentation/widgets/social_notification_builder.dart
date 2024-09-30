@@ -27,7 +27,6 @@ class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
   late final ScrollController scrollController;
   late double scrollPosition;
   late double scrollMaxExtent;
-  int nextPage = 1;
   bool isLoading = false;
 
   late GetSocialNotificationsCubit getSocialNotificationsCubit;
@@ -83,7 +82,7 @@ class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
                   await deleteAllNotificationsCubit.deleteAllNotifications(type: 'social');
                   getSocialNotificationsCubit.notifications = [];
                   getSocialNotificationsCubit.page = 1;
-                  await getSocialNotificationsCubit.getSocialNotifications();
+                  await getSocialNotificationsCubit.getSocialNotifications(languageCode: 'en');
                   await getUnreadNotificationsCountCubit.getUnreadNotificationsCount();
                 },
               );
@@ -123,8 +122,7 @@ class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
         if (!isLoading && (getSocialNotificationsCubit.notifications.last.hasNextPage ?? false)) {
           isLoading = true;
           getSocialNotificationsCubit.page = getSocialNotificationsCubit.notifications.last.nextPageNumber!;
-          await getSocialNotificationsCubit.getSocialNotifications();
-          nextPage++;
+          await getSocialNotificationsCubit.getSocialNotifications(languageCode: 'en');
           isLoading = false;
         }
       }
@@ -134,7 +132,7 @@ class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
   void _fetchNotificationsIfEmpty() {
     if (getSocialNotificationsCubit.notifications.isEmpty) {
       getSocialNotificationsCubit.page = 1;
-      getSocialNotificationsCubit.getSocialNotifications();
+      getSocialNotificationsCubit.getSocialNotifications(languageCode: 'en');
     }
   }
 }

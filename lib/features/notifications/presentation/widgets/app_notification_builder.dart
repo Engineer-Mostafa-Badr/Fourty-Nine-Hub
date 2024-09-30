@@ -27,7 +27,6 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
   late final ScrollController scrollController;
   late double scrollPosition;
   late double scrollMaxExtent;
-  int nextPage = 1;
   bool isLoading = false;
 
   late GetAppNotificationsCubit getAppNotificationsCubit;
@@ -83,7 +82,7 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
                   await deleteAllNotificationsCubit.deleteAllNotifications(type: 'app');
                   getAppNotificationsCubit.notifications = [];
                   getAppNotificationsCubit.page = 1;
-                  await getAppNotificationsCubit.getAppNotifications();
+                  await getAppNotificationsCubit.getAppNotifications(languageCode: 'en');
                   await getUnreadNotificationsCountCubit.getUnreadNotificationsCount();
                 },
               );
@@ -123,8 +122,8 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
         if (!isLoading && (getAppNotificationsCubit.notifications.last.hasNextPage ?? false)) {
           isLoading = true;
           getAppNotificationsCubit.page = getAppNotificationsCubit.notifications.last.nextPageNumber!;
-          await getAppNotificationsCubit.getAppNotifications();
-          nextPage++;
+          await getAppNotificationsCubit.getAppNotifications(
+              languageCode: Localizations.localeOf(context).languageCode);
           isLoading = false;
         }
       }
@@ -134,7 +133,7 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
   void _fetchNotificationsIfEmpty() {
     if (getAppNotificationsCubit.notifications.isEmpty) {
       getAppNotificationsCubit.page = 1;
-      getAppNotificationsCubit.getAppNotifications();
+      getAppNotificationsCubit.getAppNotifications(languageCode: 'en');
     }
   }
 }
