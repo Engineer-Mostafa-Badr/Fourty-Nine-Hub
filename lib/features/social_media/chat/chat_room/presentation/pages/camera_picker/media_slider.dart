@@ -70,8 +70,11 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                             file,
                           );
                         } else {
-                          return _TrimmerView(
-                              file: file, onSave: (editedVideo) {});
+                          // return _TrimmerView(
+                          //     file: file, onSave: (editedVideo) {});
+                          return VideoPlayerCard(
+                            videoUrl: file.path,
+                          );
                         }
                       },
                     ),
@@ -92,37 +95,37 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                               },
                             ),
                             const Spacer(),
-                            _BaseIcon(
-                                icon: Icons.plus_one_rounded, onTap: () {}),
-                            SizedBox(width: 20.h),
-                            _BaseIcon(
-                              icon: Icons.edit,
-                              onTap: () async {
-                                Uint8List? editedImage;
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => ProImageEditor.file(
-                                    context
-                                        .read<ChatRoomCubit>()
-                                        .media[_selectedIndex],
-                                    onImageEditingComplete:
-                                        (Uint8List bytes) async {
-                                      editedImage = bytes;
-                                      context.pop();
-                                    },
-                                  ),
-                                ).then((value) async {
-                                  if (editedImage != null) {
-                                    context
-                                            .read<ChatRoomCubit>()
-                                            .media[_selectedIndex] =
-                                        await _convertUint8ListToFile(
-                                            editedImage!);
-                                    setState(() {});
-                                  }
-                                });
-                              },
-                            ),
+                            // _BaseIcon(
+                            //     icon: Icons.plus_one_rounded, onTap: () {}),
+                            // SizedBox(width: 20.h),
+                            // _BaseIcon(
+                            //   icon: Icons.edit,
+                            //   onTap: () async {
+                            //     Uint8List? editedImage;
+                            //     showDialog(
+                            //       context: context,
+                            //       builder: (context) => ProImageEditor.file(
+                            //         context
+                            //             .read<ChatRoomCubit>()
+                            //             .media[_selectedIndex],
+                            //         onImageEditingComplete:
+                            //             (Uint8List bytes) async {
+                            //           editedImage = bytes;
+                            //           context.pop();
+                            //         },
+                            //       ),
+                            //     ).then((value) async {
+                            //       if (editedImage != null) {
+                            //         context
+                            //                 .read<ChatRoomCubit>()
+                            //                 .media[_selectedIndex] =
+                            //             await _convertUint8ListToFile(
+                            //                 editedImage!);
+                            //         setState(() {});
+                            //       }
+                            //     });
+                            //   },
+                            // ),
                           ],
                         ),
                       ),
@@ -141,7 +144,11 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                                 context.read<ChatRoomCubit>().media[index];
                             if (file.isImage) {
                               return _mediaContainer(
-                                  index: index, image: FileImage(file));
+                                index: index,
+                                image: FileImage(file),
+                                isPhoto: true,
+                                chatRoomCubit: widget.chatRoomCubit,
+                              );
                             } else {
                               return FutureBuilder<Uint8List?>(
                                 future: generateThumbnail(path: file.path),
@@ -151,9 +158,10 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                                       snapshot.data != null &&
                                       snapshot.data!.isNotEmpty) {
                                     return _mediaContainer(
-                                        index: index,
-                                        image: MemoryImage(snapshot.data!),
-                                        isPhoto: false);
+                                      index: index,
+                                      image: MemoryImage(snapshot.data!),
+                                      chatRoomCubit: widget.chatRoomCubit,
+                                    );
                                   } else {
                                     return Shimmer.fromColors(
                                       baseColor: Colors.grey[300]!,
@@ -194,7 +202,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                                 setState(() {});
                               },
                             ),
-                            hintText: 'Add a caption ...',
+                            hintText: LocaleKeys.addACaption.tr(),
                             hintStyle: const TextStyle(color: Colors.grey),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30.0),
@@ -216,7 +224,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                     isLoading = true;
                   });
                   await context.read<ChatRoomCubit>().sendMessage();
-                  await Future.delayed(const Duration(seconds: 6), () {});
+                  // await Future.delayed(const Duration(seconds: 6), () {});
                   setState(() {
                     isLoading = false;
                   });
@@ -235,234 +243,352 @@ class _MediaSliderViewState extends State<MediaSliderView> {
     );
   }
 
-  Future<File> _convertUint8ListToFile(Uint8List uint8list) async {
-    // Get the application's directory to store the file.
-    final directory = await getApplicationDocumentsDirectory();
+  // Future<File> _convertUint8ListToFile(Uint8List uint8list) async {
+  //   // Get the application's directory to store the file.
+  //   final directory = await getApplicationDocumentsDirectory();
 
-    // Create a unique file path
-    String filePath =
-        '${directory.path}/image_${DateTime.now().millisecondsSinceEpoch}.png';
+  //   // Create a unique file path
+  //   String filePath =
+  //       '${directory.path}/image_${DateTime.now().millisecondsSinceEpoch}.png';
 
-    // Convert the Uint8List to an image using the image package.
-    img.Image image = img.decodeImage(uint8list)!;
+  //   // Convert the Uint8List to an image using the image package.
+  //   img.Image image = img.decodeImage(uint8list)!;
 
-    // Encode the image as a PNG.
-    List<int> pngBytes = img.encodePng(image);
+  //   // Encode the image as a PNG.
+  //   List<int> pngBytes = img.encodePng(image);
 
-    // Create a file from the Uint8List.
-    File imgFile = File(filePath);
+  //   // Create a file from the Uint8List.
+  //   File imgFile = File(filePath);
 
-    // Write the file
-    await imgFile.writeAsBytes(pngBytes);
+  //   // Write the file
+  //   await imgFile.writeAsBytes(pngBytes);
 
-    return imgFile;
-  }
+  //   return imgFile;
+  // }
 
   Widget _mediaContainer(
-      {required int index, required ImageProvider image, bool isPhoto = true}) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _selectedIndex = index;
-          _pageController.jumpToPage(index);
-        });
-      },
-      child: Container(
-        width: 150.h,
-        decoration: BoxDecoration(
-          border: _selectedIndex == index
-              ? Border.all(color: Colors.white, width: 3)
-              : null,
-          borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
-            image: image,
-            fit: BoxFit.cover,
-            colorFilter: _selectedIndex == index
-                ? const ColorFilter.mode(Colors.black54, BlendMode.darken)
-                : null,
-          ),
-        ),
-        child: isPhoto
-            ? index == _selectedIndex
-                ? Center(
-                    child: IconButton(
-                      onPressed: () async {
-                        setState(() {
-                          context.read<ChatRoomCubit>().media.removeAt(index);
-                          // Adjust the selected index after deletion
-                          if (_selectedIndex > 0) {
-                            _selectedIndex--;
-                          }
-
-                          // If no media left, pop back to the previous screen
-                          if (context.read<ChatRoomCubit>().media.isEmpty) {
-                            context.pop();
-                            context.pop();
-                          }
-                        });
-                      },
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.white,
-                        size: 26,
-                      ),
-                    ),
-                  )
-                : null
-            : Center(
-                child: Icon(
-                  _selectedIndex == index
-                      ? Icons.delete
-                      : Icons.play_arrow_rounded,
-                  color: Colors.white,
-                ),
+      {required int index,
+      required ImageProvider image,
+      bool isPhoto = true,
+      required ChatRoomCubit chatRoomCubit}) {
+    return BlocProvider.value(
+      value: chatRoomCubit,
+      child: Builder(builder: (context) {
+        return InkWell(
+          onTap: () {
+            setState(() {
+              _selectedIndex = index;
+              _pageController.jumpToPage(index);
+            });
+          },
+          child: Container(
+            width: 150.h,
+            decoration: BoxDecoration(
+              border: _selectedIndex == index
+                  ? Border.all(color: Colors.white, width: 3)
+                  : null,
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: image,
+                fit: BoxFit.cover,
+                colorFilter: _selectedIndex == index
+                    ? const ColorFilter.mode(Colors.black54, BlendMode.darken)
+                    : null,
               ),
-      ),
+            ),
+            child: isPhoto
+                ? index == _selectedIndex
+                    ? Center(
+                        child: IconButton(
+                          onPressed: () async {
+                            setState(() {
+                              context
+                                  .read<ChatRoomCubit>()
+                                  .media
+                                  .removeAt(index);
+                              // Adjust the selected index after deletion
+                              if (_selectedIndex > 0) {
+                                _selectedIndex--;
+                              }
+
+                              // If no media left, pop back to the previous screen
+                              if (context.read<ChatRoomCubit>().media.isEmpty) {
+                                context.pop();
+                                context.pop();
+                              }
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                            size: 26,
+                          ),
+                        ),
+                      )
+                    : null
+                : Center(
+                    child: Icon(
+                      _selectedIndex == index
+                          ? Icons.delete
+                          : Icons.play_arrow_rounded,
+                      color: Colors.white,
+                    ),
+                  ),
+          ),
+        );
+      }),
     );
   }
 }
 
-class _TrimmerView extends StatefulWidget {
-  final File file;
-  final void Function(File video) onSave;
-
-  const _TrimmerView({required this.file, required this.onSave});
+class VideoPlayerCard extends StatefulWidget {
+  const VideoPlayerCard({
+    super.key,
+    required this.videoUrl,
+  });
+  final String videoUrl;
 
   @override
-  _TrimmerViewState createState() => _TrimmerViewState();
+  State<VideoPlayerCard> createState() => _VideoPlayerCardState();
 }
 
-class _TrimmerViewState extends State<_TrimmerView> {
-  // final Trimmer _trimmer = Trimmer();
-
-  double _startValue = 0.0;
-  double _endValue = 0.0;
-
-  bool _isPlaying = false;
-  bool _progressVisibility = false;
-
-  Future<String?> _saveVideo() async {
-    setState(() {
-      _progressVisibility = true;
-    });
-
-    String? value;
-
-    // await _trimmer.saveTrimmedVideo(
-    //     startValue: _startValue,
-    //     endValue: _endValue,
-    //     onSave: (path) {
-    //       setState(() {
-    //         value = path;
-    //         _progressVisibility = false;
-    //       });
-    //     });
-
-    return value;
-  }
-
-  void _loadVideo() {
-    // _trimmer.loadVideo(videoFile: widget.file);
-  }
+class _VideoPlayerCardState extends State<VideoPlayerCard> {
+  late VideoPlayerController _controller;
+  bool _showControls = true; // Control the visibility of the play/pause icons
+  Timer? _hideControlTimer;
 
   @override
   void initState() {
     super.initState();
+    _controller = VideoPlayerController.file(File(widget.videoUrl))
+      ..initialize().then((_) {
+        setState(() {});
+      });
 
-    _loadVideo();
+    // Listen for video completion and pause when finished
+    _controller.addListener(() {
+      if (_controller.value.position == _controller.value.duration) {
+        setState(() {
+          _controller.pause(); // Pause when video is completed
+          _showControls = true; // Show controls when the video completes
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _hideControlTimer?.cancel();
+    super.dispose();
+  }
+
+  void _togglePlayPause() {
+    setState(() {
+      if (_controller.value.isPlaying) {
+        _controller.pause();
+        _showControls = true; // Always show controls when paused
+      } else {
+        _controller.play();
+        _showControls = true; // Show controls when playing starts
+        _hideControlAfterDelay(); // Hide after delay
+      }
+    });
+  }
+
+  void _hideControlAfterDelay() {
+    _hideControlTimer?.cancel(); // Cancel any existing timer
+    _hideControlTimer = Timer(const Duration(seconds: 2), () {
+      setState(() {
+        _showControls = false; // Hide controls after 2 seconds
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 20.h),
-      color: Colors.black,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Visibility(
-            visible: _progressVisibility,
-            child: const LinearProgressIndicator(
-              backgroundColor: Colors.red,
-            ),
-          ),
-
-          Expanded(
-            child: InkWell(
-              onTap: () async {
-                // bool playbackState = await _trimmer.videoPlaybackControl(
-                //   startValue: _startValue,
-                //   endValue: _endValue,
-                // );
-                // setState(() {
-                //   _isPlaying = playbackState;
-                // });
+    return Center(
+      child: _controller.value.isInitialized
+          ? GestureDetector(
+              onTap: () {
+                _togglePlayPause();
               },
-              // child: VideoViewer(trimmer: _trimmer)
-            ),
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Expanded(
-              //   child: TrimViewer(
-              //     trimmer: _trimmer,
-              //     viewerHeight: 50.0,
-              //     // viewerWidth: MediaQuery.of(context).size.width,
-              //     onChangeStart: (value) => _startValue = value,
-              //     onChangeEnd: (value) => _endValue = value,
-              //     onChangePlaybackState: (value) =>
-              //         setState(() => _isPlaying = value),
-              //   ),
-              // ),
-              SizedBox(width: 5.h),
-              Center(child: _BaseIcon(icon: Icons.check, onTap: _saveVideo)),
-            ],
-          ),
-          // Sizer(),
-          // ElevatedAppButton(
-          //   onPressed: () async {
-          //     if (_progressVisibility) {
-          //       _saveVideo().then((outputPath) {
-          //         CliLogger.info('OUTPUT PATH: $outputPath');
-          //         if (outputPath != null) {
-          //           widget.onSave(File(outputPath));
-          //           ScaffoldMessenger.of(context).showSnackBar(
-          //             SnackBar(
-          //                 content: Text(LocaleKeys.suscessfullySaved.tr())),
-          //           );
-          //         }
-          //       });
-          //     }
-          //   },
-          //   label: LocaleKeys.save.tr(),
-          // ),
-          // TextButton(
-          //   child: _isPlaying
-          //       ? Icon(
-          //           Icons.pause,
-          //           size: 80.0,
-          //           color: Colors.white,
-          //         )
-          //       : Icon(
-          //           Icons.play_arrow,
-          //           size: 80.0,
-          //           color: Colors.white,
-          //         ),
-          //   onPressed: () async {
-          //     bool playbackState = await _trimmer.videoPlaybackControl(
-          //       startValue: _startValue,
-          //       endValue: _endValue,
-          //     );
-          //     setState(() {
-          //       _isPlaying = playbackState;
-          //     });
-          //   },
-          // )
-        ],
-      ),
+              child: AspectRatio(
+                aspectRatio: _controller.value.aspectRatio,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    VideoPlayer(_controller),
+
+                    // Show dark background when paused
+                    if (!_controller.value.isPlaying)
+                      Container(
+                        color: Colors.black
+                            .withOpacity(0.5), // Dark background with opacity
+                      ),
+
+                    // Show play/pause icons when _showControls is true
+                    if (_showControls)
+                      IconButton(
+                        iconSize: 64,
+                        icon: Icon(
+                          _controller.value.isPlaying
+                              ? Icons.pause_circle_filled
+                              : Icons.play_circle_filled,
+                          color: Colors.white,
+                        ),
+                        onPressed: _togglePlayPause,
+                      ),
+                  ],
+                ),
+              ),
+            )
+          : const CircularProgressIndicator(),
     );
   }
 }
+
+// class _TrimmerView extends StatefulWidget {
+//   final File file;
+//   final void Function(File video) onSave;
+
+//   const _TrimmerView({required this.file, required this.onSave});
+
+//   @override
+//   _TrimmerViewState createState() => _TrimmerViewState();
+// }
+
+// class _TrimmerViewState extends State<_TrimmerView> {
+//   // final Trimmer _trimmer = Trimmer();
+
+//   double _startValue = 0.0;
+//   double _endValue = 0.0;
+
+//   bool _isPlaying = false;
+//   bool _progressVisibility = false;
+
+//   Future<String?> _saveVideo() async {
+//     setState(() {
+//       _progressVisibility = true;
+//     });
+
+//     String? value;
+
+//     // await _trimmer.saveTrimmedVideo(
+//     //     startValue: _startValue,
+//     //     endValue: _endValue,
+//     //     onSave: (path) {
+//     //       setState(() {
+//     //         value = path;
+//     //         _progressVisibility = false;
+//     //       });
+//     //     });
+
+//     return value;
+//   }
+
+//   void _loadVideo() {
+//     // _trimmer.loadVideo(videoFile: widget.file);
+//   }
+
+//   @override
+//   void initState() {
+//     super.initState();
+
+//     _loadVideo();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: EdgeInsets.symmetric(vertical: 20.h),
+//       color: Colors.black,
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         mainAxisSize: MainAxisSize.max,
+//         children: <Widget>[
+//           Visibility(
+//             visible: _progressVisibility,
+//             child: const LinearProgressIndicator(
+//               backgroundColor: Colors.red,
+//             ),
+//           ),
+
+//           Expanded(
+//             child: InkWell(
+//               onTap: () async {
+//                 // bool playbackState = await _trimmer.videoPlaybackControl(
+//                 //   startValue: _startValue,
+//                 //   endValue: _endValue,
+//                 // );
+//                 // setState(() {
+//                 //   _isPlaying = playbackState;
+//                 // });
+//               },
+//               // child: VideoViewer(trimmer: _trimmer)
+//             ),
+//           ),
+//           Row(
+//             mainAxisSize: MainAxisSize.max,
+//             crossAxisAlignment: CrossAxisAlignment.center,
+//             children: [
+//               // Expanded(
+//               //   child: TrimViewer(
+//               //     trimmer: _trimmer,
+//               //     viewerHeight: 50.0,
+//               //     // viewerWidth: MediaQuery.of(context).size.width,
+//               //     onChangeStart: (value) => _startValue = value,
+//               //     onChangeEnd: (value) => _endValue = value,
+//               //     onChangePlaybackState: (value) =>
+//               //         setState(() => _isPlaying = value),
+//               //   ),
+//               // ),
+//               SizedBox(width: 5.h),
+//               Center(child: _BaseIcon(icon: Icons.check, onTap: _saveVideo)),
+//             ],
+//           ),
+//           // Sizer(),
+//           // ElevatedAppButton(
+//           //   onPressed: () async {
+//           //     if (_progressVisibility) {
+//           //       _saveVideo().then((outputPath) {
+//           //         CliLogger.info('OUTPUT PATH: $outputPath');
+//           //         if (outputPath != null) {
+//           //           widget.onSave(File(outputPath));
+//           //           ScaffoldMessenger.of(context).showSnackBar(
+//           //             SnackBar(
+//           //                 content: Text(LocaleKeys.suscessfullySaved.tr())),
+//           //           );
+//           //         }
+//           //       });
+//           //     }
+//           //   },
+//           //   label: LocaleKeys.save.tr(),
+//           // ),
+//           // TextButton(
+//           //   child: _isPlaying
+//           //       ? Icon(
+//           //           Icons.pause,
+//           //           size: 80.0,
+//           //           color: Colors.white,
+//           //         )
+//           //       : Icon(
+//           //           Icons.play_arrow,
+//           //           size: 80.0,
+//           //           color: Colors.white,
+//           //         ),
+//           //   onPressed: () async {
+//           //     bool playbackState = await _trimmer.videoPlaybackControl(
+//           //       startValue: _startValue,
+//           //       endValue: _endValue,
+//           //     );
+//           //     setState(() {
+//           //       _isPlaying = playbackState;
+//           //     });
+//           //   },
+//           // )
+//         ],
+//       ),
+//     );
+//   }
+// }

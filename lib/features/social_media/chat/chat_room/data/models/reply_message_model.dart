@@ -2,6 +2,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entiti
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/reply_message_entity.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 
+import 'message_media_model.dart';
+
 class ReplyMessageModel extends ReplyMessageEntity {
   ReplyMessageModel(
       {required super.sender,
@@ -18,7 +20,13 @@ class ReplyMessageModel extends ReplyMessageEntity {
       ),
       text: json['text'] ?? 'no message',
       id: json['_id'] ?? 'no id',
-      media: [],
+      media: json['media'] != null
+          ? (json['media'] as List)
+          .whereType<
+          Map<String, dynamic>>() // Only keep items that are maps
+          .map((e) => MessageMediaModel.fromJson(e))
+          .toList()
+          : [],
     );
   }
 }

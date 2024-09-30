@@ -737,5 +737,20 @@
   "chats": "Chats",
   "deleteAd": "Delete",
   "rent": "Rent",
-  "sale": "Sale"
+  "sale": "Sale",
+  "viewAll": "View All",
+  "addACaption": "Add a caption...",
+  "and": "And",
+  "otherContacts": "Other Contacts",
+  "registered": "Registered",
+  "add": "Add",
+  "noDocs": "No Docs",
+  "noLinks": "No Links",
+  "noMedia": "No Media",
+  "seeAll": "See All",
+  "broadcasts": "Broadcasts",
+  "myBroadcasts": "My Broadcasts",
+  "channelInfo": "Channel Info",
+  "unfollow": "Unfollow",
+  "file": "File"
 }

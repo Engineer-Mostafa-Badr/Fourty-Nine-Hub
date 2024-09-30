@@ -112,16 +112,20 @@ class UploadFile {
       String? mediaId;
       CliLogger.info("Creating upload URL for: ${file.path}");
 
+      log("file name + path is : ${file.type.name == 'document' ? file.type.name.substring(0, 3) : file.type.name}/${file.path.split('.').last}");
+      log("file path is : ${file.path.split('/').last}");
       final uploadUrlResponse = await serviceLocator<ApiConsumer>().post(
         EndPoints.mediaUrl,
         data: {
-          "type": "${file.type.name}/${file.path.split('.').last}",
+          "type":
+              "${file.type.name == 'document' ? file.type.name.substring(0, 3) : file.type.name}/${file.path.split('.').last}",
           "size": fileInBytes.length,
+          "fileName": file.path.split('/').last,
           "subcategoryId": subCategoryId,
         },
-      );
+      ); // mark as deleveerd , database, creating new chat
 
-      uploadUrlResponse.fold(
+      await uploadUrlResponse.fold(
         (l) {
           CliLogger.error("Can't get upload URL");
         },

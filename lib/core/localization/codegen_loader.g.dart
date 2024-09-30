@@ -558,7 +558,7 @@ class CodegenLoader extends AssetLoader{
   "youCantLeaveFieldEmpty": "لا يمكن ترك هذا الجقل فارغا",
   "addressMustBeAtLeast10Chars": "العنوان يجب ان يكون علي الأقل 10 أحرف",
   "searchFind": "ابحث",
-  "seeAll": "مشاهدة الكل",
+  "seeAll": "مشاهدة الجميع",
   "markAllNotificationAsSeen": "هل ترغب بجعل جميع الأشعارات مرئية؟",
   "requestLog": "سجل الطلبات",
   "requestsHistory": "تاريخ الطلبات",
@@ -751,7 +751,20 @@ class CodegenLoader extends AssetLoader{
   "chats": "محادثة",
   "deleteAd": "حذف الإعلان",
   "rent": "إيجار",
-  "sale": "بيع"
+  "sale": "بيع",
+  "viewAll": "عرض الكل",
+  "addACaption": "...اضافة تعليق",
+  "and": "و",
+  "otherContacts": "جهات اتصال اخرى",
+  "registered": "مسجل",
+  "add": "اضافة",
+  "noDocs": "لا يوجد ملفات",
+  "noLinks": "لا يوجد روابط",
+  "broadcasts": "القنوات",
+  "myBroadcasts": "قنواتي",
+  "channelInfo": "معلومات القناة",
+  "unfollow": "الغاء المتابعة",
+  "file": "ملف"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1492,7 +1505,21 @@ static const Map<String,dynamic> en = {
   "chats": "Chats",
   "deleteAd": "Delete",
   "rent": "Rent",
-  "sale": "Sale"
+  "sale": "Sale",
+  "viewAll": "View All",
+  "addACaption": "Add a caption...",
+  "and": "And",
+  "otherContacts": "Other Contacts",
+  "registered": "Registered",
+  "add": "Add",
+  "noDocs": "No Docs",
+  "noLinks": "No Links",
+  "noMedia": "No Media",
+  "broadcasts": "Broadcasts",
+  "myBroadcasts": "My Broadcasts",
+  "channelInfo": "Channel Info",
+  "unfollow": "Unfollow",
+  "file": "File"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

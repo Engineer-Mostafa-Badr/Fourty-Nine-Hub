@@ -736,5 +736,19 @@
   "chats": "محادثة",
   "deleteAd": "حذف الإعلان",
   "rent": "إيجار",
-  "sale": "بيع"
+  "sale": "بيع",
+  "viewAll": "عرض الكل",
+  "addACaption": "...اضافة تعليق",
+  "and": "و",
+  "otherContacts": "جهات اتصال اخرى",
+  "registered": "مسجل",
+  "add": "اضافة",
+  "noDocs": "لا يوجد ملفات",
+  "noLinks": "لا يوجد روابط",
+  "seeAll": "مشاهدة الجميع",
+  "broadcasts": "القنوات",
+  "myBroadcasts": "قنواتي",
+  "channelInfo": "معلومات القناة",
+  "unfollow": "الغاء المتابعة",
+  "file": "ملف"
 }
