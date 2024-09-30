@@ -116,7 +116,7 @@ class BuildItemAuctionCard extends StatelessWidget {
                                   WalletTypes.balance,
                                 ],
                                 subCategoryId: item.subCategory.id,
-                                title: 'Ads',
+                                title: LocaleKeys.ads.localize,
                               );
                             },
                           )),
@@ -233,9 +233,9 @@ class BuildItemAuctionCard extends StatelessWidget {
                         onTap: () {
                           context.pop();
                           showAreYouSure(
-                              title: 'Alert',
+                              title: LocaleKeys.alert.localize,
                               subTitle:
-                              'Are you sure, you want to set this AD as soldout?',
+                              LocaleKeys.adSoldout.localize,
                               action: () => context.pop(),
                               context: context);
                         },
@@ -246,9 +246,9 @@ class BuildItemAuctionCard extends StatelessWidget {
                         label: LocaleKeys.deactivate.localize,
                         onTap: () {
                           showAreYouSure(
-                              title: 'Alert',
+                              title: LocaleKeys.alert.localize,
                               subTitle:
-                              'Are you sure, you want to set this AD as soldout?',
+                              LocaleKeys.adSoldout.localize,
                               action: () {},
                               context: context);
                         },

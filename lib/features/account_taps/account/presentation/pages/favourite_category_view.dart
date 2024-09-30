@@ -9,7 +9,13 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/favourite_main_category_banner.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../ads_feature/ads/presentation/cubit/ads_cubit.dart';
+import '../../../../subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../cubit/managers/favourite_categories_cubit.dart';
 
 class FavouriteCategoryView extends StatefulWidget {
@@ -43,27 +49,42 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
                       ),
                       itemBuilder: (context, i) => Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
-                        child: FavouriteMainCategoryBanner(
-                          category: state.data![i],
-                          canRegister: false,
-                          onFavorite: () async {
-                            var result = await controller
-                                .removeFavorite(state.data![i].id);
-                            if (result == true) {
-                              state.data?.removeWhere(
-                                  (element) => element.id == state.data![i].id);
-                            }
+                        child: InkWell(
+                          onTap: () {
+                            // context.push(Routes.SUBCATEGORIES,
+                            //     extra: state.data![i]);
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => BlocProvider(
+                            //       create: (_) => serviceLocator<SubcategoriesCubit>(),
+                            //       child: SubCategoriesView(
+                            //           mainCategory: state.data![i]),
+                            //     ),
+                            //   ),
+                            // );
                           },
+                          child: FavouriteMainCategoryBanner(
+                            category: state.data![i],
+                            canRegister: false,
+                            onFavorite: () async {
+                              var result = await controller
+                                  .removeFavorite(state.data![i].id);
+                              if (result == true) {
+                                state.data?.removeWhere((element) =>
+                                    element.id == state.data![i].id);
+                              }
+                            },
+                          ),
                         ),
                       ),
                     )
-                  :  Center(
+                  : Center(
                       child: Label(
-                        style: Styles.mediumText(fontSize: 60.sp),
+                          style: Styles.mediumText(fontSize: 60.sp),
                           maxLines: 3,
                           textAlign: TextAlign.center,
-                          text:
-                              LocaleKeys.noFavouriteCategory.localize));
+                          text: LocaleKeys.noFavouriteCategory.localize));
         }));
   }
 }

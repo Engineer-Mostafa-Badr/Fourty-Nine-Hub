@@ -714,7 +714,13 @@ class CodegenLoader extends AssetLoader{
   "chats": "محادثة",
   "deleteAd": "حذف الإعلان",
   "rent": "إيجار",
-  "sale": "بيع"
+  "sale": "بيع",
+  "seat": "مقعد",
+  "repeated": "مكرر",
+  "subscription": "اشتراك",
+  "tripJoinAds": "إعلانات الانضمام إلى الرحلة",
+  "other": "اخري",
+  "adSoldout": "هل أنت متأكد أنك تريد تعيين هذا الإعلان على أنه مباع؟"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1418,7 +1424,13 @@ static const Map<String,dynamic> en = {
   "chats": "Chats",
   "deleteAd": "Delete",
   "rent": "Rent",
-  "sale": "Sale"
+  "sale": "Sale",
+  "seat": "Seat",
+  "repeated": "Repeated",
+  "subscription": "Subscription",
+  "tripJoinAds": "Trip Join Ads",
+  "other": "Other",
+  "adSoldout": "Are you sure, you want to set this AD as soldout?"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

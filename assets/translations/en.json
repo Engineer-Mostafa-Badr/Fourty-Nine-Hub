@@ -700,5 +700,12 @@
   "chats": "Chats",
   "deleteAd": "Delete",
   "rent": "Rent",
-  "sale": "Sale"
+  "sale": "Sale",
+  "seat": "Seat",
+  "repeated": "Repeated",
+  "subscription": "Subscription",
+  "tripJoinAds": "Trip Join Ads",
+  "other": "Other",
+  "adSoldout": "Are you sure, you want to set this AD as soldout?"
+
 }

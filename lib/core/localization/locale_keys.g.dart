@@ -689,5 +689,10 @@ abstract class  LocaleKeys {
   static const deleteAd = 'deleteAd';
   static const rent = 'rent';
   static const sale = 'sale';
+  static const seat = 'seat';
+  static const repeated = 'repeated';
+  static const subscription = 'subscription';
+  static const tripJoinAds = 'tripJoinAds';
+  static const adSoldout = 'adSoldout';
 
 }

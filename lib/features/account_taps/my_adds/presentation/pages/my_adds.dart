@@ -64,8 +64,8 @@ class _MyAddsViewState extends State<MyAddsView>
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        appBar: const BackAppBar(
-          label: 'My Ads',
+        appBar: BackAppBar(
+          label: LocaleKeys.myAds.localize,
         ),
         body: BlocConsumer<MyAddsCubit, MyAddsState>(
           listener: (context, state) {
@@ -114,7 +114,7 @@ class _MyAddsViewState extends State<MyAddsView>
                         Tab(text: LocaleKeys.auction.localize),
                         Tab(text: LocaleKeys.installments.localize),
                         Tab(text: LocaleKeys.tripJoin.localize),
-                        const Tab(text: 'Other'),
+                         Tab(text: LocaleKeys.other.localize),
                       ],
                     ),
                   ),
@@ -231,42 +231,6 @@ class _MyAddsViewState extends State<MyAddsView>
                 itemBuilder: (context, index) {
                   return MyAdsTripJoin(
                     tripJoinCardEntity: state.tripJoin!.docs[index],
-                    reportOnTap: () {
-                      // _reportOnTap(context, index);
-                    },
-                    premuimRequestOnTap: () async {
-                      // if (await _userApproved(
-                      //   tripJoinCardEntity,
-                      //   tripJoinCardEntity.categoryId ?? '',
-                      //   'Trip Join Subscription',
-                      // )) {}
-                    },
-                    deleteOnTap: () {},
-                    callOnTap: () async {
-                      // launchUrlString("tel://${tripJoinCardEntity.phone}");
-                      // return;
-                      // if (await _userApproved(
-                      //   tripJoinCardEntity,
-                      //   UIConst.chatNormalId,
-                      //   'Chat Subscription',
-                      // )) {
-                      //   launchUrlString("tel://${tripJoinCardEntity.phone}");
-                      // }
-                    },
-                    messageOnTap: () async {
-                      // if (await _userApproved(
-                      //   tripJoinCardEntity,
-                      //   UIConst.chatNormalId,
-                      //   'Chat Subscription',
-                      // )) {}
-                    },
-                    subscribeMessageOnTap: () async {
-                      // if (await _userApproved(
-                      //   tripJoinCardEntity,
-                      //   tripJoinCardEntity.categoryId ?? '',
-                      //   'Trip Join Subscription',
-                      // )) {}
-                    },
                   );
                 }),
           );

@@ -22,7 +22,13 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets
 
 class AdCard extends StatefulWidget {
   final AdEntity item;
-  const AdCard({super.key, required this.item, required this.onFav, required this.onRemoveFav});
+
+  const AdCard(
+      {super.key,
+      required this.item,
+      required this.onFav,
+      required this.onRemoveFav});
+
   final Function(String) onFav;
   final Function(String) onRemoveFav;
 
@@ -33,8 +39,9 @@ class AdCard extends StatefulWidget {
 class _AdCardState extends State<AdCard> {
   @override
   Widget build(BuildContext context) {
-
-    List<CreateAdEntity> details = widget.item.details.where((e) => e.value.nameAr!='السعر'&&e.value.nameAr!='المرتب').toList();
+    List<CreateAdEntity> details = widget.item.details
+        .where((e) => e.value.nameAr != 'السعر' && e.value.nameAr != 'المرتب')
+        .toList();
     return InkWell(
       child: Container(
         width: kToolbarHeight * 2.5,
@@ -48,142 +55,165 @@ class _AdCardState extends State<AdCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-                child:Stack(
-                  alignment: AlignmentDirectional.topStart,
-                  children: [
-                    SizedBox(
-                              height: kToolbarHeight * 4,
+              child: Stack(
+                alignment: AlignmentDirectional.topStart,
+                children: [
+                  SizedBox(
+                    height: kToolbarHeight * 4,
+                    width: double.infinity,
+                    child: Swiper(
+                      itemCount: widget.item.images.length > 4
+                          ? 4
+                          : widget.item.images.length,
+                      onIndexChanged: (i) {},
+                      outer: false,
+                      loop: false,
+                      physics: widget.item.images.length > 1
+                          ? null
+                          : const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) => Padding(
+                        padding: EdgeInsets.only(bottom: 5.h),
+                        child: Stack(
+                          children: [
+                            ImageFromInternet(
                               width: double.infinity,
-                              child: Swiper(
-                                itemCount: widget.item.images.length>4?4:widget.item.images.length,
-                                onIndexChanged: (i) {},
-                                outer: false,
-                                loop: false,
-                                physics:widget.item.images.length>1?null:const NeverScrollableScrollPhysics() ,
-                                itemBuilder: (context, index) => Padding(
-                                  padding: EdgeInsets.only(bottom: 5.h),
-                                  child: Stack(
-                                    children: [
-                                      ImageFromInternet(width: double.infinity,image: widget.item.images[index],defaultLogo: true,fit: BoxFit.fill,borderRadius: BorderRadius.only(topLeft: Radius.circular(5.r),topRight: Radius.circular(5.r)),),
-                                      if(index==3)Positioned.fill(child: InkWell(
-                                        onTap: () => context.push(Routes.ADdetails, extra: widget.item.id),
-                                        child: Container(
-                                          color: Colors.black.withOpacity(0.8),
-                                          alignment: AlignmentDirectional.center,
-                                          child: Label(text: 'See More',style: Styles.headerText(color: Colors.white,decoration: TextDecoration.underline),),
-                                        ),
-                                      ))
-                                    ],
+                              image: widget.item.images[index],
+                              defaultLogo: true,
+                              fit: BoxFit.fill,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(5.r),
+                                  topRight: Radius.circular(5.r)),
+                            ),
+                            if (index == 3)
+                              Positioned.fill(
+                                  child: InkWell(
+                                onTap: () => context.push(Routes.ADdetails,
+                                    extra: widget.item.id),
+                                child: Container(
+                                  color: Colors.black.withOpacity(0.8),
+                                  alignment: AlignmentDirectional.center,
+                                  child: Label(
+                                    text: 'See More',
+                                    style: Styles.headerText(
+                                        color: Colors.white,
+                                        decoration: TextDecoration.underline),
                                   ),
                                 ),
-                                pagination: SwiperPagination(
-                    builder: SwiperCustomPagination(builder: (context, config) {
-                      return const DotSwiperPaginationBuilder(color: AppColors.GREY_DARK_COLOR, activeColor: AppColors.SECONDARY_COLOR, size: 10.0, activeSize: 10.0)
-                          .build(context, config);
-                    })),
-                              ),
-                            ),
-                    PositionedDirectional(
-                      start: 10.w,
-                      child: IconAppButton(
-                          size: 18, icon: widget.item.isFavourite==false?Icons.favorite_border:Icons.favorite,color: AppColors.SECONDARY_COLOR, onPressed: () async{
-                        if(widget.item.isFavourite==false){
-                          var result = await widget.onFav(widget.item.id);
-                          if(result==true){
-                            widget.item.isFavourite=!widget.item.isFavourite!;
-                          }
-                        }else{
-                          var result = await widget.onRemoveFav(widget.item.id);
-                          if(result==true){
-                            widget.item.isFavourite=!widget.item.isFavourite!;
-                          }
-                        }
-                      }),
+                              ))
+                          ],
+                        ),
+                      ),
+                      pagination: SwiperPagination(builder:
+                          SwiperCustomPagination(builder: (context, config) {
+                        return const DotSwiperPaginationBuilder(
+                                color: AppColors.GREY_DARK_COLOR,
+                                activeColor: AppColors.SECONDARY_COLOR,
+                                size: 10.0,
+                                activeSize: 10.0)
+                            .build(context, config);
+                      })),
                     ),
-                  ],
-                ),
+                  ),
+                  PositionedDirectional(
+                    start: 10.w,
+                    child: IconAppButton(
+                        size: 18,
+                        icon: widget.item.isFavourite == false
+                            ? Icons.favorite_border
+                            : Icons.favorite,
+                        color: AppColors.SECONDARY_COLOR,
+                      onPressed: () async => await widget.onFav(widget.item.id)),
+                  ),
+                ],
+              ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0.h,horizontal: 15.w),
+              padding: EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 15.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InkWell(
-                    onTap: () => context.push(Routes.ADdetails, extra: widget.item.id),
-                    child:Column(
+                    onTap: () =>
+                        context.push(Routes.ADdetails, extra: widget.item.id),
+                    child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                      children:[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Label(
-                                text:
-                                '${NumbersHelper.formatThousands(number: widget.item.price??0)} ${LocaleKeys.currency.localize}',
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Expanded(
+                                child: Label(
+                                  text:
+                                      '${NumbersHelper.formatThousands(number: widget.item.price ?? 0)} ${LocaleKeys.currency.localize}',
+                                  style: Styles.mediumText(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.SECONDARY_COLOR),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Sizer(
+                            height: 4.h,
+                          ),
+                          Row(
+                            children: [
+                              Label(
+                                  text: '${LocaleKeys.title.localize} : ',
+                                  style: Styles.mediumText(
+                                      color: AppColors.SECONDARY_COLOR)),
+                              Label(
+                                text: widget.item.title,
                                 style: Styles.mediumText(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.SECONDARY_COLOR),
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey),
                                 maxLines: 1,
                               ),
-                            ),
-                          ],
-                        ),
-                        Sizer(
-                          height: 4.h,
-                        ),
-                        Row(
-                          children: [
-                            Label(
-                                text: '${LocaleKeys.title.localize} : ',
-                                style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
-                            Label(
-                              text: widget.item.title,
-                              style: Styles.mediumText(
-                                  fontWeight: FontWeight.w500, color: Colors.grey),
-                              maxLines: 1,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Label(
-                                text: '${LocaleKeys.desc.localize} : ',
-                                style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
-
-                            Expanded(
-                              child: Label(
-                                text: widget.item.description,
-                                style: Styles.mediumText(
-                                    fontWeight: FontWeight.w500, color: Colors.grey),
-                                maxLines: 1,
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Label(
+                                  text: '${LocaleKeys.desc.localize} : ',
+                                  style: Styles.mediumText(
+                                      color: AppColors.SECONDARY_COLOR)),
+                              Expanded(
+                                child: Label(
+                                  text: widget.item.description,
+                                  style: Styles.mediumText(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.grey),
+                                  maxLines: 1,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        RichText(
-                            text: TextSpan(
-                                children: details
-                                    .map((e) {
-                                  return WidgetSpan(
-                                      child: Row(
-                                        children: [
-                                          Label(
-                                              text: '${getLang()=='ar'?e.value.nameAr:e.value.nameEn} : ',
-                                              style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
-                                          Label(
-                                              text: getLang()=='ar'?e.value.nameAr:e.value.nameEn,
-                                              style: Styles.mediumText(color: AppColors.PRIMARY_COLOR)),
-                                        ],
-                                      ));
-                                })
-                                    .toList())),
-                        Label(
-                          text: widget.item.formattedRestTime,
-                          style: Styles.mediumText(color: Colors.grey),
-                          maxLines: 1,
-                        ),
-                      ]
-                    ),
+                            ],
+                          ),
+                          RichText(
+                              text: TextSpan(
+                                  children: details.map((e) {
+                            return WidgetSpan(
+                                child: Row(
+                              children: [
+                                Label(
+                                    text:
+                                        '${getLang() == 'ar' ? e.value.nameAr : e.value.nameEn} : ',
+                                    style: Styles.mediumText(
+                                        color: AppColors.SECONDARY_COLOR)),
+                                Label(
+                                    text: getLang() == 'ar'
+                                        ? e.value.nameAr
+                                        : e.value.nameEn,
+                                    style: Styles.mediumText(
+                                        color: AppColors.PRIMARY_COLOR)),
+                              ],
+                            ));
+                          }).toList())),
+                          Label(
+                            text: widget.item.formattedRestTime,
+                            style: Styles.mediumText(color: Colors.grey),
+                            maxLines: 1,
+                          ),
+                        ]),
                   ),
                   Divider(),
                   const Sizer(),
@@ -195,7 +225,7 @@ class _AdCardState extends State<AdCard> {
                         child: AvaialbleTripsButton(
                           title: 'Premium Request',
                           color: AppColors.SECONDARY_COLOR,
-                          onTap: (){},
+                          onTap: () {},
                         ),
                       ),
                       const Sizer(width: 5),
@@ -204,7 +234,7 @@ class _AdCardState extends State<AdCard> {
                         child: AvaialbleTripsButton(
                           title: 'Request',
                           color: AppColors.PRIMARY_COLOR,
-                          onTap: (){},
+                          onTap: () {},
                         ),
                       )
                     ],
@@ -214,52 +244,54 @@ class _AdCardState extends State<AdCard> {
                       future: ButtonAvailability().isShowButton(
                           otherUserId: widget.item.user?.id ?? '',
                           subcategoryId: widget.item.subCategoryId ?? ''),
-                      builder: (context,snap) {
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: AvaialbleTripsButton(
-                              title: 'Call',
-                              color:  snap.data==true?AppColors.SECONDARY_COLOR:AppColors.DARK_GRAY_COLOR,
-                              icon: Icons.call,
-                              onTap: snap.data==true?(){}:(){},
+                      builder: (context, snap) {
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: AvaialbleTripsButton(
+                                title: 'Call',
+                                color: snap.data == true
+                                    ? AppColors.SECONDARY_COLOR
+                                    : AppColors.DARK_GRAY_COLOR,
+                                icon: Icons.call,
+                                onTap: snap.data == true ? () {} : () {},
+                              ),
                             ),
-                          ),
-                          const Sizer(width: 5),
-                          Expanded(
-                            flex: 3,
-                            child: AvaialbleTripsButton(
-                              title: 'Message',
-                              color: snap.data==true?AppColors.SECONDARY_COLOR:AppColors.DARK_GRAY_COLOR,
-                              icon: Icons.email,
-                              onTap: snap.data==true?(){}:(){},
+                            const Sizer(width: 5),
+                            Expanded(
+                              flex: 3,
+                              child: AvaialbleTripsButton(
+                                title: 'Message',
+                                color: snap.data == true
+                                    ? AppColors.SECONDARY_COLOR
+                                    : AppColors.DARK_GRAY_COLOR,
+                                icon: Icons.email,
+                                onTap: snap.data == true ? () {} : () {},
+                              ),
                             ),
-                          ),
-
-                          const Sizer(width: 5),
-                          Expanded(
-                            flex: 3,
-                            child: AvaialbleTripsButton(
-                              title: 'Report',
-                              color: AppColors.SECONDARY_COLOR,
-                              icon: Icons.report,
-                              onTap: (){
-                                print("jskdnajksdnjkadn");
-                                bottomSheet(
-                                    context: context,
-                                    widget: ReportView(
-                                      id: widget.item.id,
-                                      categoryId: '66b77e77bb35968b535dc944',
-                                    ));
-                              },
+                            const Sizer(width: 5),
+                            Expanded(
+                              flex: 3,
+                              child: AvaialbleTripsButton(
+                                title: 'Report',
+                                color: AppColors.SECONDARY_COLOR,
+                                icon: Icons.report,
+                                onTap: () {
+                                  print("jskdnajksdnjkadn");
+                                  bottomSheet(
+                                      context: context,
+                                      widget: ReportView(
+                                        id: widget.item.id,
+                                        categoryId: '66b77e77bb35968b535dc944',
+                                      ));
+                                },
+                              ),
                             ),
-                          ),
-                        ],
-                      );
-                    }
-                  ),
+                          ],
+                        );
+                      }),
                 ],
               ),
             ),

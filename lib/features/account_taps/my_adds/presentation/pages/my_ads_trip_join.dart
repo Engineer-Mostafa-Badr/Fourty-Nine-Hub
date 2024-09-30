@@ -22,20 +22,10 @@ class MyAdsTripJoin extends StatelessWidget {
   const MyAdsTripJoin({
     super.key,
     required this.tripJoinCardEntity,
-    this.premuimRequestOnTap,
-    this.deleteOnTap,
-    this.callOnTap,
-    this.messageOnTap,
-    this.reportOnTap,
-    this.subscribeMessageOnTap,
   });
+
   final DocsTripJoinEntity tripJoinCardEntity;
-  final void Function()? premuimRequestOnTap;
-  final void Function()? deleteOnTap;
-  final void Function()? callOnTap;
-  final void Function()? messageOnTap;
-  final void Function()? reportOnTap;
-  final void Function()? subscribeMessageOnTap;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -77,19 +67,22 @@ class MyAdsTripJoin extends StatelessWidget {
                     children: [
                       const Icon(Icons.airline_seat_recline_extra_rounded),
                       const Sizer(),
-                      Text('${tripJoinCardEntity.passengers} Seat', style: Styles.headerText()),
+                      Text('${tripJoinCardEntity.passengers} ${LocaleKeys.seat.localize}',
+                          style: Styles.headerText()),
                       const Spacer(),
                       Visibility(
                         visible: tripJoinCardEntity.isRepeat,
                         child: Icon(
-                          (tripJoinCardEntity.isRepeat) ? Icons.check_box : Icons.check_box_outline_blank,
+                          (tripJoinCardEntity.isRepeat)
+                              ? Icons.check_box
+                              : Icons.check_box_outline_blank,
                           color: AppColors.PRIMARY_COLOR,
                         ),
                       ),
                       const Sizer(),
                       Visibility(
                         visible: tripJoinCardEntity.isRepeat,
-                        child: Text('Repeated', style: Styles.headerText()),
+                        child: Text(LocaleKeys.repeated.localize, style: Styles.headerText()),
                       ),
                       const Sizer(width: 20),
                     ],
@@ -98,7 +91,8 @@ class MyAdsTripJoin extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.trip_origin, color: AppColors.LIGHT_BLUE, size: 20),
+                      const Icon(Icons.trip_origin,
+                          color: AppColors.LIGHT_BLUE, size: 20),
                       const Sizer(width: 13),
                       Flexible(
                         child: Text(
@@ -114,7 +108,8 @@ class MyAdsTripJoin extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Icon(Icons.trip_origin, color: AppColors.CHECK_MARK_COLOR, size: 20),
+                      const Icon(Icons.trip_origin,
+                          color: AppColors.CHECK_MARK_COLOR, size: 20),
                       const Sizer(width: 13),
                       Flexible(
                         child: Text(
@@ -133,18 +128,9 @@ class MyAdsTripJoin extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: AvaialbleTripsButton(
-                          title: 'Edit',
+                          title: LocaleKeys.subscription.localize,
                           color: AppColors.PRIMARY_COLOR,
-                          onTap: premuimRequestOnTap,
-                        ),
-                      ),
-                      const Sizer(width: 5),
-                      Expanded(
-                        flex: 3,
-                        child: AvaialbleTripsButton(
-                          title: 'Subscription',
-                          color: AppColors.PRIMARY_COLOR,
-                          onTap: (){
+                          onTap: () {
                             serviceLocator<SubscriptionController>()
                                 .showSubscriptionPlans(
                               wallets: [
@@ -153,25 +139,26 @@ class MyAdsTripJoin extends StatelessWidget {
                                 WalletTypes.balance,
                               ],
                               subCategoryId: tripJoinCardEntity.categoryId.id,
-                              title: 'Trip Join Ads',
+                              title: LocaleKeys.tripJoinAds.localize,
                             );
                           },
                         ),
-                      ),const Sizer(width: 5),
+                      ),
+                      const Sizer(width: 5),
                       Expanded(
                         flex: 3,
                         child: AvaialbleTripsButton(
-                          title: 'Delete',
+                          title: LocaleKeys.deleteAd.localize,
                           color: AppColors.SECONDARY_COLOR,
-                          onTap: (){
+                          onTap: () {
                             showAreYouSure(
                               title: LocaleKeys.deleteAd.localize,
                               subTitle: LocaleKeys.sureRemoveAd.localize,
-                              action: (){
-                                context
-                                    .read<MyAddsCubit>()
-                                    .deleteMyTripJoin(id: tripJoinCardEntity.id);
-                              }, context: context,
+                              action: () {
+                                context.read<MyAddsCubit>().deleteMyTripJoin(
+                                    id: tripJoinCardEntity.id);
+                              },
+                              context: context,
                             );
                           },
                         ),
@@ -224,13 +211,16 @@ class MyAdsTripJoin extends StatelessWidget {
               Positioned.directional(
                 top: 5,
                 end: 20,
-                textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                textDirection:
+                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
                 child: Column(
                   children: [
                     Text(tripJoinCardEntity.price.toStringAsFixed(0),
-                        style: Styles.headerText(fontSize: 70, color: Colors.green[600])),
+                        style: Styles.headerText(
+                            fontSize: 70, color: Colors.green[600])),
                     Text(tripJoinCardEntity.status,
-                        style: Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR)),
+                        style: Styles.headerText(
+                            fontSize: 30, color: AppColors.SECONDARY_COLOR)),
                   ],
                 ),
               )
