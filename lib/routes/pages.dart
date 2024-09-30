@@ -20,7 +20,6 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/carpool/presentation/views/carpool_view.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit/food_cart_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
@@ -85,7 +84,7 @@ import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cu
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pages/edit_profile_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/live_streaming_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
@@ -125,7 +124,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/useca
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/request_trip_join_cubit/request_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/avaiable_trips_view.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -162,6 +161,7 @@ import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_re
 import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
+import '../features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_meal_list_cubit.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
 import '../features/fourty_nine/presentation/pages/fourty_nine.dart';
@@ -693,9 +693,9 @@ class AppPages {
                           name: Routes.LIVEView,
                           builder: (context, state) {
                             var extras = state.extra as ZegoArgs;
-                            return BlocProvider(
+                            return BlocProvider.value(
                               //to render topics before entering the live
-                              create: (_) => serviceLocator<StreamCubit>()..getTopics(),
+                              value: serviceLocator<StreamCubit>()..getTopics(),
                               child: LiveStreamView(
                                 isHost: extras.isHost,
                                 liveID: extras.liveId,
@@ -943,8 +943,15 @@ class AppPages {
           GoRoute(
               path: Paths.FOOD,
               name: Routes.FOOD,
-              builder: (context, state) => BlocProvider<RestaurantsListCubit>(
-                    create: (context) => serviceLocator()..loadData(),
+              builder: (context, state) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider<RestaurantsListCubit>(
+                        create: (context) => serviceLocator()..loadData(),
+                      ),
+                      BlocProvider<RestaurantsMealListCubit>(
+                        create: (context) => serviceLocator(),
+                      ),
+                    ],
                     child: const RestaurantsListsView(),
                   ),
               routes: [
@@ -979,7 +986,7 @@ class AppPages {
                           path: Paths.FOODCART,
                           name: Routes.FOODCART,
                           builder: (context, state) => BlocProvider.value(
-                                value: serviceLocator<FoodCartCubit>(),
+                                value: serviceLocator<RestaurantDetailsCubit>(),
                                 child: const FoodCartView(),
                               ))
                     ])

@@ -51,8 +51,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SocialPostsCubit, SocialPostsState>(
-        builder: (context, state) {
+    return BlocBuilder<SocialPostsCubit, SocialPostsState>(builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
       final user = context.read<UserCubit>().state.data;
       return Scaffold(
@@ -61,11 +60,9 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.grey),
           title: Label(
-              text:
-                  '${controller.commentsPagingController.itemList?.length ?? 0} ${LocaleKeys.comments.localize}',
+              text: '${controller.commentsPagingController.itemList?.length ?? 0} ${LocaleKeys.comments.localize}',
               style: Styles.mediumText()),
-          leading: IconButton(
-              onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
+          leading: IconButton(onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
           centerTitle: true,
         ),
         body: Column(
@@ -75,12 +72,10 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                 padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
                 pagingController: controller.commentsPagingController,
                 shrinkWrap: true,
-                physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
+                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                 builderDelegate: PagedChildBuilderDelegate<CommentEntity>(
                     noItemsFoundIndicatorBuilder: (context) {
-                      print(
-                          controller.commentsPagingController.itemList?.length);
+                      print(controller.commentsPagingController.itemList?.length);
                       return Padding(
                           padding: const EdgeInsets.only(top: 200),
                           child: Center(
@@ -95,13 +90,11 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                     },
                     itemBuilder: (context, item, index) {
                       return _buildCommentCard(
-                        comment: controller
-                            .commentsPagingController.itemList![index],
+                        comment: controller.commentsPagingController.itemList![index],
                         onDeleteComment: (String id) async {
                           var result = await widget.onDeleteComment(id);
                           if (result == true) {
-                            controller.commentsPagingController.itemList
-                                ?.removeWhere((e) => e.id == id);
+                            controller.commentsPagingController.itemList?.removeWhere((e) => e.id == id);
                             setState(() {});
                           }
                         },
@@ -109,11 +102,9 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                       );
                     },
                     noMoreItemsIndicatorBuilder: (context) => Container(),
-                    firstPageProgressIndicatorBuilder: (context) => Container(
-                        margin: const EdgeInsets.only(top: 150),
-                        child: const CupertinoActivityIndicator()),
-                    newPageProgressIndicatorBuilder: (context) =>
-                        const CupertinoActivityIndicator()),
+                    firstPageProgressIndicatorBuilder: (context) =>
+                        Container(margin: const EdgeInsets.only(top: 150), child: const CupertinoActivityIndicator()),
+                    newPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator()),
               ),
             ),
             Container(
@@ -141,8 +132,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                         decoration: InputDecoration(
                           fillColor: Colors.white,
                           contentPadding: const EdgeInsets.all(5),
-                          hintText:
-                              '${LocaleKeys.typeYourComment.localize} ....',
+                          hintText: '${LocaleKeys.typeYourComment.localize} ....',
                           hintStyle: Styles.mediumText(),
                         ),
                       ),
@@ -155,11 +145,8 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                           isCircle: true,
                           onPressed: () async {
                             CommentEntity data = await widget.onAddComment(
-                                PostCommentParams(
-                                    postId: widget.postId,
-                                    content: commentTextController.text));
-                            controller.commentsPagingController.itemList
-                                ?.insert(
+                                PostCommentParams(postId: widget.postId, content: commentTextController.text));
+                            controller.commentsPagingController.itemList?.insert(
                               0,
                               CommentModel(
                                 id: data.id,
@@ -209,20 +196,17 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
       children: [
         CommentCard(
           comment: comment,
-          onAddReply: (ReplyOnCommentParams params) =>
-              widget.onCommentReply(params),
+          onAddReply: (ReplyOnCommentParams params) => widget.onCommentReply(params),
           onDeleteComment: (String id) => onDeleteComment(id),
           onDeleteReply: (String id) => onDeleteReply(id),
           from: widget.from,
-          onEditComment: (PostCommentParams params) =>
-              widget.onEditComment(params),
+          onEditComment: (PostCommentParams params) => widget.onEditComment(params),
         ),
         if (comment.repliesCount != 0)
           Container(
               margin: const EdgeInsets.only(left: 30),
               child: TextAppButton(
-                  label:
-                      '${LocaleKeys.show.localize} ${comment.repliesCount} ${LocaleKeys.replies.localize}',
+                  label: '${LocaleKeys.show.localize} ${comment.repliesCount} ${LocaleKeys.replies.localize}',
                   onPressed: () {}))
       ],
     );

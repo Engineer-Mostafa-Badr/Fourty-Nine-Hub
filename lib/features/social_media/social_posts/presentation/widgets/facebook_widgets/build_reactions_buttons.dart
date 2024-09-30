@@ -61,9 +61,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
           ),
           itemsSpacing: 0,
           itemSize: const Size(40, 40),
-          reactions: context.isArabic
-              ? _buildReactionsEnList()
-              : _buildReactionsList(),
+          reactions: context.isArabic?_buildReactionsEnList():_buildReactionsList(),
           selectedReaction: Reaction<String>(
             value: null,
             icon: _buildReactionPlaceholder(),
@@ -284,83 +282,71 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
             : 'like',
         icon: _buildReactionItem(
             name: LocaleKeys.like.localize,
-            item: Reactions.like,
-            count: widget.post.totalCount),
+            item: Reactions.like, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'haha',
         icon: _buildReactionItem(
             name: LocaleKeys.haha.localize,
-            item: Reactions.haha,
-            count: widget.post.totalCount),
+            item: Reactions.haha, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'love',
         icon: _buildReactionItem(
             name: LocaleKeys.love.localize,
-            item: Reactions.love,
-            count: widget.post.totalCount),
+            item: Reactions.love, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'wow',
         icon: _buildReactionItem(
             name: LocaleKeys.wow.localize,
-            item: Reactions.wow,
-            count: widget.post.totalCount),
+            item: Reactions.wow, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'sad',
         icon: _buildReactionItem(
             name: LocaleKeys.sad.localize,
-            item: Reactions.sad,
-            count: widget.post.totalCount),
+            item: Reactions.sad, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'angry',
         icon: _buildReactionItem(
-            name: LocaleKeys.angry.localize,
-            item: Reactions.angry,
-            count: widget.post.totalCount),
+          name: LocaleKeys.angry.localize,
+            item: Reactions.angry, count: widget.post.totalCount),
       ),
     ];
   }
-
   List<Reaction<String>> _buildReactionsEnList() {
     return <Reaction<String>>[
       Reaction<String>(
         value: 'angry',
         icon: _buildReactionItem(
             name: LocaleKeys.like.localize,
-            item: Reactions.like,
-            count: widget.post.totalCount),
+            item: Reactions.like, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'sad',
         icon: _buildReactionItem(
             name: LocaleKeys.haha.localize,
-            item: Reactions.haha,
-            count: widget.post.totalCount),
+            item: Reactions.haha, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'wow',
         icon: _buildReactionItem(
             name: LocaleKeys.love.localize,
-            item: Reactions.love,
-            count: widget.post.totalCount),
+            item: Reactions.love, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'love',
         icon: _buildReactionItem(
             name: LocaleKeys.wow.localize,
-            item: Reactions.wow,
-            count: widget.post.totalCount),
+            item: Reactions.wow, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: 'haha',
         icon: _buildReactionItem(
             name: LocaleKeys.sad.localize,
-            item: Reactions.sad,
-            count: widget.post.totalCount),
+            item: Reactions.sad, count: widget.post.totalCount),
       ),
       Reaction<String>(
         value: widget.from == 'posts' || widget.from == 'userPosts'
@@ -368,8 +354,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
             : 'like',
         icon: _buildReactionItem(
             name: LocaleKeys.angry.localize,
-            item: Reactions.angry,
-            count: widget.post.totalCount),
+            item: Reactions.angry, count: widget.post.totalCount),
       ),
     ];
   }
@@ -414,9 +399,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
           size: 18,
         ),
         if (widget.from == 'posts') ...[
-          Label(
-              text: LocaleKeys.like.localize,
-              style: Styles.mediumText(color: Colors.grey)),
+          Label(text: LocaleKeys.like.localize, style: Styles.mediumText(color: Colors.grey)),
         ],
       ],
     );
@@ -426,39 +409,27 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     if (widget.post.isLikes) {
       return _buildReactionItem(
           name: LocaleKeys.like.localize,
-          item: Reactions.like,
-          count: widget.post.totalCount,
-          from: "view");
+          item: Reactions.like, count: widget.post.totalCount, from: "view");
     } else if (widget.post.isLove) {
       return _buildReactionItem(
           name: LocaleKeys.love.localize,
-          item: Reactions.love,
-          count: widget.post.totalCount,
-          from: "view");
+          item: Reactions.love, count: widget.post.totalCount, from: "view");
     } else if (widget.post.isWow) {
       return _buildReactionItem(
           name: LocaleKeys.wow.localize,
-          item: Reactions.wow,
-          count: widget.post.totalCount,
-          from: "view");
+          item: Reactions.wow, count: widget.post.totalCount, from: "view");
     } else if (widget.post.isSad) {
       return _buildReactionItem(
           name: LocaleKeys.sad.localize,
-          item: Reactions.sad,
-          count: widget.post.totalCount,
-          from: "view");
+          item: Reactions.sad, count: widget.post.totalCount, from: "view");
     } else if (widget.post.isAngry) {
       return _buildReactionItem(
           name: LocaleKeys.angry.localize,
-          item: Reactions.angry,
-          count: widget.post.totalCount,
-          from: "view");
+          item: Reactions.angry, count: widget.post.totalCount, from: "view");
     } else if (widget.post.isHaha) {
       return _buildReactionItem(
           name: LocaleKeys.haha.localize,
-          item: Reactions.haha,
-          count: widget.post.totalCount,
-          from: "view");
+          item: Reactions.haha, count: widget.post.totalCount, from: "view");
     } else {
       return _buildReactionPlaceholder();
     }

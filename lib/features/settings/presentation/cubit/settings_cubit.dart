@@ -13,19 +13,19 @@ class SettingCubit extends Cubit<SettingState> {
   final EnableAccountUseCase _enableAccountUseCase;
 
   SettingCubit(
-    this._deleteAccountUseCase,
-    this._disableAccountUseCase,
-    this._enableAccountUseCase,
-  ) : super(SettingState(able: DisableEntity(isDisabled: false)));
+      this._deleteAccountUseCase,
+      this._disableAccountUseCase,
+      this._enableAccountUseCase,
+      ) : super(SettingState(able: DisableEntity(isDisabled: false)));
 
   Future<void> deleteAccount() async {
     final response = await _deleteAccountUseCase.call(const NoParams());
     response.fold(
-      (failure) {
+          (failure) {
         emit(state.copyWith(failure: failure, status: SettingStates.error));
       },
-      (data) {
-        emit(state.copyWith(status: SettingStates.success));
+          (data) {
+        emit(state.copyWith(status: SettingStates.success1));
       },
     );
   }
@@ -33,10 +33,10 @@ class SettingCubit extends Cubit<SettingState> {
   Future<void> disableAccount() async {
     final response = await _disableAccountUseCase.call(const NoParams());
     response.fold(
-      (failure) {
+          (failure) {
         emit(state.copyWith(failure: failure, status: SettingStates.error));
       },
-      (data) {
+          (data) {
         // Ensure the actual isDisabled value from the API response is used
         emit(state.copyWith(able: data, status: SettingStates.success));
       },
@@ -46,10 +46,10 @@ class SettingCubit extends Cubit<SettingState> {
   Future<void> enableAccount() async {
     final response = await _enableAccountUseCase.call(const NoParams());
     response.fold(
-      (failure) {
+          (failure) {
         emit(state.copyWith(failure: failure, status: SettingStates.error));
       },
-      (data) {
+          (data) {
         // Ensure the actual isDisabled value from the API response is used
         emit(state.copyWith(able: data, status: SettingStates.success));
       },

@@ -6,7 +6,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
@@ -14,8 +14,9 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../routes/routes.dart';
+import '../../../../secrets/controller/secrets_cubit.dart';
 import '../../../../service_locator/service_locator.dart';
-import '../bloc/meeting_state.dart';
+import '../controller/stream_state.dart';
 
 class JoinMeetingScreen extends StatefulWidget {
   const JoinMeetingScreen({

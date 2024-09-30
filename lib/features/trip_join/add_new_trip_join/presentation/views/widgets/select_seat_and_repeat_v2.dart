@@ -51,8 +51,7 @@ class _SelectSeatAndRepeatV2State extends State<SelectSeatAndRepeatV2> {
           },
           icon: Icon(Icons.keyboard_arrow_down, size: widget.size),
         ),
-        Text('$seatsNumber ${LocaleKeys.seat.localize} ',
-            style: Styles.headerText()),
+        Text('$seatsNumber ${LocaleKeys.seat.localize} ', style: Styles.headerText()),
         Checkbox(
           value: repeated,
           onChanged: (value) {

@@ -65,16 +65,14 @@ class HealthSubCategoryCard extends StatelessWidget {
                           color: ThemeCubit.get(context).isDarkTheme
                               ? AppColors.QUANTITY_COLOR
                               : AppColors.PRIMARY_COLOR_DARK,
-                          onPressed: () {
-                            log(subCategory.isFavorite.toString() +
-                                "777777777777777777777777777777777");
+                          onPressed: ()  {
+                            log(subCategory.isFavorite.toString()+"777777777777777777777777777777777");
 
-                            context
+                              context
                                 .read<HealthCubit>()
                                 .toggleFavoriteSubcategory(subCategory.id);
 
-                            log(subCategory.isFavorite.toString() +
-                                "777777777777777777777777777777777");
+                          log(subCategory.isFavorite.toString()+"777777777777777777777777777777777");
                           })),
                 ],
               ),

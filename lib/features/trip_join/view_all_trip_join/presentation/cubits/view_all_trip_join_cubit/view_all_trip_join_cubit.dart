@@ -23,7 +23,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
     emit(ViewAllTripJoinLoading());
     final response = await viewAllTripJoinUseCase.call(
       paginationParams: paginationParams,
-      subCategory: UIConst.tripJoinCategoryId,
+      subCategory: UIConst.addTripJoinCategoryId,
     );
     response.fold(
       (Failure failure) => emit(

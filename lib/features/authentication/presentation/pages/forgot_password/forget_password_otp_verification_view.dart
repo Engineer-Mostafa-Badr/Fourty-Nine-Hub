@@ -54,27 +54,21 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
             ),
           ),
           body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding:  EdgeInsets.symmetric(horizontal: 20.w),
             child: Column(
               children: [
                 Label(
                   text: LocaleKeys.emailOtp.localize,
                 ),
-                Sizer(
-                  height: 10.h,
-                ),
+                Sizer(height: 10.h,),
                 Label(
                   text: LocaleKeys.verification.localize,
                 ),
-                Sizer(
-                  height: 10.h,
-                ),
+                Sizer(height: 10.h,),
                 Label(
                   text: '${LocaleKeys.checkVerification.localize} ($email)',
                 ),
-                Sizer(
-                  height: 60.h,
-                ),
+                 Sizer(height: 60.h,),
                 PinCodeTextField(
                   appContext: context,
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,

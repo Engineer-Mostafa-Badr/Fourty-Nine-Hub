@@ -41,14 +41,12 @@ class AvailableTripsView extends StatelessWidget {
                   dividerColor: context.isDarkMode ? Colors.grey : null,
                   tabs: [
                     TripJoinTabIcon(
-                      icon: Image.asset(Assets.tripjoin,
-                          width: size.h, height: size.h, fit: BoxFit.fill),
+                      icon: Image.asset(Assets.tripjoin, width: size.h, height: size.h, fit: BoxFit.fill),
                       title: LocaleKeys.carTrips.localize,
                       height: size + 15,
                     ),
                     TripJoinTabIcon(
-                      icon: Image.asset(Assets.autoComplete,
-                          width: size.h, height: size.h, fit: BoxFit.fill),
+                      icon: Image.asset(Assets.autoComplete, width: size.h, height: size.h, fit: BoxFit.fill),
                       title: LocaleKeys.userTrips.localize,
                       height: size + 15,
                     ),
@@ -61,8 +59,7 @@ class AvailableTripsView extends StatelessWidget {
                   children: [
                     Stack(
                       children: [
-                        SizedBox(
-                            width: double.infinity, height: double.infinity),
+                        SizedBox(width: double.infinity, height: double.infinity),
                         AvailableTripsBody(),
                         AvailableTripsFloatingActionButton(),
                       ],
@@ -106,10 +103,7 @@ class TripJoinTabIcon extends StatelessWidget {
           Sizer(width: spaceBetween.w),
           Text(
             title,
-            style: Styles.mediumText(
-                color: context.isDarkMode
-                    ? Colors.white
-                    : AppColors.PRIMARY_COLOR),
+            style: Styles.mediumText(color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
           ),
         ],
       ),

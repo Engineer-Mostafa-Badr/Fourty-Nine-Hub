@@ -38,7 +38,7 @@ class _TripJoinBodyState extends State<TripJoinBody> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ...welcomeText(context),
+              ...welcomeText(),
               // Sizer(),
               const Sizer(),
               const TripJoinGoogleMap(),
@@ -52,11 +52,11 @@ class _TripJoinBodyState extends State<TripJoinBody> {
               Builder(builder: (context) {
                 context.watch<StartingLocationCubit>();
                 context.watch<DestinationLocationCubit>();
-                return const Visibility(
-                  // visible: startingCubit.startingLocation != null &&
-                  //     destinationCubit.destinationLocation != null,
-                  visible: true,
-                  child: TripAndCarInformationV2(),
+                return Visibility(
+                  visible: startingCubit.startingLocation != null &&
+                      destinationCubit.destinationLocation != null,
+                  // visible: true,
+                  child: const TripAndCarInformationV2(),
                 );
               })
             ],

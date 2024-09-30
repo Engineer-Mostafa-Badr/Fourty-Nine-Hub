@@ -62,7 +62,7 @@ class CompanyAdvertiseDataSourceImpl implements CompanyAdvertiseDataSource {
       (failure) => Left(failure),
       (response) {
         return Right(CompanyAdOptionModel.fromJson(response));
-        // return Right(list);
+       // return Right(list);
       },
     );
   }

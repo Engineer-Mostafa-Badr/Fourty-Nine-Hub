@@ -196,6 +196,7 @@ class ListsCubit extends Cubit<ListsState> {
     }, (r) {
       print("objectRight");
       isBlocked = r;
+      getBlocked(1, '');
       print("isBlocked$isBlocked");
       emit(state.copWith(status: ListsStates.success));
     });
@@ -209,6 +210,7 @@ class ListsCubit extends Cubit<ListsState> {
     response.fold(
         (l) => emit(state.copWith(failure: l, status: ListsStates.error)), (r) {
       unFollow = r;
+      getFollowers(1, '');
       emit(state.copWith(status: ListsStates.success));
     });
     return unFollow;
@@ -221,7 +223,7 @@ class ListsCubit extends Cubit<ListsState> {
         (failure) =>
             emit(state.copWith(failure: failure, status: ListsStates.error)),
         (r) {
-      value = r;
+      value = r;getFriends(1, '');
     });
     return value;
   }
@@ -235,6 +237,7 @@ class ListsCubit extends Cubit<ListsState> {
             emit(state.copWith(failure: failure, status: ListsStates.error)),
         (r) {
       value = r;
+      getRequests(1, '');
     });
     return value;
   }

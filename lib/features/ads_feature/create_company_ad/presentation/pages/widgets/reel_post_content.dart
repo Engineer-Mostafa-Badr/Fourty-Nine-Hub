@@ -54,9 +54,7 @@ class ReelsScreenState extends State<ReelsScreen> {
 
   void _fetchInitialReels() {
     if (mounted) {
-      context
-          .read<CreateCompanyAdCubit>()
-          .getCompanyAdPosts('reel', params: PaginationParams.basic());
+      context.read<CreateCompanyAdCubit>().getCompanyAdPosts('reel', params: PaginationParams.basic());
     }
   }
 
@@ -71,8 +69,7 @@ class ReelsScreenState extends State<ReelsScreen> {
       builder: (context, state) {
         return PaginationView<CompanyAdEntity>(
           loadingWidget: const SizedBox.shrink(),
-          build:
-              (ScrollController scrollController, List<CompanyAdEntity> data) {
+          build: (ScrollController scrollController, List<CompanyAdEntity> data) {
             if (data.isEmpty) {
               return Center(child: Label(text: LocaleKeys.noReel.localize));
             }
@@ -106,9 +103,7 @@ class ReelsScreenState extends State<ReelsScreen> {
                         isVisible: _currentPage == index,
                         advertises: data[index],
                         onDeleteItem: (id) async {
-                          var result = await context
-                              .read<CreateCompanyAdCubit>()
-                              .deleteCompanyAd(id: id);
+                          var result = await context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: id);
                           if (result == true) {
                             data.removeWhere((e) => e.sId == id);
                             setState(() {});
@@ -151,11 +146,7 @@ class ReelItem extends StatefulWidget {
   final Function(String) onDeleteItem;
 
   const ReelItem(
-      {super.key,
-      required this.post,
-      required this.isVisible,
-      required this.advertises,
-      required this.onDeleteItem});
+      {super.key, required this.post, required this.isVisible, required this.advertises, required this.onDeleteItem});
 
   @override
   ReelItemState createState() => ReelItemState(advertises, onDeleteItem);
@@ -198,8 +189,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
   }
 
   Future<void> _initializeVideoController() async {
-    _videoPlayerController =
-        VideoPlayerController.networkUrl(Uri.parse(widget.post?.photo ?? ''));
+    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(widget.post?.photo ?? ''));
     try {
       print('Initializing video controller with URL: ${widget.post?.photo}');
       await _videoPlayerController.initialize();
@@ -333,8 +323,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
         placeholder: (context, url) => const Center(
           child: CupertinoActivityIndicator(radius: 25),
         ),
-        errorWidget: (context, url, error) =>
-            const Center(child: Icon(Icons.error)),
+        errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
       );
     }
   }
@@ -356,8 +345,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  Widget _buildOverlay(
-      CompanyAdEntity advertises, Function(String) onDeleteItem) {
+  Widget _buildOverlay(CompanyAdEntity advertises, Function(String) onDeleteItem) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,8 +361,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  Widget _buildReelInfo(
-      CompanyAdEntity advertises, final Function(String) onDeleteItem) {
+  Widget _buildReelInfo(CompanyAdEntity advertises, final Function(String) onDeleteItem) {
     final height = MediaQuery.of(context).size.height;
     return Padding(
       padding: const EdgeInsets.all(0.0),
@@ -428,8 +415,7 @@ class ScrollingText extends StatefulWidget {
   ScrollingTextState createState() => ScrollingTextState();
 }
 
-class ScrollingTextState extends State<ScrollingText>
-    with SingleTickerProviderStateMixin {
+class ScrollingTextState extends State<ScrollingText> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 

@@ -9,7 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/core/connect_manager.dart';
@@ -384,7 +384,7 @@ class ZoomParticipantsBuilder extends StatelessWidget {
               popUpManager: widgetBottom!.popUpManager,
               translationText: widgetBottom!.translationText,
               builder: widgetBottom!.config.memberButton.builder,
-              icon: Image.asset('assets/49-New-icons/persons.png'),
+              icon: Icon(Icons.person, color: Colors.white),
               backgroundColor: Colors.transparent,
               avatarBuilder: widgetBottom!.config.avatarBuilder,
               itemBuilder: widgetBottom!.config.memberList.itemBuilder,
@@ -485,7 +485,7 @@ class ZoomSharescreenBuilder extends StatelessWidget {
           builder: (context, screenShareOn, child) {
             log('-------------${screenShareOn}');
             if (!screenShareOn) {
-              context.read<StreamCubit>().closeWhiteBoard();
+              // context.read<StreamCubit>().closeWhiteBoard();
             }
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,

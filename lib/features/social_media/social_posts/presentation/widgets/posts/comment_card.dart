@@ -60,9 +60,7 @@ class _CommentCardState extends State<CommentCard> {
             UserProfileImage(
               accountId: 0,
               withBorder: false,
-              imageURL: widget.comment.user.image.isNotEmpty
-                  ? widget.comment.user.image
-                  : null,
+              imageURL: widget.comment.user.image.isNotEmpty ? widget.comment.user.image : null,
               userId: widget.comment.user.id,
             ),
             const Sizer(),
@@ -72,11 +70,8 @@ class _CommentCardState extends State<CommentCard> {
               children: [
                 Label(
                     text: widget.comment.user.firstName,
-                    style: Styles.mediumText(
-                        fontWeight: FontWeight.bold, color: widget.textColor)),
-                Label(
-                    text: widget.comment.sinceTime,
-                    style: Styles.mediumText(color: widget.textColor)),
+                    style: Styles.mediumText(fontWeight: FontWeight.bold, color: widget.textColor)),
+                Label(text: widget.comment.sinceTime, style: Styles.mediumText(color: widget.textColor)),
               ],
             )),
             if (widget.comment.user.id != user?.id)
@@ -145,9 +140,7 @@ class _CommentCardState extends State<CommentCard> {
                       size: 20,
                       onPressed: () async {
                         var result = await widget.onEditComment(
-                            PostCommentParams(
-                                postId: widget.comment.id,
-                                content: editTextController.text));
+                            PostCommentParams(postId: widget.comment.id, content: editTextController.text));
                         if (result == true) {
                           widget.comment.content = editTextController.text;
                           widget.comment.edit = false;
@@ -173,19 +166,15 @@ class _CommentCardState extends State<CommentCard> {
                       context: context,
                       isScrollControlled: true,
                       widget: BlocProvider.value(
-                        value: serviceLocator<SocialPostsCubit>()
-                          ..loadReplies(context, widget.comment.id),
+                        value: serviceLocator<SocialPostsCubit>()..loadReplies(context, widget.comment.id),
                         child: CommentReplies(
                           replies: const [],
                           postId: widget.comment.post,
                           commentId: widget.comment.id,
-                          onAddReply: (ReplyOnCommentParams params) =>
-                              widget.onAddReply(params),
-                          onDeleteReply: (String id) =>
-                              widget.onDeleteReply(id),
+                          onAddReply: (ReplyOnCommentParams params) => widget.onAddReply(params),
+                          onDeleteReply: (String id) => widget.onDeleteReply(id),
                           from: widget.from,
-                          onEditComment: (PostCommentParams params) =>
-                              widget.onEditComment(params),
+                          onEditComment: (PostCommentParams params) => widget.onEditComment(params),
                         ),
                       ));
                 })
@@ -196,8 +185,7 @@ class _CommentCardState extends State<CommentCard> {
     );
   }
 
-  Widget _buildPostOptions(
-      {required bool isMyComment, required CommentEntity post}) {
+  Widget _buildPostOptions({required bool isMyComment, required CommentEntity post}) {
     return SizedBox(
       height: isMyComment ? 160 : 80,
       child: Column(

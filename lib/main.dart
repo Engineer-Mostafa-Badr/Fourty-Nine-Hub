@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/get_ser
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
+import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import 'core/service/background_service.dart';
@@ -83,11 +84,13 @@ class _MyAppState extends State<MyApp> {
           create: (context) => serviceLocator<UserCubit>(),
         ),
         BlocProvider(
+          create: (context) => serviceLocator<SecretsCubit>(),
+        ),
+        BlocProvider(
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
         ),
         BlocProvider(
-          create: (BuildContext context) =>
-              serviceLocator<MainCategoriesCubit>()..loadData(),
+          create: (BuildContext context) => serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
         // BlocProvider(
         //   create: (context) => serviceLocator<RiderequestCubit>(),
@@ -129,30 +132,27 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         BlocProvider<NotificationSocketIoCubit>(
-          create: (context) => NotificationSocketIoCubit(
-            context: context,
-            notificationListenerUseCase: serviceLocator(),
-          )..notificationListener(languageCode: 'en'),
-        ),
+            create: (context) => NotificationSocketIoCubit(
+                  context: context,
+                  notificationListenerUseCase: serviceLocator(),
+                )),
       ],
       child: ScreenUtilInit(
           designSize: const Size(750, 1334),
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (context, child) {
+            context.read<SecretsCubit>().state.secrets?.zegoAppId;
             return BlocBuilder<ThemeCubit, ThemeStates>(
               builder: (BuildContext context, state) {
                 return MaterialApp.router(
                   builder: (context, child) {
                     return MediaQuery(
-                      data: MediaQuery.of(context)
-                          .copyWith(textScaler: const TextScaler.linear(1.0)),
+                      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
                       child: child!,
                     );
                   },
-                  themeMode: context.read<ThemeCubit>().isDarkTheme
-                      ? ThemeMode.dark
-                      : ThemeMode.light,
+                  themeMode: context.read<ThemeCubit>().isDarkTheme ? ThemeMode.dark : ThemeMode.light,
                   theme: lightTheme(),
                   darkTheme: darkTheme(),
                   title: '49',

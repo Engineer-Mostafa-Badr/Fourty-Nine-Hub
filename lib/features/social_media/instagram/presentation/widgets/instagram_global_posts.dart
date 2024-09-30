@@ -436,8 +436,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                   .itemList![index].content!.isEmpty) ...[
                                 InkWell(
                                     onTap: () => context.push(Routes.LOGIN),
-                                    child: Label(
-                                        text: LocaleKeys.showComments.localize))
+                                    child: Label(text: LocaleKeys.showComments.localize))
                               ],
                               if (controller.globalFeedPagingController
                                       .itemList![index].content!.isEmpty &&

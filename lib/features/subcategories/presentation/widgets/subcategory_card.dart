@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
@@ -63,9 +64,9 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                       url: widget.item.image,
                     ),
                   ),
-                  Positioned(
+                  PositionedDirectional(
                       top: 10.h,
-                      right: 10.w,
+                      start: 10.w,
                       child: IconAppButton(
                         icon: widget.item.isFavorite == false
                             ? Icons.favorite_outline
@@ -88,19 +89,9 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Label(
-                          text: widget.item.name,
-                          style: Styles.mediumText(fontWeight: FontWeight.bold),
-                        ),
-                        Label(
-                          text:
-                              '${widget.item.numberOfContent} ${LocaleKeys.ads.localize}',
-                          style: Styles.smallText(fontSize: 25),
-                        )
-                      ],
+                    child: Label(
+                      text: widget.item.name,
+                      style: Styles.mediumText(fontWeight: FontWeight.bold),
                     ),
                   ),
                   IconAppButton(

@@ -15,10 +15,12 @@ class RestaurantDashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.read<RestaurantDashboardCubit>();
+    final controller = context.read<RestaurantDashboardCubit>()..loadData();
     return BlocConsumer<RestaurantDashboardCubit, RestaurantDashboardState>(
         listener: (context, state) {},
         builder: (context, state) {
+          // print(state.orders!.length.toString()+'455555555555555555555555');
+
           return SharedScaffold(
               mainCategoryId: 1,
               body: Padding(
@@ -40,6 +42,8 @@ class RestaurantDashboardView extends StatelessWidget {
                           ),
                         Switch(
                             value: state.connected,
+                            inactiveThumbColor: Colors.white,
+                            inactiveTrackColor: Colors.grey,
                             onChanged: (v) async =>
                                 await controller.changeConnectivityStatus())
                       ],
@@ -50,11 +54,14 @@ class RestaurantDashboardView extends StatelessWidget {
                               child: Label(text: 'Not Connected'),
                             )
                           : ListView.separated(
-                              itemBuilder: (context, index) =>
-                                  RestaurantOrderCard(
-                                      item: state.orders![index]),
+                              itemBuilder: (context, index) {
+                                // print(state.orders!.length.toString() +
+                                //     '455555555555555555555555');
+                                return RestaurantOrderCard(
+                                    item: state.orders!.data[index]);
+                              },
                               separatorBuilder: (context, index) => Sizer(),
-                              itemCount: state.orders?.length ?? 0),
+                              itemCount: state.orders?.data.length ?? 0),
                     ),
                   ],
                 ),

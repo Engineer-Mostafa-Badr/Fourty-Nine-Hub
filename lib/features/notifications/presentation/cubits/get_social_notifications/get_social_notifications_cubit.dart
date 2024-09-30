@@ -18,18 +18,14 @@ class GetSocialNotificationsCubit extends Cubit<GetSocialNotificationsState> {
   }) : super(GetSocialNotificationsInitial());
   List<NotificationEntity> notifications = [];
   int page = 1;
-  Future<void> getSocialNotifications({
-    required String languageCode,
-  }) async {
-    final getUnreadNotificationsCountCubit =
-        context.read<GetUnreadNotificationsCountCubit>();
+  Future<void> getSocialNotifications() async {
+    final getUnreadNotificationsCountCubit = context.read<GetUnreadNotificationsCountCubit>();
     getUnreadNotificationsCountCubit.getUnreadNotificationsCount();
     emit(GetSocialNotificationsLoading());
     pr('getSocialNotifications is called');
     pr('pages: $page');
     pr('notifications: $notifications');
-    final response = await getNotficationsUseCase.call(
-        type: 'social', page: page, languageCode: languageCode);
+    final response = await getNotficationsUseCase.call(type: 'social', page: page);
     response.fold(
       (Failure failure) {
         emit(GetSocialNotificationsFailed(Labels.errorHappened));

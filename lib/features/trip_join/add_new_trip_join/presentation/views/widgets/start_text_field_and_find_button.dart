@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -52,8 +50,7 @@ class _StartTextFieldAndFindButonState
                   return DefaultTextFormField(
                     suffixIcon: _getIcon(state),
                     currentController: startingController,
-                    label: LocaleKeys.startingPoint.localize,
-                    labelStyle: const TextStyle(color: Colors.black),
+                    label: 'Starting Point',
                     // hint: 'Find your starting Point..!',
                     hint: '',
                     validator: _validator,
@@ -63,7 +60,6 @@ class _StartTextFieldAndFindButonState
             ),
             const Sizer(width: 5),
             CustomButton(
-              title: LocaleKeys.searchFind.localize,
               onTap: () {
                 if (formKey.currentState!.validate()) {
                   startingLocationCubit.getStartingLocation(
@@ -117,10 +113,10 @@ class _StartTextFieldAndFindButonState
 
   String? _validator(String? value) {
     if (value == null) {
-      return LocaleKeys.youCantLeaveFieldEmpty.localize;
+      return "You can't leave the field empty";
     }
     if (value.length < 10) {
-      return LocaleKeys.addressMustBeAtLeast10Chars.localize;
+      return "Address must be at least 10 characters";
     }
     return null;
   }

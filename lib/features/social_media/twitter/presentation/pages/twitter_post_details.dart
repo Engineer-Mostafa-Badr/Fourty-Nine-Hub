@@ -67,7 +67,7 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
               showErrorMessage(
                 context,
                 getFailureMessage(
-                  state.failure ?? UnknownFailure(''),
+                  state.failure ??  UnknownFailure(''),
                   context,
                 ),
               );
@@ -79,7 +79,7 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
                 ? TwitterPostCard(
                     post: state.postDetails!,
                     onReact: () async {
-                      if (context.read<UserCubit>().isLoggedIn) {
+                      if(context.read<UserCubit>().isLoggedIn){
                         var result = await controller.onReact(
                           params: TwitterPostReactParams(
                               react: 'love', postId: state.postDetails!.id),
@@ -95,12 +95,12 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
                                 (state.postDetails!.loveCount! + 1);
                           }
                         }
-                      } else {
+                      }else{
                         context.push(Routes.LOGIN);
                       }
                     },
                     showPostComments: (i) {
-                      if (context.read<UserCubit>().isLoggedIn) {
+                      if(context.read<UserCubit>().isLoggedIn){
                         final user = context.read<UserCubit>().state.data;
 
                         bottomSheet(
@@ -168,22 +168,21 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
                             ),
                           ),
                         );
-                      } else {
+                      }else{
                         context.push(Routes.LOGIN);
                       }
                     },
                     onShare: () {
-                      if (context.read<UserCubit>().isLoggedIn) {
+                      if(context.read<UserCubit>().isLoggedIn){
                         controller.onShare(postId: state.postDetails!.id);
-                      } else {
+                      }else{
                         context.push(Routes.LOGIN);
                       }
                     },
                     getPost: () {},
                     onReport: (TwitterReportParams params) async {
                       controller.onReport(params);
-                      showSuccessMessage(
-                          context, LocaleKeys.reportSentSuccessfully.localize);
+                      showSuccessMessage(context, LocaleKeys.reportSentSuccessfully.localize);
                       context.pop();
                     },
                     deletePost: (String id) {

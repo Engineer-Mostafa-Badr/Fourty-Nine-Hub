@@ -228,7 +228,8 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
             listTile(
                 icon: Icons.delete,
                 title: LocaleKeys.deleteReply.localize,
-                subTitle: LocaleKeys.youWillDeleteReply.localize,
+                subTitle:
+                LocaleKeys.youWillDeleteReply.localize,
                 onTap: () {
                   widget.onDeleteReply(widget.reply.id);
                 }),

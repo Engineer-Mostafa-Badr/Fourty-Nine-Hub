@@ -17,10 +17,9 @@ class NotificationRepoImpl implements NotificationRepo {
     required String type,
     required int page,
     int limit = 10,
-    required String languageCode,
   }) async {
     return notificationRemoteDataSource.fetchNotifications(
-        type: type, page: page, limit: limit, languageCode: languageCode);
+        type: type, page: page, limit: limit);
   }
 
   @override

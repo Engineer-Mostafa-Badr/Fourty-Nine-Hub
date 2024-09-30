@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/all_notifications_seen/all_notfications_seen_cubit.dart';
@@ -32,15 +31,6 @@ class NotificationView extends StatefulWidget {
 class _NotificationViewState extends State<NotificationView> {
   @override
   Widget build(BuildContext context) {
-    // Future.delayed(const Duration(seconds: 1)).then((_) {
-    //   notificationSnackBar(
-    //     context: context,
-    //     notificationEntity: NotificationEntity(
-    //       title: "Subscribed Successfully",
-    //       body: "`Successfully subscribed to {{subCategoryName}} for 1 days",
-    //     ),
-    //   );
-    // });
     // serviceLocator<FirebaseHelper>().getToken();
     return MultiBlocProvider(
       providers: [
@@ -104,7 +94,7 @@ class _NotificationViewState extends State<NotificationView> {
                 color: Colors.red,
               ),
               body: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -112,11 +102,9 @@ class _NotificationViewState extends State<NotificationView> {
                       text: LocaleKeys.notifications.localize,
                       style: Styles.headerText(),
                     ),
-                    const Sizer(),
-                    TabBar(
-                      // indicatorColor: AppColors.PRIMARY_COLOR,
-                      dividerColor: context.isDarkMode ? Colors.grey : null,
-                      tabs: const [
+                    Sizer(),
+                    const TabBar(
+                      tabs: [
                         SocialIconBuilder(),
                         ServicesIconBuilder(),
                         AppIconBuilder(),

@@ -134,9 +134,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                     })
             ],
           ),
-        Sizer(
-          height: 5.h,
-        ),
+        Sizer(height: 5.h,),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -167,9 +165,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
             ),
           ],
         ),
-        Sizer(
-          height: 5.h,
-        ),
+        Sizer(height: 5.h,),
       ],
     );
   }
@@ -200,7 +196,8 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
             listTile(
                 icon: Icons.delete,
                 title: LocaleKeys.deleteReply.localize,
-                subTitle: LocaleKeys.youWillDeleteReply.localize,
+                subTitle:
+                LocaleKeys.youWillDeleteReply.localize,
                 onTap: () {
                   widget.onDeleteReply(widget.reply.id);
                 }),
@@ -211,7 +208,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                 subTitle: LocaleKeys.youWillEditReply.localize,
                 onTap: () {
                   widget.reply.edit = !widget.reply.edit!;
-                  editTextController.text = widget.reply.content ?? '';
+                  editTextController.text = widget.reply.content??'';
                   setState(() {});
                 }),
         ],
@@ -221,10 +218,10 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
 
   Widget listTile(
       {required IconData icon,
-      Color? iconColor,
-      required String title,
-      required String subTitle,
-      required Function onTap}) {
+        Color? iconColor,
+        required String title,
+        required String subTitle,
+        required Function onTap}) {
     return ListTile(
       title: Label(text: title),
       onTap: () {

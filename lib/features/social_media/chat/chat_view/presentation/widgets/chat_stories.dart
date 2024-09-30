@@ -483,6 +483,7 @@ import 'package:story_view/widgets/story_view.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart'; // For localization keys
 
 import '../../../../stories/presentation/pages/more_stories.dart';
+import '../../../../tinder/data/shared/shared.dart';
 
 class ChatStories extends StatelessWidget {
   const ChatStories({super.key});

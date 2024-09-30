@@ -78,9 +78,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             child: Container(
               height: 55.h,
               padding: EdgeInsets.symmetric(horizontal: 10.w),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40.r),
-                  color: AppColors.AUTH_CONTAINER_COLOR),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(40.r), color: AppColors.AUTH_CONTAINER_COLOR),
               child: InkWell(
                 borderRadius: BorderRadius.circular(40.r),
                 onTap: () {
@@ -101,19 +100,14 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     SizedBox(width: 10.h),
                     Expanded(
                       child: Label(
-                          text: LocaleKeys.search.localize,
-                          style: Styles.mediumText(
-                              color: AppColors.QUANTITY_COLOR)),
+                          text: LocaleKeys.search.localize, style: Styles.mediumText(color: AppColors.QUANTITY_COLOR)),
                     ),
                   ],
                 ),
               ),
             ),
           ),
-          if (showLanguage)
-            TextButton(
-                onPressed: () {},
-                child: Label(text: 'Register', style: Styles.mediumText())),
+          if (showLanguage) TextButton(onPressed: () {}, child: Label(text: 'Register', style: Styles.mediumText())),
           if (language)
             Container(
                 padding: EdgeInsets.symmetric(horizontal: 5.w),
@@ -128,13 +122,10 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                       }
                       Future.delayed(const Duration(seconds: 1)).then((_) {
                         // ignore: use_build_context_synchronously
+                        context.read<NotificationSocketIoCubit>().notificationListener(languageCode: 'en');
                         context
                             .read<NotificationSocketIoCubit>()
-                            .notificationListener(languageCode: 'en');
-                        context
-                            .read<NotificationSocketIoCubit>()
-                            .clearAllNotificationsAndRefeatchAfterLogin(
-                                languageCode: 'en');
+                            .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
                       });
                     })),
           SizedBox(

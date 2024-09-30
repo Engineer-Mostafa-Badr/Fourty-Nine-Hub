@@ -197,8 +197,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                     scrollDirection: Axis.horizontal,
                                     itemCount: controller.feedPagingController
                                         .itemList![index].images!.length,
-                                    separatorBuilder: (context, index) =>
-                                        const Sizer(
+                                    separatorBuilder: (context, index) => const Sizer(
                                           width: 3,
                                         ),
                                     itemBuilder: (context, index) {
@@ -611,8 +610,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                             )),
                                       ),
                                     ),
-                                child: Label(
-                                    text: LocaleKeys.showComments.localize))
+                                child: Label(text: LocaleKeys.showComments.localize))
                           ],
                           if (controller.feedPagingController.itemList![index]
                                   .content!.isEmpty &&
@@ -723,7 +721,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                   },
                   child: TextAppButton(
                       style: TextStyle(color: Theme.of(context).primaryColor),
-                      label: post.user.firstName,
+                      label: "${post.user.firstName} ${post.user.lastName}",
                       onPressed: () {
                         context.push(Routes.INSTAGRAMPROFILE,
                             extra: post.user.id);

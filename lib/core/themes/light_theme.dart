@@ -26,6 +26,11 @@ ThemeData lightTheme() {
     iconTheme: const IconThemeData(
       color: AppColors.QUANTITY_COLOR,
     ),
+    // textSelectionTheme: const TextSelectionThemeData(
+    //   selectionColor: AppColors.PRIMARY_COLOR,
+    //   cursorColor: AppColors.PRIMARY_COLOR,
+    //   selectionHandleColor: AppColors.PRIMARY_COLOR,
+    // ),
     buttonTheme: const ButtonThemeData(
       buttonColor: AppColors.QUANTITY_COLOR,
     ),

@@ -6,12 +6,14 @@ enum PrivacyStatus {
   friendsAndFollowers,
 }
 
+
 enum MaritalStatus {
   single,
   married,
   divorced,
   widowed,
 }
+
 
 String mapPrivacyStatusToString(PrivacyStatus status) {
   switch (status) {

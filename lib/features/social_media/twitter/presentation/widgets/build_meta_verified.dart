@@ -36,7 +36,8 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
       appBar: AppBar(
         title: Label(
           text: LocaleKeys.documentation.localize,
-          style: Styles.headerText(fontSize: 34, fontWeight: FontWeight.bold),
+          style:
+              Styles.headerText(fontSize: 34, fontWeight: FontWeight.bold),
         ),
         backgroundColor: AppColors.BACKGROUND_COLOR,
         centerTitle: true,
@@ -79,8 +80,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                           decoration: InputDecoration(
                             fillColor: Colors.white,
                             contentPadding: const EdgeInsets.all(5),
-                            hintText:
-                                '${LocaleKeys.typeYourName.localize} ....',
+                            hintText: '${LocaleKeys.typeYourName.localize} ....',
                             hintStyle: Styles.mediumText(),
                           ),
                         )),
@@ -93,7 +93,8 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                         Label(
                           text: LocaleKeys.personalPhoto.localize,
                           style: Styles.headerText(
-                              fontSize: 28, color: AppColors.GREY_DARK_COLOR),
+                              fontSize: 28,
+                              color: AppColors.GREY_DARK_COLOR),
                         ),
                         SizedBox(
                           height: 15.h,
@@ -114,7 +115,8 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                         Label(
                           text: LocaleKeys.id.localize,
                           style: Styles.headerText(
-                              fontSize: 28, color: AppColors.GREY_DARK_COLOR),
+                              fontSize: 28,
+                              color: AppColors.GREY_DARK_COLOR),
                         ),
                         SizedBox(
                           height: 15.h,

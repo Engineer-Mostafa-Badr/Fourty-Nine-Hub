@@ -177,8 +177,10 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         },
                         child: MainCategoryBanner(
                           category: state.data![index],
-                          onFavorite: () {
-                            return controller.toggleFavoriteMedicalService(state.data![index].id);
+                          onFavorite: () async {
+                            var result = await controller.toggleFavoriteMedicalService(state.data![index].id);
+                            print("result$result");
+                            return result;
                           },
                         ),
                       );

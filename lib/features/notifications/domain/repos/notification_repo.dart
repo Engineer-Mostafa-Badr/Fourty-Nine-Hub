@@ -9,7 +9,6 @@ abstract class NotificationRepo {
     required String type,
     required int page,
     int limit = 10,
-    required String languageCode,
   });
   Future<void> setupInteractedMessage({
     required BuildContext context,

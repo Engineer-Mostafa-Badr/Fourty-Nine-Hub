@@ -29,7 +29,7 @@ class MazadatView extends StatelessWidget {
                   _buildViewType(context: context),
                   Expanded(
                       child: Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: state.isLoading
                         ? const Center(
                             child: CircularProgressIndicator.adaptive())

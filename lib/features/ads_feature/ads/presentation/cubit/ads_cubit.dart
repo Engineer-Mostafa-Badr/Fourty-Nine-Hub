@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/favourite_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_all_comewithme_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_all_pickme_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/remove_favourite_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_come_with_me_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_pick_me_usecase.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -20,12 +22,14 @@ class AdvertisementCubit extends Cubit<AdsState> {
   final GetAllComeWithMeUseCase _getAllComeWithMeUseCase;
   final RequestPickMeUseCase _requestPickMeUseCase;
   final RequestComeWithMeUseCase _requestComeWithMeUseCase;
+  final RemoveFavouriteAdUseCase _removeFavouriteAdUseCase;
+  final FavouriteAdUseCase _favouriteAdUseCase;
   AdvertisementCubit(
       this._getAdsUseCase,
       this._getAllComeWithMeUseCase,
       this._getAllPickMeUseCase,
       this._requestComeWithMeUseCase,
-      this._requestPickMeUseCase)
+      this._requestPickMeUseCase, this._removeFavouriteAdUseCase, this._favouriteAdUseCase)
       : super(const AdsState());
 
   // void loadData({required String subCategoryId,required String filter}) async {
@@ -87,6 +91,32 @@ class AdvertisementCubit extends Cubit<AdsState> {
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
         (data) =>
             emit(state.copyWith(pickMeAds: data, status: AdsStates.initState)));
+  }
+
+  Future<bool> favouriteAd(String id) async {
+    final response = await _favouriteAdUseCase(id);
+    bool result = false;
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: AdsStates.error)),
+        (data) {
+          result = data;
+          emit(state.copyWith( status: AdsStates.success));
+        });
+    return result;
+  }
+
+  Future<bool> unFavouriteAd(String id) async {
+    final response = await _removeFavouriteAdUseCase(id);
+    bool result = false;
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: AdsStates.error)),
+        (data) {
+          result = data;
+          emit(state.copyWith( status: AdsStates.success));
+        });
+    return result;
   }
 
   Future<void> getComeWithMeAds() async {

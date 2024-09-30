@@ -16,7 +16,6 @@ class NotificationEntity {
   int? nextPageNumber;
   bool? read;
   String? userImageUrl;
-  String? gender;
   NotificationEntity({
     this.id,
     this.receiverId,
@@ -33,11 +32,10 @@ class NotificationEntity {
     this.nextPageNumber,
     this.read,
     this.userImageUrl,
-    this.gender,
   });
 
   @override
   String toString() {
-    return 'NotificationEntity(id: $id, firstName: $firstName, lastName: $lastName, filterType: $filterType, title: $title, body: $body, payload: $payload, path: $path, createdAt: $createdAt , hasNextPage: $hasNextPage, nextPageNumber: $nextPageNumber , read: $read , userImageUrl: $userImageUrl, gender: $gender )';
+    return 'NotificationEntity(id: $id, firstName: $firstName, lastName: $lastName, filterType: $filterType, title: $title, body: $body, payload: $payload, path: $path, createdAt: $createdAt , hasNextPage: $hasNextPage, nextPageNumber: $nextPageNumber , read: $read , userImageUrl: $userImageUrl )';
   }
 }

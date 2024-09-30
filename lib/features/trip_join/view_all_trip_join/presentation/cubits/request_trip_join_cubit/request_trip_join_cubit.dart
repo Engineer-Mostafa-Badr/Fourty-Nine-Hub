@@ -10,10 +10,7 @@ class RequestTripJoinCubit extends Cubit<RequestTripJoinState> {
   RequestTripJoinCubit({
     required this.requestTripJoinUseCase,
   }) : super(RequestTripJoinInitial());
-  Future<void> makeTripJoinRequest(
-      {required String addId,
-      required String mobile,
-      bool premuimRequest = false}) async {
+  Future<void> makeTripJoinRequest({required String addId, required String mobile, bool premuimRequest = false}) async {
     emit(RequestTripJoinLoading());
     final response = await requestTripJoinUseCase.call(
       addId: addId,

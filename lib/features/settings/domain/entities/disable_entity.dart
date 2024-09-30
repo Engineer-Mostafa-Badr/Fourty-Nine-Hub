@@ -5,7 +5,10 @@ class DisableEntity {
   final bool isDisabled;
 
   DisableEntity(
-      {this.id, this.firstName, this.username, required this.isDisabled});
+      { this.id,
+       this.firstName,
+       this.username,
+      required this.isDisabled});
 
   DisableEntity copyWith({bool? isDisabled}) {
     return DisableEntity(

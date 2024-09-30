@@ -18,11 +18,10 @@ class BuildItemListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int count = model.countOfRequest!; // Replace with dynamic value if needed
+    int count = model.countOfRequest!;
     int max = model
-        .competitionId!.maxRequests!; // Replace with dynamic value if needed
+        .competitionId?.maxRequests  ??0;
 
-    // List of different icons to be displayed
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,8 +30,8 @@ class BuildItemListView extends StatelessWidget {
           children: [
             Text(
               context.locale == Locales.english
-                  ? model.competitionId!.nameEn!
-                  : model.competitionId!.nameAr!,
+                  ? model.competitionId?.nameEn ??''
+                  : model.competitionId?.nameAr ??'',
               style: Styles.headerText(),
             ),
             // const Spacer(),
@@ -42,7 +41,7 @@ class BuildItemListView extends StatelessWidget {
             // ),
           ],
         ),
-        const Sizer(),
+         const Sizer(),
         Row(
           children: [
             Expanded(
@@ -87,18 +86,18 @@ class BuildItemListView extends StatelessWidget {
                 max: max,
               ),
             ),
-            SizedBox(width: 40.w),
+            SizedBox(width: 50.w),
           ],
         ),
         SizedBox(
           height: 20.h, // Space between the text and the row
         ),
         Padding(
-          padding: EdgeInsets.only(left: 5.w),
+          padding:  EdgeInsets.only(left: 5.w),
           child: Text(
             context.locale == Locales.english
-                ? model.competitionId!.descriptionEn!
-                : model.competitionId!.descriptionAr!,
+                ? model.competitionId?.descriptionEn ??''
+                : model.competitionId?.descriptionAr ??'',
             style: Styles.mediumText(),
           ),
         ),

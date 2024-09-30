@@ -56,8 +56,7 @@ class _LoginViewState extends State<LoginView> {
     // TODO: implement dispose
     super.dispose();
     scrollController.dispose();
-    log(widget.authType.toString(),
-        name: "lllllllllllllllllllllllllllllllllllll");
+    log(widget.authType.toString(), name: "lllllllllllllllllllllllllllllllllllll");
     // wid, required AuthType authTypeget.authType = widget.authType;
     // log(widget.authType.toString(), name: "lllllllllllllllllllllllllllllllllllll");
   }
@@ -70,8 +69,7 @@ class _LoginViewState extends State<LoginView> {
       log("lllllllllllllllllllllllllll");
       scrollController.jumpTo(409);
     }
-    log(MediaQuery.of(context).viewInsets.bottom.toString(),
-        name: "OpenKeyboard");
+    log(MediaQuery.of(context).viewInsets.bottom.toString(), name: "OpenKeyboard");
     return BlocListener<RegisterCubit, RegisterState>(
       listener: (context, state) async {
         if (state is RegisterError) {
@@ -99,12 +97,9 @@ class _LoginViewState extends State<LoginView> {
               ),
             );
           } else if (state is LoginSuccess) {
-            await TokenManager.saveAccessToken(
-                state.userTokensEntity.accessToken);
-            await TokenManager.saveRefreshToken(
-                state.userTokensEntity.refreshToken);
-            await BackgroundService.reStartWebSocketService(
-                state.userTokensEntity.accessToken);
+            await TokenManager.saveAccessToken(state.userTokensEntity.accessToken);
+            await TokenManager.saveRefreshToken(state.userTokensEntity.refreshToken);
+            await BackgroundService.reStartWebSocketService(state.userTokensEntity.accessToken);
             serviceLocator<UserCubit>()
               ..setLogin(true)
               ..attachToken()
@@ -113,23 +108,17 @@ class _LoginViewState extends State<LoginView> {
                 serviceLocator<WalletCubit>().getWallet();
                 String? accessToken = await TokenManager.getAccessToken();
                 String? refreshToken = await TokenManager.getRefreshToken();
-                debugPrint(
-                    '/////////////////////////////////////////////////////////////////////////');
+                debugPrint('/////////////////////////////////////////////////////////////////////////');
                 debugPrint('Refresh Token: $refreshToken');
                 debugPrint('Access Token: $accessToken');
-                debugPrint(
-                    '/////////////////////////////////////////////////////////////////////////');
+                debugPrint('/////////////////////////////////////////////////////////////////////////');
                 debugPrint(serviceLocator<UserCubit>().state.data.toString());
                 // Navigator.pop(context);
                 Navigator.pop(context);
                 context.push(Routes.HOME);
               });
-            context
-                .read<NotificationSocketIoCubit>()
-                .notificationListener(languageCode: 'en');
-            context
-                .read<NotificationSocketIoCubit>()
-                .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
+            context.read<NotificationSocketIoCubit>().notificationListener(languageCode: 'en');
+            context.read<NotificationSocketIoCubit>().clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
             showSuccessMessage(context, LocaleKeys.welcomeBack.localize);
           }
         },
@@ -212,31 +201,22 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       widget.authType == AuthType.REGISTER
                           ? DefaultButton(
-                              labelStyle: TextStyle(
-                                  fontSize: 35.sp,
-                                  color: AppColors.AUTH_CONTAINER_COLOR),
+                              labelStyle: TextStyle(fontSize: 35.sp, color: AppColors.AUTH_CONTAINER_COLOR),
                               label: LocaleKeys.register.localize,
                               width: double.infinity,
                               onPressed: () {
                                 if (registerCubit.accept) {
                                   registerCubit.register();
                                 } else {
-                                  showErrorMessage(
-                                      context,
-                                      getFailureMessage(
-                                          ServerFailure(
-                                              message:
-                                                  LocaleKeys.terms.localize),
-                                          context));
+                                  showErrorMessage(context,
+                                      getFailureMessage(ServerFailure(message: LocaleKeys.terms.localize), context));
                                 }
                               },
                             )
                           : DefaultButton(
                               width: double.infinity,
                               label: LocaleKeys.login.localize,
-                              labelStyle: TextStyle(
-                                  fontSize: 35.sp,
-                                  color: AppColors.AUTH_CONTAINER_COLOR),
+                              labelStyle: TextStyle(fontSize: 35.sp, color: AppColors.AUTH_CONTAINER_COLOR),
                               onPressed: () => loginCubit.login(formKey),
                             ),
                     ],
@@ -249,10 +229,7 @@ class _LoginViewState extends State<LoginView> {
   }
 
   chooseAuthWidget(
-      {required bool active,
-      required String text,
-      required BorderRadius borderRadius,
-      void Function()? onTap}) {
+      {required bool active, required String text, required BorderRadius borderRadius, void Function()? onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -265,8 +242,7 @@ class _LoginViewState extends State<LoginView> {
         child: Center(
           child: Text(
             text,
-            style:
-                Styles.mediumText(color: active ? Colors.white : Colors.black),
+            style: Styles.mediumText(color: active ? Colors.white : Colors.black),
           ),
         ),
       ),
@@ -335,8 +311,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             TextAppButton(
-                style: Styles.smallText(
-                    fontSize: 40.sp, color: Theme.of(context).primaryColor),
+                style: Styles.smallText(fontSize: 40.sp, color: Theme.of(context).primaryColor),
                 label: LocaleKeys.forgetPassword.localize,
                 onPressed: () => context.push(Routes.FORGOTPASSWORD)),
           ],
@@ -506,9 +481,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   children: [
                     Flexible(
                         child: Text(LocaleKeys.gender.localize,
-                            style: Styles.mediumText(
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.w400))),
+                            style:
+                                Styles.mediumText(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w400))),
                     Flexible(
                       child: Row(
                         children: [
@@ -523,9 +497,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                   isCentered: true,
                                   close: false,
                                   isBordered: !registerCubit.isMale,
-                                  color: registerCubit.isMale
-                                      ? AppColors.PRIMARY_COLOR
-                                      : Colors.transparent,
+                                  color: registerCubit.isMale ? AppColors.PRIMARY_COLOR : Colors.transparent,
                                   textColor: registerCubit.isMale
                                       ? AppColors.AUTH_CONTAINER_COLOR
                                       : Theme.of(context).primaryColor,
@@ -547,9 +519,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                               textColor: registerCubit.isMale
                                   ? Theme.of(context).primaryColor
                                   : AppColors.AUTH_CONTAINER_COLOR,
-                              color: registerCubit.isMale
-                                  ? Colors.transparent
-                                  : AppColors.PRIMARY_COLOR,
+                              color: registerCubit.isMale ? Colors.transparent : AppColors.PRIMARY_COLOR,
                               label: 'female'.localize,
                             ),
                           ),
@@ -594,8 +564,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   borderRadius: BorderRadius.circular(20.r),
                   controller: registerCubit.confirmPasswordTextController,
                   // label: 'Password',
-                  hint:
-                      '${LocaleKeys.confirm.localize} ${LocaleKeys.password.localize}',
+                  hint: '${LocaleKeys.confirm.localize} ${LocaleKeys.password.localize}',
                   obsecure: obsecure,
                   prefix: GestureDetector(
                     onTap: () {
@@ -653,9 +622,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     ),
                     Text(
                       LocaleKeys.conditions.localize,
-                      style: Styles.mediumText(
-                          color: const Color(0xFF4898D6),
-                          fontWeight: FontWeight.w600),
+                      style: Styles.mediumText(color: const Color(0xFF4898D6), fontWeight: FontWeight.w600),
                     ),
                     Checkbox(
                       activeColor: Colors.red,

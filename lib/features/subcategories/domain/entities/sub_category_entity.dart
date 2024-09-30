@@ -3,6 +3,7 @@ class SubCategoryEntity {
   final String name;
   final String image;
   bool? isFavorite;
+  final bool? hasAuction;
   final int? numberOfContent;
 
   SubCategoryEntity({
@@ -10,6 +11,7 @@ class SubCategoryEntity {
     required this.name,
     required this.image,
     this.isFavorite = false,
+    this.hasAuction = false,
     this.numberOfContent,
   });
 }

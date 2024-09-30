@@ -40,6 +40,7 @@ class HealthMedicalServices extends StatelessWidget {
                 ),
               ),
               Sizer(),
+
             ],
           ),
         );

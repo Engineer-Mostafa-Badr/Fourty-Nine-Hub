@@ -176,8 +176,8 @@ class _TwitterViewState extends State<TwitterView> {
                                   .postsPagingController.itemList![index].id,
                         );
                         if (state.shareSuccess == true) {
-                          showSuccessMessage(context,
-                              LocaleKeys.postSharedSuccessfully.localize);
+                          showSuccessMessage(
+                              context, LocaleKeys.postSharedSuccessfully.localize);
                         }
                         setState(() {});
                       },
@@ -210,7 +210,8 @@ class _TwitterViewState extends State<TwitterView> {
                                 controller.onCommentReact(params: params);
                               },
                               onGetReplies: (String id,
-                                  TwitterPostCommentEntity comment) async {},
+                                  TwitterPostCommentEntity comment) async {
+                              },
                               newCommentId: '',
                               state: state,
                               onReport: (TwitterReportParams params) {
@@ -354,8 +355,8 @@ class _TwitterViewState extends State<TwitterView> {
                                   .itemList![index].id,
                         );
                         if (state.shareSuccess == true) {
-                          showSuccessMessage(context,
-                              LocaleKeys.postSharedSuccessfully.localize);
+                          showSuccessMessage(
+                              context, LocaleKeys.postSharedSuccessfully.localize);
                         }
                         setState(() {});
                       },
@@ -388,7 +389,8 @@ class _TwitterViewState extends State<TwitterView> {
                                 controller.onCommentReact(params: params);
                               },
                               onGetReplies: (String id,
-                                  TwitterPostCommentEntity comment) async {},
+                                  TwitterPostCommentEntity comment) async {
+                              },
                               newCommentId: '',
                               state: state,
                               onReport: (TwitterReportParams params) {

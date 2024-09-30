@@ -120,6 +120,7 @@ class AccountServiceLocator {
 
     serviceLocator.registerFactory<GiftCubit>(() => GiftCubit(
           serviceLocator(),
+          serviceLocator(),
         )..loadData());
   }
 }

@@ -4,7 +4,7 @@ import 'package:fourtyninehub/features/settings/data/data_source/setting_remote_
 import 'package:fourtyninehub/features/settings/domain/entities/disable_entity.dart';
 import 'package:fourtyninehub/features/settings/domain/repository/setting_repository.dart';
 
-class SettingRepositoryImpl extends SettingRepository {
+class SettingRepositoryImpl extends SettingRepository{
   final SettingRemoteDataSource _settingRemoteDataSource;
 
   SettingRepositoryImpl(this._settingRemoteDataSource);
@@ -21,5 +21,7 @@ class SettingRepositoryImpl extends SettingRepository {
   @override
   Future<Either<Failure, DisableEntity>> enableAccount() {
     return _settingRemoteDataSource.enableAccount();
+
   }
+
 }

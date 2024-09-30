@@ -20,14 +20,14 @@ class SocialNotificationBuilder extends StatefulWidget {
   });
 
   @override
-  State<SocialNotificationBuilder> createState() =>
-      _SocialNotificationBuilderState();
+  State<SocialNotificationBuilder> createState() => _SocialNotificationBuilderState();
 }
 
 class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
   late final ScrollController scrollController;
   late double scrollPosition;
   late double scrollMaxExtent;
+  int nextPage = 1;
   bool isLoading = false;
 
   late GetSocialNotificationsCubit getSocialNotificationsCubit;
@@ -39,8 +39,7 @@ class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
   void initState() {
     getSocialNotificationsCubit = context.read<GetSocialNotificationsCubit>();
     notificationSeenCubit = context.read<NotificationSeenCubit>();
-    getUnreadNotificationsCountCubit =
-        context.read<GetUnreadNotificationsCountCubit>();
+    getUnreadNotificationsCountCubit = context.read<GetUnreadNotificationsCountCubit>();
     deleteNotificationCubit = context.read<DeleteNotificationCubit>();
     deleteAllNotificationsCubit = context.read<DeleteAllNotificationsCubit>();
     _fetchNotificationsIfEmpty();
@@ -56,16 +55,14 @@ class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<GetSocialNotificationsCubit,
-        GetSocialNotificationsState>(
+    return BlocConsumer<GetSocialNotificationsCubit, GetSocialNotificationsState>(
       listener: (context, state) {
         if (state is GetSocialNotificationsFailed) {
           showErrorMessage(context, state.message);
         }
       },
       builder: (context, state) {
-        if (state is GetSocialNotificationsSuccess &&
-            getSocialNotificationsCubit.notifications.isEmpty) {
+        if (state is GetSocialNotificationsSuccess && getSocialNotificationsCubit.notifications.isEmpty) {
           return const NoNotificationsWidget();
         }
         return ListView.builder(
@@ -75,62 +72,42 @@ class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
             if (index == 0) {
               return SeeAndClearButtons(
                 seeAllCallback: () async {
-                  context
-                      .read<AllNotficationsSeenCubit>()
-                      .allNotificationSeen(type: 'social')
-                      .then(
-                        (value) => context
-                            .read<GetUnreadNotificationsCountCubit>()
-                            .getUnreadNotificationsCount(),
+                  context.read<AllNotficationsSeenCubit>().allNotificationSeen(type: 'social').then(
+                        (value) => context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount(),
                       );
-                  context
-                      .read<GetSocialNotificationsCubit>()
-                      .notifications
-                      .forEach((element) {
+                  context.read<GetSocialNotificationsCubit>().notifications.forEach((element) {
                     element.read = true;
                   });
                 },
                 clearAllCallback: () async {
-                  await deleteAllNotificationsCubit.deleteAllNotifications(
-                      type: 'social');
+                  await deleteAllNotificationsCubit.deleteAllNotifications(type: 'social');
                   getSocialNotificationsCubit.notifications = [];
                   getSocialNotificationsCubit.page = 1;
-                  await getSocialNotificationsCubit.getSocialNotifications(
-                      languageCode: 'en');
-                  await getUnreadNotificationsCountCubit
-                      .getUnreadNotificationsCount();
+                  await getSocialNotificationsCubit.getSocialNotifications();
+                  await getUnreadNotificationsCountCubit.getUnreadNotificationsCount();
                 },
               );
             }
             index--;
             if (index < getSocialNotificationsCubit.notifications.length) {
-              final NotificationEntity notificationEntity =
-                  getSocialNotificationsCubit.notifications[index];
+              final NotificationEntity notificationEntity = getSocialNotificationsCubit.notifications[index];
               return NotificationCard(
                 notificationEntity: notificationEntity,
                 index: index,
                 notificationSeenCallback: () {
                   notificationEntity.read = true;
-                  notificationSeenCubit
-                      .notificationSeen(id: notificationEntity.id ?? '')
-                      .then(
-                        (value) => getUnreadNotificationsCountCubit
-                            .getUnreadNotificationsCount()
-                            .then((value) => context.push(
-                                notificationEntity.path ?? '',
-                                extra: notificationEntity.payload)),
+                  notificationSeenCubit.notificationSeen(id: notificationEntity.id ?? '').then(
+                        (value) => getUnreadNotificationsCountCubit.getUnreadNotificationsCount().then(
+                            (value) => context.push(notificationEntity.path ?? '', extra: notificationEntity.payload)),
                       );
                 },
                 notificationDeleteCallback: () {
-                  deleteNotificationCubit.deleteNotification(
-                      id: notificationEntity.id ?? '');
+                  deleteNotificationCubit.deleteNotification(id: notificationEntity.id ?? '');
                   getSocialNotificationsCubit.notifications.removeAt(index);
                 },
               );
             }
-            return state is GetSocialNotificationsLoading
-                ? const NotificationCardLoadingList()
-                : const SizedBox();
+            return state is GetSocialNotificationsLoading ? const NotificationCardLoadingList() : const SizedBox();
           },
         );
       },
@@ -143,14 +120,11 @@ class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
       scrollPosition = scrollController.position.pixels;
       scrollMaxExtent = scrollController.position.maxScrollExtent;
       if (scrollPosition >= 0.7 * scrollMaxExtent) {
-        if (!isLoading &&
-            (getSocialNotificationsCubit.notifications.last.hasNextPage ??
-                false)) {
+        if (!isLoading && (getSocialNotificationsCubit.notifications.last.hasNextPage ?? false)) {
           isLoading = true;
-          getSocialNotificationsCubit.page =
-              getSocialNotificationsCubit.notifications.last.nextPageNumber!;
-          await getSocialNotificationsCubit.getSocialNotifications(
-              languageCode: 'en');
+          getSocialNotificationsCubit.page = getSocialNotificationsCubit.notifications.last.nextPageNumber!;
+          await getSocialNotificationsCubit.getSocialNotifications();
+          nextPage++;
           isLoading = false;
         }
       }
@@ -160,7 +134,7 @@ class _SocialNotificationBuilderState extends State<SocialNotificationBuilder> {
   void _fetchNotificationsIfEmpty() {
     if (getSocialNotificationsCubit.notifications.isEmpty) {
       getSocialNotificationsCubit.page = 1;
-      getSocialNotificationsCubit.getSocialNotifications(languageCode: 'en');
+      getSocialNotificationsCubit.getSocialNotifications();
     }
   }
 }

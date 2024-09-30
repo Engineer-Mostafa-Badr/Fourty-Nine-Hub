@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-List<Widget> welcomeText(BuildContext context) {
+List<Widget> welcomeText() {
   return [
     Text(
-      LocaleKeys.welcomeToTripjoin.localize,
+      'Welcome To Trip Join',
       style: Styles.headerText(
-        // fontSize: 24.sp,
-        fontWeight: FontWeight.bold,
-        color: AppColors.getSecondryColor(context),
-      ),
+          // fontSize: 24.sp,
+          fontWeight: FontWeight.bold,
+          color: AppColors.SECONDARY_COLOR),
     ),
-    const Sizer(),
+    Sizer(),
     Text(
-      LocaleKeys.ownCar.localize.trim(),
+      'You own a car!\nSomeone will share trip with you / pay half price',
       style: Styles.headerText(fontWeight: FontWeight.w400),
     ),
   ];

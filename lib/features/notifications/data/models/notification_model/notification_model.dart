@@ -60,12 +60,11 @@ class NotificationModel extends NotificationEntity {
           body: bodyTranslationCode,
           payload: payload,
           path: path,
-          createdAt: DateTime.fromMicrosecondsSinceEpoch((time ?? 0) * 1000000),
+          createdAt: DateTime.fromMicrosecondsSinceEpoch(time ?? 0),
           hasNextPage: hasNextPage,
           nextPageNumber: nextPageNumber,
           read: read,
           userImageUrl: userImageUrl,
-          gender: receiverInfo?.gender,
         );
 
   @override

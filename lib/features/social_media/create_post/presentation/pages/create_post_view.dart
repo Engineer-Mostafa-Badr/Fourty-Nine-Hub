@@ -60,8 +60,7 @@ class _CreatePostViewState extends State<CreatePostView> {
         return Stack(
           children: [
             Scaffold(
-              appBar:
-                  BackAppBar(label: LocaleKeys.createPost.localize, actions: [
+              appBar: BackAppBar(label: LocaleKeys.createPost.localize, actions: [
                 TextButton(
                     child: Label(text: LocaleKeys.post.localize),
                     onPressed: () => controller.createPost(

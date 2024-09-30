@@ -18,6 +18,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/data/reposito
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/repositories/chats_repository.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatMuteState_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_anonymous_chat_use_case.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_normal_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getGroupsChats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getSeenHistoryUseCase.dart';
@@ -54,6 +56,14 @@ class SocialServiceLocator {
 
     serviceLocator.registerLazySingleton<GetSeenHistoryUseCase>(
         () => GetSeenHistoryUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<CreateNormalChatUseCase>(
+        () => CreateNormalChatUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<CreateAnonymousChatUseCase>(
+        () => CreateAnonymousChatUseCase(
               serviceLocator(),
             ));
 

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/bloc/meeting_state.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_state.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 
 import '../../../../service_locator/service_locator.dart';
 import '../../../social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
@@ -77,8 +78,8 @@ class _MeetingRoomState extends State<MeetingRoom> {
           builder: (context, state) {
             // var cubit = context.read<MeetingCubit>();
             return ZegoUIKitPrebuiltLiveStreaming(
-              appID: UIConst.appId,
-              appSign: UIConst.appSign,
+              appID: context.read<SecretsCubit>().state.secrets!.zegoAppId,
+              appSign: context.read<SecretsCubit>().state.secrets!.zegoAppSign,
               userID: userId,
               isLiveStream: false,
               userName: widget.userName,

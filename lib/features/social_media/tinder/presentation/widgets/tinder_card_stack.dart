@@ -725,7 +725,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
         elevation: 2,
         child: Stack(
           children: [
-            swipeCardDemo2(context, cardUser),
+            SwipeCardDemo2(cardUser: cardUser),
             _buildGenderSwitch(context, cardUser),
             // _buildMapSwitch(context, cardUser),
             _buildStoryBar(context, cardUser),
@@ -1072,7 +1072,8 @@ class _TinderCardStackState extends State<TinderCardStack> {
     bottomSheet(
       context: context,
       widget: ReportView(
-        id: context.read<UserCubit>().state.data!.id,
+        id: user.id!,
+        // id: context.read<UserCubit>().state.data!.id,
         categoryId: '66af974f8bf69f9469944746',
       ),
     );
@@ -1511,7 +1512,7 @@ Widget swipeCardDemo2(BuildContext context, UserData cardUser) {
 }
 
 //last ya ali
-/*
+
 class SwipeCardDemo2 extends StatefulWidget {
   final UserData cardUser;
 
@@ -1524,21 +1525,54 @@ class SwipeCardDemo2 extends StatefulWidget {
 class SwipeCardDemo2State extends State<SwipeCardDemo2> {
   int _currentStoryIndex = 0;
 
+  @override
+  void initState() {
+    // _currentStoryIndex = 0; // Starts from the first story (dot 0)
+    super.initState();
+  }
+
+  // void _nextStory() {
+  //   setState(() {
+  //     if (_currentStoryIndex == widget.cardUser.pictures.length - 1) {
+  //       _currentStoryIndex = 0;
+  //     }
+  //     _currentStoryIndex =
+  //         (_currentStoryIndex < widget.cardUser.pictures.length)
+  //             ? _currentStoryIndex + 1
+  //             : widget.cardUser.pictures.length - 1;
+  //   });
+  // }
+
   void _nextStory() {
     setState(() {
-      final pictures = widget.cardUser.pictures;
-      _currentStoryIndex = (_currentStoryIndex < pictures.length - 1)
-          ? _currentStoryIndex + 1
-          : pictures.length - 1;
+      if (_currentStoryIndex < widget.cardUser.pictures.length - 1) {
+        _currentStoryIndex++; // Move to the next story
+      } else {
+        _currentStoryIndex = 0; // Reset to the first story after the last
+      }
     });
   }
 
   void _previousStory() {
     setState(() {
-      _currentStoryIndex =
-      (_currentStoryIndex > 0) ? _currentStoryIndex - 1 : 0;
+      if (_currentStoryIndex > 0) {
+        _currentStoryIndex--; // Move to the previous story
+      } else {
+        _currentStoryIndex =
+            widget.cardUser.pictures.length - 1; // Go to the last story
+      }
     });
   }
+
+  // void _previousStory() {
+  //   setState(() {
+  //     if (_currentStoryIndex == 0) {
+  //       _currentStoryIndex = widget.cardUser.pictures.length;
+  //     }
+  //     _currentStoryIndex =
+  //         (_currentStoryIndex > 0) ? _currentStoryIndex - 1 : 0;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -1549,14 +1583,19 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
   }
 
   void _handleTap(Offset localPosition) {
+    print('Current Story Index: $_currentStoryIndex');
+
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool tappedLeftSide = localPosition.dx < screenWidth / 2;
+    print('Current Story Index: $_currentStoryIndex');
 
-    if (tappedLeftSide) {
-      context.isArabic ? _nextStory() : _previousStory();
-    } else {
-      context.isArabic ? _previousStory() : _nextStory();
-    }
+    setState(() {
+      if (tappedLeftSide) {
+        context.isArabic ? _nextStory() : _previousStory();
+      } else {
+        context.isArabic ? _previousStory() : _nextStory();
+      }
+    });
   }
 
   Widget _buildCard(BuildContext context) {
@@ -1589,19 +1628,16 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
           left: 10,
           right: 10,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: List.generate(
               pictures.length,
-                  (dotIndex) => Expanded(
+              (dotIndex) => Expanded(
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 2.0),
                   height: 4,
-                  decoration: BoxDecoration(
-                    color: (dotIndex == _currentStoryIndex)
-                        ? Colors.red
-                        : Colors.white54,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+                  color: (dotIndex != _currentStoryIndex)
+                      ? Colors.white54
+                      : Colors.red,
                 ),
               ),
             ),
@@ -1610,4 +1646,4 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
       ],
     );
   }
-}*/
+}

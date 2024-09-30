@@ -10,7 +10,7 @@ class IconWithViewCount extends StatelessWidget {
     super.key,
     required this.icon,
     required this.unreadCount,
-    this.spaceBetween = 10,
+    this.spaceBetween = 5,
   });
   final Widget icon;
   final int unreadCount;
@@ -26,27 +26,10 @@ class IconWithViewCount extends StatelessWidget {
         ),
         Sizer(width: spaceBetween.w),
         Text(
-          _formatCount(unreadCount),
-          style: Styles.mediumText(
-            color: AppColors.getSecondryColor(context),
-          ),
+          unreadCount == 0 ? '   ' : '($unreadCount)',
+          style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
         ),
       ],
     );
-  }
-
-  String _formatCount(int? count) {
-    // count = 1009;
-    if (count == null || count == 0) {
-      return '  ';
-    }
-    if (count < 1000) {
-      return '($count)';
-    }
-    String result = (count / 1000).toStringAsFixed(1);
-    if (result.endsWith('0')) {
-      return "(${result.split('.').first}K)";
-    }
-    return '(${result}K)';
   }
 }

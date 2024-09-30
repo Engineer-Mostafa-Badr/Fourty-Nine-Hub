@@ -81,8 +81,7 @@ extension RideServicesEnumExtension on RideServicesEnum {
   String title() {
     switch (this) {
       case RideServicesEnum.pickMe:
-        // return LocaleKeys.pickMe.tr();
-        return 'Carpool ';
+        return LocaleKeys.pickMe.tr();
       case RideServicesEnum.womenOnly:
         return 'Women Only';
       case RideServicesEnum.captain:

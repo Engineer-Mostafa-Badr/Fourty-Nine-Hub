@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,10 +8,13 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/enti
 
 import '../../../../../core/error/failure.dart';
 
+import '../../../../../core/utils/shared_pref.dart';
+import '../../data/models/cart_model.dart';
 import '../../data/models/selected_meal_model.dart';
 import '../../domain/usecases/add_to_cart_usecase.dart';
 import '../../domain/usecases/get_meals_usecase.dart';
 import '../../domain/usecases/get_restaurant_details_usecase.dart';
+import 'package:http/http.dart' as http;
 
 part 'restaurant_details_state.dart';
 
@@ -18,6 +22,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
   final AddToCartUseCase _addToCartUseCase;
   final GetMealsUseCase _getMealsUseCase;
   final GetRestaurantDetailsUseCase _getRestaurantDetailsUseCase;
+
   RestaurantDetailsCubit(this._addToCartUseCase, this._getMealsUseCase,
       this._getRestaurantDetailsUseCase)
       : super(const RestaurantDetailsState());
@@ -46,8 +51,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
   }
 
   addToCart(
-      {required BuildContext context,
-      required String restaurantId,
+      {required String restaurantId,
       required String foodId,
       required String quantity}) async {
     final response = await _addToCartUseCase(
@@ -79,7 +83,10 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
       ),
     );
     emit(state.copyWith(selectedMeals: selectedMeals));
-
+    // addToCart(
+    //     restaurantId: meal.restaurantId ?? "",
+    //     foodId: meal.id ?? "",
+    //     quantity: qty.toString());
     log("added: ${state.selectedMeals?.length}");
   }
 
@@ -88,5 +95,41 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
     selectedMeals.removeWhere((element) => element.meal == meal);
     emit(state.copyWith(selectedMeals: selectedMeals));
     log("removed: ${state.selectedMeals?.length}");
+  }
+
+  String? token;
+
+  Future<void> _ensureTokenInitialized() async {
+    token ??= await TokenManager.getAccessToken();
+  }
+
+  Future<void> fetchCart() async {
+    await _ensureTokenInitialized();
+    emit(state.copyWith(status: RestaurantDetailsStates.loading));
+
+    final url = Uri.parse('https://49dev.com/api/v1/food/getCart');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final cartData = jsonDecode(response.body);
+        final cart = Cart.fromJson(cartData);
+        log("${cart.subTotal}------------------------------------");
+        emit(state.copyWith(
+            cart: cart, status: RestaurantDetailsStates.initState));
+      } else {
+        emit(state.copyWith(status: RestaurantDetailsStates.error));
+
+        log('Failed to load cart: ${response.statusCode}');
+      }
+    } catch (e) {
+      log('error: $e');
+    }
   }
 }
