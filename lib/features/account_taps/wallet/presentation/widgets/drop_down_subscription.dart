@@ -14,6 +14,8 @@ import '../../../../subscripe/presentation/controllers/subscription_controller.d
 import '../cubit/wallet_cubit.dart';
 
 class DropDownSubscription extends StatefulWidget {
+  const DropDownSubscription({super.key});
+
   @override
   _DropDownSubscriptionState createState() => _DropDownSubscriptionState();
 }

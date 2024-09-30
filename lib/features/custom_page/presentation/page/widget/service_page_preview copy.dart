@@ -1,20 +1,24 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
+
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/dynamic/wallet_widget.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -28,11 +32,6 @@ import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../fourty_nine/domain/entities/slider_item_entity.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/states/basic_state.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-
 import '../../cubit/custom_page_cubit.dart';
 import '../../cubit/custom_page_states.dart';
 import 'custom_page_botton_nav_bar.dart';
@@ -52,23 +51,19 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
   void initState() {
     super.initState();
     _setupScrollController();
-    context
-        .read<FirebaseNotficationsCubit>()
-        .setupInterceptedMessage(context: context);
-    context.read<NotificationSocketIoCubit>().notificationListener();
+    context.read<FirebaseNotficationsCubit>().setupInterceptedMessage(context: context);
+    context.read<NotificationSocketIoCubit>().notificationListener(languageCode: 'en');
   }
 
   void _setupScrollController() {
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
         if (!_isScrollingDown) {
           setState(() {
             _isScrollingDown = true;
           });
         }
-      } else if (scrollController.position.userScrollDirection ==
-          ScrollDirection.forward) {
+      } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
         if (_isScrollingDown) {
           setState(() {
             _isScrollingDown = false;
@@ -95,20 +90,17 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
           create: (BuildContext context) => serviceLocator<ThumbnailsCubit>(),
         ),
         BlocProvider(
-          create: (BuildContext context) =>
-          serviceLocator<CustomPageCubit>()..fetchSubTab(),
+          create: (BuildContext context) => serviceLocator<CustomPageCubit>()..fetchSubTab(),
         )
       ],
       child: BlocBuilder<SliderCubit, BasicState<List<SliderItemEntity>>>(
         builder: (BuildContext context, state) {
-          return BlocBuilder<ThumbnailsCubit,
-              BasicState<List<RideThumbnailEntity>>>(
-            builder: (BuildContext context,
-                BasicState<List<RideThumbnailEntity>> state) {
+          return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
+            builder: (BuildContext context, BasicState<List<RideThumbnailEntity>> state) {
               return Scaffold(
                 bottomNavigationBar: CustomPageBottonNavBar(
                   scrollController: scrollController, currentIndex: 2,
-                   isScrollingDown: _isScrollingDown,
+                  isScrollingDown: _isScrollingDown,
                   // mainCategory: 1,
                   // index: 2,
                 ),
@@ -119,37 +111,28 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                         controller: scrollController,
                         padding: EdgeInsets.symmetric(horizontal: 20.w),
                         children: [
-                          Sizer(),
+                          const Sizer(),
                           //carousel slider
-                          !context.read<UserCubit>().isLoggedIn
-                              ? Sizer()
-                              : const SizedBox.shrink(),
+                          !context.read<UserCubit>().isLoggedIn ? const Sizer() : const SizedBox.shrink(),
                           //wallet
-                          context.read<UserCubit>().isLoggedIn
-                              ? const WalletWidget()
-                              : const SizedBox.shrink(),
+                          context.read<UserCubit>().isLoggedIn ? const WalletWidget() : const SizedBox.shrink(),
                           //    Sizer(),
                           //admob
                           //   const GoogleAddsBanner(),
                           //  Sizer(),
                           //pick me and come with U
                           _pickMeAndComeWithUWidget(subTab),
-                          if (subTab.subTab?.carpool == true ||
-                              subTab.subTab?.tripJoin == true)
-                            Sizer(),
+                          if (subTab.subTab?.carpool == true || subTab.subTab?.tripJoin == true) const Sizer(),
                           //auction
                           _auctionAndInstallmentWidget(subTab),
-                          if (subTab.subTab?.auction == true ||
-                              subTab.subTab?.installment == true)
-                            Sizer(),
+                          if (subTab.subTab?.auction == true || subTab.subTab?.installment == true) const Sizer(),
                           //cats layout
                           _buildMainCategoriesViews(),
-                          Sizer(),
+                          const Sizer(),
                           //main cats
                           BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
                             builder: (context, state) {
-                              final controller =
-                              context.read<MainCategoriesCubit>();
+                              final controller = context.read<MainCategoriesCubit>();
                               if (state.status == StateStatus.loading) {
                                 return Shimmer.fromColors(
                                   baseColor: Colors.grey[100]!,
@@ -157,35 +140,24 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                                   child: Column(
                                     children: List.generate(
                                         6,
-                                            (index) => Padding(
-                                          padding:
-                                          EdgeInsets.only(bottom: 15.h),
-                                          child: Container(
-                                            height: MediaQuery.of(context)
-                                                .size
-                                                .height *
-                                                .15.h,
-                                            width: double.infinity,
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 10.w),
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.w),
-                                            decoration: BoxDecoration(
-                                              color: AppColors
-                                                  .AUTH_CONTAINER_COLOR,
-                                              borderRadius:
-                                              BorderRadius.circular(
-                                                  20.r),
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                            ),
-                                          ),
-                                        )),
+                                        (index) => Padding(
+                                              padding: EdgeInsets.only(bottom: 15.h),
+                                              child: Container(
+                                                height: MediaQuery.of(context).size.height * .15.h,
+                                                width: double.infinity,
+                                                margin: EdgeInsets.symmetric(horizontal: 10.w),
+                                                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                                decoration: BoxDecoration(
+                                                  color: AppColors.AUTH_CONTAINER_COLOR,
+                                                  borderRadius: BorderRadius.circular(20.r),
+                                                  border: Border.all(color: Colors.grey),
+                                                ),
+                                              ),
+                                            )),
                                   ),
                                 );
                               }
-                              if (state.status == StateStatus.success &&
-                                  state.data != null) {
+                              if (state.status == StateStatus.success && state.data != null) {
                                 return ListView.separated(
                                   itemCount: state.data?.length ?? 0,
                                   physics: const NeverScrollableScrollPhysics(),
@@ -193,24 +165,20 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                                   itemBuilder: (context, index) {
                                     return InkWell(
                                       onTap: () {
-                                        context.push(Routes.SUBCATEGORIES,
-                                            extra: state.data![index]);
+                                        context.push(Routes.SUBCATEGORIES, extra: state.data![index]);
                                       },
                                       child: MainCategoryBanner(
                                         category: state.data![index],
                                         onFavorite: () async {
-                                          var result = await controller
-                                              .toggleFavoriteMedicalService(
-                                              state.data![index].id);
+                                          var result =
+                                              await controller.toggleFavoriteMedicalService(state.data![index].id);
                                           print("result$result");
                                           return result;
                                         },
                                       ),
                                     );
                                   },
-                                  separatorBuilder:
-                                      (BuildContext context, int index) =>
-                                      Sizer(),
+                                  separatorBuilder: (BuildContext context, int index) => const Sizer(),
                                 );
                               } else {
                                 return const SizedBox.shrink();
@@ -272,9 +240,9 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
   }
 
   Widget _buildItemTabBar(
-      Widget icon,
-      String routeName,
-      ) {
+    Widget icon,
+    String routeName,
+  ) {
     return InkWell(
       onTap: () => context.push(routeName),
       child: Container(
@@ -285,60 +253,59 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
     );
   }
 
-  BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-  _pickMeAndComeWithUWidget(subTab) {
+  BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>> _pickMeAndComeWithUWidget(subTab) {
     return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
       builder: (context, state) {
         if (state.status == StateStatus.loading) {
           return Row(
             children: List.generate(
                 2,
-                    (index) => Expanded(
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.grey[100]!,
-                    highlightColor: Colors.white24,
-                    child: Container(
-                      width: 100.h,
-                      height: kToolbarHeight * 2.h,
-                      margin: const EdgeInsets.symmetric(horizontal: 5),
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                        color: AppColors.AUTH_CONTAINER_COLOR,
-                        borderRadius: BorderRadius.circular(20.r),
-                        border: Border.all(color: Colors.grey),
+                (index) => Expanded(
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey[100]!,
+                        highlightColor: Colors.white24,
+                        child: Container(
+                          width: 100.h,
+                          height: kToolbarHeight * 2.h,
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          decoration: BoxDecoration(
+                            color: AppColors.AUTH_CONTAINER_COLOR,
+                            borderRadius: BorderRadius.circular(20.r),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                )),
+                    )),
           );
         } else if (state.status == StateStatus.success) {
           return Row(
             children: [
               subTab.subTab?.carpool == true
                   ? Expanded(
-                child: _buildRideSubCategoryItem(
-                  service: state.data![0].service,
-                  image: state.data![0].image,
-                ),
-              )
+                      child: _buildRideSubCategoryItem(
+                        service: state.data![0].service!,
+                        image: state.data![0].image!,
+                      ),
+                    )
                   : const SizedBox.shrink(),
-              Sizer(),
+              const Sizer(),
               subTab.subTab?.tripJoin == true
                   ? Expanded(
-                child: _buildRideSubCategoryItem(
-                  service: state.data![1].service,
-                  image: state.data![1].image,
-                  route: Routes.AVAILABLE_TRIPS,
-                ),
-              )
+                      child: _buildRideSubCategoryItem(
+                        service: state.data![1].service!,
+                        image: state.data![1].image!,
+                        route: Routes.AVAILABLE_TRIPS,
+                      ),
+                    )
                   : const SizedBox.shrink(),
             ],
           );
         } else {
           return Container(
             padding:
-            //EdgeInsets.all
-            const EdgeInsets.symmetric(horizontal: 10),
+                //EdgeInsets.all
+                const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               LocaleKeys.noRideSubcategories.localize,
               style: TextStyle(fontSize: 32.sp.w, fontWeight: FontWeight.w500),
@@ -353,20 +320,19 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
     return Row(
       children: [
         subTab.subTab?.auction == true
-            ? itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
-                () => context.push(Routes.MAZADAT), Icons.group)
+            ? itemAuctionAndInstallmentWidget(
+                LocaleKeys.auction.localize, () => context.push(Routes.MAZADAT), Icons.group)
             : const SizedBox.shrink(),
         const Sizer(),
         subTab.subTab?.installment == true
-            ? itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize,
-                () => context.push(Routes.INSTALLMENT), Icons.list)
+            ? itemAuctionAndInstallmentWidget(
+                LocaleKeys.installments.localize, () => context.push(Routes.INSTALLMENT), Icons.list)
             : const SizedBox.shrink(),
       ],
     );
   }
 
-  Widget itemAuctionAndInstallmentWidget(
-      String label, Function function, IconData icon) {
+  Widget itemAuctionAndInstallmentWidget(String label, Function function, IconData icon) {
     return Expanded(
       child: InkWell(
         onTap: () => context.go(Routes.MAZADAT),
@@ -454,8 +420,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                       url: image,
                     ),
                     Container(
-                      color: Colors.black
-                          .withOpacity(0.3), // Darken the background
+                      color: Colors.black.withOpacity(0.3), // Darken the background
                     ),
                   ],
                 ),

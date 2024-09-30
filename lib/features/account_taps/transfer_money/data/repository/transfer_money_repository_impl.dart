@@ -8,8 +8,7 @@ import '../../domain/entities/user_transfer_money_entity.dart';
 import '../../domain/repository/transfer_money_repository.dart';
 import '../data_source/transfer_money_remote_data_source.dart';
 
-
-class TransferMoneyRepositoryImpl extends TransferMoneyRepository{
+class TransferMoneyRepositoryImpl extends TransferMoneyRepository {
   final TransferMoneyRemoteDataSource _transferMoneyRemoteDataSource;
 
   TransferMoneyRepositoryImpl(this._transferMoneyRemoteDataSource);

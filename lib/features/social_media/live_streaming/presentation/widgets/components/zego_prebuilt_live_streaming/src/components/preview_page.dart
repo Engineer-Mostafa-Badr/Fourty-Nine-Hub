@@ -86,13 +86,11 @@ class ZegoLiveStreamingPreviewPage extends StatefulWidget {
   final bool isLiveStream;
 
   @override
-  State<ZegoLiveStreamingPreviewPage> createState() =>
-      _ZegoLiveStreamingPreviewPageState();
+  State<ZegoLiveStreamingPreviewPage> createState() => _ZegoLiveStreamingPreviewPageState();
 }
 
 /// @nodoc
-class _ZegoLiveStreamingPreviewPageState
-    extends State<ZegoLiveStreamingPreviewPage> {
+class _ZegoLiveStreamingPreviewPageState extends State<ZegoLiveStreamingPreviewPage> {
   @override
   void initState() {
     super.initState();
@@ -137,10 +135,8 @@ class _ZegoLiveStreamingPreviewPageState
                     foregroundBuilder: audioVideoViewForeground,
                     backgroundBuilder: audioVideoViewBackground,
                     avatarConfig: ZegoAvatarConfig(
-                      showInAudioMode:
-                          widget.config.audioVideoView.showAvatarInAudioMode,
-                      showSoundWavesInAudioMode: widget
-                          .config.audioVideoView.showSoundWavesInAudioMode,
+                      showInAudioMode: widget.config.audioVideoView.showAvatarInAudioMode,
+                      showSoundWavesInAudioMode: widget.config.audioVideoView.showSoundWavesInAudioMode,
                       builder: widget.config.avatarBuilder,
                     ),
                   ),
@@ -176,9 +172,7 @@ class _ZegoLiveStreamingPreviewPageState
               child: Row(
                 children: [
                   ImageFromInternet(
-                    image:
-                        context.read<UserCubit>().state.data?.profilePicture ??
-                            UIConst.profilePlaceHolder,
+                    image: context.read<UserCubit>().state.data?.profilePicture ?? UIConst.profilePlaceHolder,
                     height: 100.h,
                     width: 100.w,
                     borderRadius: BorderRadius.circular(15),
@@ -202,8 +196,7 @@ class _ZegoLiveStreamingPreviewPageState
                         textAlign: TextAlign.center,
                         // validator: validateInput,
                         maxLength: 50,
-                        style: Styles.mediumText(
-                            color: Colors.white, decorationThickness: 0),
+                        style: Styles.mediumText(color: Colors.white, decorationThickness: 0),
                         maxLines: null,
                         // onChanged: onTextChanged,
                         decoration: const InputDecoration(
@@ -211,8 +204,7 @@ class _ZegoLiveStreamingPreviewPageState
 
                           // errorText: _errorMessage,
                           counterText: '',
-                          labelStyle:
-                              TextStyle(color: AppColors.QUANTITY_COLOR),
+                          labelStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
                           // hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
 
                           border: OutlineInputBorder(
@@ -272,9 +264,7 @@ class _ZegoLiveStreamingPreviewPageState
                               print(state.topicId);
                               print(state.topic);
                               return Text(
-                                state.topic.isEmpty
-                                    ? LocaleKeys.addTopic.localize
-                                    : state.topic,
+                                state.topic.isEmpty ? LocaleKeys.addTopic.localize : state.topic,
                                 style: const TextStyle(
                                   color: Colors.white,
                                 ),
@@ -294,11 +284,8 @@ class _ZegoLiveStreamingPreviewPageState
                       //     receiverId: '', forSelect: true);
                       Navigator.of(context).push(createCustomTransitionRoute(
                         MultiBlocProvider(providers: [
-                          BlocProvider.value(
-                              value: serviceLocator<StreamCubit>()),
-                          BlocProvider(
-                              create: (context) =>
-                                  serviceLocator<GiftsCubit>()..fetchGifts()),
+                          BlocProvider.value(value: serviceLocator<StreamCubit>()),
+                          BlocProvider(create: (context) => serviceLocator<GiftsCubit>()..fetchGifts()),
                         ], child: const SelectLiveGoalsScreen()),
                         TransitionType.bottomToTop,
                       ));
@@ -334,16 +321,14 @@ class _ZegoLiveStreamingPreviewPageState
         ));
   }
 
-  Future<dynamic> _showTopicSheet(
-      BuildContext context, List<TopicEntity> topics) {
+  Future<dynamic> _showTopicSheet(BuildContext context, List<TopicEntity> topics) {
     return showModalBottomSheet(
       context: context,
       builder: (context) => Padding(
         padding: const EdgeInsets.all(16.0),
         child: BlocProvider.value(
           value: serviceLocator<StreamCubit>(),
-          child:
-              BlocBuilder<StreamCubit, StreamState>(builder: (context, state) {
+          child: BlocBuilder<StreamCubit, StreamState>(builder: (context, state) {
             return Column(mainAxisSize: MainAxisSize.min, children: [
               Label(
                 text: LocaleKeys.selectATopic.localize,
@@ -358,8 +343,7 @@ class _ZegoLiveStreamingPreviewPageState
                   groupValue: state.topic.isEmpty ? null : state.topic,
                   onChanged: (value) {
                     context.read<StreamCubit>().setTopic(topic.name, topic.id);
-                    Future.delayed(
-                        const Duration(milliseconds: 100), () => context.pop());
+                    Future.delayed(const Duration(milliseconds: 100), () => context.pop());
                     // print('new topic is ${state.topic}');
                   },
                 );
@@ -388,15 +372,13 @@ class _ZegoLiveStreamingPreviewPageState
           },
           child: Label(
             text: LocaleKeys.cancel.localize,
-            style: Styles.headerText(
-                fontSize: 25, color: AppColors.SECONDARY_COLOR),
+            style: Styles.headerText(fontSize: 25, color: AppColors.SECONDARY_COLOR),
           ),
         ),
         title: Label(
           text: LocaleKeys.startAMeeting.localize,
           style: Styles.headerText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+              color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
               fontSize: 35,
               fontWeight: FontWeight.bold),
         ),
@@ -460,8 +442,7 @@ class _ZegoLiveStreamingPreviewPageState
         height: height,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: ZegoLiveStreamingImage.assetImage(
-                ZegoLiveStreamingIconUrls.background),
+            image: ZegoLiveStreamingImage.assetImage(ZegoLiveStreamingIconUrls.background),
             fit: BoxFit.cover,
           ),
         ),
@@ -601,8 +582,7 @@ class _ZegoLiveStreamingPreviewPageState
     final buttonSize = Size(88.zR, 88.zR);
     final iconSize = Size(56.zR, 56.zR);
 
-    final beautyButtonPlaceHolder =
-        SizedBox(width: buttonSize.width, height: buttonSize.height);
+    final beautyButtonPlaceHolder = SizedBox(width: buttonSize.width, height: buttonSize.height);
 
     return Positioned(
       bottom: 50,
@@ -675,7 +655,7 @@ class _ZegoLiveStreamingPreviewPageState
             return;
           }
           if (title != null && title.isNotEmpty) {
-           await context.read<StreamCubit>().createLive(title: title);
+            await context.read<StreamCubit>().createLive(title: title);
             widget.startedNotifier.value = true;
           } else {
             showErrorMessage(context, 'Please enter simple title');
@@ -685,8 +665,7 @@ class _ZegoLiveStreamingPreviewPageState
       );
     }
 
-    return widget.config.preview.startLiveButtonBuilder?.call(context,
-            () async {
+    return widget.config.preview.startLiveButtonBuilder?.call(context, () async {
           defaultAction.call(_titleController.text.trim());
         }) ??
         GestureDetector(
@@ -747,10 +726,7 @@ class _ZegoLiveStreamingPreviewPageState
     final isSmallView = (screenSize.width - size.width).abs() > 1;
     return Stack(
       children: [
-        Container(
-            color: isSmallView
-                ? const Color(0xff333437)
-                : const Color(0xff4A4B4D)),
+        Container(color: isSmallView ? const Color(0xff333437) : const Color(0xff4A4B4D)),
         widget.config.audioVideoView.backgroundBuilder?.call(
               context,
               size,
@@ -783,14 +759,12 @@ class _ZegoLiveStreamingPreviewPageState
             mainAxisSize: MainAxisSize.min,
             children: [
               ValueListenableBuilder<bool>(
-                  valueListenable: ZegoUIKit()
-                      .getCameraStateNotifier(ZegoUIKit().getLocalUser().id),
+                  valueListenable: ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id),
                   builder: (context, videoOn, child) {
                     return SwitchListTile(
                       title: Label(
                         text: LocaleKeys.videoOn.localize,
-                        style: Styles.headerText(
-                            fontSize: 25, fontWeight: FontWeight.bold),
+                        style: Styles.headerText(fontSize: 25, fontWeight: FontWeight.bold),
                       ),
                       value: videoOn,
                       onChanged: (v) {
@@ -816,15 +790,11 @@ class _ZegoLiveStreamingPreviewPageState
                       text: "${LocaleKeys.usePersonalMeetingId.localize} (PMI)",
                       // maxLines: 3,
                       // overflow: TextOverflow.ellipsis,
-                      style: Styles.headerText(
-                          fontSize: 25, fontWeight: FontWeight.bold),
+                      style: Styles.headerText(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                     subtitle: Label(
                       text: widget.liveID,
-                      style: Styles.headerText(
-                          color: Colors.grey,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
+                      style: Styles.headerText(color: Colors.grey, fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                     value: value,
                     onChanged: (v) {
@@ -901,8 +871,7 @@ class _ZegoLiveStreamingPreviewPageState
       );
     }
 
-    return widget.config.preview.startLiveButtonBuilder?.call(context,
-            () async {
+    return widget.config.preview.startLiveButtonBuilder?.call(context, () async {
           defaultAction.call();
         }) ??
         GestureDetector(
@@ -944,8 +913,7 @@ class _ZegoLiveStreamingPreviewPageState
       ZegoUIKit().turnCameraOn(false);
     }
 
-    ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id).value =
-        !v;
+    ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id).value = !v;
   }
 }
 

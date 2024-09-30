@@ -30,30 +30,35 @@ class TripJoinCardModel extends TripJoinCardEntity {
   DateTime? createdAt;
   DateTime? updatedAt;
   String? allowStatus;
+  String? paymentMethods;
+  @override
+  bool? subscribedPremium;
 
-  TripJoinCardModel({
-    this.id,
-    this.userId,
-    this.categoryId,
-    this.vehicleId,
-    this.fromAr,
-    this.toAr,
-    this.fromEn,
-    this.toEn,
-    this.distance,
-    this.duration,
-    this.passengers,
-    this.price,
-    this.phone,
-    this.time,
-    this.countryCode,
-    this.isApproved,
-    this.isRepeat,
-    this.createdAt,
-    this.updatedAt,
-    this.status,
-    this.allowStatus,
-  }) : super(
+  TripJoinCardModel(
+      {this.id,
+      this.userId,
+      this.categoryId,
+      this.vehicleId,
+      this.fromAr,
+      this.toAr,
+      this.fromEn,
+      this.toEn,
+      this.distance,
+      this.duration,
+      this.passengers,
+      this.price,
+      this.phone,
+      this.time,
+      this.countryCode,
+      this.isApproved,
+      this.isRepeat,
+      this.createdAt,
+      this.updatedAt,
+      this.status,
+      this.allowStatus,
+      this.paymentMethods,
+      this.subscribedPremium})
+      : super(
           id: id,
           userId: userId,
           categoryId: categoryId,
@@ -69,11 +74,13 @@ class TripJoinCardModel extends TripJoinCardEntity {
           destinationAddressEn: toEn,
           isApproved: allowStatus == 'enable',
           publishDate: time,
+          paymentMethod: paymentMethods,
+          subscribedPremium: subscribedPremium,
         );
 
   @override
   String toString() {
-    return 'TripJoinCardModel(id: $id, userId: $userId, categoryId: $categoryId, vehicleId: $vehicleId, fromAr: $fromAr, toAr: $toAr, fromEn: $fromEn, toEn: $toEn, distance: $distance, duration: $duration, passengers: $passengers, price: $price, phone: $phone, time: $time, countryCode: $countryCode, isApproved: $isApproved, isRepeat: $isRepeat, createdAt: $createdAt, updatedAt: $updatedAt , status: $status, allowStatus: $allowStatus)';
+    return 'TripJoinCardModel(id: $id, userId: $userId, categoryId: $categoryId, vehicleId: $vehicleId, fromAr: $fromAr, toAr: $toAr, fromEn: $fromEn, toEn: $toEn, distance: $distance, duration: $duration, passengers: $passengers, price: $price, phone: $phone, time: $time, countryCode: $countryCode, isApproved: $isApproved, isRepeat: $isRepeat, createdAt: $createdAt, updatedAt: $updatedAt , status: $status, allowStatus: $allowStatus , paymentMethod: $paymentMethods , subscribedPremium : $subscribedPremium)';
   }
 
   factory TripJoinCardModel.fromJson(Map<String, dynamic> json) {
@@ -81,7 +88,9 @@ class TripJoinCardModel extends TripJoinCardEntity {
       id: json['_id'] as String?,
       userId: json['userId'] as String?,
       categoryId: json['categoryId'] as String?,
-      vehicleId: json['vehicleId'] == null ? null : VehicleId.fromJson(json['vehicleId'] as Map<String, dynamic>),
+      vehicleId: json['vehicleId'] == null
+          ? null
+          : VehicleId.fromJson(json['vehicleId'] as Map<String, dynamic>),
       fromAr: json['fromAr'] as String?,
       toAr: json['toAr'] as String?,
       fromEn: json['fromEn'] as String?,
@@ -96,9 +105,14 @@ class TripJoinCardModel extends TripJoinCardEntity {
       countryCode: json['countryCode'] as String?,
       isApproved: json['isApproved'] as bool?,
       isRepeat: json['isRepeat'] as bool?,
-      createdAt: json['createdAt'] == null ? null : DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null ? null : DateTime.parse(json['updatedAt'] as String),
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt'] as String),
       allowStatus: json['allowStatus'] as String?,
+      paymentMethods: json['paymentMethods'] as String?,
     );
   }
 
@@ -124,5 +138,6 @@ class TripJoinCardModel extends TripJoinCardEntity {
         'createdAt': createdAt?.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
         'allowStatus': allowStatus,
+        'paymentMethds': paymentMethods,
       };
 }

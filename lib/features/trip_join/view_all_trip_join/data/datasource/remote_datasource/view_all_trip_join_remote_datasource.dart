@@ -16,10 +16,10 @@ abstract class ViewAllTripJoinRemoteDataSource {
     required String subCategory,
     required PaginationParams paginationParams,
   });
-  Future<Either<Failure, bool>> requestTripJoin({
-    required String addId,
-    required String mobile,
-  });
+  Future<Either<Failure, bool>> requestTripJoin(
+      {required String addId,
+      required String mobile,
+      bool premuimRequest = false});
 }
 
 class ViewAllTripJoinRemoteDataSourceImp
@@ -52,24 +52,30 @@ class ViewAllTripJoinRemoteDataSourceImp
           // pr('No data found');
           return const Right([]);
         }
-        List<TripJoinCardEntity> allCards = rawData
-            .map<TripJoinCardEntity>((e) => TripJoinCardModel.fromJson(e))
-            .toList();
-        // pr(allCards[0]);
+        List<TripJoinCardEntity> allCards = rawData.map<TripJoinCardEntity>(
+          (e) {
+            final tripJoinCardModel = TripJoinCardModel.fromJson(e);
+            tripJoinCardModel.subscribedPremium =
+                data['data']['subscribedPremium'] as bool?;
+            return tripJoinCardModel;
+          },
+        ).toList();
+        // pr(allCards, 'trip join remote datasource');
         return Right(allCards);
       },
     );
   }
 
   @override
-  Future<Either<Failure, bool>> requestTripJoin({
-    required String addId,
-    required String mobile,
-  }) async {
+  Future<Either<Failure, bool>> requestTripJoin(
+      {required String addId,
+      required String mobile,
+      bool premuimRequest = false}) async {
     final response = await apiConsumer.post(
       EndPoints.makeTripJoinRequest(addId),
       data: {
         'phone': mobile,
+        'isPremium': premuimRequest,
       },
     );
 

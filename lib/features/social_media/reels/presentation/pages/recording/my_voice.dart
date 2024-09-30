@@ -1064,9 +1064,9 @@ class MyVoiceVideoRecordingScreenState
               padding: const EdgeInsets.symmetric(vertical: kToolbarHeight),
               child: Align(
 // Check the current text direction to determine alignment
-                alignment: context.isArabic
-                    ? Alignment.topLeft
-                    : Alignment.topRight,                child: FloatingActionButton.small(
+                alignment:
+                    context.isArabic ? Alignment.topLeft : Alignment.topRight,
+                child: FloatingActionButton.small(
                   tooltip: LocaleKeys.controls_upload_reel.tr(),
                   shape: const CircleBorder(),
                   backgroundColor: Colors.white,
@@ -1247,7 +1247,7 @@ class MyVoiceVideoRecordingScreenState
                         ),
                       ),
                     )
-                  : Spacer(),
+                  : const Spacer(),
               Expanded(
                 child: GestureDetector(
                   onLongPress: () => _startRecording(),

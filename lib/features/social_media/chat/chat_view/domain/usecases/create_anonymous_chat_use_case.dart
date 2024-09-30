@@ -3,9 +3,8 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/repositories/chats_repository.dart';
 
-class CreateAnonymousChatUseCase extends UseCase<bool, CreateAnonymousChatParams> {
-
-
+class CreateAnonymousChatUseCase
+    extends UseCase<bool, CreateAnonymousChatParams> {
   final ChatsRepository _repo;
   CreateAnonymousChatUseCase(this._repo);
 

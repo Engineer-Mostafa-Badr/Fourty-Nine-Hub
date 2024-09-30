@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
-
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -25,23 +24,17 @@ class WalletWidget extends StatelessWidget {
   final Function(BuildContext context)? onGiftClicked;
 
   const WalletWidget(
-      {super.key,
-      this.margin,
-      this.details = false,
-      this.onBalanceClicked,
-      this.onGiftClicked,
-      this.onWalletClicked});
+      {super.key, this.margin, this.details = false, this.onBalanceClicked, this.onGiftClicked, this.onWalletClicked});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MainCategoriesCubit>(
-      create: (BuildContext context) =>serviceLocator()..getWallet(),
+      create: (BuildContext context) => serviceLocator()..getWallet(),
       child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
         builder: (BuildContext context, state) {
           return Container(
             height: 90.h,
-            margin:
-                EdgeInsets.symmetric(vertical: 10.h, horizontal: margin?.w ?? 5.w),
+            margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: margin?.w ?? 5.w),
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
@@ -62,12 +55,8 @@ class WalletWidget extends StatelessWidget {
                 ),
                 const Sizer(),
                 buildItem(() {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const BalanceWalletView()));
-                }, LocaleKeys.balance.tr(),
-                    '${state.wallet?.balance ?? ''}'),
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const BalanceWalletView()));
+                }, LocaleKeys.balance.tr(), '${state.wallet?.balance ?? ''}'),
                 Container(
                   width: 2.w,
                   margin: EdgeInsets.symmetric(horizontal: 5.w),
@@ -79,17 +68,14 @@ class WalletWidget extends StatelessWidget {
                   backgroundColor: AppColors.SECONDARY_COLOR,
                 ),
                 const Sizer(),
-            buildItem(
+                buildItem(
                   () {
-                //context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const GiftWalletView()));
-              },
-              LocaleKeys.gift.tr(),
-              '${state.wallet?.giftWallet ?? ''}',
-            ),
+                    //context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const GiftWalletView()));
+                  },
+                  LocaleKeys.gift.tr(),
+                  '${state.wallet?.giftWallet ?? ''}',
+                ),
                 Container(
                   width: 2.h,
                   margin: EdgeInsets.symmetric(horizontal: 5.w),
@@ -103,9 +89,7 @@ class WalletWidget extends StatelessWidget {
                 const Sizer(),
                 buildItem(() {
                   context.push(Routes.WALLET, extra: WalletTypes.mainWallet);
-                },
-                    LocaleKeys.wallet.tr(),
-                    '${state.wallet?.realAmount.floor() ?? ''}'),
+                }, LocaleKeys.wallet.tr(), '${state.wallet?.realAmount.floor() ?? ''}'),
               ],
             ),
           );
@@ -131,7 +115,8 @@ class WalletWidget extends StatelessWidget {
               child: Label(
                   text: amount,
                   style: Styles.mediumText(
-                      fontWeight: FontWeight.bold,)),
+                    fontWeight: FontWeight.bold,
+                  )),
             ),
           ],
         ),

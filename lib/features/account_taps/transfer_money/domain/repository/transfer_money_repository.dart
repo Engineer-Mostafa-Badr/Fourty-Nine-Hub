@@ -4,7 +4,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import '../entities/user_transfer_money_entity.dart';
 import '../use_case/transfer_money_use_case.dart';
 
-abstract class TransferMoneyRepository{
-  Future<Either<Failure,bool>> transferMoney(TransferMoneyParams params);
-  Future<Either<Failure,List<UserTransferMoneyEntity>>> fetchUser();
+abstract class TransferMoneyRepository {
+  Future<Either<Failure, bool>> transferMoney(TransferMoneyParams params);
+  Future<Either<Failure, List<UserTransferMoneyEntity>>> fetchUser();
 }

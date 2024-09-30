@@ -15,7 +15,7 @@ class MarkMessagesAsDeliveredUseCase
   }
 }
 
-class MarkMessagesAsDeliveredParams{
+class MarkMessagesAsDeliveredParams {
   String chatId;
 
   MarkMessagesAsDeliveredParams({required this.chatId});

@@ -8,7 +8,6 @@ import 'mix_voices.dart';
 import 'my_voice.dart';
 import 'other_voice.dart';
 
-
 import 'package:easy_localization/easy_localization.dart';
 
 class ReelsRecordingScreen extends StatefulWidget {
@@ -18,7 +17,11 @@ class ReelsRecordingScreen extends StatefulWidget {
   final String? advertisementType;
 
   const ReelsRecordingScreen(
-      {super.key, this.voiceUrl, this.comeFromCompany, this.totalPrice, this.advertisementType});
+      {super.key,
+      this.voiceUrl,
+      this.comeFromCompany,
+      this.totalPrice,
+      this.advertisementType});
 
   @override
   ReelsRecordingScreenState createState() => ReelsRecordingScreenState();
@@ -103,7 +106,7 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
                   style: TextStyle(
                     // color: isSelected? Colors.black:Colors.black,
                     fontSize: isSelected ? 35.sp : 30.sp,
-                    fontWeight:FontWeight.bold,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),

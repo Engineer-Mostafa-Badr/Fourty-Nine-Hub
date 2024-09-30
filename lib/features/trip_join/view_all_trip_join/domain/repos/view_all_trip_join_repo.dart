@@ -11,5 +11,6 @@ abstract class ViewAllTripJoinRepo {
   Future<Either<Failure, bool>> requestTripJoin({
     required String addId,
     required String mobile,
+    bool premuimRequest = false,
   });
 }

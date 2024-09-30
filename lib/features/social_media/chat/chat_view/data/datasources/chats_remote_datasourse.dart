@@ -189,7 +189,6 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
       //   ChatModel messageModel = ChatModel.fromJson(data);
       //   onNewChat(messageModel);
       // });
-
     } catch (e) {
       CliLogger.info("can't read new chat error $e");
     }

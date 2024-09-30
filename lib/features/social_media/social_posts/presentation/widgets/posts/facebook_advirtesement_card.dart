@@ -21,9 +21,8 @@ class FacebookAdvertisementCard extends StatelessWidget {
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          border: Border.all(
-              color:
-              AppColors.DIVIDER_GRAY_COLOR), borderRadius: BorderRadius.circular(5)),
+          border: Border.all(color: AppColors.DIVIDER_GRAY_COLOR),
+          borderRadius: BorderRadius.circular(5)),
       child: Column(
         children: [
           SizedBox(

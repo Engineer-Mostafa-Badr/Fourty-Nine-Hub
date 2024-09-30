@@ -7,15 +7,7 @@ import '../../../social_media/live_streaming/domain/entity/live_create_response_
 import '../../../social_media/live_streaming/domain/entity/live_entity.dart';
 import '../../../social_media/tinder/data/models/gift_model.dart';
 
-enum StreamsStates {
-  initial,
-  loading,
-  success,
-  gotscheduledMeeting,
-  failure,
-  openWhiteBoard,
-  changeTopic
-}
+enum StreamsStates { initial, loading, success, gotscheduledMeeting, failure, openWhiteBoard, changeTopic }
 
 extension MeetingStateX on StreamState {
   bool get isInitial => status == StreamsStates.initial;

@@ -89,7 +89,7 @@ class _SearchViewState extends State<SearchView>
       ),
       body: TabBarView(
         controller: _tabController,
-        children:  const [
+        children: const [
           ProfileSearchView(),
           ReelSearchView(),
           PostsSearchView(),
