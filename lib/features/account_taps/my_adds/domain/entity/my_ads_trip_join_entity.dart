@@ -2,7 +2,7 @@ import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/docs_t
 
 class MyAdsTripJoinEntity {
   final bool subscribedPremium;
-  final String subscriptionEndDate;
+  final dynamic subscriptionEndDate;
   final List<DocsTripJoinEntity> docs;
 
   MyAdsTripJoinEntity(

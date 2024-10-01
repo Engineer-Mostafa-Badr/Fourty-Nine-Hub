@@ -22,7 +22,13 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets
 
 class AdCard extends StatefulWidget {
   final AdEntity item;
-  const AdCard({super.key, required this.item, required this.onFav, required this.onRemoveFav});
+
+  const AdCard(
+      {super.key,
+      required this.item,
+      required this.onFav,
+      required this.onRemoveFav});
+
   final Function(String) onFav;
   final Function(String) onRemoveFav;
 
@@ -33,8 +39,9 @@ class AdCard extends StatefulWidget {
 class _AdCardState extends State<AdCard> {
   @override
   Widget build(BuildContext context) {
-    List<CreateAdEntity> details =
-        widget.item.details.where((e) => e.value.nameAr != 'السعر' && e.value.nameAr != 'المرتب').toList();
+    List<CreateAdEntity> details = widget.item.details
+        .where((e) => e.value.nameAr != 'السعر' && e.value.nameAr != 'المرتب')
+        .toList();
     return InkWell(
       child: Container(
         width: kToolbarHeight * 2.5,
@@ -127,71 +134,87 @@ class _AdCardState extends State<AdCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InkWell(
-                    onTap: () => context.push(Routes.ADdetails, extra: widget.item.id),
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                    onTap: () =>
+                        context.push(Routes.ADdetails, extra: widget.item.id),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Label(
-                              text:
-                                  '${NumbersHelper.formatThousands(number: widget.item.price ?? 0)} ${LocaleKeys.currency.localize}',
-                              style: Styles.mediumText(fontWeight: FontWeight.bold, color: AppColors.SECONDARY_COLOR),
-                              maxLines: 1,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Expanded(
+                                child: Label(
+                                  text:
+                                      '${NumbersHelper.formatThousands(number: widget.item.price ?? 0)} ${LocaleKeys.currency.localize}',
+                                  style: Styles.mediumText(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.SECONDARY_COLOR),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      Sizer(
-                        height: 4.h,
-                      ),
-                      Row(
-                        children: [
+                          Sizer(
+                            height: 4.h,
+                          ),
+                          Row(
+                            children: [
+                              Label(
+                                  text: '${LocaleKeys.title.localize} : ',
+                                  style: Styles.mediumText(
+                                      color: AppColors.SECONDARY_COLOR)),
+                              Label(
+                                text: widget.item.title,
+                                style: Styles.mediumText(
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey),
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Label(
+                                  text: '${LocaleKeys.desc.localize} : ',
+                                  style: Styles.mediumText(
+                                      color: AppColors.SECONDARY_COLOR)),
+                              Expanded(
+                                child: Label(
+                                  text: widget.item.description,
+                                  style: Styles.mediumText(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.grey),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                          RichText(
+                              text: TextSpan(
+                                  children: details.map((e) {
+                            return WidgetSpan(
+                                child: Row(
+                              children: [
+                                Label(
+                                    text:
+                                        '${getLang() == 'ar' ? e.value.nameAr : e.value.nameEn} : ',
+                                    style: Styles.mediumText(
+                                        color: AppColors.SECONDARY_COLOR)),
+                                Label(
+                                    text: getLang() == 'ar'
+                                        ? e.value.nameAr
+                                        : e.value.nameEn,
+                                    style: Styles.mediumText(
+                                        color: AppColors.PRIMARY_COLOR)),
+                              ],
+                            ));
+                          }).toList())),
                           Label(
-                              text: '${LocaleKeys.title.localize} : ',
-                              style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
-                          Label(
-                            text: widget.item.title,
-                            style: Styles.mediumText(fontWeight: FontWeight.w500, color: Colors.grey),
+                            text: widget.item.formattedRestTime,
+                            style: Styles.mediumText(color: Colors.grey),
                             maxLines: 1,
                           ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Label(
-                              text: '${LocaleKeys.desc.localize} : ',
-                              style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
-                          Expanded(
-                            child: Label(
-                              text: widget.item.description,
-                              style: Styles.mediumText(fontWeight: FontWeight.w500, color: Colors.grey),
-                              maxLines: 1,
-                            ),
-                          ),
-                        ],
-                      ),
-                      RichText(
-                          text: TextSpan(
-                              children: details.map((e) {
-                        return WidgetSpan(
-                            child: Row(
-                          children: [
-                            Label(
-                                text: '${getLang() == 'ar' ? e.value.nameAr : e.value.nameEn} : ',
-                                style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
-                            Label(
-                                text: getLang() == 'ar' ? e.value.nameAr : e.value.nameEn,
-                                style: Styles.mediumText(color: AppColors.PRIMARY_COLOR)),
-                          ],
-                        ));
-                      }).toList())),
-                      Label(
-                        text: widget.item.formattedRestTime,
-                        style: Styles.mediumText(color: Colors.grey),
-                        maxLines: 1,
-                      ),
-                    ]),
+                        ]),
                   ),
                   const Divider(),
                   const Sizer(),
@@ -220,7 +243,8 @@ class _AdCardState extends State<AdCard> {
                   const Sizer(),
                   FutureBuilder(
                       future: ButtonAvailability().isShowButton(
-                          otherUserId: widget.item.user?.id ?? '', subcategoryId: widget.item.subCategoryId ?? ''),
+                          otherUserId: widget.item.user?.id ?? '',
+                          subcategoryId: widget.item.subCategoryId ?? ''),
                       builder: (context, snap) {
                         return Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -229,7 +253,9 @@ class _AdCardState extends State<AdCard> {
                               flex: 3,
                               child: AvaialbleTripsButton(
                                 title: 'Call',
-                                color: snap.data == true ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                                color: snap.data == true
+                                    ? AppColors.SECONDARY_COLOR
+                                    : AppColors.DARK_GRAY_COLOR,
                                 icon: Icons.call,
                                 onTap: snap.data == true ? () {} : () {},
                               ),
@@ -239,7 +265,9 @@ class _AdCardState extends State<AdCard> {
                               flex: 3,
                               child: AvaialbleTripsButton(
                                 title: 'Message',
-                                color: snap.data == true ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                                color: snap.data == true
+                                    ? AppColors.SECONDARY_COLOR
+                                    : AppColors.DARK_GRAY_COLOR,
                                 icon: Icons.email,
                                 onTap: snap.data == true ? () {} : () {},
                               ),

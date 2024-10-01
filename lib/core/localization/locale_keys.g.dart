@@ -524,7 +524,6 @@ abstract class  LocaleKeys {
   static const sendRequest = 'sendRequest';
   static const enterPhoneNumber = 'enterPhoneNumber';
   static const enterValidPhoneNumber = 'enterValidPhoneNumber';
-  static const seat = 'seat';
   static const welcomeToTripjoin = 'welcomeToTripjoin';
   static const ownCar = 'ownCar';
   static const startingPoint = 'startingPoint';
@@ -538,7 +537,6 @@ abstract class  LocaleKeys {
   static const youCantLeaveFieldEmpty = 'youCantLeaveFieldEmpty';
   static const addressMustBeAtLeast10Chars = 'addressMustBeAtLeast10Chars';
   static const searchFind = 'searchFind';
-  static const seeAll = 'seeAll';
   static const markAllNotificationAsSeen = 'markAllNotificationAsSeen';
   static const requestLog = 'requestLog';
   static const requestsHistory = 'requestsHistory';
@@ -726,6 +724,11 @@ abstract class  LocaleKeys {
   static const deleteAd = 'deleteAd';
   static const rent = 'rent';
   static const sale = 'sale';
+  static const seat = 'seat';
+  static const repeated = 'repeated';
+  static const subscription = 'subscription';
+  static const tripJoinAds = 'tripJoinAds';
+  static const adSoldout = 'adSoldout';
   static const viewAll = 'viewAll';
   static const addACaption = 'addACaption';
   static const and = 'and';
@@ -734,6 +737,7 @@ abstract class  LocaleKeys {
   static const add = 'add';
   static const noDocs = 'noDocs';
   static const noLinks = 'noLinks';
+  static const seeAll = 'seeAll';
   static const broadcasts = 'broadcasts';
   static const myBroadcasts = 'myBroadcasts';
   static const channelInfo = 'channelInfo';

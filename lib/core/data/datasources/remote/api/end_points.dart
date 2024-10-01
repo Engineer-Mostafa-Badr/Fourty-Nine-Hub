@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
+import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_counts_usecase.dart';
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
 
 class EndPoints {
@@ -106,9 +107,16 @@ class EndPoints {
   static const favouriteCat = '/navigators/navigateCategories';
 
   //My Ads
-  static const myAdsAuction = '/ads/allMyAds/auction';
-  static const myAdsInstallment = '/ads/allMyAds/installment';
-  static const myAdsTripJoin = '/ride/come-with-you/my?subCategory=62ea00e269ea29c91dfc390c';
+  static const myAdsAuction='/ads/allMyAds/auction';
+  static const myAdsInstallment='/ads/allMyAds/installment';
+  static const myAdsOther='/ads/allMyAds/other';
+  static const myAdsTripJoin='/ride/come-with-you/my?subCategory=62ea00e269ea29c91dfc390c';
+  static String deleteMyTripJoin({required String id}) =>
+      '/ride/come-with-you/Delete/$id';
+  static String deleteMyInstallment({required String id}) =>
+      '/ads/deleteAd/$id';
+  static String getAllCount(Params params) =>
+      '/ride/come-with-you/callAndChat/${params.id}?status=${params.status}';
 
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';
