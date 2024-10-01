@@ -15,7 +15,6 @@ abstract class BackgroundService {
     }
   }
 
-
   static Future<void> reStartWebSocketService(String? token) async {
     try {
       await _platform.invokeMethod('updateWebSocketToken', {'token': token});

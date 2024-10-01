@@ -65,7 +65,8 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> markMessageAsDelivered(MarkMessagesAsDeliveredParams params) {
+  Future<Either<Failure, bool>> markMessageAsDelivered(
+      MarkMessagesAsDeliveredParams params) {
     return _chatRemoteDataSource.markMessageAsDelivered(params);
   }
 }

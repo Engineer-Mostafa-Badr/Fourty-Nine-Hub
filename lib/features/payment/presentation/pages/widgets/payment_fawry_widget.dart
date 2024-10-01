@@ -317,7 +317,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                       cvv: card.cvv.toString());
                 }
               },
-              child:  Text(
+              child: Text(
                 "Pay Now",
                 style: Styles.mediumText(color: AppColors.AUTH_CONTAINER_COLOR),
               ),
@@ -338,7 +338,7 @@ class _FawryPaymentState extends State<FawryPayment> {
             CreditCardWidget(
               cardBgColor: Colors.black,
               cardNumber: _cardNumberController.text,
-           //  textStyle: Styles.mediumText(fontSize: 30.sp,color: Theme.of(context).scaffoldBackgroundColor),
+              //  textStyle: Styles.mediumText(fontSize: 30.sp,color: Theme.of(context).scaffoldBackgroundColor),
               chipColor: Theme.of(context).scaffoldBackgroundColor,
               expiryDate:
                   '${_expiryMonthController.text}/${_expiryYearController.text}',
@@ -411,7 +411,6 @@ class _FawryPaymentState extends State<FawryPayment> {
             Row(
               children: [
                 Expanded(
-
                   child: TextFormField(
                     cursorColor: AppColors.PRIMARY_COLOR,
                     style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),

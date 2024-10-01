@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -76,10 +77,7 @@ class DrawerWidget extends StatelessWidget {
                         icon: Icons.maps_home_work_rounded,
                         label: LocaleKeys.customPage.localize,
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const CustomPage()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const CustomPage()));
                         }),
                     drawerListTile(
                         // icon: Icons.star_rounded,
@@ -96,8 +94,7 @@ class DrawerWidget extends StatelessWidget {
                         image: Assets.favorite_sub_category_icon,
                         label: LocaleKeys.favouriteSubCategories.localize,
                         requireLogin: true,
-                        onTap: () =>
-                            context.push(Routes.FAVOURITESUBCATEGORIES)),
+                        onTap: () => context.push(Routes.FAVOURITESUBCATEGORIES)),
                     drawerListTile(
                         // icon: FontAwesomeIcons.adn,
                         image: Assets.favorite_ad_icon,
@@ -157,8 +154,7 @@ class DrawerWidget extends StatelessWidget {
                         label: LocaleKeys.logout.localize,
                         onTap: () {
                           bottomSheet(
-                              backColor:
-                                  Theme.of(context).scaffoldBackgroundColor,
+                              backColor: Theme.of(context).scaffoldBackgroundColor,
                               context: context,
                               widget: const LogoutWidget());
                         }),
@@ -190,9 +186,7 @@ class DrawerWidget extends StatelessWidget {
                   icon: Icons.person,
                   onPressed: () => context.push(Routes.LOGIN),
                 ),
-                Label(
-                    text: LocaleKeys.login.localize,
-                    style: Styles.mediumText()),
+                Label(text: LocaleKeys.login.localize, style: Styles.mediumText()),
               ],
             ),
           ),
@@ -205,9 +199,7 @@ class DrawerWidget extends StatelessWidget {
                     isCircle: true,
                     icon: Icons.person_add,
                     onPressed: () => context.push(Routes.REGISTER)),
-                Label(
-                    text: LocaleKeys.register.localize,
-                    style: Styles.mediumText()),
+                Label(text: LocaleKeys.register.localize, style: Styles.mediumText()),
               ],
             ),
           ),
@@ -229,24 +221,19 @@ class DrawerWidget extends StatelessWidget {
         ),
         BlocProvider(
           create: (BuildContext context) =>
-              CompetitionCubit(serviceLocator.get<CompetitionRepoImpl>())
-                ..fetchCompetition(context),
+              CompetitionCubit(serviceLocator.get<CompetitionRepoImpl>())..fetchCompetition(context),
           child: BlocBuilder<CompetitionCubit, CompetitionState>(
             builder: (BuildContext context, state) {
               if (state is CompetitionSuccessState) {
                 int calculateSumOfRequests() {
                   // Create a list of indices, excluding 0, 9, and 10
-                  List<int> indicesToSum = List.generate(
-                          state.competitionModel.data?.length ?? 0,
-                          (index) => index)
+                  List<int> indicesToSum = List.generate(state.competitionModel.data?.length ?? 0, (index) => index)
                       .where((index) => index != 0 && index != 9 && index != 10)
                       .toList();
 
                   // Use fold to sum the values, handling null values with ?? 0
                   return indicesToSum.fold(0, (sum, index) {
-                    return sum +
-                        (state.competitionModel.data?[index].countOfRequest ??
-                            0);
+                    return sum + (state.competitionModel.data?[index].countOfRequest ?? 0);
                   });
                 }
 
@@ -256,56 +243,44 @@ class DrawerWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   // Align items at the start
                   children: [
-                    state.competitionModel.data![10].competitionId?.nameEn !=
-                            null
+                    state.competitionModel.data![10].competitionId?.nameEn != null
                         ? counterItem(
                             icon: Icons.ads_click,
                             label: LocaleKeys.specialAds.localize,
-                            value:
-                                '${state.competitionModel.data![10].countOfRequest}',
+                            value: '${state.competitionModel.data![10].countOfRequest}',
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SpecialAdsView()),
+                                MaterialPageRoute(builder: (context) => const SpecialAdsView()),
                               );
                             },
                             context: context,
                           )
                         : const SizedBox.shrink(),
-                    state.competitionModel.data![0].competitionId?.nameEn !=
-                            null
+                    state.competitionModel.data![0].competitionId?.nameEn != null
                         ? counterItem(
                             icon: Icons.person_add,
                             label: LocaleKeys.friends.localize,
-                            value:
-                                '${state.competitionModel.data![0].countOfRequest}',
+                            value: '${state.competitionModel.data![0].countOfRequest}',
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SpecialAdsView()),
+                                MaterialPageRoute(builder: (context) => const SpecialAdsView()),
                               );
                             },
                             context: context,
                           )
                         : const SizedBox.shrink(),
-                    state.competitionModel.data![9].competitionId?.nameEn !=
-                            null
+                    state.competitionModel.data![9].competitionId?.nameEn != null
                         ? counterItem(
                             icon: FontAwesomeIcons.car,
                             label: LocaleKeys.ride.localize,
-                            value:
-                                '${state.competitionModel.data![9].countOfRequest}',
+                            value: '${state.competitionModel.data![9].countOfRequest}',
                             context: context,
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SpecialAdsView()),
+                                MaterialPageRoute(builder: (context) => const SpecialAdsView()),
                               );
                             },
                           )
@@ -318,9 +293,7 @@ class DrawerWidget extends StatelessWidget {
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SpecialAdsView()),
+                                MaterialPageRoute(builder: (context) => const SpecialAdsView()),
                               );
                             },
                             context: context,
@@ -421,7 +394,7 @@ class DrawerWidget extends StatelessWidget {
             : Icon(
                 icon,
                 size: 45.w,
-          color: AppColors.PRIMARY_COLOR,
+                color: AppColors.PRIMARY_COLOR,
               ),
         title: Label(
             text: label,
@@ -429,9 +402,7 @@ class DrawerWidget extends StatelessWidget {
               fontWeight: FontWeight.w500,
             )),
         subtitle: (description != null)
-            ? Label(
-                text: description,
-                style: Styles.mediumText(fontWeight: FontWeight.w300))
+            ? Label(text: description, style: Styles.mediumText(fontWeight: FontWeight.w300))
             : null,
         trailing: Icon(
           Icons.arrow_forward_ios,
@@ -450,9 +421,7 @@ class DrawerWidget extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(20.w),
         margin: EdgeInsets.all(10.w),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.r),
-            color: AppColors.LIGHT_GRAY_COLOR),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.r), color: AppColors.LIGHT_GRAY_COLOR),
         child: Row(
           children: [
             Expanded(
@@ -461,14 +430,10 @@ class DrawerWidget extends StatelessWidget {
                 children: [
                   Label(
                       text: LocaleKeys.luckyWheel.localize,
-                      style: Styles.mediumText(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.QUANTITY_COLOR)),
+                      style: Styles.mediumText(fontWeight: FontWeight.bold, color: AppColors.QUANTITY_COLOR)),
                   Label(
                       text: LocaleKeys.feelLucky.localize,
-                      style: Styles.mediumText(
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.QUANTITY_COLOR)),
+                      style: Styles.mediumText(fontWeight: FontWeight.w400, color: AppColors.QUANTITY_COLOR)),
                 ],
               ),
             ),
@@ -577,8 +542,7 @@ class DrawerWidget extends StatelessWidget {
                       }
                       return ImageFromInternet(
                         isCircle: true,
-                        image:
-                            user?.profilePicture ?? UIConst.profilePlaceHolder,
+                        image: user?.profilePicture ?? UIConst.profilePlaceHolder,
                       );
                     },
                   ),
@@ -595,9 +559,7 @@ class DrawerWidget extends StatelessWidget {
                               title: const Text('Gallery'),
                               onTap: () async {
                                 Navigator.pop(context);
-                                await context
-                                    .read<UserCubit>()
-                                    .uploadPhoto(isGallery: true);
+                                await context.read<UserCubit>().uploadPhoto(isGallery: true);
                                 // Reload user data if needed
                               },
                             ),
@@ -606,9 +568,7 @@ class DrawerWidget extends StatelessWidget {
                               title: const Text('Camera'),
                               onTap: () async {
                                 Navigator.pop(context);
-                                await context
-                                    .read<UserCubit>()
-                                    .uploadPhoto(isGallery: false);
+                                await context.read<UserCubit>().uploadPhoto(isGallery: false);
                                 // Reload user data if needed
                               },
                             ),
@@ -678,8 +638,7 @@ class DrawerWidget extends StatelessWidget {
                     Expanded(
                       child: Label(
                         text: '${user?.wallet ?? 0}',
-                        style: Styles.mediumText(
-                            decoration: TextDecoration.underline),
+                        style: Styles.mediumText(decoration: TextDecoration.underline),
                       ),
                     )
                   ],

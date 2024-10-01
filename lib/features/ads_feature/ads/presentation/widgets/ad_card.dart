@@ -126,6 +126,78 @@ class _AdCardState extends State<AdCard> {
                   ),
                 ],
               ),
+              child: Stack(
+                alignment: AlignmentDirectional.topStart,
+                children: [
+                  SizedBox(
+                    height: kToolbarHeight * 4,
+                    width: double.infinity,
+                    child: Swiper(
+                      itemCount: widget.item.images.length > 4 ? 4 : widget.item.images.length,
+                      onIndexChanged: (i) {},
+                      outer: false,
+                      loop: false,
+                      physics: widget.item.images.length > 1 ? null : const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) => Padding(
+                        padding: EdgeInsets.only(bottom: 5.h),
+                        child: Stack(
+                          children: [
+                            ImageFromInternet(
+                              width: double.infinity,
+                              image: widget.item.images[index],
+                              defaultLogo: true,
+                              fit: BoxFit.fill,
+                              borderRadius:
+                                  BorderRadius.only(topLeft: Radius.circular(5.r), topRight: Radius.circular(5.r)),
+                            ),
+                            if (index == 3)
+                              Positioned.fill(
+                                  child: InkWell(
+                                onTap: () => context.push(Routes.ADdetails, extra: widget.item.id),
+                                child: Container(
+                                  color: Colors.black.withOpacity(0.8),
+                                  alignment: AlignmentDirectional.center,
+                                  child: Label(
+                                    text: 'See More',
+                                    style: Styles.headerText(color: Colors.white, decoration: TextDecoration.underline),
+                                  ),
+                                ),
+                              ))
+                          ],
+                        ),
+                      ),
+                      pagination: SwiperPagination(builder: SwiperCustomPagination(builder: (context, config) {
+                        return const DotSwiperPaginationBuilder(
+                                color: AppColors.GREY_DARK_COLOR,
+                                activeColor: AppColors.SECONDARY_COLOR,
+                                size: 10.0,
+                                activeSize: 10.0)
+                            .build(context, config);
+                      })),
+                    ),
+                  ),
+                  PositionedDirectional(
+                    start: 10.w,
+                    child: IconAppButton(
+                        size: 18,
+                        icon: widget.item.isFavourite == false ? Icons.favorite_border : Icons.favorite,
+                        color: AppColors.SECONDARY_COLOR,
+                        onPressed: () async {
+                          if (widget.item.isFavourite == false) {
+                            var result = await widget.onFav(widget.item.id);
+                            if (result == true) {
+                              widget.item.isFavourite = !widget.item.isFavourite!;
+                            }
+                          } else {
+                            var result = await widget.onRemoveFav(widget.item.id);
+                            if (result == true) {
+                              widget.item.isFavourite = !widget.item.isFavourite!;
+                            }
+                          }
+                        }),
+                  ),
+                ],
+              ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 15.w),
@@ -215,7 +287,7 @@ class _AdCardState extends State<AdCard> {
                           ),
                         ]),
                   ),
-                  Divider(),
+                  const Divider(),
                   const Sizer(),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -301,14 +373,14 @@ class _AdCardState extends State<AdCard> {
     );
   }
 
-  // Widget _buildTag() {
-  //   // super premium
-  //   return const Icon(
-  //     Icons.workspace_premium_outlined,
-  //     size: 20,
-  //     color: AppColors.SECONDARY_COLOR,
-  //   );
-  //   // premium
-  //   // regular
-  // }
+  Widget _buildTag() {
+    // super premium
+    return const Icon(
+      Icons.workspace_premium_outlined,
+      size: 20,
+      color: AppColors.SECONDARY_COLOR,
+    );
+    // premium
+    // regular
+  }
 }

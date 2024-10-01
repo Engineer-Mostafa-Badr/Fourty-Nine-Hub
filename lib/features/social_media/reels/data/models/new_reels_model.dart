@@ -119,7 +119,7 @@ class User {
   final bool isRider;
   final bool isDoctor;
   final bool isRestaurant;
-   bool isFollowed;
+  bool isFollowed;
   final bool areFriends;
   final bool isSentRequest;
 

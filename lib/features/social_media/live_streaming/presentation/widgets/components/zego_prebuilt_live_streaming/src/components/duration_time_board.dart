@@ -91,10 +91,9 @@ class _ZegoLiveStreamingDurationTimeBoardState
         return elapsedTime.inSeconds <= 0
             ? Container()
             : Label(
-                text:durationFormatString(elapsedTime),
+                text: durationFormatString(elapsedTime),
                 textAlign: TextAlign.center,
-                style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)
-              );
+                style: Styles.mediumText(color: AppColors.SECONDARY_COLOR));
       },
     );
   }

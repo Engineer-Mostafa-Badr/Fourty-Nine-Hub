@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_items.dart';
@@ -10,7 +8,8 @@ class ReelsScreenForAudio extends StatefulWidget {
   final List<Reel> reels;
   final int navigateTo;
 
-  const ReelsScreenForAudio({super.key, required this.reels, required this.navigateTo});
+  const ReelsScreenForAudio(
+      {super.key, required this.reels, required this.navigateTo});
 
   @override
   ReelsScreenForAudioState createState() => ReelsScreenForAudioState();

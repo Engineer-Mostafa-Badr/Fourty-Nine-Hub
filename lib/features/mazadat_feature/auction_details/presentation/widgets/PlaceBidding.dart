@@ -79,15 +79,14 @@ class _PlaceBiddingState extends State<PlaceBidding> {
                       text: Labels.yourbid,
                       style: Styles.headerText(color: AppColors.PRIMARY_COLOR)),
                   Label(
-                      text:
-                          NumbersHelper.formatThousands(number: bidding),
+                      text: NumbersHelper.formatThousands(number: bidding),
                       style: Styles.headerText(
                           fontSize: 30.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.PRIMARY_COLOR)),
                   Label(
-                      text:
-                          NumbersHelper.formatThousands(number: widget.auction.currentPrice),
+                      text: NumbersHelper.formatThousands(
+                          number: widget.auction.currentPrice),
                       style: Styles.mediumText()),
                 ],
               )),

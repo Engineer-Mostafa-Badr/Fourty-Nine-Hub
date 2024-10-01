@@ -1,7 +1,9 @@
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_media_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_shared_contacts_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/reply_message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_sender_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_shared_contacts_entity.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 
 class MessageModel extends MessageEntity {
@@ -21,7 +23,9 @@ class MessageModel extends MessageEntity {
       required super.delivered,
       required super.hasReply,
       required super.isDeleted,
-      required super.time});
+      required super.time,
+      required super.sharedContacts
+      });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
     return MessageModel(
@@ -57,6 +61,13 @@ class MessageModel extends MessageEntity {
       isDeleted: json['isDeleted'] ?? false,
       chatId: json['chatId'],
       groupId: json['groupId'],
+      sharedContacts:  json['sharedContacts'] != null
+          ? (json['sharedContacts'] as List)
+          .whereType<
+          Map<String, dynamic>>() // Only keep items that are maps
+          .map((e) => MessageSharedContactsModel.fromJson(e))
+          .toList()
+          : [],
     );
   }
 }

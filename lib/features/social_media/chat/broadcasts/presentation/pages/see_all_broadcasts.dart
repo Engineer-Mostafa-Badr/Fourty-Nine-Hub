@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/widgets/follow_broadcast_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -61,7 +63,7 @@ class SeeAllBroadcasts extends StatelessWidget {
         elevation: 0,
         leadingWidth: 26,
         title: Text(
-          'Broadcasts',
+          LocaleKeys.broadcasts.tr(),
           style: Styles.headerText(color: Colors.white),
         ),
         leading: IconButton(

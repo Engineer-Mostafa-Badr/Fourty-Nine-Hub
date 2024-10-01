@@ -9,7 +9,7 @@ class TransferMoneyUseCase extends UseCase<bool, TransferMoneyParams> {
   TransferMoneyUseCase(this._transferMoneyRepository);
 
   @override
-  Future<Either<Failure, bool>> call(TransferMoneyParams params)async {
+  Future<Either<Failure, bool>> call(TransferMoneyParams params) async {
     return await _transferMoneyRepository.transferMoney(params);
   }
 }
@@ -18,14 +18,12 @@ class TransferMoneyParams {
   final String receiverUsername;
   final int amount;
 
-  TransferMoneyParams(
-      {required this.receiverUsername,
-      required this.amount});
+  TransferMoneyParams({required this.receiverUsername, required this.amount});
 
-  Map<String,dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     return {
-      "receiverUsername":receiverUsername,
-      "amount":amount,
+      "receiverUsername": receiverUsername,
+      "amount": amount,
     };
   }
 }

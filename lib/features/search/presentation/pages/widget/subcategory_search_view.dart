@@ -16,14 +16,11 @@ class SubCategorySearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.symmetric(
-        vertical: 20.h
-      ),
+      padding: EdgeInsets.symmetric(vertical: 20.h),
       child: GridView.builder(
         itemCount: 10,
-      //      controller: controller.scrollController,
-        gridDelegate:
-        const SliverGridDelegateWithFixedCrossAxisCount(
+        //      controller: controller.scrollController,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, childAspectRatio: 1),
         itemBuilder: (context, index) {
           return buildItem(context);
@@ -42,89 +39,90 @@ class SubCategorySearchView extends StatelessWidget {
     );
   }
 
-  Widget buildItem(context)=>InkWell(
-    onTap: () {},
-    child: Container(
-      margin: EdgeInsets.all(10.w),
-      decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(5.r),
-          boxShadow: const [
-            BoxShadow(
-                color: Colors.grey,
-                spreadRadius: 1,
-                offset: Offset(-1, 1),
-                blurRadius: 5)
-          ]),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                const Positioned.fill(
-                  child: SquareImage(
-                    fit: BoxFit.cover,
-                    radius: 5,
-                    url: 'https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg',
-                  ),
-                ),
-                Positioned(
-                    top: 10.h,
-                    right: 10.w,
-                    child: IconAppButton(
-                      icon: Icons.favorite_outline,
-                      onPressed: () async {
-                        // var result = await widget.onFav();
-                        // if (result == true) {
-                        //   widget.item.isFavorite = !widget.item.isFavorite!;
-                        //   setState(() {});
-                        // }
-                      },
-                      color: AppColors.SECONDARY_COLOR,
-                    ))
-              ],
-            ),
-          ),
-          Sizer(),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0.w),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Label(
-                        text: 'Craft',
-                        style: Styles.mediumText(fontWeight: FontWeight.bold),
+  Widget buildItem(context) => InkWell(
+        onTap: () {},
+        child: Container(
+          margin: EdgeInsets.all(10.w),
+          decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: BorderRadius.circular(5.r),
+              boxShadow: const [
+                BoxShadow(
+                    color: Colors.grey,
+                    spreadRadius: 1,
+                    offset: Offset(-1, 1),
+                    blurRadius: 5)
+              ]),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Stack(
+                  children: [
+                    const Positioned.fill(
+                      child: SquareImage(
+                        fit: BoxFit.cover,
+                        radius: 5,
+                        url:
+                            'https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg',
                       ),
-                      Label(
-                        text:
-                        '0 ${LocaleKeys.ads.localize}',
-                        style: Styles.smallText(fontSize: 25),
-                      )
-                    ],
-                  ),
+                    ),
+                    Positioned(
+                        top: 10.h,
+                        right: 10.w,
+                        child: IconAppButton(
+                          icon: Icons.favorite_outline,
+                          onPressed: () async {
+                            // var result = await widget.onFav();
+                            // if (result == true) {
+                            //   widget.item.isFavorite = !widget.item.isFavorite!;
+                            //   setState(() {});
+                            // }
+                          },
+                          color: AppColors.SECONDARY_COLOR,
+                        ))
+                  ],
                 ),
-                IconAppButton(
-                    icon: Icons.add_box_rounded,
-                    size: 40.h,
-                    onPressed: () {
-                      // if (AuthHelper().isLoggedIn()) {
-                      //   context.push(Routes.CREATEAD,
-                      //       extra: CategorizationEntity(
-                      //           mainCategory: widget.mainCategory,
-                      //           subCategory: widget.item));
-                      // } else {
-                      //   context.push(Routes.LOGIN);
-                      // }
-                    })
-              ],
-            ),
+              ),
+              Sizer(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Label(
+                            text: 'Craft',
+                            style:
+                                Styles.mediumText(fontWeight: FontWeight.bold),
+                          ),
+                          Label(
+                            text: '0 ${LocaleKeys.ads.localize}',
+                            style: Styles.smallText(fontSize: 25),
+                          )
+                        ],
+                      ),
+                    ),
+                    IconAppButton(
+                        icon: Icons.add_box_rounded,
+                        size: 40.h,
+                        onPressed: () {
+                          // if (AuthHelper().isLoggedIn()) {
+                          //   context.push(Routes.CREATEAD,
+                          //       extra: CategorizationEntity(
+                          //           mainCategory: widget.mainCategory,
+                          //           subCategory: widget.item));
+                          // } else {
+                          //   context.push(Routes.LOGIN);
+                          // }
+                        })
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
 }

@@ -1,10 +1,12 @@
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_sender_entity.dart';
 
+import 'message_media_entity.dart';
+
 class ReplyMessageEntity {
   String id;
   String text;
   MessageSenderEntity sender;
-  List<String> media;
+  List<MessageMediaEntity> media;
 
   ReplyMessageEntity(
       {required this.sender,
