@@ -103,41 +103,6 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
     log("removed: ${state.selectedMeals?.length}");
   }
 
-  String? token;
-
-  Future<void> _ensureTokenInitialized() async {
-    token ??= await TokenManager.getAccessToken();
-  }
-
-  // Future<void> fetchCart() async {
-  //   await _ensureTokenInitialized();
-  //   emit(state.copyWith(status: RestaurantDetailsStates.loading));
-  //
-  //   final url = Uri.parse('https://49dev.com/api/v1/food/getCart');
-  //
-  //   try {
-  //     final response = await http.get(
-  //       url,
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //       },
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       final cartData = jsonDecode(response.body);
-  //       final cart = Cart.fromJson(cartData);
-  //       log("${cart.subTotal}------------------------------------");
-  //       emit(state.copyWith(
-  //           cart: cart, status: RestaurantDetailsStates.initState));
-  //     } else {
-  //       emit(state.copyWith(status: RestaurantDetailsStates.error));
-  //
-  //       log('Failed to load cart: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     log('error: $e');
-  //   }
-  // }
   Future<void> fetchCart() async {
     emit(state.copyWith(status: RestaurantDetailsStates.loading, cart: null));
 
@@ -374,6 +339,34 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
         // );
 
         emit(state.copyWith(status: RestaurantDetailsStates.initState));
+      },
+    );
+  }
+
+  Future<void> addRestaurantToFavorites(context, String restaurantId) async {
+    emit(state.copyWith(status: RestaurantDetailsStates.loading));
+
+    // Construct the full URL with the restaurantId
+    final url =
+        'https://49dev.com/api/v1/food/favorite-restaurant/$restaurantId';
+
+    final response = await apiConsumer.post(url);
+
+    response.fold(
+      (failure) {
+        // Handle the failure case
+        emit(state.copyWith(
+          status: RestaurantDetailsStates.error,
+          failure: failure,
+        ));
+      },
+      (data) {
+        // Handle the success case
+        emit(state.copyWith(
+          status: RestaurantDetailsStates.initState,
+          // message: data['message'] ?? 'Restaurant added to favorites',
+        ));
+        // showSuccessMessage(context, data['message'] ?? 'Restaurant added to favorites');
       },
     );
   }

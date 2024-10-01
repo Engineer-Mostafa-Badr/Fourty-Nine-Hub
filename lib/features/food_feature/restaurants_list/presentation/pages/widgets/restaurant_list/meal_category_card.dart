@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../../../common/theme/cubit/cubit.dart';
 import '../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../res/style/app_colors.dart';
+import '../../../cubit/restaurants_list_cubit.dart';
 
 class MealCategoryCard extends StatelessWidget {
   final FoodCategoryEntity? subCategory;
@@ -68,7 +69,7 @@ class MealCategoryCard extends StatelessWidget {
                               : AppColors.PRIMARY_COLOR_DARK,
                           onPressed: () {
                             context
-                                .read<RestaurantsMealListCubit>()
+                                .read<RestaurantsCubit>()
                                 .toggleFavoriteSubcategory(
                                     subCategory?.id ?? "");
                           }),

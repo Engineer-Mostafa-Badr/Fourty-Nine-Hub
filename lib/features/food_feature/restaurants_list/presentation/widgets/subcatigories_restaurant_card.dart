@@ -8,7 +8,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_meal_list_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
@@ -23,6 +25,7 @@ import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../../../../trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
+import '../../../restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../../domain/entities/restaurant_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -190,12 +193,20 @@ class _PropertyCardState extends State<PropertyCard> {
                       child: IconButton(
                         padding: EdgeInsets.zero,
                         icon: Icon(
-                          widget.item.subcategoryId!.isFavorite ?? false
+                          widget.item.isFavorite!
                               ? Icons.favorite
                               : Icons.favorite_border,
                           color: AppColors.SECONDARY_COLOR,
                         ),
-                        onPressed: () {
+                        onPressed: () async {
+                          log("${widget.item.isFavorite!}ascacsacac");
+                          await serviceLocator<RestaurantDetailsCubit>()
+                              .addRestaurantToFavorites(
+                                  context, widget.item.id!);
+                          await context.read<RestaurantsCubit>().loadData();
+
+                          log("${widget.item.isFavorite!}ascacsacac");
+
                           // setState(() {
                           //   context
                           //       .read<RestaurantsListCubit>()
@@ -387,7 +398,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
         children: [
           _buildButton(
             label: 'Premium Request',
-            color: Colors.red,
+            color: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () async {
               serviceLocator<SubscriptionController>().checkIfUserSubscribed(
                 showRegular: false,
@@ -411,7 +422,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
           const SizedBox(width: 4),
           _buildButton(
             label: 'Request',
-            color: Colors.black,
+            color: AppColors.PRIMARY_COLOR,
             onPressed: () {
               context.push(Routes.RESTAURANTDETAILS, extra: item.id);
             },
@@ -468,29 +479,48 @@ class CallMessageReportButtons extends StatelessWidget {
           _buildElevatedButtonWithIcon(
             label: 'Call',
             icon: Icons.call,
-            onPressed: () async {
-              // if (await _userApproved(
-              //   tripJoinCardEntity,
-              //   UIConst.chatNormalId,
-              //   'Chat Subscription',
-              // )) {
-              //   launchUrlString("tel://${tripJoinCardEntity.phone}");
-              // }
-            },
-            color: Colors.grey,
+            onPressed: item.enableOrDisableChat != 'disable'
+                ? () async {
+                    log('enable--------------');
+                    launchUrlString("tel://01121081958");
+
+                    // if (await _userApproved(
+                    //   tripJoinCardEntity,
+                    //   UIConst.chatNormalId,
+                    //   'Chat Subscription',
+                    // )) {
+                    //   launchUrlString("tel://${tripJoinCardEntity.phone}");
+                    // }
+                  }
+                : () {},
+            color: AppColors.GREY_DARK_COLOR,
           ),
           const SizedBox(width: 4),
           _buildElevatedButtonWithIcon(
             label: 'Message',
             icon: Icons.message,
-            onPressed: () {},
-            color: Colors.grey,
+            onPressed: item.enableOrDisableChat != 'disable'
+                ? () async {
+                    log('enable--------------');
+
+                    //   launchUrlString("tel://${tripJoinCardEntity.phone}");
+
+                    // if (await _userApproved(
+                    //   tripJoinCardEntity,
+                    //   UIConst.chatNormalId,
+                    //   'Chat Subscription',
+                    // )) {
+                    //   launchUrlString("tel://${tripJoinCardEntity.phone}");
+                    // }
+                  }
+                : () {},
+            color: AppColors.GREY_DARK_COLOR,
           ),
           const SizedBox(width: 4),
           _buildElevatedButtonWithIcon(
             label: 'Report',
             icon: Icons.report,
-            color: Colors.red,
+            color: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () {
               bottomSheet(
                 context: context,

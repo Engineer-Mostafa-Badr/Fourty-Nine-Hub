@@ -10,7 +10,7 @@ class ResturantDashboardButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
+    return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
       builder: (context, state) {
         if (state.isResturant == true) {
           return const DashboardBanner(

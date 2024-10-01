@@ -999,10 +999,10 @@ class AppPages {
               name: Routes.FOOD,
               builder: (context, state) => MultiBlocProvider(
                     providers: [
-                      BlocProvider<RestaurantsListCubit>(
+                      BlocProvider<RestaurantsCubit>(
                         create: (context) => serviceLocator()..loadData(),
                       ),
-                      BlocProvider<RestaurantsMealListCubit>(
+                      BlocProvider<RestaurantsCubit>(
                         create: (context) => serviceLocator(),
                       ),
                     ],

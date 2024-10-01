@@ -81,39 +81,39 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
             ),
             PositionedDirectional(
               start: 0,
-              child: Row(
+              child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   context.read<UserCubit>().isLoggedIn
                       ? IconButton(
-                        color: AppColors.SECONDARY_COLOR,
-                        onPressed: () async {
-                          final result = await widget.onFavorite();
-                          print("resutlt=${result}");
-                          if (result == true) {
-                            print(result);
-                            setState(() {
-                              widget.category.isFavorite =
-                              !widget.category.isFavorite!;
-                              print(widget.category.isFavorite);
-                              widget.isFavorite = result;
-                              print("===================$result");
-                            });
-                          }
-                        },
-                        icon: Icon(widget.category.isFavorite == true
-                            ? Icons.favorite
-                            : Icons.favorite_border),
-                      )
+                          color: AppColors.SECONDARY_COLOR,
+                          onPressed: () async {
+                            final result = await widget.onFavorite();
+                            print("resutlt=${result}");
+                            if (result == true) {
+                              print(result);
+                              setState(() {
+                                widget.category.isFavorite =
+                                    !widget.category.isFavorite!;
+                                print(widget.category.isFavorite);
+                                widget.isFavorite = result;
+                                print("===================$result");
+                              });
+                            }
+                          },
+                          icon: Icon(widget.category.isFavorite == true
+                              ? Icons.favorite
+                              : Icons.favorite_border),
+                        )
                       : const SizedBox.shrink(),
-                  Label(
-                    text:
-                        '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
-                    style: Styles.mediumText(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  )
+                  // Label(
+                  //   text:
+                  //       '${widget.category.total.toShortScale} ${LocaleKeys.ads.localize}',
+                  //   style: Styles.mediumText(
+                  //     fontWeight: FontWeight.bold,
+                  //     color: Colors.white,
+                  //   ),
+                  // )
                 ],
               ),
             ),
