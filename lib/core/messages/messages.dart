@@ -25,15 +25,15 @@ void showErrorMessage(BuildContext context, String message) {
         children: [
           Expanded(
             child: Text(
-              message,                textScaleFactor: 1.0,
-
+              message,
+              textScaleFactor: 1.0,
               style: const TextStyle(
                 fontWeight: FontWeight.w500,
                 color: Colors.black,
               ),
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           const Icon(
             Icons.error,
             color: Colors.red,
@@ -46,7 +46,7 @@ void showErrorMessage(BuildContext context, String message) {
         vertical: 20.h,
         horizontal: 20,
       ),
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         bottom: 25,
         right: 20,
         left: 20,
@@ -64,6 +64,7 @@ showSuccessMessage(
   WidgetsBinding.instance.addPostFrameCallback(
     (_) => ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        duration: const Duration(seconds: 6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -72,15 +73,15 @@ showSuccessMessage(
           children: [
             Expanded(
               child: Text(
-                message,                textScaleFactor: 1.0,
-
+                message,
+                textScaleFactor: 1.0,
                 style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   color: AppColors.QUANTITY_COLOR,
                 ),
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Icon(
               icon,
               color: color,
@@ -93,7 +94,7 @@ showSuccessMessage(
           vertical: 20.h,
           horizontal: 20,
         ),
-        margin: EdgeInsets.only(
+        margin: const EdgeInsets.only(
           bottom: 25,
           right: 20,
           left: 20,
@@ -116,7 +117,7 @@ void showSuccessDialog(BuildContext context, String text) => showDialog(
           ),
           textAlign: TextAlign.center,
         ),
-        contentPadding: EdgeInsets.only(
+        contentPadding: const EdgeInsets.only(
           right: 20,
           left: 20,
           top: 20,
@@ -139,7 +140,7 @@ Future<void> showPermissionDialog({required String message}) async =>
           ),
           textAlign: TextAlign.center,
         ),
-        contentPadding: EdgeInsets.only(
+        contentPadding: const EdgeInsets.only(
           right: 20,
           left: 20,
           top: 20,
@@ -184,7 +185,7 @@ void showLoadingDialog(BuildContext context,
               ),
             ],
           ),
-          contentPadding: EdgeInsets.only(
+          contentPadding: const EdgeInsets.only(
             right: 20,
             left: 20,
             top: 20,
@@ -217,7 +218,7 @@ void showConfirmDialog(
         ),
         textAlign: TextAlign.center,
       ),
-      contentPadding: EdgeInsets.only(
+      contentPadding: const EdgeInsets.only(
         right: 20,
         left: 20,
         top: 20,
@@ -235,7 +236,7 @@ void showConfirmDialog(
                 },
               ),
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Expanded(
               child: ElevatedAppButton(
                 label: confirmText ?? 'Delete',

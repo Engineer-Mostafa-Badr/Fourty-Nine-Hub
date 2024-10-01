@@ -6,9 +6,9 @@ import 'package:flutter/cupertino.dart';
 
 class ZegoInputBoardWrapper extends StatefulWidget {
   const ZegoInputBoardWrapper({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   final Widget child;
 
@@ -17,7 +17,7 @@ class ZegoInputBoardWrapper extends StatefulWidget {
 }
 
 class _ZegoInputBoardWrapperState extends State<ZegoInputBoardWrapper> {
-  final padding = MediaQueryData.fromWindow(ui.window).padding;
+  final padding = MediaQueryData.fromView(ui.window).padding;
 
   @override
   Widget build(BuildContext context) {

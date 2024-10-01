@@ -13,7 +13,6 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
   const BookDoctorAppointmentPatientInfoCard({super.key});
@@ -38,10 +37,10 @@ class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
                 style: Styles.mediumText(),
               ),
             ),
-            Sizer(),
+            const Sizer(),
             Text(Labels.gender, style: Styles.headerText()),
             const _GenderSelector(),
-            Sizer(),
+            const Sizer(),
             Form(
               key: controller.formKey,
               child: Column(
@@ -52,13 +51,13 @@ class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
                     onInputChanged: (value) {},
                     nextFocusNode: null,
                   ),
-                  Sizer(),
+                  const Sizer(),
                   DefaultTextFormField(
                       currentFocusNode: controller.ageFocusNode,
                       currentController: controller.ageController,
                       keyboardType: TextInputType.number,
                       hint: Labels.age),
-                  Sizer(),
+                  const Sizer(),
                   DefaultTextFormField(
                       currentFocusNode: controller.notesFocusNode,
                       currentController: controller.notesController,

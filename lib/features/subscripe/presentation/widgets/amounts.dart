@@ -31,15 +31,15 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
     return Column(
       children: [
         Text(
-          "You don't have in money in ${widget.walletType.translatedName}",
-          style: Styles.headerText(),
+          "Insufficient Amount",
+          style: Styles.headerText(color: Colors.red, fontSize: 40),
         ),
-        Sizer(),
+        const Sizer(),
         Text(
           "select amount to charge",
           style: Styles.mediumText(),
         ),
-        Sizer(),
+        const Sizer(),
         Expanded(
           child: ListView.builder(
             shrinkWrap: true,
@@ -53,7 +53,7 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                     onChanged: (value) {
                       setState(() {
                         groupValue = value!;
-                        print("${widget.amounts[index].id}");
+                        print(widget.amounts[index].id);
                         newIndex = widget.amounts[index].id;
                         newAmount = widget.amounts[index].amount;
                         print("${widget.amounts[index].amount}");
@@ -68,7 +68,7 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
             },
           ),
         ),
-        Sizer(),
+        const Sizer(),
         ElevatedAppButton(
           label: 'Charge Now',
           onPressed: () {

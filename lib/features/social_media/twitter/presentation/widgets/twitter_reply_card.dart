@@ -60,7 +60,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                     imageURL: widget.reply.user.image,
                     userId: '',
                   ),
-            Sizer(),
+            const Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +92,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
             ),
           ],
         ),
-        Sizer(),
+        const Sizer(),
         Label(
           textAlign: TextAlign.start,
           text: widget.reply.content ?? '',
@@ -111,12 +111,12 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                 style: Styles.headerText(fontSize: 26),
                 decoration: InputDecoration(
                   fillColor: Colors.white,
-                  contentPadding: EdgeInsets.all(5),
+                  contentPadding: const EdgeInsets.all(5),
                   hintText: '${LocaleKeys.typeYourReply.localize} ....',
                   hintStyle: Styles.mediumText(),
                 ),
               )),
-              Sizer(),
+              const Sizer(),
               if (editTextController.text.isNotEmpty)
                 IconAppButton(
                     icon: Icons.send,
@@ -134,7 +134,9 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                     })
             ],
           ),
-        Sizer(height: 5.h,),
+        Sizer(
+          height: 5.h,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -165,7 +167,9 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
             ),
           ],
         ),
-        Sizer(height: 5.h,),
+        Sizer(
+          height: 5.h,
+        ),
       ],
     );
   }
@@ -196,8 +200,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
             listTile(
                 icon: Icons.delete,
                 title: LocaleKeys.deleteReply.localize,
-                subTitle:
-                LocaleKeys.youWillDeleteReply.localize,
+                subTitle: LocaleKeys.youWillDeleteReply.localize,
                 onTap: () {
                   widget.onDeleteReply(widget.reply.id);
                 }),
@@ -208,7 +211,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                 subTitle: LocaleKeys.youWillEditReply.localize,
                 onTap: () {
                   widget.reply.edit = !widget.reply.edit!;
-                  editTextController.text = widget.reply.content??'';
+                  editTextController.text = widget.reply.content ?? '';
                   setState(() {});
                 }),
         ],
@@ -218,10 +221,10 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
 
   Widget listTile(
       {required IconData icon,
-        Color? iconColor,
-        required String title,
-        required String subTitle,
-        required Function onTap}) {
+      Color? iconColor,
+      required String title,
+      required String subTitle,
+      required Function onTap}) {
     return ListTile(
       title: Label(text: title),
       onTap: () {

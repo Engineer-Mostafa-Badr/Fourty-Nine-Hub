@@ -87,7 +87,7 @@ class BuildItemTextPost extends StatelessWidget {
 
   Widget buildItem(context) {
     return Container(
-      constraints:  BoxConstraints(minHeight: 120.h),
+      constraints: BoxConstraints(minHeight: 120.h),
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 15.w),
       decoration: BoxDecoration(
@@ -97,7 +97,7 @@ class BuildItemTextPost extends StatelessWidget {
       child: Text(
         advertises.post!,
         style: Styles.mediumText(
-         // fontSize: 34.sp,
+          // fontSize: 34.sp,
           color: Theme.of(context).scaffoldBackgroundColor,
         ),
       ),

@@ -20,7 +20,8 @@ abstract class ChatsRepository {
 
   Future<Either<Failure, bool>> createNormalChat(CreateNormalChatParams params);
 
-  Future<Either<Failure, bool>> createAnonymousChat(CreateAnonymousChatParams params);
+  Future<Either<Failure, bool>> createAnonymousChat(
+      CreateAnonymousChatParams params);
 
   void listenToNewChats(Function(ChatEntity) onNewChat);
   void stopListenToNewChats();

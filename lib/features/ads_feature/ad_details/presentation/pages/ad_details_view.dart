@@ -46,8 +46,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
   Widget build(BuildContext context) {
     return Scaffold(
         // appBar: const BackAppBar(),
-        body: BlocConsumer<AdDetailsCubit, AdDetailsState>(
-            listener: (contex, state) {
+        body: BlocConsumer<AdDetailsCubit, AdDetailsState>(listener: (contex, state) {
       if (state.isError) {
         showErrorMessage(
           context,
@@ -65,9 +64,8 @@ class _AdDetailsViewState extends State<AdDetailsView> {
           child: CircularProgressIndicator.adaptive(),
         );
       }
-      List<AdDetailsPropEntity>? details = state.ad?.details
-          .where((e) => e.nameAr != 'الراتب' && e.nameAr != 'السعر')
-          .toList();
+      List<AdDetailsPropEntity>? details =
+          state.ad?.details.where((e) => e.nameAr != 'الراتب' && e.nameAr != 'السعر').toList();
 
       return Column(
         children: [
@@ -90,8 +88,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
   }
 
   Widget _buildRelevantAdsWidget() {
-    return BlocBuilder<AdDetailsCubit, AdDetailsState>(
-        builder: (context, state) {
+    return BlocBuilder<AdDetailsCubit, AdDetailsState>(builder: (context, state) {
       if (state.relevantAds?.isEmpty ?? true) {
         return const SizedBox();
       }
@@ -120,8 +117,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
   }
 
   Widget _buildActionsWidget() {
-    return BlocBuilder<AdDetailsCubit, AdDetailsState>(
-        builder: (context, state) {
+    return BlocBuilder<AdDetailsCubit, AdDetailsState>(builder: (context, state) {
       final controller = context.read<AdDetailsCubit>();
       return Container(
         margin: const EdgeInsets.all(10),
@@ -152,9 +148,8 @@ class _AdDetailsViewState extends State<AdDetailsView> {
             ),
             const Sizer(),
             FutureBuilder(
-                future: ButtonAvailability().isShowButton(
-                    otherUserId: state.ad?.user?.id ?? '',
-                    subcategoryId: state.ad?.subCategoryId ?? ''),
+                future: ButtonAvailability()
+                    .isShowButton(otherUserId: state.ad?.user?.id ?? '', subcategoryId: state.ad?.subCategoryId ?? ''),
                 builder: (context, snap) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -163,9 +158,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         flex: 3,
                         child: AvaialbleTripsButton(
                           title: 'Call',
-                          color: snap.data == true
-                              ? AppColors.SECONDARY_COLOR
-                              : AppColors.DARK_GRAY_COLOR,
+                          color: snap.data == true ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
                           icon: Icons.call,
                           onTap: snap.data == true ? () {} : () {},
                         ),
@@ -175,9 +168,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         flex: 3,
                         child: AvaialbleTripsButton(
                           title: 'Message',
-                          color: snap.data == true
-                              ? AppColors.SECONDARY_COLOR
-                              : AppColors.DARK_GRAY_COLOR,
+                          color: snap.data == true ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
                           icon: Icons.email,
                           onTap: snap.data == true ? () {} : () {},
                         ),
@@ -213,9 +204,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                 itemCount: ad.images.length,
                 onIndexChanged: (i) {},
                 outer: false,
-                physics: ad.images.length > 1
-                    ? null
-                    : const NeverScrollableScrollPhysics(),
+                physics: ad.images.length > 1 ? null : const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) => Padding(
                   padding: EdgeInsets.only(bottom: 5.h),
                   child: ImageFromInternet(
@@ -223,8 +212,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                     defaultLogo: true,
                   ),
                 ),
-                pagination: SwiperPagination(
-                    builder: SwiperCustomPagination(builder: (context, config) {
+                pagination: SwiperPagination(builder: SwiperCustomPagination(builder: (context, config) {
                   return const DotSwiperPaginationBuilder(
                           color: AppColors.GREY_DARK_COLOR,
                           activeColor: AppColors.SECONDARY_COLOR,
@@ -258,11 +246,8 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Label(
-                    text:
-                        '${NumbersHelper.formatThousands(number: ad.price ?? 0)} ${LocaleKeys.currency.localize}',
-                    style: Styles.mediumText(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.SECONDARY_COLOR),
+                    text: NumbersHelper.formatThousands(number: ad.price ?? 0),
+                    style: Styles.mediumText(fontWeight: FontWeight.bold, color: AppColors.SECONDARY_COLOR),
                     maxLines: 1,
                   ),
                   Label(text: ad.formatedDate)
@@ -275,9 +260,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                 children: [
                   Label(
                     text: "${LocaleKeys.title.localize} : ",
-                    style: Styles.mediumText(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.SECONDARY_COLOR),
+                    style: Styles.mediumText(fontWeight: FontWeight.bold, color: AppColors.SECONDARY_COLOR),
                   ),
                   Label(
                     text: ad.title,
@@ -288,13 +271,15 @@ class _AdDetailsViewState extends State<AdDetailsView> {
               Sizer(
                 height: 5.h,
               ),
-              Label(
-                text: "${LocaleKeys.desc.localize} : ",
-                style: Styles.mediumText(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.SECONDARY_COLOR),
+              Row(
+                children: [
+                  Label(
+                    text: "${LocaleKeys.desc.localize} : ",
+                    style: Styles.mediumText(fontWeight: FontWeight.bold, color: AppColors.SECONDARY_COLOR),
+                  ),
+                  Label(text: ad.description),
+                ],
               ),
-              Label(text: ad.description),
             ],
           ),
         ),
@@ -303,9 +288,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
   }
 
   Widget _buildDetailsWidget({required AddDetailsModel ad}) {
-    List<AdDetailsPropEntity>? details = ad.details
-        .where((e) => e.nameAr != 'الراتب' && e.nameAr != 'السعر')
-        .toList();
+    List<AdDetailsPropEntity>? details = ad.details.where((e) => e.nameAr != 'الراتب' && e.nameAr != 'السعر').toList();
 
     // List<DetailEntiy> details = ad.details.where((e) => e.label!='المرتب'&&e.label!='Salary'&&e.label!='price'&&e.label!='Price '&&e.label!='السعر ').toList();
 
@@ -324,24 +307,14 @@ class _AdDetailsViewState extends State<AdDetailsView> {
               final detail = details[index];
               return Container(
                 padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
-                decoration: BoxDecoration(
-                    color: index.isEven
-                        ? AppColors.LIGHT_GRAY_COLOR
-                        : Colors.white),
+                decoration: BoxDecoration(color: index.isEven ? AppColors.LIGHT_GRAY_COLOR : Colors.white),
                 child: Row(
                   children: [
                     Expanded(
                         child: Label(
-                            text:
-                                "${getLang() == 'ar' ? detail.nameAr : detail.nameEn} : ",
-                            style: Styles.mediumText(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.SECONDARY_COLOR))),
-                    Expanded(
-                        child: Label(
-                            text: getLang() == 'ar'
-                                ? detail.valueAr
-                                : detail.valueEn)),
+                            text: "${getLang() == 'ar' ? detail.nameAr : detail.nameEn} : ",
+                            style: Styles.mediumText(fontWeight: FontWeight.bold, color: AppColors.SECONDARY_COLOR))),
+                    Expanded(child: Label(text: getLang() == 'ar' ? detail.valueAr : detail.valueEn)),
                   ],
                 ),
               );

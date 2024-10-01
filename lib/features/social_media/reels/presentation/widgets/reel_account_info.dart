@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_entity.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -28,14 +27,14 @@ class ReelAccountInfo extends StatelessWidget {
               accountId: 0,
               userId: '',
             ),
-            Sizer(),
+            const Sizer(),
             TextAppButton(
               label: item.user?.fullName ?? '',
               style: Styles.mediumText(
                   fontWeight: FontWeight.bold, color: Colors.white),
               onPressed: () => context.push(Routes.OTHERSACCOUNT),
             ),
-            Sizer(),
+            const Sizer(),
             AppButton(
               height: kToolbarHeight * .4,
               padding: 20,

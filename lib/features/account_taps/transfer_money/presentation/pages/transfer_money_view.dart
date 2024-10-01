@@ -38,7 +38,8 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
     return '${name[0].toUpperCase()}${name.substring(1).toLowerCase()}';
   }
 
-  bool isUsernameInFilteredUsers(String? username, List<UserTransferMoneyEntity>? filteredUsers) {
+  bool isUsernameInFilteredUsers(
+      String? username, List<UserTransferMoneyEntity>? filteredUsers) {
     if (username == null || filteredUsers == null) return false;
     return filteredUsers.any((user) => user.userName == username);
   }
@@ -87,7 +88,7 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                             FormTextField(
                               textStyle: Styles.mediumText(
                                 color:
-                                Theme.of(context).scaffoldBackgroundColor,
+                                    Theme.of(context).scaffoldBackgroundColor,
                               ),
                               constraints: BoxConstraints(
                                 maxHeight: 52.h,
@@ -98,7 +99,7 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                               style: TextStyle(
                                 fontSize: 30.sp,
                                 color:
-                                Theme.of(context).scaffoldBackgroundColor,
+                                    Theme.of(context).scaffoldBackgroundColor,
                               ),
                               controller: searchController,
                               hint: LocaleKeys.search.localize,
@@ -113,7 +114,7 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                             FormTextField(
                               textStyle: Styles.mediumText(
                                 color:
-                                Theme.of(context).scaffoldBackgroundColor,
+                                    Theme.of(context).scaffoldBackgroundColor,
                               ),
                               type: TextInputType.number,
                               constraints: BoxConstraints(
@@ -125,7 +126,7 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                               style: TextStyle(
                                 fontSize: 30.sp,
                                 color:
-                                Theme.of(context).scaffoldBackgroundColor,
+                                    Theme.of(context).scaffoldBackgroundColor,
                               ),
                               controller: amountController,
                               hint: LocaleKeys.amount.localize,
@@ -144,26 +145,25 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                                       !isUsernameInFilteredUsers(
                                           selectedUsername, filteredUsers)) {
                                     // If no user is selected or the user is not in the filtered list
-                                    showSuccessMessage(
-                                        context,
+                                    showSuccessMessage(context,
                                         'User not found or not valid, please select a valid user');
                                   } else if (int.parse(amountController.text) <
                                       state.wallet!.realAmount!) {
                                     return showAreYouSure(
                                         title: LocaleKeys.alert.localize,
                                         subTitle:
-                                        'Are you sure of transferring money?',
+                                            'Are you sure of transferring money?',
                                         action: () {
                                           context
                                               .read<TransferMoneyCubit>()
                                               .transferMoney(
-                                            params: TransferMoneyParams(
-                                              receiverUsername:
-                                              selectedUsername!,
-                                              amount: int.parse(
-                                                  amountController.text),
-                                            ),
-                                          );
+                                                params: TransferMoneyParams(
+                                                  receiverUsername:
+                                                      selectedUsername!,
+                                                  amount: int.parse(
+                                                      amountController.text),
+                                                ),
+                                              );
                                         },
                                         context: context);
                                   } else {
@@ -181,7 +181,9 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                             ),
                           ],
                         ),
-                        if (showUserList && filteredUsers != null && filteredUsers.isNotEmpty)
+                        if (showUserList &&
+                            filteredUsers != null &&
+                            filteredUsers.isNotEmpty)
                           Positioned(
                             top: 100.h,
                             left: 0,
@@ -230,4 +232,3 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
     );
   }
 }
-

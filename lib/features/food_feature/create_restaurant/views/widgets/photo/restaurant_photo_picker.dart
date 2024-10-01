@@ -32,7 +32,7 @@ class _CreateRestaurantProfilePhotoPickerState
             text: LocaleKeys.photoForRestaurant.tr(),
             style: Styles.headerText(),
           ),
-          Sizer(),
+          const Sizer(),
           BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
             buildWhen: (previous, current) =>
                 current is CreateRestaurantUploadProfileImage ||

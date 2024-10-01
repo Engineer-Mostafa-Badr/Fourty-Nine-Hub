@@ -60,7 +60,8 @@ class _CreatePostViewState extends State<CreatePostView> {
         return Stack(
           children: [
             Scaffold(
-              appBar: BackAppBar(label: LocaleKeys.createPost.localize, actions: [
+              appBar:
+                  BackAppBar(label: LocaleKeys.createPost.localize, actions: [
                 TextButton(
                     child: Label(text: LocaleKeys.post.localize),
                     onPressed: () => controller.createPost(
@@ -129,7 +130,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                                                 : Icons.language,
                                 size: 16,
                               ),
-                              Sizer(),
+                              const Sizer(),
                               Text(
                                 state.selectedPrivacy == 'onlyMe'
                                     ? LocaleKeys.onlyMe.localize
@@ -139,13 +140,14 @@ class _CreatePostViewState extends State<CreatePostView> {
                                             ? LocaleKeys.followers.localize
                                             : state.selectedPrivacy ==
                                                     'friendsAndFollowers'
-                                                ? LocaleKeys.friendsAndFollowers.localize
+                                                ? LocaleKeys.friendsAndFollowers
+                                                    .localize
                                                 : LocaleKeys.public.localize,
                                 style: Styles.mediumText(
                                     color: AppColors.PRIMARY_COLOR,
                                     fontSize: 24),
                               ),
-                              Sizer(),
+                              const Sizer(),
                               const Icon(
                                 Icons.keyboard_arrow_down_outlined,
                                 size: 16,
@@ -214,7 +216,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                                 ],
                               ),
                             ),
-                          Sizer(),
+                          const Sizer(),
                           if (state.selectedActivity != null &&
                               state.selectedActivity!.name.isNotEmpty)
                             Container(
@@ -293,7 +295,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                       ),
                     ),
                   ],
-                  Sizer(),
+                  const Sizer(),
                   _buildCreatePost(onChange: (c) {
                     if (c.length > 80 &&
                         c.length < 120 &&
@@ -310,15 +312,15 @@ class _CreatePostViewState extends State<CreatePostView> {
                     }
                     return controller.removeBackground();
                   }),
-                  Sizer(),
+                  const Sizer(),
                   if (widget.social != 'twitter' &&
                       (state.images == null || state.images!.isEmpty) &&
                       state.isBiggerThen150 == false)
                     _buildColorsBallet(context: context),
-                  Sizer(),
+                  const Sizer(),
                   if (state.images != null && state.images!.isNotEmpty)
                     Expanded(child: _buildMediaCard()),
-                  Sizer(),
+                  const Sizer(),
                   _buildOptions(controller),
                 ],
               ),
@@ -527,7 +529,7 @@ class _CreatePostViewState extends State<CreatePostView> {
               ),
             );
           },
-          separatorBuilder: (context, index) => Sizer(),
+          separatorBuilder: (context, index) => const Sizer(),
           itemCount: colors.length),
     );
   }
@@ -554,7 +556,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                       color: Colors.green,
                       size: 30,
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Text(
                       LocaleKeys.photo.localize,
                       style: Styles.mediumText(
@@ -587,7 +589,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                         color: Colors.blue,
                         size: 30,
                       ),
-                      Sizer(),
+                      const Sizer(),
                       Text(
                         LocaleKeys.activity.localize,
                         style: Styles.mediumText(
@@ -621,7 +623,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                         color: Colors.orangeAccent,
                         size: 30,
                       ),
-                      Sizer(),
+                      const Sizer(),
                       Text(
                         LocaleKeys.feeling.localize,
                         style: Styles.mediumText(
@@ -655,7 +657,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                         color: Colors.grey,
                         size: 30,
                       ),
-                      Sizer(),
+                      const Sizer(),
                       Text(
                         LocaleKeys.tagPeople.localize,
                         style: Styles.mediumText(

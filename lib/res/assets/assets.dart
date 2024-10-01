@@ -48,6 +48,7 @@ abstract class Assets {
   static String empty = 'assets/images/image.png';
   static String threeDots = 'assets/images/three_dots.svg';
   static String mobile = 'assets/images/mobile_icon.svg';
+  static String visa = 'assets/images/visa.png';
 
   // reactions
   static String like = 'assets/images/reactions/like.png';
@@ -76,15 +77,15 @@ abstract class Assets {
   static String chatRoomBackground = 'assets/images/background.png';
   static String maleImagePlaceholder = 'assets/images/male_image.png';
   static String femaleImagePlacehlder = 'assets/images/female_image.png';
+  static String autoComplete = 'assets/images/autocomplete.png';
+  static String tripjoin = 'assets/images/tripjoin.png';
 
   //drawer
   static String contact_us_icon = 'assets/settings/contact_us_icon.png';
   static String dashbboard_icon = 'assets/settings/dashbboard_icon.png';
-  static String favorite_ad_icon = 'assets/settings/favorite_ad_icon.png';
-  static String favorite_main_category_icon =
-      'assets/settings/favorite_main_category_icon.png';
-  static String favorite_sub_category_icon =
-      'assets/settings/favorite_sub_category_icon.png';
+  static String favorite_ad_icon = 'assets/settings/Icon awesome-heart.png';
+  static String favorite_main_category_icon = 'assets/settings/favorite_main_category_icon.png';
+  static String favorite_sub_category_icon = 'assets/settings/favorite_sub_category_icon.png';
   static String lists_icon = 'assets/settings/lists_icon.png';
   static String my_ads_icon = 'assets/settings/my_ads_icon.png';
   static String privacy_icon = 'assets/settings/privacy_icon.png';

@@ -116,7 +116,7 @@ class _ReportViewTripJoinState extends State<ReportViewTripJoin> {
             color: Colors.black,
           ),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         const Icon(
           Icons.report_gmailerrorred_rounded,
           color: AppColors.SECONDARY_COLOR,
@@ -216,7 +216,7 @@ class _ReportViewTripJoinState extends State<ReportViewTripJoin> {
             ),
           ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         AnimatedOpacity(
           opacity: reportTextController.text.isNotEmpty ? 1.0 : 0.5,
           duration: const Duration(milliseconds: 300),

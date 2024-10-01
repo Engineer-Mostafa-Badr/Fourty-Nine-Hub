@@ -20,7 +20,7 @@ import 'container.dart';
 /// For audio, we support "aac", "midi", "mp3", "ogg", "wav".
 class ZegoUIKitMediaPlayer extends StatefulWidget {
   const ZegoUIKitMediaPlayer({
-    Key? key,
+    super.key,
     required this.size,
     this.canControl = true,
     this.showSurface = true,
@@ -41,7 +41,7 @@ class ZegoUIKitMediaPlayer extends StatefulWidget {
     this.volumeMuteIcon,
     this.durationTextStyle,
     this.onPlayStateChanged,
-  }) : super(key: key);
+  });
 
   final Size size;
 

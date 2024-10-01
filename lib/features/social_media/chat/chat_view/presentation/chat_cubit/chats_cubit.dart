@@ -11,9 +11,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:icons_launcher/utils/cli_logger.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 
 part 'chats_state.dart';
 

@@ -202,7 +202,8 @@ class _UserPostCardState extends State<UserPostCard> {
                             ),
                             const Sizer(),
                             Label(
-                              text: LocaleKeys.thisContentIsNotAvailableNow.localize,
+                              text: LocaleKeys
+                                  .thisContentIsNotAvailableNow.localize,
                               style: Styles.headerText(
                                 color: Colors.black,
                               ),
@@ -306,8 +307,8 @@ class _UserPostCardState extends State<UserPostCard> {
                                   ? myPost.mainPost!.id
                                   : myPost.id);
                           if (result == true) {
-                            showSuccessMessage(
-                                context, LocaleKeys.postSharedSuccessfully.localize);
+                            showSuccessMessage(context,
+                                LocaleKeys.postSharedSuccessfully.localize);
                           }
                         } else {
                           context.push(Routes.LOGIN);
@@ -352,8 +353,7 @@ class _UserPostCardState extends State<UserPostCard> {
           listTile(
               icon: Icons.delete,
               title: LocaleKeys.deletePost.localize,
-              subTitle:
-              LocaleKeys.youWillDeletePost.localize,
+              subTitle: LocaleKeys.youWillDeletePost.localize,
               onTap: () {
                 widget.deletePost(post.id);
                 if (fromDetails == true) {
@@ -585,7 +585,7 @@ class _UserPostCardState extends State<UserPostCard> {
             alignment: Alignment.center,
             margin: EdgeInsets.symmetric(vertical: 10.h),
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
-            color: backgroundColor != null && images.isEmpty
+            color: images.isEmpty
                 ? Color(
                     int.parse(backgroundColor.substring(1), radix: 16),
                   )

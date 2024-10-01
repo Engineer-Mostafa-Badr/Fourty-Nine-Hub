@@ -197,7 +197,8 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                     scrollDirection: Axis.horizontal,
                                     itemCount: controller.feedPagingController
                                         .itemList![index].images!.length,
-                                    separatorBuilder: (context, index) => const Sizer(
+                                    separatorBuilder: (context, index) =>
+                                        const Sizer(
                                           width: 3,
                                         ),
                                     itemBuilder: (context, index) {
@@ -610,7 +611,8 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                             )),
                                       ),
                                     ),
-                                child: Label(text: LocaleKeys.showComments.localize))
+                                child: Label(
+                                    text: LocaleKeys.showComments.localize))
                           ],
                           if (controller.feedPagingController.itemList![index]
                                   .content!.isEmpty &&
@@ -702,9 +704,10 @@ class _InstagramPostsState extends State<InstagramPosts> {
           },
           child: CircleAvatar(
             backgroundColor: Colors.white,
-            backgroundImage: NetworkImage((post.user.image!=null&&post.user.image.isNotEmpty)
-                ? post.user.image
-                : UIConst.profilePlaceHolder),
+            backgroundImage: NetworkImage(
+                (post.user.image != null && post.user.image.isNotEmpty)
+                    ? post.user.image
+                    : UIConst.profilePlaceHolder),
           ),
         ),
         const Sizer(),

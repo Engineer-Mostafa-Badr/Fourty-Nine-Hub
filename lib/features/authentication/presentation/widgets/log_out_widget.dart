@@ -11,7 +11,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 import '../../../../routes/routes.dart';
 
@@ -37,7 +36,7 @@ class _LogoutWidgetState extends State<LogoutWidget> {
           text: LocaleKeys.sureLogout.localize,
           style: Styles.mediumText(),
         ),
-        Sizer(),
+        const Sizer(),
         Row(
           children: [
             Expanded(
@@ -48,7 +47,7 @@ class _LogoutWidgetState extends State<LogoutWidget> {
               onPressed: () => context.pop(),
               backColor: AppColors.DARK_GRAY_COLOR,
             )),
-            Sizer(),
+            const Sizer(),
             Expanded(
               child: AppButton(
                 height: 50.h,

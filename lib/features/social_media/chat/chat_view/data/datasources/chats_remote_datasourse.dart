@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_category_model.dart';
@@ -189,7 +186,6 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
       //   ChatModel messageModel = ChatModel.fromJson(data);
       //   onNewChat(messageModel);
       // });
-
     } catch (e) {
       CliLogger.info("can't read new chat error $e");
     }

@@ -7,7 +7,6 @@ import '../../core/connect_manager.dart';
 import '../../core/core_managers.dart';
 import '../../core/host_manager.dart';
 import '../../internal/defines.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 /// @nodoc
 mixin ZegoLiveStreamingControllerCoHostPrivate {

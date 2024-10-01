@@ -6,6 +6,8 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 class PolicyView extends StatefulWidget {
+  const PolicyView({super.key});
+
   @override
   _PolicyViewState createState() => _PolicyViewState();
 }
@@ -65,13 +67,14 @@ class _PolicyViewState extends State<PolicyView> {
         child: _isLoading
             ? const CircularProgressIndicator()
             : PDFViewer(
-          document: document,
-          zoomSteps: 2,
-          showNavigation: false, // Hide bottom navigation
-          showPicker: false, // Hide page picker
-          lazyLoad: false, // Set this to true if you want to load pages lazily
-          scrollDirection: Axis.vertical, // Vertical scrolling
-        ),
+                document: document,
+                zoomSteps: 2,
+                showNavigation: false, // Hide bottom navigation
+                showPicker: false, // Hide page picker
+                lazyLoad:
+                    false, // Set this to true if you want to load pages lazily
+                scrollDirection: Axis.vertical, // Vertical scrolling
+              ),
       ),
     );
   }

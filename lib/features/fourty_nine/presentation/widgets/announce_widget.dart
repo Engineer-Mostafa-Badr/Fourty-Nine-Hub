@@ -17,7 +17,7 @@ class AnnounceWidget extends StatelessWidget {
         builder: (context, state) {
       if (state.data?.isEmpty ?? true) {
         // print('data is empty');
-        return SizedBox();
+        return const SizedBox();
       } else {
         return CarouselSliderWidget(
             height: 200.h,
@@ -32,7 +32,7 @@ class AnnounceWidget extends StatelessWidget {
 
   Widget _buildAnnounceItem({required SliderItemEntity item}) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20.r),
         child: Stack(

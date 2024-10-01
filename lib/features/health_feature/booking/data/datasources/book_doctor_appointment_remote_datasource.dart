@@ -22,7 +22,6 @@ class BookAppointmentRemoteDataSourceImpl
     final response = await _apiConsumer.post(
         EndPoints.bookRegularAppointment(params.appointmentId),
         data: params.toJson(),
-
         queryParameters: {'subCategory': params.subCategoryId});
 
     return response.fold((failure) => Left(failure), (data) {

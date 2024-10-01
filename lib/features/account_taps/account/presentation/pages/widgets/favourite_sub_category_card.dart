@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -12,6 +13,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../../../../core/localization/locales.dart';
 
 class FavouriteSubCategoryCard extends StatefulWidget {
   const FavouriteSubCategoryCard(
@@ -30,10 +33,10 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: AdsViewParams(mainCategory: mainCategory, subCategory: item)),
       child: Container(
-        margin: const EdgeInsets.all(10),
+        margin:  EdgeInsets.all(10.w),
         decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(10.r),
             boxShadow: const [
               BoxShadow(
                   color: Colors.grey,
@@ -55,8 +58,8 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
                     ),
                   ),
                   Positioned(
-                      top: 10,
-                      right: 10,
+                      top: 10.h,
+                      right: 10.w,
                       child: IconAppButton(
                         icon: Icons.favorite,
                         onPressed: () => widget.onFav(),
@@ -65,9 +68,9 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
                 ],
               ),
             ),
-            Sizer(),
+            const Sizer(),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Row(
                 children: [
                   Expanded(
@@ -75,19 +78,19 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Label(
-                          text: widget.item.name,
+                          text:context.locale == Locales.english? widget.item.nameEn:widget.item.nameAr,
                           style: Styles.mediumText(fontWeight: FontWeight.bold),
                         ),
                         Label(
-                          text: 'dd ${LocaleKeys.ads.localize}',
-                          style: Styles.smallText(fontSize: 25.sp),
+                          text: '${widget.item.numOfAds} ${LocaleKeys.ad.localize}',
+                          style: Styles.smallText(fontSize: 40.sp),
                         )
                       ],
                     ),
                   ),
                   IconAppButton(
                       icon: Icons.add_box_rounded,
-                      size: 40,
+                      size: 40.h,
                       onPressed: () {
                         if (AuthHelper().isLoggedIn()) {
                           // context.push(Routes.CREATEAD,

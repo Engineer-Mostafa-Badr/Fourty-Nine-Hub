@@ -11,30 +11,29 @@ import '../features/settings/domain/useCase/enable_account_use_case.dart';
 class SettingServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<SettingRemoteDataSource>(
-            () => SettingRemoteDataSourceImpl(
-          serviceLocator(),
-        ));
+        () => SettingRemoteDataSourceImpl(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<SettingRepository>(
-            () => SettingRepositoryImpl(serviceLocator()));
+        () => SettingRepositoryImpl(serviceLocator()));
 
     serviceLocator
         .registerLazySingleton<DeleteAccountUseCase>(() => DeleteAccountUseCase(
-      serviceLocator(),
-    ));
+              serviceLocator(),
+            ));
 
-    serviceLocator
-        .registerLazySingleton<DisableAccountUseCase>(() => DisableAccountUseCase(
-      serviceLocator(),
-    ));
+    serviceLocator.registerLazySingleton<DisableAccountUseCase>(
+        () => DisableAccountUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator
         .registerLazySingleton<EnableAccountUseCase>(() => EnableAccountUseCase(
-      serviceLocator(),
-    ));
+              serviceLocator(),
+            ));
 
-    serviceLocator.registerFactory<SettingCubit>(
-            () => SettingCubit(
+    serviceLocator.registerFactory<SettingCubit>(() => SettingCubit(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

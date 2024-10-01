@@ -6,13 +6,13 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 
 class ZegoInRoomNotificationViewItem extends StatelessWidget {
   const ZegoInRoomNotificationViewItem({
-    Key? key,
+    super.key,
     required this.user,
     required this.message,
     this.prefix,
     this.maxLines = 3,
     this.isHorizontal = true,
-  }) : super(key: key);
+  });
 
   final String? prefix;
   final ZegoUIKitUser user;

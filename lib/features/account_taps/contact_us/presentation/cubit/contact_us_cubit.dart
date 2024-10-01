@@ -12,8 +12,9 @@ class ContactUsCubit extends Cubit<ContactUsState> {
   final messageController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   final CreateContactUsUseCase _createContactUsUseCase;
-  ContactUsCubit(this._createContactUsUseCase,)
-      : super(const ContactUsState());
+  ContactUsCubit(
+    this._createContactUsUseCase,
+  ) : super(const ContactUsState());
 
   void createContactUs() async {
     state.copyWith(status: StateStatus.initial);
@@ -21,13 +22,13 @@ class ContactUsCubit extends Cubit<ContactUsState> {
       final response = await _createContactUsUseCase(ContactUsModel(
           content: messageController.text, phone: phoneController.text));
       response.fold(
-          (l) =>emit( state.copyWith(failure: l, status: StateStatus.error)),
+          (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
           (r) {
-            print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-            print(r);
-            print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-            return emit(state.copyWith(status: StateStatus.success));
-          });
+        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+        print(r);
+        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+        return emit(state.copyWith(status: StateStatus.success));
+      });
     }
   }
 }

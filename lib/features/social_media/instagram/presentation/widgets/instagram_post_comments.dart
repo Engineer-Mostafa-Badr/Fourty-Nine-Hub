@@ -15,7 +15,6 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -83,7 +82,7 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                           child: Center(
                             child: Text(
                               LocaleKeys.noComments.localize,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,
                               ),

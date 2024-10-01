@@ -22,6 +22,7 @@ class DefaultButton extends StatefulWidget {
     this.alignment = Alignment.center,
     this.borderRadius = const BorderRadius.all(Radius.circular(20)),
     this.borderColor,
+    this.height,
     this.shadow,
     this.isExpanded = false,
     this.keepButtonSizeOnLoading = false,
@@ -48,6 +49,7 @@ class DefaultButton extends StatefulWidget {
   final Widget? icon;
   final DefaultButtonIconLocation iconLocation;
   final double borderWidth, width;
+  final double? height;
   final bool enabled;
   final Color backgroundColor;
   final List<BoxShadow>? shadow;
@@ -73,12 +75,13 @@ class _DefaultButtonState extends State<DefaultButton>
     final iconOnStart = widget.iconLocation == DefaultButtonIconLocation.Start;
     final buttonContents = <Widget>[
       ...widget.icon != null
-          ? [widget.icon!, if (widget.label != null) SizedBox(width: 8.0)]
+          ? [widget.icon!, if (widget.label != null) const SizedBox(width: 8.0)]
           : [],
       if (widget.label != null)
         Padding(
-          padding:
-              widget.icon != null ? EdgeInsets.only(top: 3.0) : EdgeInsets.zero,
+          padding: widget.icon != null
+              ? const EdgeInsets.only(top: 3.0)
+              : EdgeInsets.zero,
           child: Text(
             widget.label!,
             style: widget.labelStyle,

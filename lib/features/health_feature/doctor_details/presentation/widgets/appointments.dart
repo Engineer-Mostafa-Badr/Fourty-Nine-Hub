@@ -23,7 +23,7 @@ class DoctorDetailsAppointmentsCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(text: Labels.chooseBookingTime, style: Styles.headerText()),
-        Sizer(),
+        const Sizer(),
         SizedBox(
             height: kToolbarHeight * 2.5,
             child: ListView.separated(
@@ -34,7 +34,8 @@ class DoctorDetailsAppointmentsCard extends StatelessWidget {
                   item: doctor.appointments[index],
                 );
               },
-              separatorBuilder: (BuildContext context, int index) => Sizer(),
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Sizer(),
             )),
         const DoctorDetailsDivider(),
       ],
@@ -50,7 +51,7 @@ class _DayScheduleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: kToolbarHeight * 1.5,
-      margin: EdgeInsets.symmetric(horizontal: 3),
+      margin: const EdgeInsets.symmetric(horizontal: 3),
       decoration: BoxDecoration(
           border: Border.all(
             color: Colors.grey,
@@ -61,7 +62,7 @@ class _DayScheduleWidget extends StatelessWidget {
         children: [
           Container(
             width: double.infinity,
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             decoration: const BoxDecoration(
                 color: AppColors.PRIMARY_COLOR,
                 borderRadius: BorderRadius.only(

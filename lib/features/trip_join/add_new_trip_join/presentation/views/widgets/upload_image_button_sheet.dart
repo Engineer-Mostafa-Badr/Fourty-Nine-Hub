@@ -24,7 +24,7 @@ class UploadImageButtonSheet extends StatelessWidget {
                 topRight: Radius.circular(10.0))),
         child: Column(
           children: [
-            Sizer(),
+            const Sizer(),
             Container(
               alignment: Alignment.centerRight,
               child: IconButton(
@@ -34,7 +34,7 @@ class UploadImageButtonSheet extends StatelessWidget {
                 },
               ),
             ),
-            Sizer(),
+            const Sizer(),
             UploadButtonAndInfo(
               isCarImage: true,
               number: 1,

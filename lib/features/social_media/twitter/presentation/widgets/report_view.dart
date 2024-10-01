@@ -22,11 +22,13 @@ class ReportView extends StatefulWidget {
   const ReportView({
     super.key,
     required this.id,
+    this.loadingTripId,
     required this.categoryId,
   });
 
   final String id;
   final String categoryId;
+  final String? loadingTripId;
 
   @override
   State<ReportView> createState() => _ReportViewState();

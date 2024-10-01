@@ -29,7 +29,7 @@ class ReelActions extends StatelessWidget {
           text: item.numberOfLikes.toString(),
           style: Styles.mediumText(color: Colors.white),
         ),
-        Sizer(),
+        const Sizer(),
         IconAppButton(
           icon: Icons.comment,
           onPressed: () {},
@@ -39,7 +39,7 @@ class ReelActions extends StatelessWidget {
         Label(
             text: item.numberOfComments.toString(),
             style: Styles.mediumText(color: Colors.white)),
-        Sizer(),
+        const Sizer(),
         IconAppButton(
           icon: Icons.bookmark_outline,
           onPressed: () {},
@@ -49,7 +49,7 @@ class ReelActions extends StatelessWidget {
         Label(
             text: item.numberOfSaves.toString(),
             style: Styles.mediumText(color: Colors.white)),
-        Sizer(),
+        const Sizer(),
         IconAppButton(
           icon: FontAwesomeIcons.share,
           onPressed: () {},
@@ -59,7 +59,7 @@ class ReelActions extends StatelessWidget {
         Label(
             text: item.numberOfExplores.toString(),
             style: Styles.mediumText(color: Colors.white)),
-        Sizer(),
+        const Sizer(),
         InkWell(
           onTap: () {
             context.push(Routes.MUSICREELS);
@@ -72,7 +72,7 @@ class ReelActions extends StatelessWidget {
             ),
           ),
         ),
-        Sizer(),
+        const Sizer(),
       ],
     );
   }

@@ -24,7 +24,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   MainCategoriesCubit(
     this._getMainCategoriesUseCase,
     this._toggleFavoriteCategoryUseCase,
-   this._getWalletHomeUseCase,
+    this._getWalletHomeUseCase,
   ) : super(MainCategoriesState());
   Future<void> loadData() async {
     emit(state.copyWith(status: StateStatus.loading));
@@ -47,8 +47,9 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
               'can\'t load main categories there is an error ${failure.toString()}');
         },
         (r) {
-          _fourtyNineSharedData.mainCategories = r;
-          CliLogger.info('main categories loaded : ${r.length}');
+          // _fourtyNineSharedData.mainCategories = r;
+          // CliLogger.info('main categories loaded : ${r.length}');
+          // CliLogger.info('shared main categories loaded : ${_fourtyNineSharedData.mainCategories.length}');
           // emit(state.copyWith(status: StateStatus.loading));
           emit(state.copyWith(status: StateStatus.success, data: r));
         },
@@ -108,5 +109,4 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       emit(state.copyWith(wallet: data));
     });
   }
-
 }

@@ -66,6 +66,7 @@ class BaseApiConsumer extends ApiConsumer {
     _token = token;
     log("${token?.accessToken}", name: "Token");
     if (token != null) {
+      log(token.accessToken.toString(), name: "Token");
       _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
     }
   }
@@ -151,6 +152,7 @@ class BaseApiConsumer extends ApiConsumer {
       Map<String, dynamic>? queryParameters,
       Map<String, dynamic>? headers}) async {
     try {
+      log(data.toString());
       final result = await _dio.post(
         url,
         data: formData ?? data,

@@ -1,6 +1,6 @@
 part of 'my_adds_cubit.dart';
 
-enum MyAddsStates { loading, error, initState }
+enum MyAddsStates { loading, error, initState ,success}
 
 class MyAddsState {
   final MyAddsStates? status;
@@ -8,8 +8,11 @@ class MyAddsState {
   final List<AdEntity>? myAds;
   final List<TripAndRequestEntity>? comeWithMeTrips;
   final List<TripAndRequestEntity>? pickMeTrips;
-  final List<AuctionEntity>? myAuctions;
-  final List<InstallmentEntity>? myInstallments;
+  final List<MyAuctionAdsEntity>? myAuctions;
+  final List<MyAuctionAdsEntity>? myInstallments;
+  final List<MyAuctionAdsEntity>? myOtherAds;
+  final  List<GetAllCountsTripJoinEntity>? allCounts;
+  final MyAdsTripJoinEntity? tripJoin;
 
   const MyAddsState({
     this.status,
@@ -19,6 +22,9 @@ class MyAddsState {
     this.pickMeTrips,
     this.myAuctions,
     this.myInstallments,
+    this.tripJoin,
+    this.myOtherAds,
+    this.allCounts,
   });
   MyAddsState copyWith({
     MyAddsStates? status,
@@ -26,8 +32,11 @@ class MyAddsState {
     List<AdEntity>? myAds,
     List<TripAndRequestEntity>? comeWithMeTrips,
     List<TripAndRequestEntity>? pickMeTrips,
-    List<AuctionEntity>? myAuctions,
-    List<InstallmentEntity>? myInstallments,
+    List<MyAuctionAdsEntity>? myAuctions,
+    List<MyAuctionAdsEntity>? myInstallments,
+    List<MyAuctionAdsEntity>? myOtherAds,
+    List<GetAllCountsTripJoinEntity>? allCounts,
+    MyAdsTripJoinEntity? tripJoin
   }) {
     return MyAddsState(
       status: status ?? this.status,
@@ -37,6 +46,9 @@ class MyAddsState {
       pickMeTrips: pickMeTrips ?? this.pickMeTrips,
       myAuctions: myAuctions ?? this.myAuctions,
       myInstallments: myInstallments ?? this.myInstallments,
+      tripJoin: tripJoin ?? this.tripJoin,
+      myOtherAds: myOtherAds ?? this.myOtherAds,
+      allCounts: allCounts ?? this.allCounts,
     );
   }
 }

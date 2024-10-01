@@ -19,7 +19,7 @@ class TransferMoneyState {
     StateStatus? status,
     Failure? failure,
     List<UserTransferMoneyEntity>? users,
-     WalletEntity? wallet,
+    WalletEntity? wallet,
   }) {
     return TransferMoneyState(
       status: status ?? this.status,

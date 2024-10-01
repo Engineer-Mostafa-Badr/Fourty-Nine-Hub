@@ -46,7 +46,7 @@ class DriverTripCard extends StatelessWidget {
                 children: [
                   const Icon(FontAwesomeIcons.car,
                       color: AppColors.PRIMARY_COLOR),
-                  Sizer(),
+                  const Sizer(),
                   Label(
                     text: trip.category?.name ?? '',
                     style: Styles.mediumText(fontWeight: FontWeight.bold),
@@ -59,7 +59,7 @@ class DriverTripCard extends StatelessWidget {
                     Icons.location_searching,
                     color: AppColors.PRIMARY_COLOR,
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Expanded(child: Label(text: trip.fromAddress)),
                 ],
               ),
@@ -69,7 +69,7 @@ class DriverTripCard extends StatelessWidget {
                     Icons.location_on,
                     color: AppColors.SECONDARY_COLOR,
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Expanded(child: Label(text: trip.toAddress)),
                 ],
               ),
@@ -80,7 +80,7 @@ class DriverTripCard extends StatelessWidget {
                       child: Row(
                     children: [
                       const Icon(Icons.monetization_on_rounded),
-                      Sizer(),
+                      const Sizer(),
                       Label(text: '${trip.price} L.E')
                     ],
                   )),
@@ -88,7 +88,7 @@ class DriverTripCard extends StatelessWidget {
                       child: Row(
                     children: [
                       const Icon(Icons.timer),
-                      Sizer(),
+                      const Sizer(),
                       Label(text: trip.time.toString())
                     ],
                   )),
@@ -96,13 +96,13 @@ class DriverTripCard extends StatelessWidget {
                       child: Row(
                     children: [
                       const Icon(Icons.add_road),
-                      Sizer(),
+                      const Sizer(),
                       Label(text: trip.distance.toString())
                     ],
                   )),
                 ],
               ),
-              Sizer(),
+              const Sizer(),
               StaticMapWidget(
                 height: kToolbarHeight * 1.5,
                 radius: 10,
@@ -117,7 +117,7 @@ class DriverTripCard extends StatelessWidget {
                   Location(trip.toCoordinates[0], trip.toCoordinates[1]),
                 ],
               ),
-              Sizer(),
+              const Sizer(),
               ProgressButton(
                 label: 'Accept',
                 width: double.infinity,

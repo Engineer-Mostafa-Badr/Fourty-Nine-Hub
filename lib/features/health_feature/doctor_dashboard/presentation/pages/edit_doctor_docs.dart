@@ -21,12 +21,12 @@ class EditDoctorDocsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(18),
+      padding: const EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(text: Labels.uploadPhotos, style: Styles.headerText()),
-          Sizer(),
+          const Sizer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -50,7 +50,7 @@ class EditDoctorDocsView extends StatelessWidget {
             height: 20.h,
           ),
           Label(text: Labels.expireDate, style: Styles.headerText()),
-          Sizer(),
+          const Sizer(),
           DatePickerField(
             title: Labels.expireDate,
             initialDate: now,

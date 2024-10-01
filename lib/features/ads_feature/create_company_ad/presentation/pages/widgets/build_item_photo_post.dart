@@ -50,7 +50,7 @@ class BuildItemPhotoPost extends StatelessWidget {
                 GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: length == 1 ? 1 : 2),
                   itemCount: length < 4 ? length : 4,
@@ -74,9 +74,9 @@ class BuildItemPhotoPost extends StatelessWidget {
                     child: Stack(
                       children: [
                         Container(
-                          margin:
-                              EdgeInsetsDirectional.only(end: 10, bottom: 10),
-                          padding: EdgeInsets.all(10),
+                          margin: const EdgeInsetsDirectional.only(
+                              end: 10, bottom: 10),
+                          padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             image: DecorationImage(
@@ -88,8 +88,8 @@ class BuildItemPhotoPost extends StatelessWidget {
                         ),
                         if (index == 3 && length > 4)
                           Container(
-                            margin:
-                                EdgeInsetsDirectional.only(end: 10, bottom: 10),
+                            margin: const EdgeInsetsDirectional.only(
+                                end: 10, bottom: 10),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
@@ -152,7 +152,7 @@ class BuildItemPhotoPost extends StatelessWidget {
                 children: [
                   Container(
                     height: 400.h,
-                    margin: EdgeInsets.only(bottom: 10),
+                    margin: const EdgeInsets.only(bottom: 10),
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: AppColors.DARK_BLUE_COLOR,

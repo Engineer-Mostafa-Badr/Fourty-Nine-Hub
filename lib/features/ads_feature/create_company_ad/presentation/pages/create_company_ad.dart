@@ -4,7 +4,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/custom_container.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/show_post_company_advertise.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../core/widget/custom_text_no_login.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -65,7 +64,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                     color: Theme.of(context).primaryColor,
                   ),
                 )
-              : SizedBox.shrink(),
+              : const SizedBox.shrink(),
         ],
       ),
       body: context.read<UserCubit>().isLoggedIn
@@ -112,7 +111,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                                     builder: (context) => CreatePostCompany(
                                       text: false,
                                       title:
-                                      LocaleKeys.createPicturePost.localize,
+                                          LocaleKeys.createPicturePost.localize,
                                       type: 'photo',
                                       totalPrice: state.price?.photoPrice ?? 0,
                                     ),
@@ -136,7 +135,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                                       title: LocaleKeys.createPost.localize,
                                       type: 'photo_written',
                                       totalPrice:
-                                      state.price?.postAndPhotoPrice ?? 0,
+                                          state.price?.postAndPhotoPrice ?? 0,
                                     ),
                                   ),
                                 );
@@ -151,18 +150,18 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                               price: state.price?.reelPrice ?? 0,
                               context: context,
                               function: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ReelsRecordingScreen(
-                                      voiceUrl: '',
-                                      totalPrice:
-                                      '${state.price?.reelPrice ?? 0}',
-                                      advertisementType: 'reel',
-                                      comeFromCompany: 'company',
-                                    ),
-                                  ),
-                                );
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) => ReelsRecordingScreen(
+                                //       voiceUrl: '',
+                                //       totalPrice:
+                                //       '${state.price?.reelPrice ?? 0}',
+                                //       advertisementType: 'reel',
+                                //       comeFromCompany: 'company',
+                                //     ),
+                                //   ),
+                                // );
                               },
                               onTotalPriceUpdated: (price) {
                                 updateTotalPrice('reel', price);
@@ -254,6 +253,4 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
           : const CustomTextNoLogin(),
     );
   }
-
-
 }

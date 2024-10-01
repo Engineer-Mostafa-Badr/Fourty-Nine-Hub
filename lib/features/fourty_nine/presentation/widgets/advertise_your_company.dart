@@ -28,7 +28,7 @@ class AdvertiseYourCompany extends StatelessWidget {
               FontAwesomeIcons.bullhorn,
               color: Colors.white,
             ),
-            Sizer(),
+            const Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

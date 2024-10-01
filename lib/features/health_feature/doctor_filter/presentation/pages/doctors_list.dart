@@ -48,7 +48,7 @@ class _DoctorsListViewState extends State<DoctorsListView> {
                     itemBuilder: (context, index) => DoctorCard(
                           doctor: state.doctors[index],
                         ),
-                    separatorBuilder: (context, index) => Sizer(),
+                    separatorBuilder: (context, index) => const Sizer(),
                     itemCount: state.doctors.length);
               } else {
                 return Center(child: Text(LocaleKeys.noDoctorsFound.localize));

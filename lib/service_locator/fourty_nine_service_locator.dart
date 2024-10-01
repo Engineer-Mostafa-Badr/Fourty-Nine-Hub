@@ -47,10 +47,16 @@ import '../features/account_taps/contact_us/domain/repositories/contact_us_repo.
 import '../features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
 import '../features/account_taps/my_adds/domain/usecases/cancel_ad_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/delete_come_with_me_usecase.dart';
+import '../features/account_taps/my_adds/domain/usecases/delete_my_installment_usecase.dart';
+import '../features/account_taps/my_adds/domain/usecases/delete_my_trip_join_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/delete_pick_me_usecase.dart';
+import '../features/account_taps/my_adds/domain/usecases/get_all_counts_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/get_my_auctions_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/get_my_come_with_you_usecase.dart';
+import '../features/account_taps/my_adds/domain/usecases/get_my_installments_usecase.dart';
+import '../features/account_taps/my_adds/domain/usecases/get_my_other_ads_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/get_my_pick_me_usecase.dart';
+import '../features/account_taps/my_adds/domain/usecases/get_my_trip_join_usecase.dart';
 import '../features/ads_feature/ad_details/data/repositories/ad_details_repo_impl.dart';
 import '../features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import '../features/ads_feature/ads/data/repositories/ads_repo_impl.dart';
@@ -233,11 +239,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-    serviceLocator.registerLazySingleton<GetSliderItemsUseCase>(
-      () => GetSliderItemsUseCase(
-        serviceLocator(),
-      ),
-    );
+    // serviceLocator.registerLazySingleton<GetSliderItemsUseCase>(
+    //   () => GetSliderItemsUseCase(
+    //     serviceLocator(),
+    //   ),
+    // );
     serviceLocator.registerLazySingleton<GetMyPickMeAdsUseCase>(
       () => GetMyPickMeAdsUseCase(
         serviceLocator(),
@@ -260,6 +266,36 @@ class FourtyNineServiceLocator {
     );
     serviceLocator.registerLazySingleton<GetMyAuctionsUseCase>(
       () => GetMyAuctionsUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<GetMyTripJoinUseCase>(
+          () => GetMyTripJoinUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<GetAllCountsUseCase>(
+          () => GetAllCountsUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<DeleteMyTripJoinUseCase>(
+          () => DeleteMyTripJoinUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<DeleteMyInstallmentUseCase>(
+          () => DeleteMyInstallmentUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<GetMyInstallmentUseCase>(
+          () => GetMyInstallmentUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<GetMyOtherAdsUseCase>(
+          () => GetMyOtherAdsUseCase(
         serviceLocator(),
       ),
     );
@@ -316,6 +352,9 @@ class FourtyNineServiceLocator {
     );
 
     // cubits
+    serviceLocator.registerLazySingleton<GetSliderItemsUseCase>(
+      () => GetSliderItemsUseCase(serviceLocator()),
+    );
 
     serviceLocator.registerSingleton(
       SliderCubit(
@@ -355,6 +394,12 @@ class FourtyNineServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
       )..loadData(),
     );
 
@@ -380,6 +425,8 @@ class FourtyNineServiceLocator {
     // CreateAdCubit
     serviceLocator.registerFactory<CreateAdCubit>(
       () => CreateAdCubit(
+        serviceLocator(),
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
       ),

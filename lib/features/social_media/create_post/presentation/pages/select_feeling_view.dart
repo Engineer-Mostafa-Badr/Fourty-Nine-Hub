@@ -32,7 +32,7 @@ class SelectFeelingView extends StatelessWidget {
                 Navigator.pop(context, item);
               },
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey, width: .5)),
                 child: Row(
@@ -42,7 +42,7 @@ class SelectFeelingView extends StatelessWidget {
                       backgroundColor: Colors.white,
                       backgroundImage: NetworkImage(item.image),
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Expanded(child: Label(text: item.name))
                   ],
                 ),

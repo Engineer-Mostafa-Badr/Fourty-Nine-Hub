@@ -61,7 +61,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                   ? widget.comment.user.image
                   : null,
             ),
-            Sizer(),
+            const Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +93,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
             ),
           ],
         ),
-        Sizer(),
+        const Sizer(),
         Label(
           textAlign: TextAlign.start,
           text: widget.comment.content,
@@ -119,7 +119,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                     hintStyle: Styles.mediumText(),
                   ),
                 )),
-                Sizer(),
+                const Sizer(),
                 if (editTextController.text.isNotEmpty)
                   IconAppButton(
                     icon: Icons.send,
@@ -169,7 +169,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
               ),
             ),
             Label(text: '${widget.comment.loveCount}'),
-            Sizer(),
+            const Sizer(),
             TextAppButton(
                 style: Styles.mediumText(),
                 label: LocaleKeys.reply.localize,
@@ -222,8 +222,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
             listTile(
                 icon: Icons.delete,
                 title: LocaleKeys.deleteComment.localize,
-                subTitle:
-                LocaleKeys.youWillDeleteComment.localize,
+                subTitle: LocaleKeys.youWillDeleteComment.localize,
                 onTap: () {
                   widget.onDeleteComment(widget.comment.id);
                 }),

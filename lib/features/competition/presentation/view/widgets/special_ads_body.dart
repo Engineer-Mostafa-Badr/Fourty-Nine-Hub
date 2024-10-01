@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/competition/presentation/view/widgets/build_item_list_view.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../service_locator/service_locator.dart';
@@ -40,8 +39,7 @@ class SpecialAdsBody extends StatelessWidget {
         builder: (BuildContext context, state) {
           if (state is CompetitionSuccessState) {
             return Padding(
-              padding:
-                   EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+              padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
               child: ListView.separated(
                 itemBuilder: (context, index) => BuildItemListView(
                   model: state.competitionModel.data![index],
@@ -53,14 +51,6 @@ class SpecialAdsBody extends StatelessWidget {
                   child: Divider(endIndent: 15, color: Colors.grey),
                 ),
                 itemCount: state.competitionModel.data!.length,
-              ),
-            );
-          } else if (state is CompetitionErrorState) {
-            return Center(
-              child: Text(
-                state.errMessage,
-                textAlign: TextAlign.center,
-                style: Styles.mediumText(),
               ),
             );
           }

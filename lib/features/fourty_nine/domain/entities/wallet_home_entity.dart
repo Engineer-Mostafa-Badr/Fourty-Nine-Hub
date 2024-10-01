@@ -4,8 +4,7 @@ class WalletHomeEntity {
   final num giftWallet;
 
   WalletHomeEntity(
-      {
-      required this.realAmount,
+      {required this.realAmount,
       required this.balance,
       required this.giftWallet});
 }

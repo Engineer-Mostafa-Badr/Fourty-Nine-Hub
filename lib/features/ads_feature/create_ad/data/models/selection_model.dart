@@ -9,6 +9,4 @@ class SelectionModel extends SelectionEntity {
       nameEn: json['en'],
     );
   }
-
-
 }

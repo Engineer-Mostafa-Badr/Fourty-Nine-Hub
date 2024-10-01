@@ -36,14 +36,14 @@ class PrivacySwitchItem extends StatelessWidget {
                 Expanded(
                     child: Label(
                   text: label,
-                      style: TextStyle(fontSize: 30.sp),
+                  style: TextStyle(fontSize: 30.sp),
                 )),
                 Label(
-                  text: (privacy? LocaleKeys.on.localize : LocaleKeys.off.localize),
+                  text: (privacy
+                      ? LocaleKeys.on.localize
+                      : LocaleKeys.off.localize),
                   style: Styles.mediumText(
-                    fontSize: 50.sp,
-                    color: AppColors.GREY_DARK_COLOR
-                  ),
+                      fontSize: 50.sp, color: AppColors.GREY_DARK_COLOR),
                 ),
                 SizedBox(
                   width: 10.w,

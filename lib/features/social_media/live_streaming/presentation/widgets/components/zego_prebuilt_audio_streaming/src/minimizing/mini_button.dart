@@ -4,7 +4,6 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
@@ -14,13 +13,13 @@ import '../components/defines.dart';
 /// @nodoc
 class ZegoMinimizingButton extends StatefulWidget {
   const ZegoMinimizingButton({
-    Key? key,
+    super.key,
     this.onWillPressed,
     this.icon,
     this.iconSize,
     this.buttonSize,
     this.rootNavigator = false,
-  }) : super(key: key);
+  });
 
   final bool rootNavigator;
 

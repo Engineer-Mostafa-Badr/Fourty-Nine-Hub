@@ -12,7 +12,7 @@ import '../../../../services/uikit_service.dart';
 /// @nodoc
 class ZegoCancelInvitationButton extends StatefulWidget {
   const ZegoCancelInvitationButton({
-    Key? key,
+    super.key,
     required this.invitees,
     this.isAdvancedMode = false,
     this.targetInvitationID,
@@ -29,7 +29,7 @@ class ZegoCancelInvitationButton extends StatefulWidget {
     this.unclickableTextColor = Colors.black,
     this.clickableBackgroundColor = Colors.transparent,
     this.unclickableBackgroundColor = Colors.transparent,
-  }) : super(key: key);
+  });
   final bool isAdvancedMode;
 
   final List<String> invitees;

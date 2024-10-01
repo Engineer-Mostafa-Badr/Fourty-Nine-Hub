@@ -35,7 +35,7 @@ class HealthSubCategoryCard extends StatelessWidget {
       },
       child: Container(
         width: 200,
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(10),
@@ -65,23 +65,23 @@ class HealthSubCategoryCard extends StatelessWidget {
                           color: ThemeCubit.get(context).isDarkTheme
                               ? AppColors.QUANTITY_COLOR
                               : AppColors.PRIMARY_COLOR_DARK,
-                          onPressed: ()  {
-                            log(subCategory.isFavorite.toString()+"777777777777777777777777777777777");
+                          onPressed: () {
+                            log("${subCategory.isFavorite}777777777777777777777777777777777");
 
-                              context
+                            context
                                 .read<HealthCubit>()
                                 .toggleFavoriteSubcategory(subCategory.id);
 
-                          log(subCategory.isFavorite.toString()+"777777777777777777777777777777777");
+                            log("${subCategory.isFavorite}777777777777777777777777777777777");
                           })),
                 ],
               ),
             )),
-            Sizer(),
+            const Sizer(),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                const Row(
                   children: [
                     Expanded(
                       child: Sizer(

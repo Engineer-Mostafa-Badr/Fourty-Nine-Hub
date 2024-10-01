@@ -14,13 +14,13 @@ import 'pop_up_manager.dart';
 /// @nodoc
 class ZegoLiveAudioRoomPopUpSheetMenu extends StatefulWidget {
   const ZegoLiveAudioRoomPopUpSheetMenu({
-    Key? key,
+    super.key,
     required this.popupItems,
     required this.innerText,
     required this.seatManager,
     required this.connectManager,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   final List<ZegoLiveAudioRoomPopupItem> popupItems;
   final ZegoLiveAudioRoomSeatManager seatManager;

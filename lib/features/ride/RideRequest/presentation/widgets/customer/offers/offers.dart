@@ -31,7 +31,7 @@ class WaitingOffers extends StatelessWidget {
               ),
               Positioned.fill(
                 child: Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: Colors.black.withOpacity(.2),
                   ),

@@ -590,12 +590,13 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               },
                               child: Container(
                                   padding: const EdgeInsets.all(5),
-                                  decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.PRIMARY_COLOR),
-                                  child:  Icon(
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppColors.PRIMARY_COLOR),
+                                  child: Icon(
                                     Icons.camera_alt_outlined,
                                     color: Colors.white,
-                                    size: 35.w
-                                    ,
+                                    size: 35.w,
                                   )),
                             ),
                           )

@@ -25,7 +25,7 @@ class SettingCubit extends Cubit<SettingState> {
         emit(state.copyWith(failure: failure, status: SettingStates.error));
       },
           (data) {
-        emit(state.copyWith(status: SettingStates.success));
+        emit(state.copyWith(status: SettingStates.success1));
       },
     );
   }

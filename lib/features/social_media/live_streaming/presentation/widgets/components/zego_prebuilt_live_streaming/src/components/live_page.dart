@@ -163,7 +163,6 @@ class _ZegoLiveStreamingLivePageState extends State<ZegoLiveStreamingLivePage>
     );
   }
 
-
   ZegoScreenUtilInit _zoomLivePage() {
     return ZegoScreenUtilInit(
       designSize: const Size(750, 1334),

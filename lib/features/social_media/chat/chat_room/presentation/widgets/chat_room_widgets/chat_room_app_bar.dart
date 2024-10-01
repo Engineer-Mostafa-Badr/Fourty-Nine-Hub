@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,10 +12,12 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const ChatRoomAppBar({super.key});
+  const ChatRoomAppBar({super.key, required this.chatRoomCubit});
+  final ChatRoomCubit chatRoomCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +49,17 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      context.read<ChatsCubit>().selectedChat.name,
-                      // 'state.chatData?.chat?.contact?.name',
-                      overflow: TextOverflow.ellipsis,
-                      style: Styles.headerText(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.4),
+                      child: Text(
+                        context.read<ChatsCubit>().selectedChat.name,
+                        // 'state.chatData?.chat?.contact?.name',
+                        overflow: TextOverflow.ellipsis,
+                        style: Styles.headerText(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                   ],
@@ -69,7 +77,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () {},
           color: Colors.white,
         ),
-        Sizer(
+        const Sizer(
           width: 15,
         ),
         // call
@@ -95,7 +103,10 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   extra: context.read<ChatsCubit>().selectedChat.name);
             }
             if (value == 1) {
-              context.push(Routes.ATTACHMENTSVIEW);
+              context.push(
+                Routes.ATTACHMENTSVIEW,
+                extra: chatRoomCubit,
+              );
             }
             if (value == 6) {
               _showMoreMenu(context);

@@ -47,18 +47,17 @@ class UploadImagePopup extends StatelessWidget {
                           Border.all(width: 2, color: AppColors.PRIMARY_COLOR),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('From Gallery'),
+                        Text('From Gallery'),
                         Sizer(),
-                        const Icon(Icons.perm_media,
-                            color: AppColors.PRIMARY_COLOR),
+                        Icon(Icons.perm_media, color: AppColors.PRIMARY_COLOR),
                       ],
                     ),
                   ),
                 ),
-                Sizer(),
+                const Sizer(),
                 GestureDetector(
                   onTap: cameraCallback,
                   child: Container(
@@ -69,13 +68,12 @@ class UploadImagePopup extends StatelessWidget {
                           Border.all(width: 2, color: AppColors.PRIMARY_COLOR),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('From Camera'),
+                        Text('From Camera'),
                         Sizer(),
-                        const Icon(Icons.videocam,
-                            color: AppColors.SECONDARY_COLOR),
+                        Icon(Icons.videocam, color: AppColors.SECONDARY_COLOR),
                       ],
                     ),
                   ),

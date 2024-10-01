@@ -1,15 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/select_contacts_to_share_cart.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 class SelectContactsToShareView extends StatefulWidget {
-  const SelectContactsToShareView({super.key});
+  const SelectContactsToShareView({super.key, required this.chatRoomCubit});
+  final ChatRoomCubit chatRoomCubit;
 
   @override
   State<SelectContactsToShareView> createState() =>
@@ -29,52 +32,65 @@ class _SelectContactsToShareViewState extends State<SelectContactsToShareView> {
     if (!await FlutterContacts.requestPermission(readonly: true)) {
       setState(() => _permissionDenied = true);
     } else {
-      final contacts = await FlutterContacts.getContacts();
+      // Fetch contacts with phone numbers and other details
+      final contacts = await FlutterContacts.getContacts(withProperties: true);
       setState(() => _contacts = contacts);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.PRIMARY_COLOR,
-        elevation: 0,
-        leadingWidth: 26,
-        leading: IconButton(
-          onPressed: () {
-            context.pop();
-            context.pop();
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.search,
-              color: Colors.white,
+    return BlocProvider.value(
+      value: widget.chatRoomCubit,
+      child: Builder(
+        builder: (context) {
+          if (widget.chatRoomCubit.sharedContacts.isEmpty) {
+            widget.chatRoomCubit.convertContactsToSharedContacts(contacts: _contacts);
+          }
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: AppColors.PRIMARY_COLOR,
+              elevation: 0,
+              leadingWidth: 26,
+              leading: IconButton(
+                onPressed: () {
+                  context.pop();
+                  context.pop();
+                },
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                ),
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
+                )
+              ],
+              title: Text(
+                LocaleKeys.selectContact.tr(),
+                style: Styles.headerText(color: Colors.white),
+              ),
             ),
-          )
-        ],
-        title: Text(
-          LocaleKeys.selectContact.tr(),
-          style: Styles.headerText(color: Colors.white),
-        ),
-      ),
-      body: _body(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // context.push(Routes.CONTACTSVIEW);
-        },
-        backgroundColor: AppColors.PRIMARY_COLOR,
-        child: const Icon(
-          Icons.arrow_forward_ios,
-          color: Colors.white,
-        ),
+            body: _body(),
+            floatingActionButton: FloatingActionButton(
+              onPressed: ()async {
+                await widget.chatRoomCubit.sendMessage();
+                context.pop();
+                context.pop();
+              },
+              backgroundColor: AppColors.PRIMARY_COLOR,
+              child: const Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white,
+              ),
+            ),
+          );
+        }
       ),
     );
   }
@@ -87,12 +103,12 @@ class _SelectContactsToShareViewState extends State<SelectContactsToShareView> {
       return const Center(child: CircularProgressIndicator());
     }
     return ListView.separated(
-      itemCount: _contacts!.length,
+      itemCount: widget.chatRoomCubit.sharedContacts.length,
       separatorBuilder: (context, index) => const Divider(
         height: 1,
       ),
       itemBuilder: (context, i) {
-        return SelectContactToShareCart(contact: _contacts![i]);
+        return SelectContactToShareCart(contact: widget.chatRoomCubit.sharedContacts[i]);
       },
     );
   }

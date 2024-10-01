@@ -56,7 +56,7 @@ class _PlaceBiddingState extends State<PlaceBidding> {
         children: [
           Row(
             children: [
-              Sizer(),
+              const Sizer(),
               AppButton(
                 label: 'Minus',
                 onPressed: () => _decreaseBidding(),
@@ -79,15 +79,14 @@ class _PlaceBiddingState extends State<PlaceBidding> {
                       text: Labels.yourbid,
                       style: Styles.headerText(color: AppColors.PRIMARY_COLOR)),
                   Label(
-                      text:
-                          NumbersHelper.formatThousands(number: bidding),
+                      text: NumbersHelper.formatThousands(number: bidding),
                       style: Styles.headerText(
                           fontSize: 30.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.PRIMARY_COLOR)),
                   Label(
-                      text:
-                          NumbersHelper.formatThousands(number: widget.auction.currentPrice),
+                      text: NumbersHelper.formatThousands(
+                          number: widget.auction.currentPrice),
                       style: Styles.mediumText()),
                 ],
               )),
@@ -103,7 +102,7 @@ class _PlaceBiddingState extends State<PlaceBidding> {
                   color: Colors.white,
                 ),
               ),
-              Sizer(),
+              const Sizer(),
             ],
           ),
           Row(
@@ -114,7 +113,7 @@ class _PlaceBiddingState extends State<PlaceBidding> {
                 color: AppColors.PRIMARY_COLOR,
                 size: 14,
               ),
-              Sizer(),
+              const Sizer(),
               Label(
                   text: Labels.biddingNote,
                   style: Styles.mediumText(

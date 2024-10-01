@@ -22,7 +22,7 @@ class InstallmentOrderDetails extends StatelessWidget {
       appBar: const HomeAppbar(),
       drawer: const DrawerWidget(),
       body: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: [
             _buildSellerWidget(),
@@ -35,7 +35,7 @@ class InstallmentOrderDetails extends StatelessWidget {
                 },
                 separatorBuilder: (context, index) => const Divider(),
                 itemCount: 4),
-            Sizer(),
+            const Sizer(),
             stepItemWidget(
                 label: 'Step#1: Order Sent',
                 isDone: true,
@@ -65,7 +65,7 @@ class InstallmentOrderDetails extends StatelessWidget {
           accountId: 0,
           userId: '',
         ),
-        Sizer(),
+        const Sizer(),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +97,7 @@ class InstallmentOrderDetails extends StatelessWidget {
           Row(
             children: [
               const Icon(FontAwesomeIcons.ccVisa),
-              Sizer(),
+              const Sizer(),
               Label(text: 'xxx xxx xxx 4893', style: Styles.mediumText()),
             ],
           )
@@ -135,7 +135,7 @@ class InstallmentOrderDetails extends StatelessWidget {
               ),
           ],
         ),
-        Sizer(),
+        const Sizer(),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

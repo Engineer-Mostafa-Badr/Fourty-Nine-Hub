@@ -18,7 +18,8 @@ class TripJoinCardEntity {
   int? publishDate;
   String? phone;
   String? gender;
-
+  String? paymentMethod;
+  bool? subscribedPremium;
   TripJoinCardEntity({
     this.id,
     this.userId,
@@ -38,6 +39,8 @@ class TripJoinCardEntity {
     this.publishDate,
     this.phone,
     this.gender,
+    this.paymentMethod,
+    this.subscribedPremium,
   });
 
   TripJoinCardEntity copyWith({
@@ -59,6 +62,8 @@ class TripJoinCardEntity {
     int? publishDate,
     String? phone,
     String? gender,
+    String? paymentMethod,
+    bool? subscribedPremium,
   }) {
     return TripJoinCardEntity(
       id: id ?? this.id,
@@ -80,11 +85,13 @@ class TripJoinCardEntity {
       gender: gender ?? this.gender,
       requestOwnerFirstName:
           requestOwnerFirstName ?? this.requestOwnerFirstName,
+      paymentMethod: paymentMethod ?? this.paymentMethod,
+      subscribedPremium: subscribedPremium ?? this.subscribedPremium,
     );
   }
 
   @override
   String toString() {
-    return 'TripJoinCardEntity(id: $id, userId: $userId, requestOwnerFirstName: $requestOwnerFirstName ,  categoryId: $categoryId, brand: $brand, model: $model, journeyPrice: $journeyPrice, status: $status, seatNumber: $seatNumber, isRepeated: $isRepeated, startingAddressAr: $startingAddressAr, destinationAddressAr: $destinationAddressAr, startingAddressEn: $startingAddressEn, destinationAddressEn: $destinationAddressEn, isApproved: $isApproved, publishDate: $publishDate, phone: $phone , gender: $gender)';
+    return 'TripJoinCardEntity(id: $id, userId: $userId, requestOwnerFirstName: $requestOwnerFirstName ,  categoryId: $categoryId, brand: $brand, model: $model, journeyPrice: $journeyPrice, status: $status, seatNumber: $seatNumber, isRepeated: $isRepeated, startingAddressAr: $startingAddressAr, destinationAddressAr: $destinationAddressAr, startingAddressEn: $startingAddressEn, destinationAddressEn: $destinationAddressEn, isApproved: $isApproved, publishDate: $publishDate, phone: $phone , gender: $gender , paymentMethod: $paymentMethod: subscribedPremium: $subscribedPremium)';
   }
 }

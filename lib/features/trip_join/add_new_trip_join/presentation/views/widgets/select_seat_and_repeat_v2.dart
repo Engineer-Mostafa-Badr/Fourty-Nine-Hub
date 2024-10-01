@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/custom_row_v2.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -49,7 +51,7 @@ class _SelectSeatAndRepeatV2State extends State<SelectSeatAndRepeatV2> {
           },
           icon: Icon(Icons.keyboard_arrow_down, size: widget.size),
         ),
-        Text('$seatsNumber ${seatsNumber == 1 ? "Seat" : "Seats"}',
+        Text('$seatsNumber ${LocaleKeys.seat.localize} ',
             style: Styles.headerText()),
         Checkbox(
           value: repeated,
@@ -61,7 +63,7 @@ class _SelectSeatAndRepeatV2State extends State<SelectSeatAndRepeatV2> {
           checkColor: Colors.white,
           activeColor: AppColors.PRIMARY_COLOR,
         ),
-        Text('Repeate', style: Styles.headerText()),
+        Text(LocaleKeys.repeat.localize, style: Styles.headerText()),
       ],
     );
   }

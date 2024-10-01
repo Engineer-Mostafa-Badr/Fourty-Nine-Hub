@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_category_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -12,8 +14,11 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/localization/locales.dart';
+
 class FavouriteMainCategoryBanner extends StatefulWidget {
-  FavouriteMainCategoryBanner(
+  const FavouriteMainCategoryBanner(
       {super.key,
       required this.category,
       required this.canRegister,
@@ -37,11 +42,11 @@ class _FavouriteMainCategoryBannerState
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: widget.category.banner,
-      height: MediaQuery.sizeOf(context).height * 0.08,
+      height: MediaQuery.sizeOf(context).height * 0.09,
       imageBuilder: (context, i) => Container(
-        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
+        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(10.r),
           color: widget.category.banner.isNotEmpty
               ? Colors.transparent
               : AppColors.PRIMARY_COLOR,
@@ -61,11 +66,11 @@ class _FavouriteMainCategoryBannerState
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: widget.category.name,
+              text:context.locale == Locales.english? widget.category.nameEn :widget.category.nameAr,
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 45.sp),
+                  fontSize: 40.sp),
             ),
             PositionedDirectional(
               start: 0,
@@ -79,13 +84,13 @@ class _FavouriteMainCategoryBannerState
                             color: AppColors.SECONDARY_COLOR,
                           ),
                         )
-                      : SizedBox.shrink(),
+                      : const SizedBox.shrink(),
                   Sizer(
                     height: 15.h,
                   ),
                   Label(
                     text:
-                        '${widget.category.numberOfAds.toShortScale} ${Labels.ads}',
+                        '${widget.category.numberOfAds.toShortScale} ${LocaleKeys.ad.localize}',
                     style: Styles.mediumText(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -120,7 +125,7 @@ class _FavouriteMainCategoryBannerState
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: widget.category.name,
+              text: context.locale == Locales.english? widget.category.nameEn :widget.category.nameAr,
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -138,7 +143,7 @@ class _FavouriteMainCategoryBannerState
                             color: AppColors.SECONDARY_COLOR,
                           ),
                         )
-                      : SizedBox.shrink(),
+                      : const SizedBox.shrink(),
                   Sizer(
                     height: 15.h,
                   ),
@@ -168,7 +173,7 @@ class _FavouriteMainCategoryBannerState
                 color: Colors.white, fontWeight: FontWeight.bold)),
       );
     } else {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
   }
 }

@@ -53,7 +53,7 @@ class CompetitionView extends StatelessWidget {
               color: AppColors.ACCENT_COLOR,
               size: 30,
             ),
-            Sizer(),
+            const Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +67,7 @@ class CompetitionView extends StatelessWidget {
                     style: Styles.mediumText(color: Colors.grey))
               ],
             )),
-            Sizer(),
+            const Sizer(),
             const Icon(
               Icons.arrow_forward_ios,
               color: Colors.black,
@@ -90,7 +90,7 @@ class CompetitionView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // timeFrame(),
-          Sizer(),
+          const Sizer(),
           GridView.builder(
               itemCount: list.length,
               shrinkWrap: true,
@@ -193,7 +193,7 @@ class CompetitionView extends StatelessWidget {
                 ],
               ),
             ),
-            Sizer(),
+            const Sizer(),
             Label(
                 text: title,
                 maxLines: 1,

@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -25,11 +26,11 @@ class ReelsPostContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       extendBodyBehindAppBar: true,
       // appBar: _buildAppBar(context),
       backgroundColor: Colors.transparent,
-      body: const ReelsScreen(),
+      body: ReelsScreen(),
     );
   }
 }
@@ -53,9 +54,7 @@ class ReelsScreenState extends State<ReelsScreen> {
 
   void _fetchInitialReels() {
     if (mounted) {
-      context
-          .read<CreateCompanyAdCubit>()
-          .getCompanyAdPosts('reel', params: PaginationParams.basic());
+      context.read<CreateCompanyAdCubit>().getCompanyAdPosts('reel', params: PaginationParams.basic());
     }
   }
 
@@ -70,12 +69,9 @@ class ReelsScreenState extends State<ReelsScreen> {
       builder: (context, state) {
         return PaginationView<CompanyAdEntity>(
           loadingWidget: const SizedBox.shrink(),
-          build:
-              (ScrollController scrollController, List<CompanyAdEntity> data) {
+          build: (ScrollController scrollController, List<CompanyAdEntity> data) {
             if (data.isEmpty) {
-              return  Center(
-                child: Label(text: LocaleKeys.noReel.localize)
-              );
+              return Center(child: Label(text: LocaleKeys.noReel.localize));
             }
             return data.isNotEmpty
                 ? PageView.builder(
@@ -83,41 +79,38 @@ class ReelsScreenState extends State<ReelsScreen> {
                     controller: _pageController,
                     scrollDirection: Axis.vertical,
                     itemCount: data.length,
-                    onPageChanged: (index){
-                      _handlePageChange(index,data);
+                    onPageChanged: (index) {
+                      _handlePageChange(index, data);
                     },
-                itemBuilder: (context, index) {
-                  if (index >= data.length) {
-                    return const Center(
-                      child: CupertinoActivityIndicator(radius: 25),
-                    );
-                  }
-
-                  var mediaList = data[index].media;
-                  if (mediaList == null || index >= mediaList.length) {
-                    return const Center(
-                      child: CupertinoActivityIndicator(radius: 25),
-                    );
-                  }
-
-                  var mediaItem = mediaList[index];
-                  return ReelItem(
-                    key: ValueKey(mediaItem.sId),
-                    post: mediaItem,
-                    isVisible: _currentPage == index,
-                    advertises: data[index],
-                    onDeleteItem: (id) async {
-                      var result = await context
-                          .read<CreateCompanyAdCubit>()
-                          .deleteCompanyAd(id: id);
-                      if (result == true) {
-                        data.removeWhere((e) => e.sId == id);
-                        setState(() {});
+                    itemBuilder: (context, index) {
+                      if (index >= data.length) {
+                        return const Center(
+                          child: CupertinoActivityIndicator(radius: 25),
+                        );
                       }
-                    },
-                  );
-                }
-                  )
+
+                      var mediaList = data[index].media;
+                      if (mediaList == null || index >= mediaList.length) {
+                        return const Center(
+                          child: CupertinoActivityIndicator(radius: 25),
+                        );
+                      }
+
+                      var mediaItem = mediaList[index];
+                      return ReelItem(
+                        key: ValueKey(mediaItem.sId),
+                        post: mediaItem,
+                        isVisible: _currentPage == index,
+                        advertises: data[index],
+                        onDeleteItem: (id) async {
+                          var result = await context.read<CreateCompanyAdCubit>().deleteCompanyAd(id: id);
+                          if (result == true) {
+                            data.removeWhere((e) => e.sId == id);
+                            setState(() {});
+                          }
+                        },
+                      );
+                    })
                 : Center(child: Label(text: LocaleKeys.noReel.localize));
           },
           fetchData: (PaginationParams paginationParams) {
@@ -131,9 +124,7 @@ class ReelsScreenState extends State<ReelsScreen> {
     );
   }
 
-
-
-  void _handlePageChange(index,data) {
+  void _handlePageChange(index, data) {
     setState(() => _currentPage = index);
     final postsCubit = context.read<CreateCompanyAdCubit>();
     if (index == data.length - 1 && mounted) {
@@ -155,11 +146,7 @@ class ReelItem extends StatefulWidget {
   final Function(String) onDeleteItem;
 
   const ReelItem(
-      {super.key,
-      required this.post,
-      required this.isVisible,
-      required this.advertises,
-      required this.onDeleteItem});
+      {super.key, required this.post, required this.isVisible, required this.advertises, required this.onDeleteItem});
 
   @override
   ReelItemState createState() => ReelItemState(advertises, onDeleteItem);
@@ -214,7 +201,6 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
       }
     }
   }
-
 
   void _setupChewieController() {
     _chewieController = ChewieController(
@@ -337,8 +323,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
         placeholder: (context, url) => const Center(
           child: CupertinoActivityIndicator(radius: 25),
         ),
-        errorWidget: (context, url, error) =>
-            const Center(child: Icon(Icons.error)),
+        errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
       );
     }
   }
@@ -360,14 +345,13 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  Widget _buildOverlay(
-      CompanyAdEntity advertises, Function(String) onDeleteItem) {
+  Widget _buildOverlay(CompanyAdEntity advertises, Function(String) onDeleteItem) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildReelInfo(advertises, onDeleteItem),
-        SizedBox(height: kToolbarHeight + 20),
+        const SizedBox(height: kToolbarHeight + 20),
         Expanded(
           child: GestureDetector(
             onTap: _togglePlayPause,
@@ -377,8 +361,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  Widget _buildReelInfo(
-      CompanyAdEntity advertises, final Function(String) onDeleteItem) {
+  Widget _buildReelInfo(CompanyAdEntity advertises, final Function(String) onDeleteItem) {
     final height = MediaQuery.of(context).size.height;
     return Padding(
       padding: const EdgeInsets.all(0.0),
@@ -389,7 +372,7 @@ class ReelItemState extends State<ReelItem> with AutomaticKeepAliveClientMixin {
           alignment: AlignmentDirectional.topEnd,
           children: [
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: IconButton(
                 onPressed: () {
                   // _pauseVideo();
@@ -432,8 +415,7 @@ class ScrollingText extends StatefulWidget {
   ScrollingTextState createState() => ScrollingTextState();
 }
 
-class ScrollingTextState extends State<ScrollingText>
-    with SingleTickerProviderStateMixin {
+class ScrollingTextState extends State<ScrollingText> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 

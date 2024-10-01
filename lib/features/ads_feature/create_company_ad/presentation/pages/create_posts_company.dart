@@ -22,7 +22,7 @@ import '../../../../social_media/create_post/presentation/widgets/show_all_image
 import '../cubit/create_company_ad_cubit.dart';
 
 class CreatePostCompany extends StatefulWidget {
-  CreatePostCompany(
+  const CreatePostCompany(
       {super.key,
       this.text = true,
       this.picture = true,
@@ -98,7 +98,8 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                             ? controller.selectedImages
                                             : showSuccessMessage(
                                                 context,
-                                                LocaleKeys.imageNotSelected.localize,
+                                                LocaleKeys
+                                                    .imageNotSelected.localize,
                                                 color:
                                                     AppColors.SECONDARY_COLOR,
                                                 icon: Icons.error,
@@ -183,8 +184,8 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                     );
                                   },
                                   child: Container(
-                                    padding: EdgeInsets.all(10),
-                                    margin: EdgeInsets.all(10),
+                                    padding: const EdgeInsets.all(10),
+                                    margin: const EdgeInsets.all(10),
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                       color: Theme.of(context).primaryColor,
@@ -217,7 +218,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
 
   Widget _buildCreatePost() {
     return Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         // color: Colors.white,
         child: TextFormField(
           maxLines: 4,
@@ -249,7 +250,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
       return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: state.images!.length == 1 ? 1 : 2),
           itemCount: state.images!.length < 4 ? state.images!.length : 4,
@@ -282,9 +283,9 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                     Stack(
                       children: [
                         Container(
-                          margin:
-                              EdgeInsetsDirectional.only(end: 10, bottom: 10),
-                          padding: EdgeInsets.all(10),
+                          margin: const EdgeInsetsDirectional.only(
+                              end: 10, bottom: 10),
+                          padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             image: DecorationImage(
@@ -297,8 +298,8 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                         ),
                         if (index == 3 && state.images!.length > 4)
                           Container(
-                            margin:
-                                EdgeInsetsDirectional.only(end: 10, bottom: 10),
+                            margin: const EdgeInsetsDirectional.only(
+                                end: 10, bottom: 10),
                             // padding: EdgeInsets.all(10),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(

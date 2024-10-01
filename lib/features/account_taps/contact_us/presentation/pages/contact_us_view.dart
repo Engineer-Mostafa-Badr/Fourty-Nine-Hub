@@ -21,13 +21,14 @@ class ContactUsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         label: LocaleKeys.contactUs.localize,
       ),
       body: BlocConsumer<ContactUsCubit, ContactUsState>(
         listener: (context, state) {
           if (state.status == StateStatus.success) {
-            showSuccessMessage(context, LocaleKeys.messageSuccessfully.localize);
+            showSuccessMessage(
+                context, LocaleKeys.messageSuccessfully.localize);
           }
           if (state.status == StateStatus.error) {
             showErrorMessage(
@@ -53,9 +54,11 @@ class ContactUsView extends StatelessWidget {
                   ),
                   const Sizer(),
                   FormTextField(
-                    textStyle: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
+                    textStyle: Styles.mediumText(
+                        color: Theme.of(context).scaffoldBackgroundColor),
                     validator: (v) => null,
-                    constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
+                    constraints:
+                        BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                     fillColor: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(20.r),
                     style: TextStyle(
@@ -73,7 +76,8 @@ class ContactUsView extends StatelessWidget {
                   ),
                   const Sizer(),
                   FormTextField(
-                    textStyle: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
+                    textStyle: Styles.mediumText(
+                        color: Theme.of(context).scaffoldBackgroundColor),
                     height: 120,
                     maxLines: 4,
                     maxLength: 150,
@@ -81,13 +85,15 @@ class ContactUsView extends StatelessWidget {
                     fillColor: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(20.r),
                     style: TextStyle(
-                        fontSize: 30.sp, color:Theme.of(context).scaffoldBackgroundColor),
+                        fontSize: 30.sp,
+                        color: Theme.of(context).scaffoldBackgroundColor),
                     controller: controller.messageController,
                     // label: 'Password',
                     hint: '${LocaleKeys.message.localize}...',
                     action: (c) {
                       if (c.length == 150) {
-                        showErrorMessage(context, LocaleKeys.character.localize);
+                        showErrorMessage(
+                            context, LocaleKeys.character.localize);
                       }
                     },
                   ),

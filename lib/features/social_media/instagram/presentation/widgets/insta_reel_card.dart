@@ -56,7 +56,7 @@ class _InstagramReelCardState extends State<InstagramReelCard> {
         Positioned.fill(
           child: Center(
             child: _controller == null
-                ? SizedBox.shrink()
+                ? const SizedBox.shrink()
                 : AspectRatio(
                     aspectRatio: _controller!.value.aspectRatio,
                     child: VideoPlayer(
@@ -114,7 +114,7 @@ class _ControlsOverlay extends StatelessWidget {
           duration: const Duration(milliseconds: 50),
           reverseDuration: const Duration(milliseconds: 200),
           child: controller.value.isPlaying
-              ? SizedBox.shrink()
+              ? const SizedBox.shrink()
               : ColoredBox(
                   color: Colors.black26,
                   child: Center(
@@ -191,7 +191,7 @@ class _ControlsOverlay extends StatelessWidget {
                 vertical: 12.h,
                 horizontal: 16,
               ),
-              child: Text(''),
+              child: const Text(''),
             ),
           ),
         ),

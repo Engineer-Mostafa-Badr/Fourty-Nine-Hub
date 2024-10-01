@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/favourite_main_category_banner.dart';
+import '../../../../../res/style/styles.dart';
 import '../cubit/managers/favourite_categories_cubit.dart';
 
 class FavouriteCategoryView extends StatefulWidget {
@@ -32,15 +34,30 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
                   // ignore: unnecessary_const
                   child: const CircularProgressIndicator(),
                 )
-              : ListView.separated(
-                  padding: EdgeInsets.all(8.w),
-                  itemCount: state.data?.length ?? 0,
-                  separatorBuilder: (context, i) => Sizer(
-                    height: 0.h,
-                  ),
-                  itemBuilder: (context, i) => state.data![i].id.isNotEmpty
-                      ? Padding(
-                          padding: EdgeInsets.only(bottom: 10.0),
+              : state.data!.isNotEmpty && state.data != null
+                  ? ListView.separated(
+                      padding: EdgeInsets.all(8.w),
+                      itemCount: state.data?.length ?? 0,
+                      separatorBuilder: (context, i) => Sizer(
+                        height: 0.h,
+                      ),
+                      itemBuilder: (context, i) => Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: InkWell(
+                          onTap: () {
+                            // context.push(Routes.SUBCATEGORIES,
+                            //     extra: state.data![i]);
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => BlocProvider(
+                            //       create: (_) => serviceLocator<SubcategoriesCubit>(),
+                            //       child: SubCategoriesView(
+                            //           mainCategory: state.data![i]),
+                            //     ),
+                            //   ),
+                            // );
+                          },
                           child: FavouriteMainCategoryBanner(
                             category: state.data![i],
                             canRegister: false,
@@ -53,9 +70,15 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
                               }
                             },
                           ),
-                        )
-                      : SizedBox.shrink(),
-                );
+                        ),
+                      ),
+                    )
+                  : Center(
+                      child: Label(
+                          style: Styles.mediumText(fontSize: 60.sp),
+                          maxLines: 3,
+                          textAlign: TextAlign.center,
+                          text: LocaleKeys.noFavouriteCategory.localize));
         }));
   }
 }

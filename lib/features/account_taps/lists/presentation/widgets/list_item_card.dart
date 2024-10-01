@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
@@ -15,6 +17,7 @@ import '../cubit/lists_cubit.dart';
 class ListItemCard extends StatelessWidget {
   final UserFriendEntity user;
   final ListTypes type;
+
   const ListItemCard(
       {super.key,
       required this.user,
@@ -24,11 +27,13 @@ class ListItemCard extends StatelessWidget {
       required this.unblockUser,
       required this.unfollowUser,
       required this.deleteFriend});
+
   final Function(AcceptRejectFriendRequestParams) removeRequest;
   final Function(AcceptRejectFriendRequestParams) acceptRequest;
   final Function(String) unblockUser;
   final Function(String) deleteFriend;
   final Function(String) unfollowUser;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ListsCubit, ListsState>(builder: (context, state) {
@@ -42,9 +47,9 @@ class ListItemCard extends StatelessWidget {
               userId: '',
               fromProfile: true,
             ),
-            Sizer(),
+            const Sizer(),
             Expanded(child: Label(text: "${user.firstName}\t${user.lastName}")),
-            Sizer(),
+            const Sizer(),
             if (type == ListTypes.requests)
               IconButton(
                   onPressed: () {
@@ -86,19 +91,22 @@ class ListItemCard extends StatelessWidget {
         ListTile(
           onTap: () => context.push(Routes.OTHERSACCOUNT, extra: user.id),
           leading: const Icon(Icons.person),
-          title: Label(text: 'View ${user.firstName} Profile'),
+          title: Label(
+              text:
+                  '${LocaleKeys.view.localize} ${LocaleKeys.profile.localize} ${user.firstName} '),
         ),
         if (type != ListTypes.blocked)
           ListTile(
             onTap: () => context.push(Routes.CHATROOM),
             leading: const Icon(Icons.chat),
-            title: Label(text: 'Chat with ${user.firstName}'),
+            title: Label(
+                text: '${LocaleKeys.chatWith.localize} ${user.firstName}'),
           ),
         if (type == ListTypes.followers)
           ListTile(
             leading: const Icon(Icons.clear),
             title: Label(
-              text: 'Unfollow ${user.firstName}',
+              text: '${LocaleKeys.unFollow.localize} ${user.firstName}',
               style: Styles.mediumText(fontWeight: FontWeight.w600),
             ),
             onTap: () {
@@ -107,7 +115,8 @@ class ListItemCard extends StatelessWidget {
             },
             subtitle: Label(
               text:
-                  'Stop seeing ${user.firstName} posts while keeping him as a friend',
+                  '${LocaleKeys.stopSeeing.localize} ${user.firstName}',
+              maxLines: 2,
             ),
           ),
         if (type == ListTypes.blocked)
@@ -121,12 +130,13 @@ class ListItemCard extends StatelessWidget {
               context.pop();
             },
             title: Label(
-              text: 'Unblock ${user.firstName}',
+              text: '${LocaleKeys.unblock.localize} ${user.firstName}',
               style: Styles.mediumText(
                   color: Colors.green, fontWeight: FontWeight.w600),
             ),
             subtitle: Label(
-              text: 'You can remove ${user.firstName} from blocked list',
+              text:
+                  '${LocaleKeys.youCanRemove.localize} ${user.firstName} ${LocaleKeys.fromBlockedList.localize}',
             ),
           ),
         if (type == ListTypes.requests)
@@ -141,7 +151,8 @@ class ListItemCard extends StatelessWidget {
               context.pop();
             },
             title: Label(
-              text: 'Accept ${user.firstName} Friend Request',
+              text:
+                  '${LocaleKeys.Accept.localize} ${LocaleKeys.friendRequest.localize} ${user.firstName}',
               style: Styles.mediumText(
                   color: Colors.green, fontWeight: FontWeight.w600),
             ),
@@ -158,7 +169,8 @@ class ListItemCard extends StatelessWidget {
               context.pop();
             },
             title: Label(
-              text: 'Reject ${user.firstName} Friend Request',
+              text:
+                  '${LocaleKeys.reject.localize} ${LocaleKeys.friendRequest.localize} ${user.firstName}',
               style: Styles.mediumText(
                   color: Colors.red, fontWeight: FontWeight.w600),
             ),
@@ -174,12 +186,13 @@ class ListItemCard extends StatelessWidget {
               context.pop();
             },
             title: Label(
-              text: 'Unfriend ${user.firstName}',
+              text: '${LocaleKeys.unfriend.localize} ${user.firstName}',
               style: Styles.mediumText(
                   color: Colors.red, fontWeight: FontWeight.w600),
             ),
             subtitle: Label(
-              text: 'You can remove ${user.firstName} from friends list',
+              text:
+                  '${LocaleKeys.youCanRemove.localize} ${user.firstName} ${LocaleKeys.fromFriendsList.localize}',
             ),
           ),
       ],

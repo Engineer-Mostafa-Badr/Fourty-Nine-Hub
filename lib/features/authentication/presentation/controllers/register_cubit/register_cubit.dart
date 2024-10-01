@@ -52,7 +52,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     String? token = await FirebaseMessaging.instance.getToken();
     log("message");
     if (state is RegisterLoading) return;
-    if (formKey.currentState!.validate()) {
+ //   if (formKey.currentState!.validate()) {
       emit(RegisterLoading());
       final result = await _registerUseCase(
         RegisterParams(
@@ -71,7 +71,7 @@ class RegisterCubit extends Cubit<RegisterState> {
           (_) => OTPSent(),
         ),
       );
-    }
+   // }
   }
 
   Future<void> signInWithGoogle() async {

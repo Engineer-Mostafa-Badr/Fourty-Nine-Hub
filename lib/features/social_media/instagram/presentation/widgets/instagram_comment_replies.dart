@@ -85,7 +85,7 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
                             child: Center(
                               child: Text(
                                 LocaleKeys.noReplied.localize,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 18,
                                 ),
@@ -133,7 +133,7 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
                         accountId: 0,
                         userId: '',
                       ),
-                      Sizer(),
+                      const Sizer(),
                       Expanded(
                           child: TextFormField(
                         maxLines: null,
@@ -149,7 +149,7 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
                           hintStyle: Styles.mediumText(),
                         ),
                       )),
-                      Sizer(),
+                      const Sizer(),
                       if (replyTextController.text.isNotEmpty)
                         IconAppButton(
                           icon: Icons.send,

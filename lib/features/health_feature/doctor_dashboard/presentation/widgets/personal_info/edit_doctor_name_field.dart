@@ -18,7 +18,7 @@ class EditDoctorNameField extends StatelessWidget {
             nextFocusNode: FocusNode(),
           ),
         ),
-        Sizer(),
+        const Sizer(),
         Expanded(
           child: LastNameTextFormField(
             currentFocusNode: FocusNode(),

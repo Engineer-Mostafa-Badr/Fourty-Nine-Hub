@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -23,11 +22,11 @@ class PaymobLink {
 }
 
 class PaymentView extends StatefulWidget {
-  PaymentView({
-    Key? key,
+  const PaymentView({
+    super.key,
     required this.amountId,
     required this.amount,
-  }) : super(key: key);
+  });
 
   final String amountId;
   final num amount;
@@ -49,7 +48,7 @@ class _PaymentViewState extends State<PaymentView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Payment Options'),
+        title: const Text('Payment Options'),
       ),
       body: BlocBuilder<PaymentCubit, PaymentState>(
         builder: (context, state) {
@@ -169,7 +168,7 @@ class _PaymentViewState extends State<PaymentView> {
               color: color.withOpacity(0.3),
               spreadRadius: 2,
               blurRadius: 8,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -203,7 +202,7 @@ class _PaymentViewState extends State<PaymentView> {
       case 'InstaPay':
         return _bankTransferPayment();
       default:
-        return Center(
+        return const Center(
           child: Text('Please select a payment method.'),
         );
     }
@@ -217,11 +216,11 @@ class _PaymentViewState extends State<PaymentView> {
     } else {
       print("Null $url");
     }
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   Widget _bankTransferPayment() {
-    final TextEditingController _bankNameController = TextEditingController();
+    final TextEditingController bankNameController = TextEditingController();
 
     final cubit = context.read<PaymentCubit>();
     final banks = cubit.state.data ?? [];
@@ -235,11 +234,11 @@ class _PaymentViewState extends State<PaymentView> {
       }
     }
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
           DropdownButtonFormField<String>(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               fillColor: Colors.white,
               labelText: 'Select Phone Number',
             ),
@@ -252,7 +251,7 @@ class _PaymentViewState extends State<PaymentView> {
             }).toList(),
             onChanged: (value) {
               if (value != null) {
-                _bankNameController.text = value;
+                bankNameController.text = value;
               }
             },
           ),
@@ -276,7 +275,7 @@ class _PaymentViewState extends State<PaymentView> {
                 text: "Snap copy of bill payment",
                 style: Styles.headerText(),
               ),
-              SizedBox(),
+              const SizedBox(),
               InkWell(
                 onTap: () async {
                   await cubit.uploadProfileImage();
@@ -287,12 +286,12 @@ class _PaymentViewState extends State<PaymentView> {
                       previous.uploadStatus != current.uploadStatus,
                   builder: (context, state) {
                     if (state.uploadStatus == StateStatus.loading) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     } else if (state.uploadStatus == StateStatus.success &&
                         state.uploadedImage != null) {
                       return Image.file(state.uploadedImage!);
                     }
-                    return ImagePickerPlaceholder();
+                    return const ImagePickerPlaceholder();
                   },
                 ),
               ),
@@ -302,7 +301,7 @@ class _PaymentViewState extends State<PaymentView> {
                     onPressed: () {
                       // Snackbar: "Your bill has been sent successfully, waiting for administration approval."
                       print("${state.imageMediaId}");
-                      print(" the provider ${_selectedProviderId}");
+                      print(" the provider $_selectedProviderId");
                       if (state.imageMediaId != null) {
                         cubit.postInstaPay(
                             receiptId: state.imageMediaId!,

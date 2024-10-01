@@ -172,12 +172,11 @@ class ReelsState {
             likeReelCommentErrorMessage ?? this.likeReelCommentErrorMessage,
         likeReelCommentResponseMessage: likeReelCommentResponseMessage ??
             this.likeReelCommentResponseMessage,
-        globalReels: reels ?? this.globalReels,
+        globalReels: reels ?? globalReels,
         reelsForAudio: reelsForAudio ?? this.reelsForAudio,
-        globalReelsIsLoading: isLoading ?? this.globalReelsIsLoading,
-        globalReelsHasReachedMax:
-            hasReachedMax ?? this.globalReelsHasReachedMax,
-        globalReelsCurrentPage: currentPage ?? this.globalReelsCurrentPage,
+        globalReelsIsLoading: isLoading ?? globalReelsIsLoading,
+        globalReelsHasReachedMax: hasReachedMax ?? globalReelsHasReachedMax,
+        globalReelsCurrentPage: currentPage ?? globalReelsCurrentPage,
         isLikingReel: isLikingReel ?? this.isLikingReel,
         likeReelErrorMessage: likeReelErrorMessage ?? this.likeReelErrorMessage,
         likeReelResponse: likeReelResponse ?? this.likeReelResponse,
@@ -557,8 +556,7 @@ class ReelsCubit extends Cubit<ReelsState> {
           pageToFetch >= response.data!.pagination!.pageCount!;
 
       final List<Reel> newReels = response.data?.reels ?? [];
-      log(newReels.first.user!.firstName! +
-          "----------------------------------------------------------------------------------------------");
+      log("${newReels.first.user.firstName}----------------------------------------------------------------------------------------------");
 
       emit(state.copyWith(
         reelsForAudio:

@@ -74,7 +74,7 @@ class RestaurantCard extends StatelessWidget {
                       Icons.star_rounded,
                       color: AppColors.ACCENT_COLOR,
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Label(
                         text: '${item?.totalRating}',
                         style: Styles.mediumText(fontWeight: FontWeight.w500)),
@@ -103,7 +103,7 @@ class RestaurantCard extends StatelessWidget {
             url: item?.restaurantMedia?.first.mediaKey,
           ),
         ),
-        Sizer(),
+        const Sizer(),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,7 +121,7 @@ class RestaurantCard extends StatelessWidget {
                   Icons.star_rounded,
                   color: AppColors.ACCENT_COLOR,
                 ),
-                Sizer(),
+                const Sizer(),
                 Label(
                     text: '${item?.totalRating} ',
                     style: Styles.mediumText(fontWeight: FontWeight.w500)),

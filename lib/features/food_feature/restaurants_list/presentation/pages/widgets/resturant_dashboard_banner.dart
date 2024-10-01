@@ -19,7 +19,7 @@ class ResturantDashboardButton extends StatelessWidget {
             route: Routes.RestaurantDashboard,
           );
         } else {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
       },
     );

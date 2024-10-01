@@ -5,6 +5,9 @@ import 'package:fourtyninehub/features/account_taps/lists/data/models/user_frien
 import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import '../../../../../core/error/failure.dart';
+import '../models/user_follower_model.dart';
+import '../models/user_friends_list_model.dart';
+import '../models/user_request_model.dart';
 
 abstract class ListsRemoteDataSource {
   Future<Either<Failure, List<UserFriendEntity>>> getFriendsList(
@@ -44,7 +47,7 @@ class ListsRemoteDataSourceImpl implements ListsRemoteDataSource {
       return Left(l);
     }, (data) {
       final list = (data['data']['followers'] as List)
-          .map((e) => UserFriendModel.fromJson(e))
+          .map((e) => UserFollowerModel.fromJson(e))
           .toList();
       return Right(list);
     });
@@ -60,7 +63,7 @@ class ListsRemoteDataSourceImpl implements ListsRemoteDataSource {
       return Left(l);
     }, (data) {
       final list = (data['data']['friendRequests'] as List)
-          .map((e) => UserFriendModel.fromJson(e))
+          .map((e) => UserRequestModel.fromJson(e))
           .toList();
       return Right(list);
     });
@@ -75,7 +78,7 @@ class ListsRemoteDataSourceImpl implements ListsRemoteDataSource {
       return Left(l);
     }, (data) {
       final list = (data['data']['friends'] as List)
-          .map((e) => UserFriendModel.fromJson(e))
+          .map((e) => UserFriendsListModel.fromJson(e))
           .toList();
       return Right(list);
     });

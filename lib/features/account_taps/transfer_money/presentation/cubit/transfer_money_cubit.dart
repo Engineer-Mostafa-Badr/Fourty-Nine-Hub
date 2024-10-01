@@ -9,27 +9,28 @@ import '../../../wallet/domain/usecases/get_wallet_usecase.dart';
 import '../../domain/use_case/fetch_user_use_case.dart';
 
 class TransferMoneyCubit extends Cubit<TransferMoneyState> {
-
   final TransferMoneyUseCase _transferMoneyUseCase;
-  final FetchUserUseCase  _fetchUserUseCase;
+  final FetchUserUseCase _fetchUserUseCase;
   final GetWalletUseCase _getWalletUseCase;
 
-  TransferMoneyCubit(this._transferMoneyUseCase, this._fetchUserUseCase, this._getWalletUseCase) : super(const TransferMoneyState());
+  TransferMoneyCubit(this._transferMoneyUseCase, this._fetchUserUseCase,
+      this._getWalletUseCase)
+      : super(const TransferMoneyState());
 
-
-  Future<void> loadData()async{
+  Future<void> loadData() async {
     await fetchUsers();
     await getWallet();
   }
+
   Future<void> transferMoney({
     required TransferMoneyParams params,
   }) async {
     emit(state.copyWith(status: StateStatus.loading));
     var response = await _transferMoneyUseCase(params);
     return response.fold(
-          (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-          (data) {
-            getWallet();
+      (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+      (data) {
+        getWallet();
         emit(state.copyWith(status: StateStatus.success));
       },
     );
@@ -39,8 +40,8 @@ class TransferMoneyCubit extends Cubit<TransferMoneyState> {
     emit(state.copyWith(status: StateStatus.loading));
     var response = await _fetchUserUseCase(const NoParams());
     return response.fold(
-          (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-          (data) {
+      (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+      (data) {
         emit(state.copyWith(users: data));
       },
     );

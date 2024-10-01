@@ -29,7 +29,7 @@ class MazadatView extends StatelessWidget {
                   _buildViewType(context: context),
                   Expanded(
                       child: Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: state.isLoading
                         ? const Center(
                             child: CircularProgressIndicator.adaptive())
@@ -50,7 +50,8 @@ class MazadatView extends StatelessWidget {
                                       item: state.auctionList![index],
                                       isVertical: false,
                                     ),
-                                separatorBuilder: (context, index) => Sizer(),
+                                separatorBuilder: (context, index) =>
+                                    const Sizer(),
                                 itemCount: state.auctionList?.length ?? 0),
                   )),
                 ],
@@ -96,7 +97,7 @@ class MazadatView extends StatelessWidget {
       required BuildContext context}) {
     final controller = context.read<AuctionListCubit>();
     return Container(
-      padding: EdgeInsets.all(3),
+      padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color: isSelected ? AppColors.PRIMARY_COLOR : Colors.white),
@@ -148,8 +149,8 @@ class MazadatView extends StatelessWidget {
                   return InkWell(
                     onTap: () => controller.changeSubCategory(v: subCategory),
                     child: Container(
-                      margin: EdgeInsets.only(left: 10),
-                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      margin: const EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: state.selectedSubCategory == subCategory
@@ -170,7 +171,7 @@ class MazadatView extends StatelessWidget {
                     ),
                   );
                 },
-                separatorBuilder: (context, index) => Sizer(
+                separatorBuilder: (context, index) => const Sizer(
                   width: 0,
                 ),
               ),

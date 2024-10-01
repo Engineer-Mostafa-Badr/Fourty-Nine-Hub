@@ -19,7 +19,7 @@ class UploadCarLicenseImages extends StatelessWidget {
         label: label,
       ),
       body: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
           child: Column(
             children: [

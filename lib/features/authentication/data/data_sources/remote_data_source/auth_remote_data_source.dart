@@ -22,8 +22,7 @@ abstract class AuthRemoteDataSource {
 
   Future<Either<Failure, UserTokensModel>> login(LoginParams loginParams);
 
-  Future<Either<Failure, UserTokensModel>> socialLogin(
-      SocialLoginParams params);
+  Future<Either<Failure, UserTokensModel>> socialLogin(SocialLoginParams params);
 
   Future<Either<Failure, void>> register(RegisterParams registerParams);
 
@@ -126,9 +125,6 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     );
   }
 
-
-
-
   Future<Either<Failure, UserCredential>> signInWithGoogle({
     required String idToken,
   }) async {
@@ -138,7 +134,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
       // Check if the user is null (i.e., the user canceled the sign-in)
       if (googleUser == null) {
-        return Left(SocialLoginFailure('Google sign-in was canceled by the user.'));
+        return const Left(SocialLoginFailure('Google sign-in was canceled by the user.'));
       }
 
       // Obtain the authentication details from the request
@@ -180,8 +176,8 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
       // Handle the result
       return signInResult.fold(
-            (failure) => Left(failure), // If the sign-in failed, return the failure
-            (userCredential) async {
+        (failure) => Left(failure), // If the sign-in failed, return the failure
+        (userCredential) async {
           // If sign-in succeeded, obtain the tokens (idToken and accessToken)
           final idToken = await userCredential.user?.getIdToken();
           final accessToken = await userCredential.user?.getIdTokenResult();
@@ -204,8 +200,8 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
           // Handle the API response
           return result.fold(
-                (failure) => Left(failure),
-                (response) {
+            (failure) => Left(failure),
+            (response) {
               final userData = response['data'];
               return Right(UserTokensModel.fromJson(userData));
             },
@@ -216,8 +212,6 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       return Left(ServerFailure(message: 'Social login failed: $e'));
     }
   }
-
-
 
   @override
   Future<Either<Failure, void>> resendOTP(ResendOTPParams params) async {

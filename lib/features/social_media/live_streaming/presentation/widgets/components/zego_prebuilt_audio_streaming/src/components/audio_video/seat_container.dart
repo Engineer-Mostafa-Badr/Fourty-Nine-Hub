@@ -17,7 +17,7 @@ import 'audio_room_layout.dart';
 /// container of seat
 class ZegoLiveAudioRoomSeatContainer extends StatefulWidget {
   const ZegoLiveAudioRoomSeatContainer({
-    Key? key,
+    super.key,
     required this.seatManager,
     required this.layoutConfig,
     this.avatarBuilder,
@@ -25,7 +25,7 @@ class ZegoLiveAudioRoomSeatContainer extends StatefulWidget {
     this.backgroundBuilder,
     this.sortAudioVideo,
     this.showSoundWavesInAudioMode = true,
-  }) : super(key: key);
+  });
 
   final ZegoLiveAudioRoomSeatManager seatManager;
 

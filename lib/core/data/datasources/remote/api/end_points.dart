@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
+import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_counts_usecase.dart';
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
 
 class EndPoints {
@@ -54,14 +55,11 @@ class EndPoints {
 
   static String getMainCategoryDetails(String id) => '/categories/main/$id';
 
-  static String addMainCategoryToFavorite(String id) =>
-      '/favorite-category/$id';
+  static String addMainCategoryToFavorite(String id) => '/favorite-category/$id';
 
-  static String deleteMainCategoryFromFavorite(String id) =>
-      '/favorite-category/$id';
+  static String deleteMainCategoryFromFavorite(String id) => '/favorite-category/$id';
 
-  static String toggleSubCategoryToFavorites(String id) =>
-      '/favorite-sub-category/$id';
+  static String toggleSubCategoryToFavorites(String id) => '/favorite-sub-category/$id';
 
   static const getGift = '/subscriber/competitions';
   static const getBalance = '/main-wallet/user-balance';
@@ -102,6 +100,24 @@ class EndPoints {
     return '/advertisementCompany?subCategory=66adecd7aa2ff24015872e9f';
   }
 
+  // Custom Page
+  static const socialPage = '/navigators/socialPage';
+  static const subTab = '/navigators/subTap';
+  static const navigateBar = '/navigators/navigatorsBar';
+  static const favouriteCat = '/navigators/navigateCategories';
+
+  //My Ads
+  static const myAdsAuction='/ads/allMyAds/auction';
+  static const myAdsInstallment='/ads/allMyAds/installment';
+  static const myAdsOther='/ads/allMyAds/other';
+  static const myAdsTripJoin='/ride/come-with-you/my?subCategory=62ea00e269ea29c91dfc390c';
+  static String deleteMyTripJoin({required String id}) =>
+      '/ride/come-with-you/Delete/$id';
+  static String deleteMyInstallment({required String id}) =>
+      '/ads/deleteAd/$id';
+  static String getAllCount(Params params) =>
+      '/ride/come-with-you/callAndChat/${params.id}?status=${params.status}';
+
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';
   static const fetchUsers = '/users/all-usernames';
@@ -109,10 +125,8 @@ class EndPoints {
   static const getSubscription = '/subscription';
   static const transferFiveBalance = '/main-wallet/transfer-five-years';
   static const transferTenBalance = '/main-wallet/transfer-ten-years';
-  static const requestWithdrawBalance =
-      '/main-wallet/request-withdrawal-balance';
-  static const checkRequestWithdrawBalance =
-      '/main-wallet/check-request-withdrawal';
+  static const requestWithdrawBalance = '/main-wallet/request-withdrawal-balance';
+  static const checkRequestWithdrawBalance = '/main-wallet/check-request-withdrawal';
 
   static const getWheel = '/wheels/random';
   static const spinWheel = '/wheels/spin/';
@@ -133,12 +147,22 @@ class EndPoints {
   static const deleteAllNotification = '/notifications/all';
 
   // static const report = '/report?subCategory=66a3583454e6e337915514db';
-  static String report({required String subCategoryId}) =>
-      '/report?subCategory=$subCategoryId';
-  static String documentRequest =
-      '/twitter/document-request?subCategory=${Constants.documentSubCategory}';
+  static String report({required String subCategoryId}) => '/report?subCategory=$subCategoryId';
+  static String documentRequest = '/twitter/document-request?subCategory=${Constants.documentSubCategory}';
 
   // ride
+  static String bannerDataRider = "$developmentBaseUrl/ride/get-thumbnail-ride";
+  static String specialRegister =
+      "$developmentBaseUrl/ride/riders/special/register";
+  static String riderRegister = "$developmentBaseUrl/ride/riders/register";
+  static String expectedPrice = "$developmentBaseUrl/ride/trips/expected/price";
+  static String acceptOfferRide =
+      "$developmentBaseUrl/ride/offers/accept/offer";
+  static String declineOfferRide =
+      "$developmentBaseUrl/ride/offers/decline/offer";
+  static String pictureOptional =
+      "$developmentBaseUrl/ride/info/picture-optional";
+  static String newTripRide = "$developmentBaseUrl/ride/trips/newTrip";
   //shipping
   static String bannerData = "$developmentBaseUrl/loading/driver/subcategory";
   static const drivingLicenseS3 = '/ride/info/driving-license';
@@ -146,54 +170,40 @@ class EndPoints {
   static const carLicenseS3 = '/ride/info/car-license';
   static const idLicenseS3 = '/ride/info/id';
   static const mainWallet = '$developmentBaseUrl/main-wallet';
-  static const infoDocuments =
-      '$developmentBaseUrl/loading/driver/info/documents';
+  static const infoDocuments = '$developmentBaseUrl/loading/driver/info/documents';
   static const infoId = '$developmentBaseUrl/ride/info/id';
   static const drivingLicense = '$developmentBaseUrl/ride/info/driving-license';
   static const carLicense = '$developmentBaseUrl/ride/info/car-license';
   static const successUpload = '$developmentBaseUrl/ride/info/success-upload';
   static const successDocuments = '$developmentBaseUrl/ride/info/documents';
-  static const successCarImages =
-      '$developmentBaseUrl/ride/info/success-car-images';
+  static const successCarImages = '$developmentBaseUrl/ride/info/success-car-images';
 
   // health
-  static String getCities({required String governorateId}) =>
-      '/health/cities/$governorateId';
+  static String getCities({required String governorateId}) => '/health/cities/$governorateId';
   static const getGovernorates = '/health/governorate';
   static const createDoctor = '/health/doctor';
   static const doctorSearch = '/health/doctor-search';
   static const bookEmergency = '/health/book-emergency';
 
-  static String bookRegularAppointment(String appointmentId) =>
-      '/health/book-appointment/$appointmentId';
+  static String bookRegularAppointment(String appointmentId) => '/health/book-appointment/$appointmentId';
 
-  static String toggleFavoriteSubcategory(String subCategoryId) =>
-      '/favorite-sub-category/$subCategoryId';
+  static String toggleFavoriteSubcategory(String subCategoryId) => '/favorite-sub-category/$subCategoryId';
 
-  static String bookPremiumAppointment(String appointmentId) =>
-      '/health/book-appointment-premium/$appointmentId';
+  static String bookPremiumAppointment(String appointmentId) => '/health/book-appointment-premium/$appointmentId';
 
-  static String getDoctorReviewsForUsers(String doctorId) =>
-      '/health/doctor/rate/$doctorId';
+  static String getDoctorReviewsForUsers(String doctorId) => '/health/doctor/rate/$doctorId';
 
-  static String getDoctorDetails(String doctorId) =>
-      '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
+  static String getDoctorDetails(String doctorId) => '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
 
-  static String toggleFavoriteCategory(String subCategoryId) =>
-      '/favorite-category/$subCategoryId';
+  static String toggleFavoriteCategory(String subCategoryId) => '/favorite-category/$subCategoryId';
   static const getHealthSubcategories = '/health/subCategories-health-with-ads';
-  static const getMedicalServices =
-      '/health/subCategories-medicalServices-with-ads';
+  static const getMedicalServices = '/health/subCategories-medicalServices-with-ads';
   static const getFavoriteCategory = '/favorite-category';
   static const String getUpcomingUserAppointments = '/health/book-appointment';
-  static const String getHealthRequestsHistory =
-      '/health/history-patient-booking';
-  static const remainingDaysOfDoctorPracticing =
-      '/health/dashboard/remaining-days-of-doctor-id';
-  static const remainingDaysOfDoctorID =
-      '/health/dashboard/remaining-days-of-doctor-practicing-id';
-  static const remainingDaysOfDoctorSubscription =
-      '/health/dashboard/remaining-days-of-doctor-subscription';
+  static const String getHealthRequestsHistory = '/health/history-patient-booking';
+  static const remainingDaysOfDoctorPracticing = '/health/dashboard/remaining-days-of-doctor-id';
+  static const remainingDaysOfDoctorID = '/health/dashboard/remaining-days-of-doctor-practicing-id';
+  static const remainingDaysOfDoctorSubscription = '/health/dashboard/remaining-days-of-doctor-subscription';
   static const String getPaymentProvider = '/payment-provider/active';
 
   // static const String getPaymentProvider = '/dashboard/payment-provider';
@@ -201,6 +211,7 @@ class EndPoints {
   static const String postInstaPay = '/manual-payment/create';
   static const String saveCardToken = '/fawry/tokenize-card';
   static const String payWithCardToken = '/fawry/pay-with-card-token';
+  static const favouriteCategoriesList = '/favorite-category';
   static const String getSavedCards = '/payment/cards';
   static const String makeMultiPayment = '/fawry/multi-charge';
   static const String deleteSavedCard = '/payment/cards';
@@ -208,30 +219,62 @@ class EndPoints {
   static const getDoctorAppointmentsByDay = '/health/doctor/booking-day';
   static const getDoctorUnhandledAppointments = '/health/book-requests';
   static const isDoctor = '/health/check-doctor-or-not';
-  static const getDoctorTotalEarnedMoney =
-      '/health/dashboard/total-earned-money';
+  static const getDoctorTotalEarnedMoney = '/health/dashboard/total-earned-money';
 
-  static String doctorAcceptAppointment(String appointmentId) =>
-      '/health/book-appointment/approve/$appointmentId';
+  static String doctorAcceptAppointment(String appointmentId) => '/health/book-appointment/approve/$appointmentId';
 
-  static String doctorRejectAppointment(String appointmentId) =>
-      '/health/book-appointment/reject/$appointmentId';
-  static const getAllDoctorReservations =
-      '/health/dashboard/number-of-reservations';
+  static String doctorRejectAppointment(String appointmentId) => '/health/book-appointment/reject/$appointmentId';
+  static const getAllDoctorReservations = '/health/dashboard/number-of-reservations';
   static const isDoctorApproval = '/health/check-doctor-approval';
   static const getDoctorProfile = '/health/doctor-profile';
   static const updateDoctorProfilePhoto = '/health/doctor/picture';
-  static const updateDoctorPractcing =
-      '/health/doctor-upload-license-practicing';
+  static const updateDoctorPractcing = '/health/doctor-upload-license-practicing';
   static const updateDoctorID = '/health/doctor-upload-license-id';
 
   static String deleteDoctor(String doctorId) => '/health/doctor/$doctorId';
-
+  // ride
+  //shipping
+  static String registerDriver = "$developmentBaseUrl/loading/driver/register";
+  static String favoriteSubCategory =
+      "$developmentBaseUrl/favorite-sub-category";
+  static String createLoadingTrip =
+      "$developmentBaseUrl/loading/trip/createLoadingTrip";
+  // static const idLicenseS3 = '/ride/info/id';
+  static const getAllTripBySubCategory =
+      '$developmentBaseUrl/loading/trip/driver/subcategory';
+  static const carPlate = '/loading/driver/info/car-plate';
+  static const makeRatingDriver = '/loading/rating-driver/makeRating';
+  static const getDriverData = '$developmentBaseUrl/loading/driver/info';
+  static const updateDriver = '$developmentBaseUrl/loading/driver';
+  static const completeTrip = '$developmentBaseUrl/loading/trip/complete';
+  static const deleteDriver = '$developmentBaseUrl/loading/driver/deleteDriver';
+  static const driverStatistics =
+      '$developmentBaseUrl/loading/driver/driverStatistics';
+  //trip
+  static const sendOffer = '$developmentBaseUrl/loading/trip/sendOffer';
+  static const reportUrl = '$developmentBaseUrl/report';
+  static const favoriteCategory = '$developmentBaseUrl/favorite-category';
+  static const sendOfferPremium =
+      '$developmentBaseUrl/loading/trip/sendOffer-premium';
+  // static const acceptLoadingTripOffer =
+  //     '$developmentBaseUrl/loading/trip/acceptLoadingTripOffer';
+  static const mediasignedUrl =
+      '$developmentBaseUrl/dashboard/media/signed-url';
+  static const mediaconfirm = '$developmentBaseUrl/dashboard/media/confirm';
+  static const click = '$developmentBaseUrl/global/click';
+  static const allUserTrips = '$developmentBaseUrl/loading/trip/allUserTrips';
+  static const cancelOffer = '$developmentBaseUrl/loading/trip/cancelOffer';
+  static const acceptLoadingTripOffer =
+      '$developmentBaseUrl/loading/trip/acceptOffer';
+  static const deleteLoadingTrip =
+      '$developmentBaseUrl/loading/trip/deleteLoadingTrip';
+  static const loadingTripRequests =
+      '$developmentBaseUrl/loading/trip/loadingTripRequests';
   // reels
   static const getExploreReels = '/reels/explore';
 
   // ride request
-  static const expectedPrice = '/ride/trips/expected/price';
+  // static const expectedPrice = '/ride/trips/expected/price';
   static const carTypes = '/cars';
 
   static String subCategories({required String mainCategoryId}) {
@@ -298,14 +341,12 @@ class EndPoints {
   // social
 
   static const createFacebookPost = '/facebook/post';
-  static String createTwitterPost =
-      '/twitter/post?subCategory=${Constants.twitterSubCategory}';
+  static String createTwitterPost = '/twitter/post?subCategory=${Constants.twitterSubCategory}';
 
   // static const getFeedPosts = '/facebook/feed';
   static const activities = '/facebook/post/activities';
   static const feelings = '/facebook/post/feelings';
-  static String getTwitterFeedPosts =
-      '/twitter/feed?subCategory=${Constants.twitterSubCategory}';
+  static String getTwitterFeedPosts = '/twitter/feed?subCategory=${Constants.twitterSubCategory}';
   static const editProfile = '/users/profile-data';
 
   static String userPosts(UserPostsParams params) {
@@ -444,13 +485,14 @@ class EndPoints {
     return '/facebook/comment/update-comment/${params.postId}?subCategory=${Constants.facebookSubCategory}';
   }
 
-  static String acceptRejectFriendRequest(
-      AcceptRejectFriendRequestParams params) {
-    return '/friends/acceptOrRejectrequest/${params.userId}?subCategory=${Constants.facebookSubCategory}';
+  static String acceptRejectFriendRequest(AcceptRejectFriendRequestParams params) {
+    return '/friends/acceptOrRejectrequest/${params
+        .userId}?subCategory=${Constants.facebookSubCategory}';
   }
 
+
   static String deleteFriend(String userId) {
-    return '/friends/deleteFriend/$userId?subCategory=${Constants.facebookSubCategory}';
+    return '/friends/deleteFriend/$userId';
   }
 
   static String commentOnTwitterPost(String postId) {
@@ -517,8 +559,8 @@ class EndPoints {
     return '/follow/make-follow/$userId?subCategory=${Constants.instagramSubCategory}';
   }
 
-  static String removeFollow(String userId) {
-    return '/follow/unFollow/$userId?subCategory=${Constants.instagramSubCategory}';
+  static String deleteFollow(String userId) {
+    return '/follow/delete-follower/$userId?subCategory=${Constants.instagramSubCategory}';
   }
 
   static String greetMessage(String userId) {
@@ -646,13 +688,11 @@ class EndPoints {
     return '/chat/get-chat/$chatId';
   }
 
-  static String createNormalChat(
-      {required String categoryId, required String otherUserId}) {
+  static String createNormalChat({required String categoryId, required String otherUserId}) {
     return '/chat/start-chat/$otherUserId?categoryId=$categoryId';
   }
 
-  static String createAnonymousChat(String otherUserId) =>
-      '/chat/start-anonymous-chat/$otherUserId';
+  static String createAnonymousChat(String otherUserId) => '/chat/start-anonymous-chat/$otherUserId';
 
   //club voice
   static String allClubVoiceRooms = '/clubvoice';
@@ -664,8 +704,7 @@ class EndPoints {
 
   static String leaveVoiceRoom(String id) => '/clubvoice/leave/$id';
 
-  static String searchVoiceRooms(String subject) =>
-      '/clubvoice?search=$subject';
+  static String searchVoiceRooms(String subject) => '/clubvoice?search=$subject';
 
   //meeting
   static String createMeeting = '/room-id';
@@ -697,8 +736,7 @@ class EndPoints {
 
   static String buttonAvailable = '/global/click';
 
-  static String getSubscriptionPlans(String subcategoryId) =>
-      '/subscription/plans/$subcategoryId';
+  static String getSubscriptionPlans(String subcategoryId) => '/subscription/plans/$subcategoryId';
 
   static String checkUserSubscription(String id) {
     return '/subscription/subcategory/$id';
@@ -727,20 +765,23 @@ class EndPoints {
   }
 
   // gecoding google api url
-  static String geocodingUrl =
-      'https://maps.googleapis.com/maps/api/geocode/json';
+  static String geocodingUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
 
   // trip join
-  static String tripJoinExpectedPrice =
-      "/ride/come-with-you/trip/expectedPrice";
+  static String tripJoinExpectedPrice = "/ride/come-with-you/trip/expectedPrice";
   static String getCarBrand = "/ride/riders/brands";
   static String getCarModelByBrand = "/ride/riders/models";
   static String getCarYearType = "/ride/riders/car-years-and-types";
   static String publishTripJoin = "/ride/come-with-you";
 
   static String getAllTripJoin = '/ride/come-with-you/get-all';
+  static String getAllPickMe = '/ride/pick-me/get-all';
 
   static String makeTripJoinRequest(String addId) {
     return '/ride/come-with-you/request/$addId?subCategory=62ea00e269ea29c91dfc390c';
   }
+
+  static String getAllMyTripJoin = '/ride/come-with-you/my';
+  static String deleteTrip(String id) => '/ride/come-with-you/Delete/$id';
+  static String getRequest(String id) => '/ride/come-with-you/trip/requests//$id';
 }
