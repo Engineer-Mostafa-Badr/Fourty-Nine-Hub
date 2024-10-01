@@ -17,6 +17,8 @@ import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../../domain/entity/docs_trip_join_entity.dart';
+import '../../domain/entity/get_all_counts_trip_join_entity.dart';
+import '../../domain/usecases/get_all_counts_usecase.dart';
 import '../cubit/my_adds_cubit.dart';
 import '../widgets/custom_button_count.dart';
 
@@ -45,8 +47,7 @@ class MyAdsTripJoin extends StatelessWidget {
                       const Icon(Icons.time_to_leave),
                       const Sizer(),
                       Text(
-                        '${tripJoinCardEntity.vehicleId
-                            .brand}, ${tripJoinCardEntity.vehicleId.model}',
+                        '${tripJoinCardEntity.vehicleId.brand}, ${tripJoinCardEntity.vehicleId.model}',
                         style: Styles.headerText(
                           fontSize: 45,
                           color: AppColors.SECONDARY_COLOR,
@@ -70,8 +71,8 @@ class MyAdsTripJoin extends StatelessWidget {
                     children: [
                       const Icon(Icons.airline_seat_recline_extra_rounded),
                       const Sizer(),
-                      Text('${tripJoinCardEntity.passengers} ${LocaleKeys.seat
-                          .localize}',
+                      Text(
+                          '${tripJoinCardEntity.passengers} ${LocaleKeys.seat.localize}',
                           style: Styles.headerText()),
                       const Spacer(),
                       Visibility(
@@ -178,7 +179,7 @@ class MyAdsTripJoin extends StatelessWidget {
                 top: 5,
                 end: 20,
                 textDirection:
-                context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
                 child: Column(
                   children: [
                     Text(tripJoinCardEntity.price.toStringAsFixed(0),
@@ -203,64 +204,92 @@ class MyAdsTripJoin extends StatelessWidget {
   }
 
   Widget _buildContactInfo(context) {
-    return Row(
-      children: [
-        Expanded(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const CustomButtonCount(),));
-              },
-              child: _buildContactItem(
-                  icon: Icons.call_outlined,
-                  label: LocaleKeys.tel.localize,
-                  value: 0, context: context),
-            )),
-        Expanded(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const CustomButtonCount(),));
-              },
-              child: _buildContactItem(
-                  icon: Icons.chat_bubble_outline,
-                  label: LocaleKeys.chats.localize,
-                  value: 0, context: context),
-            )),
-        Expanded(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const CustomButtonCount(),));
-              },
-              child: _buildContactItem(
-                  icon: Icons.favorite_border_outlined,
-                  label: LocaleKeys.like.localize,
-                  value: 0, context: context),
-            )),
-      ],
+    return BlocProvider<MyAddsCubit>(
+      create: (BuildContext context) => serviceLocator()
+        ..getAllCount(
+            params: Params(id: tripJoinCardEntity.id, status: 'chat')),
+      child: BlocBuilder<MyAddsCubit, MyAddsState>(
+        builder: (BuildContext context, state) {
+          return Row(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CustomButtonCount(
+                          id: tripJoinCardEntity.id,
+                          status: 'call',
+                        ),
+                      ));
+                },
+                child: _buildContactItem(
+                    icon: Icons.call_outlined,
+                    label: LocaleKeys.tel.localize,
+                    value: state.allCounts?.length ?? 0,
+                    context: context),
+              )),
+              Expanded(
+                  child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CustomButtonCount(
+                          id: tripJoinCardEntity.id,
+                          status: 'chat',
+                        ),
+                      ));
+                },
+                child: _buildContactItem(
+                    icon: Icons.chat_bubble_outline,
+                    label: LocaleKeys.chats.localize,
+                    value: state.allCounts?.length ?? 0,
+                    context: context),
+              )),
+              Expanded(
+                  child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CustomButtonCount(
+                          id: tripJoinCardEntity.id,
+                          status: 'like',
+                        ),
+                      ));
+                },
+                child: _buildContactItem(
+                    icon: Icons.favorite_border_outlined,
+                    label: LocaleKeys.like.localize,
+                    value: state.allCounts?.length ?? 0,
+                    context: context),
+              )),
+            ],
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildContactItem({
-    required IconData icon,
-    required String label,
-    required int value,
-    required context
-  }) {
+  Widget _buildContactItem(
+      {required IconData icon,
+      required String label,
+      required int value,
+      required context}) {
     return Row(
       children: [
         Container(
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: Theme
-                .of(context)
-                .primaryColor,
+            color: Theme.of(context).primaryColor,
           ),
-          child: Icon(icon, color: Theme
-              .of(context)
-              .scaffoldBackgroundColor,),
+          child: Icon(
+            icon,
+            color: Theme.of(context).scaffoldBackgroundColor,
+          ),
         ),
         const Sizer(),
         Expanded(

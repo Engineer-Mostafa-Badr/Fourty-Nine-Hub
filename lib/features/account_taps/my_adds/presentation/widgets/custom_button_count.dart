@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
 
+import '../../../../../common/widgets/stateless/pages/empty.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
+import '../../domain/entity/get_all_counts_trip_join_entity.dart';
+import '../../domain/usecases/get_all_counts_usecase.dart';
 
 class CustomButtonCount extends StatelessWidget {
-  const CustomButtonCount({super.key});
+  const CustomButtonCount({super.key, required this.id, required this.status});
+
+  final String id;
+  final String status;
 
   @override
   Widget build(BuildContext context) {
@@ -19,36 +29,57 @@ class CustomButtonCount extends StatelessWidget {
       appBar: const BackAppBar(
         label: 'Request Trip Join',
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w,vertical: 10.h),
-        child: ListView.separated(
-          itemBuilder: (context,index)=>buildItem(context),
-          separatorBuilder: (context,index)=>const Sizer(),
-          itemCount: 10,
+      body: BlocProvider<MyAddsCubit>(
+        create: (BuildContext context) => serviceLocator()
+          ..getAllCount(params: Params(id: id, status: status)),
+        child: BlocBuilder<MyAddsCubit, MyAddsState>(
+          builder: (BuildContext context, state) {
+            if (state.status == MyAddsStates.initState) {
+              if (state.allCounts == null || state.allCounts!.isEmpty) {
+                return const EmptyPage();
+              }
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                child: ListView.separated(
+                  itemBuilder: (context, index) =>
+                      buildItem(context, state.allCounts![index]),
+                  separatorBuilder: (context, index) => const Sizer(),
+                  itemCount: state.allCounts?.length ?? 0,
+                ),
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
         ),
       ),
     );
   }
 
-  Widget buildItem(context) => Container(
-    padding: EdgeInsets.all(12.w),
-    decoration: BoxDecoration(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      borderRadius: BorderRadius.circular(12.r),
-      border: Border.all(color: Theme.of(context).primaryColor,width: 1),
-    ),
-    child: Column(
+  Widget buildItem(context, GetAllCountsTripJoinEntity model) => Container(
+        padding: EdgeInsets.all(12.w),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(12.r),
+          border: Border.all(color: Theme.of(context).primaryColor, width: 1),
+        ),
+        child: Column(
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  radius: 75.r,
-                  backgroundImage: const NetworkImage(
-                      'https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg'),
+                SizedBox(
+                  height: kToolbarHeight * 2.5.h,
+                  width: kToolbarHeight * 2.5.w,
+                  child: ImageFromInternet(
+                    isCircle: true,
+                    image:model.gender == 'male'
+                        ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwC-ZR1TdJ7VIAMeqhjm-u29-HB0PyAuSFFQ&s'
+                        : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKc-oaCL6lH4WNLuY-A6H7UyEJmZQ5HdN6Os89NNXXANez6DAEM9SJdKu-Drj6L2LSfpM&usqp=CAU',
+                  ),
                 ),
                 const Sizer(),
                 Label(
-                  text: 'Moaz',
+                  text: '${model.firstName} ${model.lastName}',
                   style: Styles.headerText(),
                 ),
               ],
@@ -91,5 +122,5 @@ class CustomButtonCount extends StatelessWidget {
             ),
           ],
         ),
-  );
+      );
 }
