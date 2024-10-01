@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/widgets/unread_notifications_builder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
@@ -30,6 +31,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   final bool showLanguage;
   final Color color;
   final bool language;
+  final double? toolbarHeight;
+  final PreferredSizeWidget? bottom;
 
   const HomeAppbar({
     super.key,
@@ -37,6 +40,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.isWithBackArrow = false,
     this.inNotifications = false,
     this.isMenu = false,
+    this.bottom,
+    this.toolbarHeight,
     this.isDetailsCardService = false,
     this.showChat = true,
     this.isIconWhite = false,
@@ -48,6 +53,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      toolbarHeight: toolbarHeight,
+      bottom: bottom,
       title: Row(
         children: [
           if (isShowLogo)
@@ -74,6 +81,32 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               icon: Icons.arrow_back_ios,
               size: 20,
             ),
+          SizedBox(
+            width: 5.w,
+          ),
+          if (language)
+            Container(
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                child: TextAppButton(
+                    label: LocaleKeys.lang.tr(),
+                    style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
+                    onPressed: () {
+                      if (context.locale == Locales.english) {
+                        changeLang(locale: Locales.arabic, context: context);
+                      } else {
+                        changeLang(locale: Locales.english, context: context);
+                      }
+                      Future.delayed(const Duration(seconds: 1)).then((_) {
+                        // ignore: use_build_context_synchronously
+                        context.read<NotificationSocketIoCubit>().notificationListener(languageCode: 'en');
+                        context
+                            .read<NotificationSocketIoCubit>()
+                            .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
+                      });
+                    })),
+          SizedBox(
+            width: 5.w,
+          ),
           Expanded(
             child: Container(
               height: 55.h,
@@ -108,26 +141,14 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           if (showLanguage) TextButton(onPressed: () {}, child: Label(text: 'Register', style: Styles.mediumText())),
-          if (language)
-            Container(
-                padding: EdgeInsets.symmetric(horizontal: 5.w),
-                child: TextAppButton(
-                    label: LocaleKeys.lang.tr(),
-                    style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
-                    onPressed: () {
-                      if (context.locale == Locales.english) {
-                        changeLang(locale: Locales.arabic, context: context);
-                      } else {
-                        changeLang(locale: Locales.english, context: context);
-                      }
-                      Future.delayed(const Duration(seconds: 1)).then((_) {
-                        // ignore: use_build_context_synchronously
-                        context.read<NotificationSocketIoCubit>().notificationListener(languageCode: 'en');
-                        context
-                            .read<NotificationSocketIoCubit>()
-                            .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
-                      });
-                    })),
+          InkWell(
+            onTap: ()=>context.push(Routes.CHAT),
+            child: SvgPicture.asset(
+              Assets.message,
+              height: 25.h,
+            
+            ),
+          ),
           SizedBox(
             width: 5.w,
           ),
@@ -150,5 +171,5 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kTextTabBarHeight * 2.h);
+  Size get preferredSize => Size.fromHeight(toolbarHeight??kTextTabBarHeight * 2.h);
 }
