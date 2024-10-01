@@ -1,436 +1,370 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/common/dashboard_banner.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/repositories/shipping_repository.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/accept_decline_trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_request_by_my_trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_my_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_trip_form.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/shipping_banner.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card_selected.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/trip_card.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-
-import '../../../../../common/widgets/stateful/maps/map_picker.dart';
-import '../../../../ride/RideRequest/domain/entity/address_search_params_entity.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class CreateShippingView extends StatefulWidget {
-  CreateShippingView({super.key});
+  const CreateShippingView({super.key, this.selectedId});
+  final String? selectedId;
   @override
   State<CreateShippingView> createState() => _CreateShippingViewState();
 }
 
 class _CreateShippingViewState extends State<CreateShippingView> {
-  TextEditingController receiptPoint = TextEditingController();
-  TextEditingController deliveryPoint = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey();
-  TextEditingController decoration = TextEditingController();
-  TextEditingController offerPrice = TextEditingController();
-  TextEditingController phone = TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<GetMyTripCubit>().getMyTrip();
+  }
 
-  // Time time;
-  SubCategoryEntity? select;
+  bool isButtonSheet = false;
+  // GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     final shippingcubit = context.read<ShippingCubit>();
     return SharedScaffold(
+      // key: scaffoldKey,
       mainCategoryId: 1,
-      body: Form(
-        key: formKey,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                BlocBuilder<ShippingCubit, ShippingState>(
-                  builder: (context, state) {
-                    if (state is SuccessGetBannerState) {
-                      return SizedBox(
-                        width: double.infinity,
-                        child: ShippingBanner(
-                          model: state.model,
-                        ),
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
+      body: BlocConsumer<CreateTripCubit, ShippingState>(
+        listener: (context, state) {
+          if (state is SuccessCreateTrip) {
+            context.go(Routes.HOME);
+            showSuccessMessage(context, state.message);
+          }
+          if (state is FailureShippingState) {
+            showErrorMessage(
+                context, getFailureMessage(state.failure, context));
+          }
+          //
+          // } else if (state is OTPSent) {
+          //
+        },
+        builder: (context, status) {
+          if (status is LoadingShippingState) {
+            return const Align(
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.PRIMARY_COLOR,
                 ),
-                Sizer(),
-                const DashboardBanner(
-                  title: Labels.driverDashboard,
-                  subTitle: Labels.driverDashboardBannerDiscription,
-                  route: Routes.DOCTORDASHBOARD,
-                ),
-                SizedBox(
-                  height: 30.h,
-                ),
-                FormField(
-                  validator: (value) {
-                    return shippingcubit.validation(
-                        message: "This field is required.",
-                        condition:
-                            shippingcubit.requestModel.subcategoryEntity ==
-                                null);
-                  },
-                  builder: (field) {
-                    return BlocBuilder<ShippingCubit, ShippingState>(
-                      builder: (context, state) {
-                        if (state is SuccessGetBannerState) {
-                          log(
-                              state.model.subCategories!.first.subCategoryId
-                                  .toString(),
-                              name: "SubCategory");
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _buildMainCategoriesWidget(
-                                category: MainCategoryEntity(
-                                    id: state.model.mainCategory
-                                            ?.mainCategoryId ??
-                                        "",
-                                    name:
-                                        state.model.mainCategory?.nameEn ?? "",
-                                    image:
-                                        state.model.mainCategory?.cover ?? "",
-                                    isFavorite: false,
-                                    total: state
-                                            .model.mainCategory?.driverLength ??
-                                        0,
-                                    cover:
-                                        state.model.mainCategory?.cover ?? "",
-                                    banner:
-                                        state.model.mainCategory?.banner ?? "",
-                                    subcategories: state.model.subCategories!
-                                        .map(
-                                          (e) => SubCategoryEntity(
-                                              id: e.subCategoryId!,
-                                              image: e.picture!,
-                                              isFavorite: false,
-                                              name: e.subCategoryNameEn!),
+              ),
+            );
+          }
+          return Form(
+            key: formKey,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                      minHeight: MediaQuery.of(context).size.height,
+                      minWidth: MediaQuery.of(context).size.width),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      children: [
+                        BlocBuilder<ShippingCubit, ShippingState>(
+                          builder: (context, state) {
+                            if (state is LoadingShippingState) {
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColors.PRIMARY_COLOR,
+                                ),
+                              );
+                            }
+                            if (state is SuccessGetBannerState) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (state.model.mainCategory?.haveTrip ??
+                                    false) {
+                                  if (!isButtonSheet) {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) => MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider(
+                                              create: (context) =>
+                                                  serviceLocator<
+                                                      GetMyTripCubit>()),
+                                          BlocProvider(
+                                              create: (context) =>
+                                                  serviceLocator<TripCubit>()),
+                                          BlocProvider(
+                                              create: (context) =>
+                                                  serviceLocator<
+                                                      GetMyTripCubit>()),
+                                          BlocProvider(
+                                              create: (context) =>
+                                                  serviceLocator<
+                                                      CallMessageCubit>()),
+                                        ],
+                                        child: showButtonSheetTrip(),
+                                      ),
+                                    );
+                                  }
+                                  isButtonSheet = true;
+                                }
+                              });
+
+                              return Column(
+                                children: [
+                                  ShippingBanner(
+                                    model: state.model,
+                                    favoriteName: "Driver".tr(),
+                                    
+                                  ),
+                                  // const Sizer(),
+                                  // لو هو مسجل
+                                  // if (isDriver(state.model))
+                                  if ((state.model.mainCategory?.isDriver ??
+                                          false) &&
+                                      (state.model.mainCategory
+                                              ?.isDriverApproved ??
+                                          false))
+                                    // if(!(state.model.mainCategory?.haveTrip??false))
+                                    Column(
+                                      children: [
+                                        const SizedBox(
+                                          height: 8,
+                                        ),
+                                        DashboardBanner(
+                                          onTap: () => context.push(
+                                              Routes.DASHBOARDDRIVERSCREEN),
+                                          title: Labels.driverDashboard,
+                                          subTitle: Labels
+                                              .driverDashboardBannerDiscription,
+                                          route: Routes.DOCTORDASHBOARD,
+                                        ),
+                                      ],
+                                    ),
+                                  // لو هو مش مسجل
+                                  // if ((state.model.mainCategory?.isDriver ??
+                                  //             false) !=
+                                  //         true &&
+                                  //     ((state.model.mainCategory?.isDriver ??
+                                  //             false)) !=
+                                  //         true)
+                                  if ((state.model.mainCategory?.isDriver ??
+                                              false) !=
+                                          true &&
+                                      (state.model.mainCategory
+                                                  ?.isDriverApproved ??
+                                              false) !=
+                                          true)
+                                    GestureDetector(
+                                      // onTap: () => context
+                                      //     .push(Routes.SHIPPING_REGISTER),
+                                      onTap: () {
+                                        if (context
+                                            .read<UserCubit>()
+                                            .isLoggedIn) {
+                                          context
+                                              .push(Routes.SHIPPING_REGISTER);
+                                        } else {
+                                          // context.push(Routes.SHIPPING_REGISTER);
+                                          context.push(Routes.LOGIN);
+                                        }
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                        ),
+                                        child: Text(
+                                          "You can enjoy serving your clients using your car by clicking the register button above.".tr(),
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  (state.model.mainCategory?.haveTrip ?? false)
+                                      ? BlocBuilder<GetAllRequestByMyTripCubit,
+                                          ShippingState>(
+                                          builder: (context, state) {
+                                            if (state
+                                                is SuccessGetLoadingTripRequests) {
+                                              if (state.request.isNotEmpty) {
+                                                return Column(
+                                                  children: [
+                                                    ...List.generate(
+                                                      state.request.length,
+                                                      (index) =>
+                                                          RequestOfferCard(
+                                                        model: state
+                                                            .request[index],
+                                                      ),
+                                                    )
+                                                  ],
+                                                );
+                                              } else {
+                                                return const NotFoundOffers();
+                                              }
+                                            } else {
+                                              return const NotFoundOffers();
+                                            }
+                                          },
                                         )
-                                        .toList(), nameEn: ''),
-                              ),
-                              if (field.hasError)
-                                Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 8.h,
-                                    ),
-                                    Text(
-                                      field.errorText ?? "",
-                                      style:
-                                          Styles.mediumText(color: Colors.red),
-                                    ),
-                                  ],
-                                )
-                            ],
-                          );
-                        } else {
-                          return Container();
-                        }
-                      },
-                    );
-                  },
-                ),
-                SizedBox(
-                  height: 30.h,
-                ),
-                DefaultTextFormField(
-                  validator: (value) {
-                    return shippingcubit.validation(
-                        message: "This field is required.",
-                        condition:
-                            shippingcubit.model.licenseExpiryDate == null);
-                  },
-                  currentController: receiptPoint,
-                  currentFocusNode: FocusNode(),
-                  hint: Labels.receiptPoint,
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                DefaultTextFormField(
-                  validator: (value) {
-                    return shippingcubit.validation(
-                        message: "This field is required.",
-                        condition:
-                            shippingcubit.model.licenseExpiryDate == null);
-                  },
-                  currentController: deliveryPoint,
-                  currentFocusNode: FocusNode(),
-                  hint: Labels.deliveryPoint,
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                DefaultTextFormField(
-                  validator: (value) {
-                    return shippingcubit.validation(
-                        message: "This field is required.",
-                        condition:
-                            shippingcubit.model.licenseExpiryDate == null);
-                  },
-                  onTap: () {},
-                  readOnly: true,
-                  currentController: TextEditingController(),
-                  currentFocusNode: FocusNode(),
-                  // hint: "نقطة الاستلام",
-                  hint: Labels.time,
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-
-                TextFormField(
-                  validator: (value) {
-                    return shippingcubit.validation(
-                        message: "This field is required.",
-                        condition:
-                            shippingcubit.model.licenseExpiryDate == null);
-                  },
-                  controller: decoration,
-                  minLines: 6,
-                  maxLines: 6,
-                  maxLength: 100,
-                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
-                  decoration: InputDecoration(
-                      fillColor: AppColors.AUTH_CONTAINER_COLOR,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      hintText: Labels.description,
-                      hintStyle: TextStyle(
-                          fontSize: 12.sp, color: AppColors.QUANTITY_COLOR)),
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                //  CustomTextField(hint: "عرض سعر"),
-                DefaultTextFormField(
-                  // isRequired: true,
-                  validator: (value) {
-                    return shippingcubit.validation(
-                        message: "This field is required.",
-                        condition:
-                            shippingcubit.model.licenseExpiryDate == null);
-                  },
-                  currentController: offerPrice,
-                  currentFocusNode: FocusNode(),
-
-                  // hint: "نقطة الاستلام",
-                  hint: Labels.offerPrice,
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                //  CustomTextField(hint: "المحمول"),
-                DefaultTextFormField(
-                  validator: (value) {
-                    return shippingcubit.validation(
-                        message: "This field is required.",
-                        condition:
-                            shippingcubit.model.licenseExpiryDate == null);
-                  },
-                  currentController: phone,
-                  currentFocusNode: FocusNode(),
-                  // hint: "نقطة الاستلام",
-                  hint: Labels.phone,
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Flexible(
-                        child: Image.asset(
-                      Assets.logo,
-                      width: 25,
-                      height: 25.h,
-                    )),
-                    const SizedBox(width: 10),
-                    Flexible(
-                        flex: 3,
-                        child: Text(Labels.theApplicationDoesNot,
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                fontSize: 20.sp, fontWeight: FontWeight.bold))),
-                  ],
-                ),
-                SizedBox(height: 30.h),
-                //  Gap(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Flexible(
-                        child: Image.asset(
-                      Assets.logo,
-                      width: 25,
-                      height: 25.h,
-                    )),
-                    const SizedBox(width: 10),
-
-                    //  Gap(10),
-                    Flexible(
-                        flex: 3,
-                        child: Text(
-                          Labels.thePremiumPackageGivesYou,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 20.sp, fontWeight: FontWeight.bold),
-                        )),
-                  ],
-                ),
-                SizedBox(height: 30.h),
-                //  Gap(30),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Flexible(
-                        child: Image.asset(
-                      Assets.logo,
-                      width: 25,
-                      height: 25.h,
-                    )),
-                    //  Gap(10),
-                    const SizedBox(width: 10),
-                    Flexible(
-                      flex: 3,
-                      child: Text(
-                        Labels.freeCancellation,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.bold,
+                                      : CreateTripForm(
+                                          formKey: formKey,
+                                        )
+                                ],
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 50.h),
-                //  Gap(50),
-                Row(
-                  children: [
-                    Flexible(
-                      child: AppButton(
-                          height: 60.h,
-                          label: Labels.premiumRequest,
-                          style: Styles.headerText(color: Colors.white),
-                          onPressed: () {}),
-                    ),
-                    //  Gap(6),
-                    const SizedBox(width: 6),
-                    Flexible(
-                      child: AppButton(
-                          height: 60.h,
-                          backColor: const Color(0xFF0B1135),
-                          label: Labels.request,
-                          style: Styles.headerText(color: Colors.white),
-                          onPressed: () async {
-                            // String token = ApiConsumer().attachToken(token)
-                            // log(token, name: "Token");
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        // Spacer(),
+                        // NotFoundOffeRers(),
+                        // CreateTripForm(
+                        //   formKey: formKey,
+                        // ),
 
-                            // if (formKey.currentState!.validate()) {}
-                          }),
+                        // BlocBuilder<GetMyTripCubit, ShippingState>(
+                        //   builder: (context, state) {
+                        //     if (state is SuccessGetMyTripState) {
+
+                        //     }
+                        //     else{
+
+                        //     }
+                        //   },
+                        // )
+                        // CreateTripForm(formKey: formKey),
+                        // BlocBuilder<GetAllRequestByMyTripCubit, ShippingState>(
+                        //   builder: (context, state) {
+                        //     if (state is SuccessGetLoadingTripRequests) {
+                        //       if (state.request.isNotEmpty) {
+                        //         return Column(
+                        //           children: [
+                        //             ...List.generate(
+                        //               state.request.length,
+                        //               (index) => RequestOfferCard(
+                        //                 model: state.request[index],
+                        //               ),
+                        //             )
+                        //           ],
+                        //         );
+                        //       } else {
+                        //         return NotFoundOffers();
+                        //       }
+                        //     } else {
+                        //       return CreateTripForm(formKey: formKey);
+                        //     }
+                        //   },
+                        // ),
+                        // status is SuccessGetBannerState?
+                        // if(status.)
+                        // :CreateTripForm()
+                        // const SizedBox(height: 20),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-                //  Gap(100),
-                SizedBox(height: 100.h),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildMapWidget({
-    required BuildContext context,
-  }) {
-    final controller = context.read<CreateShippingRequestCubit>();
-    return BlocBuilder<CreateShippingRequestCubit, CreateShippingRequestState>(
-      builder: (context, state) {
-        return MapPicker(
-          lat: state.fromAddress?.lat,
-          lng: state.fromAddress?.lng,
-          onAddressPicked: (AddressSearchParamsEntity v) =>
-              controller.selectPickUpLocation(item: v),
-        );
-      },
-    );
+  bool isDriver(BannerModel model) {
+    if (model.subCategories!.first.isDriver ?? false) {
+      if (model.subCategories!.first.isDriverApproved ?? false) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 
-  Widget _buildMainCategoriesWidget({
-    required MainCategoryEntity category,
-  }) {
-    final shippingCubit = context.read<ShippingCubit>();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(
-          text: category.name,
-          style: Styles.headerText(),
-        ),
-        if (category.subcategories?.isNotEmpty ?? false)
-          SizedBox(
-            height: kToolbarHeight * 3,
-            child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        select = category.subcategories![index];
-                        if (select != null) {
-                          shippingCubit.seSubCategoryRequest(
-                              subCategory: select!);
-                        }
-                      });
-                    },
-                    child: SubcategoryCardSelected(
-                        selected: select == null
-                            ? false
-                            : select!.id == category.subcategories![index].id,
-                        mainCategory: category,
-                        item: category.subcategories![index]),
-                  );
-                },
-                separatorBuilder: (context, index) => Sizer(),
-                itemCount: category.subcategories?.length ?? 0),
-          )
-      ],
+// BlocProvider(
+//                   create: (context) => ),
+  showButtonSheetTrip() {
+    return BlocBuilder<GetMyTripCubit, ShippingState>(
+      builder: (context, state) {
+        log(state.toString(), name: "lksjdflskdjfslkdjflsdkjfd");
+        if (state is SuccessGetMyTripState) {
+          return BlocProvider(
+            create: (context) => AcceptDeclineTripCubit(
+                repository: serviceLocator<ShippingRepository>()),
+            child: BlocListener<AcceptDeclineTripCubit, ShippingState>(
+              listener: (context, state) {
+                if (state is SuccessCancelState) {
+                  context.pop();
+
+                  showSuccessMessage(context, "The trip has been successfully closed.".tr());
+                }
+                if (state is FailureShippingState) {
+                  showErrorMessage(
+                      context, getFailureMessage(state.failure, context));
+                }
+              },
+              child: TripCardWidget(
+                yourRequest: true,
+                title: "Your request".tr(),
+                buttons: false,
+                model: AllTripModel(
+                    id: state.model.id,
+                    phone: state.model.phone,
+                    time: state.model.time,
+                    desc: state.model.desc,
+                    price: state.model.price,
+                    targetLocation: state.model.targetLocation,
+                    startLocation: state.model.startLocation,
+                    status: state.model.status),
+              ),
+            ),
+          );
+        } else {
+          return Container();
+        }
+      },
     );
   }
 }
 
 class CustomTextField extends StatelessWidget {
-  CustomTextField(
+  const CustomTextField(
       {super.key,
       required this.hint,
       this.prefixIcon,
@@ -470,6 +404,403 @@ class CustomTextField extends StatelessWidget {
         ),
       ),
       textAlign: TextAlign.right,
+    );
+  }
+}
+
+class NotFoundOffers extends StatelessWidget {
+  const NotFoundOffers({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: Text(
+            "Your request has been sent. You'll receive offers shortly.".tr(),
+            style: TextStyle(
+              fontSize: 25,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class RequestOfferCard extends StatelessWidget {
+  const RequestOfferCard(
+      {super.key, required this.model, this.isHistory = false});
+  final GetRequestsForLoadingModel model;
+  final bool isHistory;
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<AcceptDeclineTripCubit, ShippingState>(
+      listener: (context, state) {
+        log(state.toString(), name: "loadingState");
+        if (state is SuccessAcceptState) {
+          showSuccessMessage(context, "The request has been successfully approved.".tr());
+          context.read<GetAllRequestByMyTripCubit>().getAllRequest();
+          context.pop();
+        }
+        if (state is SuccessDeclineState) {
+          showSuccessMessage(context, "The request was successfully rejected.".tr());
+          context.read<GetAllRequestByMyTripCubit>().getAllRequest();
+        }
+        if (state is SuccessCompleteTripState) {
+          showSuccessMessage(context, "Trip is completed".tr());
+          context.read<GetAllRequestByMyTripCubit>().getAllRequest();
+        }
+        // if (state is SuccessCancelState) {
+        //   showSuccessMessage(context, "تم اغلاق الرحلة بنجاح");
+        //   context.pop();
+        // }
+        if (state is FailureShippingState) {
+          showErrorMessage(context, getFailureMessage(state.failure, context));
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 5),
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: AppColors.PRIMARY_COLOR, width: 3),
+                // ignore: prefer_const_literals_to_create_immutables
+                boxShadow: [
+                  const BoxShadow(color: Colors.black12, blurRadius: 10),
+                ],
+                borderRadius: BorderRadius.circular(15)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: Text(
+                        isHistory ? "" : "New Offer".tr(),
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Text(
+                      "${model.price}",
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 7,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          image: DecorationImage(
+                            image: NetworkImage(model
+                                    .driverId
+                                    ?.userId
+                                    ?.userProfile
+                                    ?.profilePictureKey
+                                    ?.mediaKey ??
+                                ""),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(15)),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "car model".tr(),
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          model.driverId?.userId?.firstName ?? "",
+                          style: const TextStyle(fontSize: 15),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "${model.driverId?.trips ?? 0} ${"Orders".tr()}",
+                          style: const TextStyle(fontSize: 15),
+                        )
+                      ],
+                    ),
+                    const Spacer(),
+                    Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            context.push(Routes.TripRating, extra: model);
+                          },
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              Text(
+                                  "${model.driverId?.rating?.toStringAsFixed(1)}"),
+                              const Text(
+                                "(1)",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (model.isPremium ?? false) Text("Premium".tr())
+                      ],
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                // Con
+                if (!isHistory)
+                  (model.isAccepted ?? false)
+                      ? AppButton(
+                          color: Colors.white,
+                          backColor: AppColors.PRIMARY_COLOR,
+                          // height: 50,
+                          // padding: EdgeInsets.symmetric(vertical: 0),
+                          width: double.infinity,
+                          onPressed: () {
+                            context.read<AcceptDeclineTripCubit>().complete(
+                                loadingTrip: model.loadingTripId ?? "");
+                          },
+                          style: Styles.mediumText(
+                              fontSize: 28, color: Colors.white),
+                          label: "Complete Trip".tr(),
+                          // backgroundColor: Colors.red,
+                        )
+                      : Row(
+                          children: [
+                            Flexible(
+                              child: AppButton(
+                                color: Colors.white,
+                                // height: 50,
+                                // padding: EdgeInsets.symmetric(vertical: 0),
+                                width: double.infinity,
+                                onPressed: () {
+                                  context
+                                      .read<AcceptDeclineTripCubit>()
+                                      .decline(
+                                          loadingRequestId: model.id ?? "");
+                                },
+                                style: Styles.mediumText(
+                                    fontSize: 28, color: Colors.white),
+                                label: "Decline".tr(),
+                                // backgroundColor: Colors.red,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Flexible(
+                              child: AppButton(
+                                // label: Labels.message,
+                                // icon: Icons.message,
+                                backColor: AppColors.PRIMARY_COLOR,
+                                style: Styles.mediumText(
+                                    fontSize: 28, color: Colors.white),
+                                onPressed: () {
+                                  context
+                                      .read<AcceptDeclineTripCubit>()
+                                      .accept(loadingRequestId: model.id ?? "");
+                                },
+                                label: "Accept".tr(),
+                              ),
+                            )
+                          ],
+                        ),
+                const SizedBox(
+                  height: 10,
+                ),
+                if (!isHistory)
+                  BlocBuilder<CallMessageCubit, ShippingState>(
+                    builder: (context, state) {
+                      if (state is FailureShippingState) {
+                        log(getFailureMessage(state.failure, context),
+                            name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                      }
+                      log(state.toString(),
+                          name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                      if (state is SuccessGetCallMessageState) {
+                        log(state.data.toString(),
+                            name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: AppButton(
+                                label: Labels.call,
+                                color: Colors.white,
+                                icon: Icons.call,
+                                backColor: state.data
+                                    ? AppColors.PRIMARY_COLOR
+                                    : AppColors.DARK_GRAY_COLOR,
+                                onPressed: () {},
+                                style: Styles.mediumText(
+                                    fontSize: 28, color: Colors.white),
+                              ),
+                            ),
+                            const Sizer(
+                              width: 5,
+                            ),
+                            Expanded(
+                              child: AppButton(
+                                label: Labels.message,
+                                icon: Icons.message,
+                                backColor: state.data
+                                    ? AppColors.PRIMARY_COLOR
+                                    : AppColors.DARK_GRAY_COLOR,
+                                style: Styles.mediumText(
+                                    fontSize: 15, color: Colors.white),
+                                onPressed: () {},
+                              ),
+                            ),
+                            const Sizer(
+                              width: 5,
+                            ),
+                            Expanded(
+                              child: AppButton(
+                                label: Labels.report,
+                                icon: Icons.report,
+                                backColor: Colors.red,
+                                style: Styles.mediumText(
+                                    fontSize: 28, color: Colors.white),
+                                onPressed: () {
+                                  // tripCubit.report(
+                                  //     loadingTripId: widget.model.id ?? "");
+                                  // showBottomSheet(
+                                  //   context: context,
+                                  //   builder: (context) => Padding(
+                                  //     padding: const EdgeInsets.all(10),
+                                  //     child: ReportView(
+                                  //       categoryId:
+                                  //           widget.model.categoryId?.id ?? "",
+                                  //       id: widget.model.id ?? "",
+                                  //       loadingTripId: widget.model.id ?? "",
+                                  //     ),
+                                  //   ),
+                                  // );
+                                },
+                              ),
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: AppButton(
+                                label: Labels.call,
+                                color: Colors.white,
+                                icon: Icons.call,
+                                backColor: AppColors.DARK_GRAY_COLOR,
+                                onPressed: () {
+                                  launchUrlString(
+                                      "tel://${model.driverId?.phone}");
+                                  // serviceLocator<SubscriptionController>()
+                                  //     .showSubscriptionPlans(
+                                  //         subCategoryId:
+                                  //             "62c8bab18e28a58a3edf580d");
+                                  // .showActiveSubscriptionAmounts(
+                                  //     walletType: WalletTypes.balance);
+                                },
+                                style: Styles.mediumText(
+                                    fontSize: 28, color: Colors.white),
+                              ),
+                            ),
+                            const Sizer(
+                              width: 5,
+                            ),
+                            Expanded(
+                              child: AppButton(
+                                label: Labels.message,
+                                icon: Icons.message,
+                                backColor: AppColors.DARK_GRAY_COLOR,
+                                style: Styles.mediumText(
+                                    fontSize: 28, color: Colors.white),
+                                onPressed: () {
+                                  // serviceLocator<SubscriptionController>()
+                                  //     .showSubscriptionPlans(
+                                  //         subCategoryId:
+                                  //             "62c8bab18e28a58a3edf580d");
+                                },
+                              ),
+                            ),
+                            const Sizer(
+                              width: 5,
+                            ),
+                            Expanded(
+                              child: AppButton(
+                                label: Labels.report,
+                                icon: Icons.report,
+                                backColor: Colors.red,
+                                style: Styles.mediumText(
+                                    fontSize: 28, color: Colors.white),
+                                onPressed: () {
+                                  showBottomSheet(
+                                    context: context,
+                                    builder: (context) => const ReportView(
+                                      categoryId: "",
+                                      id: "",
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                    },
+                  ),
+              ],
+            ),
+          ),
+          if (!isHistory)
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: GestureDetector(
+                  onTap: () {
+                    //هتروح لي صفحه subscription
+                    serviceLocator<SubscriptionController>()
+                        .showSubscriptionPlans(
+                            subCategoryId: "62c8bab18e28a58a3edf580d");
+                  },
+                  child: Text(
+                    "Subscribe to contact to the driver".tr(),
+                    style: TextStyle(fontSize: 16, color: Colors.red),
+                  ),
+                )),
+          const SizedBox(
+            height: 20,
+          ),
+        ],
+      ),
     );
   }
 }

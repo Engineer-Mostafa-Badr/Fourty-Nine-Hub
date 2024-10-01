@@ -92,7 +92,7 @@ dependencies:
   zego_uikit_signaling_plugin: ^2.8.2
   image_filter_pro: ^0.1.11
   path: 1.9.0
-  open_file: ^3.3.1
+  open_file: ^3.5.4
   html: ^0.15.0
   voice_message_package: ^2.2.1
   
@@ -107,6 +107,7 @@ dependencies:
   zego_express_engine: ^3.16.2
   statemachine: ^3.3.1
   native_device_orientation: ^2.0.3
+  win32: ^5.5.4
 dependency_overrides:
   http: ^0.13.3
 dev_dependencies:

@@ -18,7 +18,7 @@ extension ToBitDescription on Widget {
     );
     final pngBytes = await createImageFromWidget(widget,
         waitToRender: waitToRender,
-        logicalSize: logicalSize,
+        // logicalSize: logicalSize,
         imageSize: imageSize);
     return BitmapDescriptor.fromBytes(pngBytes);
   }

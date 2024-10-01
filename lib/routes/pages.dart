@@ -203,12 +203,20 @@ import '../features/ride/driver_dashboard/presentation/cubit/driver_dashboard_cu
 import '../features/ride/driver_dashboard/presentation/pages/driver_dashboard_view.dart';
 import '../features/ride/trip_details/presentation/cubit/trip_details_cubit.dart';
 import '../features/ride/trip_details/presentation/pages/trip_details_view.dart';
+import '../features/shipping/create_shipping_request/presentation/cubit/accept_decline_trip_cubit.dart';
+import '../features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
+import '../features/shipping/create_shipping_request/presentation/cubit/create_trip_cubit.dart';
+import '../features/shipping/create_shipping_request/presentation/cubit/favorite_main_cateogry_cubit.dart';
+import '../features/shipping/create_shipping_request/presentation/cubit/favorite_shipping_cubit.dart';
+import '../features/shipping/create_shipping_request/presentation/cubit/get_all_request_by_my_trip_cubit.dart';
+import '../features/shipping/create_shipping_request/presentation/cubit/get_my_trip_cubit.dart';
 import '../features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
 import '../features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
+import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/youtube/presentation/pages/play_video.dart';
 import '../features/youtube/presentation/pages/youtube.dart';
@@ -1024,9 +1032,41 @@ class AppPages {
           GoRoute(
             path: Paths.SHIPPING,
             name: Routes.SHIPPING,
-            builder: (context, state) => BlocProvider<ShippingCubit>(
-              create: (context) => serviceLocator<ShippingCubit>()..getBannerData(),
-              child: CreateShippingView(),
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider<ShippingCubit>(
+                  create: (context) =>
+                  serviceLocator<ShippingCubit>()..getBannerData(),
+                ),
+                BlocProvider<GetMyTripCubit>(
+                  create: (context) =>
+                  serviceLocator<GetMyTripCubit>()..getMyTrip(),
+                ),
+                BlocProvider<CreateTripCubit>(
+                  create: (context) => serviceLocator<CreateTripCubit>(),
+                ),
+                BlocProvider<GetAllRequestByMyTripCubit>(
+                  create: (context) =>
+                      serviceLocator<GetAllRequestByMyTripCubit>(),
+                ),
+                BlocProvider<CallMessageCubit>(
+                  create: (context) => serviceLocator<CallMessageCubit>(),
+                ),
+                BlocProvider<AcceptDeclineTripCubit>(
+                  create: (context) => serviceLocator<AcceptDeclineTripCubit>(),
+                ),
+                BlocProvider<FavoriteMainCateogryCubit>(
+                  create: (context) =>
+                      serviceLocator<FavoriteMainCateogryCubit>(),
+                ),
+                BlocProvider<FavoriteShippingCubit>(
+                  create: (context) => serviceLocator<FavoriteShippingCubit>(),
+                ),
+                BlocProvider<TwitterCubit>(
+                  create: (context) => serviceLocator<TwitterCubit>(),
+                ),
+              ],
+              child: const CreateShippingView(),
             ),
           ),
           GoRoute(path: Paths.RIDE, name: Routes.RIDE, builder: (context, state) => BlocProvider<GetTripInfoCubit>(
