@@ -80,8 +80,8 @@ class _RiderBannerState extends State<RiderBanner> {
         cover: widget.model.mainCategory?.cover ?? UIConst.imagePlaceHolder,
         image: UIConst.imagePlaceHolder,
         total: widget.model.mainCategory?.driverLength ?? 0,
-        favoriteName: widget.favoriteName,
-        isFavorite: widget.model.mainCategory?.isFavorite ?? false,
+        // favoriteName: widget.favoriteName,
+        isFavorite: widget.model.mainCategory?.isFavorite ?? false, nameEn: '',
       ),
     );
     // return Container(

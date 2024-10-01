@@ -141,6 +141,7 @@ import 'package:fourtyninehub/features/social_media/reels/data/models/audio_reel
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/like_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/save_reel_model.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:http/http.dart' as http;
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/utils/shared_pref.dart';

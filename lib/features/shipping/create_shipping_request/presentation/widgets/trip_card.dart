@@ -275,10 +275,10 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                       currentFocusNode: FocusNode(),
                                       currentController: price,
                                       hint: widget.model.price.toString(),
-                                      constraints: const BoxConstraints(
-                                        maxHeight: kToolbarHeight * .6,
-                                        minHeight: kToolbarHeight * .6,
-                                      ),
+                                      // constraints: const BoxConstraints(
+                                      //   maxHeight: kToolbarHeight * .6,
+                                      //   minHeight: kToolbarHeight * .6,
+                                      // ),
                                       keyboardType: TextInputType.number,
                                     ),
                                   )

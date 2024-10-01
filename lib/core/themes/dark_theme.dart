@@ -60,7 +60,7 @@ ThemeData darkTheme() {
     canvasColor: Colors.black38,
     bannerTheme: const MaterialBannerThemeData(),
     switchTheme: const SwitchThemeData(
-      trackColor: WidgetStatePropertyAll<Color>(Colors.grey),
+      trackColor: MaterialStatePropertyAll<Color>(Colors.grey),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(),
     cardColor: Colors.white,

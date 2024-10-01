@@ -124,7 +124,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                             isFavorite: e.isFavorite ?? false,
                                             name: e.subCategoryNameEn!),
                                       )
-                                      .toList()),
+                                      .toList(), nameEn: ''),
                         ),
                         if (field.hasError)
                           Column(

@@ -1,9 +1,4 @@
-// import 'package:flutter/src/widgets/basic.dart';
-import 'dart:developer';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/share/context_utilty.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/pages/contact_us_view.dart';
@@ -67,36 +62,10 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/picture_optional_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/raise_fare_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/offer_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/accept_decline_trip_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_trip_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/driverStatistics_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/favorite_main_cateogry_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/favorite_shipping_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_request_by_my_trip_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_driver_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_my_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/update_driver_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/dahsboard_driver_screen.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/edit_driver_screen.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/my_rating_screen.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/attachments_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/pages/broadcast_view.dart';
@@ -106,18 +75,11 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entiti
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room_view.dart';
-// import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
-// import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/select_contacts_to_share_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/show_image_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/show_images_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/viewcontact_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/request_detials_screen.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/trip_rating_screen.dart';
-// import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/Chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/viewcontact_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/pages/see_all_broadcasts.dart';
@@ -138,12 +100,9 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/pages/mus
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/instagram_profile.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_view.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
-
-import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 // import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
@@ -257,18 +216,11 @@ import '../features/zoom/presentation/pages/meeting_room.dart';
 import '../features/zoom/presentation/pages/meeting_view.dart';
 import '../service_locator/service_locator.dart';
 import 'routes.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
-
-final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 
 class AppPages {
   AppPages._();
 
   static final router = GoRouter(
-    navigatorKey: ContextUtilty.navigatorKey,
-    observers: [routeObserver],
     routes: <RouteBase>[
       GoRoute(
         path: Routes.HOME,
@@ -335,29 +287,29 @@ class AppPages {
               path: Paths.SUBCATEGORIES,
               name: Routes.SUBCATEGORIES,
               builder: (context, state) => BlocProvider.value(
-                    value: serviceLocator<SubcategoriesCubit>(),
-                    child: SubCategoriesView(
-                      mainCategory: state.extra as MainCategoryEntity,
-                    ),
-                  ),
+                value: serviceLocator<SubcategoriesCubit>(),
+                child: SubCategoriesView(
+                  mainCategory: state.extra as MainCategoryEntity,
+                ),
+              ),
               routes: [
                 GoRoute(
                     path: Paths.ADS,
                     name: Routes.ADS,
                     builder: (context, state) => BlocProvider(
-                          create: (_) => serviceLocator<AdvertisementCubit>(),
-                          child: AdsView(
-                            params: state.extra as AdsViewParams,
-                          ),
-                        ),
+                      create: (_) => serviceLocator<AdvertisementCubit>(),
+                      child: AdsView(
+                        params: state.extra as AdsViewParams,
+                      ),
+                    ),
                     routes: [
                       GoRoute(
                           path: Paths.ADdetails,
                           name: Routes.ADdetails,
                           builder: (context, state) => BlocProvider<AdDetailsCubit>(
-                                create: (_) => serviceLocator(),
-                                child: AdDetailsView(id: state.extra as String),
-                              )),
+                            create: (_) => serviceLocator(),
+                            child: AdDetailsView(id: state.extra as String),
+                          )),
                       GoRoute(
                         path: Paths.CREATEAD,
                         name: Routes.CREATEAD,
@@ -560,11 +512,11 @@ class AppPages {
               path: Paths.WALLET,
               name: Routes.WALLET,
               builder: (context, state) => BlocProvider<WalletCubit>(
-                    create: (_) => serviceLocator(),
-                    child: WalletView(
-                      type: state.extra as WalletTypes,
-                    ),
-                  ),
+                create: (_) => serviceLocator(),
+                child: WalletView(
+                  type: state.extra as WalletTypes,
+                ),
+              ),
               routes: [
                 GoRoute(
                     path: Paths.WALLETHISTORY,
@@ -598,17 +550,17 @@ class AppPages {
                     path: Paths.Lists,
                     name: Routes.Lists,
                     builder: (context, state) => BlocProvider<ListsCubit>(
-                          create: (_) => serviceLocator()..loadFriends(''),
-                          child: const ListsView(),
-                        )),
+                      create: (_) => serviceLocator()..loadFriends(''),
+                      child: const ListsView(),
+                    )),
                 GoRoute(
                     path: Paths.SHAREAPP,
                     name: Routes.SHAREAPP,
                     //
                     builder: (context, state) => BlocProvider<ShareAppCubit>(
-                          create: (_) => serviceLocator(),
-                          child: const ShareTheApp(),
-                        )),
+                      create: (_) => serviceLocator(),
+                      child: const ShareTheApp(),
+                    )),
                 GoRoute(
                     path: Paths.FAVOURITE,
                     name: Routes.FAVOURITE,
@@ -618,9 +570,9 @@ class AppPages {
                     path: Paths.FAVOURITECATEGORIES,
                     name: Routes.FAVOURITECATEGORIES,
                     builder: (context, state) => BlocProvider<FavouriteCategoryCubit>(
-                          create: (_) => serviceLocator(),
-                          child: const FavouriteCategoryView(),
-                        )),
+                      create: (_) => serviceLocator(),
+                      child: FavouriteCategoryView(),
+                    )),
                 GoRoute(
                   path: Paths.FAVOURITESUBCATEGORIES,
                   name: Routes.FAVOURITESUBCATEGORIES,
@@ -633,9 +585,9 @@ class AppPages {
                     path: Paths.MYADDS,
                     name: Routes.MYADDS,
                     builder: (context, state) => BlocProvider<MyAddsCubit>(
-                          create: (_) => serviceLocator(),
-                          child: const MyAddsView(),
-                        )),
+                      create: (_) => serviceLocator(),
+                      child: const MyAddsView(),
+                    )),
               ]),
 
           GoRoute(
@@ -728,13 +680,13 @@ class AppPages {
                     path: Paths.REELS,
                     name: Routes.REELS,
                     builder: (context, state) => MultiBlocProvider(
-                          providers: [
-                            BlocProvider<ReelsCubit>(
-                              create: (_) => serviceLocator(),
-                            ),
-                          ],
-                          child: const ReelView(),
+                      providers: [
+                        BlocProvider<ReelsCubit>(
+                          create: (_) => serviceLocator(),
                         ),
+                      ],
+                      child: const ReelView(),
+                    ),
                     routes: [
                       GoRoute(
                         path: Paths.MUSICREELS,
@@ -747,15 +699,15 @@ class AppPages {
                     path: Paths.LIVE,
                     name: Routes.LIVE,
                     builder: (context, state) => MultiBlocProvider(
-                          providers: [
-                            //club voice
-                            BlocProvider<ClubVoiceCubit>(
-                              create: (context) => serviceLocator()..loadData(),
-                              child: const ClubHouseHome(),
-                            ),
-                          ],
-                          child: const LiveStreamHomeScreen(),
+                      providers: [
+                        //club voice
+                        BlocProvider<ClubVoiceCubit>(
+                          create: (context) => serviceLocator()..loadData(),
+                          child: const ClubHouseHome(),
                         ),
+                      ],
+                      child: const LiveStreamHomeScreen(),
+                    ),
                     routes: [
                       GoRoute(
                           path: Paths.LIVEVIEW,
@@ -809,11 +761,11 @@ class AppPages {
                     path: Paths.CREATEAUCTION,
                     name: Routes.CREATEAUCTION,
                     builder: (context, state) => BlocProvider.value(
-                          value: serviceLocator<CreateAuctionCubit>(),
-                          child: CreateAuctionView(
-                            adId: state.extra as String,
-                          ),
-                        )),
+                      value: serviceLocator<CreateAuctionCubit>(),
+                      child: CreateAuctionView(
+                        adId: state.extra as String,
+                      ),
+                    )),
                 // OtherAccountView
               ]),
 
@@ -859,20 +811,8 @@ class AppPages {
                   path: Paths.SELECTCONTACTSTOSHARE,
                   name: Routes.SELECTCONTACTSTOSHARE,
                   builder: (context, state) =>
-                       SelectContactsToShareView(chatRoomCubit: state.extra as ChatRoomCubit,),
+                      SelectContactsToShareView(chatRoomCubit: state.extra as ChatRoomCubit,),
                 ),
-                // routes: const [
-                // GoRoute(
-                //   path: Paths.CHATROOMCAMERAPICKER,
-                //   name: Routes.CHATROOMCAMERAPICKER,
-                //   builder: (context, state) => const CameraPickerView(),
-                // ),
-                // GoRoute(
-                //   path: Paths.MEDIASLIDER,
-                //   name: Routes.MEDIASLIDER,
-                //   builder: (context, state) => MediaSliderView(
-                //       params: (state.extra) as MediaSliderViewParams),
-                // ),
               ]),
           // Snap
 
@@ -882,14 +822,14 @@ class AppPages {
               path: Paths.SPOTLIGHT,
               name: Routes.SPOTLIGHT,
               builder: (context, state) => MultiBlocProvider(
-                    providers: [
-                      BlocProvider(create: (context) => serviceLocator<ReelsCubit>()),
-                      BlocProvider<StoryCubit>(
-                        create: (_) => serviceLocator<StoryCubit>(),
-                      ),
-                    ],
-                    child: const SpotlightView(),
-                  )),
+                providers: [
+                  BlocProvider(create: (context) => serviceLocator<ReelsCubit>()),
+                  BlocProvider<StoryCubit>(
+                    create: (_) => serviceLocator<StoryCubit>(),
+                  ),
+                ],
+                child: const SpotlightView(),
+              )),
           // _________________ services ____________
 
           GoRoute(
@@ -986,9 +926,9 @@ class AppPages {
                     path: Paths.EDITDOCTORPROFILE,
                     name: Routes.EDITDOCTORPROFILE,
                     builder: (context, state) => BlocProvider<EditDoctorProfileCubit>(
-                          create: (context) => serviceLocator(),
-                          child: const EditDoctorProfileView(),
-                        )),
+                      create: (context) => serviceLocator(),
+                      child: const EditDoctorProfileView(),
+                    )),
                 GoRoute(
                     path: Paths.EDITDOCTORPERSONALINFO,
                     name: Routes.EDITDOCTORPERSONALINFO,
@@ -997,45 +937,45 @@ class AppPages {
                     path: Paths.DOCTORSTATISTICS,
                     name: Routes.DOCTORSTATISTICS,
                     builder: (context, state) => BlocProvider<DoctorStatisticsCubit>(
-                          create: (context) => serviceLocator(),
-                          child: const DoctorStatisticsView(),
-                        )),
+                      create: (context) => serviceLocator(),
+                      child: const DoctorStatisticsView(),
+                    )),
                 GoRoute(
                     path: Paths.DOCTORTODAYAPPOINTMENTS,
                     name: Routes.DOCTORTODAYAPPOINTMENTS,
                     builder: (context, state) => BlocProvider<DoctorTodayAppointmentsCubit>(
-                          create: (context) => serviceLocator(),
-                          child: const DoctorTodayAppointmentsView(),
-                        )),
+                      create: (context) => serviceLocator(),
+                      child: const DoctorTodayAppointmentsView(),
+                    )),
                 GoRoute(
                     path: Paths.DOCTORUNHANDLEDAPPOINTMENTS,
                     name: Routes.DOCTORUNHANDLEDAPPOINTMENTS,
                     builder: (context, state) => BlocProvider<DoctorUnhandledAppointmentsCubit>(
-                          create: (context) => serviceLocator(),
-                          child: const DoctorUnhandledAppointmentsView(),
-                        )),
+                      create: (context) => serviceLocator(),
+                      child: const DoctorUnhandledAppointmentsView(),
+                    )),
                 GoRoute(
                     path: Paths.ALLDOCTORRESERVATIONS,
                     name: Routes.ALLDOCTORRESERVATIONS,
                     builder: (context, state) => BlocProvider<AllDoctorReservationsCubit>(
-                          create: (context) => serviceLocator(),
-                          child: const AllDoctorReservationsView(),
-                        )),
+                      create: (context) => serviceLocator(),
+                      child: const AllDoctorReservationsView(),
+                    )),
               ]),
           GoRoute(
               path: Paths.FOOD,
               name: Routes.FOOD,
               builder: (context, state) => MultiBlocProvider(
-                    providers: [
-                      BlocProvider<RestaurantsListCubit>(
-                        create: (context) => serviceLocator()..loadData(),
-                      ),
-                      BlocProvider<RestaurantsMealListCubit>(
-                        create: (context) => serviceLocator(),
-                      ),
-                    ],
-                    child: const RestaurantsListsView(),
+                providers: [
+                  BlocProvider<RestaurantsListCubit>(
+                    create: (context) => serviceLocator()..loadData(),
                   ),
+                  BlocProvider<RestaurantsMealListCubit>(
+                    create: (context) => serviceLocator(),
+                  ),
+                ],
+                child: const RestaurantsListsView(),
+              ),
               routes: [
                 // CusineRestaurantsView
                 GoRoute(
@@ -1058,19 +998,19 @@ class AppPages {
                     path: Paths.RESTAURANTDETAILS,
                     name: Routes.RESTAURANTDETAILS,
                     builder: (context, state) => BlocProvider.value(
-                          value: serviceLocator<RestaurantDetailsCubit>(),
-                          child: RestaurantDetailsView(
-                            id: state.extra as String,
-                          ),
-                        ),
+                      value: serviceLocator<RestaurantDetailsCubit>(),
+                      child: RestaurantDetailsView(
+                        id: state.extra as String,
+                      ),
+                    ),
                     routes: [
                       GoRoute(
                           path: Paths.FOODCART,
                           name: Routes.FOODCART,
                           builder: (context, state) => BlocProvider.value(
-                                value: serviceLocator<RestaurantDetailsCubit>(),
-                                child: const FoodCartView(),
-                              ))
+                            value: serviceLocator<RestaurantDetailsCubit>(),
+                            child: const FoodCartView(),
+                          ))
                     ])
               ]),
           GoRoute(
@@ -1087,65 +1027,32 @@ class AppPages {
             builder: (context, state) => BlocProvider<ShippingCubit>(
               create: (context) => serviceLocator<ShippingCubit>()..getBannerData(),
               child: CreateShippingView(),
-            builder: (context, state) => MultiBlocProvider(
-              providers: [
-                BlocProvider<ShippingCubit>(
-                  create: (context) =>
-                      serviceLocator<ShippingCubit>()..getBannerData(),
-                ),
-                BlocProvider<GetMyTripCubit>(
-                  create: (context) =>
-                      serviceLocator<GetMyTripCubit>()..getMyTrip(),
-                ),
-                BlocProvider<CreateTripCubit>(
-                  create: (context) => serviceLocator<CreateTripCubit>(),
-                ),
-                BlocProvider<GetAllRequestByMyTripCubit>(
-                  create: (context) =>
-                      serviceLocator<GetAllRequestByMyTripCubit>(),
-                ),
-                BlocProvider<CallMessageCubit>(
-                  create: (context) => serviceLocator<CallMessageCubit>(),
-                ),
-                BlocProvider<AcceptDeclineTripCubit>(
-                  create: (context) => serviceLocator<AcceptDeclineTripCubit>(),
-                ),
-                BlocProvider<FavoriteMainCateogryCubit>(
-                  create: (context) =>
-                      serviceLocator<FavoriteMainCateogryCubit>(),
-                ),
-                BlocProvider<FavoriteShippingCubit>(
-                  create: (context) => serviceLocator<FavoriteShippingCubit>(),
-                ),
-                BlocProvider<TwitterCubit>(
-                  create: (context) => serviceLocator<TwitterCubit>(),
-                ),
-              ],
-              child: const CreateShippingView(),
             ),
           ),
-          GoRoute(path: Paths.RIDE, name: Routes.RIDE, builder: (context, state) => const RideRequestView(), routes: [
+          GoRoute(path: Paths.RIDE, name: Routes.RIDE, builder: (context, state) => BlocProvider<GetTripInfoCubit>(
+              create: (_) => serviceLocator(),
+              child: const RideRequestView()), routes: [
             GoRoute(
                 path: Paths.REQUESTSHISTORY,
                 name: Routes.REQUESTSHISTORY,
                 builder: (context, state) => BlocProvider<RequestHistoryCubit>(
-                      create: (_) => serviceLocator(),
-                      child: const HistoryRequestsView(),
-                    )),
+                  create: (_) => serviceLocator(),
+                  child: const HistoryRequestsView(),
+                )),
             GoRoute(
                 path: Paths.TRIPDETAILS,
                 name: Routes.TRIPDETAILS,
                 builder: (context, state) => BlocProvider<TripDetailsCubit>(
-                      create: (_) => serviceLocator(),
-                      child: const TripDetailsView(),
-                    )),
+                  create: (_) => serviceLocator(),
+                  child: const TripDetailsView(),
+                )),
             GoRoute(
                 path: Paths.RIDERDASHBOARD,
                 name: Routes.RIDERDASHBOARD,
                 builder: (context, state) => BlocProvider<DriverDashboardCubit>(
-                      create: (_) => serviceLocator(),
-                      child: const DriverDashboardView(),
-                    ))
+                  create: (_) => serviceLocator(),
+                  child: const DriverDashboardView(),
+                ))
           ]),
           GoRoute(path: Paths.YOUTUBE, name: Routes.YOUTUBE, builder: (context, state) => const YouTubeView(), routes: [
             // PlayVideo
@@ -1156,154 +1063,12 @@ class AppPages {
             )
           ]),
           GoRoute(
-              path: Paths.RIDE,
-              name: Routes.RIDE,
-              builder: (context, state) {
-                log(state.toString(), name: "zyadzyadzyd");
-                return MultiBlocProvider(
-                  providers: [
-                    BlocProvider(
-                      create: (context) =>
-                          serviceLocator<GetCateogryRiderCubit>(),
-                    ),
-                    BlocProvider(
-                      create: (context) => serviceLocator<RegisterRiderCubit>(),
-                    ),
-                    BlocProvider(
-                      create: (context) =>
-                          serviceLocator<FavoriteMainCateogryCubit>(),
-                    ),
-                    BlocProvider(
-                        create: (context) =>
-                            serviceLocator<RiderTripReelTimeCubit>()),
-                    BlocProvider(
-                      create: (context) =>
-                          GetTripInfoCubit(repository: serviceLocator()),
-                    ),
-                    BlocProvider(
-                      create: (context) => StartingLocationCubit(
-                          fetchLocationCordinatesUseCase: serviceLocator()),
-                    ),
-                    BlocProvider(
-                      create: (context) => DestinationLocationCubit(
-                          fetchLocationCordinatesUseCase: serviceLocator()),
-                    ),
-                    BlocProvider(
-                      create: (context) => FetchPriceDistanceCubit(
-                          fetchPriceDistanceUsecase: serviceLocator()),
-                    ),
-                    BlocProvider(
-                      create: (context) =>
-                          FavoriteShippingCubit(repository: serviceLocator()),
-                    ),
-                    BlocProvider(
-                      create: (context) =>
-                          LocationSocketCubit(repository: serviceLocator()),
-                    ),
-                    BlocProvider(
-                      create: (context) =>
-                          RequestRiderTripCubit(repository: serviceLocator()),
-                    ),
-                    BlocProvider(
-                      create: (context) =>
-                          RaiseFareCubit(repository: serviceLocator()),
-                    ),
-                    BlocProvider(
-                      create: (context) =>
-                          OfferCubit(repository: serviceLocator()),
-                    ),
-                  ],
-                  child: const RideRequestView(),
-                );
-              },
-              routes: [
-                GoRoute(
-                    path: Paths.REQUESTSHISTORY,
-                    name: Routes.REQUESTSHISTORY,
-                    builder: (context, state) =>
-                        BlocProvider<RequestHistoryCubit>(
-                          create: (_) => serviceLocator(),
-                          child: const HistoryRequestsView(),
-                        )),
-                GoRoute(
-                    path: Paths.TRIPDETAILS,
-                    name: Routes.TRIPDETAILS,
-                    builder: (context, state) => BlocProvider<TripDetailsCubit>(
-                          create: (_) => serviceLocator(),
-                          child: const TripDetailsView(),
-                        )),
-                GoRoute(
-                    path: Paths.RIDERDASHBOARD,
-                    name: Routes.RIDERDASHBOARD,
-                    builder: (context, state) => MultiBlocProvider(
-                          providers: [
-                            BlocProvider<DriverDashboardCubit>(
-                              create: (_) => serviceLocator(),
-                            ),
-                            BlocProvider(
-                              create: (context) => DriverStatisticsCubit(
-                                  repository: serviceLocator()),
-                            ),
-                          ],
-                          child: const DriverDashboardView(),
-                        )),
-                GoRoute(
-                    path: Paths.RIDERREGISTER,
-                    name: Routes.RIDERREGISTER,
-                    builder: (context, state) => MultiBlocProvider(
-                          providers: [
-                            BlocProvider<DriverDashboardCubit>(
-                              create: (_) => serviceLocator(),
-                            ),
-                            BlocProvider(
-                              create: (context) => RegisterRiderCubit(
-                                  repo: serviceLocator(),
-                                  repository: serviceLocator()),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  serviceLocator<GetCateogryRiderCubit>(),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  serviceLocator<FetchCarBrandsCubit>(),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  serviceLocator<FetchCarModelsCubit>(),
-                            ),
-                            BlocProvider(
-                              create: (context) =>
-                                  serviceLocator<FetchCarYearTypeCubit>(),
-                            ),
-                            BlocProvider(
-                              create: (context) => PictureOptionalCubit(
-                                  repository: serviceLocator())
-                                ..getData(),
-                            ),
-                          ],
-                          child: const RiderRegisterView(),
-                        ))
-              ]),
-          GoRoute(
-              path: Paths.YOUTUBE,
-              name: Routes.YOUTUBE,
-              builder: (context, state) => const YouTubeView(),
-              routes: [
-                // PlayVideo
-                GoRoute(
-                  path: Paths.PLAYVIDEO,
-                  name: Routes.PLAYVIDEO,
-                  builder: (context, state) => const PlayVideo(),
-                )
-              ]),
-          GoRoute(
               path: Paths.ZOOM,
               name: Routes.ZOOM,
               builder: (context, state) => BlocProvider<StreamCubit>(
-                    create: (context) => serviceLocator<StreamCubit>()..getScheduledMeetings(),
-                    child: const MeetingView(),
-                  ),
+                create: (context) => serviceLocator<StreamCubit>()..getScheduledMeetings(),
+                child: const MeetingView(),
+              ),
               routes: [
                 // PlayVideo
                 GoRoute(
@@ -1370,7 +1135,7 @@ class AppPages {
               BlocProvider(
                 create: (context) => serviceLocator<CreateDoctorCubit>(),
               ),
-            ], child: const RegisterShippingScreen()),
+            ], child: RegisterShippingScreen()),
           ),
           // ___________________ trip join ______________
           GoRoute(

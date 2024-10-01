@@ -80,7 +80,7 @@ class AuthServiceLocator {
     // auth use cases
     serviceLocator.registerFactory(() => LoginUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => GetUserUseCase(serviceLocator()));
-    serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
+    // serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     serviceLocator.registerFactory(() => AttachTokenUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => SaveTokensUseCase(serviceLocator()));
     // serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());

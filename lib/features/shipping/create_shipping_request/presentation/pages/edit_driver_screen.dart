@@ -841,13 +841,13 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                       hintColor: AppColors.PRIMARY_COLOR,
                                       currentFocusNode: model,
                                       currentController: modelController,
-                                      hintFontSize: 16,
+                                      // hintFontSize: 16,
                                       noBoarder: true,
                                       contentPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 5),
-                                      constraints: const BoxConstraints(
-                                          maxHeight: 70, minHeight: 70),
+                                      // constraints: const BoxConstraints(
+                                      //     maxHeight: 70, minHeight: 70),
                                       onChanged: (value) {
                                         shippingcubit.model.model = value;
                                       },

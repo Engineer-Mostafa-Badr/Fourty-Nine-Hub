@@ -181,7 +181,7 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                         name: e
                                                             .subCategoryNameEn!),
                                                   )
-                                                  .toList()),
+                                                  .toList(), nameEn: ''),
                                         ),
                                         if (field.hasError)
                                           Column(

@@ -39,7 +39,7 @@ class _ShippingBannerState extends State<ShippingBanner> {
   @override
   Widget build(BuildContext context) {
     return MainCategoryBanner(
-      noCount: true,
+      // noCount: true,
       onFavorite: () {
         if (isFavrote) {
           context
@@ -80,8 +80,8 @@ class _ShippingBannerState extends State<ShippingBanner> {
         cover: widget.model.mainCategory?.cover ?? UIConst.imagePlaceHolder,
         image: UIConst.imagePlaceHolder,
         total: widget.model.mainCategory?.driverLength ?? 0,
-        favoriteName: widget.favoriteName,
-        isFavorite: widget.model.mainCategory?.isFavorite ?? false,
+        // favoriteName: widget.favoriteName,
+        isFavorite: widget.model.mainCategory?.isFavorite ?? false, nameEn: '',
       ),
     );
     // return Container(

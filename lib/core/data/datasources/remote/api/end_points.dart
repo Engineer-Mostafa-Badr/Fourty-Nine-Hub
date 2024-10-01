@@ -188,11 +188,6 @@ class EndPoints {
   static String getDoctorDetails(String doctorId) => '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
 
   static String toggleFavoriteCategory(String subCategoryId) => '/favorite-category/$subCategoryId';
-  static String getDoctorDetails(String doctorId) =>
-      '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
-  static String toggleFavoriteCategory(String subCategoryId) =>
-      '/favorite-category/$subCategoryId';
-
   static const getHealthSubcategories = '/health/subCategories-health-with-ads';
   static const getMedicalServices = '/health/subCategories-medicalServices-with-ads';
   static const getFavoriteCategory = '/favorite-category';
@@ -483,11 +478,10 @@ class EndPoints {
   }
 
   static String acceptRejectFriendRequest(AcceptRejectFriendRequestParams params) {
-    return '/friends/acceptOrRejectrequest/${params.userId}?subCategory=${Constants.facebookSubCategory}';
-  static String acceptRejectFriendRequest(
-      AcceptRejectFriendRequestParams params) {
-    return '/friends/acceptOrRejectrequest/${params.userId}?subCategory=62ef7cf658c90d4a7ed48120';
+    return '/friends/acceptOrRejectrequest/${params
+        .userId}?subCategory=${Constants.facebookSubCategory}';
   }
+
 
   static String deleteFriend(String userId) {
     return '/friends/deleteFriend/$userId';
@@ -735,8 +729,6 @@ class EndPoints {
   static String buttonAvailable = '/global/click';
 
   static String getSubscriptionPlans(String subcategoryId) => '/subscription/plans/$subcategoryId';
-  static String getSubscriptionPlans(String subcategoryId) =>
-      '/subscription/plans/$subcategoryId';
 
   static String checkUserSubscription(String id) {
     return '/subscription/subcategory/$id';

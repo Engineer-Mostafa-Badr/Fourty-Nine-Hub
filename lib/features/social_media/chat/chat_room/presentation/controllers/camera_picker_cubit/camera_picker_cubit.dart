@@ -1,167 +1,165 @@
-// import 'dart:async';
-// import 'package:bloc/bloc.dart';
-// import 'package:camera/camera.dart';
-// import 'package:fourtyninehub/core/messages/messages.dart';
-// import 'package:icons_launcher/utils/cli_logger.dart';
-// import 'package:permission_handler/permission_handler.dart';
-// import 'dart:io';
+import 'dart:async';
+import 'package:bloc/bloc.dart';
+import 'package:camera/camera.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'dart:io';
 
-// part 'camera_picker_state.dart';
+part 'camera_picker_state.dart';
 
-// class CameraPickerCubit extends Cubit<CameraPickerState> {
-//   CameraPickerCubit() : super(CameraPickerState());
+class CameraPickerCubit extends Cubit<CameraPickerState> {
+  CameraPickerCubit() : super(CameraPickerState());
 
-//   CameraController? _controller;
-//   int _selectedCamera = 0;
-//   final List<File> _mediaList = [];
-//   final Duration _maxVideoLength = const Duration(minutes: 2);
-//   late List<CameraDescription> _cameras;
-//   Completer<void>? _recordingManualCompleter;
+  CameraController? _controller;
+  int _selectedCamera = 0;
+  final List<File> _mediaList = [];
+  final Duration _maxVideoLength = const Duration(minutes: 2);
+  late List<CameraDescription> _cameras;
+  Completer<void>? _recordingManualCompleter;
 
-//   Future<void> init() async {
-//     try {
-//       emit(state.copyWith(status: CameraPickerStatus.loadingCamera));
-//       _cameras = await availableCameras();
-//       CliLogger.info(_cameras.toString());
-//       _controller =
-//           CameraController(_cameras[_selectedCamera], ResolutionPreset.medium);
+  Future<void> init() async {
+    try {
+      emit(state.copyWith(status: CameraPickerStatus.loadingCamera));
+      _cameras = await availableCameras();
+      CliLogger.info(_cameras.toString());
+      _controller =
+          CameraController(_cameras[_selectedCamera], ResolutionPreset.medium);
 
-//       await _controller?.initialize();
-//       await _controller?.setFlashMode(FlashMode.off);
-//       emit(state.copyWith(
-//           controller: _controller, status: CameraPickerStatus.initialized));
-//     } on CameraException catch (e) {
-//       if (e.code.toLowerCase().contains('camera')) {
-//         emit(state.copyWith(status: CameraPickerStatus.needCameraPermission));
-//       } else if (e.code.toLowerCase().contains('microphone') ||
-//           e.code.toLowerCase().contains('audio')) {
-//         emit(state.copyWith(
-//             status: CameraPickerStatus.needMicrophonePermission));
-//       } else {
-//         CliLogger.error(e.toString());
-//       }
-//     } catch (e) {
-//       CliLogger.error(e.toString());
-//     }
-//   }
+      await _controller?.initialize();
+      await _controller?.setFlashMode(FlashMode.off);
+      emit(state.copyWith(
+          controller: _controller, status: CameraPickerStatus.initialized));
+    } on CameraException catch (e) {
+      if (e.code.toLowerCase().contains('camera')) {
+        emit(state.copyWith(status: CameraPickerStatus.needCameraPermission));
+      } else if (e.code.toLowerCase().contains('microphone') ||
+          e.code.toLowerCase().contains('audio')) {
+        emit(state.copyWith(
+            status: CameraPickerStatus.needMicrophonePermission));
+      } else {
+        CliLogger.error(e.toString());
+      }
+    } catch (e) {
+      CliLogger.error(e.toString());
+    }
+  }
 
-//   Future<void> flipCamera() async {
-//     _selectedCamera = _selectedCamera == 0 ? 1 : 0;
-//     emit(state.copyWith(status: CameraPickerStatus.loadingCamera));
-//     await _controller?.setDescription(_cameras[_selectedCamera]);
-//     CliLogger.info('Camera flipped to ${_cameras[_selectedCamera].name}');
-//     emit(state.copyWith(
-//         status: CameraPickerStatus.flipCamera, controller: _controller));
-//   }
+  Future<void> flipCamera() async {
+    _selectedCamera = _selectedCamera == 0 ? 1 : 0;
+    emit(state.copyWith(status: CameraPickerStatus.loadingCamera));
+    await _controller?.setDescription(_cameras[_selectedCamera]);
+    CliLogger.info('Camera flipped to ${_cameras[_selectedCamera].name}');
+    emit(state.copyWith(
+        status: CameraPickerStatus.flipCamera, controller: _controller));
+  }
 
-//   Future<void> toggleFlashMode() async {
-//     FlashMode newFlashMode = _controller?.value.flashMode == FlashMode.off
-//         ? FlashMode.torch
-//         : FlashMode.off;
+  Future<void> toggleFlashMode() async {
+    FlashMode newFlashMode = _controller?.value.flashMode == FlashMode.off
+        ? FlashMode.torch
+        : FlashMode.off;
 
-//     await _controller?.setFlashMode(newFlashMode);
-//     emit(state.copyWith(
-//         status: CameraPickerStatus.toggleFlashMode, controller: _controller));
-//   }
+    await _controller?.setFlashMode(newFlashMode);
+    emit(state.copyWith(
+        status: CameraPickerStatus.toggleFlashMode, controller: _controller));
+  }
 
-//   Future<void> takePicture() async {
-//     try {
-//       final XFile? image = await _controller?.takePicture();
-//       CliLogger.info(
-//           'Picture taken : ${image?.path}\nimage.mimeType: ${image?.mimeType}');
-//       if (image != null) {
-//         _mediaList.add(File(image.path));
-//       }
-//       emit(state.copyWith(
-//           status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
-//     } catch (e) {
-//       CliLogger.error('Error taking picture: $e');
-//     }
-//   }
+  Future<void> takePicture() async {
+    try {
+      final XFile? image = await _controller?.takePicture();
+      CliLogger.info(
+          'Picture taken : ${image?.path}\nimage.mimeType: ${image?.mimeType}');
+      if (image != null) {
+        _mediaList.add(File(image.path));
+      }
+      emit(state.copyWith(
+          status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
+    } catch (e) {
+      CliLogger.error('Error taking picture: $e');
+    }
+  }
 
-//   Future<void> startVideoRecording() async {
-//     try {
-//       _recordingManualCompleter = Completer<void>();
-//       await _controller?.startVideoRecording();
-//       emit(state.copyWith(status: CameraPickerStatus.startVideo));
-//       CliLogger.info('Video recording started');
+  Future<void> startVideoRecording() async {
+    try {
+      _recordingManualCompleter = Completer<void>();
+      await _controller?.startVideoRecording();
+      emit(state.copyWith(status: CameraPickerStatus.startVideo));
+      CliLogger.info('Video recording started');
 
-//       await Future.any([
-//         Future.delayed(_maxVideoLength),
-//         _recordingManualCompleter!.future,
-//       ]);
+      await Future.any([
+        Future.delayed(_maxVideoLength),
+        _recordingManualCompleter!.future,
+      ]);
 
-//       if (!(_recordingManualCompleter!.isCompleted)) {
-//         CliLogger.info('Video recording stopped automatically');
-//         stopVideoRecording();
-//       }
+      if (!(_recordingManualCompleter!.isCompleted)) {
+        CliLogger.info('Video recording stopped automatically');
+        stopVideoRecording();
+      }
 
-//       _recordingManualCompleter = null;
-//     } catch (e) {
-//       CliLogger.error("Error while starting video recording: $e");
-//     }
-//   }
+      _recordingManualCompleter = null;
+    } catch (e) {
+      CliLogger.error("Error while starting video recording: $e");
+    }
+  }
 
-//   Future<void> stopVideoRecording() async {
-//     try {
-//       if (_recordingManualCompleter != null &&
-//           !_recordingManualCompleter!.isCompleted) {
-//         _recordingManualCompleter!
-//             .complete(); // Signal that the recording has been stopped
-//       }
-//     }
-//   }
+  Future<void> stopVideoRecording() async {
+    try {
+      if (_recordingManualCompleter != null &&
+          !_recordingManualCompleter!.isCompleted) {
+        _recordingManualCompleter!
+            .complete(); // Signal that the recording has been stopped
+      }
 
-//       final XFile? tmpVideo = await _controller?.stopVideoRecording();
+      final XFile? tmpVideo = await _controller?.stopVideoRecording();
 
-//       emit(state.copyWith(status: CameraPickerStatus.endVideo));
+      emit(state.copyWith(status: CameraPickerStatus.endVideo));
 
-//       if (tmpVideo != null) {
-//         final File video = await _renameVideoFile(File(tmpVideo.path), '.mp4');
-//         CliLogger.info('Video recording stopped : ${video.path}}');
-//         _mediaList.add(video);
-//         emit(state.copyWith(
-//             status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
-//       }
-//     } catch (e) {
-//       CliLogger.error("Error while stopping video recording: $e");
-//     }
-//   }
+      if (tmpVideo != null) {
+        final File video = await _renameVideoFile(File(tmpVideo.path), '.mp4');
+        CliLogger.info('Video recording stopped : ${video.path}}');
+        _mediaList.add(video);
+        emit(state.copyWith(
+            status: CameraPickerStatus.updateMediaList, mediaList: _mediaList));
+      }
+    } catch (e) {
+      CliLogger.error("Error while stopping video recording: $e");
+    }
+  }
 
-//   void emitPhotoPickMode() {
-//     emit(state.copyWith(pickMode: PickMode.photo));
-//   }
+  void emitPhotoPickMode() {
+    emit(state.copyWith(pickMode: PickMode.photo));
+  }
 
-//   void emitVideoPickMode() {
-//     emit(state.copyWith(pickMode: PickMode.video));
-//   }
+  void emitVideoPickMode() {
+    emit(state.copyWith(pickMode: PickMode.video));
+  }
 
-//   void refreshMediaList({List<File>? media}) {
-//     emit(state.copyWith(
-//         status: CameraPickerStatus.updateMediaList,
-//         mediaList: media ?? _mediaList));
-//   }
+  void refreshMediaList({List<File>? media}) {
+    emit(state.copyWith(
+        status: CameraPickerStatus.updateMediaList,
+        mediaList: media ?? _mediaList));
+  }
 
-//   Future<File> _renameVideoFile(File originalFile, String newExtension) async {
-//     final originalPath = originalFile.path;
+  Future<File> _renameVideoFile(File originalFile, String newExtension) async {
+    final originalPath = originalFile.path;
 
-//     // Create a new path with the desired extension
-//     final newPath = originalPath.replaceAll('.temp', newExtension);
+    // Create a new path with the desired extension
+    final newPath = originalPath.replaceAll('.temp', newExtension);
 
-//     // Copy the file to the new path
-//     final newFile = await originalFile.copy(newPath);
+    // Copy the file to the new path
+    final newFile = await originalFile.copy(newPath);
 
-//     // Optionally, delete the old file
-//     await originalFile.delete();
+    // Optionally, delete the old file
+    await originalFile.delete();
 
-//     return newFile;
-//   }
+    return newFile;
+  }
 
-//   Duration get maxVideoLength => _maxVideoLength;
+  Duration get maxVideoLength => _maxVideoLength;
 
-//   @override
-//   Future<void> close() {
-//     _controller?.dispose();
-//     return super.close();
-//   }
-// }
+  @override
+  Future<void> close() {
+    _controller?.dispose();
+    return super.close();
+  }
+}
