@@ -49,7 +49,7 @@ class RoomInfoWidget extends StatelessWidget {
                   accountId: 0,
                   userId: '',
                 ),
-                Sizer(),
+                const Sizer(),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

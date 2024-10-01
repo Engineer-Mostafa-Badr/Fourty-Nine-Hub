@@ -16,7 +16,7 @@ class DoctorDetailsReviewsWidget extends StatelessWidget {
     return SizedBox(
       height: 500.h,
       child: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -24,7 +24,7 @@ class DoctorDetailsReviewsWidget extends StatelessWidget {
               Labels.patientsReviews,
               style: Styles.headerText(),
             ),
-            Sizer(),
+            const Sizer(),
             BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
               buildWhen: (previous, current) =>
                   current is DoctorDetailsReviewsLoaded ||

@@ -22,16 +22,16 @@ class CancelOrder extends StatelessWidget {
         shrinkWrap: true,
         children: [
           Label(text: 'Cancel this request?', style: Styles.mediumText()),
-          Sizer(),
+          const Sizer(),
           AppButton(
               label: 'Keep finding Driver!', onPressed: () => context.pop()),
-          Sizer(),
+          const Sizer(),
           AppButton(
               label: 'Cancel Request',
               backColor: Colors.grey[100] ?? Colors.grey,
               textColor: Colors.black,
               onPressed: () {}),
-          Sizer(),
+          const Sizer(),
         ],
       ),
     );

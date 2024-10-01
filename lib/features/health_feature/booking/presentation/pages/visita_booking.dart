@@ -72,7 +72,7 @@ class _VisitaBookingState extends State<VisitaBooking> {
           },
           builder: (context, state) {
             return Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: ListView(
                 children: [
                   const BookingDoctorProfileWidget(),
@@ -80,7 +80,7 @@ class _VisitaBookingState extends State<VisitaBooking> {
                   const BookDoctorAppointmentTimeCard(),
                   const BookDoctorAppointmentLocationInfoCard(),
                   const BookDoctorAppointmentFeesCard(),
-                  Sizer(),
+                  const Sizer(),
 
                   Row(
                     children: [
@@ -107,7 +107,7 @@ class _VisitaBookingState extends State<VisitaBooking> {
                               );
                             }),
                       ),
-                      Sizer(),
+                      const Sizer(),
                       Expanded(
                         child: AppButton(
                             height: 50.h,

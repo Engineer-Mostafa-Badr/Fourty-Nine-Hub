@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/src/components/message/input_board_button.dart';
 
 // Package imports:
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
@@ -44,7 +43,7 @@ class ZegoLiveAudioRoomBottomBar extends StatefulWidget {
   final ZegoUIKitPrebuiltLiveAudioRoomMinimizeData minimizeData;
 
   const ZegoLiveAudioRoomBottomBar({
-    Key? key,
+    super.key,
     this.avatarBuilder,
     required this.config,
     required this.events,
@@ -58,7 +57,7 @@ class ZegoLiveAudioRoomBottomBar extends StatefulWidget {
     required this.height,
     required this.buttonSize,
     required this.minimizeData,
-  }) : super(key: key);
+  });
 
   @override
   State<ZegoLiveAudioRoomBottomBar> createState() =>

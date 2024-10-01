@@ -6,13 +6,13 @@ import '../../../../zego_uikit.dart';
 
 class ZegoScreenSharingToggleButton extends StatefulWidget {
   const ZegoScreenSharingToggleButton({
-    Key? key,
+    super.key,
     this.iconStartSharing,
     this.iconStopSharing,
     this.buttonSize,
     this.iconSize,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   final ButtonIcon? iconStartSharing;
   final ButtonIcon? iconStopSharing;

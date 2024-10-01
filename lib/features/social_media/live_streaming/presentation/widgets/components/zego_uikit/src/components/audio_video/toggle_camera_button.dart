@@ -10,14 +10,14 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 /// button used to open/close camera
 class ZegoToggleCameraButton extends StatefulWidget {
   const ZegoToggleCameraButton({
-    Key? key,
+    super.key,
     this.normalIcon,
     this.offIcon,
     this.onPressed,
     this.defaultOn = true,
     this.iconSize,
     this.buttonSize,
-  }) : super(key: key);
+  });
 
   final ButtonIcon? normalIcon;
   final ButtonIcon? offIcon;

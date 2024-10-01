@@ -7,10 +7,10 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 
 class ZegoInRoomChatViewItem extends StatefulWidget {
   const ZegoInRoomChatViewItem({
-    Key? key,
+    super.key,
     required this.message,
     required this.avatarBuilder,
-  }) : super(key: key);
+  });
 
   final ZegoInRoomMessage message;
   final ZegoAvatarBuilder? avatarBuilder;

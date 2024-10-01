@@ -19,7 +19,7 @@ class EditDoctorPersonalInfoView extends StatelessWidget {
         label: Labels.edit,
       ),
       body: ListView(
-        padding: EdgeInsets.all(18),
+        padding: const EdgeInsets.all(18),
         children: [
           const EditDoctorSpecialityField(),
           Sizer(

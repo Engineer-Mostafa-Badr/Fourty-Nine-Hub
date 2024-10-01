@@ -28,7 +28,7 @@ class Winners extends StatelessWidget {
           builder: (BuildContext context, state) {
             if (state is WinnersSuccessState) {
               return Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3, childAspectRatio: .6),

@@ -42,12 +42,12 @@ class AreYouSure extends StatelessWidget {
         text: title,
         style: Styles.headerText(),
       ),
-      Sizer(),
+      const Sizer(),
       Label(
         text: subTitle,
         style: Styles.mediumText(),
       ),
-      Sizer(),
+      const Sizer(),
       Row(
         children: [
           Expanded(
@@ -58,7 +58,7 @@ class AreYouSure extends StatelessWidget {
                     action();
                     context.pop();
                   })),
-          Sizer(),
+          const Sizer(),
           Expanded(
               child: AppButton(
                   color: AppColors.QUANTITY_COLOR,

@@ -119,10 +119,10 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildAccountHeader(context: context, post: myPost),
-                  _buildContentWidget(
-                      content: myPost.content ?? '',
-                      backgroundColor: myPost.backgroundColor,
-                      images: myPost.images ?? []),
+                _buildContentWidget(
+                    content: myPost.content ?? '',
+                    backgroundColor: myPost.backgroundColor,
+                    images: myPost.images ?? []),
                 Container(
                   margin: EdgeInsets.all(myPost.isShared == true ? 10 : 0),
                   padding: EdgeInsets.all(
@@ -251,8 +251,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                       ? myPost.mainPost!.id
                                       : myPost.id);
                               if (result == true) {
-                                showSuccessMessage(
-                                    context, LocaleKeys.postSharedSuccessfully.localize);
+                                showSuccessMessage(context,
+                                    LocaleKeys.postSharedSuccessfully.localize);
                               }
                             }),
                       ),
@@ -416,8 +416,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             listTile(
                 icon: Icons.delete,
                 title: LocaleKeys.deletePost.localize,
-                subTitle:
-                LocaleKeys.youWillDeletePost.localize,
+                subTitle: LocaleKeys.youWillDeletePost.localize,
                 onTap: () {
                   widget.deletePost(post.id);
                   if (fromDetails == true) {

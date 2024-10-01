@@ -73,7 +73,7 @@ class InstallmentView extends StatelessWidget {
       required BuildContext context}) {
     final controller = context.read<InstallmentListCubit>();
     return Container(
-      padding: EdgeInsets.all(3),
+      padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color: isSelected ? AppColors.PRIMARY_COLOR : Colors.white),
@@ -125,8 +125,8 @@ class InstallmentView extends StatelessWidget {
                   return InkWell(
                     onTap: () => controller.changeSubCategory(v: subCategory),
                     child: Container(
-                      margin: EdgeInsets.only(left: 10),
-                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      margin: const EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: state.selectedSubCategory == subCategory
@@ -147,7 +147,7 @@ class InstallmentView extends StatelessWidget {
                     ),
                   );
                 },
-                separatorBuilder: (context, index) => Sizer(
+                separatorBuilder: (context, index) => const Sizer(
                   width: 0,
                 ),
               ),
@@ -162,7 +162,7 @@ class InstallmentView extends StatelessWidget {
     return BlocBuilder<InstallmentListCubit, InstallmentListState>(
         builder: (context, state) {
       return Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: state.isLoading
             ? const Center(
                 child: CircularProgressIndicator.adaptive(),
@@ -184,7 +184,7 @@ class InstallmentView extends StatelessWidget {
                           item: state.installments![index],
                           isVertical: false,
                         ),
-                    separatorBuilder: (context, index) => Sizer(),
+                    separatorBuilder: (context, index) => const Sizer(),
                     itemCount: state.installments?.length ?? 0),
       );
     });

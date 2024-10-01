@@ -5,14 +5,23 @@ class MainCategory {
   String? banner;
   String? cover;
   int? driverLength;
-
+  String? registeredSubcategory;
+  bool? isDriver;
+  bool? isFavorite;
+  bool? isDriverApproved;
+  bool? haveTrip;
   MainCategory({
     this.mainCategoryId,
     this.nameAr,
     this.nameEn,
     this.banner,
     this.cover,
+    this.haveTrip,
     this.driverLength,
+    this.isDriver,
+    this.isDriverApproved,
+    this.registeredSubcategory,
+    this.isFavorite,
   });
 
   factory MainCategory.fromJson(Map<String, dynamic> json) => MainCategory(
@@ -21,7 +30,12 @@ class MainCategory {
         nameEn: json['nameEn'] as String?,
         banner: json['banner'] as String?,
         cover: json['cover'] as String?,
+        haveTrip: (json['haveTrip'] as bool?) ?? false,
         driverLength: json['driverLength'] as int?,
+        isDriver: (json['isDriver'] as bool?) ?? false,
+        isFavorite: (json['isFavorite'] as bool?) ?? false,
+        isDriverApproved: (json['isDriverApproved'] as bool?) ?? false,
+        registeredSubcategory: json[''] as String?,
       );
 
   Map<String, dynamic> toJson() => {

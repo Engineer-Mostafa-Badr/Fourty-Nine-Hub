@@ -9,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../common/widgets/stateful/videos/video_player.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../widgets/youtube_video_card.dart';
 
 class PlayVideo extends StatelessWidget {
@@ -30,7 +29,7 @@ class PlayVideo extends StatelessWidget {
   }
 
   Widget _buildVideoWidget() {
-    return SizedBox(
+    return const SizedBox(
       height: kToolbarHeight * 3,
       child: VideoPlayerWidget(
         url:
@@ -41,7 +40,7 @@ class PlayVideo extends StatelessWidget {
 
   Widget _buildVideoInfo() {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
           Label(
@@ -49,14 +48,14 @@ class PlayVideo extends StatelessWidget {
             style: Styles.mediumText(fontWeight: FontWeight.w500),
             maxLines: 2,
           ),
-          Sizer(),
+          const Sizer(),
           Row(
             children: [
               const ProfileImage(
                 accountId: 0,
                 userId: '',
               ),
-              Sizer(),
+              const Sizer(),
               Label(text: 'Mr Beast', style: Styles.mediumText()),
               const Spacer(),
               AppButton(
@@ -66,7 +65,7 @@ class PlayVideo extends StatelessWidget {
                   onPressed: () {}),
             ],
           ),
-          Sizer(),
+          const Sizer(),
           SizedBox(
             height: kToolbarHeight * .5,
             child: ListView(
@@ -97,7 +96,7 @@ class PlayVideo extends StatelessWidget {
       required IconData icon,
       required Function onTap}) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 5),
       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5.h),
       decoration: BoxDecoration(
           color: AppColors.LIGHT_GRAY_COLOR,
@@ -107,7 +106,7 @@ class PlayVideo extends StatelessWidget {
           Icon(
             icon,
           ),
-          Sizer(
+          const Sizer(
             width: 5,
           ),
           Label(text: label, style: Styles.mediumText()),
@@ -129,8 +128,8 @@ class PlayVideo extends StatelessWidget {
                 itemCount: 10));
       },
       child: Container(
-        margin: EdgeInsets.all(8.0),
-        padding: EdgeInsets.all(8.0),
+        margin: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           color: AppColors.GREY_LIGHT_COLOR,
           borderRadius: BorderRadius.circular(10),
@@ -146,7 +145,7 @@ class PlayVideo extends StatelessWidget {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) => const YoutubeVideoCard(),
-        separatorBuilder: (context, index) => Sizer(),
+        separatorBuilder: (context, index) => const Sizer(),
         itemCount: 10);
   }
 }

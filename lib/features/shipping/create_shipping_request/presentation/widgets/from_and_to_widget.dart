@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
@@ -31,13 +33,13 @@ class FromAndToWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildSubcategoriesWidget(context: context),
-          Sizer(),
+          const Sizer(),
           _buildFromWidget(context: context),
-          Sizer(),
+          const Sizer(),
           _buildToWidget(context: context),
-          Sizer(),
+          const Sizer(),
           AppButton(
-              label: 'Continue',
+              label: 'Continue'.tr(),
               onPressed: () {
                 bottomSheet(
                     isScrollControlled: true,
@@ -73,10 +75,10 @@ class FromAndToWidget extends StatelessWidget {
                 Icons.search,
                 color: Colors.grey,
               ),
-              Sizer(),
+              const Sizer(),
               Expanded(
                   child: Label(
-                text: state.toAddress?.address ?? 'Select drop off location',
+                text: state.toAddress?.address ?? 'Select drop off location'.tr(),
                 style: Styles.mediumText(),
                 maxLines: 1,
               )),
@@ -110,17 +112,17 @@ class FromAndToWidget extends StatelessWidget {
                         radius: 4,
                       ),
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Expanded(
                         child: Text(
-                      state.fromAddress?.address ?? 'Select Pickup location',
+                      state.fromAddress?.address ?? 'Select Pickup location'.tr(),
                       maxLines: 1,
                     )),
                   ],
                 ),
               ),
             )
-          : Sizer();
+          : const Sizer();
     });
   }
 
@@ -172,7 +174,7 @@ class FromAndToWidget extends StatelessWidget {
                         ),
                       );
                     },
-                    separatorBuilder: (context, index) => Sizer(),
+                    separatorBuilder: (context, index) => const Sizer(),
                     itemCount: state.subCategories?.length ?? 0),
               )
             : const SizedBox();

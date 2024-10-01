@@ -9,7 +9,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MainCategoriesGridView extends StatefulWidget {
-  MainCategoriesGridView({super.key});
+  const MainCategoriesGridView({super.key});
 
   @override
   State<MainCategoriesGridView> createState() => _MainCategoriesGridViewState();

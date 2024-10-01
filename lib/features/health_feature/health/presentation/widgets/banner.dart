@@ -21,11 +21,13 @@ class _HealthBannerState extends State<HealthBanner> {
         if (state.mainCategory != null) {
           return MainCategoryBanner(
               isFavorite: state.mainCategory!.isFavorite,
-              onFavorite: () async {
-                print(state.mainCategory!.id);
-                context
-                    .read<HealthCubit>()
-                    .toggleFavoriteCategory(state.mainCategory!.id);
+              onFavorite: () {
+                return null;
+
+                // print(state.mainCategory!.id);
+                // context
+                //     .read<HealthCubit>()
+                //     .toggleFavoriteCategory(state.mainCategory!.id);
               },
               category: state.mainCategory!,
               canRegister: state.isDoctor == true ? false : true,
@@ -37,7 +39,7 @@ class _HealthBannerState extends State<HealthBanner> {
                 }
               });
         } else {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
       },
       listener: (BuildContext context, HealthState state) {},

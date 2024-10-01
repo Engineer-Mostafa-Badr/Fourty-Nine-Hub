@@ -52,7 +52,7 @@ class _DestinationTextFieldAndFindButonState extends State<DestinationTextFieldA
                     currentController: destinationController,
                     // labelStyle: const TextStyle(color: Colors.black),
                     // hint: 'Find your destination point..!',
-                    label: LocaleKeys.destinationPoint.localize,
+                    lable: LocaleKeys.destinationPoint.localize,
                     hint: '',
                     validator: _validator,
                   );

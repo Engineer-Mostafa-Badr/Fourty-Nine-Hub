@@ -120,7 +120,7 @@ class WhatsAppCategoryViewState extends State<_WhatsAppCategoryView>
         widget.config.categoryViewConfig.backspaceColor,
       );
     }
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 }
 
@@ -148,7 +148,7 @@ class _WhatsAppTabBar extends StatelessWidget {
         unselectedLabelColor: config.categoryViewConfig.iconColor,
         dividerColor: config.categoryViewConfig.dividerColor,
         controller: tabController,
-        labelPadding: EdgeInsets.only(top: 1.0),
+        labelPadding: const EdgeInsets.only(top: 1.0),
         indicatorSize: TabBarIndicatorSize.label,
         indicator: const BoxDecoration(
           shape: BoxShape.circle,
@@ -171,7 +171,7 @@ class _WhatsAppTabBar extends StatelessWidget {
   Widget _buildCategory(int index, Category category) {
     return Tab(
       child: Padding(
-        padding: EdgeInsets.all(6.0),
+        padding: const EdgeInsets.all(6.0),
         child: Icon(
           getIconForCategory(
             config.categoryViewConfig.categoryIcons,

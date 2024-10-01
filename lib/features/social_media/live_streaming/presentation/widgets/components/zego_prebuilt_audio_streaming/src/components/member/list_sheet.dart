@@ -24,7 +24,7 @@ typedef ZegoLiveAudioRoomMemberListSheetMoreButtonPressed = void Function(
 /// @nodoc
 class ZegoLiveAudioRoomMemberListSheet extends StatefulWidget {
   const ZegoLiveAudioRoomMemberListSheet({
-    Key? key,
+    super.key,
     this.avatarBuilder,
     this.itemBuilder,
     this.hiddenUserIDsNotifier,
@@ -34,7 +34,7 @@ class ZegoLiveAudioRoomMemberListSheet extends StatefulWidget {
     required this.innerText,
     required this.onMoreButtonPressed,
     required this.popUpManager,
-  }) : super(key: key);
+  });
 
   final bool isPluginEnabled;
   final ZegoLiveAudioRoomSeatManager seatManager;

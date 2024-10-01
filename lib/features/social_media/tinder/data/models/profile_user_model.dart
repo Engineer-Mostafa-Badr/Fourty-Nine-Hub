@@ -298,7 +298,7 @@ class Location {
     return Location(
       type: json['type'],
       coordinates:
-      List<double>.from(json['coordinates'].map((x) => x.toDouble())),
+          List<double>.from(json['coordinates'].map((x) => x.toDouble())),
     );
   }
 

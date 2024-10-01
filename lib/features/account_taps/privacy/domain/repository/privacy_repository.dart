@@ -4,7 +4,8 @@ import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/priv
 
 import '../useCase/update_privacy_use_case.dart';
 
-abstract class PrivacyRepository{
-  Future<Either<Failure,PrivacyEntity>> fetchDataPrivacy();
-  Future<Either<Failure,PrivacyEntity>> updateDataPrivacy(UpdatePrivacyParams params);
+abstract class PrivacyRepository {
+  Future<Either<Failure, PrivacyEntity>> fetchDataPrivacy();
+  Future<Either<Failure, PrivacyEntity>> updateDataPrivacy(
+      UpdatePrivacyParams params);
 }

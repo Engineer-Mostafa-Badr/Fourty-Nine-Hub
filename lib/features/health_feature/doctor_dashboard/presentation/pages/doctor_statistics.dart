@@ -21,7 +21,7 @@ class DoctorStatisticsView extends StatelessWidget {
           if (state is DoctorStatisticsLoaded) {
             final statistics = state.statistics;
             return ListView(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               children: [
                 InkWell(
                   onTap: () {

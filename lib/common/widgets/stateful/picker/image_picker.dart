@@ -68,7 +68,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
 
   Widget _buildTitle() {
     if (widget.tilte == null || widget.tilte!.isEmpty) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
     return Text(widget.tilte!);
   }

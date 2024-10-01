@@ -13,11 +13,11 @@ class ZegoLiveAudioRoomInRoomLiveMessageView extends StatefulWidget {
   final ZegoAvatarBuilder? avatarBuilder;
 
   const ZegoLiveAudioRoomInRoomLiveMessageView({
-    Key? key,
+    super.key,
     this.config,
     this.events,
     this.avatarBuilder,
-  }) : super(key: key);
+  });
 
   @override
   State<ZegoLiveAudioRoomInRoomLiveMessageView> createState() =>

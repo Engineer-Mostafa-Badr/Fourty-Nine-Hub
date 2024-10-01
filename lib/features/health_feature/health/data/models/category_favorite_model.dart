@@ -1,6 +1,5 @@
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/favorite_entity.dart';
-import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 
 class FavoriteCategoryModel extends FavoriteCategoryBannersEntity {
   FavoriteCategoryModel(

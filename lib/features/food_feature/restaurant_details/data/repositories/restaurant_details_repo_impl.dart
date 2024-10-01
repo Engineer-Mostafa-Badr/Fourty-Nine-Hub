@@ -5,7 +5,6 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
 import '../../domain/repositories/restaurant_details_repo.dart';
 import '../datasources/restaurant_details_remote_data_source.dart';
-import '../models/selected_meal_model.dart';
 
 class RestaurantDetailsRepoImpl implements RestaurantDetailsRepo {
   final RestaurantRemoteDataSource _remoteDataSource;

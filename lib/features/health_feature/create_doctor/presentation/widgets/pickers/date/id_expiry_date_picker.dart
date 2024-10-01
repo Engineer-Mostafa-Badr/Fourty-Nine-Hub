@@ -5,9 +5,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreateDoctorIDExpiryDatePicker extends StatelessWidget {
   const CreateDoctorIDExpiryDatePicker(
-      {super.key, this.validator, this.onDateSelected});
+      {super.key,
+      this.validator,
+      this.onDateSelected,
+      this.title,
+      this.textStyle,
+      this.borderColor,
+      this.borderWidth});
   final String? Function(Object? value)? validator;
   final dynamic Function(DateTime? date)? onDateSelected;
+  final String? title;
+  final Color? borderColor;
+  final TextStyle? textStyle;
+  final double? borderWidth;
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
@@ -18,9 +28,11 @@ class CreateDoctorIDExpiryDatePicker extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DatePickerField(
-              borderColor: field.hasError ? Colors.red : null,
-              title: "ID Expiry Date",
+              borderWidth: borderWidth,
+              borderColor: field.hasError ? Colors.red : borderColor,
+              title: title ?? "ID Expiry Date",
               initialDate: now,
+              textStyle: textStyle,
               minDate: now,
               maxDate: DateTime(now.year + 5, now.month, now.day),
               onDateSelected: (date) {

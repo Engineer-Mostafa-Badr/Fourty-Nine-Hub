@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -22,6 +24,7 @@ class FavouriteCategoryCubit extends Cubit<FavouriteCategoryState> {
     print("=====================object");
     emit(state.copyWith(status: StateStatus.loading));
     final result = await _getMainCategoriesUseCase.call(const NoParams());
+    log(result.toString(), name: "kljjjjjjjjjjjjjjjjjjjjjjjjj");
     emit(
       result.fold(
         (failure) => state.copyWith(

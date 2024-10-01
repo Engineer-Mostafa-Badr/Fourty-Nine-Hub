@@ -29,7 +29,7 @@ class ZegoLiveAudioRoomSeatForeground extends StatefulWidget {
   final ZegoUIKitPrebuiltLiveAudioRoomController? prebuiltController;
 
   const ZegoLiveAudioRoomSeatForeground({
-    Key? key,
+    super.key,
     this.user,
     this.extraInfo = const {},
     this.prebuiltController,
@@ -39,7 +39,7 @@ class ZegoLiveAudioRoomSeatForeground extends StatefulWidget {
     required this.popUpManager,
     required this.config,
     required this.events,
-  }) : super(key: key);
+  });
 
   @override
   State<ZegoLiveAudioRoomSeatForeground> createState() =>

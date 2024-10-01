@@ -11,7 +11,7 @@ import 'donut_chart_painter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BuildItemListView extends StatelessWidget {
-  BuildItemListView({super.key, required this.model, required this.icon});
+  const BuildItemListView({super.key, required this.model, required this.icon});
 
   final CompetitionData model;
   final IconData icon;
@@ -41,7 +41,7 @@ class BuildItemListView extends StatelessWidget {
             // ),
           ],
         ),
-         const Sizer(),
+        const Sizer(),
         Row(
           children: [
             Expanded(
@@ -93,7 +93,7 @@ class BuildItemListView extends StatelessWidget {
           height: 20.h, // Space between the text and the row
         ),
         Padding(
-          padding:  EdgeInsets.only(left: 5.w),
+          padding: EdgeInsets.only(left: 5.w),
           child: Text(
             context.locale == Locales.english
                 ? model.competitionId?.descriptionEn ??''

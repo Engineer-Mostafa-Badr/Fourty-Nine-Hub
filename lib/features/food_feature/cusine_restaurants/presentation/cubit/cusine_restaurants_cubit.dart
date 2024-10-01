@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_model.dart';
 
 import '../../../../../core/error/failure.dart';
-import '../../../restaurants_list/data/models/restaurant_2_model.dart';
 import '../../../restaurants_list/domain/usecases/get_nearby_restaurants_usecase.dart';
 
 part 'cusine_restaurants_state.dart';

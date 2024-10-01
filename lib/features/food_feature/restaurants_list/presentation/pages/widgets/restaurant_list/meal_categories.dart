@@ -25,7 +25,7 @@ class MealCategories extends StatelessWidget {
             children: [
               Expanded(
                 child: ListView.separated(
-                  separatorBuilder: (context, index) => Sizer(),
+                  separatorBuilder: (context, index) => const Sizer(),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) => MealCategoryCard(
                       onTap: (String id) {

@@ -18,7 +18,7 @@ class ZegoInRoomNotificationView extends StatefulWidget {
   final ZegoNotificationMessageItemBuilder? itemBuilder;
 
   const ZegoInRoomNotificationView({
-    Key? key,
+    super.key,
     this.maxCount = 3,
     this.itemMaxLine = 3,
     this.itemDisappearTime = 3000,
@@ -26,7 +26,7 @@ class ZegoInRoomNotificationView extends StatefulWidget {
     this.userJoinItemBuilder,
     this.userLeaveItemBuilder,
     this.itemBuilder,
-  }) : super(key: key);
+  });
 
   @override
   State<ZegoInRoomNotificationView> createState() =>

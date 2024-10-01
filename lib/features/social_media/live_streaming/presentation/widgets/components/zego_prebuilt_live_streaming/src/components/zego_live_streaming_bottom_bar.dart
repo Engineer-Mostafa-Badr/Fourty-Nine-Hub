@@ -31,8 +31,6 @@ import 'member/button.dart';
 import 'message/input_board_button.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
-import 'top_bar.dart';
-
 /// @nodoc
 class ZegoLiveStreamingBottomBar extends StatefulWidget {
   final ZegoUIKitPrebuiltLiveStreamingConfig config;
@@ -122,7 +120,7 @@ class _ZegoLiveStreamingBottomBarState
             padding: widget.config.bottomMenuBar.padding,
             width: context.screenWidth,
             decoration: BoxDecoration(
-              color: Color(0xFF35383F).withOpacity(0.7),
+              color: const Color(0xFF35383F).withOpacity(0.7),
             ),
             height: widget.config.bottomMenuBar.height ?? 120.zR,
             child: FakeTextFieldBuilder(widget: widget),
@@ -483,7 +481,7 @@ class ZoomSharescreenBuilder extends StatelessWidget {
       child: ValueListenableBuilder<bool>(
           valueListenable: shareScreenState,
           builder: (context, screenShareOn, child) {
-            log('-------------${screenShareOn}');
+            log('-------------$screenShareOn');
             if (!screenShareOn) {
               // context.read<StreamCubit>().closeWhiteBoard();
             }

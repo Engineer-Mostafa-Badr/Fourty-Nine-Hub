@@ -17,7 +17,7 @@ class BookDoctorAppointmentCardInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5.h),
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -42,7 +42,7 @@ class BookDoctorAppointmentCardInfo extends StatelessWidget {
           Container(
             height: height,
             width: .5,
-            margin: EdgeInsets.symmetric(horizontal: 5),
+            margin: const EdgeInsets.symmetric(horizontal: 5),
             color: AppColors.GREY_DARK_COLOR,
           ),
           Expanded(child: widget),

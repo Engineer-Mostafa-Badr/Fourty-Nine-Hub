@@ -11,10 +11,10 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 /// @nodoc
 class ZegoLiveAudioRoomAvatarDefaultItem extends StatefulWidget {
   const ZegoLiveAudioRoomAvatarDefaultItem({
-    Key? key,
+    super.key,
     this.user,
     this.avatarBuilder,
-  }) : super(key: key);
+  });
 
   final ZegoUIKitUser? user;
   final ZegoAvatarBuilder? avatarBuilder;

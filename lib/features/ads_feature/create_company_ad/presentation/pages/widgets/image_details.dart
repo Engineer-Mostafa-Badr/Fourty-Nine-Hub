@@ -15,43 +15,43 @@ class ImageDetails extends StatefulWidget {
 class _ImageDetailsState extends State<ImageDetails> {
   @override
   Widget build(BuildContext context) {
-    double _scale = 1.0;
-    double _previousScale = 1.0;
-    final double _minScale = 1.0;
-    final double _maxScale = 4.0; // Maximum scale factor
-    Offset _position = Offset.zero;
-    Offset _previousPosition = Offset.zero;
+    double scale = 1.0;
+    double previousScale = 1.0;
+    const double minScale = 1.0;
+    const double maxScale = 4.0; // Maximum scale factor
+    Offset position = Offset.zero;
+    Offset previousPosition = Offset.zero;
 
     return GestureDetector(
       onScaleStart: (ScaleStartDetails details) {
-        _previousScale = _scale;
-        _previousPosition = details.focalPoint;
+        previousScale = scale;
+        previousPosition = details.focalPoint;
       },
       onScaleUpdate: (ScaleUpdateDetails details) {
         setState(() {
-          _scale = (_previousScale * details.scale).clamp(_minScale, _maxScale);
+          scale = (previousScale * details.scale).clamp(minScale, maxScale);
 
-          if (_scale > _minScale) {
-            final Offset delta = details.focalPoint - _previousPosition;
-            _previousPosition = details.focalPoint;
-            _position += delta;
+          if (scale > minScale) {
+            final Offset delta = details.focalPoint - previousPosition;
+            previousPosition = details.focalPoint;
+            position += delta;
           } else {
-            _position = Offset.zero;
+            position = Offset.zero;
           }
         });
       },
       onScaleEnd: (ScaleEndDetails details) {
-        _previousScale = 1.0;
-        _previousPosition = Offset.zero;
+        previousScale = 1.0;
+        previousPosition = Offset.zero;
       },
       onDoubleTap: () {
         setState(() {
-          if (_scale > _minScale) {
-            _scale = _minScale;
-            _position = Offset.zero;
+          if (scale > minScale) {
+            scale = minScale;
+            position = Offset.zero;
           } else {
-            _scale = 2.0; // Zoom-in scale factor on double-tap
-            _position = Offset.zero; // Center the image
+            scale = 2.0; // Zoom-in scale factor on double-tap
+            position = Offset.zero; // Center the image
           }
         });
       },
@@ -67,8 +67,8 @@ class _ImageDetailsState extends State<ImageDetails> {
             child: Center(
               child: Transform(
                 transform: Matrix4.identity()
-                  ..translate(_position.dx, _position.dy)
-                  ..scale(_scale),
+                  ..translate(position.dx, position.dy)
+                  ..scale(scale),
                 child: Image.network(
                   widget.image,
                   fit: BoxFit.fill,

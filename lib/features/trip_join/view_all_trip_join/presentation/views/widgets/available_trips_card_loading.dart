@@ -104,7 +104,7 @@ class CustomGrayContainerEqualSizes extends StatelessWidget {
           (index) => Expanded(
             flex: 1,
             child: Container(
-                margin: EdgeInsets.symmetric(
+                margin: const EdgeInsets.symmetric(
                   horizontal: 5,
                 ),
                 height: height,

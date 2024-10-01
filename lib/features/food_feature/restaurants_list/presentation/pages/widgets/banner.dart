@@ -38,10 +38,12 @@ class MealBanner extends StatelessWidget {
                 context.push(Routes.REGISTER);
               }
             },
-            onFavorite: () {},
+            onFavorite: () {
+              return null;
+            },
           );
         } else {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
       },
     );

@@ -34,7 +34,7 @@ class GiveOffer extends StatelessWidget {
               Label(
                   text: 'Offer your fare',
                   style: Styles.mediumText(fontWeight: FontWeight.bold)),
-              Sizer(),
+              const Sizer(),
               FormTextField(
                   hint: 'EGP',
                   type: TextInputType.number,
@@ -44,25 +44,25 @@ class GiveOffer extends StatelessWidget {
                       color: Colors.grey,
                       fontWeight: FontWeight.bold),
                   action: (v) => controller.changeExpectedPrice(v)),
-              Sizer(),
+              const Sizer(),
               Row(
                 children: [
                   const Icon(
                     Icons.money,
                     color: Colors.green,
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Label(text: 'Cash', style: Styles.mediumText())
                 ],
               ),
-              Sizer(),
+              const Sizer(),
               Row(
                 children: [
                   const Icon(
                     Icons.rocket_launch,
                     color: AppColors.PRIMARY_COLOR,
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Expanded(
                       child: Label(
                           text:
@@ -73,7 +73,7 @@ class GiveOffer extends StatelessWidget {
                       onChanged: (v) => controller.changeAutoAcceptStatus(v: v))
                 ],
               ),
-              Sizer(),
+              const Sizer(),
               AppButton(
                   label: 'Done',
                   onPressed: () {

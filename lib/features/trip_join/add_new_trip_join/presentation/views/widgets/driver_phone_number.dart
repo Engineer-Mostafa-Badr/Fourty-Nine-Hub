@@ -23,7 +23,7 @@ class DriverPhoneNumber extends StatelessWidget {
           hint: '0123456789',
           keyboardType: TextInputType.phone,
         ),
-        Sizer(),
+        const Sizer(),
       ],
     );
   }

@@ -65,7 +65,7 @@ class MainCategoryCard extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Sizer(),
+                            const Sizer(),
                             const CircleAvatar(
                               radius: 12,
                               backgroundColor: AppColors.LIGHT_GRAY_COLOR,

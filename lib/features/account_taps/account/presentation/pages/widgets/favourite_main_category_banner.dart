@@ -18,7 +18,7 @@ import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../core/localization/locales.dart';
 
 class FavouriteMainCategoryBanner extends StatefulWidget {
-  FavouriteMainCategoryBanner(
+  const FavouriteMainCategoryBanner(
       {super.key,
       required this.category,
       required this.canRegister,
@@ -143,7 +143,7 @@ class _FavouriteMainCategoryBannerState
                             color: AppColors.SECONDARY_COLOR,
                           ),
                         )
-                      : SizedBox.shrink(),
+                      : const SizedBox.shrink(),
                   Sizer(
                     height: 15.h,
                   ),

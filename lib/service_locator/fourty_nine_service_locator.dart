@@ -239,11 +239,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-    serviceLocator.registerLazySingleton<GetSliderItemsUseCase>(
-      () => GetSliderItemsUseCase(
-        serviceLocator(),
-      ),
-    );
+    // serviceLocator.registerLazySingleton<GetSliderItemsUseCase>(
+    //   () => GetSliderItemsUseCase(
+    //     serviceLocator(),
+    //   ),
+    // );
     serviceLocator.registerLazySingleton<GetMyPickMeAdsUseCase>(
       () => GetMyPickMeAdsUseCase(
         serviceLocator(),
@@ -352,6 +352,9 @@ class FourtyNineServiceLocator {
     );
 
     // cubits
+    serviceLocator.registerLazySingleton<GetSliderItemsUseCase>(
+      () => GetSliderItemsUseCase(serviceLocator()),
+    );
 
     serviceLocator.registerSingleton(
       SliderCubit(

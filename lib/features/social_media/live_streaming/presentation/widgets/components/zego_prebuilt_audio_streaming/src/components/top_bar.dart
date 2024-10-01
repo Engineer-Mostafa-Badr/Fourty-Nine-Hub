@@ -25,7 +25,7 @@ class ZegoLiveAudioRoomTopBar extends StatefulWidget {
   final ZegoUIKitPrebuiltLiveAudioRoomInnerText translationText;
 
   const ZegoLiveAudioRoomTopBar({
-    Key? key,
+    super.key,
     required this.config,
     required this.events,
     required this.defaultEndAction,
@@ -33,7 +33,7 @@ class ZegoLiveAudioRoomTopBar extends StatefulWidget {
     required this.seatManager,
     required this.connectManager,
     required this.translationText,
-  }) : super(key: key);
+  });
 
   @override
   State<ZegoLiveAudioRoomTopBar> createState() =>

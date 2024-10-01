@@ -1,8 +1,7 @@
-
 import '../../../../../core/error/failure.dart';
 import '../../domain/entities/privacy_entity.dart';
 
-enum PrivacyStates { loading, initial, error,success }
+enum PrivacyStates { loading, initial, error, success }
 
 class PrivacyState {
   final PrivacyStates status;

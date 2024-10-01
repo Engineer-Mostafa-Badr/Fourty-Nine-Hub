@@ -28,7 +28,6 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TwitterView extends StatefulWidget {
   const TwitterView({super.key});
@@ -82,7 +81,7 @@ class _TwitterViewState extends State<TwitterView> {
 
   Widget _buildTwitterTitle() {
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Label(
         text: LocaleKeys.Tweets.localize,
         style: Styles.headerText(),
@@ -127,7 +126,7 @@ class _TwitterViewState extends State<TwitterView> {
                     return Center(
                       child: Text(
                         LocaleKeys.noPosts.localize,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 18,
                         ),
@@ -176,8 +175,8 @@ class _TwitterViewState extends State<TwitterView> {
                                   .postsPagingController.itemList![index].id,
                         );
                         if (state.shareSuccess == true) {
-                          showSuccessMessage(
-                              context, LocaleKeys.postSharedSuccessfully.localize);
+                          showSuccessMessage(context,
+                              LocaleKeys.postSharedSuccessfully.localize);
                         }
                         setState(() {});
                       },
@@ -210,8 +209,7 @@ class _TwitterViewState extends State<TwitterView> {
                                 controller.onCommentReact(params: params);
                               },
                               onGetReplies: (String id,
-                                  TwitterPostCommentEntity comment) async {
-                              },
+                                  TwitterPostCommentEntity comment) async {},
                               newCommentId: '',
                               state: state,
                               onReport: (TwitterReportParams params) {
@@ -301,7 +299,7 @@ class _TwitterViewState extends State<TwitterView> {
                     return Center(
                       child: Text(
                         LocaleKeys.noPosts.localize,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 18,
                         ),
@@ -355,8 +353,8 @@ class _TwitterViewState extends State<TwitterView> {
                                   .itemList![index].id,
                         );
                         if (state.shareSuccess == true) {
-                          showSuccessMessage(
-                              context, LocaleKeys.postSharedSuccessfully.localize);
+                          showSuccessMessage(context,
+                              LocaleKeys.postSharedSuccessfully.localize);
                         }
                         setState(() {});
                       },
@@ -389,8 +387,7 @@ class _TwitterViewState extends State<TwitterView> {
                                 controller.onCommentReact(params: params);
                               },
                               onGetReplies: (String id,
-                                  TwitterPostCommentEntity comment) async {
-                              },
+                                  TwitterPostCommentEntity comment) async {},
                               newCommentId: '',
                               state: state,
                               onReport: (TwitterReportParams params) {

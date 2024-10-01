@@ -17,7 +17,7 @@ class MusicReels extends StatelessWidget {
         actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.share))],
       ),
       body: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: [
             _buildMusicHeader(),
@@ -36,7 +36,7 @@ class MusicReels extends StatelessWidget {
             width: kToolbarHeight * 1.5,
             radius: 10,
             source: NetworkImage(UIConst.mrbeast)),
-        Sizer(),
+        const Sizer(),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

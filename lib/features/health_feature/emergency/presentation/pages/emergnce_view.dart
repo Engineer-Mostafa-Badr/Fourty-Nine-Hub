@@ -44,7 +44,7 @@ class HealthEmergencyView extends StatelessWidget {
         body: Form(
           key: context.read<HealthEmergencyCubit>().formKey,
           child: ListView(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             children: [
               Sizer(height: 30.h),
               FirstNameTextFormField(
@@ -67,7 +67,7 @@ class HealthEmergencyView extends StatelessWidget {
                 onInputChanged: (value) {},
               ),
               Sizer(height: 30.h),
-              HealthEmergencySubCategoriesDropdown(),
+              const HealthEmergencySubCategoriesDropdown(),
               Sizer(height: 30.h),
               DefaultTextFormField(
                 hintColor: AppColors.QUANTITY_COLOR,

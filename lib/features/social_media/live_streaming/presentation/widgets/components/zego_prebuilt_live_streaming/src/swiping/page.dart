@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 
-import '../../../zego_uikit/src/services/services.dart';
-import '../../../zego_uikit/src/services/uikit_service.dart';
 import '../../../zego_uikit/zego_uikit.dart';
 import '../components/live_streaming.dart';
 import '../config.dart';

@@ -81,7 +81,7 @@ import 'overlay_machine.dart';
 /// ```
 class ZegoUIKitPrebuiltLiveAudioRoomMiniOverlayPage extends StatefulWidget {
   const ZegoUIKitPrebuiltLiveAudioRoomMiniOverlayPage({
-    Key? key,
+    super.key,
     required this.contextQuery,
     this.rootNavigator = true,
     this.navigatorWithSafeArea = true,
@@ -102,7 +102,7 @@ class ZegoUIKitPrebuiltLiveAudioRoomMiniOverlayPage extends StatefulWidget {
     this.foregroundBuilder,
     this.backgroundBuilder,
     this.avatarBuilder,
-  }) : super(key: key);
+  });
 
   final Size? size;
   final double padding;

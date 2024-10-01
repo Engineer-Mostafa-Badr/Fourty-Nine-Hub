@@ -44,6 +44,11 @@ abstract class CacheService {
 
   Future<bool> saveFavList(List<String> favList);
   Future<List<String>?> getFavList();
+
+  String getSubCategryDriver();
+  String? getDriverId();
+  Future<void> setSubCategoryDriver({required String id});
+  Future<void> setDriverId({required String id});
 }
 
 class CacheServiceImpl implements CacheService {
@@ -61,6 +66,8 @@ class CacheServiceImpl implements CacheService {
   static const _APPLE_USER_DATA = "APPLE_USER_DATA";
   static const _IS_FIRST_LUNCH = "IS_FIRST_LUNCH";
   static const _FAV_PRODUCTS_LIST = "FAV_PRODUCTS_LIST";
+  static const _SubCateogryDriver = "SubCateogryDriver";
+  static const _DriverId = "DriverId";
   static late SharedPreferences preferences;
   @override
   Future<bool> saveUserData(String userData) async {
@@ -225,6 +232,26 @@ class CacheServiceImpl implements CacheService {
   @override
   Future<void> setLogin(bool value) async {
     await preferences.setBool(_ISLOGIN, value);
+  }
+
+  @override
+  String getSubCategryDriver() {
+    return preferences.getString(CacheServiceImpl._SubCateogryDriver) ?? "";
+  }
+
+  @override
+  Future<void> setSubCategoryDriver({required String id}) async {
+    await preferences.setString(CacheServiceImpl._SubCateogryDriver, id);
+  }
+
+  @override
+  String? getDriverId() {
+    return preferences.getString(CacheServiceImpl._DriverId);
+  }
+
+  @override
+  Future<void> setDriverId({required String id}) async {
+    await preferences.setString(_DriverId, id);
   }
 }
 
@@ -432,6 +459,30 @@ class CacheServiceImplV2 implements CacheService {
   @override
   Future<void> setLogin(bool valuel) {
     // TODO: implement setLogin
+    throw UnimplementedError();
+  }
+
+  @override
+  String getSubCategryDriver() {
+    // TODO: implement getSubCategryDriver
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setSubCategoryDriver({required String id}) {
+    // TODO: implement setSubCategoryDriver
+    throw UnimplementedError();
+  }
+
+  @override
+  String getDriverId() {
+    // TODO: implement getDriverId
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setDriverId({required String id}) {
+    // TODO: implement setDriverId
     throw UnimplementedError();
   }
 }

@@ -10,8 +10,6 @@ import 'package:flutter/cupertino.dart';
 
 import '../../../../zego_prebuilt_live_streaming/src/components/utils/dialogs.dart';
 import '../../../../zego_prebuilt_live_streaming/src/components/utils/toast.dart';
-import '../../../../zego_uikit/src/services/defines/user.dart';
-import '../../../../zego_uikit/src/services/uikit_service.dart';
 import '../../../../zego_uikit/zego_uikit.dart';
 import '../../components/permissions.dart';
 import '../../components/pop_up_manager.dart';

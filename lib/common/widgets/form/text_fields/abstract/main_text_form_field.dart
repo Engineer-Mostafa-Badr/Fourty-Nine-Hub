@@ -14,6 +14,7 @@ abstract class MainTextFormField extends StatefulWidget {
   final TextCapitalization textCapitalization;
   final EdgeInsetsGeometry? margin;
   final bool enabled;
+  final bool? noBoarder;
   final int? maxLength;
   final List<TextInputFormatter>? inputFormatters;
   final bool expanded;
@@ -40,6 +41,7 @@ abstract class MainTextFormField extends StatefulWidget {
     this.currentFocusNode,
     this.minLines,
     this.readOnly = false,
+    this.noBoarder = false,
     this.nextFocusNode,
     required this.currentController,
     required this.hintText,

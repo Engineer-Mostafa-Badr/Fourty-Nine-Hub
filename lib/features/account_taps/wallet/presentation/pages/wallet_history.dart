@@ -34,7 +34,7 @@ class WalletHistory extends StatelessWidget {
                   Icons.info_outline,
                   color: Colors.grey,
                 ),
-                Sizer(),
+                const Sizer(),
                 Expanded(
                     child: Label(
                   text: 'Minimum 1002 EGP for personal transaction',
@@ -58,7 +58,7 @@ class WalletHistory extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.send_to_mobile_rounded),
-                  Sizer(),
+                  const Sizer(),
                   Label(
                       text: Labels.withDrawel,
                       style: Styles.mediumText(color: Colors.white)),

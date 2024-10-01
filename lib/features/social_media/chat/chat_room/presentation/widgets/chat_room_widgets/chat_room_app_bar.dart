@@ -77,7 +77,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () {},
           color: Colors.white,
         ),
-        Sizer(
+        const Sizer(
           width: 15,
         ),
         // call

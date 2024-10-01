@@ -38,16 +38,14 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
             ),
             BottomItemModel(
               icon: FontAwesomeIcons.stream,
-              label: 'live',
-              // Translated text
+              label: 'live', // Translated text
               index: 0,
               image: Assets.live,
               route: Routes.LIVE,
             ),
             BottomItemModel(
               icon: Icons.video_call,
-              label: 'meet',
-              // Translated text
+              label: 'meet', // Translated text
               index: 0,
               image: Assets.zoomMeeting,
               route: Routes.ZOOM,
@@ -66,32 +64,28 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
             ? <BottomItemModel>[
                 BottomItemModel(
                   icon: FontAwesomeIcons.twitter,
-                  label: 'tweet',
-                  // Translated text
+                  label: 'tweet', // Translated text
                   index: 0,
                   image: Assets.twitter,
                   route: Routes.TWITTER,
                 ),
                 BottomItemModel(
                   icon: FontAwesomeIcons.list,
-                  label: 'reels',
-                  // Translated text
+                  label: 'reels', // Translated text
                   index: 1,
                   image: Assets.reels,
                   route: Routes.REELS,
                 ),
                 BottomItemModel(
                   icon: Icons.chat,
-                  label: 'chat',
-                  // Translated text
+                  label: 'chat', // Translated text
                   index: 3,
                   image: Assets.message,
                   route: Routes.CHAT,
                 ),
                 BottomItemModel(
                   icon: FontAwesomeIcons.car,
-                  label: 'find',
-                  // Translated text
+                  label: 'find', // Translated text
                   index: 4,
                   image: Assets.social,
                   route: Routes.Tinder,
@@ -100,32 +94,28 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
             : <BottomItemModel>[
                 BottomItemModel(
                   icon: FontAwesomeIcons.bowlFood,
-                  label: 'meal',
-                  // Translated text
+                  label: 'meal', // Translated text
                   index: 0,
                   image: Assets.food,
                   route: Routes.FOOD,
                 ),
                 BottomItemModel(
                   icon: FontAwesomeIcons.kitMedical,
-                  label: 'health',
-                  // Translated text
+                  label: 'health', // Translated text
                   index: 1,
                   image: Assets.health,
                   route: Routes.VISITA,
                 ),
                 BottomItemModel(
                   icon: Icons.delivery_dining,
-                  label: 'ship',
-                  // Using generated key for translation
+                  label: 'ship', // Using generated key for translation
                   index: 3,
                   image: Assets.shipping,
                   route: Routes.SHIPPING,
                 ),
                 BottomItemModel(
                   icon: FontAwesomeIcons.car,
-                  label: 'ride',
-                  // Using generated key for translation
+                  label: 'ride', // Using generated key for translation
                   index: 4,
                   image: Assets.ride,
                   route: Routes.RIDE,

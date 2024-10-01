@@ -18,7 +18,7 @@ class MeetingParticipants extends StatelessWidget {
         label: 'Meeting Participants',
       ),
       body: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: ListView.separated(
             itemBuilder: (context, index) => _buildParticipantItem(),
             separatorBuilder: (context, index) => const Divider(),
@@ -42,7 +42,7 @@ class MeetingParticipants extends StatelessWidget {
           height: kToolbarHeight * .5,
           width: kToolbarHeight * .5,
         ),
-        Sizer(),
+        const Sizer(),
         Label(text: 'Farouk Shahin', style: Styles.mediumText()),
         const Spacer(),
         const Icon(

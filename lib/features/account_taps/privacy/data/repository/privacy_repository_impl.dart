@@ -5,7 +5,7 @@ import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/priv
 import 'package:fourtyninehub/features/account_taps/privacy/domain/repository/privacy_repository.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/useCase/update_privacy_use_case.dart';
 
-class PrivacyRepositoryImpl extends PrivacyRepository{
+class PrivacyRepositoryImpl extends PrivacyRepository {
   final PrivacyDataSource _privacyDataSource;
 
   PrivacyRepositoryImpl(this._privacyDataSource);
@@ -15,8 +15,8 @@ class PrivacyRepositoryImpl extends PrivacyRepository{
   }
 
   @override
-  Future<Either<Failure, PrivacyEntity>> updateDataPrivacy(UpdatePrivacyParams params) {
-   return _privacyDataSource.updateDataPrivacy(params);
+  Future<Either<Failure, PrivacyEntity>> updateDataPrivacy(
+      UpdatePrivacyParams params) {
+    return _privacyDataSource.updateDataPrivacy(params);
   }
-
 }

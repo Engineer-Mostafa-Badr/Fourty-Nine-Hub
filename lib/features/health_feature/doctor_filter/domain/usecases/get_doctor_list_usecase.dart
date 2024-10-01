@@ -24,8 +24,12 @@ class DoctorSearchParams {
   GovernorateEntity governorate =
       GovernorateEntity(id: '', nameEn: '', nameAr: '');
   CityEntity city = CityEntity(id: '', nameEn: '', nameAr: '');
-  SubCategoryEntity subCategory =
-      SubCategoryEntity(id: '', name: '', image: '', isFavorite: false);
+  SubCategoryEntity subCategory = SubCategoryEntity(
+    id: '',
+    name: '',
+    image: '',
+    isFavorite: false,
+  );
   BookingTypes? bookingType;
   PaginationParams paginationParams = PaginationParams(page: 1);
   DoctorSearchParams();

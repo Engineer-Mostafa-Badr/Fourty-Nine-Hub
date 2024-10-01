@@ -17,7 +17,7 @@ class InstallmentOrderCard extends StatelessWidget {
     return InkWell(
       onTap: () => context.push(Routes.INSTALLMENTORDERDETAILS),
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.grey,
@@ -34,7 +34,7 @@ class InstallmentOrderCard extends StatelessWidget {
                   accountId: 0,
                   userId: '',
                 ),
-                Sizer(),
+                const Sizer(),
                 Expanded(
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +51,7 @@ class InstallmentOrderCard extends StatelessWidget {
                 const RatioWidget(value: .8),
               ],
             ),
-            Sizer(),
+            const Sizer(),
             RichText(
                 text: TextSpan(children: [
               TextSpan(
@@ -64,7 +64,7 @@ class InstallmentOrderCard extends StatelessWidget {
             Label(
                 text: 'Comming installment: 13 Jun. 2024',
                 style: Styles.mediumText(color: Colors.grey)),
-            Sizer(),
+            const Sizer(),
             AppButton(label: 'Pay now', onPressed: () {}),
           ],
         ),

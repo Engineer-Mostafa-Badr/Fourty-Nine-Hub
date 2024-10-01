@@ -27,7 +27,7 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
           text: Labels.unhandledAppointments,
           style: Styles.headerText(),
         ),
-        Sizer(),
+        const Sizer(),
         Container(
           padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10),
           decoration: BoxDecoration(
@@ -56,7 +56,7 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
                                 .rejectAppointment(appointment.id),
                           );
                         }),
-                    Sizer(),
+                    const Sizer(),
                     AppButton(
                         label: Labels.viewMore,
                         onPressed: () {
@@ -96,7 +96,7 @@ class DoctorUnhandledAppointmentCard extends StatelessWidget {
             child: SquareImage(
               url: appointment.image ?? UIConst.profilePlaceHolder,
             )),
-        Sizer(),
+        const Sizer(),
         Expanded(
           flex: 3,
           child: Column(
@@ -123,7 +123,7 @@ class DoctorUnhandledAppointmentCard extends StatelessWidget {
                 onPressed: () => onAccept?.call(),
                 backColor: AppColors.PRIMARY_COLOR,
               ),
-              Sizer(),
+              const Sizer(),
               AppButton(
                 label: Labels.reject,
                 onPressed: () => onReject?.call(),

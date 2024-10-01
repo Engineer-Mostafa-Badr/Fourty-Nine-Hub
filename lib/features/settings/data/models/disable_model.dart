@@ -9,10 +9,10 @@ class DisableModel extends DisableEntity {
 
   factory DisableModel.fromJson(Map<String, dynamic> json) {
     return DisableModel(
-      id: json['_id'] ??'',
-      firstName: json['firstName'] ??'',
-      username: json['username'] ??'',
-      isDisabled: json['isDisabled'] ??false,
+      id: json['_id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      username: json['username'] ?? '',
+      isDisabled: json['isDisabled'] ?? false,
     );
   }
 }

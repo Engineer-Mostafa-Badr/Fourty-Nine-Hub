@@ -87,6 +87,7 @@ abstract class Routes {
   static const CONTACTUS = '/ContactUs';
 
   static const RIDERDASHBOARD = '/Ride/RiderDashboard';
+  static const RIDERREGISTER = '/Ride/RiderRegister';
 
   static const TRIPDETAILS = '/Ride/TripDetails';
   static const REQUESTSHISTORY = '/Ride/RequestsHistory';
@@ -129,6 +130,11 @@ abstract class Routes {
   static const SETTINGS = '/Account/Settings';
   static const PAYMENT = '/Payment';
   static const SUBSCRIPTIONPLANS = '/SubscriptionPlans';
+  static const DASHBOARDDRIVERSCREEN = '/DASHBOARDDRIVERSCREEN';
+  static const DRIVERREQUESTSDETIALS = '/DRIVERREQUESTSDETIALS';
+  static const MyRating = '/MyRating';
+  static const TripRating = '/TripRating';
+  static const EDITDRIVERSCREEN = '/EditDriver';
 
   static const TRIP_JOIN = '/TripJoin';
   static const AVAILABLE_TRIPS = '/AvailableTrips';
@@ -219,6 +225,7 @@ abstract class Paths {
   static const RIDE = 'Ride';
   static const CONTACTUS = 'ContactUs';
   static const RIDERDASHBOARD = 'RiderDashboard';
+  static const RIDERREGISTER = 'RiderRegister';
   static const REQUESTSHISTORY = 'RequestsHistory';
   static const TRIPDETAILS = 'TripDetails';
 
@@ -275,4 +282,9 @@ abstract class Paths {
   static const SEEALLBROADCASTS = 'SeeAllBroadcasts';
 
   static const BROADCAST = 'Broadcast';
+  static const DASHBOARDDRIVERSCREEN = 'DASHBOARDDRIVERSCREEN';
+  static const DRIVERREQUESTSDETIALS = 'DRIVERREQUESTSDETIALS';
+  static const MyRating = 'MyRating';
+  static const TripRating = 'TripRating';
+  static const EDITDRIVERSCREEN = 'EditDriver';
 }

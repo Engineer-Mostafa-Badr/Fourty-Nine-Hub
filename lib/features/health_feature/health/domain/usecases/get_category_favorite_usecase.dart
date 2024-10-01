@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/favorite_entity.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';

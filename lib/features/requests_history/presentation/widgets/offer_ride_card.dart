@@ -26,7 +26,7 @@ class OfferRideCard extends StatelessWidget {
             imageURL: offer.profileImage,
             userId: '',
           ),
-          Sizer(),
+          const Sizer(),
           Expanded(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

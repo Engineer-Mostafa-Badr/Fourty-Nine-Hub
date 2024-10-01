@@ -82,7 +82,7 @@ class _UserReelsState extends State<UserReels> {
               },
               noMoreItemsIndicatorBuilder: (context) => Container(),
               firstPageProgressIndicatorBuilder: (context) => Container(
-                  margin: EdgeInsets.only(top: 150),
+                  margin: const EdgeInsets.only(top: 150),
                   child: const CupertinoActivityIndicator()),
               newPageProgressIndicatorBuilder: (context) =>
                   const CupertinoActivityIndicator()),

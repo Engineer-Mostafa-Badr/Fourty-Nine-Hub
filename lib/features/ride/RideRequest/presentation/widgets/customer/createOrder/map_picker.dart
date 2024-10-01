@@ -4,9 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/helpers/BitmapDescriptor.dart';
 import '../../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../../../helpers/BitmapDescriptor.dart';
 import '../../../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
@@ -143,7 +143,7 @@ class _mapPickerState extends State<MapPicker> {
                           text: address,
                           style: Styles.mediumText(color: Colors.white)),
                     ),
-                  Sizer(),
+                  const Sizer(),
                   CircleAvatar(
                     radius: 15,
                     backgroundColor: AppColors.PRIMARY_COLOR,

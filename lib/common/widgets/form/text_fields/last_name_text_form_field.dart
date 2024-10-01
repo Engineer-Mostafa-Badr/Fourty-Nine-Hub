@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/utils/validator.dart';
-import '../../../../res/style/app_colors.dart';
 import 'abstract/main_text_form_field.dart';
 
 class LastNameTextFormField extends MainTextFormField {
   LastNameTextFormField(
       {super.key,
-      required super.currentFocusNode,
+      super.currentFocusNode,
       super.nextFocusNode,
       required super.currentController,
       super.margin = null,
       super.enabled,
       super.maxLength,
+      String? Function(String?)? validator,
       super.hintColor,
       super.fillColor})
       : super(
-          validator: Validator().validateUserName,
+          validator: validator ?? Validator().validateUserName,
           hintText: 'Last Name',
+          // border
           keyboardType: TextInputType.name,
-          borderColor: AppColors.GREY_DARK_COLOR,
+          borderColor: Colors.black,
           textCapitalization: TextCapitalization.words,
         );
 }

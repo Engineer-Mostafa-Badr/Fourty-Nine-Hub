@@ -25,7 +25,7 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
     final searchController = TextEditingController();
     return Scaffold(
       body: Padding(
-        padding: EdgeInsetsDirectional.only(top: 20.0, end: 8, start: 8),
+        padding: const EdgeInsetsDirectional.only(top: 20.0, end: 8, start: 8),
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
@@ -34,7 +34,7 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
                   InkWell(
                       onTap: () => context.pop(),
                       child: const Icon(Icons.arrow_back)),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Expanded(
@@ -59,7 +59,7 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
                 pagingController: widget.controller.placesPagingController,
                 builderDelegate: PagedChildBuilderDelegate<PlaceEntity>(
                   noItemsFoundIndicatorBuilder: (context) {
-                    return SizedBox.shrink();
+                    return const SizedBox.shrink();
                   },
                   itemBuilder: (context, item, index) {
                     return GestureDetector(
@@ -68,7 +68,7 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
                             .placesPagingController.itemList![index]);
                       },
                       child: Container(
-                        padding: EdgeInsets.all(15),
+                        padding: const EdgeInsets.all(15),
                         child: Row(
                           children: [
                             const Icon(

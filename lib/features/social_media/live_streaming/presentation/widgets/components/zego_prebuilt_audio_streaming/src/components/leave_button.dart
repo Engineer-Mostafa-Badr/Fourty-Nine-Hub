@@ -26,7 +26,7 @@ class ZegoLiveAudioRoomLeaveButton extends StatefulWidget {
   ) defaultLeaveConfirmationAction;
 
   const ZegoLiveAudioRoomLeaveButton({
-    Key? key,
+    super.key,
     required this.seatManager,
     required this.config,
     required this.events,
@@ -35,7 +35,7 @@ class ZegoLiveAudioRoomLeaveButton extends StatefulWidget {
     this.icon,
     this.iconSize,
     this.buttonSize,
-  }) : super(key: key);
+  });
 
   @override
   State<ZegoLiveAudioRoomLeaveButton> createState() =>

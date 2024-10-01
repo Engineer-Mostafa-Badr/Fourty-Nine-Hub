@@ -4,7 +4,6 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/register/driver_register/presentation/widgets/upload_image.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../res/style/styles.dart';
 import '../../cubit/driver_register_cubit.dart';
@@ -20,17 +19,17 @@ class EnterCarInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Sizer(),
+        const Sizer(),
         Row(
           children: [
             const Expanded(child: Label(text: 'Car Module')),
-            Sizer(),
+            const Sizer(),
             Expanded(
                 child: FormTextField(
               action: (v) {},
               label: 'Mark',
             )),
-            Sizer(),
+            const Sizer(),
             Expanded(
                 child: FormTextField(
               action: (v) {},
@@ -38,18 +37,18 @@ class EnterCarInfo extends StatelessWidget {
             )),
           ],
         ),
-        Sizer(),
+        const Sizer(),
         Row(
           children: [
             const Expanded(child: Label(text: 'Metal Plate')),
-            Sizer(),
+            const Sizer(),
             Expanded(
                 child: FormTextField(
               action: (v) {},
               label: 'Chars',
               type: TextInputType.text,
             )),
-            Sizer(),
+            const Sizer(),
             Expanded(
                 child: FormTextField(
               action: (v) {},
@@ -58,7 +57,7 @@ class EnterCarInfo extends StatelessWidget {
             )),
           ],
         ),
-        Sizer(),
+        const Sizer(),
         Row(
           children: [
             const Expanded(child: Label(text: 'Air Conditioner')),

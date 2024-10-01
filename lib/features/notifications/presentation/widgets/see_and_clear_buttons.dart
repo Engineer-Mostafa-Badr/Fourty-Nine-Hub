@@ -34,7 +34,7 @@ class SeeAndClearButtons extends StatelessWidget {
               );
             },
           ),
-          Sizer(),
+          const Sizer(),
           TextAppButton(
             style: const TextStyle(color: AppColors.SECONDARY_COLOR),
             label: LocaleKeys.clearAll.localize,

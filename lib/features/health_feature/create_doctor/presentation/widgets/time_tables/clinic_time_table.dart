@@ -29,7 +29,7 @@ class CreateDoctorClinicTimeTable extends StatelessWidget {
                     isRequired: true,
                     hint: 'Clinic Price',
                   ),
-                  Sizer(),
+                  const Sizer(),
                   DefaultTextFormField(
                     hint: 'Clinic Examine Duration (in minutes)',
                     keyboardType: TextInputType.number,
@@ -40,7 +40,7 @@ class CreateDoctorClinicTimeTable extends StatelessWidget {
                     currentController:
                         createDoctorCubit.clinicExamineDurationController,
                   ),
-                  Sizer(),
+                  const Sizer(),
                   DefaultTextFormField(
                     hint: 'Clinic Waiting time (in minutes)',
                     keyboardType: TextInputType.number,
@@ -51,7 +51,7 @@ class CreateDoctorClinicTimeTable extends StatelessWidget {
                 ],
               ));
         } else {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
       },
     );

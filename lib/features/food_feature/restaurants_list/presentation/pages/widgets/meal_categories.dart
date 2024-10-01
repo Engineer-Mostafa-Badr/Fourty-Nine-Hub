@@ -28,10 +28,10 @@ class MealCategories extends StatelessWidget {
                 text: LocaleKeys.meal.localize,
                 style: Styles.headerText(),
               ),
-              Sizer(),
+              const Sizer(),
               Expanded(
                 child: ListView.separated(
-                  separatorBuilder: (context, index) => Sizer(),
+                  separatorBuilder: (context, index) => const Sizer(),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) => MealCategoryCard(
                       onTap: (String id) {

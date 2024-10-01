@@ -151,6 +151,18 @@ class EndPoints {
   static String documentRequest = '/twitter/document-request?subCategory=${Constants.documentSubCategory}';
 
   // ride
+  static String bannerDataRider = "$developmentBaseUrl/ride/get-thumbnail-ride";
+  static String specialRegister =
+      "$developmentBaseUrl/ride/riders/special/register";
+  static String riderRegister = "$developmentBaseUrl/ride/riders/register";
+  static String expectedPrice = "$developmentBaseUrl/ride/trips/expected/price";
+  static String acceptOfferRide =
+      "$developmentBaseUrl/ride/offers/accept/offer";
+  static String declineOfferRide =
+      "$developmentBaseUrl/ride/offers/decline/offer";
+  static String pictureOptional =
+      "$developmentBaseUrl/ride/info/picture-optional";
+  static String newTripRide = "$developmentBaseUrl/ride/trips/newTrip";
   //shipping
   static String bannerData = "$developmentBaseUrl/loading/driver/subcategory";
   static const drivingLicenseS3 = '/ride/info/driving-license';
@@ -199,6 +211,7 @@ class EndPoints {
   static const String postInstaPay = '/manual-payment/create';
   static const String saveCardToken = '/fawry/tokenize-card';
   static const String payWithCardToken = '/fawry/pay-with-card-token';
+  static const favouriteCategoriesList = '/favorite-category';
   static const String getSavedCards = '/payment/cards';
   static const String makeMultiPayment = '/fawry/multi-charge';
   static const String deleteSavedCard = '/payment/cards';
@@ -219,12 +232,49 @@ class EndPoints {
   static const updateDoctorID = '/health/doctor-upload-license-id';
 
   static String deleteDoctor(String doctorId) => '/health/doctor/$doctorId';
-
+  // ride
+  //shipping
+  static String registerDriver = "$developmentBaseUrl/loading/driver/register";
+  static String favoriteSubCategory =
+      "$developmentBaseUrl/favorite-sub-category";
+  static String createLoadingTrip =
+      "$developmentBaseUrl/loading/trip/createLoadingTrip";
+  // static const idLicenseS3 = '/ride/info/id';
+  static const getAllTripBySubCategory =
+      '$developmentBaseUrl/loading/trip/driver/subcategory';
+  static const carPlate = '/loading/driver/info/car-plate';
+  static const makeRatingDriver = '/loading/rating-driver/makeRating';
+  static const getDriverData = '$developmentBaseUrl/loading/driver/info';
+  static const updateDriver = '$developmentBaseUrl/loading/driver';
+  static const completeTrip = '$developmentBaseUrl/loading/trip/complete';
+  static const deleteDriver = '$developmentBaseUrl/loading/driver/deleteDriver';
+  static const driverStatistics =
+      '$developmentBaseUrl/loading/driver/driverStatistics';
+  //trip
+  static const sendOffer = '$developmentBaseUrl/loading/trip/sendOffer';
+  static const reportUrl = '$developmentBaseUrl/report';
+  static const favoriteCategory = '$developmentBaseUrl/favorite-category';
+  static const sendOfferPremium =
+      '$developmentBaseUrl/loading/trip/sendOffer-premium';
+  // static const acceptLoadingTripOffer =
+  //     '$developmentBaseUrl/loading/trip/acceptLoadingTripOffer';
+  static const mediasignedUrl =
+      '$developmentBaseUrl/dashboard/media/signed-url';
+  static const mediaconfirm = '$developmentBaseUrl/dashboard/media/confirm';
+  static const click = '$developmentBaseUrl/global/click';
+  static const allUserTrips = '$developmentBaseUrl/loading/trip/allUserTrips';
+  static const cancelOffer = '$developmentBaseUrl/loading/trip/cancelOffer';
+  static const acceptLoadingTripOffer =
+      '$developmentBaseUrl/loading/trip/acceptOffer';
+  static const deleteLoadingTrip =
+      '$developmentBaseUrl/loading/trip/deleteLoadingTrip';
+  static const loadingTripRequests =
+      '$developmentBaseUrl/loading/trip/loadingTripRequests';
   // reels
   static const getExploreReels = '/reels/explore';
 
   // ride request
-  static const expectedPrice = '/ride/trips/expected/price';
+  // static const expectedPrice = '/ride/trips/expected/price';
   static const carTypes = '/cars';
 
   static String subCategories({required String mainCategoryId}) {
@@ -436,8 +486,10 @@ class EndPoints {
   }
 
   static String acceptRejectFriendRequest(AcceptRejectFriendRequestParams params) {
-    return '/friends/acceptOrRejectrequest/${params.userId}?subCategory=${Constants.facebookSubCategory}';
+    return '/friends/acceptOrRejectrequest/${params
+        .userId}?subCategory=${Constants.facebookSubCategory}';
   }
+
 
   static String deleteFriend(String userId) {
     return '/friends/deleteFriend/$userId';

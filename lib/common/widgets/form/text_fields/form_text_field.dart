@@ -41,6 +41,7 @@ class FormTextField extends StatelessWidget {
       this.initialValue,
       this.hintStyle,
       this.action,
+      this.maxLength,
       this.obsecure,
       this.borderRadius,
       this.prefix,
@@ -62,7 +63,6 @@ class FormTextField extends StatelessWidget {
       this.onTap,
       this.height,
       this.maxLines,
-      this.maxLength,
       this.style,
       this.validator,
       this.required,
@@ -169,13 +169,13 @@ class FormTextField extends StatelessWidget {
             margin: const EdgeInsets.only(top: 5),
             child: Row(
               children: [
-                Sizer(),
+                const Sizer(),
                 const Icon(
                   Icons.info_outline,
                   color: Colors.grey,
                   size: 14,
                 ),
-                Sizer(),
+                const Sizer(),
                 Expanded(
                     child: Label(
                   text: info ?? '',

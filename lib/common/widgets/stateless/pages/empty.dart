@@ -20,7 +20,7 @@ class EmptyPage extends StatelessWidget {
               Assets.empty,
               height: kToolbarHeight,
             ),
-            Sizer(),
+            const Sizer(),
             Label(text: label ?? 'Empty List', style: Styles.headerText())
           ],
         ),

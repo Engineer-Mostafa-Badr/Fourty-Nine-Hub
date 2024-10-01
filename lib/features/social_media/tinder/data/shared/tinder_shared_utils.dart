@@ -39,7 +39,7 @@ class TinderSharedUtils {
         'You do not have enough money in your wallet.';
     const successMessage = 'has been sent successfully!';
 
-    log(response.toString() + "111111111111111111111111111111111111");
+    log("${response}111111111111111111111111111111111111");
     switch (response) {
       case '{"success":false,"error":{"name":"Bad Request","httpCode":400,"message":"You does not have enough money in the wallet","data":{},"isOperational":true,"stack":"","domain":"49dev.com"}}':
         _showDialog(
@@ -92,7 +92,7 @@ class TinderSharedUtils {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
           title: title == 'Gift Sent'
-              ? SizedBox.shrink()
+              ? const SizedBox.shrink()
               : _buildDialogTitle(icon, title, primaryColor),
           content: title == 'Gift Sent'
               ? _buildGiftContent(gift!, message)
@@ -109,7 +109,7 @@ class TinderSharedUtils {
     return Row(
       children: [
         Icon(icon, color: primaryColor, size: 30),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Text(title),
       ],
     );

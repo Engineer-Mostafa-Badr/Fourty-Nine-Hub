@@ -54,7 +54,7 @@ class _ShowPostsImagesState extends State<ShowPostsImages> {
             },
             child: Container(
               height: 400.h,
-              margin: EdgeInsets.only(bottom: 10),
+              margin: const EdgeInsets.only(bottom: 10),
               width: double.infinity,
               decoration: BoxDecoration(
                   color: AppColors.DARK_BLUE_COLOR,
