@@ -36,6 +36,8 @@ Restaurant2Model _$Restaurant2ModelFromJson(Map<String, dynamic> json) =>
           .toList(),
       totalRating: (json['totalRating'] as num?)?.toDouble(),
       description: json['description'] as String?,
+      isFavorite: json['isFavorite'] as bool?,
+      enableOrDisableChat: json['enableOrDisableChat'] as String?,
     );
 
 Map<String, dynamic> _$Restaurant2ModelToJson(Restaurant2Model instance) =>
@@ -53,5 +55,7 @@ Map<String, dynamic> _$Restaurant2ModelToJson(Restaurant2Model instance) =>
       'MENU': instance.menu?.map((e) => e.toJson()).toList(),
       'subcategoryId': instance.subcategoryId?.toJson(),
       'mainCategoryId': instance.mainCategoryId?.toJson(),
+      'isFavorite': instance.isFavorite,
+      'enableOrDisableChat': instance.enableOrDisableChat,
       'description': instance.description,
     };

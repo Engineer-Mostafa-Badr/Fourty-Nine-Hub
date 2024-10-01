@@ -57,7 +57,7 @@ class MealCategoryCard extends StatelessWidget {
                               : AppColors.PRIMARY_COLOR_DARK,
                           onPressed: () {
                             context
-                                .read<RestaurantsListCubit>()
+                                .read<RestaurantsCubit>()
                                 .toggleFavoriteSubcategory(
                                     subCategory?.id ?? "");
                           })),

@@ -875,7 +875,8 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
 
   Future<void> _submitOrder(cartId) async {
     if (_formKey.currentState?.validate() ?? false) {
-      final address = _addressController.text.trim();
+      // final address = _addressController.text.trim();
+      const address = '  ';
       final phone = _phoneController.text.trim();
 
       final cartId = widget.cartId;
@@ -909,7 +910,7 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
             width: double.infinity,
             decoration: BoxDecoration(
               color: Theme.of(context).cardColor,
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Colors.black12,
                   blurRadius: 10,
@@ -937,29 +938,29 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
                     //       fontWeight: FontWeight.bold,
                     //       color: Theme.of(context).primaryColor),
                     // ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _addressController,
-                      decoration: InputDecoration(
-                        labelText: 'Your Address',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor, width: 2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your address';
-                        }
-                        return null;
-                      },
-                      maxLines: null,
-                    ),
-                    const SizedBox(height: 16),
+                    // const SizedBox(height: 20),
+                    // TextFormField(
+                    //   controller: _addressController,
+                    //   decoration: InputDecoration(
+                    //     labelText: 'Your Address',
+                    //     border: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(12),
+                    //     ),
+                    //     focusedBorder: OutlineInputBorder(
+                    //       borderSide: BorderSide(
+                    //           color: Theme.of(context).primaryColor, width: 2),
+                    //       borderRadius: BorderRadius.circular(12),
+                    //     ),
+                    //   ),
+                    //   validator: (value) {
+                    //     if (value == null || value.isEmpty) {
+                    //       return 'Please enter your address';
+                    //     }
+                    //     return null;
+                    //   },
+                    //   maxLines: null,
+                    // ),
+                    const SizedBox(height: 24),
                     TextFormField(
                       maxLines: null,
                       controller: _phoneController,

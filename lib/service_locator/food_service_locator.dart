@@ -36,7 +36,7 @@ import '../features/food_feature/restaurants_list/domain/repositories/resturant_
 import '../features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_nearby_restaurants_usecase.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_trending_restaurants_usecase.dart';
-import '../features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_meal_list_cubit.dart';
+import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 
 class FoodServiceLocator {
   static void execute({required GetIt serviceLocator}) async {
@@ -77,7 +77,8 @@ class FoodServiceLocator {
       )..loadData(),
     );
     serviceLocator
-        .registerFactory<RestaurantsMealListCubit>(() => RestaurantsMealListCubit(
+        .registerFactory<RestaurantsCubit>(() => RestaurantsCubit(
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),

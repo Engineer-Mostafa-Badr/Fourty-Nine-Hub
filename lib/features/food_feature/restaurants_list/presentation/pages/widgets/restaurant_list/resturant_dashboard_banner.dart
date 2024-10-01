@@ -9,14 +9,16 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/com
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../cubit/restaurants_list_cubit.dart';
+
 class ResturantDashboardButton extends StatelessWidget {
   const ResturantDashboardButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: serviceLocator<RestaurantsMealListCubit>()..isRestaurant(),
-      child: BlocConsumer<RestaurantsMealListCubit, RestaurantsMealListState>(
+      value: serviceLocator<RestaurantsCubit>()..isRestaurant(),
+      child: BlocConsumer<RestaurantsCubit, RestaurantsListState>(
         builder: (context, state) {
           log( state.isResturant.toString()+"aaaaaaaa");
           if (state.isResturant!.isRestaurant == true) {
@@ -30,7 +32,7 @@ class ResturantDashboardButton extends StatelessWidget {
           } else {
             return SizedBox.shrink();
           }
-        }, listener: (BuildContext context, RestaurantsMealListState state) {  },
+        }, listener: (BuildContext context, RestaurantsListState state) {  },
       ),
     );
   }

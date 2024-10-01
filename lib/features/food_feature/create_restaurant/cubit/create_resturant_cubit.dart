@@ -21,6 +21,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
+
 part 'create_resturant_state.dart';
 
 class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
@@ -74,7 +76,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
         res = 'success';
 
         AppPages.router.routerDelegate.navigatorKey.currentContext!
-            .read<RestaurantsMealListCubit>()
+            .read<RestaurantsCubit>()
             .loadData();
 
         AppPages.router.routerDelegate.pop();
