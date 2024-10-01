@@ -3025,6 +3025,7 @@ import 'package:video_player/video_player.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../res/style/app_colors.dart';
+import '../../../../../routes/routes.dart';
 import '../../../tinder/data/shared/shared.dart';
 import '../../../tinder/presentation/pages/user_profile.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
@@ -3057,6 +3058,7 @@ class ReelView extends StatelessWidget {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
+      // toolbarHeight: 200.h,
       leading: IconAppButton(
         icon: Icons.arrow_back,
         size: 50.h,
@@ -3064,27 +3066,42 @@ class ReelView extends StatelessWidget {
         onPressed: () => context.pop(),
       ),
       actions: [
-        const Spacer(),
+        // const Spacer(),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: IconButton(
-            onPressed: () async {
-              // context.pop();
-              await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ReelsRecordingScreen(
-                        // advertisementType: 'reel',
-                        // comeFromCompany: 'company',
-                        // totalPrice: '500',
-                        ),
-                  ));
-            },
-            icon: FaIcon(
-              Icons.camera_alt_outlined,
-              color: isDarkTheme(context) ? Colors.white : Colors.grey,
-              size: 50.h,
-            ),
+          child: Row(
+            children: [
+              IconButton(
+                onPressed: () async {
+                  // context.pop();
+                  context.push(Routes.LIVE);
+                },
+                icon: FaIcon(
+                  FontAwesomeIcons.tiktok,
+                  color: isDarkTheme(context) ? Colors.white : Colors.grey,
+                  size: 50.h,
+                ),
+              ),
+              IconButton(
+                onPressed: () async {
+                  // context.pop();
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ReelsRecordingScreen(
+                            // advertisementType: 'reel',
+                            // comeFromCompany: 'company',
+                            // totalPrice: '500',
+                            ),
+                      ));
+                },
+                icon: FaIcon(
+                  Icons.camera_alt_outlined,
+                  color: isDarkTheme(context) ? Colors.white : Colors.grey,
+                  size: 50.h,
+                ),
+              ),
+            ],
           ),
         )
       ],

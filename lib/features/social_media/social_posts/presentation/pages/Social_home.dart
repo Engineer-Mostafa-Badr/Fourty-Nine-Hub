@@ -78,7 +78,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
               context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
               labelColor:
               context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-              tabs: [
+              tabs: const [
                 Tab(icon: Icon(FontAwesomeIcons.facebook),),
                 Tab(icon: Icon(FontAwesomeIcons.instagram),),
                 Tab(icon: Icon(FontAwesomeIcons.twitter),),
@@ -164,7 +164,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                 ],
                 child: const InstagramView(),
               ),
-              TwitterView(),
+              const TwitterView(),
             ],
           )),
     );
