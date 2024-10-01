@@ -183,7 +183,7 @@ class _ItemCardState extends State<ItemCard> {
   }
 
   void _decreaseQuantity() {
-    if (qty > 1) {
+    if (qty > 0) {
       setState(() {
         qty--;
       });

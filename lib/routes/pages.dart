@@ -166,6 +166,7 @@ import '../features/competition/presentation/pages/competition_view.dart';
 import '../features/competition/presentation/pages/winners.dart';
 import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
 import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
+import '../features/food_feature/food_cart/presentation/pages/restaurant_orders.dart';
 import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_meal_list_cubit.dart';
@@ -236,6 +237,11 @@ class AppPages {
           child: const FourtyNineView(),
         ),
         routes: <RouteBase>[
+          GoRoute(
+            path: Paths.RESTAURANTORDERS,
+            name: Routes.RESTAURANTORDERS,
+            builder: (context, state) => const RestaurantOrders(),
+          ),
           // FLIP CARDS
           GoRoute(
             path: Paths.MAINCATEGORIESCARDS,
