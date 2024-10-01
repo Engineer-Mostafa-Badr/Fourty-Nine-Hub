@@ -98,59 +98,70 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                       }
                       Future.delayed(const Duration(seconds: 1)).then((_) {
                         // ignore: use_build_context_synchronously
-                        context.read<NotificationSocketIoCubit>().notificationListener(languageCode: 'en');
                         context
                             .read<NotificationSocketIoCubit>()
-                            .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
+                            .notificationListener(languageCode: 'en');
+                        context
+                            .read<NotificationSocketIoCubit>()
+                            .clearAllNotificationsAndRefeatchAfterLogin(
+                                languageCode: 'en');
                       });
                     })),
           SizedBox(
             width: 5.w,
           ),
           Expanded(
-            child: Container(
-              height: 55.h,
-              padding: EdgeInsets.symmetric(horizontal: 10.w),
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(40.r), color: AppColors.AUTH_CONTAINER_COLOR),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(40.r),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SearchView(),
-                    ),
-                  );
-                },
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.search,
-                      size: 30.h,
-                      color: AppColors.QUANTITY_COLOR,
-                    ),
-                    SizedBox(width: 10.h),
-                    Expanded(
-                      child: Label(
-                          text: LocaleKeys.search.localize, style: Styles.mediumText(color: AppColors.QUANTITY_COLOR)),
-                    ),
-                  ],
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: 40.h,
+                // padding: EdgeInsets.symmetric(horizontal: 10.w),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40.r),
+                    color: AppColors.GREY_LIGHT_COLOR),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(40.r),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SearchView(),
+                      ),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.search,
+                        size: 30.h,
+                        color: AppColors.QUANTITY_COLOR,
+                      ),
+                      SizedBox(width: 10.h),
+                      Expanded(
+                        child: Label(
+                            text: LocaleKeys.search.localize,
+                            style: Styles.mediumText(
+                                color: AppColors.QUANTITY_COLOR)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-          if (showLanguage) TextButton(onPressed: () {}, child: Label(text: 'Register', style: Styles.mediumText())),
+          if (showLanguage)
+            TextButton(
+                onPressed: () {},
+                child: Label(text: 'Register', style: Styles.mediumText())),
           InkWell(
-            onTap: ()=>context.push(Routes.CHAT),
+            onTap: () => context.push(Routes.CHAT),
             child: SvgPicture.asset(
               Assets.message,
               height: 25.h,
-            
             ),
           ),
           SizedBox(
-            width: 5.w,
+            width: 20.w,
           ),
           GestureDetector(
             onTap: () {
@@ -171,5 +182,6 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(toolbarHeight??kTextTabBarHeight * 2.h);
+  Size get preferredSize =>
+      Size.fromHeight(toolbarHeight ?? kTextTabBarHeight * 2.h);
 }
