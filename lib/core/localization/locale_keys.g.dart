@@ -820,5 +820,6 @@ abstract class  LocaleKeys {
   static const newRide = 'newRide';
   static const cancelRequest = 'cancelRequest';
   static const sendOffer = 'sendOffer';
+  static const seeAll = 'seeAll';
 
 }
