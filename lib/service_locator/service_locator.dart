@@ -171,6 +171,9 @@ import 'package:fourtyninehub/core/utils/api_service.dart';
 import 'package:fourtyninehub/features/competition/data/repository/competition_repo_impl.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/repositories/reels_repository_impl.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
@@ -309,9 +312,16 @@ class DI {
     //     .registerFactory<SliderCubit>(() => SliderCubit(serviceLocator()));
     //
     // // Register the TinderRepository
-    // serviceLocator.registerLazySingleton<TinderRepository>(
-    //   () => TinderRepository(),
-    // );
+    serviceLocator.registerLazySingleton<GetTripInfoCubit>(
+      () => GetTripInfoCubit(repository: serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<ShowOffersCubit>(
+      () => ShowOffersCubit(repository: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<RequestRiderTripCubit>(
+      () => RequestRiderTripCubit(repository: serviceLocator()),
+    );
     //
     // // Register the TinderCubit
     // serviceLocator.registerFactory<TinderViewCubit>(
