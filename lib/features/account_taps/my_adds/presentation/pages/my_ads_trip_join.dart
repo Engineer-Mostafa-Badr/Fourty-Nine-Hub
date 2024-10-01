@@ -17,7 +17,6 @@ import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../../domain/entity/docs_trip_join_entity.dart';
-import '../../domain/entity/get_all_counts_trip_join_entity.dart';
 import '../../domain/usecases/get_all_counts_usecase.dart';
 import '../cubit/my_adds_cubit.dart';
 import '../widgets/custom_button_count.dart';

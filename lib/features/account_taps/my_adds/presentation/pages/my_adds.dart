@@ -12,7 +12,6 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../widgets/build_item_auction_card.dart';
-import 'my_ads_other.dart';
 import 'my_ads_trip_join.dart';
 
 class MyAddsView extends StatefulWidget {
