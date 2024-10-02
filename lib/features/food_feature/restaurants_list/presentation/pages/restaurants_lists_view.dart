@@ -79,22 +79,20 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-        create: (context) => serviceLocator<RestaurantsMealListCubit>(),
+        create: (context) => serviceLocator<RestaurantsCubit>(),
         child: SharedScaffold(
           mainCategoryId: 1,
           body: RefreshIndicator(
             onRefresh: () async {
               if (serviceLocator<UserCubit>().isLoggedIn) {
-                serviceLocator<RestaurantsMealListCubit>().loadData();
-                context.read<RestaurantsListCubit>().loadData();
+                serviceLocator<RestaurantsCubit>().loadData();
+                context.read<RestaurantsCubit>().loadData();
               }
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: BlocConsumer<RestaurantsMealListCubit,
-                  RestaurantsMealListState>(
-                listener:
-                    (BuildContext context, RestaurantsMealListState state) {},
+              child: BlocConsumer<RestaurantsCubit, RestaurantsListState>(
+                listener: (BuildContext context, RestaurantsListState state) {},
                 builder: (context, state) {
                   // if (state.isLoading) {
                   //   return const Center(
@@ -264,7 +262,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
                           )
                         : const SizedBox.shrink();
                   }
-                  return context.watch<RestaurantsMealListCubit>().user == null
+                  return context.watch<RestaurantsCubit>().user == null
                       ? const Center(
                           child: CircularProgressIndicator.adaptive(),
                           //   child: Label(
@@ -457,7 +455,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
   }
 
   Widget _buildSubCatigoriesRestaurants() {
-    return BlocBuilder<RestaurantsMealListCubit, RestaurantsMealListState>(
+    return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
         builder: (context, state) {
       return SizedBox(
           height: MediaQuery.of(context).size.width,
@@ -472,7 +470,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
   }
 
   Widget _buildAllRestaurants() {
-    return BlocConsumer<RestaurantsMealListCubit, RestaurantsMealListState>(
+    return BlocConsumer<RestaurantsCubit, RestaurantsListState>(
       builder: (context, state) {
         return GridView.builder(
             shrinkWrap: true,
@@ -491,7 +489,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
                 ),
             itemCount: state.allRestaurant?.length ?? 0);
       },
-      listener: (BuildContext context, RestaurantsMealListState state) {},
+      listener: (BuildContext context, RestaurantsListState state) {},
     );
   }
 }

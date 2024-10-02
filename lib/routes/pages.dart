@@ -177,6 +177,7 @@ import '../features/competition/presentation/pages/competition_view.dart';
 import '../features/competition/presentation/pages/winners.dart';
 import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
 import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
+import '../features/food_feature/food_cart/presentation/pages/restaurant_orders.dart';
 import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_meal_list_cubit.dart';
@@ -235,6 +236,7 @@ import '../features/zoom/presentation/pages/meeting_room.dart';
 import '../features/zoom/presentation/pages/meeting_view.dart';
 import '../service_locator/service_locator.dart';
 import 'routes.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 
 class AppPages {
   AppPages._();
@@ -255,6 +257,11 @@ class AppPages {
           child: const FourtyNineView(),
         ),
         routes: <RouteBase>[
+          GoRoute(
+            path: Paths.RESTAURANTORDERS,
+            name: Routes.RESTAURANTORDERS,
+            builder: (context, state) => const RestaurantOrders(),
+          ),
           // FLIP CARDS
           GoRoute(
             path: Paths.MAINCATEGORIESCARDS,
@@ -474,7 +481,7 @@ class AppPages {
             builder: (context, state) => const CompetitionView(
               list: [],
             ),
-            routes: const [],
+            routes: [],
           ),
           // PaymentView
           GoRoute(
@@ -985,22 +992,23 @@ class AppPages {
               path: Paths.FOOD,
               name: Routes.FOOD,
               builder: (context, state) => MultiBlocProvider(
-                providers: [
-                  BlocProvider<RestaurantsListCubit>(
-                    create: (context) => serviceLocator()..loadData(),
+                    providers: [
+                      BlocProvider<RestaurantsCubit>(
+                        create: (context) => serviceLocator()..loadData(),
+                      ),
+                      BlocProvider<RestaurantsCubit>(
+                        create: (context) => serviceLocator(),
+                      ),
+                    ],
+                    child: RestaurantsListsView(),
                   ),
-                  BlocProvider<RestaurantsMealListCubit>(
-                    create: (context) => serviceLocator(),
-                  ),
-                ],
-                child: const RestaurantsListsView(),
-              ),
               routes: [
                 // CusineRestaurantsView
                 GoRoute(
                   path: Paths.RestaurantDashboard,
                   name: Routes.RestaurantDashboard,
-                  builder: (context, state) => BlocProvider<RestaurantDashboardCubit>(
+                  builder: (context, state) =>
+                      BlocProvider<RestaurantDashboardCubit>(
                     create: (_) => serviceLocator(),
                     child: const RestaurantDashboardView(),
                   ),
@@ -1008,7 +1016,8 @@ class AppPages {
                 GoRoute(
                   path: Paths.CusineRestaurants,
                   name: Routes.CusineRestaurants,
-                  builder: (context, state) => BlocProvider<CusineRestaurantsCubit>(
+                  builder: (context, state) =>
+                      BlocProvider<CusineRestaurantsCubit>(
                     create: (_) => serviceLocator(),
                     child: const CusineRestaurantsView(),
                   ),

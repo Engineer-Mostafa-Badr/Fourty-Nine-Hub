@@ -14,9 +14,9 @@ class MealCategories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
+    return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
         builder: (context, state) {
-      final controller = context.read<RestaurantsListCubit>();
+      final controller = context.read<RestaurantsCubit>();
 
       if (state.mealCategories != null && state.mealCategories!.isNotEmpty) {
         return SizedBox(

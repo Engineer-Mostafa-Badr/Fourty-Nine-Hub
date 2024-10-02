@@ -2,23 +2,23 @@ class MyAuctionSubCategoryEntity {
   final String id;
   final bool isHidden;
   final String parent;
-  final int dailyPrice;
-  final int portion;
-  final int providerPortion;
-  final int paymentFactor;
-  final int grossMoney;
+  final num dailyPrice;
+  final num portion;
+  final num providerPortion;
+  final num paymentFactor;
+  final num grossMoney;
   final String picture;
-  final int index;
+  final num index;
   final String createdAt;
   final String updatedAt;
-  final int overHeadFactor;
+  final num overHeadFactor;
   final bool hasAuction;
   final String nameAr;
   final String nameEn;
   final String nameCode;
   final String enableChatAndCallButton;
   final String paymentMethods;
-  final int totalOverHead;
+  final num totalOverHead;
 
   MyAuctionSubCategoryEntity(
       {required this.id,

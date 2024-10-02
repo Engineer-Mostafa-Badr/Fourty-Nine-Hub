@@ -30,14 +30,12 @@ class FloatingButton extends StatelessWidget {
             : () {
                 if (changeView == 1) {
                   context.push(Routes.SOCIAL);
-                } else if (changeView == 2) {
-                  context.push(Routes.INSTAGRAM);
                 } else {
                   context.push(Routes.HOME);
                 }
               },
         backgroundColor:
-            changeView == 2 ? AppColors.PRIMARY_COLOR : Colors.white,
+            Colors.white,
         child: icon != null
             ? Icon(
                 icon,

@@ -8,12 +8,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_meal_list_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
+import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -21,6 +24,8 @@ import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
+import '../../../../trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
+import '../../../restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../../domain/entities/restaurant_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -188,12 +193,20 @@ class _PropertyCardState extends State<PropertyCard> {
                       child: IconButton(
                         padding: EdgeInsets.zero,
                         icon: Icon(
-                          widget.item.subcategoryId!.isFavorite ?? false
+                          widget.item.isFavorite!
                               ? Icons.favorite
                               : Icons.favorite_border,
                           color: AppColors.SECONDARY_COLOR,
                         ),
-                        onPressed: () {
+                        onPressed: () async {
+                          log("${widget.item.isFavorite!}ascacsacac");
+                          await serviceLocator<RestaurantDetailsCubit>()
+                              .addRestaurantToFavorites(
+                                  context, widget.item.id!);
+                          await context.read<RestaurantsCubit>().loadData();
+
+                          log("${widget.item.isFavorite!}ascacsacac");
+
                           // setState(() {
                           //   context
                           //       .read<RestaurantsListCubit>()
@@ -220,9 +233,9 @@ class _PropertyCardState extends State<PropertyCard> {
               ),
               Expanded(flex: 3, child: _buildDetailsSection(widget.item)),
               const SizedBox(height: 4),
-              Expanded(flex: 1, child: PremiumAndRequestButtons(widget.item)),
-              const SizedBox(height: 2),
-              Expanded(flex: 1, child: CallMessageReportButtons(widget.item)),
+              PremiumAndRequestButtons(widget.item),
+              const SizedBox(height: 4),
+              CallMessageReportButtons(widget.item),
               const SizedBox(height: 2),
             ],
           ),
@@ -380,12 +393,12 @@ class PremiumAndRequestButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 0),
       child: Row(
         children: [
           _buildButton(
             label: 'Premium Request',
-            color: Colors.red,
+            color: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () async {
               serviceLocator<SubscriptionController>().checkIfUserSubscribed(
                 showRegular: false,
@@ -395,7 +408,6 @@ class PremiumAndRequestButtons extends StatelessWidget {
                   context.push(Routes.RESTAURANTDETAILS, extra: item.id);
                 },
                 subCategoryId: item.subcategoryId!.id,
-
               );
               // await serviceLocator<SubscriptionController>()
               //     .showSubscriptionPlans(
@@ -407,10 +419,10 @@ class PremiumAndRequestButtons extends StatelessWidget {
               //     ]);
             },
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 4),
           _buildButton(
             label: 'Request',
-            color: Colors.black,
+            color: AppColors.PRIMARY_COLOR,
             onPressed: () {
               context.push(Routes.RESTAURANTDETAILS, extra: item.id);
             },
@@ -428,6 +440,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
     return Flexible(
       child: AppButton(
           height: 60.h,
+          padding: 0,
+          margin: 0,
           label: label,
           backColor: color,
           style: Styles.mediumText(color: Colors.white),
@@ -442,30 +456,71 @@ class CallMessageReportButtons extends StatelessWidget {
 
   const CallMessageReportButtons(this.item, {super.key});
 
+  Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity,
+      String subCategoryId, String title) async {
+    if (tripJoinCardEntity.isApproved == null ||
+        tripJoinCardEntity.isApproved == false) {
+      await serviceLocator<SubscriptionController>().showSubscriptionPlans(
+        wallets: [WalletTypes.balance],
+        subCategoryId: subCategoryId,
+        title: title,
+      );
+      return false;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 0),
       child: Row(
         children: [
           _buildElevatedButtonWithIcon(
             label: 'Call',
             icon: Icons.call,
-            onPressed: () {},
-            color: Colors.grey,
+            onPressed: item.enableOrDisableChat != 'disable'
+                ? () async {
+                    log('enable--------------');
+                    launchUrlString("tel://01121081958");
+
+                    // if (await _userApproved(
+                    //   tripJoinCardEntity,
+                    //   UIConst.chatNormalId,
+                    //   'Chat Subscription',
+                    // )) {
+                    //   launchUrlString("tel://${tripJoinCardEntity.phone}");
+                    // }
+                  }
+                : () {},
+            color: AppColors.GREY_DARK_COLOR,
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 4),
           _buildElevatedButtonWithIcon(
             label: 'Message',
             icon: Icons.message,
-            onPressed: () {},
-            color: Colors.grey,
+            onPressed: item.enableOrDisableChat != 'disable'
+                ? () async {
+                    log('enable--------------');
+
+                    //   launchUrlString("tel://${tripJoinCardEntity.phone}");
+
+                    // if (await _userApproved(
+                    //   tripJoinCardEntity,
+                    //   UIConst.chatNormalId,
+                    //   'Chat Subscription',
+                    // )) {
+                    //   launchUrlString("tel://${tripJoinCardEntity.phone}");
+                    // }
+                  }
+                : () {},
+            color: AppColors.GREY_DARK_COLOR,
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 4),
           _buildElevatedButtonWithIcon(
             label: 'Report',
             icon: Icons.report,
-            color: Colors.red,
+            color: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () {
               bottomSheet(
                 context: context,
@@ -489,6 +544,8 @@ class CallMessageReportButtons extends StatelessWidget {
   }) {
     return Expanded(
         child: AppButton(
+            padding: 0,
+            margin: 0,
             height: 60.h,
             label: label,
             icon: icon,

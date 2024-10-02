@@ -584,7 +584,7 @@ class EndPoints {
       '/restaurants/subcategories-count-restaurant${params?.page != null || params?.userId != null ? "?page=${params?.page}&userId=${params?.userId}" : ""}';
 
   static String getAllRestaurantWithMenu({PostCommentsParams? params}) =>
-      '/restaurants/all-restaurants${params?.page != null ? "?page=${params?.page}" : ""}';
+      '/restaurants/all-restaurants${params?.page != null || params?.userId != null ? "?page=${params?.page}&userId=${params?.userId}" : ""}';
 
   static String searchRestaurants({PostCommentsParams? params}) =>
       '/restaurants/search-restaurants${params?.page != null ? "?page=${params?.page ?? "1"}&limit=${params?.limit ?? "20"}" : ""}';

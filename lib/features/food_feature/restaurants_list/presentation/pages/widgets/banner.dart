@@ -13,7 +13,7 @@ class MealBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
+    return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
       builder: (context, state) {
         if (state.isLoading) {
           return Shimmer.fromColors(

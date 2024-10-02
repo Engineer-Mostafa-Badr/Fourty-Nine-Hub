@@ -26,93 +26,96 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<BottomItemModel> pages = mainCategory == 3
-        ? <BottomItemModel>[
-            BottomItemModel(
-              icon: FontAwesomeIcons.microphone,
-              label: 'snap',
-              // Translated text
-              index: 0,
-              image: Assets.cameraIcon,
-              route: Routes.SNAP,
-            ),
-            BottomItemModel(
-              icon: FontAwesomeIcons.stream,
-              label: 'live', // Translated text
-              index: 0,
-              image: Assets.live,
-              route: Routes.LIVE,
-            ),
-            BottomItemModel(
-              icon: Icons.video_call,
-              label: 'meet', // Translated text
-              index: 0,
-              image: Assets.zoomMeeting,
-              route: Routes.ZOOM,
-            ),
-            BottomItemModel(
-              icon: Icons.light_mode_rounded,
-              label: 'spotlight',
-              // Translated text
-              index: 0,
-              image: Assets.spotlightIcon,
+    List<BottomItemModel> pages =
+    // mainCategory == 3
+    //     ? <BottomItemModel>[
+    //         BottomItemModel(
+    //           icon: FontAwesomeIcons.microphone,
+    //           label: 'snap',
+    //           // Translated text
+    //           index: 0,
+    //           image: Assets.cameraIcon,
+    //           route: Routes.SNAP,
+    //         ),
+    //         BottomItemModel(
+    //           icon: FontAwesomeIcons.stream,
+    //           label: 'live', // Translated text
+    //           index: 0,
+    //           image: Assets.live,
+    //           route: Routes.LIVE,
+    //         ),
+    //         BottomItemModel(
+    //           icon: Icons.video_call,
+    //           label: 'meet', // Translated text
+    //           index: 0,
+    //           image: Assets.zoomMeeting,
+    //           route: Routes.ZOOM,
+    //         ),
+    //         BottomItemModel(
+    //           icon: Icons.light_mode_rounded,
+    //           label: 'spotlight',
+    //           // Translated text
+    //           index: 0,
+    //           image: Assets.spotlightIcon,
+    //
+    //           route: Routes.SPOTLIGHT,
+    //         ),
+    //       ]
+    //     : mainCategory == 2
+    //         ? <BottomItemModel>[
+    //             BottomItemModel(
+    //               icon: FontAwesomeIcons.twitter,
+    //               label: 'tweet', // Translated text
+    //               index: 0,
+    //               image: Assets.twitter,
+    //               route: Routes.TWITTER,
+    //             ),
+    //             BottomItemModel(
+    //               icon: FontAwesomeIcons.list,
+    //               label: 'reels', // Translated text
+    //               index: 1,
+    //               image: Assets.reels,
+    //               route: Routes.REELS,
+    //             ),
+    //             BottomItemModel(
+    //               icon: Icons.chat,
+    //               label: 'chat', // Translated text
+    //               index: 3,
+    //               image: Assets.message,
+    //               route: Routes.CHAT,
+    //             ),
+    //             BottomItemModel(
+    //               icon: FontAwesomeIcons.car,
+    //               label: 'find', // Translated text
+    //               index: 4,
+    //               image: Assets.social,
+    //               route: Routes.Tinder,
+    //             ),
+    //           ]
+    //         :
+    <BottomItemModel>[
 
-              route: Routes.SPOTLIGHT,
-            ),
-          ]
-        : mainCategory == 2
-            ? <BottomItemModel>[
-                BottomItemModel(
-                  icon: FontAwesomeIcons.twitter,
-                  label: 'tweet', // Translated text
-                  index: 0,
-                  image: Assets.twitter,
-                  route: Routes.TWITTER,
-                ),
-                BottomItemModel(
-                  icon: FontAwesomeIcons.list,
-                  label: 'reels', // Translated text
-                  index: 1,
-                  image: Assets.reels,
-                  route: Routes.REELS,
-                ),
-                BottomItemModel(
-                  icon: Icons.chat,
-                  label: 'chat', // Translated text
-                  index: 3,
-                  image: Assets.message,
-                  route: Routes.CHAT,
-                ),
-                BottomItemModel(
-                  icon: FontAwesomeIcons.car,
-                  label: 'find', // Translated text
-                  index: 4,
-                  image: Assets.social,
-                  route: Routes.Tinder,
-                ),
-              ]
-            : <BottomItemModel>[
-                BottomItemModel(
-                  icon: FontAwesomeIcons.bowlFood,
-                  label: 'meal', // Translated text
-                  index: 0,
-                  image: Assets.food,
-                  route: Routes.FOOD,
-                ),
-                BottomItemModel(
-                  icon: FontAwesomeIcons.kitMedical,
-                  label: 'health', // Translated text
-                  index: 1,
-                  image: Assets.health,
-                  route: Routes.VISITA,
-                ),
-                BottomItemModel(
-                  icon: Icons.delivery_dining,
-                  label: 'ship', // Using generated key for translation
-                  index: 3,
-                  image: Assets.shipping,
-                  route: Routes.SHIPPING,
-                ),
+      BottomItemModel(
+        icon: FontAwesomeIcons.list,
+        label: 'reels', // Translated text
+        index: 1,
+        image: Assets.reels,
+        route: Routes.REELS,
+      ),
+      BottomItemModel(
+        icon: FontAwesomeIcons.bowlFood,
+        label: 'meal', // Translated text
+        index: 0,
+        image: Assets.food,
+        route: Routes.FOOD,
+      ),
+      BottomItemModel(
+        icon: FontAwesomeIcons.kitMedical,
+        label: 'health', // Translated text
+        index: 1,
+        image: Assets.health,
+        route: Routes.VISITA,
+      ),
                 BottomItemModel(
                   icon: FontAwesomeIcons.car,
                   label: 'ride', // Using generated key for translation
@@ -238,16 +241,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                           : index == index2
                               ? EdgeInsets.only(left: 60.w)
                               : EdgeInsets.zero,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Expanded(
-                            child: SvgPicture.asset(
-                              widget.items[index].image,
-                              height: widget.items[index].height * 1.8.h,
-                            ),
-                          ),
-                        ],
+                      child: Expanded(
+                        child: SvgPicture.asset(
+                          widget.items[index].image,
+                          height: widget.items[index].height * 1.8.h,
+                        ),
                       ),
                     ),
                   );

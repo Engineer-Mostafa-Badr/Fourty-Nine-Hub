@@ -11,10 +11,6 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
-import '../../../../../common/widgets/dynamic/drawer.dart';
-import '../../../../../common/widgets/dynamic/floating_button.dart';
-import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 
 class InstagramView extends StatefulWidget {
   final bool hideAppBar;
@@ -55,20 +51,6 @@ class _InstagramViewState extends State<InstagramView> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: widget.hideAppBar
-            ? null
-            : const HomeAppbar(isWithBackArrow: true),  // Conditionally show AppBar
-        drawer: widget.hideAppBar ? null : const DrawerWidget(),  // Conditionally show Drawer
-        floatingActionButton: _isScrollingDown || widget.hideAppBar
-            ? null
-            : const FloatingButton(changeView: 3),  // Conditionally show FAB
-        floatingActionButtonLocation:_isScrollingDown || widget.hideAppBar? null:FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar:  BottomNavigator(  // Conditionally show BottomNavigator
-          scrollController: scrollController,
-          isScrollingDown: _isScrollingDown,
-          mainCategory: 3,
-          index: 2,
-        ),
         body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
           builder: (context, state) {
             return context.read<UserCubit>().isLoggedIn
