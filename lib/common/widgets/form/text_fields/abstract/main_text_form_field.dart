@@ -15,6 +15,7 @@ abstract class MainTextFormField extends StatefulWidget {
   final EdgeInsetsGeometry? margin;
   final bool enabled;
   final bool? noBoarder;
+  final BoxConstraints? constraints;
   final int? maxLength;
   final List<TextInputFormatter>? inputFormatters;
   final bool expanded;
@@ -47,6 +48,7 @@ abstract class MainTextFormField extends StatefulWidget {
     required this.hintText,
     this.keyboardType,
     required this.validator,
+    this.constraints,
     this.textCapitalization = TextCapitalization.none,
     this.margin = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
     this.enabled = true,
@@ -117,6 +119,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
           hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
           suffixIcon: widget.suffixIcon,
           prefixIcon: widget.prefixIcon,
+          constraints: widget.constraints,
           prefixIconColor: AppColors.QUANTITY_COLOR,
           enabledBorder: OutlineInputBorder(
             borderRadius: const BorderRadius.all(Radius.circular(UIConst.radius)),

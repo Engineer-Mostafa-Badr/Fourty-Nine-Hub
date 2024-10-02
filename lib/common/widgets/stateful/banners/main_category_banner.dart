@@ -48,6 +48,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
+      width: double.infinity,
       imageUrl: widget.category.banner,
       height: MediaQuery.sizeOf(context).height * 0.13.h,
       imageBuilder: (context, i) => Container(

@@ -47,6 +47,7 @@ class DefaultTextFormField extends MainTextFormField {
     final String? Function(String?)? validator,
     super.onChanged,
     // super.label,
+    super.constraints,
     super.hintColor,
     // final ValueChanged<String>? onChanged,
     // Color? hintColor,

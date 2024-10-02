@@ -848,9 +848,9 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                               horizontal: 5),
                                       // constraints: const BoxConstraints(
                                       //     maxHeight: 70, minHeight: 70),
-                                      onChanged: (value) {
-                                        shippingcubit.model.model = value;
-                                      },
+                                      // onChanged: (value) {
+                                      //   shippingcubit.model.model = value;
+                                      // },
                                       hint: Labels.model),
                                 ),
                                 if (field.hasError)

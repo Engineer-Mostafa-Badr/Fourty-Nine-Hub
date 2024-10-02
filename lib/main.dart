@@ -147,6 +147,7 @@ class _MyAppState extends State<MyApp> {
                   context: context,
                   notificationListenerUseCase: serviceLocator(),
                 )),
+        BlocProvider(create: (context) => ShowOffersCubit(repository: serviceLocator(),),),
       ],
       child: ScreenUtilInit(
           designSize: const Size(750, 1334),
@@ -177,7 +178,8 @@ class _MyAppState extends State<MyApp> {
                 );
               },
             );
-          }),
+         },
+      ),
     );
   }
 }

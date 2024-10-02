@@ -1063,9 +1063,9 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                       const EdgeInsets.symmetric(horizontal: 5),
                                   // constraints: const BoxConstraints(
                                   //     maxHeight: 70, minHeight: 70),
-                                  onChanged: (value) {
-                                    shippingcubit.model.model = value;
-                                  },
+                                  // onChanged: (value) {
+                                  //   shippingcubit.model.model = value;
+                                  // },
                                   // validator: (value) {
                                   //   if (value == null || value.isEmpty) {
                                   //     return "You have to fill your car model !";
