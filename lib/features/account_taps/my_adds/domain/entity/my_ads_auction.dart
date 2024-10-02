@@ -23,6 +23,10 @@ class MyAuctionAdsEntity {
   final List<SubscriptionAdsAuctionEntity> subscriptions;
   final List<MyAuctionImageEntity> images;
   final String subscriptionStatus;
+  final int phoneCountLength;
+  final int chatCountLength;
+  final int viewCountLength;
+  final int loveCountLength;
 
   MyAuctionAdsEntity(
       {required this.id,
@@ -42,6 +46,11 @@ class MyAuctionAdsEntity {
       required this.user,
       required this.subscriptions,
       required this.images,
-      required this.subscriptionStatus});
+      required this.subscriptionStatus,
+      required this.phoneCountLength,
+      required this.chatCountLength,
+      required this.viewCountLength,
+      required this.loveCountLength});
+
 // final List<String> images;
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/entity/sub_tab_entity.dart';
 import '../../../domain/use_case/update_sub_tab_use_case.dart';
@@ -18,59 +20,24 @@ class SubTab extends StatefulWidget {
 }
 
 class _SubTabState extends State<SubTab> {
-  Set<int> _selectedItems = {};
-  final List<String> _items = [
-    'Trip Join',
-    'Carpool',
-    'Auction',
-    'Installments',
-    'Chance',
-  ];
+  Map<String, bool> _selectedItems = {};
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void _loadSavedState(SubTabEntity subTabEntity) {
-    setState(() {
-     // _selectedItems.clear(); // Clear previous selections
-
-      // Load the state based on the SubTabEntity values
-      if (subTabEntity.tripJoin) {
-        _selectedItems.add(_items.indexOf('Trip Join'));
-      }
-      if (subTabEntity.carpool) {
-        _selectedItems.add(_items.indexOf('Carpool'));
-      }
-      if (subTabEntity.auction) {
-        _selectedItems.add(_items.indexOf('Auction'));
-      }
-      if (subTabEntity.installment) {
-        _selectedItems.add(_items.indexOf('Installments'));
-      }
-      if (subTabEntity.chance) {
-        _selectedItems.add(_items.indexOf('Chance'));
-      }
-    });
-  }
-
-  void _toggleSelection(int index) {
-    setState(() {
-      // Toggle the selection
-      if (_selectedItems.contains(index)) {
-        _selectedItems.remove(index); // Remove if already selected
-      } else {
-        _selectedItems.add(index); // Add if not selected
-      }
-    });
+  // Method to initialize categories based on UserPreferences
+  Map<String, bool> _initFavouriteCategories(SubTabEntity preferences) {
+    return {
+      "TripJoin": preferences.tripJoin,
+      "Carpool": preferences.carpool,
+      "Auction": preferences.auction,
+      "Installment": preferences.installment,
+      "Chance": preferences.chance,
+    };
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SubTab Example'),
+        title: Text(LocaleKeys.subTab.localize),
       ),
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) => serviceLocator()..fetchSubTab(),
@@ -78,43 +45,41 @@ class _SubTabState extends State<SubTab> {
           builder: (BuildContext context, state) {
             if (state.status == CustomPageStates.success) {
               // Load the saved state if available
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (state.subTab != null) {
-                  _loadSavedState(state.subTab!);
-                }
-              });
+              if (_selectedItems.isEmpty) {
+                _selectedItems = _initFavouriteCategories(state.subTab!);
+              }
 
               return ListView.builder(
-                itemCount: _items.length,
+                itemCount: _selectedItems.length,
                 itemBuilder: (context, index) {
-                  bool isSelected = _selectedItems.contains(index);
+                  final categoryName = _selectedItems.keys.elementAt(index);
+                  final isSelected = _selectedItems[categoryName]!;
                   return ListTile(
                     leading: Checkbox(
-                      value: isSelected, // Checkbox state
-                      checkColor: Colors.white,
-                      activeColor: Colors.blue,
+                      value: isSelected,
+                      checkColor: Theme.of(context).scaffoldBackgroundColor,
+                      activeColor: Theme.of(context).primaryColor,
                       onChanged: (bool? value) {
-                        // Toggle the selection when checkbox is pressed
-                        _toggleSelection(index);
+                        setState(() {
+                          _selectedItems[categoryName] = value ?? false;
+                        });
                       },
                     ),
                     title: Text(
-                      _items[index],
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    trailing: Text(
-                      isSelected ? 'True' : 'False', // Display based on state
-                      style: TextStyle(
-                        color: isSelected ? Colors.green : Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      categoryName,
+                      style: Styles.mediumText(
+                          fontSize: 65.sp,
+                          fontWeight: FontWeight.w400,
+                          color: Theme.of(context).primaryColor),
                     ),
                     selected: isSelected,
                   );
                 },
               );
-            } else {
+            } else if (state.status == CustomPageStates.loading) {
               return const Center(child: CircularProgressIndicator());
+            } else {
+              return Center(child: Text(LocaleKeys.failedToLoadCategories.localize));
             }
           },
         ),
@@ -124,21 +89,34 @@ class _SubTabState extends State<SubTab> {
         child: BlocConsumer<CustomPageCubit, CustomPageState>(
           listener: (BuildContext context, state) {
             if (state.status == CustomPageStates.success) {
-              showSuccessMessage(context, 'Updated successfully!');
+              showSuccessMessage(context, LocaleKeys.updateSuccessfully.localize);
             }
           },
           builder: (BuildContext context, state) {
             return FloatingActionButton(
               backgroundColor: Theme.of(context).primaryColor,
               onPressed: () {
+                final selectedCategories = _selectedItems.entries
+                    .where((entry) => entry.value == true)
+                    .map((entry) => entry.key)
+                    .toList();
                 // Handle the save or update action
-                context.read<CustomPageCubit>().updateSubTab(SubTabParams(
-                  tripJoin: _selectedItems.contains(_items.indexOf('Trip Join')),
-                  carpool: _selectedItems.contains(_items.indexOf('Carpool')),
-                  auction: _selectedItems.contains(_items.indexOf('Auction')),
-                  installment: _selectedItems.contains(_items.indexOf('Installments')),
-                  chance: _selectedItems.contains(_items.indexOf('Chance')),
+                if(selectedCategories.length ==2) {
+                  context.read<CustomPageCubit>().updateSubTab(SubTabParams(
+                  tripJoin: _selectedItems["TripJoin"] ?? false,
+                  carpool: _selectedItems["Carpool"] ?? false,
+                  auction: _selectedItems["Auction"] ?? false,
+                  installment: _selectedItems["Installment"] ?? false,
+                  chance: _selectedItems["Chance"] ?? false,
                 ));
+                }else {
+                  // Show a message if the selection is not valid
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(LocaleKeys.exactly2items.localize),
+                    ),
+                  );
+                }
               },
               child: Icon(Icons.check, color: Theme.of(context).scaffoldBackgroundColor),
             );
@@ -148,164 +126,3 @@ class _SubTabState extends State<SubTab> {
     );
   }
 }
-
-
-
-
-
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:fourtyninehub/core/extensions/string_extension.dart';
-//
-// import '../../../../../core/localization/locale_keys.g.dart';
-// import '../../../../../core/messages/messages.dart';
-// import '../../../../../service_locator/service_locator.dart';
-// import '../../../domain/use_case/update_sub_tab_use_case.dart';
-// import '../../cubit/custom_page_cubit.dart';
-// import '../../cubit/custom_page_states.dart';
-//
-// class SubTab extends StatefulWidget {
-//   const SubTab({super.key});
-//
-//   @override
-//   _SubTabState createState() => _SubTabState();
-// }
-//
-// class _SubTabState extends State<SubTab> {
-//   // A set to keep track of selected items (stores index of fully selected items)
-//   Set<int> _selectedItems = {};
-//
-//   // Track intermediate states separately
-//   Set<int> _intermediateItems = {};
-//
-//   // List of items
-//   final List<String> _items = [
-//     'Trip Join',
-//     'Carpool',
-//     'Auction',
-//     'Installments',
-//     'Chance',
-//   ];
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     // Simulate fetching saved states (for demonstration, assuming items 1 and 3 were selected previously)
-//     _loadSavedState();
-//   }
-//
-//   // Simulate loading saved state from storage (this could be from an API or local storage)
-//   void _loadSavedState() {
-//     // Example: Items at index 1 and 3 were selected before
-//     setState(() {
-//       _selectedItems.add(1); // Carpool was selected
-//       _selectedItems.add(3); // Installments was selected
-//     });
-//   }
-//
-//   // Helper to toggle between true, false, and intermediate
-//   void toggleSelection(int index) {
-//     setState(() {
-//       if (_selectedItems.contains(index)) {
-//         // Move to intermediate state
-//         _selectedItems.remove(index);
-//         _intermediateItems.add(index);
-//       } else if (_intermediateItems.contains(index)) {
-//         // Move to false state (uncheck)
-//         _intermediateItems.remove(index);
-//       } else {
-//         // Move to true state (checked)
-//         _selectedItems.add(index);
-//       }
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('SubTab Example'),
-//       ),
-//       body: BlocProvider<CustomPageCubit>(
-//         create: (BuildContext context) => serviceLocator()..fetchSubTab(),
-//         child: BlocBuilder<CustomPageCubit, CustomPageState>(
-//           builder: (BuildContext context, state) {
-//             return ListView.builder(
-//               itemCount: _items.length,
-//               itemBuilder: (context, index) {
-//                 bool isSelected = _selectedItems.contains(index);
-//                 return ListTile(
-//                   leading: Checkbox(
-//                     value: isSelected
-//                         ? true
-//                         : false, // Tri-state logic
-//                     checkColor: Colors.white,
-//                     activeColor: Colors.blue,
-//                     tristate: true, // Enable intermediate state
-//                     onChanged: (bool? value) {
-//                       toggleSelection(index);
-//                     },
-//                   ),
-//                   title: Text(
-//                     _items[index],
-//                     style: const TextStyle(fontSize: 18),
-//                   ),
-//                   trailing: Text(
-//                     isSelected
-//                         ? 'True'
-//                         : 'False', // Display based on state
-//                     style: TextStyle(
-//                       color: isSelected
-//                           ? Colors.green
-//                           : Colors.red,
-//                       fontWeight: FontWeight.bold,
-//                     ),
-//                   ),
-//                   selected: isSelected, // Highlight selected or intermediate
-//                 );
-//               },
-//             );
-//           },
-//         ),
-//       ),
-//       floatingActionButton: BlocProvider<CustomPageCubit>(
-//         create: (BuildContext context) => serviceLocator(),
-//         child: BlocConsumer<CustomPageCubit, CustomPageState>(
-//           listener: (BuildContext context, state) {
-//             if (state.status == CustomPageStates.success) {
-//               showSuccessMessage(context, LocaleKeys.updateSuccessfully.localize);
-//             }
-//           },
-//           builder: (BuildContext context, state) {
-//             return FloatingActionButton(
-//               backgroundColor: Theme.of(context).primaryColor,
-//               onPressed: () {
-//                 if (_selectedItems.length == 2) {
-//                   // Update the selected items using the Cubit
-//                   context.read<CustomPageCubit>().updateSubTab(SubTabParams(
-//                     tripJoin: _selectedItems.contains(_items.indexOf(LocaleKeys.tripJoin.localize)),
-//                     carpool: _selectedItems.contains(_items.indexOf(LocaleKeys.carpool.localize)),
-//                     auction: _selectedItems.contains(_items.indexOf(LocaleKeys.auction.localize)),
-//                     installment: _selectedItems.contains(_items.indexOf(LocaleKeys.installments.localize)),
-//                     chance: _selectedItems.contains(_items.indexOf(LocaleKeys.chance.localize)),
-//                   ));
-//                   // Proceed with the selected items
-//                   print('Selected Items: ${_selectedItems.toList()}');
-//                 } else {
-//                   // Show a message if the selection is not valid
-//                   ScaffoldMessenger.of(context).showSnackBar(
-//                     SnackBar(
-//                       content: Text(LocaleKeys.exactly2items.localize),
-//                     ),
-//                   );
-//                 }
-//               },
-//               child: Icon(Icons.check, color: Theme.of(context).scaffoldBackgroundColor),
-//             );
-//           },
-//         ),
-//       ),
-//     );
-//   }
-// }

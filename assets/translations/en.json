@@ -530,7 +530,6 @@
   "sendRequest" : "Send Request"  ,
   "enterPhoneNumber" : "Please enter mobile number" ,
   "enterValidPhoneNumber" : "Please enter valid mobile number" ,
-  "seat" : "Seat"   ,
   "welcomeToTripjoin" : "Welcome To Trip Join" ,
   "ownCar" : "You own a car!\nSomeone will share trip with you / pay half price" ,
   "startingPoint" : "Starting Point" ,
@@ -544,7 +543,6 @@
   "youCantLeaveFieldEmpty" : "You can't leave the field empty" ,
   "addressMustBeAtLeast10Chars" : "Address must be at least 10 characters" ,
   "searchFind" : "Find" ,
-  "seeAll" : "See All" ,
   "markAllNotificationAsSeen" :"Do you want to mark all notifications as seen?" ,
   "requestLog" : "Request Log" ,
   "requestsHistory" : "Requests History" ,
@@ -738,6 +736,12 @@
   "deleteAd": "Delete",
   "rent": "Rent",
   "sale": "Sale",
+  "seat": "Seat",
+  "repeated": "Repeated",
+  "subscription": "Subscription",
+  "tripJoinAds": "Trip Join Ads",
+  "other": "Other",
+  "adSoldout": "Are you sure, you want to set this AD as soldout?",
   "viewAll": "View All",
   "addACaption": "Add a caption...",
   "and": "And",
@@ -837,5 +841,6 @@
   "youHaveReportedThisTrip": "you have reported this trip.",
   "newRide": "New Ride",
   "cancelRequest": "Cancel Request",
-  "sendOffer": "Send Offer"
+  "sendOffer": "Send Offer",
+  "seeAll": "See All"
 }

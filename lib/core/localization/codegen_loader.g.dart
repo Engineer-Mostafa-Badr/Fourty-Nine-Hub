@@ -544,7 +544,6 @@ class CodegenLoader extends AssetLoader{
   "sendRequest": "ارسل الطلب",
   "enterPhoneNumber": "من فضلك ادخل رقم الهاتف",
   "enterValidPhoneNumber": "من فضلك ادخل رقم هاتف صحيح",
-  "seat": "مقاعد",
   "welcomeToTripjoin": "مرحبا بك في مشاركة الرحلات",
   "ownCar": "انت تملك سيارة\nشحص سيشارك الرحلة معك ويدفع نصف الثمن",
   "startingPoint": "البداية",
@@ -558,7 +557,6 @@ class CodegenLoader extends AssetLoader{
   "youCantLeaveFieldEmpty": "لا يمكن ترك هذا الجقل فارغا",
   "addressMustBeAtLeast10Chars": "العنوان يجب ان يكون علي الأقل 10 أحرف",
   "searchFind": "ابحث",
-  "seeAll": "مشاهدة الكل",
   "markAllNotificationAsSeen": "هل ترغب بجعل جميع الأشعارات مرئية؟",
   "requestLog": "سجل الطلبات",
   "requestsHistory": "تاريخ الطلبات",
@@ -752,6 +750,12 @@ class CodegenLoader extends AssetLoader{
   "deleteAd": "حذف الإعلان",
   "rent": "إيجار",
   "sale": "بيع",
+  "seat": "مقعد",
+  "repeated": "مكرر",
+  "subscription": "اشتراك",
+  "tripJoinAds": "إعلانات الانضمام إلى الرحلة",
+  "other": "اخري",
+  "adSoldout": "هل أنت متأكد أنك تريد تعيين هذا الإعلان على أنه مباع؟",
   "viewAll": "عرض الكل",
   "addACaption": "...اضافة تعليق",
   "and": "و",
@@ -842,7 +846,8 @@ class CodegenLoader extends AssetLoader{
   "youHaveReportedThisTrip": "لقد أبلغت عن هذه الرحلة.",
   "newRide": "رحلة جديدة",
   "cancelRequest": "إلغاء الطلب",
-  "sendOffer": "إرسال العرض"
+  "sendOffer": "إرسال العرض",
+  "seeAll": "شاهد الكل"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1376,7 +1381,6 @@ static const Map<String,dynamic> en = {
   "sendRequest": "Send Request",
   "enterPhoneNumber": "Please enter mobile number",
   "enterValidPhoneNumber": "Please enter valid mobile number",
-  "seat": "Seat",
   "welcomeToTripjoin": "Welcome To Trip Join",
   "ownCar": "You own a car!\nSomeone will share trip with you / pay half price",
   "startingPoint": "Starting Point",
@@ -1390,7 +1394,6 @@ static const Map<String,dynamic> en = {
   "youCantLeaveFieldEmpty": "You can't leave the field empty",
   "addressMustBeAtLeast10Chars": "Address must be at least 10 characters",
   "searchFind": "Find",
-  "seeAll": "See All",
   "markAllNotificationAsSeen": "Do you want to mark all notifications as seen?",
   "requestLog": "Request Log",
   "requestsHistory": "Requests History",
@@ -1584,6 +1587,12 @@ static const Map<String,dynamic> en = {
   "deleteAd": "Delete",
   "rent": "Rent",
   "sale": "Sale",
+  "seat": "Seat",
+  "repeated": "Repeated",
+  "subscription": "Subscription",
+  "tripJoinAds": "Trip Join Ads",
+  "other": "Other",
+  "adSoldout": "Are you sure, you want to set this AD as soldout?",
   "viewAll": "View All",
   "addACaption": "Add a caption...",
   "and": "And",
@@ -1675,7 +1684,8 @@ static const Map<String,dynamic> en = {
   "youHaveReportedThisTrip": "you have reported this trip.",
   "newRide": "New Ride",
   "cancelRequest": "Cancel Request",
-  "sendOffer": "Send Offer"
+  "sendOffer": "Send Offer",
+  "seeAll": "See All"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -11,6 +11,7 @@ import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
+import '../../../domain/entity/navigate_bar_entity.dart';
 import '../../../domain/use_case/update_navigate_bar_use_case.dart';
 
 class NavigateBar extends StatefulWidget {
@@ -21,21 +22,23 @@ class NavigateBar extends StatefulWidget {
 }
 
 class _NavigateBarState extends State<NavigateBar> {
-  Set<int> _selectedItems = {};
-  final List<String> _items = [
-    LocaleKeys.ride.localize,
-    LocaleKeys.ship.localize,
-    LocaleKeys.health.localize,
-    LocaleKeys.meal.localize,
-    LocaleKeys.find.localize,
-    LocaleKeys.chat.localize,
-    LocaleKeys.reel.localize,
-    LocaleKeys.tweet.localize,
-    LocaleKeys.spotlight.localize,
-    LocaleKeys.meet.localize,
-    LocaleKeys.live.localize,
-    LocaleKeys.snap.localize,
-  ];
+  Map<String, bool> _selectedItems = {};
+  Map<String, bool> _initFavouriteCategories(NavigateBarEntity preferences) {
+    return {
+      "Ride": preferences.ride,
+      "Loading": preferences.loading,
+      "Health": preferences.health,
+      "Meal": preferences.meal,
+      "Find": preferences.find,
+      "Chat": preferences.chat,
+      "Reel": preferences.reel,
+      "Tweet": preferences.tweet,
+      "Spotlight": preferences.spotlight,
+      "Meet": preferences.meet,
+      "Live": preferences.live,
+      "Snap": preferences.snap,
+    };
+  }
 
   final List<String> _icons = [
     Assets.ride,
@@ -62,44 +65,46 @@ class _NavigateBarState extends State<NavigateBar> {
         create: (BuildContext context) => serviceLocator()..fetchNavigateBar(),
         child: BlocBuilder<CustomPageCubit, CustomPageState>(
           builder: (BuildContext context, state) {
+            if (state.status == CustomPageStates.success){
+            if (_selectedItems.isEmpty) {
+              _selectedItems = _initFavouriteCategories(state.navigateBar!);
+            }
             return ListView.builder(
-              itemCount: _items.length,
+              itemCount: _selectedItems.length,
               itemBuilder: (context, index) {
-                String currentItem = _items[index];
-
+                final categoryName = _selectedItems.keys.elementAt(index);
+                final isSelected = _selectedItems[categoryName]!;
                 return ListTile(
                   leading: Checkbox(
-                    value: _selectedItems.contains(index),
+                    value: isSelected,
                     checkColor: Theme.of(context).scaffoldBackgroundColor,
                     activeColor: Theme.of(context).primaryColor,
-                    // Red if true, white if false
                     onChanged: (bool? value) {
                       setState(() {
-                        if (value == true) {
-                          if (_selectedItems.length < 5) {
-                            _selectedItems.add(index);
-                          }
-                        } else {
-                          _selectedItems.remove(index);
-                        }
+                        _selectedItems[categoryName] = value ?? false;
                       });
                     },
                   ),
                   title: Text(
-                    currentItem,
+                    categoryName,
                     style: Styles.mediumText(
                         fontSize: 65.sp,
                         fontWeight: FontWeight.w400,
                         color: Theme.of(context).primaryColor),
                   ),
+                  selected: isSelected,
                   trailing: SvgPicture.asset(
                     _icons[index],
                     height: 40.h,
                   ),
-                  selected: _selectedItems.contains(index),
                 );
               },
             );
+            }else if (state.status == CustomPageStates.loading) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return Center(child: Text(LocaleKeys.failedToLoadCategories.localize));
+            }
           },
         ),
       ),
@@ -116,28 +121,28 @@ class _NavigateBarState extends State<NavigateBar> {
             return FloatingActionButton(
               backgroundColor: Theme.of(context).primaryColor,
               onPressed: () {
-                if (_selectedItems.length >= 3 && _selectedItems.length <= 5) {
+                final selectedCategories = _selectedItems.entries
+                    .where((entry) => entry.value == true)
+                    .map((entry) => entry.key)
+                    .toList();
+                if (selectedCategories.length >= 3 && selectedCategories.length <= 5) {
                   // Proceed with the selected items
                   context
                       .read<CustomPageCubit>()
                       .updateNavigateBar(NavigateBarParams(
-                        ride: _selectedItems.contains(_items.indexOf('Ride')),
-                        loading:
-                            _selectedItems.contains(_items.indexOf('Loading')),
-                        health:
-                            _selectedItems.contains(_items.indexOf('Auction')),
-                        meal: _selectedItems.contains(_items.indexOf('Meal')),
-                        find: _selectedItems.contains(_items.indexOf('Find')),
-                        chat: _selectedItems.contains(_items.indexOf('Chat')),
-                        reel: _selectedItems.contains(_items.indexOf('Reel')),
-                        tweet: _selectedItems.contains(_items.indexOf('Tweet')),
-                        spotlight: _selectedItems
-                            .contains(_items.indexOf('Spotlight')),
-                        meet: _selectedItems.contains(_items.indexOf('Meet')),
-                        live: _selectedItems.contains(_items.indexOf('Live')),
-                        snap: _selectedItems.contains(_items.indexOf('Snap')),
+                    ride: _selectedItems["Ride"] ?? false,
+                    loading: _selectedItems["Loading"] ?? false,
+                    health: _selectedItems["Health"] ?? false,
+                    meal: _selectedItems["Meal"] ?? false,
+                    find: _selectedItems["Find"] ?? false,
+                    chat: _selectedItems["Chat"] ?? false,
+                    reel: _selectedItems["Reel"] ?? false,
+                    tweet: _selectedItems["Tweet"] ?? false,
+                    spotlight: _selectedItems["Spotlight"] ?? false,
+                    meet: _selectedItems["Meet"] ?? false,
+                    live: _selectedItems["Live"] ?? false,
+                    snap: _selectedItems["Snap"] ?? false,
                       ));
-                  print('Selected Items: ${_selectedItems.toList()}');
                 } else {
                   // Show a message if the selection is not valid
                   showSuccessMessage(
