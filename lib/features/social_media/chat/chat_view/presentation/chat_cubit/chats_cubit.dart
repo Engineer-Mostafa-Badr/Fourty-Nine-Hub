@@ -57,18 +57,18 @@ class ChatsCubit extends Cubit<ChatsState> {
     switch (chatCategory) {
       case ChatCategories.social:
         return _getSocialChats();
-      case ChatCategories.greet:
-        return _getGreetChats();
+      // case ChatCategories.greet:
+      //   return _getGreetChats();
       case ChatCategories.service:
         return _getServicesChats();
-      case ChatCategories.anonymous:
-        return _getAnonymousChats();
-      case ChatCategories.locked:
-        return _getLockedChats();
+      // case ChatCategories.anonymous:
+      //   return _getAnonymousChats();
+      // case ChatCategories.locked:
+      //   return _getLockedChats();
       case ChatCategories.unread:
         return _getUnreadChats();
-      case ChatCategories.archived:
-        return _getArchivedChats();
+      // case ChatCategories.archived:
+      //   return _getArchivedChats();
       default:
         return _getSocialChats();
     }

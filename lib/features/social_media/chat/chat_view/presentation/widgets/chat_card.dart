@@ -173,7 +173,7 @@ class _ChatCardState extends State<ChatCard> {
                                           ? "No messages until now"
                                           : '${widget.chat?.lastMessage?.text}',
                                   style: Styles.mediumText(
-                                    fontSize: 20,
+                                    fontSize: 24,
                                     color: widget.chat!.typing
                                         ? AppColors.SPLASH_BLACK_COLOR
                                         : AppColors.DARK_GRAY_COLOR,

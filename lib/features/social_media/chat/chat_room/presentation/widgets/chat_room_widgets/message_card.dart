@@ -630,27 +630,41 @@ class VoiceMessageCard extends StatelessWidget {
                       : const SizedBox(),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.65,
-                    child: VoiceMessageView(
-                      activeSliderColor: AppColors.PRIMARY_COLOR,
-                      circlesColor: AppColors.PRIMARY_COLOR,
-                      backgroundColor: isSend
-                          ? AppColors.MESSAGE_COLOR
-                          : AppColors.BACKGROUND_COLOR,
-                      innerPadding: 12,
-                      cornerRadius: 12,
-                      // notActiveSliderColor:
-                      //     AppColors.PRIMARY_COLOR.withOpacity(0.1),
-                      // size: ,
-                      controller: VoiceController(
-                        audioSrc: messageEntity.media[0].url,
-                        maxDuration: const Duration(minutes: 1000),
-                        // cacheKey: messageEntity.media[0].url,
-                        isFile: false,
-                        onComplete: () {},
-                        onPause: () {},
-                        onPlaying: () {},
-                        onError: (p0) {},
-                      ),
+                    child: Stack(
+                      children: [
+                        VoiceMessageView(
+                          activeSliderColor: AppColors.PRIMARY_COLOR,
+                          circlesColor: AppColors.PRIMARY_COLOR,
+                          notActiveSliderColor: isSend
+                              ? AppColors.MESSAGE_COLOR
+                              : AppColors.BACKGROUND_COLOR,
+                          backgroundColor: isSend
+                              ? AppColors.MESSAGE_COLOR
+                              : AppColors.BACKGROUND_COLOR,
+                          innerPadding: 12,
+                          cornerRadius: 12,
+                          // notActiveSliderColor:
+                          //     AppColors.PRIMARY_COLOR.withOpacity(0.1),
+                          // size: ,
+                          controller: VoiceController(
+                            audioSrc: messageEntity.media[0].url,
+                            maxDuration: const Duration(minutes: 1000),
+                            // cacheKey: messageEntity.media[0].url,
+                            isFile: false,
+                            onComplete: () {},
+                            onPause: () {},
+                            onPlaying: () {},
+                            onError: (p0) {},
+                          ),
+                        ),
+                        const Divider(
+                          color: AppColors.LIGHT_GRAY_COLOR2,
+                          height: 70,
+                          indent: 70,
+                          endIndent: 90,
+                          // thickness: 2,
+                        )
+                      ],
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -770,7 +784,7 @@ class ReplyRecivedMessageCard extends StatelessWidget {
                 children: [
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: width * 0.5,
+                      maxWidth: width * 0.4,
                     ),
                     child: Text(
                       messageEntity.reply!.sender.name,
@@ -782,7 +796,7 @@ class ReplyRecivedMessageCard extends StatelessWidget {
                   ),
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: width * 0.5,
+                      maxWidth: width * 0.4,
                       maxHeight: 20,
                     ),
                     child: Text(
@@ -819,7 +833,7 @@ class ReplyRecivedMessageCard extends StatelessWidget {
                       )
                     : const Icon(
                         Icons.insert_drive_file,
-                        size: 40,
+                        size: 30,
                         color: AppColors.GREY_DARK_COLOR,
                       )
                 : const SizedBox(),
