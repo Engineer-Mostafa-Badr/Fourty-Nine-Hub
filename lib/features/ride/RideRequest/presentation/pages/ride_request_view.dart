@@ -48,597 +48,589 @@ class _RideRequestViewState extends State<RideRequestView> {
   @override
   Widget build(BuildContext context) {
     var getTripInfoCubit = context.read<GetTripInfoCubit>();
-    log(GoRouter.of(context).routerDelegate.currentConfiguration
-    .toString(), name: "llllllllllllllllllllll");
-    return SharedScaffold(
-      mainCategoryId: 1,
-      body: SingleChildScrollView(
-        child: BlocListener<ShowOffersCubit, RiderState>(
-          listener: (context, state) {
-            if (state is SuccessGetOfferDataState) {
-              if (state.data != null) {
-                final overlay = Overlay.of(context);
-                final overlayEntry = OverlayEntry(
-                  builder: (context) => Positioned(
-                    top: 30,
-                    left: 10,
-                    right: 10,
-                    child: Material(child: AcceptOrDeclineTrip(model: state.data!,)),
-                  ),
-                );
+    log(GoRouter.of(context).routerDelegate.currentConfiguration.toString(),
+        name: "llllllllllllllllllllll");
+    return SingleChildScrollView(
+      child: BlocListener<ShowOffersCubit, RiderState>(
+        listener: (context, state) {
+          if (state is SuccessGetOfferDataState) {
+            if (state.data != null) {
+              final overlay = Overlay.of(context);
+              final overlayEntry = OverlayEntry(
+                builder: (context) => Positioned(
+                  top: 30,
+                  left: 10,
+                  right: 10,
+                  child: Material(
+                      child: AcceptOrDeclineTrip(
+                    model: state.data!,
+                  )),
+                ),
+              );
 
-                overlay.insert(overlayEntry);
+              overlay.insert(overlayEntry);
 
-                // Remove the overlay after some time or on user action
-                Future.delayed(const Duration(seconds: 15), () {
-                  overlayEntry.remove();
-                });
-              }
+              // Remove the overlay after some time or on user action
+              Future.delayed(const Duration(seconds: 15), () {
+                overlayEntry.remove();
+              });
             }
-            log(state.toString(),
-                name:
-                    "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              BlocBuilder<GetCateogryRiderCubit, RiderState>(
-                builder: (context, state) {
-                  if (state is SuccessGetCateogyRider) {
-                    return Column(
-                      children: [
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: RiderBanner(
-                              model: state.model,
-                              favoriteName: "Driver",
-                            )),
-                        // SizedBox(height: 10,),
-                        GestureDetector(
-                          // onTap: () => context
-                          //     .push(Routes.SHIPPING_REGISTER),
-                          onTap: () {
-                            if (context.read<UserCubit>().isLoggedIn) {
-                              context.push(Routes.SHIPPING_REGISTER);
-                            } else {
-                              // context.push(Routes.SHIPPING_REGISTER);
-                              context.push(Routes.LOGIN);
-                            }
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 10,
-                            ),
-                            child: Text(
-                              "You can enjoy serving your clients using your car by clicking the register button above.",
-                              style: TextStyle(
-                                color: Colors.red,
-                              ),
+          }
+          log(state.toString(),
+              name: "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            BlocBuilder<GetCateogryRiderCubit, RiderState>(
+              builder: (context, state) {
+                if (state is SuccessGetCateogyRider) {
+                  return Column(
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: RiderBanner(
+                            model: state.model,
+                            favoriteName: "Driver",
+                          )),
+                      // SizedBox(height: 10,),
+                      GestureDetector(
+                        // onTap: () => context
+                        //     .push(Routes.SHIPPING_REGISTER),
+                        onTap: () {
+                          if (context.read<UserCubit>().isLoggedIn) {
+                            context.push(Routes.SHIPPING_REGISTER);
+                          } else {
+                            // context.push(Routes.SHIPPING_REGISTER);
+                            context.push(Routes.LOGIN);
+                          }
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                          ),
+                          child: Text(
+                            "You can enjoy serving your clients using your car by clicking the register button above.",
+                            style: TextStyle(
+                              color: Colors.red,
                             ),
                           ),
                         ),
-                        // SizedBox(
-                        //   height: 10,
-                        // ),
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: FormField(
-                            // validator: (value) {
-                            //   return shippingcubit.validation(
-                            //       message: "You have to select one sub category!",
-                            //       condition:
-                            //           shippingcubit.requestModel.subcategoryEntity == null);
-                            // },
-                            builder: (field) {
-                              // log(select.toString());
-                              return BlocBuilder<GetCateogryRiderCubit,
-                                  RiderState>(
-                                builder: (context, state) {
-                                  log(state.toString(), name: "lssss");
-                                  if (state is SuccessGetCateogyRider) {
-                                    // log(isSelect.toString(), name: "lkjdslkjsdlkfjsdf");
-                                    // if (!isSelect) {
-                                    //   if (widget.selectedId != null) {
-                                    //     select = getSelectedSubCategory(
-                                    //         categoryes: state.model.subCategories);
-                                    //   }
-                                    // }
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        _buildMainCategoriesWidget(
-                                          category: MainCategoryEntity(
-                                              id: state.model.mainCategory
-                                                      ?.mainCategoryId ??
-                                                  "",
-                                              name:
-                                                  "Choose your favorite sub category!",
-                                              image: state.model.mainCategory
-                                                      ?.cover ??
-                                                  "",
-                                              isFavorite: true,
-                                              total: state.model.mainCategory
-                                                      ?.driverLength ??
-                                                  0,
-                                              cover: state.model.mainCategory
-                                                      ?.cover ??
-                                                  "",
-                                              banner: state.model.mainCategory
-                                                      ?.banner ??
-                                                  "",
-                                              subcategories: sortList(state
-                                                      .model.subCategories)!
-                                                  .map(
-                                                    (e) => SubCategoryEntity(
-                                                        id: e.subCategoryId!,
-                                                        numberOfContent:
-                                                            e.driverCount,
-                                                        image: e.picture!,
-                                                        isFavorite:
-                                                            e.isFavorite ??
-                                                                false,
-                                                        name: e
-                                                            .subCategoryNameEn!),
-                                                  )
-                                                  .toList(), nameEn: ''),
-                                        ),
-                                        if (field.hasError)
-                                          Column(
-                                            children: [
-                                              const SizedBox(
-                                                height: 8,
+                      ),
+                      // SizedBox(
+                      //   height: 10,
+                      // ),
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: FormField(
+                          // validator: (value) {
+                          //   return shippingcubit.validation(
+                          //       message: "You have to select one sub category!",
+                          //       condition:
+                          //           shippingcubit.requestModel.subcategoryEntity == null);
+                          // },
+                          builder: (field) {
+                            // log(select.toString());
+                            return BlocBuilder<GetCateogryRiderCubit,
+                                RiderState>(
+                              builder: (context, state) {
+                                log(state.toString(), name: "lssss");
+                                if (state is SuccessGetCateogyRider) {
+                                  // log(isSelect.toString(), name: "lkjdslkjsdlkfjsdf");
+                                  // if (!isSelect) {
+                                  //   if (widget.selectedId != null) {
+                                  //     select = getSelectedSubCategory(
+                                  //         categoryes: state.model.subCategories);
+                                  //   }
+                                  // }
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      _buildMainCategoriesWidget(
+                                        category: MainCategoryEntity(
+                                            nameEn: state
+                                                .model.mainCategory?.nameEn,
+                                            id: state.model.mainCategory
+                                                    ?.mainCategoryId ??
+                                                "",
+                                            name:
+                                                "Choose your favorite sub category!",
+                                            image: state.model.mainCategory
+                                                    ?.cover ??
+                                                "",
+                                            isFavorite: true,
+                                            total: state.model.mainCategory
+                                                    ?.driverLength ??
+                                                0,
+                                            cover: state.model.mainCategory
+                                                    ?.cover ??
+                                                "",
+                                            banner: state.model.mainCategory
+                                                    ?.banner ??
+                                                "",
+                                            subcategories: sortList(
+                                                    state.model.subCategories)!
+                                                .map(
+                                                  (e) => SubCategoryEntity(
+                                                      id: e.subCategoryId!,
+                                                      numberOfContent:
+                                                          e.driverCount,
+                                                      image: e.picture!,
+                                                      isFavorite:
+                                                          e.isFavorite ?? false,
+                                                      name:
+                                                          e.subCategoryNameEn!),
+                                                )
+                                                .toList()),
+                                      ),
+                                      if (field.hasError)
+                                        Column(
+                                          children: [
+                                            const SizedBox(
+                                              height: 8,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15),
+                                              child: Text(
+                                                field.errorText ?? "",
+                                                style: Styles.mediumText(
+                                                    color: Colors.red),
                                               ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 15),
+                                            ),
+                                          ],
+                                        )
+                                    ],
+                                  );
+                                } else {
+                                  return Container(
+                                    width: 12,
+                                    height: 12,
+                                    color: Colors.red,
+                                  );
+                                }
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      BlocBuilder<RiderTripReelTimeCubit, RiderState>(
+                        builder: (context, state) {
+                          if (state is ViewPickTripDataState) {
+                            log(state.toString(),
+                                name: "lskdjflskdjflkjfdlkddddd");
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 17),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      // SizedBox(
+                                      //   width: 5,
+                                      // ),
+                                      const Text(
+                                        "Comfort",
+                                        style: TextStyle(fontSize: 17),
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Switch(
+                                        value: getTripInfoCubit.model.comfort ??
+                                            false,
+                                        onChanged: (value) {
+                                          getTripInfoCubit.comfort(value);
+                                          setState(() {});
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Sizer(),
+                                  // const TripJoinGoogleMap(),
+                                  const Sizer(height: 20),
+                                  // Text('Starting Point', style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
+                                  // const StartTextFieldAndFindButon(),
+                                  const Sizer(height: 20),
+                                  // Text('Destination Point', style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
+                                  // const DestinationTextFieldAndFindButon(),
+                                  const Sizer(height: 20),
+                                  BlocBuilder<GetTripInfoCubit, RiderState>(
+                                    builder: (context, state) {
+                                      if (state is SuccessGetTripInfoState) {
+                                        return Column(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 4),
+                                              child: Row(
+                                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  const Icon(Icons.flash_on),
+                                                  Text(
+                                                    "Auto Accept",
+                                                    style: Styles.mediumText(
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                  const Spacer(),
+                                                  Switch(
+                                                    activeColor:
+                                                        AppColors.PRIMARY_COLOR,
+                                                    value: getTripInfoCubit
+                                                            .model.autoAccept ??
+                                                        false,
+                                                    onChanged: (value) {
+                                                      getTripInfoCubit
+                                                          .autoAccept(value);
+                                                      setState(() {});
+                                                    },
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            const Sizer(),
+                                            DefaultTextFormField(
+                                              currentController:
+                                                  TextEditingController(),
+                                              hint: "Offer your fare",
+                                              readOnly: (getTripInfoCubit
+                                                      .model.autoAccept ??
+                                                  false),
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              validator: (value) {
+                                                if ((double.tryParse(
+                                                            value.toString()) ??
+                                                        0) >
+                                                    (state.model.lowestFare ??
+                                                        0)) {
+                                                  return "Minimum fare is ${state.model.lowestFare}";
+                                                }
+                                                return null;
+                                              },
+                                              hintColor: Colors.grey,
+                                              suffixIcon: GestureDetector(
+                                                  onTap: () {
+                                                    showModalBottomSheet(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          const OfferYourFareWidet(),
+                                                    );
+                                                  },
+                                                  child: const Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Icon(Icons.credit_card),
+                                                      Sizer(
+                                                        width: 6,
+                                                      ),
+                                                      Text("Cash"),
+                                                      Sizer()
+                                                    ],
+                                                  )),
+                                              prefixIcon: Container(
+                                                alignment: (getTripInfoCubit
+                                                            .model.autoAccept ??
+                                                        false)
+                                                    ? Alignment.center
+                                                    : null,
+                                                margin: EdgeInsets.only(
+                                                    top: (getTripInfoCubit.model
+                                                                .autoAccept ??
+                                                            false)
+                                                        ? 0
+                                                        : 13,
+                                                    left: 8,
+                                                    right: 8),
                                                 child: Text(
-                                                  field.errorText ?? "",
-                                                  style: Styles.mediumText(
-                                                      color: Colors.red),
+                                                  "EGP ${state.model.price}",
+                                                  style: const TextStyle(
+                                                      color: AppColors
+                                                          .QUANTITY_COLOR,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                               ),
-                                            ],
-                                          )
-                                      ],
-                                    );
-                                  } else {
-                                    return Container(
-                                      width: 12,
-                                      height: 12,
-                                      color: Colors.red,
-                                    );
-                                  }
-                                },
-                              );
-                            },
-                          ),
-                        ),
-                        BlocBuilder<RiderTripReelTimeCubit, RiderState>(
-                          builder: (context, state) {
-                            if (state is ViewPickTripDataState) {
-                              log(state.toString(),
-                                  name: "lskdjflskdjflkjfdlkddddd");
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 17),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        // SizedBox(
-                                        //   width: 5,
-                                        // ),
-                                        const Text(
-                                          "Comfort",
-                                          style: TextStyle(fontSize: 17),
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        Switch(
-                                          value:
-                                              getTripInfoCubit.model.comfort ??
-                                                  false,
-                                          onChanged: (value) {
-                                            getTripInfoCubit.comfort(value);
-                                            setState(() {});
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    const Sizer(),
-                                    // const TripJoinGoogleMap(),
-                                    const Sizer(height: 20),
-                                    // Text('Starting Point', style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
-                                    // const StartTextFieldAndFindButon(),
-                                    const Sizer(height: 20),
-                                    // Text('Destination Point', style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
-                                    // const DestinationTextFieldAndFindButon(),
-                                    const Sizer(height: 20),
-                                    BlocBuilder<GetTripInfoCubit, RiderState>(
-                                      builder: (context, state) {
-                                        if (state is SuccessGetTripInfoState) {
-                                          return Column(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 4),
-                                                child: Row(
-                                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    const Icon(Icons.flash_on),
-                                                    Text(
-                                                      "Auto Accept",
+                                            ),
+                                            const Sizer(),
+                                            Container(
+                                              // padding:
+                                              // EdgeInsets.symmetric(horizontal: 15),
+                                              width: double.infinity,
+                                              height: 46,
+                                              decoration: BoxDecoration(
+                                                  // color: Color(0xFF0E4669),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          13)),
+                                              child: Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.info_outline,
+                                                    color: Colors.black,
+                                                  ),
+                                                  const Sizer(),
+                                                  Flexible(
+                                                    child: Text(
+                                                      "Travel time: ~${formatDuration(state.model.duration!.toInt())} , Distance: ${formatDistance(state.model.distance!.toInt())}",
                                                       style: Styles.mediumText(
                                                           fontWeight:
-                                                              FontWeight.w500),
+                                                              FontWeight.w500,
+                                                          color: Colors.black),
                                                     ),
-                                                    const Spacer(),
-                                                    Switch(
-                                                      activeColor: AppColors
-                                                          .PRIMARY_COLOR,
-                                                      value: getTripInfoCubit
-                                                              .model
-                                                              .autoAccept ??
-                                                          false,
-                                                      onChanged: (value) {
-                                                        getTripInfoCubit
-                                                            .autoAccept(value);
-                                                        setState(() {});
-                                                      },
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              const Sizer(),
-                                              DefaultTextFormField(
-                                                currentController:
-                                                    TextEditingController(),
-                                                hint: "Offer your fare",
-                                                readOnly: (getTripInfoCubit
-                                                        .model.autoAccept ??
-                                                    false),
-                                                keyboardType:
-                                                    TextInputType.number,
-                                                validator: (value) {
-                                                  if ((double.tryParse(value
-                                                              .toString()) ??
-                                                          0) >
-                                                      (state.model.lowestFare ??
-                                                          0)) {
-                                                    return "Minimum fare is ${state.model.lowestFare}";
-                                                  }
-                                                  return null;
-                                                },
-                                                hintColor: Colors.grey,
-                                                suffixIcon: GestureDetector(
-                                                    onTap: () {
-                                                      showModalBottomSheet(
-                                                        context: context,
-                                                        builder: (context) =>
-                                                            const OfferYourFareWidet(),
-                                                      );
-                                                    },
-                                                    child: const Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        Icon(Icons.credit_card),
-                                                        Sizer(
-                                                          width: 6,
-                                                        ),
-                                                        Text("Cash"),
-                                                        Sizer()
-                                                      ],
-                                                    )),
-                                                prefixIcon: Container(
-                                                  alignment: (getTripInfoCubit
-                                                              .model
-                                                              .autoAccept ??
-                                                          false)
-                                                      ? Alignment.center
-                                                      : null,
-                                                  margin: EdgeInsets.only(
-                                                      top: (getTripInfoCubit
-                                                                  .model
-                                                                  .autoAccept ??
-                                                              false)
-                                                          ? 0
-                                                          : 13,
-                                                      left: 8,
-                                                      right: 8),
-                                                  child: Text(
-                                                    "EGP ${state.model.price}",
-                                                    style: const TextStyle(
-                                                        color: AppColors
-                                                            .QUANTITY_COLOR,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.bold),
                                                   ),
-                                                ),
+                                                  const Sizer(),
+                                                ],
                                               ),
-                                              const Sizer(),
-                                              Container(
-                                                // padding:
-                                                // EdgeInsets.symmetric(horizontal: 15),
-                                                width: double.infinity,
-                                                height: 46,
-                                                decoration: BoxDecoration(
-                                                    // color: Color(0xFF0E4669),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            13)),
-                                                child: Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.info_outline,
-                                                      color: Colors.black,
-                                                    ),
-                                                    const Sizer(),
-                                                    Flexible(
-                                                      child: Text(
-                                                        "Travel time: ~${formatDuration(state.model.duration!.toInt())} , Distance: ${formatDistance(state.model.distance!.toInt())}",
-                                                        style:
-                                                            Styles.mediumText(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                                color: Colors
-                                                                    .black),
-                                                      ),
-                                                    ),
-                                                    const Sizer(),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        } else {
-                                          return Container();
-                                        }
-                                      },
-                                    ),
-                                    const Sizer(),
-                                    Row(
-                                      children: [
-                                        Flexible(
-                                          child: AppButton(
-                                            height: 40,
-                                            label: Labels.premiumRequest,
-                                            style: Styles.headerText(
-                                                color: Colors.white),
-                                            onPressed: () {},
-                                          ),
+                                            ),
+                                          ],
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
+                                    },
+                                  ),
+                                  const Sizer(),
+                                  Row(
+                                    children: [
+                                      Flexible(
+                                        child: AppButton(
+                                          height: 40,
+                                          label: Labels.premiumRequest,
+                                          style: Styles.headerText(
+                                              color: Colors.white),
+                                          onPressed: () {},
                                         ),
-                                        // const Gap(6),
-                                        const SizedBox(width: 6),
-                                        BlocConsumer<RequestRiderTripCubit,
-                                            RiderState>(
-                                          listener: (context, state) {
-                                            log(state.toString(),
-                                                name: "ldsjflskdjflskdfjlskjf");
-                                            if (state
-                                                is SuccessRequestTripState) {
-                                              context
-                                                  .read<ShowOffersCubit>()
-                                                  .showOffers();
-                                              context
-                                                  .read<LocationSocketCubit>()
-                                                  .nearbyDriversEmit(
-                                                      tripId: state
-                                                              .model.trip?.id ??
-                                                          "",
-                                                      location: state
-                                                              .model
-                                                              .trip
-                                                              ?.riderLocation
-                                                              ?.coordinates ??
-                                                          [],
-                                                      subcategoryId: state
-                                                              .model
-                                                              .trip
-                                                              ?.subCategoryId ??
-                                                          "");
+                                      ),
+                                      // const Gap(6),
+                                      const SizedBox(width: 6),
+                                      BlocConsumer<RequestRiderTripCubit,
+                                          RiderState>(
+                                        listener: (context, state) {
+                                          log(state.toString(),
+                                              name: "ldsjflskdjflskdfjlskjf");
+                                          if (state
+                                              is SuccessRequestTripState) {
+                                            context
+                                                .read<ShowOffersCubit>()
+                                                .showOffers();
+                                            context
+                                                .read<LocationSocketCubit>()
+                                                .nearbyDriversEmit(
+                                                    tripId:
+                                                        state.model.trip?.id ??
+                                                            "",
+                                                    location: state
+                                                            .model
+                                                            .trip
+                                                            ?.riderLocation
+                                                            ?.coordinates ??
+                                                        [],
+                                                    subcategoryId: state
+                                                            .model
+                                                            .trip
+                                                            ?.subCategoryId ??
+                                                        "");
 
-                                              //                                   BlocProvider(
-                                              //   create: (context) =>
-                                              //       RaiseFareCubit(repository: serviceLocator()),
-                                              // ),
-                                              showModalBottomSheet(
-                                                context: context,
-                                                builder: (context) {
-                                                  return BlocProvider(
-                                                    create: (context) =>
-                                                        RaiseFareCubit(
-                                                            repository:
-                                                                serviceLocator()),
-                                                    child:
-                                                        RequestButtonSheetWidget(
-                                                      model: state.model,
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            }
-                                          },
-                                          builder: (context, state) {
-                                            log(state.toString(),
-                                                name:
-                                                    "lskdddddddddddddddddddddddddddd");
-                                            return Flexible(
-                                              child: AppButton(
-                                                height: 40,
-                                                backColor:
-                                                    const Color(0xFF0B1135),
-                                                label: Labels.request,
-                                                style: Styles.headerText(
-                                                    color: Colors.white),
-                                                onPressed: () async {
-                                                  
-                                                  // final overlay =
-                                                  //     Overlay.of(context);
-                                                  // final overlayEntry =
-                                                  //     OverlayEntry(
-                                                  //   builder: (context) =>
-                                                  //       Positioned(
-                                                  //     top: 30,
-                                                  //     left: 10,
-                                                  //     right: 10,
-                                                  //     child: Material(
-                                                  //       child: AcceptOrDeclineTrip()
-                                                  //     ),
-                                                  //   ),
-                                                  // );
-
-                                                  // overlay?.insert(overlayEntry);
-
-                                                  // // Remove the overlay after some time or on user action
-                                                  // Future.delayed(
-                                                  //     const Duration(seconds: 5),
-                                                  //     () {
-                                                  //   overlayEntry.remove();
-                                                  // });
-
-                                                  context
-                                                      .read<
-                                                          RequestRiderTripCubit>()
-                                                      .request(
-                                                          model:
-                                                              TripRequestModel());
-
-                                                  // context
-                                                  //     .read<LocationSocketCubit>()
-                                                  //     .sendSubCategoryId(context
-                                                  //             .read<
-                                                  //                 RiderTripReelTimeCubit>()
-                                                  //             .subCategory
-                                                  //             ?.id ??
-                                                  //         "");
-
-                                                  // context
-                                                  //     .read<GetTripInfoCubit>()
-                                                  //     .getTripInfoRequest();
-                                                  // context
-                                                  //     .read<RequestRiderTripCubit>()
-                                                  //     .request(
-                                                  //         model: TripRequestModel());
-                                                  // if (widget.formKey.currentState!.validate()) {
-                                                  //   context.read<CreateTripCubit>().createTrip(
-                                                  //         model: RequestModel(
-                                                  //           date:
-                                                  //               "${date!.year}/${date!.month}/${date!.day}",
-                                                  //           deliveryPoint: deliveryPoint.text,
-                                                  //           description: decoration.text,
-                                                  //           offerPrice: offerPrice.text,
-                                                  //           // tripImages: tripImages,
-                                                  //           phone: phone.text,
-                                                  //           subcategoryEntity: select,
-                                                  //           receiptPoint: receiptPoint.text,
-                                                  //           time: "${time!.hour}:${time!.minute}",
-                                                  //         ),
-                                                  //       );
-                                                  // }
-                                                },
-                                              ),
+                                            //                                   BlocProvider(
+                                            //   create: (context) =>
+                                            //       RaiseFareCubit(repository: serviceLocator()),
+                                            // ),
+                                            showModalBottomSheet(
+                                              context: context,
+                                              builder: (context) {
+                                                return BlocProvider(
+                                                  create: (context) =>
+                                                      RaiseFareCubit(
+                                                          repository:
+                                                              serviceLocator()),
+                                                  child:
+                                                      RequestButtonSheetWidget(
+                                                    model: state.model,
+                                                  ),
+                                                );
+                                              },
                                             );
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                    // Builder(builder: (context) {
-                                    //   context.watch<StartingLocationCubit>();
-                                    //   context.watch<DestinationLocationCubit>();
-                                    //   return Visibility(
-                                    //     visible: startingCubit.startingLocation != null &&
-                                    //         destinationCubit.destinationLocation != null,
-                                    //     // visible: true,
-                                    //     child: const TripAndCarInformationV2(),
-                                    //   );
-                                    // })
-                                  ],
-                                ),
-                              );
-                            }
-                            return Container();
-                          },
-                        ),
-                        // Padding(
-                        //   padding: const EdgeInsets.all(8.0),
-                        //   child: DashboardBanner(
-                        //   title: 'Driver Dashboard\n',
-                        //   subTitle:
-                        //       'New trips are waiting you, go to driver dashboard and explore more!',
-                        //   route: Routes.RIDERDASHBOARD,
-                        //                     ),
-                        // )
-                      ],
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-              ),
-              // const Expanded(
-              //     child: Stack(
-              //   children: [
-              //     // Positioned.fill(
-              //     //   child: BlocProvider(
-              //     //     create: (BuildContext context) =>
-              //     //         serviceLocator<RiderequestCubit>(),
-              //     //     child: BlocBuilder<RiderequestCubit, RiderequestState>(
-              //     //       builder: (context, state) {
-              //     //         final rideCubit = context.read<RiderequestCubit>();
-              //     //         if (state.fromAddress != null &&
-              //     //             state.toAddress != null) {
-              //     //           return MapPicker(
-              //     //             lat: state.fromAddress?.lat,
-              //     //             lng: state.fromAddress?.lng,
-              //     //             destLat: state.toAddress?.lat,
-              //     //             destLng: state.toAddress?.lng,
-              //     //           );
-              //     //         }
-              //     //         return MapPicker(
-              //     //           lat: state.fromAddress?.lat,
-              //     //           lng: state.fromAddress?.lng,
-              //     //           onAddressPicked: (AddressSearchParamsEntity v) =>
-              //     //               rideCubit.selectPickUpLocation(item: v),
-              //     //         );
-              //     //         // return Container(
-              //     //         //   decoration: const BoxDecoration(
-              //     //         //     color: Colors.red,
-              //     //         //     image: DecorationImage(image: AssetImage("assets/images/map_image.png"), fit: BoxFit.cover)
-              //     //         //   ),
-              //     //         // );
-              //     //       },
-              //     //     ),
-              //     //   ),
-              //     // ),
-              //     // const Positioned(
-              //     // bottom: 10,
-              //     // right: 10,
-              //     // left: 10,
-              //     // child: DashboardBanner(
-              //     //   title: 'Driver Dashboard\n',
-              //     //   subTitle:
-              //     //       'New trips are waiting you, go to driver dashboard and explore more!',
-              //     //   route: Routes.RIDERDASHBOARD,
-              //     // )),
-              //   ],
-              // )
-              // ),
-              // BlocProvider.value(
-              //   value: serviceLocator<RiderequestCubit>(),
-              //   child: const RideOptionsBottomSheet(),
-              // ),
-            ],
-          ),
+                                          }
+                                        },
+                                        builder: (context, state) {
+                                          log(state.toString(),
+                                              name:
+                                                  "lskdddddddddddddddddddddddddddd");
+                                          return Flexible(
+                                            child: AppButton(
+                                              height: 40,
+                                              backColor:
+                                                  const Color(0xFF0B1135),
+                                              label: Labels.request,
+                                              style: Styles.headerText(
+                                                  color: Colors.white),
+                                              onPressed: () async {
+                                                // final overlay =
+                                                //     Overlay.of(context);
+                                                // final overlayEntry =
+                                                //     OverlayEntry(
+                                                //   builder: (context) =>
+                                                //       Positioned(
+                                                //     top: 30,
+                                                //     left: 10,
+                                                //     right: 10,
+                                                //     child: Material(
+                                                //       child: AcceptOrDeclineTrip()
+                                                //     ),
+                                                //   ),
+                                                // );
+
+                                                // overlay?.insert(overlayEntry);
+
+                                                // // Remove the overlay after some time or on user action
+                                                // Future.delayed(
+                                                //     const Duration(seconds: 5),
+                                                //     () {
+                                                //   overlayEntry.remove();
+                                                // });
+
+                                                context
+                                                    .read<
+                                                        RequestRiderTripCubit>()
+                                                    .request(
+                                                        model:
+                                                            TripRequestModel());
+
+                                                // context
+                                                //     .read<LocationSocketCubit>()
+                                                //     .sendSubCategoryId(context
+                                                //             .read<
+                                                //                 RiderTripReelTimeCubit>()
+                                                //             .subCategory
+                                                //             ?.id ??
+                                                //         "");
+
+                                                // context
+                                                //     .read<GetTripInfoCubit>()
+                                                //     .getTripInfoRequest();
+                                                // context
+                                                //     .read<RequestRiderTripCubit>()
+                                                //     .request(
+                                                //         model: TripRequestModel());
+                                                // if (widget.formKey.currentState!.validate()) {
+                                                //   context.read<CreateTripCubit>().createTrip(
+                                                //         model: RequestModel(
+                                                //           date:
+                                                //               "${date!.year}/${date!.month}/${date!.day}",
+                                                //           deliveryPoint: deliveryPoint.text,
+                                                //           description: decoration.text,
+                                                //           offerPrice: offerPrice.text,
+                                                //           // tripImages: tripImages,
+                                                //           phone: phone.text,
+                                                //           subcategoryEntity: select,
+                                                //           receiptPoint: receiptPoint.text,
+                                                //           time: "${time!.hour}:${time!.minute}",
+                                                //         ),
+                                                //       );
+                                                // }
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  // Builder(builder: (context) {
+                                  //   context.watch<StartingLocationCubit>();
+                                  //   context.watch<DestinationLocationCubit>();
+                                  //   return Visibility(
+                                  //     visible: startingCubit.startingLocation != null &&
+                                  //         destinationCubit.destinationLocation != null,
+                                  //     // visible: true,
+                                  //     child: const TripAndCarInformationV2(),
+                                  //   );
+                                  // })
+                                ],
+                              ),
+                            );
+                          }
+                          return Container();
+                        },
+                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: DashboardBanner(
+                      //   title: 'Driver Dashboard\n',
+                      //   subTitle:
+                      //       'New trips are waiting you, go to driver dashboard and explore more!',
+                      //   route: Routes.RIDERDASHBOARD,
+                      //                     ),
+                      // )
+                    ],
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+            // const Expanded(
+            //     child: Stack(
+            //   children: [
+            //     // Positioned.fill(
+            //     //   child: BlocProvider(
+            //     //     create: (BuildContext context) =>
+            //     //         serviceLocator<RiderequestCubit>(),
+            //     //     child: BlocBuilder<RiderequestCubit, RiderequestState>(
+            //     //       builder: (context, state) {
+            //     //         final rideCubit = context.read<RiderequestCubit>();
+            //     //         if (state.fromAddress != null &&
+            //     //             state.toAddress != null) {
+            //     //           return MapPicker(
+            //     //             lat: state.fromAddress?.lat,
+            //     //             lng: state.fromAddress?.lng,
+            //     //             destLat: state.toAddress?.lat,
+            //     //             destLng: state.toAddress?.lng,
+            //     //           );
+            //     //         }
+            //     //         return MapPicker(
+            //     //           lat: state.fromAddress?.lat,
+            //     //           lng: state.fromAddress?.lng,
+            //     //           onAddressPicked: (AddressSearchParamsEntity v) =>
+            //     //               rideCubit.selectPickUpLocation(item: v),
+            //     //         );
+            //     //         // return Container(
+            //     //         //   decoration: const BoxDecoration(
+            //     //         //     color: Colors.red,
+            //     //         //     image: DecorationImage(image: AssetImage("assets/images/map_image.png"), fit: BoxFit.cover)
+            //     //         //   ),
+            //     //         // );
+            //     //       },
+            //     //     ),
+            //     //   ),
+            //     // ),
+            //     // const Positioned(
+            //     // bottom: 10,
+            //     // right: 10,
+            //     // left: 10,
+            //     // child: DashboardBanner(
+            //     //   title: 'Driver Dashboard\n',
+            //     //   subTitle:
+            //     //       'New trips are waiting you, go to driver dashboard and explore more!',
+            //     //   route: Routes.RIDERDASHBOARD,
+            //     // )),
+            //   ],
+            // )
+            // ),
+            // BlocProvider.value(
+            //   value: serviceLocator<RiderequestCubit>(),
+            //   child: const RideOptionsBottomSheet(),
+            // ),
+          ],
         ),
       ),
     );
@@ -1233,9 +1225,15 @@ class AcceptOrDeclineTrip extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10), color: (model.data?.offerObject?.comfort??false)?Colors.green: Colors.red,),
+              borderRadius: BorderRadius.circular(10),
+              color: (model.data?.offerObject?.comfort ?? false)
+                  ? Colors.green
+                  : Colors.red,
+            ),
             child: Text(
-              (model.data?.offerObject?.comfort??false)?"Comfort": "Not Comfort",
+              (model.data?.offerObject?.comfort ?? false)
+                  ? "Comfort"
+                  : "Not Comfort",
               style: Styles.mediumText(),
             ),
           ),
@@ -1246,7 +1244,12 @@ class AcceptOrDeclineTrip extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                    shape: BoxShape.circle, image: DecorationImage(image: NetworkImage(model.data?.offerObject?.profilePicture??""), fit: BoxFit.cover,)),
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: NetworkImage(
+                          model.data?.offerObject?.profilePicture ?? ""),
+                      fit: BoxFit.cover,
+                    )),
               ),
               const Sizer(),
               Column(
@@ -1255,7 +1258,7 @@ class AcceptOrDeclineTrip extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        model.data?.offerObject?.firstName??"",
+                        model.data?.offerObject?.firstName ?? "",
                         style: Styles.mediumText(color: Colors.black),
                       ),
                       const Icon(
@@ -1263,7 +1266,7 @@ class AcceptOrDeclineTrip extends StatelessWidget {
                         color: Colors.amber,
                       ),
                       Text(
-                        "${model.data?.offerObject?.averageRating??""} ",
+                        "${model.data?.offerObject?.averageRating ?? ""} ",
                         style: Styles.mediumText(color: Colors.black),
                       ),
                       Text(
@@ -1274,7 +1277,7 @@ class AcceptOrDeclineTrip extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    model.data?.offerObject?.model??"",
+                    model.data?.offerObject?.model ?? "",
                     style: Styles.mediumText(color: Colors.black),
                   ),
                 ],
@@ -1283,11 +1286,12 @@ class AcceptOrDeclineTrip extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                    formatDuration(model.data?.offerObject?.arrivalTimeToClient??0),
+                    formatDuration(
+                        model.data?.offerObject?.arrivalTimeToClient ?? 0),
                     style: Styles.headerText(color: Colors.black, fontSize: 30),
                   ),
                   Text(
-                    formatDistance(model.data?.offerObject?.distance??0),
+                    formatDistance(model.data?.offerObject?.distance ?? 0),
                     style: Styles.headerText(color: Colors.black, fontSize: 30),
                   ),
                 ],
@@ -1295,7 +1299,7 @@ class AcceptOrDeclineTrip extends StatelessWidget {
             ],
           ),
           Text(
-            "EGP ${model.data?.offerObject?.priceOffer??0}",
+            "EGP ${model.data?.offerObject?.priceOffer ?? 0}",
             style: Styles.headerText(color: Colors.black, fontSize: 50),
           ),
           const Sizer(),
@@ -1345,7 +1349,8 @@ class AcceptOrDeclineTrip extends StatelessWidget {
       ),
     );
   }
-    String formatDuration(int totalSeconds) {
+
+  String formatDuration(int totalSeconds) {
     if (totalSeconds >= 3600) {
       // إذا كان العدد يساوي أو أكبر من ساعة (3600 ثانية)
       int hours = totalSeconds ~/ 3600;

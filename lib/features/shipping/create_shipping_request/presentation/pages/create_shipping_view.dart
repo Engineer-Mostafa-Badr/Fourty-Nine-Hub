@@ -58,250 +58,239 @@ class _CreateShippingViewState extends State<CreateShippingView> {
   @override
   Widget build(BuildContext context) {
     final shippingcubit = context.read<ShippingCubit>();
-    return SharedScaffold(
-      // key: scaffoldKey,
-      mainCategoryId: 1,
-      body: BlocConsumer<CreateTripCubit, ShippingState>(
-        listener: (context, state) {
-          if (state is SuccessCreateTrip) {
-            context.go(Routes.HOME);
-            showSuccessMessage(context, state.message);
-          }
-          if (state is FailureShippingState) {
-            showErrorMessage(
-                context, getFailureMessage(state.failure, context));
-          }
-          //
-          // } else if (state is OTPSent) {
-          //
-        },
-        builder: (context, status) {
-          if (status is LoadingShippingState) {
-            return const Align(
-              child: Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.PRIMARY_COLOR,
-                ),
+    return BlocConsumer<CreateTripCubit, ShippingState>(
+      listener: (context, state) {
+        if (state is SuccessCreateTrip) {
+          context.go(Routes.HOME);
+          showSuccessMessage(context, state.message);
+        }
+        if (state is FailureShippingState) {
+          showErrorMessage(context, getFailureMessage(state.failure, context));
+        }
+        //
+        // } else if (state is OTPSent) {
+        //
+      },
+      builder: (context, status) {
+        if (status is LoadingShippingState) {
+          return const Align(
+            child: Center(
+              child: CircularProgressIndicator(
+                color: AppColors.PRIMARY_COLOR,
               ),
-            );
-          }
-          return Form(
-            key: formKey,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                      minHeight: MediaQuery.of(context).size.height,
-                      minWidth: MediaQuery.of(context).size.width),
-                  child: IntrinsicHeight(
-                    child: Column(
-                      children: [
-                        BlocBuilder<ShippingCubit, ShippingState>(
-                          builder: (context, state) {
-                            if (state is LoadingShippingState) {
-                              return const Center(
-                                child: CircularProgressIndicator(
-                                  color: AppColors.PRIMARY_COLOR,
-                                ),
-                              );
-                            }
-                            if (state is SuccessGetBannerState) {
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                if (state.model.mainCategory?.haveTrip ??
-                                    false) {
-                                  if (!isButtonSheet) {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      builder: (context) => MultiBlocProvider(
-                                        providers: [
-                                          BlocProvider(
-                                              create: (context) =>
-                                                  serviceLocator<
-                                                      GetMyTripCubit>()),
-                                          BlocProvider(
-                                              create: (context) =>
-                                                  serviceLocator<TripCubit>()),
-                                          BlocProvider(
-                                              create: (context) =>
-                                                  serviceLocator<
-                                                      GetMyTripCubit>()),
-                                          BlocProvider(
-                                              create: (context) =>
-                                                  serviceLocator<
-                                                      CallMessageCubit>()),
-                                        ],
-                                        child: showButtonSheetTrip(),
-                                      ),
-                                    );
-                                  }
-                                  isButtonSheet = true;
-                                }
-                              });
-
-                              return Column(
-                                children: [
-                                  ShippingBanner(
-                                    model: state.model,
-                                    favoriteName: "Driver".tr(),
-                                    
-                                  ),
-                                  // const Sizer(),
-                                  // لو هو مسجل
-                                  // if (isDriver(state.model))
-                                  if ((state.model.mainCategory?.isDriver ??
-                                          false) &&
-                                      (state.model.mainCategory
-                                              ?.isDriverApproved ??
-                                          false))
-                                    // if(!(state.model.mainCategory?.haveTrip??false))
-                                    Column(
-                                      children: [
-                                        const SizedBox(
-                                          height: 8,
-                                        ),
-                                        DashboardBanner(
-                                          onTap: () => context.push(
-                                              Routes.DASHBOARDDRIVERSCREEN),
-                                          title: Labels.driverDashboard,
-                                          subTitle: Labels
-                                              .driverDashboardBannerDiscription,
-                                          route: Routes.DOCTORDASHBOARD,
-                                        ),
+            ),
+          );
+        }
+        return Form(
+          key: formKey,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height,
+                    minWidth: MediaQuery.of(context).size.width),
+                child: IntrinsicHeight(
+                  child: Column(
+                    children: [
+                      BlocBuilder<ShippingCubit, ShippingState>(
+                        builder: (context, state) {
+                          if (state is LoadingShippingState) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.PRIMARY_COLOR,
+                              ),
+                            );
+                          }
+                          if (state is SuccessGetBannerState) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              if (state.model.mainCategory?.haveTrip ?? false) {
+                                if (!isButtonSheet) {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) => MultiBlocProvider(
+                                      providers: [
+                                        BlocProvider(
+                                            create: (context) => serviceLocator<
+                                                GetMyTripCubit>()),
+                                        BlocProvider(
+                                            create: (context) =>
+                                                serviceLocator<TripCubit>()),
+                                        BlocProvider(
+                                            create: (context) => serviceLocator<
+                                                GetMyTripCubit>()),
+                                        BlocProvider(
+                                            create: (context) => serviceLocator<
+                                                CallMessageCubit>()),
                                       ],
+                                      child: showButtonSheetTrip(),
                                     ),
-                                  // لو هو مش مسجل
-                                  // if ((state.model.mainCategory?.isDriver ??
-                                  //             false) !=
-                                  //         true &&
-                                  //     ((state.model.mainCategory?.isDriver ??
-                                  //             false)) !=
-                                  //         true)
-                                  if ((state.model.mainCategory?.isDriver ??
-                                              false) !=
-                                          true &&
-                                      (state.model.mainCategory
-                                                  ?.isDriverApproved ??
-                                              false) !=
-                                          true)
-                                    GestureDetector(
-                                      // onTap: () => context
-                                      //     .push(Routes.SHIPPING_REGISTER),
-                                      onTap: () {
-                                        if (context
-                                            .read<UserCubit>()
-                                            .isLoggedIn) {
-                                          context
-                                              .push(Routes.SHIPPING_REGISTER);
-                                        } else {
-                                          // context.push(Routes.SHIPPING_REGISTER);
-                                          context.push(Routes.LOGIN);
-                                        }
-                                      },
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                        ),
-                                        child: Text(
-                                          "You can enjoy serving your clients using your car by clicking the register button above.".tr(),
-                                          style: TextStyle(
-                                            color: Colors.red,
-                                          ),
+                                  );
+                                }
+                                isButtonSheet = true;
+                              }
+                            });
+
+                            return Column(
+                              children: [
+                                ShippingBanner(
+                                  model: state.model,
+                                  favoriteName: "Driver".tr(),
+                                ),
+                                // const Sizer(),
+                                // لو هو مسجل
+                                // if (isDriver(state.model))
+                                if ((state.model.mainCategory?.isDriver ??
+                                        false) &&
+                                    (state.model.mainCategory
+                                            ?.isDriverApproved ??
+                                        false))
+                                  // if(!(state.model.mainCategory?.haveTrip??false))
+                                  Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      DashboardBanner(
+                                        onTap: () => context
+                                            .push(Routes.DASHBOARDDRIVERSCREEN),
+                                        title: Labels.driverDashboard,
+                                        subTitle: Labels
+                                            .driverDashboardBannerDiscription,
+                                        route: Routes.DOCTORDASHBOARD,
+                                      ),
+                                    ],
+                                  ),
+                                // لو هو مش مسجل
+                                // if ((state.model.mainCategory?.isDriver ??
+                                //             false) !=
+                                //         true &&
+                                //     ((state.model.mainCategory?.isDriver ??
+                                //             false)) !=
+                                //         true)
+                                if ((state.model.mainCategory?.isDriver ??
+                                            false) !=
+                                        true &&
+                                    (state.model.mainCategory
+                                                ?.isDriverApproved ??
+                                            false) !=
+                                        true)
+                                  GestureDetector(
+                                    // onTap: () => context
+                                    //     .push(Routes.SHIPPING_REGISTER),
+                                    onTap: () {
+                                      if (context
+                                          .read<UserCubit>()
+                                          .isLoggedIn) {
+                                        context.push(Routes.SHIPPING_REGISTER);
+                                      } else {
+                                        // context.push(Routes.SHIPPING_REGISTER);
+                                        context.push(Routes.LOGIN);
+                                      }
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                      ),
+                                      child: Text(
+                                        "You can enjoy serving your clients using your car by clicking the register button above."
+                                            .tr(),
+                                        style: TextStyle(
+                                          color: Colors.red,
                                         ),
                                       ),
                                     ),
-                                  (state.model.mainCategory?.haveTrip ?? false)
-                                      ? BlocBuilder<GetAllRequestByMyTripCubit,
-                                          ShippingState>(
-                                          builder: (context, state) {
-                                            if (state
-                                                is SuccessGetLoadingTripRequests) {
-                                              if (state.request.isNotEmpty) {
-                                                return Column(
-                                                  children: [
-                                                    ...List.generate(
-                                                      state.request.length,
-                                                      (index) =>
-                                                          RequestOfferCard(
-                                                        model: state
-                                                            .request[index],
-                                                      ),
-                                                    )
-                                                  ],
-                                                );
-                                              } else {
-                                                return const NotFoundOffers();
-                                              }
+                                  ),
+                                (state.model.mainCategory?.haveTrip ?? false)
+                                    ? BlocBuilder<GetAllRequestByMyTripCubit,
+                                        ShippingState>(
+                                        builder: (context, state) {
+                                          if (state
+                                              is SuccessGetLoadingTripRequests) {
+                                            if (state.request.isNotEmpty) {
+                                              return Column(
+                                                children: [
+                                                  ...List.generate(
+                                                    state.request.length,
+                                                    (index) => RequestOfferCard(
+                                                      model:
+                                                          state.request[index],
+                                                    ),
+                                                  )
+                                                ],
+                                              );
                                             } else {
                                               return const NotFoundOffers();
                                             }
-                                          },
-                                        )
-                                      : CreateTripForm(
-                                          formKey: formKey,
-                                        )
-                                ],
-                              );
-                            } else {
-                              return Container();
-                            }
-                          },
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        // Spacer(),
-                        // NotFoundOffeRers(),
-                        // CreateTripForm(
-                        //   formKey: formKey,
-                        // ),
+                                          } else {
+                                            return const NotFoundOffers();
+                                          }
+                                        },
+                                      )
+                                    : CreateTripForm(
+                                        formKey: formKey,
+                                      )
+                              ],
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      // Spacer(),
+                      // NotFoundOffeRers(),
+                      // CreateTripForm(
+                      //   formKey: formKey,
+                      // ),
 
-                        // BlocBuilder<GetMyTripCubit, ShippingState>(
-                        //   builder: (context, state) {
-                        //     if (state is SuccessGetMyTripState) {
+                      // BlocBuilder<GetMyTripCubit, ShippingState>(
+                      //   builder: (context, state) {
+                      //     if (state is SuccessGetMyTripState) {
 
-                        //     }
-                        //     else{
+                      //     }
+                      //     else{
 
-                        //     }
-                        //   },
-                        // )
-                        // CreateTripForm(formKey: formKey),
-                        // BlocBuilder<GetAllRequestByMyTripCubit, ShippingState>(
-                        //   builder: (context, state) {
-                        //     if (state is SuccessGetLoadingTripRequests) {
-                        //       if (state.request.isNotEmpty) {
-                        //         return Column(
-                        //           children: [
-                        //             ...List.generate(
-                        //               state.request.length,
-                        //               (index) => RequestOfferCard(
-                        //                 model: state.request[index],
-                        //               ),
-                        //             )
-                        //           ],
-                        //         );
-                        //       } else {
-                        //         return NotFoundOffers();
-                        //       }
-                        //     } else {
-                        //       return CreateTripForm(formKey: formKey);
-                        //     }
-                        //   },
-                        // ),
-                        // status is SuccessGetBannerState?
-                        // if(status.)
-                        // :CreateTripForm()
-                        // const SizedBox(height: 20),
-                      ],
-                    ),
+                      //     }
+                      //   },
+                      // )
+                      // CreateTripForm(formKey: formKey),
+                      // BlocBuilder<GetAllRequestByMyTripCubit, ShippingState>(
+                      //   builder: (context, state) {
+                      //     if (state is SuccessGetLoadingTripRequests) {
+                      //       if (state.request.isNotEmpty) {
+                      //         return Column(
+                      //           children: [
+                      //             ...List.generate(
+                      //               state.request.length,
+                      //               (index) => RequestOfferCard(
+                      //                 model: state.request[index],
+                      //               ),
+                      //             )
+                      //           ],
+                      //         );
+                      //       } else {
+                      //         return NotFoundOffers();
+                      //       }
+                      //     } else {
+                      //       return CreateTripForm(formKey: formKey);
+                      //     }
+                      //   },
+                      // ),
+                      // status is SuccessGetBannerState?
+                      // if(status.)
+                      // :CreateTripForm()
+                      // const SizedBox(height: 20),
+                    ],
                   ),
                 ),
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -332,7 +321,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                 if (state is SuccessCancelState) {
                   context.pop();
 
-                  showSuccessMessage(context, "The trip has been successfully closed.".tr());
+                  showSuccessMessage(
+                      context, "The trip has been successfully closed.".tr());
                 }
                 if (state is FailureShippingState) {
                   showErrorMessage(
@@ -441,12 +431,14 @@ class RequestOfferCard extends StatelessWidget {
       listener: (context, state) {
         log(state.toString(), name: "loadingState");
         if (state is SuccessAcceptState) {
-          showSuccessMessage(context, "The request has been successfully approved.".tr());
+          showSuccessMessage(
+              context, "The request has been successfully approved.".tr());
           context.read<GetAllRequestByMyTripCubit>().getAllRequest();
           context.pop();
         }
         if (state is SuccessDeclineState) {
-          showSuccessMessage(context, "The request was successfully rejected.".tr());
+          showSuccessMessage(
+              context, "The request was successfully rejected.".tr());
           context.read<GetAllRequestByMyTripCubit>().getAllRequest();
         }
         if (state is SuccessCompleteTripState) {

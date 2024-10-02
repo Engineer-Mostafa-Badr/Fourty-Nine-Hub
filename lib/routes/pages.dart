@@ -62,8 +62,19 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/offer_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/picture_optional_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/raise_fare_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_view.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/shipping_rider_tab_screen.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/driverStatistics_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
@@ -1069,31 +1080,166 @@ class AppPages {
               child: const CreateShippingView(),
             ),
           ),
-          GoRoute(path: Paths.RIDE, name: Routes.RIDE, builder: (context, state) => BlocProvider<GetTripInfoCubit>(
-              create: (_) => serviceLocator(),
-              child: const RideRequestView()), routes: [
-            GoRoute(
-                path: Paths.REQUESTSHISTORY,
-                name: Routes.REQUESTSHISTORY,
-                builder: (context, state) => BlocProvider<RequestHistoryCubit>(
-                  create: (_) => serviceLocator(),
-                  child: const HistoryRequestsView(),
-                )),
-            GoRoute(
-                path: Paths.TRIPDETAILS,
-                name: Routes.TRIPDETAILS,
-                builder: (context, state) => BlocProvider<TripDetailsCubit>(
-                  create: (_) => serviceLocator(),
-                  child: const TripDetailsView(),
-                )),
-            GoRoute(
-                path: Paths.RIDERDASHBOARD,
-                name: Routes.RIDERDASHBOARD,
-                builder: (context, state) => BlocProvider<DriverDashboardCubit>(
-                  create: (_) => serviceLocator(),
-                  child: const DriverDashboardView(),
-                ))
-          ]),
+          GoRoute(
+              path: Paths.RIDE,
+              name: Routes.RIDE,
+              builder: (context, state) {
+                return MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) =>
+                          serviceLocator<GetCateogryRiderCubit>(),
+                    ),
+                    BlocProvider(
+                      create: (context) => serviceLocator<RegisterRiderCubit>(),
+                    ),
+                    BlocProvider(
+                      create: (context) =>
+                          serviceLocator<FavoriteMainCateogryCubit>(),
+                    ),
+                    BlocProvider(
+                        create: (context) =>
+                            serviceLocator<RiderTripReelTimeCubit>()),
+                    BlocProvider(
+                      create: (context) =>
+                          GetTripInfoCubit(repository: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) => StartingLocationCubit(
+                          fetchLocationCordinatesUseCase: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) => DestinationLocationCubit(
+                          fetchLocationCordinatesUseCase: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) => FetchPriceDistanceCubit(
+                          fetchPriceDistanceUsecase: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) =>
+                          FavoriteShippingCubit(repository: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) =>
+                          LocationSocketCubit(repository: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) =>
+                          RequestRiderTripCubit(repository: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) =>
+                          RaiseFareCubit(repository: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) =>
+                          OfferCubit(repository: serviceLocator()),
+                    ),
+                    BlocProvider<ShippingCubit>(
+                      create: (context) =>
+                          serviceLocator<ShippingCubit>()..getBannerData(),
+                    ),
+                    BlocProvider<GetMyTripCubit>(
+                      create: (context) =>
+                          serviceLocator<GetMyTripCubit>()..getMyTrip(),
+                    ),
+                    BlocProvider<CreateTripCubit>(
+                      create: (context) => serviceLocator<CreateTripCubit>(),
+                    ),
+                    BlocProvider<GetAllRequestByMyTripCubit>(
+                      create: (context) =>
+                          serviceLocator<GetAllRequestByMyTripCubit>(),
+                    ),
+                    BlocProvider<CallMessageCubit>(
+                      create: (context) => serviceLocator<CallMessageCubit>(),
+                    ),
+                    BlocProvider<AcceptDeclineTripCubit>(
+                      create: (context) => serviceLocator<AcceptDeclineTripCubit>(),
+                    ),
+                    BlocProvider<FavoriteMainCateogryCubit>(
+                      create: (context) =>
+                          serviceLocator<FavoriteMainCateogryCubit>(),
+                    ),
+                    BlocProvider<FavoriteShippingCubit>(
+                      create: (context) => serviceLocator<FavoriteShippingCubit>(),
+                    ),
+                    BlocProvider<TwitterCubit>(
+                      create: (context) => serviceLocator<TwitterCubit>(),
+                    ),
+                  ],
+                  child: const ShippingRiderTabScreen(),
+                );
+              },
+              routes: [
+                GoRoute(
+                    path: Paths.REQUESTSHISTORY,
+                    name: Routes.REQUESTSHISTORY,
+                    builder: (context, state) =>
+                        BlocProvider<RequestHistoryCubit>(
+                          create: (_) => serviceLocator(),
+                          child: const HistoryRequestsView(),
+                        )),
+                GoRoute(
+                    path: Paths.TRIPDETAILS,
+                    name: Routes.TRIPDETAILS,
+                    builder: (context, state) => BlocProvider<TripDetailsCubit>(
+                          create: (_) => serviceLocator(),
+                          child: const TripDetailsView(),
+                        )),
+                GoRoute(
+                    path: Paths.RIDERDASHBOARD,
+                    name: Routes.RIDERDASHBOARD,
+                    builder: (context, state) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider<DriverDashboardCubit>(
+                              create: (_) => serviceLocator(),
+                            ),
+                            BlocProvider(
+                              create: (context) => DriverStatisticsCubit(
+                                  repository: serviceLocator()),
+                            ),
+                          ],
+                          child: const DriverDashboardView(),
+                        )),
+                GoRoute(
+                    path: Paths.RIDERREGISTER,
+                    name: Routes.RIDERREGISTER,
+                    builder: (context, state) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider<DriverDashboardCubit>(
+                              create: (_) => serviceLocator(),
+                            ),
+                            BlocProvider(
+                              create: (context) => RegisterRiderCubit(
+                                  repo: serviceLocator(),
+                                  repository: serviceLocator()),
+                            ),
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<GetCateogryRiderCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<FetchCarBrandsCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<FetchCarModelsCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<FetchCarYearTypeCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (context) => PictureOptionalCubit(
+                                  repository: serviceLocator())
+                                ..getData(),
+                            ),
+                          ],
+                          child: const RiderRegisterView(),
+                        ))
+              ]),
           GoRoute(path: Paths.YOUTUBE, name: Routes.YOUTUBE, builder: (context, state) => const YouTubeView(), routes: [
             // PlayVideo
             GoRoute(

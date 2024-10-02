@@ -72,6 +72,7 @@ class _RiderBannerState extends State<RiderBanner> {
       // canRegister: !(widget.model.mainCategory?.isDriver ?? false) &&
       //     !(widget.model.mainCategory?.isDriverApproved ?? false),
       category: MainCategoryEntity(
+        nameEn: widget.model.mainCategory?.nameEn,
         id: widget.model.mainCategory?.mainCategoryId ?? '',
         name: getLang() == 'ar'
             ? widget.model.mainCategory?.nameAr ?? ''
@@ -81,7 +82,7 @@ class _RiderBannerState extends State<RiderBanner> {
         image: UIConst.imagePlaceHolder,
         total: widget.model.mainCategory?.driverLength ?? 0,
         // favoriteName: widget.favoriteName,
-        isFavorite: widget.model.mainCategory?.isFavorite ?? false, nameEn: '',
+        isFavorite: widget.model.mainCategory?.isFavorite ?? false,
       ),
     );
     // return Container(
