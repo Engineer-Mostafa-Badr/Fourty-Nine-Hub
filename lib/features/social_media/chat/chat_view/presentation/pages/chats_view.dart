@@ -270,7 +270,7 @@
 // }
 //after add index to navigate
 
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -286,7 +286,9 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/widgets/my_broadcast_card.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/archived_chats_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/widgets/follow_broadcast_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -634,7 +636,21 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
             ChatOptions(
               icon: Icons.archive,
               text: LocaleKeys.archive.tr(),
-              onTap: () {},
+              onTap: () async {
+                final result = await context.push(Routes.ARCHIVEDCHATS,
+                    extra: OptionsChatsViewParams(
+                      category: 'Archive',
+                      chatsCubit: chatCubit,
+                      isSecret: false,
+                    ));
+
+                // Check if the result is true, refresh the home page
+                if (result == true) {
+                  log("pop");
+                  await chatCubit.getChatsByCategory(ChatCategories.social);
+                  setState(() {});
+                }
+              },
             ),
             // const Divider(),
             AnimatedSwitcher(
@@ -651,7 +667,22 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       key: const ValueKey(1),
                       icon: Icons.mail_lock,
                       text: LocaleKeys.lockChat.tr(),
-                      onTap: () {},
+                      onTap: () async {
+                        final result = await context.push(Routes.ARCHIVEDCHATS,
+                            extra: OptionsChatsViewParams(
+                              category: 'LockedChats',
+                              chatsCubit: chatCubit,
+                              isSecret: true,
+                            ));
+
+                        // Check if the result is true, refresh the home page
+                        if (result == true) {
+                          log("pop");
+                          await chatCubit
+                              .getChatsByCategory(ChatCategories.social);
+                          setState(() {});
+                        }
+                      },
                     )
                   : const SizedBox.shrink(),
             ),
@@ -668,7 +699,22 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       key: const ValueKey(2),
                       icon: Icons.person_off,
                       text: LocaleKeys.anonymous.tr(),
-                      onTap: () {},
+                      onTap: () async {
+                        final result = await context.push(Routes.ARCHIVEDCHATS,
+                            extra: OptionsChatsViewParams(
+                              category: ChatCategoriesIds.anonymous,
+                              chatsCubit: chatCubit,
+                              isSecret: false,
+                            ));
+
+                        // Check if the result is true, refresh the home page
+                        if (result == true) {
+                          log("pop");
+                          await chatCubit
+                              .getChatsByCategory(ChatCategories.social);
+                          setState(() {});
+                        }
+                      },
                     )
                   : const SizedBox.shrink(),
             ),
@@ -685,7 +731,22 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       key: const ValueKey(3),
                       icon: Icons.emoji_people,
                       text: LocaleKeys.greet.tr(),
-                      onTap: () {},
+                      onTap: () async {
+                        final result = await context.push(Routes.ARCHIVEDCHATS,
+                            extra: OptionsChatsViewParams(
+                              category: ChatCategoriesIds.greet,
+                              chatsCubit: chatCubit,
+                              isSecret: false,
+                            ));
+
+                        // Check if the result is true, refresh the home page
+                        if (result == true) {
+                          log("pop");
+                          await chatCubit
+                              .getChatsByCategory(ChatCategories.social);
+                          setState(() {});
+                        }
+                      },
                     )
                   : const SizedBox.shrink(),
             ),
@@ -699,7 +760,21 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
             ChatOptions(
               icon: Icons.archive,
               text: LocaleKeys.archive.tr(),
-              onTap: () {},
+              onTap: () async {
+                final result = await context.push(Routes.ARCHIVEDCHATS,
+                    extra: OptionsChatsViewParams(
+                      category: 'Archive',
+                      chatsCubit: chatCubit,
+                      isSecret: false,
+                    ));
+
+                // Check if the result is true, refresh the home page
+                if (result == true) {
+                  log("pop");
+                  await chatCubit.getChatsByCategory(ChatCategories.service);
+                  setState(() {});
+                }
+              },
             ),
             // const Divider(),
             AnimatedSwitcher(
@@ -715,7 +790,22 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       key: const ValueKey(4),
                       icon: Icons.mail_lock,
                       text: LocaleKeys.lockChat.tr(),
-                      onTap: () {},
+                      onTap: () async {
+                        final result = await context.push(Routes.ARCHIVEDCHATS,
+                            extra: OptionsChatsViewParams(
+                              category: 'LockedChats',
+                              chatsCubit: chatCubit,
+                              isSecret: true,
+                            ));
+
+                        // Check if the result is true, refresh the home page
+                        if (result == true) {
+                          log("pop");
+                          await chatCubit
+                              .getChatsByCategory(ChatCategories.service);
+                          setState(() {});
+                        }
+                      },
                     )
                   : const SizedBox.shrink(),
             ),
@@ -730,6 +820,15 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
         return _buildCallingHistory(isVideo: false);
       case ChatCategories.broadcast:
         return buildBroadcast();
+      //   case ChatCategories.archived:
+      // case ChatCategories.anonymous:
+      // case ChatCategories.greet:
+      //   return _buildCategoryChats();
+      // case ChatCategories.socialCalls:
+      // case ChatCategories.serviceCalls:
+      // return _buildCallingHistory(isVideo: false);
+      // case ChatCategories.locked:
+      // return _buildCategoryChats(isSecret: true);
     }
   }
 
@@ -800,14 +899,57 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
   }
 
   Widget _buildCallingHistory({required bool isVideo}) {
-    return ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) => CallingCard(
-              isVideo: isVideo,
+    return DefaultTabController(
+      length: 2, // Two tabs: Social and Services
+
+      child: Column(
+        children: [
+          // Tab Bar for Social and Services
+          const TabBar(
+            labelColor: AppColors.PRIMARY_COLOR,
+            unselectedLabelColor: AppColors.LIGHT_GRAY_COLOR2,
+            indicator: BoxDecoration(
+                // color: AppColors.PRIMARY_COLOR_DARK,
+                border: Border(
+              bottom: BorderSide(
+                color: AppColors.PRIMARY_COLOR_DARK,
+                width: 3.0,
+              ),
+            )),
+            tabs: [
+              Tab(text: 'Social'),
+              Tab(text: 'Services'),
+            ],
+            indicatorColor: Colors.blue,
+          ),
+          Expanded(
+            // TabBarView to display content for each tab
+            child: TabBarView(
+              children: [
+                // Social tab: Show video calls
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) =>
+                      const CallingCard(isVideo: true),
+                  separatorBuilder: (context, index) => const SizedBox(),
+                  itemCount: 8,
+                ),
+                // Services tab: Show voice calls
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) =>
+                      const CallingCard(isVideo: false),
+                  separatorBuilder: (context, index) => const SizedBox(),
+                  itemCount: 8,
+                ),
+              ],
             ),
-        separatorBuilder: (context, index) => const SizedBox(),
-        itemCount: 8);
+          ),
+        ],
+      ),
+    );
   }
 
   Widget buildBroadcast() {
