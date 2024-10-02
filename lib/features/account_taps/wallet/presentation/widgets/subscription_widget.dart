@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_subscription_entity.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locales.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -141,8 +142,13 @@ class SubscriptionWidget extends StatelessWidget {
                   print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
                   serviceLocator<SubscriptionController>()
                       .showSubscriptionPlans(
+                    wallets: [
+                      WalletTypes.mainWallet,
+                      WalletTypes.giftWallet,
+                      WalletTypes.balance,
+                    ],
                     subCategoryId: subscription.subCategoryId!,
-                    wallets: [],
+                    title: LocaleKeys.ads.localize,
                   );
                 },
               ),
