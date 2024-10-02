@@ -1,5 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 
 // Project imports:
 import '../../../../zego_uikit.dart';
@@ -79,6 +81,7 @@ class _ZegoScreenSharingToggleButtonState
       await ZegoUIKit().startSharingScreen();
     } else {
       await ZegoUIKit().stopSharingScreen();
+      context.read<StreamCubit>().closeWhiteBoard();
     }
 
     if (widget.onPressed != null) {

@@ -37,7 +37,7 @@ abstract class Assets {
   static String zoom = 'assets/images/zoom.svg';
   static String zoomMeeting = 'assets/images/zoom_meeting.svg';
   static String twitter = 'assets/images/twitter.svg';
-  static String live = 'assets/images/live.svg';
+  static String live = 'assets/images/live_icon.svg';
   static String voiceLive = 'assets/images/voice_live.svg';
   static String reels = 'assets/images/reel_icon.svg';
   static String lists = 'assets/images/lists_icon.svg';
