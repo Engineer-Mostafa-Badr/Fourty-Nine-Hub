@@ -150,15 +150,19 @@ class _MyAddsViewState extends State<MyAddsView>
         if (state.myInstallments!.isEmpty) {
           return const EmptyPage();
         }
-        return ListView.separated(
-            itemCount: state.myInstallments?.length ?? 0,
-            separatorBuilder: (context, index) => const Sizer(),
-            itemBuilder: (context, index) {
-              return BuildItemAuctionCard(
-                item: state.myInstallments![index],
-                // onDelete: (String id) => controller.cancelAd(id: id),
-              );
-            });
+        return RefreshIndicator(
+          onRefresh: () async => context.read<MyAddsCubit>().getMyInstallment(),
+          child: ListView.separated(
+            physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: state.myInstallments?.length ?? 0,
+              separatorBuilder: (context, index) => const Sizer(),
+              itemBuilder: (context, index) {
+                return BuildItemAuctionCard(
+                  item: state.myInstallments![index],
+                  // onDelete: (String id) => controller.cancelAd(id: id),
+                );
+              }),
+        );
       } else {
         return const Center(child: CircularProgressIndicator());
       }
@@ -176,15 +180,19 @@ class _MyAddsViewState extends State<MyAddsView>
         if (state.myAuctions?.isEmpty ?? true) {
           return const EmptyPage();
         }
-        return ListView.separated(
-            itemCount: state.myAuctions?.length ?? 0,
-            separatorBuilder: (context, index) => const Sizer(),
-            itemBuilder: (context, index) {
-              return BuildItemAuctionCard(
-                item: state.myAuctions![index],
-                // onDelete: (String id) => controller.cancelAd(id: id),
-              );
-            });
+        return RefreshIndicator(
+          onRefresh: () async => context.read<MyAddsCubit>().getMyAuctions(),
+          child: ListView.separated(
+            physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: state.myAuctions?.length ?? 0,
+              separatorBuilder: (context, index) => const Sizer(),
+              itemBuilder: (context, index) {
+                return BuildItemAuctionCard(
+                  item: state.myAuctions![index],
+                  // onDelete: (String id) => controller.cancelAd(id: id),
+                );
+              }),
+        );
       } else {
         return const Center(child: CircularProgressIndicator());
       }
@@ -202,15 +210,19 @@ class _MyAddsViewState extends State<MyAddsView>
         if (state.myOtherAds?.isEmpty ?? true) {
           return const EmptyPage();
         }
-        return ListView.separated(
-            itemCount: state.myOtherAds?.length ?? 0,
-            separatorBuilder: (context, index) => const Sizer(),
-            itemBuilder: (context, index) {
-              return BuildItemAuctionCard(
-                item: state.myOtherAds![index],
-                // onDelete: (String id) => controller.cancelAd(id: id),
-              );
-            });
+        return RefreshIndicator(
+          onRefresh: () async => context.read<MyAddsCubit>().getMyOtherAds(),
+          child: ListView.separated(
+            physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: state.myOtherAds?.length ?? 0,
+              separatorBuilder: (context, index) => const Sizer(),
+              itemBuilder: (context, index) {
+                return BuildItemAuctionCard(
+                  item: state.myOtherAds![index],
+                  // onDelete: (String id) => controller.cancelAd(id: id),
+                );
+              }),
+        );
       } else {
         return const Center(child: CircularProgressIndicator());
       }
@@ -232,6 +244,7 @@ class _MyAddsViewState extends State<MyAddsView>
           return RefreshIndicator(
             onRefresh: () async => context.read<MyAddsCubit>().getMyTripJoin(),
             child: ListView.separated(
+              physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: state.tripJoin?.docs.length ?? 0,
                 separatorBuilder: (context, index) => const Sizer(),
                 itemBuilder: (context, index) {

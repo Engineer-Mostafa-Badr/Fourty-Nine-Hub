@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/get_all_count_ads_entity.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
@@ -6,6 +7,7 @@ import '../../../../ride/trip_details/domain/entities/trip_and_request_entity.da
 import '../entity/get_all_counts_trip_join_entity.dart';
 import '../entity/my_ads_auction.dart';
 import '../entity/my_ads_trip_join_entity.dart';
+import '../usecases/get_all_counts_ads_usecase.dart';
 import '../usecases/get_all_counts_usecase.dart';
 
 abstract class MyAdsRepo {
@@ -27,4 +29,5 @@ abstract class MyAdsRepo {
   Future<Either<Failure, bool>> deleteMyTripJoin({required String id});
   Future<Either<Failure, bool>> deleteMyInstallment({required String id});
   Future<Either<Failure, List<GetAllCountsTripJoinEntity>>> getAllCountsTripJoin(Params params);
+  Future<Either<Failure, List<GetAllCountAdsEntity>>> getAllCountsAds(CountAdsParams params);
 }

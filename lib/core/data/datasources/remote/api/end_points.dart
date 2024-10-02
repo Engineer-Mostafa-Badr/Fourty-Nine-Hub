@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
+import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_counts_ads_usecase.dart';
 import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_counts_usecase.dart';
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
 
@@ -117,6 +118,8 @@ class EndPoints {
       '/ads/deleteAd/$id';
   static String getAllCount(Params params) =>
       '/ride/come-with-you/callAndChat/${params.id}?status=${params.status}';
+  static String getAllAdsCount(CountAdsParams params) =>
+      '/ads/users-ads-field/${params.id}?field=${params.status}';
 
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';
