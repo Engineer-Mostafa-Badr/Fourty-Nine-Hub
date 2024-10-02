@@ -22,12 +22,10 @@ class ViewAllTripJoinCardBuilder extends StatefulWidget {
   });
 
   @override
-  State<ViewAllTripJoinCardBuilder> createState() =>
-      _ViewAllTripJoinCardBuilderState();
+  State<ViewAllTripJoinCardBuilder> createState() => _ViewAllTripJoinCardBuilderState();
 }
 
-class _ViewAllTripJoinCardBuilderState
-    extends State<ViewAllTripJoinCardBuilder> {
+class _ViewAllTripJoinCardBuilderState extends State<ViewAllTripJoinCardBuilder> {
   late final ViewAllTripJoinCubit viewAllTripJoinCubit;
 
   @override
@@ -42,8 +40,7 @@ class _ViewAllTripJoinCardBuilderState
       // buildWhen: (previous, current) => !viewAllTripJoinCubit.noMoreDataInDatabase,
       builder: (context, state) {
         if (viewAllTripJoinCubit.tripJoinCards.isEmpty &&
-            (state is ViewAllTripJoinSuccess ||
-                state is ViewAllTripJoinFailed)) {
+            (state is ViewAllTripJoinSuccess || state is ViewAllTripJoinFailed)) {
           return Container(
             height: MediaQuery.of(context).size.height * 0.8,
             width: double.infinity,
@@ -57,8 +54,7 @@ class _ViewAllTripJoinCardBuilderState
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) {
             if (index < viewAllTripJoinCubit.tripJoinCards.length) {
-              TripJoinCardEntity tripJoinCardEntity =
-                  viewAllTripJoinCubit.tripJoinCards[index];
+              TripJoinCardEntity tripJoinCardEntity = viewAllTripJoinCubit.tripJoinCards[index];
               return AvailableTripCard(
                 tripJoinCardEntity: tripJoinCardEntity,
                 reportOnTap: () {
@@ -76,11 +72,8 @@ class _ViewAllTripJoinCardBuilderState
                       isScrollControlled: true,
                       builder: (_) {
                         return BlocProvider.value(
-                            value:
-                                BlocProvider.of<RequestTripJoinCubit>(context),
-                            child: RequstTripJoinBottomSheet(
-                                tripJoinCardEntity: tripJoinCardEntity,
-                                isPremium: true));
+                            value: BlocProvider.of<RequestTripJoinCubit>(context),
+                            child: RequstTripJoinBottomSheet(tripJoinCardEntity: tripJoinCardEntity, isPremium: true));
                       },
                     );
                   }
@@ -93,15 +86,14 @@ class _ViewAllTripJoinCardBuilderState
                     builder: (_) {
                       return BlocProvider.value(
                           value: BlocProvider.of<RequestTripJoinCubit>(context),
-                          child: RequstTripJoinBottomSheet(
-                              tripJoinCardEntity: tripJoinCardEntity));
+                          child: RequstTripJoinBottomSheet(tripJoinCardEntity: tripJoinCardEntity));
                     },
                   );
                 },
                 callOnTap: () async {
                   // launchUrlString("tel://${tripJoinCardEntity.phone}");
                   // return;
-                  if (await _userApproved(
+                  if (await _isPremuim(
                     tripJoinCardEntity,
                     UIConst.chatNormalId,
                     LocaleKeys.chatSubscription.localize,
@@ -110,14 +102,14 @@ class _ViewAllTripJoinCardBuilderState
                   }
                 },
                 messageOnTap: () async {
-                  if (await _userApproved(
+                  if (await _isPremuim(
                     tripJoinCardEntity,
                     UIConst.chatNormalId,
                     LocaleKeys.chatSubscription.localize,
                   )) {}
                 },
                 subscribeMessageOnTap: () async {
-                  if (await _userApproved(
+                  if (await _isPremuim(
                     tripJoinCardEntity,
                     tripJoinCardEntity.categoryId ?? '',
                     LocaleKeys.tripjoinPremuimSubscription.localize,
@@ -125,8 +117,7 @@ class _ViewAllTripJoinCardBuilderState
                 },
               );
             }
-            return state is ViewAllTripJoinLoading &&
-                    !viewAllTripJoinCubit.noMoreDataInDatabase
+            return state is ViewAllTripJoinLoading && !viewAllTripJoinCubit.noMoreDataInDatabase
                 ? const AvailableTripCardLoadingList()
                 : const SizedBox();
           },
@@ -135,14 +126,10 @@ class _ViewAllTripJoinCardBuilderState
     );
   }
 
-  Future<bool> _isPremuim(TripJoinCardEntity tripJoinCardEntity,
-      String subCategoryId, String title) async {
-    if (tripJoinCardEntity.subscribedPremium == null ||
-        tripJoinCardEntity.subscribedPremium == false) {
+  Future<bool> _isPremuim(TripJoinCardEntity tripJoinCardEntity, String subCategoryId, String title) async {
+    if (tripJoinCardEntity.subscribedPremium == null || tripJoinCardEntity.subscribedPremium == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-        wallets: [
-          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
-        ],
+        wallets: [tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance],
         subCategoryId: subCategoryId,
         title: title,
       );
@@ -151,14 +138,10 @@ class _ViewAllTripJoinCardBuilderState
     return true;
   }
 
-  Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity,
-      String subCategoryId, String title) async {
-    if (tripJoinCardEntity.isApproved == null ||
-        tripJoinCardEntity.isApproved == false) {
+  Future<bool> _userApproved(TripJoinCardEntity tripJoinCardEntity, String subCategoryId, String title) async {
+    if (tripJoinCardEntity.isApproved == null || tripJoinCardEntity.isApproved == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-        wallets: [
-          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
-        ],
+        wallets: [tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance],
         subCategoryId: subCategoryId,
         title: title,
       );
@@ -173,8 +156,7 @@ class _ViewAllTripJoinCardBuilderState
         widget: ReportViewTripJoin(
           id: viewAllTripJoinCubit.tripJoinCards[index].userId ?? '',
           cardId: viewAllTripJoinCubit.tripJoinCards[index].id ?? '',
-          categoryId:
-              viewAllTripJoinCubit.tripJoinCards[index].categoryId ?? '',
+          categoryId: viewAllTripJoinCubit.tripJoinCards[index].categoryId ?? '',
         ));
   }
 }

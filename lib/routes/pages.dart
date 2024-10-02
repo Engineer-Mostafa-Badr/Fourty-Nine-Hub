@@ -18,7 +18,8 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/l
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/carpool/presentation/views/carpool_view.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/views/add_new_route_view.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/views/carpool_view.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
@@ -1209,6 +1210,13 @@ class AppPages {
             path: Paths.CAR_POOL,
             name: Routes.CAR_POOL,
             builder: (context, state) {
+              return const CarPoolView();
+            },
+          ),
+          GoRoute(
+            path: Paths.ADD_NEW_ROUTE,
+            name: Routes.ADD_NEW_ROUTE,
+            builder: (context, state) {
               return MultiBlocProvider(providers: [
                 BlocProvider<StartingLocationCubit>(
                   create: (context) => StartingLocationCubit(fetchLocationCordinatesUseCase: serviceLocator()),
@@ -1216,13 +1224,7 @@ class AppPages {
                 BlocProvider<DestinationLocationCubit>(
                   create: (context) => DestinationLocationCubit(fetchLocationCordinatesUseCase: serviceLocator()),
                 ),
-                BlocProvider<StartingLocationCubit>(
-                  create: (context) => StartingLocationCubit(fetchLocationCordinatesUseCase: serviceLocator()),
-                ),
-                BlocProvider<DestinationLocationCubit>(
-                  create: (context) => DestinationLocationCubit(fetchLocationCordinatesUseCase: serviceLocator()),
-                ),
-              ], child: const CarPoolView());
+              ], child: const AddNewRouteView());
             },
           )
         ],

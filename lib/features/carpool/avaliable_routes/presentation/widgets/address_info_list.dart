@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/features/carpool/domain/entities/available_routes_card_entity.dart';
-import 'package:fourtyninehub/features/carpool/presentation/widgets/numberwidget.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/available_routes_card_entity.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/numberwidget.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class AddressInfoList extends StatelessWidget {
