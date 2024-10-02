@@ -214,6 +214,9 @@ class EndPoints {
   static const isDoctor = '/health/check-doctor-or-not';
   static const getDoctorTotalEarnedMoney = '/health/dashboard/total-earned-money';
 
+  //  Payment Cache Out
+  static const instaPay = '/payment-profile';
+
   static String doctorAcceptAppointment(String appointmentId) => '/health/book-appointment/approve/$appointmentId';
 
   static String doctorRejectAppointment(String appointmentId) => '/health/book-appointment/reject/$appointmentId';
