@@ -25,12 +25,15 @@ class AvaiableRoutesCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("40:00:00", style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
+              Text("40:00:00",
+                  style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
               const Spacer(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('${entity.price} EGP', style: Styles.headerText(color: AppColors.CHECK_MARK_COLOR)),
+                  Text('${entity.price} EGP',
+                      style:
+                          Styles.headerText(color: AppColors.CHECK_MARK_COLOR)),
                   Text("per seat", style: Styles.mediumText()),
                 ],
               ),

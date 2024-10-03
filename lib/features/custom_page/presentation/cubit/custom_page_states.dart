@@ -5,7 +5,7 @@ import '../../../../../../core/error/failure.dart';
 import '../../domain/entity/favourite_categ_entity.dart';
 import '../../domain/entity/sub_tab_entity.dart';
 
-enum CustomPageStates { loading, initial, error, success}
+enum CustomPageStates { loading, initial, error, success }
 
 class CustomPageState {
   final CustomPageStates status;
@@ -15,22 +15,20 @@ class CustomPageState {
   final NavigateBarEntity? navigateBar;
   final FavouriteCatEntity? favourite;
 
-  const CustomPageState({
-    this.status = CustomPageStates.loading,
-    this.failure,
-    this.social,
-    this.subTab,
-    this.navigateBar,
-    this.favourite
-  });
+  const CustomPageState(
+      {this.status = CustomPageStates.loading,
+      this.failure,
+      this.social,
+      this.subTab,
+      this.navigateBar,
+      this.favourite});
   CustomPageState copyWith(
       {CustomPageStates? status,
       Failure? failure,
-        SocialPageEntity? social,
-        SubTabEntity? subTab,
-        NavigateBarEntity? navigateBar,
-        FavouriteCatEntity? favourite
-      }) {
+      SocialPageEntity? social,
+      SubTabEntity? subTab,
+      NavigateBarEntity? navigateBar,
+      FavouriteCatEntity? favourite}) {
     return CustomPageState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

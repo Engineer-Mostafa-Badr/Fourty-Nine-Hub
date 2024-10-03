@@ -77,7 +77,7 @@ class LiveDataSourceImpl extends LiveDataSource {
 
   @override
   Future<Either<Failure, void>> endLive(MeetingParams params) async {
-    final result =await _apiConsumer.delete(EndPoints.endStream(params.id));
+    final result = await _apiConsumer.delete(EndPoints.endStream(params.id));
     return result.fold((l) => Left(l), (r) => Right(r));
   }
 }

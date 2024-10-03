@@ -16,7 +16,8 @@ class ImageFromInternet extends StatelessWidget {
     this.borderRadius,
     this.fromFile = false,
     this.isCircle = false,
-    this.defaultLogo = false, this.fit,
+    this.defaultLogo = false,
+    this.fit,
   });
   final String image;
   final double? width;
@@ -38,7 +39,7 @@ class ImageFromInternet extends StatelessWidget {
           shape: isCircle == true ? BoxShape.circle : BoxShape.rectangle,
           image: DecorationImage(
             image: imageProvider,
-            fit: fit??BoxFit.fill,
+            fit: fit ?? BoxFit.fill,
           ),
         ),
       ),

@@ -254,7 +254,6 @@ class MeetingView extends StatelessWidget {
                               SizedBox(width: 15.h),
                               InkWell(
                                 onTap: () {
-
                                   //to unschedule
                                   joinRoom(context.read<StreamCubit>(),
                                       scheduledMeeting.roomId);

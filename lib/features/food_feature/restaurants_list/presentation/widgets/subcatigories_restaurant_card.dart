@@ -395,7 +395,6 @@ class PremiumAndRequestButtons extends StatelessWidget {
                   context.push(Routes.RESTAURANTDETAILS, extra: item.id);
                 },
                 subCategoryId: item.subcategoryId!.id,
-
               );
               // await serviceLocator<SubscriptionController>()
               //     .showSubscriptionPlans(

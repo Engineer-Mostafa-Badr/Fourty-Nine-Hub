@@ -21,7 +21,10 @@ class BuildFoodList extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   RestaurantMenu? meal = state.meals?[index];
-                  return ItemCard(meal: meal!,restaurantId: restaurantId,);
+                  return ItemCard(
+                    meal: meal!,
+                    restaurantId: restaurantId,
+                  );
                 },
               ),
             )

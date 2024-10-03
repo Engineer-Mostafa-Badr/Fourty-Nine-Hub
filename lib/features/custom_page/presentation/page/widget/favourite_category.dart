@@ -62,11 +62,11 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text(LocaleKeys.favoriteCategory.localize),
+        title: Text(LocaleKeys.favoriteCategory.localize),
       ),
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) =>
-        serviceLocator<CustomPageCubit>()..fetchFavouriteCat(),
+            serviceLocator<CustomPageCubit>()..fetchFavouriteCat(),
         child: BlocBuilder<CustomPageCubit, CustomPageState>(
           builder: (BuildContext context, state) {
             if (state.status == CustomPageStates.success) {
@@ -105,7 +105,8 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
             } else if (state.status == CustomPageStates.loading) {
               return const Center(child: CircularProgressIndicator());
             } else {
-              return Center(child: Text(LocaleKeys.failedToLoadCategories.localize));
+              return Center(
+                  child: Text(LocaleKeys.failedToLoadCategories.localize));
             }
           },
         ),
@@ -129,17 +130,22 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                   final updatedParams = FavouriteCatParams(
                     animals: _categoriesMap["Animals"] ?? false,
                     cars: _categoriesMap["Cars"] ?? false,
-                    collectiblesGifts: _categoriesMap["Collectibles Gifts"] ?? false,
-                    computersCameras: _categoriesMap["Computers Cameras"] ?? false,
+                    collectiblesGifts:
+                        _categoriesMap["Collectibles Gifts"] ?? false,
+                    computersCameras:
+                        _categoriesMap["Computers Cameras"] ?? false,
                     craft: _categoriesMap["Craft"] ?? false,
                     dating: _categoriesMap["Dating"] ?? false,
-                    discountsOffers: _categoriesMap["Discounts Offers"] ?? false,
+                    discountsOffers:
+                        _categoriesMap["Discounts Offers"] ?? false,
                     doctorJob: _categoriesMap["Doctor Job"] ?? false,
-                    electricalDevices: _categoriesMap["Electrical Devices"] ?? false,
+                    electricalDevices:
+                        _categoriesMap["Electrical Devices"] ?? false,
                     equipment: _categoriesMap["Equipment"] ?? false,
                     farming: _categoriesMap["Farming"] ?? false,
                     fashionBeauty: _categoriesMap["Fashion Beauty"] ?? false,
-                    governmentServices: _categoriesMap["Government Services"] ?? false,
+                    governmentServices:
+                        _categoriesMap["Government Services"] ?? false,
                     homeEssentials: _categoriesMap["Home Essentials"] ?? false,
                     homeService: _categoriesMap["Home Service"] ?? false,
                     marketingSales: _categoriesMap["Marketing Sales"] ?? false,
@@ -158,17 +164,20 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                     vehicles: _categoriesMap["Vehicles"] ?? false,
                     wholesaleTrade: _categoriesMap["Wholesale Trade"] ?? false,
                   );
-                  context.read<CustomPageCubit>().updateFavouriteCat(updatedParams);
+                  context
+                      .read<CustomPageCubit>()
+                      .updateFavouriteCat(updatedParams);
                 } else {
                   // Show a message if the selection is not valid
                   ScaffoldMessenger.of(context).showSnackBar(
-                     SnackBar(
+                    SnackBar(
                       content: Text(LocaleKeys.atLeast3atMost8items.localize),
                     ),
                   );
                 }
               },
-              child: Icon(Icons.check, color: Theme.of(context).scaffoldBackgroundColor),
+              child: Icon(Icons.check,
+                  color: Theme.of(context).scaffoldBackgroundColor),
             );
           },
         ),

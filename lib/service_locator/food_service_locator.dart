@@ -76,8 +76,8 @@ class FoodServiceLocator {
         serviceLocator(),
       )..loadData(),
     );
-    serviceLocator
-        .registerFactory<RestaurantsMealListCubit>(() => RestaurantsMealListCubit(
+    serviceLocator.registerFactory<RestaurantsMealListCubit>(
+        () => RestaurantsMealListCubit(
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),

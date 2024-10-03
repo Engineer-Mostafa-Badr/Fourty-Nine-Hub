@@ -21,7 +21,11 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets
 
 class MobileAdCard extends StatefulWidget {
   final AdEntity item;
-  const MobileAdCard({super.key, required this.item, required this.onFav, required this.onRemoveFav});
+  const MobileAdCard(
+      {super.key,
+      required this.item,
+      required this.onFav,
+      required this.onRemoveFav});
   final Function(String) onFav;
   final Function(String) onRemoveFav;
 
@@ -32,7 +36,9 @@ class MobileAdCard extends StatefulWidget {
 class _MobileAdCardState extends State<MobileAdCard> {
   @override
   Widget build(BuildContext context) {
-    List<CreateAdEntity> details = widget.item.details.where((e) => e.value.nameAr!='السعر'&&e.value.nameAr!='المرتب').toList();
+    List<CreateAdEntity> details = widget.item.details
+        .where((e) => e.value.nameAr != 'السعر' && e.value.nameAr != 'المرتب')
+        .toList();
     return InkWell(
       child: Container(
         width: kToolbarHeight * 2.5,
@@ -51,120 +57,156 @@ class _MobileAdCardState extends State<MobileAdCard> {
                 children: [
                   Expanded(
                     flex: 1,
-                      child:SizedBox(
-                                height: kToolbarHeight * 2.8,
+                    child: SizedBox(
+                      height: kToolbarHeight * 2.8,
+                      width: double.infinity,
+                      child: Swiper(
+                        itemCount: widget.item.images.length > 4
+                            ? 4
+                            : widget.item.images.length,
+                        onIndexChanged: (i) {},
+                        outer: false,
+                        loop: false,
+                        physics: widget.item.images.length > 1
+                            ? null
+                            : const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) => Padding(
+                          padding: EdgeInsets.only(bottom: 5.h),
+                          child: Stack(
+                            children: [
+                              ImageFromInternet(
                                 width: double.infinity,
-                                child: Swiper(
-                                  itemCount: widget.item.images.length>4?4:widget.item.images.length,
-                                  onIndexChanged: (i) {},
-                                  outer: false,
-                                  loop: false,
-                                  physics:widget.item.images.length>1?null:const NeverScrollableScrollPhysics() ,
-                                  itemBuilder: (context, index) => Padding(
-                                    padding: EdgeInsets.only(bottom: 5.h),
-                                    child: Stack(
-                                      children: [
-                                        ImageFromInternet(width: double.infinity,image: widget.item.images[index],defaultLogo: true,fit: BoxFit.fill,borderRadius: BorderRadius.only(topLeft: Radius.circular(5.r),topRight: Radius.circular(5.r)),),
-                                        if(index==3)Positioned.fill(child: InkWell(
-                                          onTap: () => context.push(Routes.ADdetails, extra: widget.item.id),
-                                          child: Container(
-                                            color: Colors.black.withOpacity(0.8),
-                                            alignment: AlignmentDirectional.center,
-                                            child: Label(text: 'See More',style: Styles.headerText(color: Colors.white,decoration: TextDecoration.underline),),
-                                          ),
-                                        ))
-                                      ],
+                                image: widget.item.images[index],
+                                defaultLogo: true,
+                                fit: BoxFit.fill,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(5.r),
+                                    topRight: Radius.circular(5.r)),
+                              ),
+                              if (index == 3)
+                                Positioned.fill(
+                                    child: InkWell(
+                                  onTap: () => context.push(Routes.ADdetails,
+                                      extra: widget.item.id),
+                                  child: Container(
+                                    color: Colors.black.withOpacity(0.8),
+                                    alignment: AlignmentDirectional.center,
+                                    child: Label(
+                                      text: 'See More',
+                                      style: Styles.headerText(
+                                          color: Colors.white,
+                                          decoration: TextDecoration.underline),
                                     ),
                                   ),
-                                  pagination: SwiperPagination(
-                      builder: SwiperCustomPagination(builder: (context, config) {
-                        return const DotSwiperPaginationBuilder(color: AppColors.GREY_DARK_COLOR, activeColor: AppColors.SECONDARY_COLOR, size: 10.0, activeSize: 10.0)
-                            .build(context, config);
-                      })),
-                                ),
-                              ),
+                                ))
+                            ],
+                          ),
+                        ),
+                        pagination: SwiperPagination(builder:
+                            SwiperCustomPagination(builder: (context, config) {
+                          return const DotSwiperPaginationBuilder(
+                                  color: AppColors.GREY_DARK_COLOR,
+                                  activeColor: AppColors.SECONDARY_COLOR,
+                                  size: 10.0,
+                                  activeSize: 10.0)
+                              .build(context, config);
+                        })),
+                      ),
+                    ),
                   ),
                   Expanded(
                     flex: 2,
                     child: Padding(
-                      padding: EdgeInsetsDirectional.symmetric( horizontal: 15.w),
+                      padding:
+                          EdgeInsetsDirectional.symmetric(horizontal: 15.w),
                       child: InkWell(
-                        onTap: () => context.push(Routes.ADdetails, extra: widget.item.id),
-                        child:Column(
+                        onTap: () => context.push(Routes.ADdetails,
+                            extra: widget.item.id),
+                        child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children:[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Expanded(
-                                  child: Label(
-                                    text:
-                                    '${NumbersHelper.formatThousands(number: widget.item.price??0)} ${LocaleKeys.currency.localize}',
-                                    style: Styles.mediumText(
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.SECONDARY_COLOR),
-                                    maxLines: 1,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Expanded(
+                                    child: Label(
+                                      text:
+                                          '${NumbersHelper.formatThousands(number: widget.item.price ?? 0)} ${LocaleKeys.currency.localize}',
+                                      style: Styles.mediumText(
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.SECONDARY_COLOR),
+                                      maxLines: 1,
+                                    ),
                                   ),
-                                ),
-                                IconAppButton(
-                                    size: 18, icon: widget.item.isFavourite==false?Icons.favorite_border:Icons.favorite,color: AppColors.SECONDARY_COLOR, onPressed: () async{
-                                  if(widget.item.isFavourite==false){
-                                    var result = await widget.onFav(widget.item.id);
-                                    if(result==true){
-                                      widget.item.isFavourite=!widget.item.isFavourite!;
-                                    }
-                                  }else{
-                                    var result = await widget.onRemoveFav(widget.item.id);
-                                    if(result==true){
-                                      widget.item.isFavourite=!widget.item.isFavourite!;
-                                    }
-                                  }
-                                })
-                              ],
-                            ),
-                            RichText(
-                                text: TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: '${LocaleKeys.title.localize} : ',
-                                    style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)
-                                      ),
-                                      TextSpan(
-                                        text: widget.item.title,
-                                        style:  Styles.mediumText(
-                                            fontWeight: FontWeight.w500, color: Colors.grey),
-                                        // maxLines: 1,
-                                      ),
-                                    ]),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const Sizer(height: 4,),
-                            RichText(
-                              text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                        text: '${LocaleKeys.desc.localize} : ',
-                                        style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)
-                                    ),
-                                    TextSpan(
-                                      text: widget.item.description,
-                                      style:  Styles.mediumText(
-                                          fontWeight: FontWeight.w500, color: Colors.grey),
-                                      // maxLines: 1,
-                                    ),
-                                  ]),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Label(
-                              text: widget.item.formattedRestTime,
-                              style: Styles.mediumText(color: Colors.grey),
-                              maxLines: 1,
-                            ),
-                          ]
-                        ),
+                                  IconAppButton(
+                                      size: 18,
+                                      icon: widget.item.isFavourite == false
+                                          ? Icons.favorite_border
+                                          : Icons.favorite,
+                                      color: AppColors.SECONDARY_COLOR,
+                                      onPressed: () async {
+                                        if (widget.item.isFavourite == false) {
+                                          var result = await widget
+                                              .onFav(widget.item.id);
+                                          if (result == true) {
+                                            widget.item.isFavourite =
+                                                !widget.item.isFavourite!;
+                                          }
+                                        } else {
+                                          var result = await widget
+                                              .onRemoveFav(widget.item.id);
+                                          if (result == true) {
+                                            widget.item.isFavourite =
+                                                !widget.item.isFavourite!;
+                                          }
+                                        }
+                                      })
+                                ],
+                              ),
+                              RichText(
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                      text: '${LocaleKeys.title.localize} : ',
+                                      style: Styles.mediumText(
+                                          color: AppColors.SECONDARY_COLOR)),
+                                  TextSpan(
+                                    text: widget.item.title,
+                                    style: Styles.mediumText(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.grey),
+                                    // maxLines: 1,
+                                  ),
+                                ]),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const Sizer(
+                                height: 4,
+                              ),
+                              RichText(
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                      text: '${LocaleKeys.desc.localize} : ',
+                                      style: Styles.mediumText(
+                                          color: AppColors.SECONDARY_COLOR)),
+                                  TextSpan(
+                                    text: widget.item.description,
+                                    style: Styles.mediumText(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.grey),
+                                    // maxLines: 1,
+                                  ),
+                                ]),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Label(
+                                text: widget.item.formattedRestTime,
+                                style: Styles.mediumText(color: Colors.grey),
+                                maxLines: 1,
+                              ),
+                            ]),
                       ),
                     ),
                   ),
@@ -172,7 +214,9 @@ class _MobileAdCardState extends State<MobileAdCard> {
               ),
             ),
             // const Sizer(),
-            const Divider(height: 0,),
+            const Divider(
+              height: 0,
+            ),
             const Sizer(),
             Padding(
               padding: EdgeInsets.all(8.w),
@@ -186,7 +230,7 @@ class _MobileAdCardState extends State<MobileAdCard> {
                         child: AvaialbleTripsButton(
                           title: 'Premium Request',
                           color: AppColors.SECONDARY_COLOR,
-                          onTap: (){},
+                          onTap: () {},
                         ),
                       ),
                       const Sizer(width: 5),
@@ -195,7 +239,7 @@ class _MobileAdCardState extends State<MobileAdCard> {
                         child: AvaialbleTripsButton(
                           title: 'Request',
                           color: AppColors.PRIMARY_COLOR,
-                          onTap: (){},
+                          onTap: () {},
                         ),
                       )
                     ],
@@ -205,7 +249,7 @@ class _MobileAdCardState extends State<MobileAdCard> {
                       future: ButtonAvailability().isShowButton(
                           otherUserId: widget.item.user?.id ?? '',
                           subcategoryId: widget.item.subCategoryId ?? ''),
-                      builder: (context,snap) {
+                      builder: (context, snap) {
                         return Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -213,9 +257,11 @@ class _MobileAdCardState extends State<MobileAdCard> {
                               flex: 3,
                               child: AvaialbleTripsButton(
                                 title: 'Call',
-                                color:  snap.data==true?AppColors.SECONDARY_COLOR:AppColors.DARK_GRAY_COLOR,
+                                color: snap.data == true
+                                    ? AppColors.SECONDARY_COLOR
+                                    : AppColors.DARK_GRAY_COLOR,
                                 icon: Icons.call,
-                                onTap: snap.data==true?(){}:(){},
+                                onTap: snap.data == true ? () {} : () {},
                               ),
                             ),
                             const Sizer(width: 5),
@@ -223,12 +269,13 @@ class _MobileAdCardState extends State<MobileAdCard> {
                               flex: 3,
                               child: AvaialbleTripsButton(
                                 title: 'Message',
-                                color: snap.data==true?AppColors.SECONDARY_COLOR:AppColors.DARK_GRAY_COLOR,
+                                color: snap.data == true
+                                    ? AppColors.SECONDARY_COLOR
+                                    : AppColors.DARK_GRAY_COLOR,
                                 icon: Icons.email,
-                                onTap: snap.data==true?(){}:(){},
+                                onTap: snap.data == true ? () {} : () {},
                               ),
                             ),
-
                             const Sizer(width: 5),
                             Expanded(
                               flex: 3,
@@ -236,7 +283,7 @@ class _MobileAdCardState extends State<MobileAdCard> {
                                 title: 'Report',
                                 color: AppColors.SECONDARY_COLOR,
                                 icon: Icons.report,
-                                onTap: (){
+                                onTap: () {
                                   print("jskdnajksdnjkadn");
                                   bottomSheet(
                                       context: context,
@@ -249,8 +296,7 @@ class _MobileAdCardState extends State<MobileAdCard> {
                             ),
                           ],
                         );
-                      }
-                  ),
+                      }),
                 ],
               ),
             ),

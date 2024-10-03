@@ -29,7 +29,8 @@ class CreateNewForgetPasswordView extends StatelessWidget {
         CreateNewForgotPasswordState>(
       listener: (context, state) {
         if (state is CreateNewForgotPasswordSuccess) {
-          showSuccessMessage(context, LocaleKeys.passwordChangedSuccessfully.localize);
+          showSuccessMessage(
+              context, LocaleKeys.passwordChangedSuccessfully.localize);
           context.pushReplacement(
             Routes.LOGIN,
           );
@@ -40,7 +41,7 @@ class CreateNewForgetPasswordView extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          appBar:  BackAppBar(
+          appBar: BackAppBar(
             label: LocaleKeys.createNewPassword.localize,
           ),
           bottomSheet: SizedBox(

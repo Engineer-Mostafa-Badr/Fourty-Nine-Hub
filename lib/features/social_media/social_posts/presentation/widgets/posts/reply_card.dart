@@ -177,8 +177,7 @@ class _ReplyCardState extends State<ReplyCard> {
             listTile(
                 icon: Icons.delete,
                 title: LocaleKeys.deleteReply.localize,
-                subTitle:
-                LocaleKeys.youWillDeleteReply.localize,
+                subTitle: LocaleKeys.youWillDeleteReply.localize,
                 onTap: () {
                   widget.onDeleteReply(widget.reply.id);
                 }),

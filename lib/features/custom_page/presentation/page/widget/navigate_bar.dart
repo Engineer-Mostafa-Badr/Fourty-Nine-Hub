@@ -56,7 +56,7 @@ class _NavigateBarState extends State<NavigateBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text(LocaleKeys.navigateBar.localize),
+        title: Text(LocaleKeys.navigateBar.localize),
       ),
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) => serviceLocator()..fetchNavigateBar(),

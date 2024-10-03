@@ -15,18 +15,17 @@ class MainCategoryEntity extends Equatable {
   bool? isFavorite;
   final int total;
 
-  MainCategoryEntity({
-    required this.id,
-    required this.name,
-    required this.nameEn,
-    required this.image,
-    this.subcategories,
-    required this.banner,
-    required this.cover,
-    this.isFavorite = false,
-    required this.total,
-     this.numberOfAdsCount
-  });
+  MainCategoryEntity(
+      {required this.id,
+      required this.name,
+      required this.nameEn,
+      required this.image,
+      this.subcategories,
+      required this.banner,
+      required this.cover,
+      this.isFavorite = false,
+      required this.total,
+      this.numberOfAdsCount});
 
   factory MainCategoryEntity.fake() {
     return MainCategoryEntity(
@@ -36,14 +35,15 @@ class MainCategoryEntity extends Equatable {
         banner: UIConst.imagePlaceHolder,
         cover: UIConst.imagePlaceHolder,
         isFavorite: false,
-        total: 9900000, nameEn: '');
+        total: 9900000,
+        nameEn: '');
   }
 
   @override
   List<Object?> get props => [
         id,
         name,
-    nameEn,
+        nameEn,
         image,
         banner,
         cover,

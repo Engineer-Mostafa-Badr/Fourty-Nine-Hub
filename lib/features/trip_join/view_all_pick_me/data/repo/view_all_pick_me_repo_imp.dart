@@ -10,7 +10,8 @@ class ViewAllPickMeRepoImp implements ViewAllPickMeRepo {
   ViewAllPickMeRepoImp({required this.viewAllPickMeRemoteDataSource});
 
   @override
-  Future<Either<Failure, List<PickMeCardEntity>>> getAllPickMe({required int page}) {
+  Future<Either<Failure, List<PickMeCardEntity>>> getAllPickMe(
+      {required int page}) {
     return viewAllPickMeRemoteDataSource.getAllPickMe(page: page);
   }
 

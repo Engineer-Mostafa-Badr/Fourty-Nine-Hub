@@ -18,13 +18,13 @@ import '../model/favourite_cat_model.dart';
 
 abstract class CustomPageRemoteDataSource {
   Future<Either<Failure, SocialPageEntity>> fetchSocialPage();
-  Future<Either<Failure,bool>>updateSocialPage(SocialPageParams params);
-  Future<Either<Failure,SubTabEntity>>fetchSubTab();
-  Future<Either<Failure,bool>>updateSubTab(SubTabParams params);
-  Future<Either<Failure,NavigateBarEntity>>fetchNavigateBar();
-  Future<Either<Failure,bool>>updateNavigateBar(NavigateBarParams params);
-  Future<Either<Failure,FavouriteCatEntity>>fetchFavouriteCat();
-  Future<Either<Failure,bool>>updateFavouriteCat(FavouriteCatParams params);
+  Future<Either<Failure, bool>> updateSocialPage(SocialPageParams params);
+  Future<Either<Failure, SubTabEntity>> fetchSubTab();
+  Future<Either<Failure, bool>> updateSubTab(SubTabParams params);
+  Future<Either<Failure, NavigateBarEntity>> fetchNavigateBar();
+  Future<Either<Failure, bool>> updateNavigateBar(NavigateBarParams params);
+  Future<Either<Failure, FavouriteCatEntity>> fetchFavouriteCat();
+  Future<Either<Failure, bool>> updateFavouriteCat(FavouriteCatParams params);
 }
 
 class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
@@ -37,20 +37,20 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
     var response = await _apiConsumer.get(EndPoints.socialPage);
 
     return response.fold(
-      (failure)=>Left(failure),
-      (response)=>Right(SocialPageModel.fromJson(response['data'])),
+      (failure) => Left(failure),
+      (response) => Right(SocialPageModel.fromJson(response['data'])),
     );
   }
 
   @override
-  Future<Either<Failure, bool>> updateSocialPage(SocialPageParams params)async {
-    var response = await _apiConsumer.put(EndPoints.socialPage,
-    data: params.toJson()
-    );
+  Future<Either<Failure, bool>> updateSocialPage(
+      SocialPageParams params) async {
+    var response =
+        await _apiConsumer.put(EndPoints.socialPage, data: params.toJson());
 
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right(response['status']),
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
   }
 
@@ -59,20 +59,19 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
     var response = await _apiConsumer.get(EndPoints.subTab);
 
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right(SubTabModel.fromJson(response['data'])),
+      (failure) => Left(failure),
+      (response) => Right(SubTabModel.fromJson(response['data'])),
     );
   }
 
   @override
   Future<Either<Failure, bool>> updateSubTab(SubTabParams params) async {
-    var response = await _apiConsumer.put(EndPoints.subTab,
-        data: params.toJson()
-    );
+    var response =
+        await _apiConsumer.put(EndPoints.subTab, data: params.toJson());
 
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right(response['status']),
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
   }
 
@@ -81,20 +80,20 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
     var response = await _apiConsumer.get(EndPoints.navigateBar);
 
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right(NavigateBarModel.fromJson(response['data'])),
+      (failure) => Left(failure),
+      (response) => Right(NavigateBarModel.fromJson(response['data'])),
     );
   }
 
   @override
-  Future<Either<Failure, bool>> updateNavigateBar(NavigateBarParams params) async {
-    var response = await _apiConsumer.put(EndPoints.navigateBar,
-        data: params.toJson()
-    );
+  Future<Either<Failure, bool>> updateNavigateBar(
+      NavigateBarParams params) async {
+    var response =
+        await _apiConsumer.put(EndPoints.navigateBar, data: params.toJson());
 
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right(response['status']),
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
   }
 
@@ -103,20 +102,20 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
     var response = await _apiConsumer.get(EndPoints.favouriteCat);
 
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right(FavouriteCatModel.fromJson(response['data'])),
+      (failure) => Left(failure),
+      (response) => Right(FavouriteCatModel.fromJson(response['data'])),
     );
   }
 
   @override
-  Future<Either<Failure, bool>> updateFavouriteCat(FavouriteCatParams params) async {
-    var response = await _apiConsumer.put(EndPoints.favouriteCat,
-        data: params.toJson()
-    );
+  Future<Either<Failure, bool>> updateFavouriteCat(
+      FavouriteCatParams params) async {
+    var response =
+        await _apiConsumer.put(EndPoints.favouriteCat, data: params.toJson());
 
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right(response['status']),
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
   }
 }

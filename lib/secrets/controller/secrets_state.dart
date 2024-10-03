@@ -36,9 +36,9 @@ class SecretsState extends Equatable {
     SecretsStateStatus? status,
   }) {
     return SecretsState(
-      failure:failure ?? this.failure,
-      secrets:secrets ?? this.secrets,
-      status:status ?? this.status,
+      failure: failure ?? this.failure,
+      secrets: secrets ?? this.secrets,
+      status: status ?? this.status,
     );
   }
 

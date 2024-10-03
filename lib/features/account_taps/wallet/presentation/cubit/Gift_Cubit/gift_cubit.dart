@@ -11,7 +11,8 @@ class GiftCubit extends Cubit<GiftState> {
   final GetWheelWalletUseCase _getWheelWalletUseCase;
 
   GiftCubit(
-    this._giftUseCases, this._getWheelWalletUseCase,
+    this._giftUseCases,
+    this._getWheelWalletUseCase,
   ) : super(const GiftState());
 
   void loadData() async {
@@ -37,10 +38,8 @@ class GiftCubit extends Cubit<GiftState> {
     final result = await _getWheelWalletUseCase(const NoParams());
     emit(
       result.fold(
-            (failure) =>
-            state.copyWith(status: GiftStates.error, failure: failure),
-            (wheelWallet) =>
-            state.copyWith( wheel: wheelWallet),
+        (failure) => state.copyWith(status: GiftStates.error, failure: failure),
+        (wheelWallet) => state.copyWith(wheel: wheelWallet),
       ),
     );
   }

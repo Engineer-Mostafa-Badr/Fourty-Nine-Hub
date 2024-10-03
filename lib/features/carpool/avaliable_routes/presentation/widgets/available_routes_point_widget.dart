@@ -95,7 +95,9 @@ class AvailableRoutesPointInfo extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       margin: const EdgeInsets.only(top: 0, bottom: 10, left: 10, right: 10),
       decoration: BoxDecoration(
-        shape: status.toLowerCase() != 'free' ? BoxShape.circle : BoxShape.rectangle,
+        shape: status.toLowerCase() != 'free'
+            ? BoxShape.circle
+            : BoxShape.rectangle,
       ),
       padding: EdgeInsets.all(status.toLowerCase() != 'free' ? 0 : 5),
       child: Image.asset(

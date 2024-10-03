@@ -87,8 +87,10 @@ class CodegenLoader extends AssetLoader {
     "selectATopic": "اختر الموضوع",
     "restaurantName": "إسم المطعم",
     "theCommercialRegister": "السجل التجاري",
-    "theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider": "التطبيق لا يخصم اي نسبه من مزود الخدمة",
-    "youWillGetEGP3650PerYearIfYouSubscribeDaily": "سوف تحصل على 3650 جنيها في السنه عندما تشترك يوميا",
+    "theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider":
+        "التطبيق لا يخصم اي نسبه من مزود الخدمة",
+    "youWillGetEGP3650PerYearIfYouSubscribeDaily":
+        "سوف تحصل على 3650 جنيها في السنه عندما تشترك يوميا",
     "welcomeToResturantRegisteration": "مرحبا بك في تسجيل المطعم",
     "selecteSubcategory": "اختر الفئه الفرعيه:",
     "photoForRestaurant": "صور للمطعم",
@@ -243,7 +245,8 @@ class CodegenLoader extends AssetLoader {
     "checkVerification": "يرجى التحقق من بريدك الإلكتروني لمعرفة رمز التحقق",
     "congratulations": "تهانينا",
     "close": "إغلاق",
-    "giftApp": "لقد حصلت على هدية بقيمة 400 جنيه كهدية ترحيبية للتسجيل في تطبيق 49.",
+    "giftApp":
+        "لقد حصلت على هدية بقيمة 400 جنيه كهدية ترحيبية للتسجيل في تطبيق 49.",
     "clearAll": "حذف الكل",
     "clearNotification": "هل أنت متأكد من أنك تريد مسح جميع الإشعارات؟",
     "clearNoti": "هل أنت متأكد أنك تريد مسح هذا الإشعار؟",
@@ -316,7 +319,8 @@ class CodegenLoader extends AssetLoader {
     "exportChat": "نقل الدردشة",
     "addShortcut": "اضافة اختصار",
     "encryption": "التشفير",
-    "chatEncryptionMessage": "الرسائل و المكالمات مشفرة تماما بين الطرفين. انقر للتحقق",
+    "chatEncryptionMessage":
+        "الرسائل و المكالمات مشفرة تماما بين الطرفين. انقر للتحقق",
     "chatLock": "قفل الدردشة",
     "chatLockMessage": "تمكن من قفل هذة الدردشة و اخفاءها علي هذا الجهاز",
     "createGroupWith": "انشاء مجموعة مع",
@@ -379,16 +383,24 @@ class CodegenLoader extends AssetLoader {
     "monthly": "شهريًا",
     "yearly": "سنويًا",
     "noSubscriptionPlans": "لا توجد خطط اشتراك متاحة",
-    "premiumPackage": "تمنحك الباقة المميزة الفرصة للظهور بشكل أكبر والحصول على المزيد من النقود المستردة.",
-    "requestWithdrawal": "تم إرسال طلب السحب الخاص بك بنجاح في انتظار موافقة الإدارة",
+    "premiumPackage":
+        "تمنحك الباقة المميزة الفرصة للظهور بشكل أكبر والحصول على المزيد من النقود المستردة.",
+    "requestWithdrawal":
+        "تم إرسال طلب السحب الخاص بك بنجاح في انتظار موافقة الإدارة",
     "complete": "تم إكماله",
     "yearsLast": "سنوات مضت",
     "aBirdInHand": "عصفور في اليد خير من عشرة على الشجرة",
     "permissionDenied": "تم رفض الصلاحيات",
     "contacts": "جهات الاتصال",
-    "pleaseLoginRegisterToEnjoyTheApp": "من فضلك قم بتسجيل الدخول او التسجيل للتفاعل معنا",
+    "pleaseLoginRegisterToEnjoyTheApp":
+        "من فضلك قم بتسجيل الدخول او التسجيل للتفاعل معنا",
     "noChatsUntilNow": "لا توجد محادثات حتى الآن",
-    "tinder": {"header": "تيندر", "favorites": "المفضلة", "noData": "لا توجد بيانات متاحة", "find": "اكتشف"},
+    "tinder": {
+      "header": "تيندر",
+      "favorites": "المفضلة",
+      "noData": "لا توجد بيانات متاحة",
+      "find": "اكتشف"
+    },
     "chat_alert_dialog": {
       "pick_chat_type": "اختر نوع الدردشة:",
       "anonymous": "مجهول",
@@ -448,7 +460,8 @@ class CodegenLoader extends AssetLoader {
     "youWillEditComment": "سوف يتم تعديل تعليقك.",
     "youWillEditReply": "سوف يتم تعديل ردك.",
     "youWillDeletePost": "سيتم حذف منشورك، ولن تتمكن من الحصول عليه مرة أخرى.",
-    "youWillDeleteComment": "سيتم حذف تعليقك، ولن تتمكن من الحصول عليه مرة أخرى.",
+    "youWillDeleteComment":
+        "سيتم حذف تعليقك، ولن تتمكن من الحصول عليه مرة أخرى.",
     "youWillDeleteReply": "سيتم حذف ردك، ولن تتمكن من الحصول عليه مرة أخرى.",
     "youWillHidePost": "سيتم إخفاء منشورك، يمكنك الحصول عليها مرة أخرى.",
     "withKey": "مع",
@@ -491,7 +504,8 @@ class CodegenLoader extends AssetLoader {
     "front": "الوجه",
     "back": "الخلف",
     "requestVerification": "طلب التحقق",
-    "documentSuccessfully": "لقد قمت بتحميل المستند الخاص بك بنجاح. وهو الآن في انتظار مراجعة الإدارة وموافقتها.",
+    "documentSuccessfully":
+        "لقد قمت بتحميل المستند الخاص بك بنجاح. وهو الآن في انتظار مراجعة الإدارة وموافقتها.",
     "noReportCategoriesAvailable": "لا توجد فئات تقرير متاحة",
     "typeReportReason": "اكتب سبب الابلاغ",
     "pleaseSelectReason": "برجاء اختار السبب!",
@@ -526,7 +540,8 @@ class CodegenLoader extends AssetLoader {
     "facebook": "فيسبوك",
     "carTrips": "رحلات سيارات",
     "userTrips": "رحلات أفراد",
-    "userOwnCarsShareWithThem": "عملاء يملكون سيارات / يمكنك مشاركة الرحلات معهم",
+    "userOwnCarsShareWithThem":
+        "عملاء يملكون سيارات / يمكنك مشاركة الرحلات معهم",
     "noTripsAvailable": "لا يوجد رحلات متوفرة",
     "tripjoinPremuimSubscription": "اشتراك مميز بمشاركة الرحلات",
     "chatSubscription": "أشتراك مميز بخدمة الرسائل",
@@ -576,8 +591,15 @@ class CodegenLoader extends AssetLoader {
     },
     "reel_upload_success": {"upload_success": "تم تحميل الفيديو بنجاح!"},
     "timer": {"recording_stops_in": "التسجيل يتوقف في ", "seconds": " ثانية"},
-    "controls": {"switch_camera": "تبديل الكاميرا", "upload_reel": "ارفع الفيديو الخاص بك"},
-    "reel_voices": {"my_voice": "صوتي", "other_voice": "صوت آخر", "mix_voices": "دمج الأصوات"},
+    "controls": {
+      "switch_camera": "تبديل الكاميرا",
+      "upload_reel": "ارفع الفيديو الخاص بك"
+    },
+    "reel_voices": {
+      "my_voice": "صوتي",
+      "other_voice": "صوت آخر",
+      "mix_voices": "دمج الأصوات"
+    },
     "comments_header": "التعليقات",
     "add_comment_hint": "أضف تعليقًا...",
     "write_reply_hint": "اكتب ردًا...",
@@ -607,9 +629,11 @@ class CodegenLoader extends AssetLoader {
       "send_a_gift": "أرسل هدية",
       "recharge": "شحن"
     },
-    "report_nudity": "يحتوي هذا المحتوى على عري صريح وهو غير مناسب للجماهير العامة.",
+    "report_nudity":
+        "يحتوي هذا المحتوى على عري صريح وهو غير مناسب للجماهير العامة.",
     "report_frequent": "النشر المفرط لنفس الرسالة يعطل تجربة المستخدم.",
-    "report_fake": "يبرز هذا التقرير انتشار الأخبار الزائفة أو المعلومات المضللة.",
+    "report_fake":
+        "يبرز هذا التقرير انتشار الأخبار الزائفة أو المعلومات المضللة.",
     "report_abuse": "المحتوى المبلغ عنه يتضمن لغة أو سلوكاً مسيئاً.",
     "report_hated": "يتعلق هذا التقرير بمحتوى يروج لخطاب الكراهية أو التمييز.",
     "report_illegal": "المحتوى المبلغ عنه مشتبه في ترويجه لأنشطة غير قانونية.",
@@ -631,7 +655,8 @@ class CodegenLoader extends AssetLoader {
     "postSubmitted": "تم إرسال منشورك بنجاح، انتظر موافقة الإدارة",
     "imageNotSelected": "الصورة غير محددة",
     "randomAppearance": "المظهر العشوائي",
-    "messageSuccessfully": "تم ارسال الرسالة بنجاح سوف يتم التواصل معك باقرب وقت.",
+    "messageSuccessfully":
+        "تم ارسال الرسالة بنجاح سوف يتم التواصل معك باقرب وقت.",
     "phoneOptional": "الهاتف (اختياري)",
     "TeamHelp": "فريق 49Hub جاهز للمساعدة",
     "moneySuccessfully": "تم إرسال الامول بنجاح.",
@@ -662,7 +687,8 @@ class CodegenLoader extends AssetLoader {
     "desc": "الوصف",
     "details": "التفاصيل",
     "addImages": "إضافة صور",
-    "addImagesDesc": "الحد الأقصى لحجم الملف 5 ميجابايت مقبول بالتنسيقات التالية: jpg، Jpeg، png، gif",
+    "addImagesDesc":
+        "الحد الأقصى لحجم الملف 5 ميجابايت مقبول بالتنسيقات التالية: jpg، Jpeg، png، gif",
     "noAds": "لا توجد إعلانات في الوقت الحالي."
   };
   static const Map<String, dynamic> en = {
@@ -688,7 +714,8 @@ class CodegenLoader extends AssetLoader {
     "meetingId": "Meeting ID:",
     "startNow": "Start Now:",
     "emptyMeetingIdValidator": "Please enter some text:",
-    "invalidInputValidator": "Invalid input: Only numbers, /, and . are allowed",
+    "invalidInputValidator":
+        "Invalid input: Only numbers, /, and . are allowed",
     "meetingMustBe8Characters": "Meeting ID must be 8 numbers",
     "joinMeeting": "Join Meeting",
     "joinMeetingWithShareScreen": "Join a Meeting with Share screen",
@@ -737,7 +764,8 @@ class CodegenLoader extends AssetLoader {
     "theCommercialRegister": "The Commercial Register",
     "theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider":
         "The application does not deduct any percentage from the service provider.",
-    "youWillGetEGP3650PerYearIfYouSubscribeDaily": "You will get 3650 EGP per year if you subscribe daily.",
+    "youWillGetEGP3650PerYearIfYouSubscribeDaily":
+        "You will get 3650 EGP per year if you subscribe daily.",
     "welcomeToResturantRegisteration": "Welcome to Resturant Registeration",
     "selecteSubcategory": "Selecte Subcategory:",
     "photoForRestaurant": "Photos For Restaurant",
@@ -896,10 +924,12 @@ class CodegenLoader extends AssetLoader {
     "emailOtp": "Email OTP",
     "verification": "Verification",
     "notifications": "Notifications",
-    "checkVerification": "Please check your email to see the verification code ",
+    "checkVerification":
+        "Please check your email to see the verification code ",
     "congratulations": "Congratulations",
     "close": "CLOSE",
-    "giftApp": "You got a gift of 400 pounds as a welcome gift for registering on the 49 app.",
+    "giftApp":
+        "You got a gift of 400 pounds as a welcome gift for registering on the 49 app.",
     "clearAll": "Clear All",
     "clearNotification": "Are you sure you want to clear all notifications?",
     "clearNoti": "Are you sure you want to clear notifications?",
@@ -972,7 +1002,8 @@ class CodegenLoader extends AssetLoader {
     "exportChat": "Export chat",
     "addShortcut": "Add shortcut",
     "encryption": "Encryption",
-    "chatEncryptionMessage": "Messages and calls are end-to-end encrypted. Tap to verify",
+    "chatEncryptionMessage":
+        "Messages and calls are end-to-end encrypted. Tap to verify",
     "chatLock": "Chat Lock",
     "chatLockMessage": "Lock and hide this chat from on this device",
     "createGroupWith": "Create group with",
@@ -1011,7 +1042,8 @@ class CodegenLoader extends AssetLoader {
     "about": "About",
     "phone": "Phone",
     "name": "Name",
-    "nameMessage": "This is not your username or pin. This name will be visible to your FortyNine contacts.",
+    "nameMessage":
+        "This is not your username or pin. This name will be visible to your FortyNine contacts.",
     "selectContact": "Select Contacts to Share",
     "addChatShortcut": "Add chat shortcut",
     "markAsUnread": "Mark as unread",
@@ -1034,14 +1066,17 @@ class CodegenLoader extends AssetLoader {
     "monthly": "Monthly",
     "yearly": "Yearly",
     "noSubscriptionPlans": "No subscription plans available",
-    "premiumPackage": "The Premium Package gives you the opportunity to be seen more and get more cashback.",
-    "requestWithdrawal": "Your request withdrawal sent successfully waiting for administration approval",
+    "premiumPackage":
+        "The Premium Package gives you the opportunity to be seen more and get more cashback.",
+    "requestWithdrawal":
+        "Your request withdrawal sent successfully waiting for administration approval",
     "complete": "Complete",
     "yearsLast": "years last",
     "aBirdInHand": "A bird in the hand is better than two on the tree.",
     "permissionDenied": "Permission denied",
     "contacts": "Contacts",
-    "pleaseLoginRegisterToEnjoyTheApp": "Please Login, Register to enjoy the app",
+    "pleaseLoginRegisterToEnjoyTheApp":
+        "Please Login, Register to enjoy the app",
     "noChatsUntilNow": "No Chats until now",
     "confirmNewPassword": "Confirm New Password",
     "newPassword": "New Password",
@@ -1092,9 +1127,12 @@ class CodegenLoader extends AssetLoader {
     "youWillReportPost": "Your Well Reports This Post",
     "youWillReportComment": "Your Well Reports This Comment",
     "youWillReportReply": "Your Well Reports This Reply",
-    "youWillDeletePost": "Your post will be deleted, and you cannot get it again.",
-    "youWillDeleteComment": "Your comment will be deleted, and you cannot get it again.",
-    "youWillDeleteReply": "Your reply will be deleted, and you cannot get it again.",
+    "youWillDeletePost":
+        "Your post will be deleted, and you cannot get it again.",
+    "youWillDeleteComment":
+        "Your comment will be deleted, and you cannot get it again.",
+    "youWillDeleteReply":
+        "Your reply will be deleted, and you cannot get it again.",
     "youWillHideReply": "Your Post will be hide, and you can get it again.",
     "reportPost": "Report Post",
     "editComment": "Edit Comment",
@@ -1158,7 +1196,12 @@ class CodegenLoader extends AssetLoader {
     "suggestedForYou": "Suggested For You",
     "hours": "H",
     "minute": "Min",
-    "tinder": {"header": "Tinder", "favorites": "Favorites", "noData": "No Data Available", "find": "Find"},
+    "tinder": {
+      "header": "Tinder",
+      "favorites": "Favorites",
+      "noData": "No Data Available",
+      "find": "Find"
+    },
     "chat_alert_dialog": {
       "pick_chat_type": "Pick a Chat Type:",
       "anonymous": "Anonymous",
@@ -1192,7 +1235,8 @@ class CodegenLoader extends AssetLoader {
     "enterValidPhoneNumber": "Please enter valid mobile number",
     "seat": "Seat",
     "welcomeToTripjoin": "Welcome To Trip Join",
-    "ownCar": "You own a car!\nSomeone will share trip with you / pay half price",
+    "ownCar":
+        "You own a car!\nSomeone will share trip with you / pay half price",
     "startingPoint": "Starting Point",
     "destinationPoint": "Destination Point",
     "KM": "KM",
@@ -1205,7 +1249,8 @@ class CodegenLoader extends AssetLoader {
     "addressMustBeAtLeast10Chars": "Address must be at least 10 characters",
     "searchFind": "Find",
     "seeAll": "See All",
-    "markAllNotificationAsSeen": "Do you want to mark all notifications as seen?",
+    "markAllNotificationAsSeen":
+        "Do you want to mark all notifications as seen?",
     "requestLog": "Request Log",
     "requestsHistory": "Requests History",
     "subscribe": "Subscribe",
@@ -1229,9 +1274,19 @@ class CodegenLoader extends AssetLoader {
       "upload_fail": "Failed to upload video. Try again."
     },
     "reel_upload_success": {"upload_success": "Reel uploaded successfully!"},
-    "timer": {"recording_stops_in": "Recording stops in ", "seconds": " seconds"},
-    "controls": {"switch_camera": "Switch Camera", "upload_reel": "Upload your Reel"},
-    "reel_voices": {"my_voice": "My Voice", "other_voice": "Other Voice", "mix_voices": "Mix Voices"},
+    "timer": {
+      "recording_stops_in": "Recording stops in ",
+      "seconds": " seconds"
+    },
+    "controls": {
+      "switch_camera": "Switch Camera",
+      "upload_reel": "Upload your Reel"
+    },
+    "reel_voices": {
+      "my_voice": "My Voice",
+      "other_voice": "Other Voice",
+      "mix_voices": "Mix Voices"
+    },
     "comments_header": "Comments",
     "add_comment_hint": "Add a comment...",
     "write_reply_hint": "Write a reply...",
@@ -1253,7 +1308,8 @@ class CodegenLoader extends AssetLoader {
       "sent_successfully": "has been sent successfully!",
       "amount_deducted": "Amount deducted",
       "insufficient_funds": "Insufficient Funds",
-      "insufficient_funds_message": "You do not have enough money in your wallet.",
+      "insufficient_funds_message":
+          "You do not have enough money in your wallet.",
       "error": "Error",
       "unexpected_error": "Unexpected error!",
       "ok": "OK",
@@ -1261,13 +1317,19 @@ class CodegenLoader extends AssetLoader {
       "send_a_gift": "Send a gift",
       "recharge": "Recharge"
     },
-    "report_nudity": "This content contains explicit nudity and is inappropriate for general audiences.",
+    "report_nudity":
+        "This content contains explicit nudity and is inappropriate for general audiences.",
     "report_frequent": "Please investigate the frequency of this user's posts.",
-    "report_fake": "The content in question is deceptive and should be verified for authenticity.",
-    "report_abuse": "The content reported involves abusive language or behavior.",
-    "report_hated": "This report concerns content that promotes hate speech or discrimination.",
-    "report_illegal": "The content reported is suspected of promoting illegal activities.",
-    "report_politics": "Illegal activities are strictly prohibited on our platform.",
+    "report_fake":
+        "The content in question is deceptive and should be verified for authenticity.",
+    "report_abuse":
+        "The content reported involves abusive language or behavior.",
+    "report_hated":
+        "This report concerns content that promotes hate speech or discrimination.",
+    "report_illegal":
+        "The content reported is suspected of promoting illegal activities.",
+    "report_politics":
+        "Illegal activities are strictly prohibited on our platform.",
     "report_category_nudity": "nudity",
     "report_category_frequent": "frequent",
     "report_category_fake": "fake",
@@ -1282,10 +1344,12 @@ class CodegenLoader extends AssetLoader {
     "spotlight_follow": "Follow +",
     "spotlight_following": "Following",
     "add_story": "Add Story",
-    "postSubmitted": "Your post submitted successfully wait for administration approved",
+    "postSubmitted":
+        "Your post submitted successfully wait for administration approved",
     "imageNotSelected": "Image not selected",
     "randomAppearance": "Random Appearance",
-    "messageSuccessfully": "The message has been sent successfully. You will be contacted as soon as possible.",
+    "messageSuccessfully":
+        "The message has been sent successfully. You will be contacted as soon as possible.",
     "phoneOptional": "Phone (Optional)",
     "TeamHelp": "49Hub Team is ready to help",
     "moneySuccessfully": "The money has been sent successfully.",
@@ -1316,8 +1380,12 @@ class CodegenLoader extends AssetLoader {
     "desc": "Description",
     "details": "Details",
     "addImages": "Add Images",
-    "addImagesDesc": "5MB maximum file size accepted in the following formats: jpg, Jpeg, png, gif",
+    "addImagesDesc":
+        "5MB maximum file size accepted in the following formats: jpg, Jpeg, png, gif",
     "noAds": "There are no Ads at the moment."
   };
-  static const Map<String, Map<String, dynamic>> mapLocales = {"ar": ar, "en": en};
+  static const Map<String, Map<String, dynamic>> mapLocales = {
+    "ar": ar,
+    "en": en
+  };
 }

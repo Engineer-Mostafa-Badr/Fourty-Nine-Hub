@@ -6,13 +6,13 @@ import 'package:fourtyninehub/secrets/domain/repositories/secrets_repository_con
 
 import '../data_source/secrets_data_source.dart';
 
-class SecretRepositoryImpl implements SecretsRepository{
+class SecretRepositoryImpl implements SecretsRepository {
   final SecretsDataSource _secretsDataSource;
 
-  SecretRepositoryImpl( SecretsDataSource secretsDataSource) : _secretsDataSource = secretsDataSource;
+  SecretRepositoryImpl(SecretsDataSource secretsDataSource)
+      : _secretsDataSource = secretsDataSource;
 
   @override
-  Future<Either<Failure, Secrets>> getSecrets(NoParams noParams) => _secretsDataSource.getSecrets(noParams);
-
-
+  Future<Either<Failure, Secrets>> getSecrets(NoParams noParams) =>
+      _secretsDataSource.getSecrets(noParams);
 }

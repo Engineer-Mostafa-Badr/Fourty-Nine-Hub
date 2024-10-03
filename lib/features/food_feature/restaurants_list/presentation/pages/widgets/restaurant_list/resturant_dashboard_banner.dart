@@ -18,7 +18,7 @@ class ResturantDashboardButton extends StatelessWidget {
       value: serviceLocator<RestaurantsMealListCubit>()..isRestaurant(),
       child: BlocConsumer<RestaurantsMealListCubit, RestaurantsMealListState>(
         builder: (context, state) {
-          log( state.isResturant.toString()+"aaaaaaaa");
+          log(state.isResturant.toString() + "aaaaaaaa");
           if (state.isResturant!.isRestaurant == true) {
             return DashboardBanner(
               title: '${LocaleKeys.restaurantDashboard.tr()}\n',
@@ -30,7 +30,8 @@ class ResturantDashboardButton extends StatelessWidget {
           } else {
             return SizedBox.shrink();
           }
-        }, listener: (BuildContext context, RestaurantsMealListState state) {  },
+        },
+        listener: (BuildContext context, RestaurantsMealListState state) {},
       ),
     );
   }

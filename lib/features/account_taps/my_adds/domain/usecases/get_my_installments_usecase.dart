@@ -4,7 +4,8 @@ import 'package:fourtyninehub/features/account_taps/my_adds/domain/repositories/
 import '../../../../../../core/abstract/use_case.dart';
 import '../entity/my_ads_auction.dart';
 
-class GetMyInstallmentUseCase extends UseCase<List<MyAuctionAdsEntity>, NoParams> {
+class GetMyInstallmentUseCase
+    extends UseCase<List<MyAuctionAdsEntity>, NoParams> {
   final MyAdsRepo _repo;
   GetMyInstallmentUseCase(this._repo);
 

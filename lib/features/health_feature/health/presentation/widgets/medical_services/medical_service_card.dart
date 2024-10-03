@@ -69,7 +69,8 @@ class HealthMedicalServiceCard extends StatelessWidget {
                                 ? AppColors.QUANTITY_COLOR
                                 : AppColors.PRIMARY_COLOR_DARK,
                             onPressed: () {
-                              print("555555555555555555555555555555555555555555555555${subCategory.id}");
+                              print(
+                                  "555555555555555555555555555555555555555555555555${subCategory.id}");
                               context
                                   .read<HealthCubit>()
                                   .toggleFavoriteMedicalService(subCategory.id);

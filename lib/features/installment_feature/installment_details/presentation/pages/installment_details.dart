@@ -156,8 +156,16 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                         : Colors.white),
                 child: Row(
                   children: [
-                    Expanded(child: Label(text: getLang()=='ar'?detail.value.nameAr:detail.value.nameEn)),
-                    Expanded(child: Label(text: getLang()=='ar'?detail.value.nameAr:detail.value.nameEn)),
+                    Expanded(
+                        child: Label(
+                            text: getLang() == 'ar'
+                                ? detail.value.nameAr
+                                : detail.value.nameEn)),
+                    Expanded(
+                        child: Label(
+                            text: getLang() == 'ar'
+                                ? detail.value.nameAr
+                                : detail.value.nameEn)),
                   ],
                 ),
               );

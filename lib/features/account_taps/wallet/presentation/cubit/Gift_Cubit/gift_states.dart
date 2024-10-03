@@ -16,12 +16,11 @@ class GiftState {
     this.gift,
     this.wheel,
   });
-  GiftState copyWith({
-    GiftStates? status,
-    Failure? failure,
-    GiftEntity? gift,
-    WheelWalletEntity? wheel
-  }) {
+  GiftState copyWith(
+      {GiftStates? status,
+      Failure? failure,
+      GiftEntity? gift,
+      WheelWalletEntity? wheel}) {
     return GiftState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

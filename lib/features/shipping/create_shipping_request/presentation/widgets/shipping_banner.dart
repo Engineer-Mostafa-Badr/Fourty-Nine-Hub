@@ -26,7 +26,8 @@ class ShippingBanner extends StatelessWidget {
         cover: model.mainCategory?.cover ?? UIConst.imagePlaceHolder,
         image: UIConst.imagePlaceHolder,
         total: model.mainCategory?.driverLength ?? 0,
-        isFavorite: false, nameEn: '',
+        isFavorite: false,
+        nameEn: '',
       ),
       onFavorite: () {},
     );

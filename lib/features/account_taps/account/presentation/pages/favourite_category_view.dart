@@ -57,13 +57,12 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
                         ),
                       ),
                     )
-                  :  Center(
+                  : Center(
                       child: Label(
-                        style: Styles.mediumText(fontSize: 60.sp),
+                          style: Styles.mediumText(fontSize: 60.sp),
                           maxLines: 3,
                           textAlign: TextAlign.center,
-                          text:
-                              LocaleKeys.noFavouriteCategory.localize));
+                          text: LocaleKeys.noFavouriteCategory.localize));
         }));
   }
 }

@@ -225,7 +225,8 @@ class MyAdCard extends StatelessWidget {
                   ],
                 ));
           },
-          child:  Icon(Icons.more_vert,color: Theme.of(context).scaffoldBackgroundColor),
+          child: Icon(Icons.more_vert,
+              color: Theme.of(context).scaffoldBackgroundColor),
         )
       ]),
     );

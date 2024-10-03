@@ -1,10 +1,8 @@
-
 import 'package:fourtyninehub/features/settings/domain/entities/disable_entity.dart';
 
 import '../../../../../core/error/failure.dart';
 
-
-enum SettingStates { loading, initial, error,success,success1 }
+enum SettingStates { loading, initial, error, success, success1 }
 
 class SettingState {
   final SettingStates status;
@@ -16,11 +14,8 @@ class SettingState {
     this.failure,
     this.able,
   });
-  SettingState copyWith({
-    SettingStates? status,
-    Failure? failure,
-    DisableEntity? able
-  }) {
+  SettingState copyWith(
+      {SettingStates? status, Failure? failure, DisableEntity? able}) {
     return SettingState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

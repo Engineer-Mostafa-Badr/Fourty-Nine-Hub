@@ -81,12 +81,13 @@ class MealCategoryCard extends StatelessWidget {
                           ? subCategory?.nameAr
                           : subCategory?.nameEn) ??
                       "",
-                  style: TextStyle(fontWeight: FontWeight.bold,fontSize:45.sp),
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 45.sp),
                 ),
                 Label(
                   text:
                       '${subCategory?.numberOfRestaurant ?? "0"} ${LocaleKeys.restaurants.tr()}',
-                  style: TextStyle(fontSize:35.sp),
+                  style: TextStyle(fontSize: 35.sp),
                 ),
               ],
             ),

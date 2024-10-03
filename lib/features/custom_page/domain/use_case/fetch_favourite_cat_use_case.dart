@@ -5,13 +5,13 @@ import 'package:fourtyninehub/features/custom_page/domain/reposiory/custom_page_
 
 import '../entity/favourite_categ_entity.dart';
 
-class FetchFavouriteCatUseCase extends UseCase<FavouriteCatEntity,NoParams>{
+class FetchFavouriteCatUseCase extends UseCase<FavouriteCatEntity, NoParams> {
   final CustomPageRepository _customPageRepository;
 
   FetchFavouriteCatUseCase(this._customPageRepository);
 
   @override
-  Future<Either<Failure, FavouriteCatEntity>> call(NoParams params)async {
+  Future<Either<Failure, FavouriteCatEntity>> call(NoParams params) async {
     return await _customPageRepository.fetchFavouriteCat();
   }
 }

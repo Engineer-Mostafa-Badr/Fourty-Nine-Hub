@@ -5,14 +5,13 @@ import 'package:fourtyninehub/features/settings/domain/repository/setting_reposi
 
 import '../entities/disable_entity.dart';
 
-class DisableAccountUseCase extends UseCase<DisableEntity,NoParams>{
- final SettingRepository _settingRepository;
+class DisableAccountUseCase extends UseCase<DisableEntity, NoParams> {
+  final SettingRepository _settingRepository;
 
- DisableAccountUseCase(this._settingRepository);
+  DisableAccountUseCase(this._settingRepository);
 
   @override
-  Future<Either<Failure, DisableEntity>> call(NoParams params)async {
+  Future<Either<Failure, DisableEntity>> call(NoParams params) async {
     return await _settingRepository.disableAccount();
   }
-
 }

@@ -50,8 +50,9 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
     final response = await _apiConsumer.get(EndPoints.myAds);
     return response.fold(
         (failure) => Left(failure),
-        (data) => Right(
-            (data['data']['ads'] as List).map((e) => AdModel.fromJson(e)).toList()));
+        (data) => Right((data['data']['ads'] as List)
+            .map((e) => AdModel.fromJson(e))
+            .toList()));
   }
 
   @override
@@ -128,11 +129,11 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
   }
 
   @override
-  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments()  async {
+  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments() async {
     final response = await _apiConsumer.get(EndPoints.myAdsInstallment);
     return response.fold(
-            (failure) => Left(failure),
-            (data) => Right((data['data']['ads'] as List)
+        (failure) => Left(failure),
+        (data) => Right((data['data']['ads'] as List)
             .map((e) => MyAuctionAdsModel.fromJson(e))
             .toList()));
   }
@@ -141,7 +142,6 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
   Future<Either<Failure, MyAdsTripJoinEntity>> getMyTripJoin() async {
     final response = await _apiConsumer.get(EndPoints.myAdsTripJoin);
     return response.fold(
-            (failure) => Left(failure),
-            (data) => Right((data['data'])));
-}
+        (failure) => Left(failure), (data) => Right((data['data'])));
+  }
 }

@@ -21,7 +21,7 @@ class WalletCardWidget extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          color:Theme.of(context).primaryColor,
+          color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
@@ -33,27 +33,32 @@ class WalletCardWidget extends StatelessWidget {
                 if (type == WalletTypes.balance)
                   Label(
                     text: LocaleKeys.yourBalance.localize,
-                    style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
+                    style: Styles.mediumText(
+                        color: Theme.of(context).scaffoldBackgroundColor),
                   ),
                 if (type == WalletTypes.giftWallet)
                   Label(
                     text: LocaleKeys.yourGift.localize,
-                    style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
+                    style: Styles.mediumText(
+                        color: Theme.of(context).scaffoldBackgroundColor),
                   ),
                 if (type == WalletTypes.mainWallet)
                   Label(
                     text: LocaleKeys.yourWallet.localize,
-                    style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
+                    style: Styles.mediumText(
+                        color: Theme.of(context).scaffoldBackgroundColor),
                   ),
                 Label(
                   text: balance,
-                  style:
-                      Styles.headerText(color: Theme.of(context).scaffoldBackgroundColor, fontSize: 50.sp),
+                  style: Styles.headerText(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      fontSize: 50.sp),
                 ),
                 Label(
                   text: LocaleKeys.hUB.localize,
                   style: Styles.mediumText(
-                      fontWeight: FontWeight.w300, color: Theme.of(context).scaffoldBackgroundColor),
+                      fontWeight: FontWeight.w300,
+                      color: Theme.of(context).scaffoldBackgroundColor),
                 )
               ],
             ),

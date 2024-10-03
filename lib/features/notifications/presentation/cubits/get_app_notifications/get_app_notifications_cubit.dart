@@ -22,13 +22,15 @@ class GetAppNotificationsCubit extends Cubit<GetAppNotificationsState> {
   Future<void> getAppNotifications({
     required String languageCode,
   }) async {
-    final getUnreadNotificationsCountCubit = context.read<GetUnreadNotificationsCountCubit>();
+    final getUnreadNotificationsCountCubit =
+        context.read<GetUnreadNotificationsCountCubit>();
     getUnreadNotificationsCountCubit.getUnreadNotificationsCount();
     pr('getAppNotifications is called');
     pr('pages: $page');
     pr('notifications: $notifications');
     emit(GetAppNotificationsLoading());
-    final response = await getNotficationsUseCase.call(type: 'app', page: page, languageCode: languageCode);
+    final response = await getNotficationsUseCase.call(
+        type: 'app', page: page, languageCode: languageCode);
     response.fold(
       (Failure failure) {
         emit(GetAppNotificationsFailed(Labels.errorHappened));

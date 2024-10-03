@@ -24,27 +24,27 @@ class MyAuctionSubCategoryModel extends MyAuctionSubCategoryEntity {
       required super.totalOverHead});
 
   factory MyAuctionSubCategoryModel.fromJson(Map<String, dynamic> json) {
-      return MyAuctionSubCategoryModel(
-          id: json['_id']??'',
-          isHidden: json['is_hidden']??false,
-          parent: json['parent'] ??'',
-          dailyPrice: json['daily_price'] ??0,
-          portion: json['portion'] ??0,
-          providerPortion: json['provider_portion'] ??0,
-          paymentFactor: json['payment_factor'] ??0,
-          grossMoney: json['gross_money'] ??0,
-          picture: json['picture']??'',
-          index: json['index'] ??0,
-          createdAt: json['createdAt']??'',
-          updatedAt: json['updatedAt']??'',
-          overHeadFactor: json['over_head_factor'] ??0,
-          hasAuction: json['has_auction']??false,
-          nameAr: json['nameAr'] ??'',
-          nameEn: json['nameEn']??'',
-          nameCode: json['nameCode']??'',
-          enableChatAndCallButton: json['enableChatAndCallButton'] ??'',
-          paymentMethods: json['paymentMethods']??'',
-          totalOverHead: json['total_over_head']??0,
-      );
+    return MyAuctionSubCategoryModel(
+      id: json['_id'] ?? '',
+      isHidden: json['is_hidden'] ?? false,
+      parent: json['parent'] ?? '',
+      dailyPrice: json['daily_price'] ?? 0,
+      portion: json['portion'] ?? 0,
+      providerPortion: json['provider_portion'] ?? 0,
+      paymentFactor: json['payment_factor'] ?? 0,
+      grossMoney: json['gross_money'] ?? 0,
+      picture: json['picture'] ?? '',
+      index: json['index'] ?? 0,
+      createdAt: json['createdAt'] ?? '',
+      updatedAt: json['updatedAt'] ?? '',
+      overHeadFactor: json['over_head_factor'] ?? 0,
+      hasAuction: json['has_auction'] ?? false,
+      nameAr: json['nameAr'] ?? '',
+      nameEn: json['nameEn'] ?? '',
+      nameCode: json['nameCode'] ?? '',
+      enableChatAndCallButton: json['enableChatAndCallButton'] ?? '',
+      paymentMethods: json['paymentMethods'] ?? '',
+      totalOverHead: json['total_over_head'] ?? 0,
+    );
   }
 }

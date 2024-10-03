@@ -17,7 +17,8 @@ class CarPoolGoogleMap extends StatefulWidget {
 }
 
 class _CarPoolGoogleMapState extends State<CarPoolGoogleMap> {
-  final Completer<GoogleMapController> _googleMapController = Completer<GoogleMapController>();
+  final Completer<GoogleMapController> _googleMapController =
+      Completer<GoogleMapController>();
   PolylinePoints polylinePoints = PolylinePoints();
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
@@ -79,7 +80,9 @@ class _CarPoolGoogleMapState extends State<CarPoolGoogleMap> {
           markers = _getMarkers(startingCubit, destinationCubit);
           return GoogleMap(
             mapType: MapType.normal,
-            initialCameraPosition: markers.isEmpty ? _egyptLocation : CameraPosition(target: markers[0].position),
+            initialCameraPosition: markers.isEmpty
+                ? _egyptLocation
+                : CameraPosition(target: markers[0].position),
             onMapCreated: (GoogleMapController controller) {
               _googleMapController.complete(controller);
             },
@@ -101,14 +104,17 @@ class _CarPoolGoogleMapState extends State<CarPoolGoogleMap> {
   }
 
   _fetchPriceAndDistance() {
-    if (startingLocationCubit.startingLocation != null && destinationLocationCubit.destinationLocation != null) {
+    if (startingLocationCubit.startingLocation != null &&
+        destinationLocationCubit.destinationLocation != null) {
       LatLng startLocation = LatLng(
         startingLocationCubit.startingLocation!.coordinates![0]!.toDouble(),
         startingLocationCubit.startingLocation!.coordinates![1]!.toDouble(),
       );
       LatLng destinatonLocation = LatLng(
-        destinationLocationCubit.destinationLocation!.coordinates![0]!.toDouble(),
-        destinationLocationCubit.destinationLocation!.coordinates![1]!.toDouble(),
+        destinationLocationCubit.destinationLocation!.coordinates![0]!
+            .toDouble(),
+        destinationLocationCubit.destinationLocation!.coordinates![1]!
+            .toDouble(),
       );
       // fetchPriceDistanceCubit.fetchPriceDistance(
       //   startLocation: startLocation,
@@ -157,7 +163,8 @@ class _CarPoolGoogleMapState extends State<CarPoolGoogleMap> {
   void _animateToMarkers(var state) {
     double lat = 0;
     double long = 0;
-    if (state is StartingLocationSuccess || state is DestinationLocationSuccess) {
+    if (state is StartingLocationSuccess ||
+        state is DestinationLocationSuccess) {
       lat = state.locationEntity.coordinates?[0]?.toDouble() ?? 0;
       long = state.locationEntity.coordinates?[1]?.toDouble() ?? 0;
     }
@@ -192,8 +199,10 @@ class _CarPoolGoogleMapState extends State<CarPoolGoogleMap> {
         Marker(
           markerId: const MarkerId('destinatonMarker'),
           position: LatLng(
-            destinationCubit.destinationLocation!.coordinates?[0]?.toDouble() ?? 0,
-            destinationCubit.destinationLocation!.coordinates?[1]?.toDouble() ?? 0,
+            destinationCubit.destinationLocation!.coordinates?[0]?.toDouble() ??
+                0,
+            destinationCubit.destinationLocation!.coordinates?[1]?.toDouble() ??
+                0,
           ),
         ),
       );

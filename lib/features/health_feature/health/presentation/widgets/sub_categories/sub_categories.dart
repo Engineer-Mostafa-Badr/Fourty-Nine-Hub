@@ -20,7 +20,8 @@ class HealthSubCategories extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HealthCubit, HealthState>(builder: (context, state) {
       if (state.subCategories != null && state.subCategories!.isNotEmpty) {
-        return Card(elevation: 1,
+        return Card(
+          elevation: 1,
           child: SizedBox(
             height: 250,
             child: Column(

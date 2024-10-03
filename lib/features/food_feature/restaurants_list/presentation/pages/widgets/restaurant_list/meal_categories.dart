@@ -37,8 +37,9 @@ class MealCategories extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => BlocProvider.value(
-                                  value: serviceLocator<RestaurantsMealListCubit>()
-                                    ..getSubCategoryRestaurants(id: id),
+                                  value:
+                                      serviceLocator<RestaurantsMealListCubit>()
+                                        ..getSubCategoryRestaurants(id: id),
                                   child: RestaurantForSelectedMeal(
                                     mealId: id,
                                   ),

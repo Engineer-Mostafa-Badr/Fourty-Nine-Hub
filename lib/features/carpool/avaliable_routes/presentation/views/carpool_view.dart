@@ -21,17 +21,7 @@ class CarPoolView extends StatelessWidget {
             ),
           ),
         ),
-        body: Stack(
-          children: [
-            const SizedBox(width: double.infinity, height: double.infinity),
-            const CarPoolBody(),
-            CarpoolFloatingActionButton(
-              onPressed: () {
-                context.push(Routes.ADD_NEW_ROUTE);
-              },
-            ),
-          ],
-        ),
+        body: const CarPoolBody(),
       ),
     );
   }

@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/l
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/get_price_carpool/get_price_carpool_cubit.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/views/add_new_route_view.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/views/carpool_view.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
@@ -1223,6 +1224,9 @@ class AppPages {
                 ),
                 BlocProvider<DestinationLocationCubit>(
                   create: (context) => DestinationLocationCubit(fetchLocationCordinatesUseCase: serviceLocator()),
+                ),
+                BlocProvider<GetPriceCarpoolCubit>(
+                  create: (context) => GetPriceCarpoolCubit(getPriceCarpoolUsecase: serviceLocator()),
                 ),
               ], child: const AddNewRouteView());
             },

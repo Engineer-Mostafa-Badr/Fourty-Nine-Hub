@@ -20,8 +20,6 @@ import '../../../../../res/style/styles.dart';
 import '../../../../ride/trip_details/domain/entities/trip_request_entity.dart';
 import '../../../../ride/trip_details/presentation/widgets/trip_details.dart';
 
-
-
 class MyAdsTripJoin extends StatelessWidget {
   final TripEntity trip;
   final List<TripRequestEntity>? requests;
@@ -33,13 +31,13 @@ class MyAdsTripJoin extends StatelessWidget {
   final Function(RequestParams)? onRequest;
   const MyAdsTripJoin(
       {super.key,
-        required this.trip,
-        this.requests,
-        this.onAccept,
-        this.onDelete,
-        this.onRequest,
-        this.showDelete = false,
-        this.onReject});
+      required this.trip,
+      this.requests,
+      this.onAccept,
+      this.onDelete,
+      this.onRequest,
+      this.showDelete = false,
+      this.onReject});
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +73,7 @@ class MyAdsTripJoin extends StatelessWidget {
                         showAreYouSure(
                             title: 'Alert!',
                             subTitle:
-                            'Are you sure you want to delete this Ad!',
+                                'Are you sure you want to delete this Ad!',
                             action: () {
                               if (onDelete != null) {
                                 onDelete!(trip.id);
@@ -121,11 +119,11 @@ class MyAdsTripJoin extends StatelessWidget {
                               backgroundColor: Colors.white,
                               radius: 10,
                               backgroundImage:
-                              NetworkImage(offer.profileImage ?? ''),
+                                  NetworkImage(offer.profileImage ?? ''),
                             );
                           },
                           separatorBuilder: (context, index) =>
-                          const SizedBox(),
+                              const SizedBox(),
                           itemCount: trip.offers.length),
                     ),
                   ),

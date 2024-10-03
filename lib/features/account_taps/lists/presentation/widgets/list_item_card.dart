@@ -114,8 +114,7 @@ class ListItemCard extends StatelessWidget {
               context.pop();
             },
             subtitle: Label(
-              text:
-                  '${LocaleKeys.stopSeeing.localize} ${user.firstName}',
+              text: '${LocaleKeys.stopSeeing.localize} ${user.firstName}',
               maxLines: 2,
             ),
           ),

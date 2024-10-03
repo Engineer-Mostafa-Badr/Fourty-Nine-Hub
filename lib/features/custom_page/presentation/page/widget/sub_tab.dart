@@ -34,7 +34,7 @@ class _SubTabState extends State<SubTab> {
 
   void _loadSavedState(SubTabEntity subTabEntity) {
     setState(() {
-     // _selectedItems.clear(); // Clear previous selections
+      // _selectedItems.clear(); // Clear previous selections
 
       // Load the state based on the SubTabEntity values
       if (subTabEntity.tripJoin) {
@@ -133,14 +133,19 @@ class _SubTabState extends State<SubTab> {
               onPressed: () {
                 // Handle the save or update action
                 context.read<CustomPageCubit>().updateSubTab(SubTabParams(
-                  tripJoin: _selectedItems.contains(_items.indexOf('Trip Join')),
-                  carpool: _selectedItems.contains(_items.indexOf('Carpool')),
-                  auction: _selectedItems.contains(_items.indexOf('Auction')),
-                  installment: _selectedItems.contains(_items.indexOf('Installments')),
-                  chance: _selectedItems.contains(_items.indexOf('Chance')),
-                ));
+                      tripJoin:
+                          _selectedItems.contains(_items.indexOf('Trip Join')),
+                      carpool:
+                          _selectedItems.contains(_items.indexOf('Carpool')),
+                      auction:
+                          _selectedItems.contains(_items.indexOf('Auction')),
+                      installment: _selectedItems
+                          .contains(_items.indexOf('Installments')),
+                      chance: _selectedItems.contains(_items.indexOf('Chance')),
+                    ));
               },
-              child: Icon(Icons.check, color: Theme.of(context).scaffoldBackgroundColor),
+              child: Icon(Icons.check,
+                  color: Theme.of(context).scaffoldBackgroundColor),
             );
           },
         ),
@@ -148,11 +153,6 @@ class _SubTabState extends State<SubTab> {
     );
   }
 }
-
-
-
-
-
 
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';

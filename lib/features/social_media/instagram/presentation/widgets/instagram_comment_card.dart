@@ -222,8 +222,7 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
             listTile(
                 icon: Icons.delete,
                 title: LocaleKeys.deleteComment.localize,
-                subTitle:
-                LocaleKeys.youWillDeleteComment.localize,
+                subTitle: LocaleKeys.youWillDeleteComment.localize,
                 onTap: () {
                   widget.onDeleteComment(widget.comment.id);
                 }),

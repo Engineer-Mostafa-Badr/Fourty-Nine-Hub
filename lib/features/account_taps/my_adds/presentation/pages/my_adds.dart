@@ -89,7 +89,7 @@ class _MyAddsViewState extends State<MyAddsView>
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
                     child: TabBar(
-                     // padding: EdgeInsets.zero,
+                      // padding: EdgeInsets.zero,
                       // labelPadding:
                       //     EdgeInsetsDirectional.symmetric(horizontal: 20.w),
                       tabAlignment: TabAlignment.start,
@@ -111,7 +111,7 @@ class _MyAddsViewState extends State<MyAddsView>
                       },
                       isScrollable: true,
 
-                      tabs:  [
+                      tabs: [
                         Tab(text: LocaleKeys.auction.localize),
                         Tab(text: LocaleKeys.installments.localize),
                         Tab(text: LocaleKeys.tripJoin.localize),
@@ -143,26 +143,26 @@ class _MyAddsViewState extends State<MyAddsView>
 
   Widget _buildMyInstallmentsWidget() {
     return BlocProvider<MyAddsCubit>(
-      create: (BuildContext context) =>serviceLocator()..getMyInstallment(),
+      create: (BuildContext context) => serviceLocator()..getMyInstallment(),
       child: BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
         final controller = context.read<MyAddsCubit>();
         context.read<MyAddsCubit>();
-        if (state.status ==MyAddsStates.loading) {
+        if (state.status == MyAddsStates.loading) {
           return const Center(child: CircularProgressIndicator());
         }
-        if(state.status ==MyAddsStates.initState) {
+        if (state.status == MyAddsStates.initState) {
           return ListView.separated(
-            itemCount: state.myInstallments?.length ?? 0,
-            separatorBuilder: (context, index) => const Sizer(),
-            itemBuilder: (context, index) {
-              return BuildItemAuctionCard(
-                item: state.myInstallments![index],
-                onDelete: (String id) => controller.cancelAd(id: id),
-              );
-            });
-        }else if (state.myInstallments!.isEmpty) {
+              itemCount: state.myInstallments?.length ?? 0,
+              separatorBuilder: (context, index) => const Sizer(),
+              itemBuilder: (context, index) {
+                return BuildItemAuctionCard(
+                  item: state.myInstallments![index],
+                  onDelete: (String id) => controller.cancelAd(id: id),
+                );
+              });
+        } else if (state.myInstallments!.isEmpty) {
           return const EmptyPage();
-        }else{
+        } else {
           return const Center(child: CircularProgressIndicator());
         }
       }),
@@ -171,27 +171,26 @@ class _MyAddsViewState extends State<MyAddsView>
 
   Widget _buildMyAuctionsWidget() {
     return BlocProvider<MyAddsCubit>(
-      create: (BuildContext context) =>serviceLocator()..getMyAuctions(),
+      create: (BuildContext context) => serviceLocator()..getMyAuctions(),
       child: BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
         final controller = context.read<MyAddsCubit>();
         context.read<MyAddsCubit>();
-        if (state.status ==MyAddsStates.loading) {
+        if (state.status == MyAddsStates.loading) {
           return const Center(child: CircularProgressIndicator());
         }
-       if(state.status ==MyAddsStates.initState) {
+        if (state.status == MyAddsStates.initState) {
           return ListView.separated(
-             itemCount: state.myAuctions?.length ?? 0,
-            separatorBuilder: (context, index) => const Sizer(),
-            itemBuilder: (context, index) {
-              return BuildItemAuctionCard(
-                item: state.myAuctions![index],
-                onDelete: (String id) => controller.cancelAd(id: id),
-              );
-            });
-       }
-        else if (state.myAuctions?.isEmpty ?? true) {
-            return const EmptyPage();
-          }else{
+              itemCount: state.myAuctions?.length ?? 0,
+              separatorBuilder: (context, index) => const Sizer(),
+              itemBuilder: (context, index) {
+                return BuildItemAuctionCard(
+                  item: state.myAuctions![index],
+                  onDelete: (String id) => controller.cancelAd(id: id),
+                );
+              });
+        } else if (state.myAuctions?.isEmpty ?? true) {
+          return const EmptyPage();
+        } else {
           return const Center(child: CircularProgressIndicator());
         }
       }),

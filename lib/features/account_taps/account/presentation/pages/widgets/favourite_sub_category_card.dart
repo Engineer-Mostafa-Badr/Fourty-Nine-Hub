@@ -33,7 +33,7 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: AdsViewParams(mainCategory: mainCategory, subCategory: item)),
       child: Container(
-        margin:  EdgeInsets.all(10.w),
+        margin: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(10.r),
@@ -78,11 +78,14 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Label(
-                          text:context.locale == Locales.english? widget.item.nameEn:widget.item.nameAr,
+                          text: context.locale == Locales.english
+                              ? widget.item.nameEn
+                              : widget.item.nameAr,
                           style: Styles.mediumText(fontWeight: FontWeight.bold),
                         ),
                         Label(
-                          text: '${widget.item.numOfAds} ${LocaleKeys.ad.localize}',
+                          text:
+                              '${widget.item.numOfAds} ${LocaleKeys.ad.localize}',
                           style: Styles.smallText(fontSize: 40.sp),
                         )
                       ],

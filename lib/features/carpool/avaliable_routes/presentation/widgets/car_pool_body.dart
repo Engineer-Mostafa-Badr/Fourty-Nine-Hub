@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/available_routed_builder.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/car_pool_floating_action_button.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class CarPoolBody extends StatefulWidget {
   const CarPoolBody({super.key});
@@ -40,17 +43,27 @@ class _CarPoolBodyState extends State<CarPoolBody> {
                 ],
               ),
             ),
-            const Expanded(
+            Expanded(
               child: TabBarView(
                 children: [
-                  AvailableRoutesBuilder(),
-                  Center(
+                  Stack(
+                    children: [
+                      const SizedBox(width: double.infinity, height: double.infinity),
+                      const AvailableRoutesBuilder(),
+                      CarpoolFloatingActionButton(
+                        onPressed: () {
+                          context.push(Routes.ADD_NEW_ROUTE);
+                        },
+                      ),
+                    ],
+                  ),
+                  const Center(
                     child: Text('My Bookings'),
                   ),
-                  Center(
+                  const Center(
                     child: Text('Running Trips'),
                   ),
-                  Center(
+                  const Center(
                     child: Text('Expired Trips'),
                   ),
                 ],

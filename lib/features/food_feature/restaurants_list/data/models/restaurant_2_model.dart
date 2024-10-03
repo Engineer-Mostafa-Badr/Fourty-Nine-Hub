@@ -52,10 +52,10 @@ part 'restaurant_2_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Restaurant2Model extends Restaurant {
-   const Restaurant2Model({
+  const Restaurant2Model({
     super.id,
     super.name,
-     super.subscriptionType,
+    super.subscriptionType,
     // super.address,
     // super.countryCode,
     // super.datumId,
@@ -72,7 +72,7 @@ class Restaurant2Model extends Restaurant {
     super.totalRating,
     // super.workFrom,
     // super.workTo,
-     super.description, // New field added in the constructor
+    super.description, // New field added in the constructor
   });
 
   factory Restaurant2Model.fromJson(Map<String, dynamic> json) =>

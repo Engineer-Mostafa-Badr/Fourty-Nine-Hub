@@ -9,25 +9,24 @@ import '../features/account_taps/privacy/domain/useCase/update_privacy_use_case.
 
 class PrivacyServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
-    serviceLocator.registerLazySingleton<PrivacyDataSource>(
-            () => PrivacyDataSourceImpl(
-          serviceLocator(),
-        ));
+    serviceLocator
+        .registerLazySingleton<PrivacyDataSource>(() => PrivacyDataSourceImpl(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<PrivacyRepository>(
-            () => PrivacyRepositoryImpl(serviceLocator()));
+        () => PrivacyRepositoryImpl(serviceLocator()));
 
     serviceLocator
         .registerLazySingleton<FetchPrivacyUseCase>(() => FetchPrivacyUseCase(
-      serviceLocator(),
-    ));
+              serviceLocator(),
+            ));
     serviceLocator
         .registerLazySingleton<UpdatePrivacyUseCase>(() => UpdatePrivacyUseCase(
-      serviceLocator(),
-    ));
+              serviceLocator(),
+            ));
 
-    serviceLocator.registerFactory<PrivacyCubit>(
-            () => PrivacyCubit(
+    serviceLocator.registerFactory<PrivacyCubit>(() => PrivacyCubit(
           serviceLocator(),
           serviceLocator(),
         )..loadData());

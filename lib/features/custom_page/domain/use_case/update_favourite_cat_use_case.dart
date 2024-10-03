@@ -48,8 +48,7 @@ class FavouriteCatParams {
   final bool wholesaleTrade;
 
   FavouriteCatParams(
-      {
-      required this.animals,
+      {required this.animals,
       required this.cars,
       required this.collectiblesGifts,
       required this.computersCameras,

@@ -27,31 +27,31 @@ class MyAuctionAdsModel extends MyAuctionAdsEntity {
       required super.images,
       required super.subscriptionStatus});
 
-factory MyAuctionAdsModel.fromJson(Map<String, dynamic> json) {
-  return MyAuctionAdsModel(
-    id: json['_id'] ??'',
-    title: json['title'] ??'',
-    desc: json['desc'] ??'',
-      price: json['price'] ??0,
-    isActive: json['isActive'] ??false,
-    isFavourite: json['isFavorite'] ??false,
-    phone: json['phone'] ??'',
-    adminIgnore: json['adminIgnore'] ??false,
-    userId: json['user_id'] ??'',
-    isApproved: json['is_approved'] ??false,
-    subCategory: MyAuctionSubCategoryModel.fromJson(json['subCategoryId']),
-    mainCategory: MyAuctionMainCategoryModel.fromJson(json['mainCategoryId']),
-    isPremium: json['isPremium'] ??false,
-    createdAt: DateTime.parse(json['createdAt']),
-    user: UserAuctionModel.fromJson(json['user']),
-    subscriptions: (json['subscription'] as List)
-        .map((e) => SubscriptionAdsAuctionModel.fromJson(e))
-        .toList(),
-    images: (json['images'] as List)
-        .map((e) => MyAuctionImageModel.fromJson(e))
-        .toList(),
-    subscriptionStatus: json['subscriptionStatus'],
-  //  images: List<String>.from(json['images'] ?? []),
-  );
-}
+  factory MyAuctionAdsModel.fromJson(Map<String, dynamic> json) {
+    return MyAuctionAdsModel(
+      id: json['_id'] ?? '',
+      title: json['title'] ?? '',
+      desc: json['desc'] ?? '',
+      price: json['price'] ?? 0,
+      isActive: json['isActive'] ?? false,
+      isFavourite: json['isFavorite'] ?? false,
+      phone: json['phone'] ?? '',
+      adminIgnore: json['adminIgnore'] ?? false,
+      userId: json['user_id'] ?? '',
+      isApproved: json['is_approved'] ?? false,
+      subCategory: MyAuctionSubCategoryModel.fromJson(json['subCategoryId']),
+      mainCategory: MyAuctionMainCategoryModel.fromJson(json['mainCategoryId']),
+      isPremium: json['isPremium'] ?? false,
+      createdAt: DateTime.parse(json['createdAt']),
+      user: UserAuctionModel.fromJson(json['user']),
+      subscriptions: (json['subscription'] as List)
+          .map((e) => SubscriptionAdsAuctionModel.fromJson(e))
+          .toList(),
+      images: (json['images'] as List)
+          .map((e) => MyAuctionImageModel.fromJson(e))
+          .toList(),
+      subscriptionStatus: json['subscriptionStatus'],
+      //  images: List<String>.from(json['images'] ?? []),
+    );
+  }
 }

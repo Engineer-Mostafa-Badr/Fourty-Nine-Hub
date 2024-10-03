@@ -121,7 +121,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                               isFavorite: false,
                                               name: e.subCategoryNameEn!),
                                         )
-                                        .toList(), nameEn: ''),
+                                        .toList(),
+                                    nameEn: ''),
                               ),
                               if (field.hasError)
                                 Column(

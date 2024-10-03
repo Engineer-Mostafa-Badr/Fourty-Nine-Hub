@@ -48,7 +48,9 @@ class MyAddsCubit extends Cubit<MyAddsState> {
       this._rejectComeWithMeUseCase,
       this._cancelAdUseCase,
       this._getMyAuctionsUseCase,
-      this._rejectPickMeUseCase, this._getMyInstallmentUseCase, this._getMyTripJoinUseCase)
+      this._rejectPickMeUseCase,
+      this._getMyInstallmentUseCase,
+      this._getMyTripJoinUseCase)
       : super(const MyAddsState());
 
   void loadData() async {
@@ -67,7 +69,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
   }
 
   Future<void> getMyAuctions() async {
-    emit(state.copyWith( status: MyAddsStates.loading));
+    emit(state.copyWith(status: MyAddsStates.loading));
     final response = await _getMyAuctionsUseCase(const NoParams());
     response.fold(
         (failure) =>
@@ -77,22 +79,23 @@ class MyAddsCubit extends Cubit<MyAddsState> {
   }
 
   Future<void> getMyInstallment() async {
-    emit(state.copyWith( status: MyAddsStates.loading));
+    emit(state.copyWith(status: MyAddsStates.loading));
     final response = await _getMyInstallmentUseCase(const NoParams());
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-            (r) => emit(
+        (r) => emit(
             state.copyWith(myInstallments: r, status: MyAddsStates.initState)));
   }
+
   Future<void> getMyTripJoin() async {
-    emit(state.copyWith( status: MyAddsStates.loading));
+    emit(state.copyWith(status: MyAddsStates.loading));
     final response = await _getMyTripJoinUseCase(const NoParams());
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-            (r) => emit(
-            state.copyWith(tripJoin: r, status: MyAddsStates.initState)));
+        (r) =>
+            emit(state.copyWith(tripJoin: r, status: MyAddsStates.initState)));
   }
 
   Future<void> getPickMeTrips() async {
