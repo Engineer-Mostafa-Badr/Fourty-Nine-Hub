@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -117,12 +118,18 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         oneTimeView: false));
     result.fold(
         (l) => emit(state.copyWith(failure: l, status: ChatRoomStates.error)),
-        (r) {
+        (r) async {
       cancelReplay();
       messageTextController.text = '';
       media.clear();
       selectedContactsToShare.clear();
       sharedContacts.clear();
+// Play notification sound
+          log("before playing");
+          final player = AudioPlayer(); // Initialize the player
+          await player.play(AssetSource('49 Notification 01.mp3')); // Play the asset
+          log("playing");
+
     });
   }
 

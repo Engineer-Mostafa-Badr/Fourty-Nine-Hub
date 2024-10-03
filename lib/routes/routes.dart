@@ -41,6 +41,7 @@ abstract class Routes {
   static const AUDIOSTREAMSCREEN = '/Social/ClubHouse/ClubHouseRoom';
   static const CHAT = '/Chat';
   static const CHATROOM = '/ChatRoom';
+  static const ARCHIVEDCHATS = '/ArchivedChatsView';
   static const CHATROOMCAMERAPICKER = '/ChatRoom/CameraPicker';
   static const MEDIASLIDER = '/ChatRoom/MediaSlider';
   static const VIEWCONTACT = '/ChatRoom/ViewContact';
@@ -165,6 +166,7 @@ abstract class Paths {
   static const SUBCATEGORIES = 'Subcategories';
   static const ADS = 'ADS';
   static const ADdetails = 'AD-Details';
+  static const ARCHIVEDCHATS = 'ArchivedChatsView';
   static const CREATEAD = 'CreateAd';
   static const CREATECOMPANYAD = 'CreateCompanyAd';
   static const LUCKYWHEEL = 'LuckyWheel';

@@ -11,7 +11,6 @@ environment:
 dependencies:
   advance_pdf_viewer2: ^2.0.5+1
   audio_video_progress_bar: ^1.0.0
-  audioplayers: ^6.1.0
   cached_network_image: ^3.3.1
   camera: ^0.11.0+2
   card_swiper: ^3.0.1
@@ -86,6 +85,7 @@ dependencies:
   swipe_to: ^1.0.6
   top_snackbar_flutter: ^3.1.0
   transparent_image: ^2.0.1
+  audioplayers: ^6.1.0
   uni_links: ^0.5.1
   url_launcher: 6.2.6
   video_player: ^2.9.1
@@ -140,6 +140,7 @@ flutter:
     - assets/lottie/
     - assets/filters/
     - assets/audio/
+    - assets/49 Notification 01.mp3
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
