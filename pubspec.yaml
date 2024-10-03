@@ -69,7 +69,6 @@ dependencies:
   just_audio: null
   lottie: ^3.1.2
   marquee_text: ^2.5.0+1
-  native_device_orientation: ^2.0.3
   path_provider: ^2.0.11
   permission_handler: ^11.3.1
   pin_code_fields: ^8.0.1
@@ -95,20 +94,15 @@ dependencies:
   webview_flutter: ^4.8.0
   # zego_uikit_prebuilt_live_audio_room: ^3.7.5
   zego_uikit_signaling_plugin: ^2.8.2
-  image_filter_pro: ^0.1.11
   path: 1.9.0
   open_file: ^3.5.4
   html: ^0.15.0
   voice_message_package: ^2.2.1
-  
-  
 
   #for loading
   # skeletons: ^0.0.3
   web_socket_channel: ^2.4.5
-  webview_flutter: ^4.8.0
   zego_express_engine: ^3.16.2
-  statemachine: ^3.3.1
   native_device_orientation: ^2.0.3
 #  win32: ^5.5.4
 dependency_overrides:
