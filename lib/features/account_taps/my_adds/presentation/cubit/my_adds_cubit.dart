@@ -8,7 +8,6 @@ import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/reje
 
 import '../../../../../core/error/failure.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
-
 import '../../../../ride/trip_details/domain/entities/trip_and_request_entity.dart';
 import '../../domain/entity/get_all_counts_trip_join_entity.dart';
 import '../../domain/entity/my_ads_auction.dart';
@@ -62,7 +61,9 @@ class MyAddsCubit extends Cubit<MyAddsState> {
       this._getMyInstallmentUseCase,
       this._getMyTripJoinUseCase,
       this._deleteMyTripJoinUseCase,
-      this._deleteMyInstallmentUseCase, this._getMyOtherAdsUseCase, this._allCountsUseCase)
+      this._deleteMyInstallmentUseCase,
+      this._getMyOtherAdsUseCase,
+      this._allCountsUseCase)
       : super(const MyAddsState());
 
   void loadData() async {
@@ -74,57 +75,43 @@ class MyAddsCubit extends Cubit<MyAddsState> {
 
   Future<void> getMyAds() async {
     final response = await _getMyAdsUseCase.call(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+    response.fold((failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
         (r) => emit(state.copyWith(myAds: r, status: MyAddsStates.initState)));
   }
 
   Future<void> getMyAuctions() async {
     emit(state.copyWith(status: MyAddsStates.loading));
     final response = await _getMyAuctionsUseCase(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) => emit(
-            state.copyWith(myAuctions: r, status: MyAddsStates.initState)));
+    response.fold((failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+        (r) => emit(state.copyWith(myAuctions: r, status: MyAddsStates.initState)));
   }
 
   Future<void> getMyInstallment() async {
     emit(state.copyWith(status: MyAddsStates.loading));
     final response = await _getMyInstallmentUseCase(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) => emit(
-            state.copyWith(myInstallments: r, status: MyAddsStates.initState)));
+    response.fold((failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+        (r) => emit(state.copyWith(myInstallments: r, status: MyAddsStates.initState)));
   }
+
   Future<void> getMyOtherAds() async {
     emit(state.copyWith(status: MyAddsStates.loading));
     final response = await _getMyOtherAdsUseCase(const NoParams());
-    response.fold(
-            (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-            (r) => emit(
-            state.copyWith(myOtherAds: r, status: MyAddsStates.initState)));
+    response.fold((failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+        (r) => emit(state.copyWith(myOtherAds: r, status: MyAddsStates.initState)));
   }
 
   Future<void> getMyTripJoin() async {
     emit(state.copyWith(status: MyAddsStates.loading));
     final response = await _getMyTripJoinUseCase(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) =>
-            emit(state.copyWith(tripJoin: r, status: MyAddsStates.initState)));
+    response.fold((failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+        (r) => emit(state.copyWith(tripJoin: r, status: MyAddsStates.initState)));
   }
 
   Future<void> deleteMyTripJoin({required String id}) async {
     emit(state.copyWith(status: MyAddsStates.loading));
     final response = await _deleteMyTripJoinUseCase(id);
     response.fold(
-      (failure) =>
-          emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+      (failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
       (r) {
         emit(
           state.copyWith(status: MyAddsStates.success),
@@ -138,8 +125,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
     emit(state.copyWith(status: MyAddsStates.loading));
     final response = await _deleteMyInstallmentUseCase(id);
     response.fold(
-      (failure) =>
-          emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+      (failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
       (r) {
         emit(
           state.copyWith(status: MyAddsStates.success),
@@ -151,58 +137,40 @@ class MyAddsCubit extends Cubit<MyAddsState> {
 
   Future<void> getPickMeTrips() async {
     final response = await _getMyPickMeAdsUseCase(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) => emit(
-            state.copyWith(pickMeTrips: r, status: MyAddsStates.initState)));
+    response.fold((failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+        (r) => emit(state.copyWith(pickMeTrips: r, status: MyAddsStates.initState)));
   }
 
   Future<void> getComeWithMeTrips() async {
     final response = await _getMyComeWithMeUseCase(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) => emit(state.copyWith(
-            comeWithMeTrips: r, status: MyAddsStates.initState)));
+    response.fold((failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+        (r) => emit(state.copyWith(comeWithMeTrips: r, status: MyAddsStates.initState)));
   }
 
   void cancelAd({required String id}) async {
     final response = await _cancelAdUseCase(id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) {
+    response.fold((failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)), (r) {
       getMyAds();
     });
   }
 
   void rejectPickMeRequest({required String id}) async {
     final response = await _rejectPickMeUseCase(id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) {
+    response.fold((failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)), (r) {
       getPickMeTrips();
     });
   }
 
   void rejectComeWithMeRequest({required String id}) async {
     final response = await _rejectComeWithMeUseCase(id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) {
+    response.fold((failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)), (r) {
       getComeWithMeTrips();
     });
   }
 
   void acceptComeWithMeRequest({required String id}) async {
     final response = await _acceptComeWithMeUseCase(id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) {
+    response.fold((failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)), (r) {
       getComeWithMeTrips();
     });
   }
@@ -211,10 +179,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
     required String id,
   }) async {
     final response = await _acceptPickMeUseCase(id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) {
+    response.fold((failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)), (r) {
       getPickMeTrips();
     });
   }
@@ -225,32 +190,23 @@ class MyAddsCubit extends Cubit<MyAddsState> {
     required String id,
   }) async {
     final response = await _deletePickMeUseCase(id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) {
+    response.fold((failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)), (r) {
       getPickMeTrips();
     });
   }
 
   void deleteComeWithMe({required String id}) async {
     final response = await _deleteComeWithMeUseCase(id);
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-        (r) {
+    response.fold((failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)), (r) {
       getComeWithMeTrips();
     });
   }
 
   Future<void> getAllCount({
     required Params params,
-}) async {
+  }) async {
     final response = await _allCountsUseCase(params);
-    response.fold(
-            (failure) =>
-            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-            (r) => emit(state.copyWith(
-            allCounts: r, status: MyAddsStates.initState)));
+    response.fold((failure) => emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+        (r) => emit(state.copyWith(allCounts: r, status: MyAddsStates.initState)));
   }
 }

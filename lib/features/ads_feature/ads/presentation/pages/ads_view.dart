@@ -39,17 +39,21 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
     _tabController = TabController(length: 2, vsync: this);
     context.read<AdvertisementCubit>().loadData(
         subCategoryId: widget.params.subCategory.id,
-        filter: widget.params.subCategory.hasAuction == true ? 'sale' : 'provider');
+        filter:
+            widget.params.subCategory.hasAuction == true ? 'sale' : 'provider');
 
     _tabController.addListener(() {
       if (_tabController.index == 0) {
         context.read<AdvertisementCubit>().loadData(
             subCategoryId: widget.params.subCategory.id,
-            filter: widget.params.subCategory.hasAuction == true ? 'sale' : 'provider');
+            filter: widget.params.subCategory.hasAuction == true
+                ? 'sale'
+                : 'provider');
       } else {
         context.read<AdvertisementCubit>().loadData(
             subCategoryId: widget.params.subCategory.id,
-            filter: widget.params.subCategory.hasAuction == true ? 'rent' : 'user');
+            filter:
+                widget.params.subCategory.hasAuction == true ? 'rent' : 'user');
       }
     });
   }
@@ -64,7 +68,8 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const HomeAppbar(),
-      body: BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
+      body:
+          BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
         final controller = context.read<AdvertisementCubit>();
         return Column(
           children: [
@@ -93,11 +98,15 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                 if (i == 1) {
                   controller.loadData(
                       subCategoryId: widget.params.subCategory.id,
-                      filter: widget.params.subCategory.hasAuction == true ? 'rent' : 'user');
+                      filter: widget.params.subCategory.hasAuction == true
+                          ? 'rent'
+                          : 'user');
                 } else {
                   controller.loadData(
                       subCategoryId: widget.params.subCategory.id,
-                      filter: widget.params.subCategory.hasAuction == true ? 'sale' : 'provider');
+                      filter: widget.params.subCategory.hasAuction == true
+                          ? 'sale'
+                          : 'provider');
                 }
               },
               tabs: [
@@ -117,7 +126,8 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                     pagingController: controller.adsPagingController,
                     builderDelegate: PagedChildBuilderDelegate<AdModel>(
                         noItemsFoundIndicatorBuilder: (context) {
-                          print(controller.adsPagingController.itemList?.length);
+                          print(
+                              controller.adsPagingController.itemList?.length);
                           return Center(
                             child: Text(
                               LocaleKeys.noAds.localize,
@@ -129,7 +139,9 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                           );
                         },
                         itemBuilder: (context, item, index) {
-                          return CategoriesExtension.fromNameEn(widget.params.mainCategory.nameEn ?? '').view(
+                          return CategoriesExtension.fromNameEn(
+                                  widget.params.mainCategory.nameEn ?? '')
+                              .view(
                             item: item,
                             onFav: (String id) async {
                               var result = await controller.favouriteAd(id);
@@ -142,9 +154,12 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                           );
                         },
                         noMoreItemsIndicatorBuilder: (context) => Container(),
-                        firstPageProgressIndicatorBuilder: (context) => Container(
-                            margin: const EdgeInsets.only(top: 150), child: const CupertinoActivityIndicator()),
-                        newPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator()),
+                        firstPageProgressIndicatorBuilder: (context) =>
+                            Container(
+                                margin: const EdgeInsets.only(top: 150),
+                                child: const CupertinoActivityIndicator()),
+                        newPageProgressIndicatorBuilder: (context) =>
+                            const CupertinoActivityIndicator()),
                   ))
                 : const SizedBox.shrink()
           ],
@@ -196,7 +211,10 @@ enum Categories {
 }
 
 extension CategoriesExtension on Categories {
-  Widget view({required AdEntity item, required Function(String) onFav, required Function(String) onRemoveFav}) {
+  Widget view(
+      {required AdEntity item,
+      required Function(String) onFav,
+      required Function(String) onRemoveFav}) {
     switch (this) {
       case Categories.craft:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);

@@ -31,12 +31,15 @@ class NotificationRepoImpl implements NotificationRepo {
   }
 
   @override
-  Future<void> notificationListener({required Function(Map<String, dynamic> data) notificationCallback}) {
-    return notificationRemoteDataSource.notificationListener(notificationCallback: notificationCallback);
+  Future<void> notificationListener(
+      {required Function(Map<String, dynamic> data) notificationCallback}) {
+    return notificationRemoteDataSource.notificationListener(
+        notificationCallback: notificationCallback);
   }
 
   @override
-  Future<Either<Failure, UnreadNotificationsCountEntity>> getUnreadNotificationsCount() {
+  Future<Either<Failure, UnreadNotificationsCountEntity>>
+      getUnreadNotificationsCount() {
     return notificationRemoteDataSource.getUnreadNotificationsCount();
   }
 

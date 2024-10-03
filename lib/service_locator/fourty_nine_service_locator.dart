@@ -270,7 +270,7 @@ class FourtyNineServiceLocator {
       ),
     );
     serviceLocator.registerLazySingleton<GetMyTripJoinUseCase>(
-          () => GetMyTripJoinUseCase(
+      () => GetMyTripJoinUseCase(
         serviceLocator(),
       ),
     );
@@ -290,7 +290,7 @@ class FourtyNineServiceLocator {
       ),
     );
     serviceLocator.registerLazySingleton<GetMyInstallmentUseCase>(
-          () => GetMyInstallmentUseCase(
+      () => GetMyInstallmentUseCase(
         serviceLocator(),
       ),
     );

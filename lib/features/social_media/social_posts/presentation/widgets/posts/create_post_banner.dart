@@ -62,19 +62,19 @@ class CreatePostBanner extends StatelessWidget {
             width: 10,
           ),
           InkWell(
-            onTap: () => context.push(Routes.REELS),
+            onTap: () => context.push(Routes.ZOOM),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgPicture.asset(
-                  Assets.reels,
-                  height: 20.h,
+                  Assets.zoomMeeting,
+                  height: 40.h,
                 ),
                 Sizer(
                   height: 3.h,
                 ),
                 Label(
-                  text: LocaleKeys.reels.localize,
+                  text: 'zoom',
                   style: Styles.smallText(),
                 ),
               ],

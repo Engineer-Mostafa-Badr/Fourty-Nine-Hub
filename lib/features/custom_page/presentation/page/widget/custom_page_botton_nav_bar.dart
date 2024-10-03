@@ -13,7 +13,8 @@ import '../../../../../res/assets/assets.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 
-class CustomPageBottonNavBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomPageBottonNavBar extends StatelessWidget
+    implements PreferredSizeWidget {
   final int currentIndex;
   final ScrollController scrollController;
   final bool isScrollingDown;
@@ -21,13 +22,14 @@ class CustomPageBottonNavBar extends StatelessWidget implements PreferredSizeWid
   const CustomPageBottonNavBar({
     super.key,
     required this.currentIndex,
-    required this.scrollController, required this.isScrollingDown,
+    required this.scrollController,
+    required this.isScrollingDown,
   });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CustomPageCubit>(
-      create: (BuildContext context) =>serviceLocator()..fetchNavigateBar(),
+      create: (BuildContext context) => serviceLocator()..fetchNavigateBar(),
       child: BlocBuilder<CustomPageCubit, CustomPageState>(
         builder: (context, state) {
           // Check if navigateBar data is available
@@ -39,91 +41,102 @@ class CustomPageBottonNavBar extends StatelessWidget implements PreferredSizeWid
 
           // Build the visible items based on the navigateBar properties
           List<BottomItemModel> visibleItems = [
-            if (navigateBar.meal)  BottomItemModel(
-              icon: FontAwesomeIcons.bowlFood,
-              label: 'meal',
-              // Translated text
-              image: Assets.food,
-              route: Routes.FOOD,
-            ),
-            if (navigateBar.health) BottomItemModel(
-              icon: FontAwesomeIcons.kitMedical,
-              label: 'health',
-              // Translated text
-              image: Assets.health,
-              route: Routes.VISITA,
-            ),
-            if (navigateBar.loading)  BottomItemModel(
-              icon: Icons.delivery_dining,
-              label: 'ship',
-              // Using generated key for translation
-              image: Assets.shipping,
-              route: Routes.SHIPPING,
-            ),
-            if (navigateBar.ride) BottomItemModel(
-              icon: FontAwesomeIcons.car,
-              label: 'ride',
-              // Using generated key for translation
-              image: Assets.ride,
-              route: Routes.RIDE,
-            ),
-
-            if (navigateBar.tweet) BottomItemModel(
-              icon: FontAwesomeIcons.twitter,
-              label: 'tweet',
-              // Translated text
-              image: Assets.twitter,
-              route: Routes.TWITTER,
-            ),
-            if (navigateBar.reel) BottomItemModel(
-              icon: FontAwesomeIcons.list,
-              label: 'reels',
-              // Translated text
-              image: Assets.reels,
-              route: Routes.REELS,
-            ),
-            if (navigateBar.chat)  BottomItemModel(
-              icon: Icons.chat,
-              label: 'chat',
-              // Translated text
-              image: Assets.message,
-              route: Routes.CHAT,
-            ),
-            if (navigateBar.find)  BottomItemModel(
-              icon: FontAwesomeIcons.car,
-              label: 'find',
-              // Translated text
-              image: Assets.social,
-              route: Routes.Tinder,
-            ),
-            if (navigateBar.snap)  BottomItemModel(
-              icon: FontAwesomeIcons.microphone,
-              label: 'snap',
-              // Translated text
-              image: Assets.cameraIcon,
-              route: Routes.SNAP,
-            ),
-            if (navigateBar.live)   BottomItemModel(
-              icon: FontAwesomeIcons.stream,
-              label: 'live',
-              // Translated text
-              image: Assets.live,
-              route: Routes.LIVE,
-            ),
-            if (navigateBar.meet)   BottomItemModel(
-              icon: Icons.video_call,
-              label: 'meet',
-              // Translated text
-              image: Assets.zoomMeeting,
-              route: Routes.ZOOM,
-            ),
-            if (navigateBar.spotlight)   BottomItemModel(
-              icon: Icons.light_mode_rounded,
-              label: 'spotlight',
-              // Translated text
-              image: Assets.spotlightIcon,
-              route: Routes.SPOTLIGHT,
-            ),
+            if (navigateBar.meal)
+              BottomItemModel(
+                icon: FontAwesomeIcons.bowlFood,
+                label: 'meal',
+                // Translated text
+                image: Assets.food,
+                route: Routes.FOOD,
+              ),
+            if (navigateBar.health)
+              BottomItemModel(
+                icon: FontAwesomeIcons.kitMedical,
+                label: 'health',
+                // Translated text
+                image: Assets.health,
+                route: Routes.VISITA,
+              ),
+            if (navigateBar.loading)
+              BottomItemModel(
+                icon: Icons.delivery_dining,
+                label: 'ship',
+                // Using generated key for translation
+                image: Assets.shipping,
+                route: Routes.SHIPPING,
+              ),
+            if (navigateBar.ride)
+              BottomItemModel(
+                icon: FontAwesomeIcons.car,
+                label: 'ride',
+                // Using generated key for translation
+                image: Assets.ride,
+                route: Routes.RIDE,
+              ),
+            if (navigateBar.tweet)
+              BottomItemModel(
+                icon: FontAwesomeIcons.twitter,
+                label: 'tweet',
+                // Translated text
+                image: Assets.twitter,
+                route: Routes.TWITTER,
+              ),
+            if (navigateBar.reel)
+              BottomItemModel(
+                icon: FontAwesomeIcons.list,
+                label: 'reels',
+                // Translated text
+                image: Assets.reels,
+                route: Routes.REELS,
+              ),
+            if (navigateBar.chat)
+              BottomItemModel(
+                icon: Icons.chat,
+                label: 'chat',
+                // Translated text
+                image: Assets.message,
+                route: Routes.CHAT,
+              ),
+            if (navigateBar.find)
+              BottomItemModel(
+                icon: FontAwesomeIcons.car,
+                label: 'find',
+                // Translated text
+                image: Assets.social,
+                route: Routes.Tinder,
+              ),
+            if (navigateBar.snap)
+              BottomItemModel(
+                icon: FontAwesomeIcons.microphone,
+                label: 'snap',
+                // Translated text
+                image: Assets.cameraIcon,
+                route: Routes.SNAP,
+              ),
+            if (navigateBar.live)
+              BottomItemModel(
+                icon: FontAwesomeIcons.stream,
+                label: 'live',
+                // Translated text
+                image: Assets.live,
+                route: Routes.LIVE,
+              ),
+            if (navigateBar.meet)
+              BottomItemModel(
+                icon: Icons.video_call,
+                label: 'meet',
+                // Translated text
+                image: Assets.zoomMeeting,
+                route: Routes.ZOOM,
+              ),
+            if (navigateBar.spotlight)
+              BottomItemModel(
+                icon: Icons.light_mode_rounded,
+                label: 'spotlight',
+                // Translated text
+                image: Assets.spotlightIcon,
+                route: Routes.SPOTLIGHT,
+              ),
           ];
 
           return CustomBottomNavigationBar(
@@ -133,7 +146,8 @@ class CustomPageBottonNavBar extends StatelessWidget implements PreferredSizeWid
               Navigator.pushNamed(context, selectedItem.route);
             },
             items: visibleItems,
-            scrollController: scrollController, isScrollingDown: isScrollingDown,
+            scrollController: scrollController,
+            isScrollingDown: isScrollingDown,
           );
         },
       ),
@@ -143,7 +157,6 @@ class CustomPageBottonNavBar extends StatelessWidget implements PreferredSizeWid
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
-
 
 class BottomItemModel {
   final IconData icon;
@@ -166,7 +179,6 @@ class BottomItemModel {
     context.push(route);
   }
 }
-
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final int currentIndex;
@@ -211,14 +223,16 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     super.initState();
 
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
         if (!isScrollingDown) {
           setState(() {
             isScrollingDown = true;
             bottomNavBarHeight = 0.0; // Hide the bottom bar
           });
         }
-      } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      } else if (scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
         if (isScrollingDown) {
           setState(() {
             isScrollingDown = false;

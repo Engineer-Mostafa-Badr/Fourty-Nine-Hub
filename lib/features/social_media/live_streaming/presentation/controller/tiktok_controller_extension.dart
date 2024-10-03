@@ -98,7 +98,7 @@ extension TiktokControllerExtension on StreamCubit {
     emit(state.copyWith(status: StreamsStates.loading));
     //extract data from state
     final List<GoalParams> goalParamsList = state.selectedGifts.map((gift) {
-      return GoalParams(giftId: gift.sId!, amount: gift.currentValue??1);
+      return GoalParams(giftId: gift.sId!, amount: gift.currentValue ?? 1);
     }).toList();
 
     final result = await createLiveUseCase(CreateLiveParams(
@@ -110,11 +110,11 @@ extension TiktokControllerExtension on StreamCubit {
     result.fold(
         (l) => emit(state.copyWith(status: StreamsStates.failure, failure: l)),
         (r) {
-          CliLogger.info(r.id);
-          liveId = r.id;
-          emit(state.copyWith(
-            status: StreamsStates.success, liveCreateResponseEntity: r));
-        });
+      CliLogger.info(r.id);
+      liveId = r.id;
+      emit(state.copyWith(
+          status: StreamsStates.success, liveCreateResponseEntity: r));
+    });
   }
 
   void loadData() async {

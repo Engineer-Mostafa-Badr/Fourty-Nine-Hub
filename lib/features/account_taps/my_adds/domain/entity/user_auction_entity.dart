@@ -15,21 +15,14 @@ class UserAuctionEntity {
       required this.image,
       required this.twitterDocumentation,
       required this.profile});
-
 }
 
 class UserAuctionProfile {
   final String id;
   final ProfilePictureKey profilePictureKey;
 
-  UserAuctionProfile({
-    required this.id,
-    required this.profilePictureKey
-  });
-
-
+  UserAuctionProfile({required this.id, required this.profilePictureKey});
 }
-
 
 class ProfilePictureKey {
   final String id;
@@ -53,5 +46,4 @@ class ProfilePictureKey {
     required this.createdAt,
     required this.updatedAt,
   });
-
 }

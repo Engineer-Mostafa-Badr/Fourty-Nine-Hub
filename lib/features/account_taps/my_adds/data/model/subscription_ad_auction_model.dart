@@ -10,11 +10,11 @@ class SubscriptionAdsAuctionModel extends SubscriptionAdsAuctionEntity {
 
   factory SubscriptionAdsAuctionModel.fromJson(Map<String, dynamic> json) {
     return SubscriptionAdsAuctionModel(
-      id: json['_id'] ??'',
-      isPremium: json['isPremium'] ??false,
-      expirePremium: json['expirePremium'] ??'',
-      expireSubscription: json['ExpireSubscription'] ??'',
-      isActive: json['isActive'] ??false,
+      id: json['_id'] ?? '',
+      isPremium: json['isPremium'] ?? false,
+      expirePremium: json['expirePremium'] ?? '',
+      expireSubscription: json['ExpireSubscription'] ?? '',
+      isActive: json['isActive'] ?? false,
     );
   }
 }

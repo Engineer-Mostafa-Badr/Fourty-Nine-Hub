@@ -35,7 +35,7 @@ class CustomPageServiceLocator {
     );
 
     serviceLocator.registerLazySingleton<UpdateSocialPageUseCase>(
-          () => UpdateSocialPageUseCase(
+      () => UpdateSocialPageUseCase(
         serviceLocator(),
       ),
     );
@@ -47,31 +47,31 @@ class CustomPageServiceLocator {
     );
 
     serviceLocator.registerLazySingleton<UpdateSubTabUseCase>(
-          () => UpdateSubTabUseCase(
+      () => UpdateSubTabUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<FetchNavigateBarUseCase>(
-          () => FetchNavigateBarUseCase(
+      () => FetchNavigateBarUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<UpdateNavigateBarUseCase>(
-          () => UpdateNavigateBarUseCase(
+      () => UpdateNavigateBarUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<FetchFavouriteCatUseCase>(
-          () => FetchFavouriteCatUseCase(
+      () => FetchFavouriteCatUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<UpdateFavouriteCatUseCase>(
-          () => UpdateFavouriteCatUseCase(
+      () => UpdateFavouriteCatUseCase(
         serviceLocator(),
       ),
     );

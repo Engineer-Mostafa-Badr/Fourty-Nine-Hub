@@ -164,7 +164,7 @@ class _ReportViewState extends State<ReportView> {
                 capitalizeAndSplit(report.category),
                 textScaleFactor: 1.0,
                 style: TextStyle(
-                  fontSize: 45.sp,
+                  fontSize: 30.sp,
                   fontWeight: FontWeight.bold,
                   color: selectedReport == report
                       ? AppColors.SECONDARY_COLOR

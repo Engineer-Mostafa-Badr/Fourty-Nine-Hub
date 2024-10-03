@@ -7,8 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -48,15 +46,14 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
+      width: double.infinity,
       imageUrl: widget.category.banner,
       height: MediaQuery.sizeOf(context).height * 0.13.h,
       imageBuilder: (context, i) => Container(
         padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: widget.category.banner.isNotEmpty
-              ? Colors.transparent
-              : AppColors.PRIMARY_COLOR,
+          color: widget.category.banner.isNotEmpty ? Colors.transparent : AppColors.PRIMARY_COLOR,
           image: DecorationImage(
             fit: BoxFit.cover,
             image: CachedNetworkImageProvider(
@@ -74,10 +71,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
               text: widget.category.name,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 45.sp),
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 45.sp),
             ),
             PositionedDirectional(
               start: 0,
@@ -89,21 +83,18 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                           color: AppColors.SECONDARY_COLOR,
                           onPressed: () async {
                             final result = await widget.onFavorite();
-                            print("resutlt=${result}");
+                            print("resutlt=$result");
                             if (result == true) {
                               print(result);
                               setState(() {
-                                widget.category.isFavorite =
-                                    !widget.category.isFavorite!;
+                                widget.category.isFavorite = !widget.category.isFavorite!;
                                 print(widget.category.isFavorite);
                                 widget.isFavorite = result;
                                 print("===================$result");
                               });
                             }
                           },
-                          icon: Icon(widget.category.isFavorite == true
-                              ? Icons.favorite
-                              : Icons.favorite_border),
+                          icon: Icon(widget.category.isFavorite == true ? Icons.favorite : Icons.favorite_border),
                         )
                       : const SizedBox.shrink(),
                   // Label(
@@ -144,10 +135,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
               text: widget.category.name,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 45.sp),
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 45.sp),
             ),
             PositionedDirectional(
               start: 0,
@@ -165,9 +153,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                             }
                           },
                           child: Icon(
-                            widget.isFavorite == true
-                                ? Icons.favorite
-                                : Icons.favorite_border,
+                            widget.isFavorite == true ? Icons.favorite : Icons.favorite_border,
                             color: AppColors.SECONDARY_COLOR,
                           ),
                         )
@@ -198,9 +184,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
           log('88888888888888888888888888');
           widget.onRegister?.call();
         },
-        child: Text(Labels.register,
-            style: Styles.mediumText(
-                color: Colors.white, fontWeight: FontWeight.bold)),
+        child: Text(Labels.register, style: Styles.mediumText(color: Colors.white, fontWeight: FontWeight.bold)),
       );
     } else {
       return const SizedBox.shrink();

@@ -37,52 +37,52 @@ class HistoryRequestsView extends StatelessWidget {
                 onRefresh: () async => controller.loadData(),
                 child: state.isLoading
                     ? const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                )
+                        child: CircularProgressIndicator.adaptive(),
+                      )
                     : Column(
-                  children: [
-                    TabBar(
-                      isScrollable: true,
-                      dividerColor: context.isDarkMode ? Colors.grey : null,
-                      tabs: [
-                        Tab(
-                          text: 'Ride',
-                          icon: SvgPicture.asset(height: 20.h, Assets.ride),
-                        ),
-                        Tab(
-                          text: 'Shipping',
-                          icon: SvgPicture.asset(height: 20.h, Assets.shipping),
-                        ),
-                        Tab(
-                          text: 'Health',
-                          icon: SvgPicture.asset(height: 20.h, Assets.health),
-                        ),
-                        Tab(
-                          text: 'Food',
-                          icon: SvgPicture.asset(height: 20.h, Assets.food),
-                        ),
-                        Tab(
-                          text: LocaleKeys.tripJoin.localize,
-                          icon: Image.asset(height: 20.h, Assets.tripjoin),
-                        ),
-                        Tab(
-                          text: 'Requests',
-                          icon: Image.asset(height: 20.h, Assets.hand),
-                        ),
-                      ],
-                    ),
-                    const Sizer(),
-                    Expanded(
-                        child: TabBarView(children: [
-                          _buildRideRequests(),
-                          _buildShippingRequests(),
-                          _buildHealthBooking(),
-                          _buildFoodOrders(),
-                          const TripJoinRequestView(),
-                          _buildEmptyList(),
-                        ])),
-                  ],
-                )),
+                        children: [
+                          TabBar(
+                            isScrollable: true,
+                            dividerColor: context.isDarkMode ? Colors.grey : null,
+                            tabs: [
+                              Tab(
+                                text: 'Ride',
+                                icon: SvgPicture.asset(height: 20.h, Assets.ride),
+                              ),
+                              Tab(
+                                text: 'Shipping',
+                                icon: SvgPicture.asset(height: 20.h, Assets.shipping),
+                              ),
+                              Tab(
+                                text: 'Health',
+                                icon: SvgPicture.asset(height: 20.h, Assets.health),
+                              ),
+                              Tab(
+                                text: 'Food',
+                                icon: SvgPicture.asset(height: 20.h, Assets.food),
+                              ),
+                              Tab(
+                                text: LocaleKeys.tripJoin.localize,
+                                icon: Image.asset(height: 20.h, Assets.tripjoin),
+                              ),
+                              Tab(
+                                text: 'Requests',
+                                icon: Image.asset(height: 20.h, Assets.hand),
+                              ),
+                            ],
+                          ),
+                          const Sizer(),
+                          Expanded(
+                              child: TabBarView(children: [
+                            _buildRideRequests(),
+                            _buildShippingRequests(),
+                            _buildHealthBooking(),
+                            _buildFoodOrders(),
+                            const TripJoinRequestView(),
+                            _buildEmptyList(),
+                          ])),
+                        ],
+                      )),
           ),
         ),
       );
@@ -114,8 +114,8 @@ class HistoryRequestsView extends StatelessWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) => HealthBookingCard(
-            appointment: state.healthBookings![index],
-          ),
+                appointment: state.healthBookings![index],
+              ),
           separatorBuilder: (context, index) => const Sizer(),
           itemCount: state.healthBookings?.length ?? 0);
     });

@@ -35,7 +35,7 @@ class FloatingButton extends StatelessWidget {
                 }
               },
         backgroundColor:
-            changeView == 2 ? AppColors.PRIMARY_COLOR : Colors.white,
+            Colors.white,
         child: icon != null
             ? Icon(
                 icon,

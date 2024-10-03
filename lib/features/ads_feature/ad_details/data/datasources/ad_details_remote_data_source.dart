@@ -19,7 +19,8 @@ class AdDetailsRemoteDataSourceImpl extends AdDetailsRemoteDataSource {
   AdDetailsRemoteDataSourceImpl(this._apiConsumer);
 
   @override
-  Future<Either<Failure, AddDetailsModel>> getAdDetails({required String id}) async {
+  Future<Either<Failure, AddDetailsModel>> getAdDetails(
+      {required String id}) async {
     final response = await _apiConsumer.get(EndPoints.adDetails(id));
 
     return response.fold((failure) => Left(failure), (data) {

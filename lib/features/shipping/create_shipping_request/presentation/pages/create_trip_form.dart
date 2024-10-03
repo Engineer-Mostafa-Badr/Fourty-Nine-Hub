@@ -105,6 +105,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                       children: [
                         _buildMainCategoriesWidget(
                           category: MainCategoryEntity(
+                            nameEn: state.model.mainCategory?.nameEn,
                               id: state.model.mainCategory?.mainCategoryId ??
                                   "",
                               name: "Choose your favorite sub category!".tr(),
@@ -124,7 +125,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                             isFavorite: e.isFavorite ?? false,
                                             name: e.subCategoryNameEn!),
                                       )
-                                      .toList(), nameEn: ''),
+                                      .toList()),
                         ),
                         if (field.hasError)
                           Column(
@@ -160,7 +161,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
               children: [
                 Row(
                   children: [
-                    Flexible(
+                    Expanded(
                       child: DefaultTextFormField(
                         validator: (value) {
                           return shippingcubit.validation(
@@ -172,11 +173,15 @@ class _CreateTripFormState extends State<CreateTripForm> {
                         hint: Labels.receiptPoint,
                       ),
                     ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Flexible(
+                    // const SizedBox(
+                    //   width: 5,
+                    // ),
+                    Expanded(
+
                       child: DefaultTextFormField(
+                        constraints: BoxConstraints(
+                          maxWidth: double.infinity
+                        ),
                         validator: (value) {
                           return shippingcubit.validation(
                               message: "You have to fill your devlivery point!".tr(),
@@ -185,6 +190,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                         currentController: deliveryPoint,
                         currentFocusNode: deliveryPointFocusNode,
                         hint: Labels.deliveryPoint,
+
                       ),
                     )
                   ],

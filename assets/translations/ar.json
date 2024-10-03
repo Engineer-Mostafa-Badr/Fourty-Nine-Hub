@@ -53,6 +53,7 @@
   "enterRoomSubject": "أدخل موضوع الغرفة",
   "roomSubjectValidation": "لا يمكن أن يكون موضوع الغرفة فارغًا",
   "createRoom": "إنشاء غرفة",
+
   "audience": "الجمهور",
   "voiceChanging": "تغيير الصوت",
   "reverb": "الصدى",

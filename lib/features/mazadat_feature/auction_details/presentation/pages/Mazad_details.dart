@@ -135,12 +135,16 @@ class _MazadDetailsState extends State<MazadDetails> {
                   children: [
                     Expanded(
                         child: Label(
-                      text: getLang()=='ar'?detail.value.nameAr:detail.value.nameEn,
+                      text: getLang() == 'ar'
+                          ? detail.value.nameAr
+                          : detail.value.nameEn,
                       color: AppColors.QUANTITY_COLOR,
                     )),
                     Expanded(
                         child: Label(
-                      text: getLang()=='ar'?detail.value.nameAr:detail.value.nameEn,
+                      text: getLang() == 'ar'
+                          ? detail.value.nameAr
+                          : detail.value.nameEn,
                       color: AppColors.QUANTITY_COLOR,
                     )),
                   ],

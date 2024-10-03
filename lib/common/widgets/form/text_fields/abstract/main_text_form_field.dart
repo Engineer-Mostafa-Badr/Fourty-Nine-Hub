@@ -15,6 +15,7 @@ abstract class MainTextFormField extends StatefulWidget {
   final EdgeInsetsGeometry? margin;
   final bool enabled;
   final bool? noBoarder;
+  final BoxConstraints? constraints;
   final int? maxLength;
   final List<TextInputFormatter>? inputFormatters;
   final bool expanded;
@@ -47,6 +48,7 @@ abstract class MainTextFormField extends StatefulWidget {
     required this.hintText,
     this.keyboardType,
     required this.validator,
+    this.constraints,
     this.textCapitalization = TextCapitalization.none,
     this.margin = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
     this.enabled = true,
@@ -85,9 +87,11 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
             () {
               var selection = widget.currentController.selection;
               var length = widget.currentController.text.length;
-              var isLast = selection == TextSelection.fromPosition(TextPosition(offset: length - 1));
+              var isLast = selection ==
+                  TextSelection.fromPosition(TextPosition(offset: length - 1));
               if (isLast) {
-                selection = TextSelection.fromPosition(TextPosition(offset: length));
+                selection =
+                    TextSelection.fromPosition(TextPosition(offset: length));
               }
             },
         onEditingComplete: widget.onEditComplete,
@@ -105,26 +109,34 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         enableSuggestions: widget.enableSuggestions,
         style: const TextStyle(color: AppColors.QUANTITY_COLOR),
         textCapitalization: widget.textCapitalization,
-        textAlignVertical: widget.expanded ? const TextAlignVertical(y: -0.8) : null,
+        textAlignVertical:
+            widget.expanded ? const TextAlignVertical(y: -0.8) : null,
         obscureText: widget.obscureText ?? false,
         minLines: widget.minLines,
         decoration: InputDecoration(
-          fillColor: widget.fillColor ?? (widget.enabled ? Colors.white : Colors.white),
+          fillColor: widget.fillColor ??
+              (widget.enabled ? Colors.white : Colors.white),
           filled: true,
-          contentPadding: widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 0, 16, 0),
+          contentPadding:
+              widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 0, 16, 0),
           hintText: widget.hintText,
           labelText: widget.label,
           hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
           suffixIcon: widget.suffixIcon,
           prefixIcon: widget.prefixIcon,
+          constraints: widget.constraints,
           prefixIconColor: AppColors.QUANTITY_COLOR,
           enabledBorder: OutlineInputBorder(
-            borderRadius: const BorderRadius.all(Radius.circular(UIConst.radius)),
-            borderSide: BorderSide(color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
+            borderRadius:
+                const BorderRadius.all(Radius.circular(UIConst.radius)),
+            borderSide: BorderSide(
+                color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: const BorderRadius.all(Radius.circular((UIConst.radius))),
-            borderSide: BorderSide(color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
+            borderRadius:
+                const BorderRadius.all(Radius.circular((UIConst.radius))),
+            borderSide: BorderSide(
+                color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
           ),
           errorBorder: const OutlineInputBorder(
             borderSide: BorderSide(
@@ -143,8 +155,10 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
           counterText: '',
           border: InputBorder.none,
           disabledBorder: OutlineInputBorder(
-            borderRadius: const BorderRadius.all(Radius.circular(UIConst.radius)),
-            borderSide: BorderSide(color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
+            borderRadius:
+                const BorderRadius.all(Radius.circular(UIConst.radius)),
+            borderSide: BorderSide(
+                color: widget.borderColor ?? AppColors.GREY_LIGHT_COLOR),
           ),
         ),
         validator: widget.validator,

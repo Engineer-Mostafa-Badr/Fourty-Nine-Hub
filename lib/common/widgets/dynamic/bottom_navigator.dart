@@ -241,16 +241,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                           : index == index2
                               ? EdgeInsets.only(left: 60.w)
                               : EdgeInsets.zero,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Expanded(
-                            child: SvgPicture.asset(
-                              widget.items[index].image,
-                              height: widget.items[index].height * 1.8.h,
-                            ),
-                          ),
-                        ],
+                      child: Expanded(
+                        child: SvgPicture.asset(
+                          widget.items[index].image,
+                          height: widget.items[index].height * 1.8.h,
+                        ),
                       ),
                     ),
                   );

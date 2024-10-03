@@ -94,7 +94,8 @@ class _MyAppState extends State<MyApp> {
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
         ),
         BlocProvider(
-          create: (BuildContext context) => serviceLocator<MainCategoriesCubit>()..loadData(),
+          create: (BuildContext context) =>
+              serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
         BlocProvider(
           create: (context) => serviceLocator<ShowOffersCubit>(),
@@ -147,6 +148,7 @@ class _MyAppState extends State<MyApp> {
                   context: context,
                   notificationListenerUseCase: serviceLocator(),
                 )),
+        BlocProvider(create: (context) => ShowOffersCubit(repository: serviceLocator(),),),
       ],
       child: ScreenUtilInit(
           designSize: const Size(750, 1334),
@@ -159,11 +161,14 @@ class _MyAppState extends State<MyApp> {
                 return MaterialApp.router(
                   builder: (context, child) {
                     return MediaQuery(
-                      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+                      data: MediaQuery.of(context)
+                          .copyWith(textScaler: TextScaler.noScaling),
                       child: child!,
                     );
                   },
-                  themeMode: context.read<ThemeCubit>().isDarkTheme ? ThemeMode.dark : ThemeMode.light,
+                  themeMode: context.read<ThemeCubit>().isDarkTheme
+                      ? ThemeMode.dark
+                      : ThemeMode.light,
                   theme: lightTheme(),
                   darkTheme: darkTheme(),
                   title: '49',
@@ -177,7 +182,8 @@ class _MyAppState extends State<MyApp> {
                 );
               },
             );
-          }),
+         },
+      ),
     );
   }
 }

@@ -1,24 +1,32 @@
 import 'dart:math';
 
-import 'package:elegant_notification/elegant_notification.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 notificationSnackBar({
   required BuildContext context,
   required NotificationEntity notificationEntity,
+  required bool isAppNotification,
 }) {
   String trimmedBody = notificationEntity.body ?? '';
   trimmedBody = trimmedBody.substring(0, min(trimmedBody.length, 30));
-  ElegantNotification.success(
-    title: Text(notificationEntity.title ?? ''),
-    description: Text(trimmedBody),
-    onDismiss: () {},
-    onNotificationPressed: () {
-      context.push(notificationEntity.path ?? '', extra: notificationEntity.payload);
-    },
-    onCloseButtonPressed: () {},
-    toastDuration: const Duration(seconds: 7),
-  ).show(context);
+  AudioPlayer player = AudioPlayer();
+  player.play(AssetSource(isAppNotification ? Assets.notificationAudioApp : Assets.notificationAudioServieAndSocial));
+  showTopSnackBar(
+    Overlay.of(context),
+    GestureDetector(
+      onTap: () {
+        context.push(notificationEntity.path ?? '', extra: notificationEntity.payload);
+      },
+      child: CustomSnackBar.error(
+        message: "${notificationEntity.title} \n${notificationEntity.body}",
+        maxLines: 3,
+      ),
+    ),
+  );
 }

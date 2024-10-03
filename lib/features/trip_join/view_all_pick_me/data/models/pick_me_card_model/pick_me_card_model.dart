@@ -35,7 +35,9 @@ class PickMeCardModel extends PickMeCardEntity {
 
   factory PickMeCardModel.fromJson(Map<String, dynamic> json) {
     return PickMeCardModel(
-      trip: json['trip'] == null ? null : Trip.fromJson(json['trip'] as Map<String, dynamic>),
+      trip: json['trip'] == null
+          ? null
+          : Trip.fromJson(json['trip'] as Map<String, dynamic>),
       allowStatus: json['allowStatus'] as String?,
       paymentMethods: json['paymentMethods'] as String?,
     );

@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const nnew = 'nnew';
   static const today = 'today';
   static const tommorow = 'tommorow';
@@ -79,7 +79,8 @@ abstract class  LocaleKeys {
   static const goalsAreSelectedSuccess = 'goalsAreSelectedSuccess';
   static const restaurantName = 'restaurantName';
   static const theCommercialRegister = 'theCommercialRegister';
-  static const theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider = 'theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider';
+  static const theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider =
+      'theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider';
   static const youWillGetEGP3650PerYearIfYouSubscribeDaily = 'youWillGetEGP3650PerYearIfYouSubscribeDaily';
   static const welcomeToResturantRegisteration = 'welcomeToResturantRegisteration';
   static const selecteSubcategory = 'selecteSubcategory';
@@ -90,7 +91,8 @@ abstract class  LocaleKeys {
   static const thirdPage = 'thirdPage';
   static const selectGovernorate = 'selectGovernorate';
   static const selectCity = 'selectCity';
-  static const newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore = 'newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore';
+  static const newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore =
+      'newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore';
   static const premium = 'premium';
   static const comma = 'comma';
   static const noResultFound = 'noResultFound';
@@ -100,7 +102,8 @@ abstract class  LocaleKeys {
   static const itemName = 'itemName';
   static const price = 'price';
   static const salary = 'salary';
-  static const youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval = 'youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval';
+  static const youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval =
+      'youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval';
   static const selectSubcategoryFirst = 'selectSubcategoryFirst';
   static const uploadingImage = 'uploadingImage';
   static const cantLoadCities = 'cantLoadCities';
@@ -112,7 +115,8 @@ abstract class  LocaleKeys {
   static const cantLoadSpecialities = 'cantLoadSpecialities';
   static const cantLoadSubSubCategories = 'cantLoadSubSubCategories';
   static const creatingRestaurant = 'creatingRestaurant';
-  static const youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove = 'youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove';
+  static const youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove =
+      'youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove';
   static const photoForMeal = 'photoForMeal';
   static const menu = 'menu';
   static const submit = 'submit';
@@ -309,7 +313,7 @@ abstract class  LocaleKeys {
   static const chatLockMessage = 'chatLockMessage';
   static const createGroupWith = 'createGroupWith';
   static const createGroup = 'createGroup';
-  static const attachments  = 'attachments ';
+  static const attachments = 'attachments ';
   static const docs = 'docs';
   static const links = 'links';
   static const media = 'media';
@@ -549,6 +553,7 @@ abstract class  LocaleKeys {
   static const subscribeToContactTheClient = 'subscribeToContactTheClient';
   static const goToRequestHistory = 'goToRequestHistory';
   static const orContinueWith = 'orContinueWith';
+  static const error_dialog_audio_playback_fail = 'error_dialog.audio_playback_fail';
   static const postSubmitted = 'postSubmitted';
   static const imageNotSelected = 'imageNotSelected';
   static const randomAppearance = 'randomAppearance';
@@ -558,7 +563,6 @@ abstract class  LocaleKeys {
   static const moneySuccessfully = 'moneySuccessfully';
   static const paymentAddress = 'paymentAddress';
   static const amount = 'amount';
-  static const error_dialog_audio_playback_fail = 'error_dialog.audio_playback_fail';
   static const error_dialog_title = 'error_dialog.title';
   static const error_dialog_ok_button = 'error_dialog.ok_button';
   static const error_dialog_camera_init_fail = 'error_dialog.camera_init_fail';
@@ -742,7 +746,8 @@ abstract class  LocaleKeys {
   static const channelInfo = 'channelInfo';
   static const unfollow = 'unfollow';
   static const file = 'file';
-  static const youCanEnjoyServingYourClientsUsingYourCarByClickingTheRegisterButtonAbove = 'youCanEnjoyServingYourClientsUsingYourCarByClickingTheRegisterButtonAbove';
+  static const youCanEnjoyServingYourClientsUsingYourCarByClickingTheRegisterButtonAbove =
+      'youCanEnjoyServingYourClientsUsingYourCarByClickingTheRegisterButtonAbove';
   static const theTripHasBeenSuccessfullyClosed = 'theTripHasBeenSuccessfullyClosed';
   static const yourRequest = 'yourRequest';
   static const yourRequestHasBeenSentYoullReceiveOffersShortly = 'yourRequestHasBeenSentYoullReceiveOffersShortly';
@@ -821,5 +826,4 @@ abstract class  LocaleKeys {
   static const cancelRequest = 'cancelRequest';
   static const sendOffer = 'sendOffer';
   static const seeAll = 'seeAll';
-
 }

@@ -40,6 +40,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
     with SingleTickerProviderStateMixin {
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
+
   // TabController? controller = TabController(length: length, vsync: vsync)
   @override
   void initState() {
@@ -70,21 +71,30 @@ class _SocialHomeViewState extends State<SocialHomeView>
       child: Scaffold(
           appBar: widget.hideAppBar
               ? null
-              :  HomeAppbar(
+              : HomeAppbar(
                   isWithBackArrow: true,
-            toolbarHeight:135.h,
-            bottom: TabBar(
-              indicatorColor:
-              context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-              labelColor:
-              context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-              tabs: [
-                Tab(icon: Icon(FontAwesomeIcons.facebook),),
-                Tab(icon: Icon(FontAwesomeIcons.instagram),),
-                Tab(icon: Icon(FontAwesomeIcons.twitter),),
-              ],
-            ),
+                  toolbarHeight: context.screenHeight/6.5,
+                  bottom: TabBar(
+                    padding: EdgeInsets.zero,
 
+                    indicatorColor: context.isDarkMode
+                        ? Colors.white
+                        : AppColors.PRIMARY_COLOR,
+                    labelColor: context.isDarkMode
+                        ? Colors.white
+                        : AppColors.PRIMARY_COLOR,
+                    tabs: const [
+                      Tab(
+                        icon: Icon(FontAwesomeIcons.facebook),
+                      ),
+                      Tab(
+                        icon: Icon(FontAwesomeIcons.instagram),
+                      ),
+                      Tab(
+                        icon: Icon(FontAwesomeIcons.twitter),
+                      ),
+                    ],
+                  ),
                 ),
           drawer: widget.hideAppBar ? null : const DrawerWidget(),
           bottomNavigationBar: BottomNavigator(
@@ -105,13 +115,13 @@ class _SocialHomeViewState extends State<SocialHomeView>
             children: [
               BlocBuilder<UserCubit, BasicState<UserEntity>>(
                   builder: (context, state) {
-                    return context.read<UserCubit>().isLoggedIn
-                        ? NestedAppbar(
+                return context.read<UserCubit>().isLoggedIn
+                    ? NestedAppbar(
                         scrollController: ScrollController(),
                         appBars: [
                           SliverAppBar(
                             backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
+                                Theme.of(context).scaffoldBackgroundColor,
                             automaticallyImplyLeading: false,
                             floating: true,
                             // pinned: true,
@@ -119,7 +129,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                           ),
                           SliverAppBar(
                             backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
+                                Theme.of(context).scaffoldBackgroundColor,
                             automaticallyImplyLeading: false,
                             // floating: true,
                             pinned: true,
@@ -129,12 +139,12 @@ class _SocialHomeViewState extends State<SocialHomeView>
                         body: FacebookBody(
                           scrollController: scrollController,
                         ))
-                        : NestedAppbar(
+                    : NestedAppbar(
                         scrollController: ScrollController(),
                         appBars: [
                           SliverAppBar(
                             backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
+                                Theme.of(context).scaffoldBackgroundColor,
                             automaticallyImplyLeading: false,
                             floating: true,
                             // pinned: true,
@@ -142,7 +152,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                           ),
                           SliverAppBar(
                             backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
+                                Theme.of(context).scaffoldBackgroundColor,
                             automaticallyImplyLeading: false,
                             // floating: true,
                             pinned: true,
@@ -152,11 +162,12 @@ class _SocialHomeViewState extends State<SocialHomeView>
                         body: FacebookGlobalBody(
                           scrollController: scrollController,
                         ));
-                  }),
+              }),
               MultiBlocProvider(
                 providers: [
                   BlocProvider(
-                    create: (context) => serviceLocator<InstagramCubit>()..loadData(),
+                    create: (context) =>
+                        serviceLocator<InstagramCubit>()..loadData(),
                   ),
                   BlocProvider(
                     create: (context) => serviceLocator<StoryCubit>(),
@@ -164,7 +175,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                 ],
                 child: const InstagramView(),
               ),
-              TwitterView(),
+              const TwitterView(),
             ],
           )),
     );

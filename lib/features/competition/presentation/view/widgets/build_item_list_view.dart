@@ -19,9 +19,7 @@ class BuildItemListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int count = model.countOfRequest!;
-    int max = model
-        .competitionId?.maxRequests  ??0;
-
+    int max = model.competitionId?.maxRequests ?? 0;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,8 +28,8 @@ class BuildItemListView extends StatelessWidget {
           children: [
             Text(
               context.locale == Locales.english
-                  ? model.competitionId?.nameEn ??''
-                  : model.competitionId?.nameAr ??'',
+                  ? model.competitionId?.nameEn ?? ''
+                  : model.competitionId?.nameAr ?? '',
               style: Styles.headerText(),
             ),
             // const Spacer(),
@@ -96,8 +94,8 @@ class BuildItemListView extends StatelessWidget {
           padding: EdgeInsets.only(left: 5.w),
           child: Text(
             context.locale == Locales.english
-                ? model.competitionId?.descriptionEn ??''
-                : model.competitionId?.descriptionAr ??'',
+                ? model.competitionId?.descriptionEn ?? ''
+                : model.competitionId?.descriptionAr ?? '',
             style: Styles.mediumText(),
           ),
         ),
