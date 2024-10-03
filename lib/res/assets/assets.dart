@@ -84,10 +84,8 @@ abstract class Assets {
   static String contact_us_icon = 'assets/settings/contact_us_icon.png';
   static String dashbboard_icon = 'assets/settings/dashbboard_icon.png';
   static String favorite_ad_icon = 'assets/settings/Icon awesome-heart.png';
-  static String favorite_main_category_icon =
-      'assets/settings/favorite_main_category_icon.png';
-  static String favorite_sub_category_icon =
-      'assets/settings/favorite_sub_category_icon.png';
+  static String favorite_main_category_icon = 'assets/settings/favorite_main_category_icon.png';
+  static String favorite_sub_category_icon = 'assets/settings/favorite_sub_category_icon.png';
   static String lists_icon = 'assets/settings/lists_icon.png';
   static String my_ads_icon = 'assets/settings/my_ads_icon.png';
   static String privacy_icon = 'assets/settings/privacy_icon.png';
@@ -111,4 +109,8 @@ abstract class Assets {
   static String spotLightDemo = 'assets/images/spot_light_demo.jpg';
   static String spotlightIcon = 'assets/icons/spotlight.svg';
   static String cameraIcon = 'assets/icons/camera_icon.svg';
+
+  //! audio
+  static String notificationAudioApp = 'audio/notification.mp3';
+  static String notificationAudioServieAndSocial = 'audio/notification_social.mp3';
 }
