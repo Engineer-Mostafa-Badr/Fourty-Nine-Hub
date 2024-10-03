@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/payment/presentation/pages/widgets/payment_fawry.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/widgets/payment_instapay.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/widgets/payment_yellow_card.dart';
 
@@ -203,9 +204,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
       case 'Credit Card':
         return _openLinkPayment(context);
       case 'Fawry':
-        return Center(
-          child: Text('Please select a payment method.'),
-        );
+        return const PaymentFawryCard();
       case 'InstaPay':
         return const PaymentInstapay();
       case 'Yellow Card':
