@@ -905,10 +905,10 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       child: Column(
         children: [
           // Tab Bar for Social and Services
-          const TabBar(
+           TabBar(
             labelColor: AppColors.PRIMARY_COLOR,
             unselectedLabelColor: AppColors.LIGHT_GRAY_COLOR2,
-            indicator: BoxDecoration(
+            indicator: const BoxDecoration(
                 // color: AppColors.PRIMARY_COLOR_DARK,
                 border: Border(
               bottom: BorderSide(
@@ -917,8 +917,8 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               ),
             )),
             tabs: [
-              Tab(text: 'Social'),
-              Tab(text: 'Services'),
+              Tab(text: LocaleKeys.social.tr()),
+              Tab(text: LocaleKeys.services.tr()),
             ],
             indicatorColor: Colors.blue,
           ),

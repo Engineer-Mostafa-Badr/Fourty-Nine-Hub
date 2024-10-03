@@ -160,9 +160,13 @@ class _ChatCardState extends State<ChatCard> {
                                     ? const Icon(
                                         FontAwesomeIcons.checkDouble,
                                         color: AppColors.GREY_DARK_COLOR,
-                                        size: 14,
+                                        size: 10,
                                       )
-                                    : const SizedBox(),
+                                    : const Icon(
+                              FontAwesomeIcons.check,
+                              color: AppColors.GREY_DARK_COLOR,
+                              size: 10,
+                            ),
                             if (widget.chat!.lastMessage?.seen ?? false)
                               const SizedBox(width: 10),
                             Expanded(
@@ -235,11 +239,11 @@ class _ChatCardState extends State<ChatCard> {
                 ],
               ),
             ),
-            Container(
-              height: 0.4,
-              width: MediaQuery.of(context).size.width,
-              color: AppColors.GREY_DARK_COLOR,
-            ),
+            // Container(
+            //   height: 0.4,
+            //   width: MediaQuery.of(context).size.width,
+            //   color: AppColors.GREY_DARK_COLOR,
+            // ),
           ],
         ),
       ),

@@ -1187,7 +1187,7 @@ static const Map<String,dynamic> en = {
   "greet": "Greet",
   "groups": "Groups",
   "archive": "Archive",
-  "lockChat": "Lock Chat",
+  "lockChat": "Locked Chats",
   "unread": "Unread",
   "broadcast": "Broadcast",
   "newGroup": "New Group",
