@@ -1275,9 +1275,9 @@ class AppPages {
                         serviceLocator<StreamCubit>()..getScheduledMeetings(),
                     child: const MeetingView(),
                   ),
-                    create: (context) => serviceLocator<StreamCubit>()..getScheduledMeetings(),
-                    child: const MeetingView(),
-                  ),
+                    // create: (context) => serviceLocator<StreamCubit>()..getScheduledMeetings(),
+                    // child: const MeetingView(),
+
               routes: [
                 // PlayVideo
                 GoRoute(
