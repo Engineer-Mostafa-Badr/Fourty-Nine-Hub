@@ -754,5 +754,20 @@
   "myBroadcasts": "قنواتي",
   "channelInfo": "معلومات القناة",
   "unfollow": "الغاء المتابعة",
-  "file": "ملف"
+  "file": "ملف",
+  "receiveFawry": "طلب بطاقة الصفراء الخاص بك ناجح! تم خصم 50. ستتلقى إشعارًا عندما تكون بطاقتك جاهزة للاستلام في أي فرع من فوري.",
+  "doYellowCard": "هل لديك بطاقة صفراء؟",
+  "yellowCardNumber": "رقم هاتف البطاقة الصفراء",
+  "atLeast300YellowCard": "تحتاج إلى 300 على الأقل لطلب بطاقة صفراء.",
+  "WillBeDeducted": "طلب بطاقة صفراء (سيتم خصم 50)",
+  "iDFrontAndBack": "قم بتحميل هويتك (الوجه والظهر):",
+  "uploadFrontID": "تحميل الهوية الأمامية",
+  "frontIDUploaded": "تم تحميل الهوية الأمامية",
+  "uploadBackID": "تحميل الهوية الخلفية",
+  "BackIDUploaded": "تم تحميل الهوية الخلفية",
+  "pleaseEnterFrontIdAndBackId": "يرجى إدخال الهوية الأمامية والخلفية للاستمرار في طلب البطاقة الصفراء",
+  "submitYellowCardRequest": "إرسال طلب البطاقة الصفراء",
+  "Other":"اخري",
+  "pleaseEnterYourPhoneNumber": "الرجاء إدخال رقم هاتفك",
+  "invalidPhoneNumber": "رقم هاتف غير صالح"
 }

@@ -769,7 +769,22 @@ class CodegenLoader extends AssetLoader{
   "myBroadcasts": "قنواتي",
   "channelInfo": "معلومات القناة",
   "unfollow": "الغاء المتابعة",
-  "file": "ملف"
+  "file": "ملف",
+  "receiveFawry": "طلب بطاقة الصفراء الخاص بك ناجح! تم خصم 50. ستتلقى إشعارًا عندما تكون بطاقتك جاهزة للاستلام في أي فرع من فوري.",
+  "doYellowCard": "هل لديك بطاقة صفراء؟",
+  "yellowCardNumber": "رقم هاتف البطاقة الصفراء",
+  "atLeast300YellowCard": "تحتاج إلى 300 على الأقل لطلب بطاقة صفراء.",
+  "WillBeDeducted": "طلب بطاقة صفراء (سيتم خصم 50)",
+  "iDFrontAndBack": "قم بتحميل هويتك (الوجه والظهر):",
+  "uploadFrontID": "تحميل الهوية الأمامية",
+  "frontIDUploaded": "تم تحميل الهوية الأمامية",
+  "uploadBackID": "تحميل الهوية الخلفية",
+  "BackIDUploaded": "تم تحميل الهوية الخلفية",
+  "pleaseEnterFrontIdAndBackId": "يرجى إدخال الهوية الأمامية والخلفية للاستمرار في طلب البطاقة الصفراء",
+  "submitYellowCardRequest": "إرسال طلب البطاقة الصفراء",
+  "Other": "اخري",
+  "pleaseEnterYourPhoneNumber": "الرجاء إدخال رقم هاتفك",
+  "invalidPhoneNumber": "رقم هاتف غير صالح"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1529,7 +1544,22 @@ static const Map<String,dynamic> en = {
   "myBroadcasts": "My Broadcasts",
   "channelInfo": "Channel Info",
   "unfollow": "Unfollow",
-  "file": "File"
+  "file": "File",
+  "receiveFawry": "Your Yellow Card request is successful! 50 has been deducted. You will receive a notification when your card is ready for pickup at any Fawry branch.",
+  "doYellowCard": "Do you have a Yellow Card?",
+  "yellowCardNumber": "Yellow Card Phone Number",
+  "atLeast300YellowCard": "You need at least 300 to request a Yellow Card.",
+  "WillBeDeducted": "Request Yellow Card (50 will be deducted)",
+  "iDFrontAndBack": "Upload Your ID (Front and Back):",
+  "uploadFrontID": "Upload Front ID",
+  "frontIDUploaded": "Front ID Uploaded",
+  "uploadBackID": "Upload Back ID",
+  "BackIDUploaded": "Back ID Uploaded'",
+  "pleaseEnterFrontIdAndBackId": "Please enter front id and back id to to continue in request yellow card",
+  "submitYellowCardRequest": "Submit Yellow Card Request",
+  "Other": "other",
+  "pleaseEnterYourPhoneNumber": "Please enter your phone number.",
+  "invalidPhoneNumber": "Invalid phone number"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

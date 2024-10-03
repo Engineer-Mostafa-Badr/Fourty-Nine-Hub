@@ -743,5 +743,20 @@ abstract class  LocaleKeys {
   static const channelInfo = 'channelInfo';
   static const unfollow = 'unfollow';
   static const file = 'file';
+  static const receiveFawry = 'receiveFawry';
+  static const doYellowCard = 'doYellowCard';
+  static const yellowCardNumber = 'yellowCardNumber';
+  static const atLeast300YellowCard = 'atLeast300YellowCard';
+  static const WillBeDeducted = 'WillBeDeducted';
+  static const iDFrontAndBack = 'iDFrontAndBack';
+  static const uploadFrontID = 'uploadFrontID';
+  static const frontIDUploaded = 'frontIDUploaded';
+  static const uploadBackID = 'uploadBackID';
+  static const BackIDUploaded = 'BackIDUploaded';
+  static const pleaseEnterFrontIdAndBackId = 'pleaseEnterFrontIdAndBackId';
+  static const submitYellowCardRequest = 'submitYellowCardRequest';
+  static const Other = 'Other';
+  static const pleaseEnterYourPhoneNumber = 'pleaseEnterYourPhoneNumber';
+  static const invalidPhoneNumber = 'invalidPhoneNumber';
 
 }

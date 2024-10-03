@@ -22,6 +22,6 @@ class InstapayParams {
       {required this.instaPay,});
 
   Map<String,dynamic> toJson()=>{
-   instaPay:"instaPay",
+   'instaPay':instaPay,
   };
 }

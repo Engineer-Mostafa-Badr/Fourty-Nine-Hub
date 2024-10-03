@@ -6,10 +6,13 @@ import 'package:fourtyninehub/features/payment/data/models/instapay_cache_out_mo
 import '../../../../../core/error/failure.dart';
 import '../../../domain/entities/instapay_cache_out_entity.dart';
 import '../../../domain/use_cases/cache_out/instapay_cache_out_use_case.dart';
+import '../../../domain/use_cases/cache_out/request_yellow_card_use_case.dart';
 
 abstract class PaymentCacheOutRemoteDataSource {
   Future<Either<Failure, InstapayCacheOutEntity>> instapayCacheOut(
       InstapayParams params);
+  Future<Either<Failure, bool>> requestYellowCard(
+      RequestYellowCardParams params);
 }
 
 class PaymentCacheOutRemoteDataSourceImpl
@@ -28,6 +31,20 @@ class PaymentCacheOutRemoteDataSourceImpl
           (failure) => Left(failure),
           (data) {
         return Right(InstapayCacheOutModel.fromJson(data));
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> requestYellowCard(RequestYellowCardParams params) async {
+    final response = await _apiConsumer.post(
+      EndPoints.requestYellowCard,
+      data: params.toJson(),
+    );
+    return response.fold(
+          (failure) => Left(failure),
+          (data) {
+        return Right(data['status']);
       },
     );
   }
