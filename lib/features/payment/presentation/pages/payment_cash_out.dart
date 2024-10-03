@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
-import 'package:fourtyninehub/features/payment/presentation/pages/widgets/payment_fawry_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/widgets/payment_instapay.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/widgets/payment_yellow_card.dart';
@@ -41,7 +42,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Payment Options'),
+        title: Text(LocaleKeys.paymentOptions.localize),
       ),
       body: BlocBuilder<PaymentCubit, PaymentState>(
         builder: (context, state) {
@@ -69,7 +70,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
                             height: 30.h,
                           ),
                           color: Colors.blue,
-                          details: 'Enter your credit card details',
+                          details: LocaleKeys.enterYourCreditCardDetails.localize,
                           context: context,
                         ),
                       ),
@@ -83,7 +84,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
                             height: 30.h,
                           ),
                           color: Colors.orange,
-                          details: 'Enter your Paymob link',
+                          details: LocaleKeys.enterPaymobLink.localize,
                           context: context,
                         ),
                       ),
@@ -97,7 +98,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
                             height: 50.h,
                           ),
                           color: Colors.deepPurple,
-                          details: 'Enter your bank account details',
+                          details: LocaleKeys.enterBankAccountDetails.localize,
                           context: context,
                         ),
                       ),
@@ -107,7 +108,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
                           titleId: 'manual',
                           icon: Icon(Icons.credit_card,color: Colors.yellow,size: 60.sp,),
                           color: Colors.orange,
-                          details: 'Enter your bank account details',
+                          details: LocaleKeys.enterBankAccountDetails.localize,
                           context: context,
                         ),
                       ),
@@ -202,12 +203,8 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
       case 'Credit Card':
         return _openLinkPayment(context);
       case 'Fawry':
-        return FawryPayment(
-          amountId:'',
-         // amountId: widget.amountId,
-          providerId: _selectedProviderId ?? '',
-         // amount: widget.amount,
-          amount: 1,
+        return Center(
+          child: Text('Please select a payment method.'),
         );
       case 'InstaPay':
         return const PaymentInstapay();

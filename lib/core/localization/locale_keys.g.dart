@@ -758,5 +758,28 @@ abstract class  LocaleKeys {
   static const Other = 'Other';
   static const pleaseEnterYourPhoneNumber = 'pleaseEnterYourPhoneNumber';
   static const invalidPhoneNumber = 'invalidPhoneNumber';
+  static const successfullyReceiveYourMoneyShortly = 'successfullyReceiveYourMoneyShortly';
+  static const chooseInstaPayOption = 'chooseInstaPayOption';
+  static const instaPayAccount = 'instaPayAccount';
+  static const instaPayUsernameOrShortcut = 'instaPayUsernameOrShortcut';
+  static const bankAccount = 'bankAccount';
+  static const cardNumber = 'cardNumber';
+  static const type = 'type';
+  static const account = 'account';
+  static const bankAccountNumber = 'bankAccountNumber';
+  static const pleaseEnterBankAccountNumber = 'pleaseEnterBankAccountNumber';
+  static const pleaseEnter1016digits = 'pleaseEnter1016digits';
+  static const bankName = 'bankName';
+  static const pleaseEnterBankName = 'pleaseEnterBankName';
+  static const bankNameCanOnlyContainLetters = 'bankNameCanOnlyContainLetters';
+  static const pleaseEnterCardNumber = 'pleaseEnterCardNumber';
+  static const enterNumber16digits = 'enterNumber16digits';
+  static const invalidCardNumber = 'invalidCardNumber';
+  static const pleaseEnterUsername = 'pleaseEnterUsername';
+  static const usernameContainLettersNumbersUnderscores = 'usernameContainLettersNumbersUnderscores';
+  static const paymentOptions = 'paymentOptions';
+  static const enterYourCreditCardDetails = 'enterYourCreditCardDetails';
+  static const enterPaymobLink = 'enterPaymobLink';
+  static const enterBankAccountDetails = 'enterBankAccountDetails';
 
 }
