@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/features/carpool/domain/entities/available_routes_card_entity.dart';
-import 'package:fourtyninehub/features/carpool/presentation/widgets/address_info_list.dart';
-import 'package:fourtyninehub/features/carpool/presentation/widgets/available_rotes_bar_info.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/available_routes_card_entity.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/address_info_list.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/available_rotes_bar_info.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -25,12 +25,15 @@ class AvaiableRoutesCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("40:00:00", style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
+              Text("40:00:00",
+                  style: Styles.mediumText(color: AppColors.SECONDARY_COLOR)),
               const Spacer(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('${entity.price} EGP', style: Styles.headerText(color: AppColors.CHECK_MARK_COLOR)),
+                  Text('${entity.price} EGP',
+                      style:
+                          Styles.headerText(color: AppColors.CHECK_MARK_COLOR)),
                   Text("per seat", style: Styles.mediumText()),
                 ],
               ),

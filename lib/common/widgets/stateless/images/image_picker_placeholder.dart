@@ -58,6 +58,10 @@ class ImagePickerPlaceholder extends StatelessWidget {
     if (tilte == null || tilte!.isEmpty) {
       return SizedBox.shrink();
     }
-    return Center(child: Text(tilte!,textAlign: TextAlign.center,));
+    return Center(
+        child: Text(
+      tilte!,
+      textAlign: TextAlign.center,
+    ));
   }
 }

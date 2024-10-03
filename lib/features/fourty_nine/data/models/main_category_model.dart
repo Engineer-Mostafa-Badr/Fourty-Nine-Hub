@@ -14,7 +14,7 @@ class MainCategoryModel extends MainCategoryEntity {
     required super.cover,
     required super.isFavorite,
     required super.total,
-     super.numberOfAdsCount,
+    super.numberOfAdsCount,
     super.subcategories,
   });
 

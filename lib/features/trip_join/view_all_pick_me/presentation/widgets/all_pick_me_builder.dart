@@ -130,17 +130,23 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                 },
               );
             }
-            return state is ViewAllPickMeLoading ? const PickMeCardLoadingList() : const SizedBox();
+            return state is ViewAllPickMeLoading
+                ? const PickMeCardLoadingList()
+                : const SizedBox();
           },
         );
       },
     );
   }
 
-  Future<bool> _isPremuim(PickMeCardEntity pickMeCardEntity, String subCategoryId, String title) async {
-    if (pickMeCardEntity.subscribedPremium == null || pickMeCardEntity.subscribedPremium == false) {
+  Future<bool> _isPremuim(PickMeCardEntity pickMeCardEntity,
+      String subCategoryId, String title) async {
+    if (pickMeCardEntity.subscribedPremium == null ||
+        pickMeCardEntity.subscribedPremium == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-        wallets: [pickMeCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance],
+        wallets: [
+          pickMeCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
+        ],
         subCategoryId: subCategoryId,
         title: title,
       );
@@ -149,10 +155,14 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
     return true;
   }
 
-  Future<bool> _userApproved(PickMeCardEntity pickMeCardEntity, String subCategoryId, String title) async {
-    if (pickMeCardEntity.isApproved == null || pickMeCardEntity.isApproved == false) {
+  Future<bool> _userApproved(PickMeCardEntity pickMeCardEntity,
+      String subCategoryId, String title) async {
+    if (pickMeCardEntity.isApproved == null ||
+        pickMeCardEntity.isApproved == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-        wallets: [pickMeCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance],
+        wallets: [
+          pickMeCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
+        ],
         subCategoryId: subCategoryId,
         title: title,
       );
@@ -177,9 +187,11 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
       scrollPosition = scrollController.position.pixels;
       scrollMaxExtent = scrollController.position.maxScrollExtent;
       if (scrollPosition >= 0.7 * scrollMaxExtent) {
-        if (!isLoading && (viewAllPickMeCubit.cards.last.hasNextPage ?? false)) {
+        if (!isLoading &&
+            (viewAllPickMeCubit.cards.last.hasNextPage ?? false)) {
           isLoading = true;
-          viewAllPickMeCubit.page = viewAllPickMeCubit.cards.last.nextPage!.toInt();
+          viewAllPickMeCubit.page =
+              viewAllPickMeCubit.cards.last.nextPage!.toInt();
           await viewAllPickMeCubit.getAllPickMe();
           isLoading = false;
         }

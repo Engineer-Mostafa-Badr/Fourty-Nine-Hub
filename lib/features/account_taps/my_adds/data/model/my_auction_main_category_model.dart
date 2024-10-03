@@ -15,18 +15,18 @@ class MyAuctionMainCategoryModel extends MyAuctionMainCategory {
       required super.enableInstallmentAndAuction});
 
   factory MyAuctionMainCategoryModel.fromJson(Map<String, dynamic> json) {
-      return MyAuctionMainCategoryModel(
-          id: json['_id'] ??'',
-          banner: json['banner'] ??'',
-          cover: json['cover'] ??'',
-          index: json['index'] ??0,
-          createdAt: json['createdAt'] ??'',
-          updatedAt: json['updatedAt'] ??'',
-          nameAr: json['nameAr'] ??'',
-          nameEn: json['nameEn'] ??'',
-          nameCode: json['nameCode'] ??'',
-          isHidden: json['isHidden'] ??false,
-          enableInstallmentAndAuction: json['EnableInstallmentAndAuction'] ??false,
-      );
+    return MyAuctionMainCategoryModel(
+      id: json['_id'] ?? '',
+      banner: json['banner'] ?? '',
+      cover: json['cover'] ?? '',
+      index: json['index'] ?? 0,
+      createdAt: json['createdAt'] ?? '',
+      updatedAt: json['updatedAt'] ?? '',
+      nameAr: json['nameAr'] ?? '',
+      nameEn: json['nameEn'] ?? '',
+      nameCode: json['nameCode'] ?? '',
+      isHidden: json['isHidden'] ?? false,
+      enableInstallmentAndAuction: json['EnableInstallmentAndAuction'] ?? false,
+    );
   }
 }

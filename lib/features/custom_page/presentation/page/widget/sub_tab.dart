@@ -68,9 +68,7 @@ class _SubTabState extends State<SubTab> {
                     title: Text(
                       categoryName,
                       style: Styles.mediumText(
-                          fontSize: 65.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Theme.of(context).primaryColor),
+                          fontSize: 65.sp, fontWeight: FontWeight.w400, color: Theme.of(context).primaryColor),
                     ),
                     selected: isSelected,
                   );
@@ -96,20 +94,18 @@ class _SubTabState extends State<SubTab> {
             return FloatingActionButton(
               backgroundColor: Theme.of(context).primaryColor,
               onPressed: () {
-                final selectedCategories = _selectedItems.entries
-                    .where((entry) => entry.value == true)
-                    .map((entry) => entry.key)
-                    .toList();
+                final selectedCategories =
+                    _selectedItems.entries.where((entry) => entry.value == true).map((entry) => entry.key).toList();
                 // Handle the save or update action
-                if(selectedCategories.length ==2) {
+                if (selectedCategories.length == 2) {
                   context.read<CustomPageCubit>().updateSubTab(SubTabParams(
-                  tripJoin: _selectedItems["TripJoin"] ?? false,
-                  carpool: _selectedItems["Carpool"] ?? false,
-                  auction: _selectedItems["Auction"] ?? false,
-                  installment: _selectedItems["Installment"] ?? false,
-                  chance: _selectedItems["Chance"] ?? false,
-                ));
-                }else {
+                        tripJoin: _selectedItems["TripJoin"] ?? false,
+                        carpool: _selectedItems["Carpool"] ?? false,
+                        auction: _selectedItems["Auction"] ?? false,
+                        installment: _selectedItems["Installment"] ?? false,
+                        chance: _selectedItems["Chance"] ?? false,
+                      ));
+                } else {
                   // Show a message if the selection is not valid
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

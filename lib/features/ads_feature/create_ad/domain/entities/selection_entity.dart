@@ -1,4 +1,4 @@
-class SelectionEntity{
+class SelectionEntity {
   final String nameAr;
   final String nameEn;
 

@@ -101,7 +101,7 @@ class _ViewAllTripJoinCardBuilderState
                 callOnTap: () async {
                   // launchUrlString("tel://${tripJoinCardEntity.phone}");
                   // return;
-                  if (await _userApproved(
+                  if (await _isPremuim(
                     tripJoinCardEntity,
                     UIConst.chatNormalId,
                     LocaleKeys.chatSubscription.localize,
@@ -110,14 +110,14 @@ class _ViewAllTripJoinCardBuilderState
                   }
                 },
                 messageOnTap: () async {
-                  if (await _userApproved(
+                  if (await _isPremuim(
                     tripJoinCardEntity,
                     UIConst.chatNormalId,
                     LocaleKeys.chatSubscription.localize,
                   )) {}
                 },
                 subscribeMessageOnTap: () async {
-                  if (await _userApproved(
+                  if (await _isPremuim(
                     tripJoinCardEntity,
                     tripJoinCardEntity.categoryId ?? '',
                     LocaleKeys.tripjoinPremuimSubscription.localize,

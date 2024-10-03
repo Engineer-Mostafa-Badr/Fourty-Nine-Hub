@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/carpool/domain/entities/available_routes_card_entity.dart';
-import 'package:fourtyninehub/features/carpool/presentation/widgets/available_routes_card.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/available_routes_card_entity.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/available_routes_card.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -21,25 +21,17 @@ class AvailableRoutesBuilder extends StatefulWidget {
 class _AvailableRoutesBuilderState extends State<AvailableRoutesBuilder> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: cards.length,
-      itemBuilder: (context, index) {
-        final entity = cards[index];
-        return InkWell(
-          onTap: () {
-            showModalBottomSheet(
-              context: context,
-              // backgroundColor: Colors.transparent,
-              builder: (BuildContext context) {
-                return const AvailableRoutesBottomSheet();
-              },
-            );
-          },
-          child: AvaiableRoutesCard(entity: entity),
-        );
-      },
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 20.h),
+      child: ListView.builder(
+        shrinkWrap: true,
+        // physics: const NeverScrollableScrollPhysics(),
+        itemCount: cards.length,
+        itemBuilder: (context, index) {
+          final entity = cards[index];
+          return AvaiableRoutesCard(entity: entity);
+        },
+      ),
     );
   }
 }
@@ -103,7 +95,7 @@ class _AvailableRoutesBottomSheetState extends State<AvailableRoutesBottomSheet>
                       setState(() {});
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
-                    trackColor: const MaterialStatePropertyAll<Color>(AppColors.SECONDARY_COLOR),
+                    trackColor: WidgetStateProperty.all(AppColors.SECONDARY_COLOR),
                     inactiveThumbColor: Colors.grey,
                   ),
                 ),
@@ -127,7 +119,7 @@ class _AvailableRoutesBottomSheetState extends State<AvailableRoutesBottomSheet>
                       setState(() {});
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
-                    trackColor: const MaterialStatePropertyAll<Color>(AppColors.SECONDARY_COLOR),
+                    trackColor: WidgetStateProperty.all(AppColors.SECONDARY_COLOR),
                     inactiveThumbColor: Colors.grey,
                   ),
                 ),
@@ -153,7 +145,7 @@ class _AvailableRoutesBottomSheetState extends State<AvailableRoutesBottomSheet>
                           setState(() {});
                         },
                         activeColor: AppColors.PRIMARY_COLOR,
-                        trackColor: const MaterialStatePropertyAll<Color>(AppColors.SECONDARY_COLOR),
+                        trackColor: WidgetStateProperty.all(AppColors.SECONDARY_COLOR),
                         inactiveThumbColor: Colors.grey,
                       ),
                     ),

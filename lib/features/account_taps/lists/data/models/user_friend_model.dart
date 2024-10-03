@@ -44,5 +44,3 @@ class UserFriendModel extends UserFriendEntity {
     );
   }
 }
-
-

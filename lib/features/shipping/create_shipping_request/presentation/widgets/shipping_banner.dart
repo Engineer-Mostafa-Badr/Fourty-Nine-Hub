@@ -39,19 +39,14 @@ class _ShippingBannerState extends State<ShippingBanner> {
   @override
   Widget build(BuildContext context) {
     return MainCategoryBanner(
-
       // noCount: true,
       onFavorite: () {
         if (isFavrote) {
-          context
-              .read<FavoriteMainCateogryCubit>()
-              .favorite(widget.model.mainCategory?.mainCategoryId ?? "");
+          context.read<FavoriteMainCateogryCubit>().favorite(widget.model.mainCategory?.mainCategoryId ?? "");
           isFavrote = false;
           return isFavrote;
         } else {
-          context
-              .read<FavoriteMainCateogryCubit>()
-              .favorite(widget.model.mainCategory?.mainCategoryId ?? "");
+          context.read<FavoriteMainCateogryCubit>().favorite(widget.model.mainCategory?.mainCategoryId ?? "");
           isFavrote = true;
           return isFavrote;
         }
@@ -70,14 +65,12 @@ class _ShippingBannerState extends State<ShippingBanner> {
         }
       },
       // canRegister: true,
-      canRegister: !(widget.model.mainCategory?.isDriver ?? false) &&
-          !(widget.model.mainCategory?.isDriverApproved ?? false),
+      canRegister:
+          !(widget.model.mainCategory?.isDriver ?? false) && !(widget.model.mainCategory?.isDriverApproved ?? false),
       category: MainCategoryEntity(
         nameEn: widget.model.mainCategory?.nameEn,
         id: widget.model.mainCategory?.mainCategoryId ?? '',
-        name: getLang() == 'ar'
-            ? widget.model.mainCategory?.nameAr ?? ''
-            : widget.model.mainCategory?.nameEn ?? '',
+        name: getLang() == 'ar' ? widget.model.mainCategory?.nameAr ?? '' : widget.model.mainCategory?.nameEn ?? '',
         banner: widget.model.mainCategory?.banner ?? UIConst.imagePlaceHolder,
         cover: widget.model.mainCategory?.cover ?? UIConst.imagePlaceHolder,
         image: UIConst.imagePlaceHolder,

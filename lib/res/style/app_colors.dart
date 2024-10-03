@@ -88,6 +88,8 @@ abstract class AppColors {
     ),
   ];
   static Color getSecondryColor(BuildContext context) {
-    return context.isDarkMode ? AppColors.SECONDARY_COLOR_DARK : AppColors.SECONDARY_COLOR;
+    return context.isDarkMode
+        ? AppColors.SECONDARY_COLOR_DARK
+        : AppColors.SECONDARY_COLOR;
   }
 }

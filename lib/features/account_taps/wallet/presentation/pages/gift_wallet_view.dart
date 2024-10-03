@@ -57,10 +57,11 @@ class GiftWalletView extends StatelessWidget {
                         children: [
                           Label(
                             text: LocaleKeys.luckyWheel.localize,
-                            style: Styles.mediumText(fontWeight: FontWeight.bold),
+                            style:
+                                Styles.mediumText(fontWeight: FontWeight.bold),
                           ),
-                           Label(
-                            text: '${state.gift?.amount ??0}',
+                          Label(
+                            text: '${state.gift?.amount ?? 0}',
                           ),
                           const Sizer(),
                           Row(
@@ -70,24 +71,26 @@ class GiftWalletView extends StatelessWidget {
                                 Icons.info_outline,
                                 color: Colors.grey,
                               ),
-                               Sizer(width: 10.w,),
+                              Sizer(
+                                width: 10.w,
+                              ),
                               Expanded(
                                   child: Label(
-                                    maxLines: 2,
-                                    text:
+                                maxLines: 2,
+                                text:
                                     '${LocaleKeys.minimum.localize} 10000 ${LocaleKeys.requestTransaction.localize}',
-                                    style: Styles.mediumText(color: Colors.grey),
-                                  )),
+                                style: Styles.mediumText(color: Colors.grey),
+                              )),
                             ],
                           ),
                           const Sizer(),
                           AppButton(
                             label: LocaleKeys.requestWithdraw.localize,
                             color: AppColors.AUTH_CONTAINER_COLOR,
-                            backColor: (state.gift?.amount ?? 0) >= 10000 && state.gift?.wheelWinner == true
+                            backColor: (state.gift?.amount ?? 0) >= 10000 &&
+                                    state.gift?.wheelWinner == true
                                 ? Colors.red
                                 : Colors.red.withOpacity(.5),
-
                             onPressed: () {},
                           ),
                         ],
@@ -95,18 +98,21 @@ class GiftWalletView extends StatelessWidget {
                     ),
                     const Sizer(),
                     ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: state.gift?.competitionsWallet.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return CompetitionCard(
-                            competitionsWalletEntity:
-                                state.gift!.competitionsWallet[index],
-                            onTap: (context) {},
-                            // onTap: (context) =>
-                            //     controller.showGiftsHistory(context: context),
-                          );
-                        }, separatorBuilder: (BuildContext context, int index)=>const Sizer(),)
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: state.gift?.competitionsWallet.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return CompetitionCard(
+                          competitionsWalletEntity:
+                              state.gift!.competitionsWallet[index],
+                          onTap: (context) {},
+                          // onTap: (context) =>
+                          //     controller.showGiftsHistory(context: context),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Sizer(),
+                    )
                   ],
                 ),
               ),
