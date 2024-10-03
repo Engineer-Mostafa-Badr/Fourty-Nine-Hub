@@ -177,10 +177,11 @@
 //
 // //21/8/2024
 import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -188,7 +189,6 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
@@ -196,10 +196,6 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_sub_category_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../../../../routes/routes.dart';
 
 const kToolbarHeightFactor = 0.80;
 const kDefaultPadding = 8.0;
@@ -277,13 +273,14 @@ class _TinderScreenState extends State<TinderScreen> {
             _buildHeader(),
             state.userData.isNotEmpty
                 ? const TinderCardStack()
-                : SizedBox(
+                : const SizedBox(
                     // height: MediaQuery.of(context).size.height/2,
                     ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 2),
-              child: Divider(color: Colors.grey, height: 1.h),
-            ),
+            if (state.userData.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 2),
+                child: Divider(color: Colors.grey, height: 1.h),
+              ),
             _buildSubCategoryList(state),
             SizedBox(height: 50.h),
           ],
