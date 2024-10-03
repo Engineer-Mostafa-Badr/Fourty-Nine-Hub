@@ -43,17 +43,33 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
                       ),
                       itemBuilder: (context, i) => Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
-                        child: FavouriteMainCategoryBanner(
-                          category: state.data![i],
-                          canRegister: false,
-                          onFavorite: () async {
-                            var result = await controller
-                                .removeFavorite(state.data![i].id);
-                            if (result == true) {
-                              state.data?.removeWhere(
-                                  (element) => element.id == state.data![i].id);
-                            }
+                        child: InkWell(
+                          onTap: () {
+                            // context.push(Routes.SUBCATEGORIES,
+                            //     extra: state.data![i]);
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => BlocProvider(
+                            //       create: (_) => serviceLocator<SubcategoriesCubit>(),
+                            //       child: SubCategoriesView(
+                            //           mainCategory: state.data![i]),
+                            //     ),
+                            //   ),
+                            // );
                           },
+                          child: FavouriteMainCategoryBanner(
+                            category: state.data![i],
+                            canRegister: false,
+                            onFavorite: () async {
+                              var result = await controller
+                                  .removeFavorite(state.data![i].id);
+                              if (result == true) {
+                                state.data?.removeWhere((element) =>
+                                    element.id == state.data![i].id);
+                              }
+                            },
+                          ),
                         ),
                       ),
                     )

@@ -124,7 +124,7 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
                     return true;
                   },
                 ),
-                Sizer(),
+                const Sizer(),
               ],
             ),
           ),

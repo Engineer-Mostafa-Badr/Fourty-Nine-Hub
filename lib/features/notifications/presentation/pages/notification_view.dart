@@ -94,7 +94,7 @@ class _NotificationViewState extends State<NotificationView> {
                 color: Colors.red,
               ),
               body: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -102,7 +102,7 @@ class _NotificationViewState extends State<NotificationView> {
                       text: LocaleKeys.notifications.localize,
                       style: Styles.headerText(),
                     ),
-                    Sizer(),
+                    const Sizer(),
                     const TabBar(
                       tabs: [
                         SocialIconBuilder(),

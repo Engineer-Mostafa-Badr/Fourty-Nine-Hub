@@ -83,7 +83,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                 ],
               ),
             ),
-            Sizer(),
+            const Sizer(),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0.w),
               child: Row(

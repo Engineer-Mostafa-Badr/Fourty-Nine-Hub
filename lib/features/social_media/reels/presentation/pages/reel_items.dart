@@ -672,7 +672,7 @@ class MainReelItemState extends State<MainReelItem>
           FaIcon(
             icon,
             color: iconColor ?? Colors.white,
-            size: 50.h,
+            size: 40.h,
           ),
           if (count != 0)
             Text(
@@ -959,31 +959,28 @@ class ReelItemForInstagramState extends State<ReelItemForInstagram>
           //   ),
           // ),
 
-          Expanded(
-            flex: 4,
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  FittedBox(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _buildUserAvatar(),
-                        const SizedBox(width: 12),
-                        _buildUserInfo(),
-                      ],
-                    ),
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FittedBox(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _buildUserAvatar(),
+                      const SizedBox(width: 12),
+                      _buildUserInfo(),
+                    ],
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  FittedBox(child: _buildAudioAndButtons(width)),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                FittedBox(child: _buildAudioAndButtons(width)),
+              ],
             ),
           ),
 
@@ -994,7 +991,7 @@ class ReelItemForInstagramState extends State<ReelItemForInstagram>
           //         child: _buildActionButtons(),
           //       )
           //     :
-          Expanded(flex: 1, child: _buildActionButtons()),
+          _buildActionButtons(),
         ],
       ),
     );
@@ -1016,7 +1013,7 @@ class ReelItemForInstagramState extends State<ReelItemForInstagram>
           context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
         },
         child: CircleAvatar(
-          radius: 60.h,
+          radius: 20,
           backgroundImage: CachedNetworkImageProvider(
             widget.reel.user.profilePictureSignedUrl!,
           ),
@@ -1137,7 +1134,7 @@ class ReelItemForInstagramState extends State<ReelItemForInstagram>
     final reelsCubit = context.read<ReelsCubit>();
 
     return Padding(
-      padding: const EdgeInsets.all(4.0),
+      padding: const EdgeInsets.all(4.0).add(EdgeInsets.only(bottom: 30)),
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.end,

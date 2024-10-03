@@ -60,7 +60,7 @@ class _ZegoSwitchAudioOutputButtonState
 
   Widget getAudioRouteButtonByRoute(ZegoUIKitAudioRoute audioRoute) {
     Widget icon = UIKitImage.asset(StyleIconUrls.iconS1ControlBarSpeakerOff,
-        width: 35, height: 35);
+        width: 35, height: 35,fit: BoxFit.cover);
     var backgroundColor = controlBarButtonBackgroundColor;
 
     /// get the new icon and background color
@@ -68,32 +68,32 @@ class _ZegoSwitchAudioOutputButtonState
       /// always open
       icon = widget.bluetoothIcon?.icon ??
           UIKitImage.asset(StyleIconUrls.iconS1ControlBarSpeakerBluetooth,
-              width: 35, height: 35);
+              width: 35, height: 35,fit: BoxFit.cover);
       backgroundColor = widget.bluetoothIcon?.backgroundColor ??
           controlBarButtonBackgroundColor;
     } else if (ZegoUIKitAudioRoute.headphone == audioRoute) {
       /// always display speaker closed
       icon = widget.headphoneIcon?.icon ??
           UIKitImage.asset(StyleIconUrls.iconS1ControlBarSpeakerOff,
-              width: 35, height: 35);
+              width: 35, height: 35,fit: BoxFit.cover);
       backgroundColor = widget.headphoneIcon?.backgroundColor ??
           controlBarButtonBackgroundColor;
     } else if (ZegoUIKitAudioRoute.speaker == audioRoute) {
       icon = widget.speakerIcon?.icon ??
           UIKitImage.asset(StyleIconUrls.iconS1ControlBarSpeakerNormal,
-              width: 35, height: 35);
+              width: 35, height: 35,fit: BoxFit.cover);
       backgroundColor = widget.speakerIcon?.backgroundColor ??
           controlBarButtonCheckedBackgroundColor;
     } else {
       icon = widget.headphoneIcon?.icon ??
           UIKitImage.asset(StyleIconUrls.iconS1ControlBarSpeakerOff,
-              width: 35, height: 35);
+              width: 35, height: 35,fit: BoxFit.cover);
       backgroundColor = widget.headphoneIcon?.backgroundColor ??
           controlBarButtonBackgroundColor;
     }
 
     final containerSize = widget.buttonSize ?? Size(96.zR, 96.zR);
-    final sizeBoxSize = widget.iconSize ?? Size(56.zR, 56.zR);
+    final sizeBoxSize = widget.iconSize ?? Size(50.zW, 35.zH);
 
     return GestureDetector(
       onTap: onPressed,

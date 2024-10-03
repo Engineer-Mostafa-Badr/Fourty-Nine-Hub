@@ -1,15 +1,19 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/data/model/my_ads_trip_join_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/ride/trip_details/domain/entities/trip_and_request_entity.dart';
+
 import '../../../../../core/data/datasources/json_parser.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
-import '../../../../installment_feature/installment_list/domain/entities/installment_entity.dart';
 import '../../../../ride/trip_details/data/models/trip_and_request_model.dart';
+import '../../domain/entity/get_all_counts_trip_join_entity.dart';
 import '../../domain/entity/my_ads_auction.dart';
 import '../../domain/entity/my_ads_trip_join_entity.dart';
+import '../../domain/usecases/get_all_counts_usecase.dart';
+import '../model/get_all_counts_trip_join_model.dart';
 import '../model/my_ads_auction_model.dart';
 
 abstract class MyAdsRemoteDatasource {
@@ -18,6 +22,7 @@ abstract class MyAdsRemoteDatasource {
   Future<Either<Failure, List<TripAndRequestModel>>> getPickMeAds();
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyAuctions();
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments();
+  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyOtherAds();
   Future<Either<Failure, MyAdsTripJoinEntity>> getMyTripJoin();
   Future<Either<Failure, bool>> deleteComeWithMeAd({required String id});
   Future<Either<Failure, bool>> deletePickMeAd({required String id});
@@ -27,6 +32,9 @@ abstract class MyAdsRemoteDatasource {
   Future<Either<Failure, bool>> rejectComeWithYouRequests({required String id});
   Future<Either<Failure, bool>> cancelAd({required String id});
   Future<Either<Failure, bool>> deactivateAd({required int id});
+  Future<Either<Failure, bool>> deleteMyTripJoin({required String id});
+  Future<Either<Failure, bool>> deleteMyInstallment({required String id});
+  Future<Either<Failure, List<GetAllCountsTripJoinEntity>>> getAllCountsTripJoin(Params params);
 }
 
 class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
@@ -48,17 +56,13 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
   @override
   Future<Either<Failure, List<AdEntity>>> getAds() async {
     final response = await _apiConsumer.get(EndPoints.myAds);
-    return response.fold(
-        (failure) => Left(failure),
-        (data) => Right((data['data']['ads'] as List)
-            .map((e) => AdModel.fromJson(e))
-            .toList()));
+    return response.fold((failure) => Left(failure),
+        (data) => Right((data['data']['ads'] as List).map((e) => AdModel.fromJson(e)).toList()));
   }
 
   @override
   Future<Either<Failure, bool>> deleteComeWithMeAd({required String id}) async {
-    final response =
-        await _apiConsumer.delete(EndPoints.deleteComeWithYouTrips(id));
+    final response = await _apiConsumer.delete(EndPoints.deleteComeWithYouTrips(id));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
@@ -72,48 +76,36 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
   Future<Either<Failure, List<TripAndRequestEntity>>> getComeWithMeAds() async {
     final response = await _apiConsumer.get(EndPoints.getMyComeWithYouTrips);
     return response.fold(
-        (l) => Left(l),
-        (data) => Right((data['data'] as List)
-            .map((e) => TripAndRequestModel.fromJson(e))
-            .toList()));
+        (l) => Left(l), (data) => Right((data['data'] as List).map((e) => TripAndRequestModel.fromJson(e)).toList()));
   }
 
   @override
   Future<Either<Failure, List<TripAndRequestModel>>> getPickMeAds() async {
     final response = await _apiConsumer.get(EndPoints.getMyPickMeTrips);
     return response.fold(
-        (l) => Left(l),
-        (data) => Right((data['data'] as List)
-            .map((e) => TripAndRequestModel.fromJson(e))
-            .toList()));
+        (l) => Left(l), (data) => Right((data['data'] as List).map((e) => TripAndRequestModel.fromJson(e)).toList()));
   }
 
   @override
-  Future<Either<Failure, bool>> acceptComeWithYouRequests(
-      {required String id}) async {
-    final response =
-        await _apiConsumer.put(EndPoints.acceptComeWithYouRequest(id));
+  Future<Either<Failure, bool>> acceptComeWithYouRequests({required String id}) async {
+    final response = await _apiConsumer.put(EndPoints.acceptComeWithYouRequest(id));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, bool>> acceptPickMeRequest(
-      {required String id}) async {
+  Future<Either<Failure, bool>> acceptPickMeRequest({required String id}) async {
     final response = await _apiConsumer.put(EndPoints.acceptPickMeRequest(id));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, bool>> rejectComeWithYouRequests(
-      {required String id}) async {
-    final response =
-        await _apiConsumer.put(EndPoints.rejectComeWithYouRequest(id));
+  Future<Either<Failure, bool>> rejectComeWithYouRequests({required String id}) async {
+    final response = await _apiConsumer.put(EndPoints.rejectComeWithYouRequest(id));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, bool>> rejectPickMeRequest(
-      {required String id}) async {
+  Future<Either<Failure, bool>> rejectPickMeRequest({required String id}) async {
     final response = await _apiConsumer.put(EndPoints.rejectPickMeRequest(id));
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
@@ -121,27 +113,47 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
   @override
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyAuctions() async {
     final response = await _apiConsumer.get(EndPoints.myAdsAuction);
-    return response.fold(
-        (failure) => Left(failure),
-        (data) => Right((data['data']['ads'] as List)
-            .map((e) => MyAuctionAdsModel.fromJson(e))
-            .toList()));
+    return response.fold((failure) => Left(failure),
+        (data) => Right((data['data']['ads'] as List).map((e) => MyAuctionAdsModel.fromJson(e)).toList()));
   }
 
   @override
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments() async {
     final response = await _apiConsumer.get(EndPoints.myAdsInstallment);
-    return response.fold(
-        (failure) => Left(failure),
-        (data) => Right((data['data']['ads'] as List)
-            .map((e) => MyAuctionAdsModel.fromJson(e))
-            .toList()));
+    return response.fold((failure) => Left(failure),
+        (data) => Right((data['data']['ads'] as List).map((e) => MyAuctionAdsModel.fromJson(e)).toList()));
   }
 
   @override
   Future<Either<Failure, MyAdsTripJoinEntity>> getMyTripJoin() async {
     final response = await _apiConsumer.get(EndPoints.myAdsTripJoin);
     return response.fold(
-        (failure) => Left(failure), (data) => Right((data['data'])));
+        (failure) => Left(failure), (data) => Right(MyAdsTripJoinModel.fromJson(data['data']['trips'])));
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteMyTripJoin({required String id}) async {
+    final response = await _apiConsumer.delete(EndPoints.deleteMyTripJoin(id: id));
+    return response.fold((failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteMyInstallment({required String id}) async {
+    final response = await _apiConsumer.delete(EndPoints.deleteMyInstallment(id: id));
+    return response.fold((failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyOtherAds() async {
+    final response = await _apiConsumer.get(EndPoints.myAdsOther);
+    return response.fold((failure) => Left(failure),
+        (data) => Right((data['data']['ads'] as List).map((e) => MyAuctionAdsModel.fromJson(e)).toList()));
+  }
+
+  @override
+  Future<Either<Failure, List<GetAllCountsTripJoinEntity>>> getAllCountsTripJoin(Params params) async {
+    final response = await _apiConsumer.get(EndPoints.getAllCount(params));
+    return response.fold((failure) => Left(failure),
+        (data) => Right((data['data'] as List).map((e) => GetAllCountsTripJoinModel.fromJson(e)).toList()));
   }
 }

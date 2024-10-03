@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -28,7 +27,6 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TwitterView extends StatefulWidget {
   const TwitterView({super.key});
@@ -47,8 +45,8 @@ class _TwitterViewState extends State<TwitterView> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        SharedScaffold(
-          mainCategoryId: 2,
+        Scaffold(
+          // mainCategoryId: 2,
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
               builder: (context, state) {
             UserEntity? userData = state.data;
@@ -82,7 +80,7 @@ class _TwitterViewState extends State<TwitterView> {
 
   Widget _buildTwitterTitle() {
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Label(
         text: LocaleKeys.Tweets.localize,
         style: Styles.headerText(),
@@ -127,7 +125,7 @@ class _TwitterViewState extends State<TwitterView> {
                     return Center(
                       child: Text(
                         LocaleKeys.noPosts.localize,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 18,
                         ),
@@ -300,7 +298,7 @@ class _TwitterViewState extends State<TwitterView> {
                     return Center(
                       child: Text(
                         LocaleKeys.noPosts.localize,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 18,
                         ),

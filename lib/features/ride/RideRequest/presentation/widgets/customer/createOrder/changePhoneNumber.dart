@@ -34,7 +34,7 @@ class RideContactPhoneNumber extends StatelessWidget {
               Label(
                   text: 'Contact Phone',
                   style: Styles.mediumText(fontWeight: FontWeight.bold)),
-              Sizer(),
+              const Sizer(),
               FormTextField(
                   hint: 'Phone',
                   type: TextInputType.number,
@@ -44,7 +44,7 @@ class RideContactPhoneNumber extends StatelessWidget {
                       color: Colors.grey,
                       fontWeight: FontWeight.bold),
                   action: (v) => onChanged(v)),
-              Sizer(),
+              const Sizer(),
               AppButton(
                   label: 'Done',
                   onPressed: () {

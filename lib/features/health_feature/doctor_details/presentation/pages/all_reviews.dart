@@ -15,7 +15,7 @@ import '../../../../ride/RideRequest/domain/entity/driver_review_entity.dart';
 
 class AllReviews extends StatelessWidget {
   final List<ReviewEntity> reviews;
-  AllReviews({super.key, required this.reviews});
+  const AllReviews({super.key, required this.reviews});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class AllReviews extends StatelessWidget {
             iconSize: 20,
             color: AppColors.ACCENT_COLOR,
           ),
-          Sizer(),
+          const Sizer(),
           Label(
               text: label,
               style: Styles.mediumText(fontWeight: FontWeight.w400)),

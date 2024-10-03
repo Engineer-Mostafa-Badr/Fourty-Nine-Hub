@@ -16,7 +16,7 @@ abstract class Labels {
   static const months = 'Months';
   static const month = 'Month';
   static const details = 'Details';
-  static const description = 'Description';
+  static const description = 'Cargo Description';
   static const buyWithInstallment = 'Buy with installment';
   // doctors
   static const languages = 'Languages';
@@ -153,9 +153,9 @@ abstract class Labels {
   static const uploadPhotos = 'Upload Photos';
   static const deleteAccount = 'Delete Account';
 
-  static const receiptPoint = 'Receipt Point';
-  static const deliveryPoint = 'Delivery Point';
-  static const time = 'Time';
+  static const receiptPoint = 'Pickup Location';
+  static const deliveryPoint = 'Destination';
+  static const time = 'Pickup Time';
   static const offerPrice = 'Offer Price';
   static const phone = 'Phone';
   static const theApplicationDoesNot =

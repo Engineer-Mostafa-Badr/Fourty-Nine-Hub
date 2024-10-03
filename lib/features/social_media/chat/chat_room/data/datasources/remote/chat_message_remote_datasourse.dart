@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
@@ -144,11 +143,10 @@ class MessagesRemoteDataSourceImplementation
           mediaIds.add(id);
         }
       }
+      
 
-      // if (mediaIds.isNotEmpty) {
-      //   await Future.delayed(const Duration(seconds: 6), () {});
-      // }
 
+      _socket.connect();
       _socket.emit(
         SocketIOEvents.sendMessage,
         jsonEncode({
@@ -159,6 +157,7 @@ class MessagesRemoteDataSourceImplementation
           "groupId": null,
           "replyMessageId": params.replyMessageId,
           "oneTimeView": params.oneTimeView,
+          "sharedContacts": params.sharedContacts.map((contact) => contact.toJson()).toList(),
         }),
       );
 

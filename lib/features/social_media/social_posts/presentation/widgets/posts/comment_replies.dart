@@ -80,11 +80,11 @@ class _CommentRepliesState extends State<CommentReplies> {
                       print(
                           controller.repliesPagingController.itemList?.length);
                       return Padding(
-                          padding: EdgeInsets.only(top: 200),
+                          padding: const EdgeInsets.only(top: 200),
                           child: Center(
                             child: Text(
                               LocaleKeys.noReplied.localize,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,
                               ),
@@ -125,7 +125,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                       imageURL: user?.profilePicture,
                       userId: '',
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Expanded(
                         child: TextFormField(
                       maxLines: null,
@@ -141,7 +141,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                         hintStyle: Styles.mediumText(),
                       ),
                     )),
-                    Sizer(),
+                    const Sizer(),
                     if (replyTextController.text.isNotEmpty)
                       IconAppButton(
                         icon: Icons.send,

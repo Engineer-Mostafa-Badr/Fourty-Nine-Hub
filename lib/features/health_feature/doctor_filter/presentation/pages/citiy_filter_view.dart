@@ -51,7 +51,7 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
               currentFocusNode: doctorCityFilter.searchFocusNode,
               currentController: doctorCityFilter.searchController,
               hint: LocaleKeys.search.localize,
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: const Icon(Icons.search),
               onChanged: (value) => doctorCityFilter.search(value),
             ),
             Sizer(
@@ -64,14 +64,14 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
                     return Expanded(
                         child: ListView.separated(
                       itemCount: state.cities.length,
-                      separatorBuilder: (context, index) => Divider(),
+                      separatorBuilder: (context, index) => const Divider(),
                       itemBuilder: (context, index) =>
                           CityListTitle(city: state.cities[index]),
                     ));
                   case DoctorCityFilterError _:
                     return Center(child: Text(state.message));
                   default:
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                 }
               },
             ),

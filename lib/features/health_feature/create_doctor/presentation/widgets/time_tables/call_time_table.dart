@@ -28,7 +28,7 @@ class CreateDoctorCallTimeTable extends StatelessWidget {
                     nextFocusNode:
                         doctorLoginCubit.callExamineDurationFocusNode,
                     currentController: doctorLoginCubit.callPriceController),
-                Sizer(),
+                const Sizer(),
                 DefaultTextFormField(
                     hint: 'Call Examine Duration (in minutes)',
                     keyboardType: TextInputType.number,
@@ -41,7 +41,7 @@ class CreateDoctorCallTimeTable extends StatelessWidget {
             ),
           );
         } else {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
       },
     );

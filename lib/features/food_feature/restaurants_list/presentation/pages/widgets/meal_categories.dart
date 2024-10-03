@@ -14,9 +14,9 @@ class MealCategories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
+    return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
         builder: (context, state) {
-      final controller = context.read<RestaurantsListCubit>();
+      final controller = context.read<RestaurantsCubit>();
 
       if (state.mealCategories != null && state.mealCategories!.isNotEmpty) {
         return SizedBox(
@@ -28,10 +28,10 @@ class MealCategories extends StatelessWidget {
                 text: LocaleKeys.meal.localize,
                 style: Styles.headerText(),
               ),
-              Sizer(),
+              const Sizer(),
               Expanded(
                 child: ListView.separated(
-                  separatorBuilder: (context, index) => Sizer(),
+                  separatorBuilder: (context, index) => const Sizer(),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) => MealCategoryCard(
                       onTap: (String id) {

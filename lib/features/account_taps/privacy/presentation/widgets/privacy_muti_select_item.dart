@@ -28,7 +28,7 @@ class PrivacyMultiSelectItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Sizer(),
+        const Sizer(),
         Card(
           color: Theme.of(context).scaffoldBackgroundColor,
           shape: RoundedRectangleBorder(

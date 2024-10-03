@@ -17,7 +17,7 @@ import '../../../../../routes/routes.dart';
 class CreateNewForgetPasswordView extends StatelessWidget {
   final String email;
 
-  CreateNewForgetPasswordView({
+  const CreateNewForgetPasswordView({
     super.key,
     required this.email,
   });
@@ -54,7 +54,7 @@ class CreateNewForgetPasswordView extends StatelessWidget {
             ),
           ),
           body: Padding(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Form(
               key: cubit.formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,

@@ -15,7 +15,7 @@ class AppButton extends StatelessWidget {
   final TextStyle? style;
   final IconData? icon;
   final Color? color;
-
+  final MainAxisAlignment? mainAxisAlignment;
   const AppButton(
       {super.key,
       required this.label,
@@ -24,6 +24,7 @@ class AppButton extends StatelessWidget {
       this.height,
       this.radius,
       this.margin,
+      this.mainAxisAlignment,
       this.widget,
       this.padding,
       this.iconSize,
@@ -49,7 +50,8 @@ class AppButton extends StatelessWidget {
         child: widget ??
             Center(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment:
+                    mainAxisAlignment ?? MainAxisAlignment.center,
                 children: [
                   if (icon != null)
                     Icon(

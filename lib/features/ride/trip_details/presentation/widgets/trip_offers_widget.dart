@@ -44,7 +44,7 @@ class TripOffersWidget extends StatelessWidget {
               children: [
                 const Icon(FontAwesomeIcons.car,
                     color: AppColors.PRIMARY_COLOR),
-                Sizer(),
+                const Sizer(),
                 Label(
                   text: trip.category?.name ?? '',
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
@@ -60,7 +60,7 @@ class TripOffersWidget extends StatelessWidget {
                     Icons.location_searching,
                     color: AppColors.PRIMARY_COLOR,
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Expanded(child: Label(text: trip.fromAddress)),
                   IconAppButton(
                       icon: Icons.directions,
@@ -80,7 +80,7 @@ class TripOffersWidget extends StatelessWidget {
                     Icons.location_on,
                     color: AppColors.SECONDARY_COLOR,
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Expanded(child: Label(text: trip.toAddress)),
                   IconAppButton(
                       icon: Icons.directions,
@@ -98,7 +98,7 @@ class TripOffersWidget extends StatelessWidget {
                     child: Row(
                   children: [
                     const Icon(Icons.monetization_on_rounded),
-                    Sizer(),
+                    const Sizer(),
                     Label(text: '${trip.price} L.E')
                   ],
                 )),
@@ -106,7 +106,7 @@ class TripOffersWidget extends StatelessWidget {
                     child: Row(
                   children: [
                     const Icon(Icons.timer),
-                    Sizer(),
+                    const Sizer(),
                     Label(text: trip.time.toString())
                   ],
                 )),
@@ -114,13 +114,13 @@ class TripOffersWidget extends StatelessWidget {
                     child: Row(
                   children: [
                     const Icon(Icons.add_road),
-                    Sizer(),
+                    const Sizer(),
                     Label(text: trip.distance.toString())
                   ],
                 )),
               ],
             ),
-            Sizer(),
+            const Sizer(),
             AppButton(
                 label: 'Cancel Trip',
                 icon: Icons.clear,
@@ -147,14 +147,14 @@ class TripOffersWidget extends StatelessWidget {
               child: Column(
                 children: [
                   const LinearProgressIndicator(),
-                  Sizer(),
+                  const Sizer(),
                   if (trip.offers.isNotEmpty)
                     Expanded(
                       child: ListView.separated(
                           itemBuilder: (context, index) => OfferRideCard(
                                 offer: trip.offers[index],
                               ),
-                          separatorBuilder: (context, index) => Sizer(),
+                          separatorBuilder: (context, index) => const Sizer(),
                           itemCount: trip.offers.length),
                     ),
                 ],

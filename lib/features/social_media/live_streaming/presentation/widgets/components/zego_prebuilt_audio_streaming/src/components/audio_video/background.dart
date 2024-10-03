@@ -24,13 +24,13 @@ class ZegoLiveAudioRoomSeatBackground extends StatefulWidget {
   final ZegoUIKitPrebuiltLiveAudioRoomConfig config;
 
   const ZegoLiveAudioRoomSeatBackground({
-    Key? key,
+    super.key,
     this.user,
     this.extraInfo = const {},
     required this.size,
     required this.seatManager,
     required this.config,
-  }) : super(key: key);
+  });
 
   @override
   State<ZegoLiveAudioRoomSeatBackground> createState() =>

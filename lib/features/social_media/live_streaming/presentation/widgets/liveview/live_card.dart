@@ -57,7 +57,7 @@ class _LiveCardState extends State<LiveCard> {
             accountId: 0,
             userId: '',
           ),
-          Sizer(),
+          const Sizer(),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +73,7 @@ class _LiveCardState extends State<LiveCard> {
               ],
             ),
           ),
-          Sizer(),
+          const Sizer(),
           AppButton(
               height: 25.h,
               label: 'Follow',
@@ -85,7 +85,7 @@ class _LiveCardState extends State<LiveCard> {
                     extra: ZegoArgs('123', false,
                         context.read<UserCubit>().state.data!.fullName));
               }),
-          Sizer(),
+          const Sizer(),
           Row(
             children: [
               IconAppButton(
@@ -93,14 +93,14 @@ class _LiveCardState extends State<LiveCard> {
                 color: Colors.white,
                 onPressed: () {},
               ),
-              Sizer(
+              const Sizer(
                 width: 5,
               ),
               Label(
                 text: '140 view',
                 style: Styles.mediumText(color: Colors.white),
               ),
-              Sizer(
+              const Sizer(
                 width: 5,
               ),
               IconAppButton(
@@ -153,7 +153,7 @@ class _LiveCardState extends State<LiveCard> {
               ),
             ),
           ),
-          Sizer(),
+          const Sizer(),
           _buildActionButton(
               image: Assets.giftbox,
               label: 'Gift',
@@ -163,14 +163,14 @@ class _LiveCardState extends State<LiveCard> {
                     backColor: Colors.black87,
                     widget: Container());
               }),
-          Sizer(),
+          const Sizer(),
           _buildActionButton(
               image: Assets.coin,
               label: 'Recharge',
               onTap: () {
                 bottomSheet(context: context, widget: const RechargeCoins());
               }),
-          Sizer(),
+          const Sizer(),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

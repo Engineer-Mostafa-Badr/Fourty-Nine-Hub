@@ -57,18 +57,18 @@ class MealCategoryCard extends StatelessWidget {
                               : AppColors.PRIMARY_COLOR_DARK,
                           onPressed: () {
                             context
-                                .read<RestaurantsListCubit>()
+                                .read<RestaurantsCubit>()
                                 .toggleFavoriteSubcategory(
                                     subCategory?.id ?? "");
                           })),
                 ],
               ),
             )),
-            Sizer(),
+            const Sizer(),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                const Row(
                   children: [
                     Expanded(
                       child: Sizer(

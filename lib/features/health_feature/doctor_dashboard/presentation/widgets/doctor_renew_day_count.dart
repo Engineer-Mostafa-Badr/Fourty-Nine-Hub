@@ -20,7 +20,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
           text: Labels.deadline,
           style: Styles.headerText(),
         ),
-        Sizer(),
+        const Sizer(),
         Container(
           padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10),
           decoration: BoxDecoration(
@@ -47,7 +47,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                   },
                 ),
               ),
-              Sizer(),
+              const Sizer(),
               Expanded(
                 child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
                   buildWhen: (previous, current) =>
@@ -66,7 +66,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                   },
                 ),
               ),
-              Sizer(),
+              const Sizer(),
               Expanded(
                 child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
                   buildWhen: (previous, current) =>

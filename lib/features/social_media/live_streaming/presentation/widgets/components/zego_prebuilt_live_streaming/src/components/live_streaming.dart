@@ -29,9 +29,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 // import 'package:zego_uikit/src/services/defines/audio_video.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
-import '../../../zego_uikit/src/services/defines/error.dart';
-import '../../../zego_uikit/src/services/services.dart';
-
 /// Live Streaming Widget.
 ///
 /// You can embed this widget into any page of your project to integrate the functionality of a live streaming.

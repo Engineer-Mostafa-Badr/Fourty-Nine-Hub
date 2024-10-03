@@ -18,7 +18,6 @@ import '../../data/models/car_type_model.dart';
 import '../../data/models/google_search_results.dart';
 import '../../domain/entity/address_search_params_entity.dart';
 import '../../domain/usecases/request/add_ride_request_usecase.dart';
-import '../../domain/usecases/request/get_car_types_use_case.dart';
 import '../../domain/usecases/request/get_near_by_places_usecase.dart';
 
 part 'riderequest_state.dart';

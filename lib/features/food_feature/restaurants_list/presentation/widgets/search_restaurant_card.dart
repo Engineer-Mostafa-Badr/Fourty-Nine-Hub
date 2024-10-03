@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
@@ -47,7 +46,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
               decoration: const BoxDecoration(
-                gradient: const LinearGradient(
+                gradient: LinearGradient(
                   colors: [
                     AppColors.YELLOW_COLOR,
                     AppColors.ACCENT_COLOR,
@@ -61,7 +60,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
                     color: Colors.black,
                     size: 25,
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Text(
                     LocaleKeys.premium.tr(),
                     style: TextStyle(
@@ -138,7 +137,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
                             Icons.star_rounded,
                             color: AppColors.ACCENT_COLOR,
                           ),
-                          Sizer(),
+                          const Sizer(),
                           Label(
                               text: '${widget.restaurant?.totalRating}',
                               style: Styles.mediumText(

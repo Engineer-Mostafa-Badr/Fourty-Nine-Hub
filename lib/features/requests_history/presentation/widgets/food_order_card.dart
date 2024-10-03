@@ -10,7 +10,6 @@ import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FoodOrderCard extends StatelessWidget {
   final FoodOrderEntity item;
@@ -21,7 +20,7 @@ class FoodOrderCard extends StatelessWidget {
     return InkWell(
       onTap: () => context.push(Routes.RESTAURANTDETAILS),
       child: Container(
-        padding: EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
             border: Border.all(color: Colors.grey, width: .5),
             borderRadius: BorderRadius.circular(10)),
@@ -29,7 +28,7 @@ class FoodOrderCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildRestaurantInfoWidget(),
-            Sizer(),
+            const Sizer(),
             _buildAddressWidget(),
             Label(
               text: LocaleKeys.meal.localize,
@@ -97,7 +96,7 @@ class FoodOrderCard extends StatelessWidget {
             width: kToolbarHeight,
             radius: 10,
             source: NetworkImage(item.restaurant.image.first)),
-        Sizer(),
+        const Sizer(),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +115,7 @@ class FoodOrderCard extends StatelessWidget {
                   Icons.star_rounded,
                   color: AppColors.ACCENT_COLOR,
                 ),
-                Sizer(),
+                const Sizer(),
                 Label(
                     text: '${item.restaurant.rate} ',
                     style: Styles.mediumText(fontWeight: FontWeight.w500)),

@@ -6,6 +6,8 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 class PolicyView extends StatefulWidget {
+  const PolicyView({super.key});
+
   @override
   _PolicyViewState createState() => _PolicyViewState();
 }

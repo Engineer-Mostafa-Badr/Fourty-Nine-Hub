@@ -20,7 +20,7 @@ class DoctorDetailsInfoCard extends StatelessWidget {
           color: color ?? AppColors.PRIMARY_COLOR,
           size: 24,
         ),
-        Sizer(),
+        const Sizer(),
         Expanded(child: Label(text: label, style: Styles.mediumText())),
       ],
     );

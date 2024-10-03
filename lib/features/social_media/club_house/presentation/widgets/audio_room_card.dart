@@ -6,7 +6,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/club_house/domain/entities/club_voice_room_entity.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 

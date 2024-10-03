@@ -30,7 +30,7 @@ class CreateInstallmentView extends StatelessWidget {
             builder: (context, state) {
           final controller = context.read<CreateInstallmentCubit>();
           return Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -49,7 +49,7 @@ class CreateInstallmentView extends StatelessWidget {
                               controller: controller.nameController,
                               hint: 'Name',
                             )),
-                            Sizer(),
+                            const Sizer(),
                             Expanded(
                                 child: FormTextField(
                               controller: controller.durationController,
@@ -58,7 +58,7 @@ class CreateInstallmentView extends StatelessWidget {
                             )),
                           ],
                         ),
-                        Sizer(),
+                        const Sizer(),
                         Row(
                           children: [
                             Expanded(
@@ -67,7 +67,7 @@ class CreateInstallmentView extends StatelessWidget {
                               type: TextInputType.number,
                               hint: 'Down Payment',
                             )),
-                            Sizer(),
+                            const Sizer(),
                             Expanded(
                                 child: FormTextField(
                               controller: controller.installmentController,
@@ -76,13 +76,13 @@ class CreateInstallmentView extends StatelessWidget {
                             )),
                           ],
                         ),
-                        Sizer(),
+                        const Sizer(),
                         AppButton(
                             label: Labels.addPlan,
                             onPressed: () => controller.addPlan(adId: adId))
                       ],
                     )),
-                Sizer(),
+                const Sizer(),
                 Expanded(
                   child: ListView.separated(
                       shrinkWrap: true,

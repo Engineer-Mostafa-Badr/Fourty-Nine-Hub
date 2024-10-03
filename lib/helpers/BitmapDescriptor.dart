@@ -18,7 +18,7 @@ extension ToBitDescription on Widget {
     );
     final pngBytes = await createImageFromWidget(widget,
         waitToRender: waitToRender,
-        logicalSize: logicalSize,
+        // logicalSize: logicalSize,
         imageSize: imageSize);
     return BitmapDescriptor.fromBytes(pngBytes);
   }
@@ -45,10 +45,10 @@ Future<Uint8List> createImageFromWidget(Widget widget,
     view: view,
     child: RenderPositionedBox(
         alignment: Alignment.center, child: repaintBoundary),
-    configuration: const ViewConfiguration(
-      //size: logicalSize,
-      devicePixelRatio: 1.0,
-    ),
+    // configuration: const ViewConfiguration(
+    //   //size: logicalSize,
+    //   devicePixelRatio: 1.0,
+    // ),
   );
 
   final PipelineOwner pipelineOwner = PipelineOwner();

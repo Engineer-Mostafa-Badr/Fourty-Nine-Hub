@@ -58,7 +58,7 @@ class _ReplyCardState extends State<ReplyCard> {
                   : null,
               userId: widget.reply.user.id,
             ),
-            Sizer(),
+            const Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +89,7 @@ class _ReplyCardState extends State<ReplyCard> {
                 )),
           ],
         ),
-        Sizer(),
+        const Sizer(),
         Text(
           widget.reply.content,
           style: Styles.mediumText(color: widget.textColor),
@@ -109,12 +109,12 @@ class _ReplyCardState extends State<ReplyCard> {
                   style: Styles.headerText(fontSize: 26),
                   decoration: InputDecoration(
                     fillColor: Colors.white,
-                    contentPadding: EdgeInsets.all(5),
+                    contentPadding: const EdgeInsets.all(5),
                     hintText: '${LocaleKeys.typeYourReply.localize} ....',
                     hintStyle: Styles.mediumText(),
                   ),
                 )),
-                Sizer(),
+                const Sizer(),
                 if (editTextController.text.isNotEmpty)
                   IconAppButton(
                       icon: Icons.send,
@@ -146,7 +146,7 @@ class _ReplyCardState extends State<ReplyCard> {
             ),
           ],
         ),
-        Sizer(),
+        const Sizer(),
       ],
     );
   }

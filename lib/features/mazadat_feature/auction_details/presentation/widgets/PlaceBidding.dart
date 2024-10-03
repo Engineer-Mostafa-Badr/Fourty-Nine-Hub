@@ -56,7 +56,7 @@ class _PlaceBiddingState extends State<PlaceBidding> {
         children: [
           Row(
             children: [
-              Sizer(),
+              const Sizer(),
               AppButton(
                 label: 'Minus',
                 onPressed: () => _decreaseBidding(),
@@ -102,7 +102,7 @@ class _PlaceBiddingState extends State<PlaceBidding> {
                   color: Colors.white,
                 ),
               ),
-              Sizer(),
+              const Sizer(),
             ],
           ),
           Row(
@@ -113,7 +113,7 @@ class _PlaceBiddingState extends State<PlaceBidding> {
                 color: AppColors.PRIMARY_COLOR,
                 size: 14,
               ),
-              Sizer(),
+              const Sizer(),
               Label(
                   text: Labels.biddingNote,
                   style: Styles.mediumText(

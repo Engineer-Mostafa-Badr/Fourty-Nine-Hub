@@ -82,11 +82,11 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                       print(
                           controller.repliesPagingController.itemList?.length);
                       return Padding(
-                          padding: EdgeInsets.only(top: 200),
+                          padding: const EdgeInsets.only(top: 200),
                           child: Center(
                             child: Text(
                               LocaleKeys.noReplied.localize,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,
                               ),
@@ -108,7 +108,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                     },
                     noMoreItemsIndicatorBuilder: (context) => Container(),
                     firstPageProgressIndicatorBuilder: (context) => Container(
-                        margin: EdgeInsets.only(top: 150),
+                        margin: const EdgeInsets.only(top: 150),
                         child: const CupertinoActivityIndicator()),
                     newPageProgressIndicatorBuilder: (context) =>
                         const CupertinoActivityIndicator()),
@@ -125,7 +125,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                       accountId: 0,
                       userId: '',
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Expanded(
                         child: TextFormField(
                       maxLines: null,
@@ -136,12 +136,12 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                       style: Styles.headerText(fontSize: 26),
                       decoration: InputDecoration(
                         fillColor: Colors.white,
-                        contentPadding: EdgeInsets.all(5),
+                        contentPadding: const EdgeInsets.all(5),
                         hintText: '${LocaleKeys.typeYourReply.localize} ....',
                         hintStyle: Styles.mediumText(),
                       ),
                     )),
-                    Sizer(),
+                    const Sizer(),
                     if (replyTextController.text.isNotEmpty)
                       IconAppButton(
                         icon: Icons.send,

@@ -48,10 +48,10 @@ class CustomVerticalSheetItem {
                           ),
                         )
                       else
-                        SizedBox.shrink(),
+                        const SizedBox.shrink(),
                       if (e.image != null)
                         Padding(
-                          padding: EdgeInsets.only(right: 15, left: 5),
+                          padding: const EdgeInsets.only(right: 15, left: 5),
                           child: Image.asset(
                             e.image ?? '',
                             color: selectedItem == e.value ? Colors.red : null,
@@ -60,7 +60,7 @@ class CustomVerticalSheetItem {
                           ),
                         )
                       else
-                        SizedBox.shrink(),
+                        const SizedBox.shrink(),
                       Label(
                         text: e.text,
                         style: Styles.headerText(
@@ -74,7 +74,7 @@ class CustomVerticalSheetItem {
                   },
                 );
               }
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             },
           ).toList(),
         );

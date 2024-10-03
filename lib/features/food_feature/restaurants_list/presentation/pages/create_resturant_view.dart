@@ -56,7 +56,7 @@ class CreateResturantView extends StatelessWidget {
       child: Scaffold(
         appBar: const HomeAppbar(),
         body: SingleChildScrollView(
-          padding: EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(15.0),
           child: Form(
             key: context.read<CreateResturantCubit>().formKey,
             child: Column(

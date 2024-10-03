@@ -11,13 +11,13 @@ class InstallmentOrdersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HomeAppbar(),
+      appBar: const HomeAppbar(),
       drawer: const DrawerWidget(),
       body: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: ListView.separated(
             itemBuilder: (context, index) => const InstallmentOrderCard(),
-            separatorBuilder: (context, index) => Sizer(),
+            separatorBuilder: (context, index) => const Sizer(),
             itemCount: 7),
       ),
     );

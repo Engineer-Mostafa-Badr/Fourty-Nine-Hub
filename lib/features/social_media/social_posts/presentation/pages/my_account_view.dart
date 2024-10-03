@@ -134,12 +134,12 @@ class MyAccountView extends StatelessWidget {
           Label(
               text: '49Hub owner, welcome to your fav. app',
               style: Styles.mediumText()),
-          Sizer(),
+          const Sizer(),
           Row(
             children: [
               Expanded(
                   child: AppButton(label: 'Edit Profile', onPressed: () {})),
-              Sizer(),
+              const Sizer(),
               Expanded(
                   child: AppButton(label: 'Share Profile', onPressed: () {})),
             ],

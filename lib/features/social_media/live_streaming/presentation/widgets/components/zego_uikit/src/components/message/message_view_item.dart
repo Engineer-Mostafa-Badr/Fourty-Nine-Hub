@@ -10,7 +10,7 @@ typedef ZegoInRoomMessageViewItemPressEvent = void Function(
 
 class ZegoInRoomMessageViewItem extends StatefulWidget {
   const ZegoInRoomMessageViewItem({
-    Key? key,
+    super.key,
     required this.message,
     this.avatarLeadingBuilder,
     this.avatarTailingBuilder,
@@ -33,7 +33,7 @@ class ZegoInRoomMessageViewItem extends StatefulWidget {
     this.messageTextStyle,
     this.onItemClick,
     this.onItemLongPress,
-  }) : super(key: key);
+  });
 
   final String? namePrefix;
   final ZegoInRoomMessage message;

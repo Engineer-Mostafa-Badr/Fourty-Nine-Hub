@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/car_brand_entity.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_brand_usecase.dart';

@@ -32,7 +32,7 @@ class FacebookTweetCard extends StatelessWidget {
           border: isShared == true
               ? Border.all(color: AppColors.LIGHT_GRAY_COLOR)
               : null),
-      padding: EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -56,7 +56,7 @@ class FacebookTweetCard extends StatelessWidget {
                   ));
             },
             child: Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 border: Border.all(color: AppColors.DIVIDER_GRAY_COLOR),
                 borderRadius: BorderRadius.circular(5),
@@ -121,7 +121,7 @@ class FacebookTweetCard extends StatelessWidget {
                 : UIConst.profilePlaceHolder),
           ),
         ),
-        Sizer(),
+        const Sizer(),
         Expanded(
             child: InkWell(
           onTap: () => context.push(Routes.OTHERSACCOUNT),
@@ -170,7 +170,7 @@ class FacebookTweetCard extends StatelessWidget {
           ),
           if ((post.images?.isNotEmpty ?? false))
             GridView.builder(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -214,7 +214,7 @@ class FacebookTweetCard extends StatelessWidget {
                               ),
                               if (index == 3 && post.images!.length > 4)
                                 Container(
-                                  margin: EdgeInsetsDirectional.only(
+                                  margin: const EdgeInsetsDirectional.only(
                                       end: 10, bottom: 10),
                                   // padding: EdgeInsets.all(10),
                                   alignment: Alignment.center,
@@ -260,7 +260,7 @@ class FacebookTweetCard extends StatelessWidget {
           if ((post.images?.isNotEmpty ?? false))
             SizedBox(
               child: GridView.builder(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -299,9 +299,9 @@ class FacebookTweetCard extends StatelessWidget {
                             Stack(
                               children: [
                                 Container(
-                                  margin: EdgeInsetsDirectional.only(
+                                  margin: const EdgeInsetsDirectional.only(
                                       end: 10, bottom: 10),
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
                                     image: DecorationImage(
@@ -314,7 +314,7 @@ class FacebookTweetCard extends StatelessWidget {
                                 ),
                                 if (index == 3 && post.images!.length > 4)
                                   Container(
-                                    margin: EdgeInsetsDirectional.only(
+                                    margin: const EdgeInsetsDirectional.only(
                                         end: 10, bottom: 10),
                                     // padding: EdgeInsets.all(10),
                                     alignment: Alignment.center,

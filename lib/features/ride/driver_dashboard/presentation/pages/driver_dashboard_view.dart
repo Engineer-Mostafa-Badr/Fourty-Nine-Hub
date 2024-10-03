@@ -82,7 +82,7 @@ class DriverDashboardView extends StatelessWidget {
                     : AppColors.SECONDARY_COLOR.withOpacity(.4),
                 label: 'Not Connected'),
           ),
-          Sizer(),
+          const Sizer(),
           Expanded(
             child: AppButton(
                 onPressed: () => controller.changeConnectState(v: true),

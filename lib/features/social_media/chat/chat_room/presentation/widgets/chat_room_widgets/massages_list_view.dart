@@ -14,6 +14,7 @@ class MessagesListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chatRoomCubit = context.read<ChatRoomCubit>();
+    
     return BlocListener<ChatsCubit, ChatsState>(
       listener: (context, state) {
         if (state.isNewMessage && state.newMessage != null) {
@@ -23,17 +24,19 @@ class MessagesListView extends StatelessWidget {
       child: BlocBuilder<ChatRoomCubit, ChatRoomState>(
         builder: (context, state) {
           if (state.messages != null) {
-            return ListView.separated(
-                addAutomaticKeepAlives: true,
-                itemCount: state.messages?.length ?? 0,
-                controller: chatRoomCubit.scrollController,
-                itemBuilder: (context, index) => MessageCard(
-                      messageEntity: state.messages![index],
-                      anotherUserName: 'Anonymous',
-                    ),
-                separatorBuilder: (context, index) => Sizer(
-                      height: 3,
-                    ));
+            return Expanded(
+              child: ListView.separated(
+                  addAutomaticKeepAlives: true,
+                  itemCount: state.messages?.length ?? 0,
+                  controller: chatRoomCubit.scrollController,
+                  itemBuilder: (context, index) => MessageCard(
+                        messageEntity: state.messages![index],
+                        anotherUserName: 'Anonymous',
+                      ),
+                  separatorBuilder: (context, index) => Sizer(
+                        height: 3,
+                      )),
+            );
           } else {
             return const Center(
               child: CircularProgressIndicator(),

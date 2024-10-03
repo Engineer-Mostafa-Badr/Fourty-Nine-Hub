@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../res/assets/assets.dart';
@@ -26,20 +24,18 @@ class FloatingButton extends StatelessWidget {
       height: 90.h, // Set the desired height
       width: 90.h,
       child: FloatingActionButton(
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
         onPressed: onTap != null
             ? () => onTap!()
             : () {
                 if (changeView == 1) {
                   context.push(Routes.SOCIAL);
-                } else if (changeView == 2) {
-                  context.push(Routes.INSTAGRAM);
                 } else {
                   context.push(Routes.HOME);
                 }
               },
         backgroundColor:
-            changeView == 2 ? AppColors.PRIMARY_COLOR : Colors.white,
+            Colors.white,
         child: icon != null
             ? Icon(
                 icon,

@@ -94,7 +94,7 @@ class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
             ),
           ),
 
-          SizedBox(width: 8.0),
+          const SizedBox(width: 8.0),
           // Phone Number Text Field
           Expanded(
             flex: 8,
@@ -108,7 +108,7 @@ class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
                 fillColor: widget.fillColor ??
                     (widget.isEnabled ? Colors.white : Colors.grey),
                 filled: true,
-                contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 hintText: widget.hint ?? LocaleKeys.phoneNumber.localize,
                 hintStyle: textStyle.copyWith(color: AppColors.QUANTITY_COLOR),
                 counterText: '',

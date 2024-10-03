@@ -60,7 +60,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                     imageURL: widget.reply.user.image,
                     userId: '',
                   ),
-            Sizer(),
+            const Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +92,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
             ),
           ],
         ),
-        Sizer(),
+        const Sizer(),
         Label(
           textAlign: TextAlign.start,
           text: widget.reply.content ?? '',
@@ -111,12 +111,12 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                 style: Styles.headerText(fontSize: 26),
                 decoration: InputDecoration(
                   fillColor: Colors.white,
-                  contentPadding: EdgeInsets.all(5),
+                  contentPadding: const EdgeInsets.all(5),
                   hintText: '${LocaleKeys.typeYourReply.localize} ....',
                   hintStyle: Styles.mediumText(),
                 ),
               )),
-              Sizer(),
+              const Sizer(),
               if (editTextController.text.isNotEmpty)
                 IconAppButton(
                     icon: Icons.send,

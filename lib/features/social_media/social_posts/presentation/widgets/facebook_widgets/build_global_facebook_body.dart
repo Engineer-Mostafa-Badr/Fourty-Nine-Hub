@@ -58,7 +58,7 @@ class FacebookGlobalBody extends StatelessWidget {
                           print(controller
                               .globalFeedPagingController.itemList?.length);
                           return Padding(
-                              padding: EdgeInsets.only(top: 200),
+                              padding: const EdgeInsets.only(top: 200),
                               child: Center(
                                 child: Text(
                                   LocaleKeys.noPosts.localize,
@@ -312,7 +312,7 @@ class FacebookGlobalBody extends StatelessWidget {
                         noMoreItemsIndicatorBuilder: (context) => Container(),
                         firstPageProgressIndicatorBuilder: (context) =>
                             Container(
-                                margin: EdgeInsets.only(top: 150),
+                                margin: const EdgeInsets.only(top: 150),
                                 child: const CupertinoActivityIndicator()),
                         newPageProgressIndicatorBuilder: (context) =>
                             const CupertinoActivityIndicator()),

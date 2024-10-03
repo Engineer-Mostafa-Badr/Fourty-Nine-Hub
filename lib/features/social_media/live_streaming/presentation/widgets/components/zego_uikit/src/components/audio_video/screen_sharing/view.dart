@@ -18,7 +18,7 @@ const isScreenSharingExtraInfoKey = 'isScreenSharing';
 /// 3. foreground view
 class ZegoScreenSharingView extends StatefulWidget {
   const ZegoScreenSharingView({
-    Key? key,
+    super.key,
     required this.user,
     this.foregroundBuilder,
     this.backgroundBuilder,
@@ -28,7 +28,7 @@ class ZegoScreenSharingView extends StatefulWidget {
     this.showFullscreenModeToggleButtonRules =
         ZegoShowFullscreenModeToggleButtonRules.showWhenScreenPressed,
     this.controller,
-  }) : super(key: key);
+  });
 
   final ZegoUIKitUser? user;
 

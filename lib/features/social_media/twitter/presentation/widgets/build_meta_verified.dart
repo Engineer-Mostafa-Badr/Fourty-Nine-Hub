@@ -231,7 +231,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
             text: label,
             style: Styles.headerText(),
           ),
-          Sizer(),
+          const Sizer(),
         ],
         if (fileData == null)
           InkWell(

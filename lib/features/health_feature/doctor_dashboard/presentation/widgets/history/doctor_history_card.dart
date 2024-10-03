@@ -41,7 +41,7 @@ class DoctorHistoryCard extends StatelessWidget {
                   style: Styles.headerText(),
                 ),
               ),
-              Sizer(
+              const Sizer(
                 width: 20,
               ),
               Label(

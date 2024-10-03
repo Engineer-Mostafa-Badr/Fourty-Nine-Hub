@@ -54,7 +54,7 @@ class OrderStatisticsWidget extends StatelessWidget {
     required String label,
   }) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: AppColors.PRIMARY_COLOR.withOpacity(.4),
       ),

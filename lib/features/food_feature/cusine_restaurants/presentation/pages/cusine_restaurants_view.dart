@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -22,11 +21,11 @@ class CusineRestaurantsView extends StatelessWidget {
             body: Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListView.separated(
-                  itemBuilder: (context, index) => RestaurantCard(
+                  itemBuilder: (context, index) => const RestaurantCard(
                         isVert: false,
                         // item:,// state.cusineRestaurants![index],
                       ),
-                  separatorBuilder: (context, index) => Sizer(),
+                  separatorBuilder: (context, index) => const Sizer(),
                   itemCount: state.cusineRestaurants?.length ?? 0),
             ),
           );

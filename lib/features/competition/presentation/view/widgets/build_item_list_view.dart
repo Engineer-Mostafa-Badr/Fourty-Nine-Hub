@@ -11,7 +11,7 @@ import 'donut_chart_painter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BuildItemListView extends StatelessWidget {
-  BuildItemListView({super.key, required this.model, required this.icon});
+  const BuildItemListView({super.key, required this.model, required this.icon});
 
   final CompetitionData model;
   final IconData icon;

@@ -15,14 +15,14 @@ import 'wave.dart';
 /// 3. foreground view
 class ZegoUIKitMediaView extends StatefulWidget {
   const ZegoUIKitMediaView({
-    Key? key,
+    super.key,
     required this.user,
     this.backgroundBuilder,
     this.foregroundBuilder,
     this.borderRadius,
     this.borderColor,
     this.extraInfo,
-  }) : super(key: key);
+  });
 
   final ZegoUIKitUser? user;
 

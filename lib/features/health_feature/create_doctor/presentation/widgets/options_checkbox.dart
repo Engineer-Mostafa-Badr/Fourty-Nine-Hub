@@ -34,7 +34,7 @@ class CreateDoctorOptionsCheckbox extends StatelessWidget {
           'Clinic',
           style: Styles.mediumText(),
         ),
-        Sizer(),
+        const Sizer(),
         BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
           buildWhen: (previous, current) =>
               current is CreateDoctorShowCall || current is CreateDoctorInitial,
@@ -52,7 +52,7 @@ class CreateDoctorOptionsCheckbox extends StatelessWidget {
           'Call',
           style: Styles.mediumText(),
         ),
-        Sizer(),
+        const Sizer(),
         BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
           buildWhen: (previous, current) =>
               current is CreateDoctorShowHomeVisit ||

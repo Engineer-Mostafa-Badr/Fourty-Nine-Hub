@@ -17,7 +17,7 @@ class UploadDocuments extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Sizer(),
+        const Sizer(),
         Text(
           'Upload documents',
           style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
@@ -44,7 +44,7 @@ class UploadDocuments extends StatelessWidget {
             height: 30.h,
           ),
         ),
-        Sizer(),
+        const Sizer(),
       ],
     );
   }

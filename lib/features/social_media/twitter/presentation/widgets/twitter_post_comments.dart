@@ -99,7 +99,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                           child: Center(
                             child: Text(
                               LocaleKeys.noComments.localize,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,
                               ),
@@ -154,7 +154,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                       accountId: 0,
                       userId: '',
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Expanded(
                         child: TextFormField(
                       maxLines: null,
@@ -170,7 +170,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                         hintStyle: Styles.mediumText(),
                       ),
                     )),
-                    Sizer(),
+                    const Sizer(),
                     if (commentTextController.text.isNotEmpty)
                       IconAppButton(
                           icon: Icons.send,

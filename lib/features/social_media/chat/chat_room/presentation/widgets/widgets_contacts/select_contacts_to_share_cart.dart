@@ -1,12 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../domain/entities/message_shared_contacts_entity.dart';
+
 class SelectContactToShareCart extends StatefulWidget {
-  final Contact contact;
+  final MessageSharedContactsEntity contact;
 
   const SelectContactToShareCart({super.key, required this.contact});
 
@@ -23,7 +27,14 @@ class _SelectContactToShareCartState extends State<SelectContactToShareCart> {
       onTap: () => {
         setState(() {
           isSelected = !isSelected;
+          if(isSelected){
+            context.read<ChatRoomCubit>().addToSelectedContacts(contact: widget.contact);
+          }
+          else{
+            context.read<ChatRoomCubit>().removeFromSelectedContacts(contact: widget.contact);
+          }
         })
+
       },
       splashColor:
           AppColors.PRIMARY_COLOR.withOpacity(0.3), // Ripple effect color
@@ -56,12 +67,13 @@ class _SelectContactToShareCartState extends State<SelectContactToShareCart> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.contact.displayName,
+                      widget.contact.name,
                       overflow: TextOverflow.ellipsis,
                       style: Styles.mediumText(fontWeight: FontWeight.w600),
                     ),
                     Text(
-                      "A bird in the hand is better than two on the tree.",
+                      // "A bird in the hand is better than two on the tree.",
+                      widget.contact.phoneNumber,
                       overflow: TextOverflow.ellipsis,
                       style:
                           Styles.smallText(color: AppColors.LIGHT_GRAY_COLOR2),
@@ -80,7 +92,17 @@ class _SelectContactToShareCartState extends State<SelectContactToShareCart> {
                       size: 14,
                     ),
                   )
-                : const SizedBox(),
+                : Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                border: Border.all(
+                  color: AppColors.PRIMARY_COLOR,
+
+                )
+              ),
+            ),
             const SizedBox(
               width: 16,
             ),

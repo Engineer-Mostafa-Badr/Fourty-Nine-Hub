@@ -37,7 +37,7 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
               height: kToolbarHeight * 1.5,
               width: kToolbarHeight * 1.5,
             ),
-            Sizer(),
+            const Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,7 +76,7 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                               onPressed: () {},
                             ),
                           ),
-                          Sizer(),
+                          const Sizer(),
                           Expanded(
                             child: AppButton(
                               label: Labels.message,
@@ -98,7 +98,7 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                               onPressed: () {},
                             ),
                           ),
-                          Sizer(),
+                          const Sizer(),
                           Expanded(
                             child: AppButton(
                               label: Labels.message,
@@ -129,7 +129,7 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                             ),
                           )
                         : const Spacer(flex: 4),
-                    Sizer(),
+                    const Sizer(),
                     Expanded(
                       child: InkWell(
                         onTap: () {
@@ -152,7 +152,7 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                     ),
                   ],
                 ),
-                Sizer(),
+                const Sizer(),
               ],
             ))
           ],

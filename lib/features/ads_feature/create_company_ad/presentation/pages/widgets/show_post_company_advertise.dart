@@ -51,7 +51,7 @@ class _ShowPostCompanyAdvertiseState extends State<ShowPostCompanyAdvertise> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               height: kToolbarHeight * 1,
               child: ListView(
                 scrollDirection: Axis.horizontal,
@@ -89,11 +89,11 @@ class _ShowPostCompanyAdvertiseState extends State<ShowPostCompanyAdvertise> {
       case 'Text Post':
         return const TextPostContent();
       case 'Photo Post':
-        return PhotoPostContent();
+        return const PhotoPostContent();
       case 'Photo And Text Post':
-        return PhotoAndTextPostContent();
+        return const PhotoAndTextPostContent();
       case 'Reels Post':
-        return ReelsPostContent();
+        return const ReelsPostContent();
       default:
         return const Center(child: Text('Unknown Type'));
     }
@@ -112,7 +112,7 @@ class _ShowPostCompanyAdvertiseState extends State<ShowPostCompanyAdvertise> {
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
-        margin: EdgeInsets.all(5),
+        margin: const EdgeInsets.all(5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color:

@@ -2,14 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_sender_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/common_group_cart.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/create_group_with_contact_cart.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/view_contact_chat_lock_cart.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/view_contact_custom_divider.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/view_contact_incription_cart.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/view_contact_status_cart.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/screen_util.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -36,7 +34,7 @@ class ViewContactView extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             size: 26,
             color: AppColors.BACKGROUND_COLOR,

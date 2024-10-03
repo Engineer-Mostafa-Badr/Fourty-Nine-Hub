@@ -24,7 +24,7 @@ class OfferCard extends StatelessWidget {
               const CircleAvatar(
                 child: Icon(Icons.person),
               ),
-              Sizer(),
+              const Sizer(),
               Expanded(
                 child: RichText(
                     text: const TextSpan(children: [
@@ -51,7 +51,7 @@ class OfferCard extends StatelessWidget {
               ]))
             ],
           ),
-          Sizer(),
+          const Sizer(),
           Row(
             children: [
               Expanded(

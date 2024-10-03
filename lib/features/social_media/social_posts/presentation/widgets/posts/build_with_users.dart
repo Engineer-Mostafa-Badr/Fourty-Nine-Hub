@@ -25,14 +25,14 @@ class BuildWithUsers extends StatelessWidget {
                 context.push(Routes.OTHERSACCOUNT, extra: users[index].id);
               },
               child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
                     CircleAvatar(
                       radius: 30,
                       backgroundImage: NetworkImage(users[index].image ?? ''),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Label(

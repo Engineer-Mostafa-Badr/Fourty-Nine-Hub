@@ -14,13 +14,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../../service_locator/service_locator.dart';
 import '../../../../../create_restaurant/cubit/create_resturant_cubit.dart';
 import '../../../../../create_restaurant/views/create_resturant_view.dart';
+import '../../../cubit/restaurants_list_cubit.dart';
 
 class MealBanner extends StatelessWidget {
   const MealBanner({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RestaurantsMealListCubit, RestaurantsMealListState>(
+    return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
       builder: (context, state) {
         if (state.isLoading) {
           return Shimmer.fromColors(
@@ -34,7 +35,8 @@ class MealBanner extends StatelessWidget {
             ),
           );
         }
-        if (state.mainCategory != null || state.banner != null) {
+        if (state.isSuccess &&
+            (state.mainCategory != null || state.banner != null)) {
           return MainCategoryBanner(
             category: state.mainCategory != null
                 ? MainCategoryEntity(
@@ -74,7 +76,7 @@ class MealBanner extends StatelessWidget {
             },
             onFavorite: () {
               context
-                  .read<RestaurantsMealListCubit>()
+                  .read<RestaurantsCubit>()
                   .toggleFavoriteCategory(state.mainCategory!.id);
             },
             isFavorite: false,

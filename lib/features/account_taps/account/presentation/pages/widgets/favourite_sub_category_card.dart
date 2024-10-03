@@ -68,7 +68,7 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
                 ],
               ),
             ),
-            Sizer(),
+            const Sizer(),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Row(

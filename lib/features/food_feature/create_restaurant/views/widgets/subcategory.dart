@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -95,7 +94,7 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
             ],
           );
         } else {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
       },
     );
