@@ -14,6 +14,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -184,13 +185,16 @@ class ReelsScreenState extends State<ReelsScreen> {
                     ),
                   ],
                 ),
+                const Sizer(),
+                const Sizer(),
+
                 //tinder
                 Stack(
                   children: [
                     IconButton(
                       icon: Label(
                         text: 'Tinder',
-                        style: Styles.headerText(
+                        style: Styles.mediumText(
                             decoration: TextDecoration.underline,
                             color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
                             fontWeight: FontWeight.bold),
@@ -207,7 +211,7 @@ class ReelsScreenState extends State<ReelsScreen> {
                       child: IconButton(
                         icon: Label(
                           text: 'Tinder',
-                          style: Styles.headerText(
+                          style: Styles.mediumText(
                               decoration: TextDecoration.underline,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
@@ -220,13 +224,15 @@ class ReelsScreenState extends State<ReelsScreen> {
                     ),
                   ],
                 ),
+
+
                 //spotlight
                 Stack(
                   children: [
                     IconButton(
                       icon: Label(
                         text: 'Spotlight',
-                        style: Styles.headerText(
+                        style: Styles.mediumText(
                             decoration: TextDecoration.underline,
                             color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
                             fontWeight: FontWeight.bold),
@@ -236,6 +242,8 @@ class ReelsScreenState extends State<ReelsScreen> {
                         context.push(Routes.SPOTLIGHT);
                       },
                     ),
+
+
                     Positioned(
                       top: -1,
                       right: -1,
@@ -243,7 +251,7 @@ class ReelsScreenState extends State<ReelsScreen> {
                       child: IconButton(
                         icon: Label(
                           text: 'Spotlight',
-                          style: Styles.headerText(
+                          style: Styles.mediumText(
                               fontWeight: FontWeight.bold,
                               decoration: TextDecoration.underline,
                               color: Colors.white),
@@ -263,7 +271,7 @@ class ReelsScreenState extends State<ReelsScreen> {
                     IconButton(
                       icon: Label(
                         text: 'Reels',
-                        style: Styles.headerText(
+                        style: Styles.mediumText(
                             decoration: TextDecoration.underline,
                             color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
                             fontWeight: FontWeight.bold),
@@ -280,7 +288,7 @@ class ReelsScreenState extends State<ReelsScreen> {
                       child: IconButton(
                         icon: Label(
                           text: 'Reels',
-                          style: Styles.headerText(
+                          style: Styles.mediumText(
                               decoration: TextDecoration.underline,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
@@ -293,6 +301,8 @@ class ReelsScreenState extends State<ReelsScreen> {
                     ),
                   ],
                 ),
+                const Sizer(),
+                const Sizer(),
                 Stack(
                   children: [
                     IconButton(
@@ -309,9 +319,9 @@ class ReelsScreenState extends State<ReelsScreen> {
                             ));
                       },
                       icon: FaIcon(
-                        Icons.camera_alt_outlined,
+                        FontAwesomeIcons.search,
                         color: Colors.white,
-                        size: 50.h,
+                        size: 35.h,
                       ),
                     ),
                     IconButton(
@@ -328,9 +338,9 @@ class ReelsScreenState extends State<ReelsScreen> {
                             ));
                       },
                       icon: FaIcon(
-                        Icons.camera_alt_outlined,
+                        FontAwesomeIcons.search,
                         color: AppColors.PRIMARY_COLOR.withOpacity(0.4),
-                        size: 50.h,
+                        size: 35.h,
                       ),
                     ),
                   ],
