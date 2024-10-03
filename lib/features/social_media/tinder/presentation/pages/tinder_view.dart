@@ -279,11 +279,12 @@ class _TinderScreenState extends State<TinderScreen> {
                 ? const TinderCardStack()
                 : SizedBox(
                     // height: MediaQuery.of(context).size.height/2,
-                  ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 2),
-              child: Divider(color: Colors.grey, height: 1.h),
-            ),
+                    ),
+            if (state.userData.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 2),
+                child: Divider(color: Colors.grey, height: 1.h),
+              ),
             _buildSubCategoryList(state),
             SizedBox(height: 50.h),
           ],
