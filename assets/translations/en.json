@@ -73,6 +73,7 @@
   "lightMode": "Light mode",
   "voice": "Voice",
   "restaurantName": "ٌRestaurant Name",
+  "restaurantNumber": "ٌRestaurant Number",
   "theCommercialRegister": "The Commercial Register",
   "theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider": "The application does not deduct any percentage from the service provider.",
   "youWillGetEGP3650PerYearIfYouSubscribeDaily": "You will get 3650 EGP per year if you subscribe daily.",
@@ -842,5 +843,6 @@
   "newRide": "New Ride",
   "cancelRequest": "Cancel Request",
   "sendOffer": "Send Offer",
-  "seeAll": "See All"
+  "seeAll": "See All",
+  "expiredRequests": "Expired Requests"
 }

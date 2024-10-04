@@ -16,15 +16,15 @@ class CreateRestaurantSubmitButton extends StatelessWidget {
       children: [
         Expanded(
           child: ElevatedAppButton(
-            onPressed: () {
-              context.read<CreateRestaurantCubit>().submit().then((value) {
-                if (value == 'success') Navigator.pop(context);
-              });
+            onPressed: () async {
+              var res = await context.read<CreateRestaurantCubit>().submit();
+              if (res == 'success') {
+                Navigator.pop(context);
+              }
             },
             label: LocaleKeys.submit.tr(),
-            textStyle:Styles.headerText(color: Colors.white),
-
-    ),
+            textStyle: Styles.headerText(color: Colors.white),
+          ),
         ),
       ],
     );
