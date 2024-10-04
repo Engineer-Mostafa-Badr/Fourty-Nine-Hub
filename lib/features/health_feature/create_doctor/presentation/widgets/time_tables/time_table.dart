@@ -21,7 +21,7 @@ class Timetable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         border: Border.all(width: .5),
         borderRadius: BorderRadius.circular(UIConst.radius),
@@ -30,11 +30,11 @@ class Timetable extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title, style: Styles.headerText(color: AppColors.BARRIER_COLOR)),
-          Sizer(),
+          const Sizer(),
           _WeekWidget(
             timetale: timetale,
           ),
-          Sizer(),
+          const Sizer(),
           child,
         ],
       ),

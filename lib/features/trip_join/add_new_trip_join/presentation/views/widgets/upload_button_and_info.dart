@@ -28,7 +28,7 @@ class UploadButtonAndInfo extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: 5.h),
         width: double.infinity,
         height: 45.h,
-        padding: EdgeInsets.symmetric(horizontal: 7),
+        padding: const EdgeInsets.symmetric(horizontal: 7),
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
           // color: Colors.white,

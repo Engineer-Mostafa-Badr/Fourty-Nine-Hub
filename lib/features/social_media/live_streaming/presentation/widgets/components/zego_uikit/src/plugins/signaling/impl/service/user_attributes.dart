@@ -4,7 +4,6 @@ import 'dart:async';
 // Project imports:
 
 import '../../../../../zego_uikit.dart';
-import '../../../../services/uikit_service.dart';
 import 'user_attributes_p.dart';
 
 /// @nodoc

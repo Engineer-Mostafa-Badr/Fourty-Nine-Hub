@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +20,8 @@ import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 
 part 'create_resturant_state.dart';
 
@@ -75,7 +76,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
         res = 'success';
 
         AppPages.router.routerDelegate.navigatorKey.currentContext!
-            .read<RestaurantsMealListCubit>()
+            .read<RestaurantsCubit>()
             .loadData();
 
         AppPages.router.routerDelegate.pop();

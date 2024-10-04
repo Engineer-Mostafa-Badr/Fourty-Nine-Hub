@@ -29,13 +29,12 @@ class HealthSubCategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
-            subCategory;
+        serviceLocator<HealthSharedData>().doctorSearchParams.subCategory = subCategory;
         context.push(Routes.VISITADOCTORLIST);
       },
       child: Container(
         width: 200,
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(10),
@@ -59,29 +58,25 @@ class HealthSubCategoryCard extends StatelessWidget {
                       right: 5,
                       child: IconAppButton(
                           size: 20,
-                          icon: subCategory.isFavorite == true
-                              ? Icons.favorite
-                              : Icons.favorite_border,
+                          icon: subCategory.isFavorite == true ? Icons.favorite : Icons.favorite_border,
                           color: ThemeCubit.get(context).isDarkTheme
                               ? AppColors.QUANTITY_COLOR
                               : AppColors.PRIMARY_COLOR_DARK,
-                          onPressed: ()  {
-                            log(subCategory.isFavorite.toString()+"777777777777777777777777777777777");
+                          onPressed: () {
+                            log("${subCategory.isFavorite}777777777777777777777777777777777");
 
-                              context
-                                .read<HealthCubit>()
-                                .toggleFavoriteSubcategory(subCategory.id);
+                            context.read<HealthCubit>().toggleFavoriteSubcategory(subCategory.id);
 
-                          log(subCategory.isFavorite.toString()+"777777777777777777777777777777777");
+                            log("${subCategory.isFavorite}777777777777777777777777777777777");
                           })),
                 ],
               ),
             )),
-            Sizer(),
+            const Sizer(),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                const Row(
                   children: [
                     Expanded(
                       child: Sizer(

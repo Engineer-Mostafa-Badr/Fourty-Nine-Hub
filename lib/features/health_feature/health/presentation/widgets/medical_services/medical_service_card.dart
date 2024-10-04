@@ -38,7 +38,7 @@ class HealthMedicalServiceCard extends StatelessWidget {
         elevation: 1,
         child: Container(
           width: 200,
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(10),
@@ -69,7 +69,8 @@ class HealthMedicalServiceCard extends StatelessWidget {
                                 ? AppColors.QUANTITY_COLOR
                                 : AppColors.PRIMARY_COLOR_DARK,
                             onPressed: () {
-                              print("555555555555555555555555555555555555555555555555${subCategory.id}");
+                              print(
+                                  "555555555555555555555555555555555555555555555555${subCategory.id}");
                               context
                                   .read<HealthCubit>()
                                   .toggleFavoriteMedicalService(subCategory.id);
@@ -77,7 +78,7 @@ class HealthMedicalServiceCard extends StatelessWidget {
                   ],
                 ),
               )),
-              Sizer(),
+              const Sizer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

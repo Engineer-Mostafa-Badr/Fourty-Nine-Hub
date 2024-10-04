@@ -16,6 +16,7 @@ import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class TwitterCommentCard extends StatefulWidget {
   final Color textColor;
   final TwitterPostCommentEntity comment;
@@ -64,16 +65,13 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                     fromProfile: widget.fromProfile,
                     userId: widget.comment.user.id,
                   ),
-            Sizer(),
+            const Sizer(),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Label(
-                    text: widget.comment.user.firstName,
-                    style: Styles.mediumText(fontWeight: FontWeight.bold)),
-                Label(
-                    text: widget.comment.sinceTime, style: Styles.mediumText()),
+                Label(text: widget.comment.user.firstName, style: Styles.mediumText(fontWeight: FontWeight.bold)),
+                Label(text: widget.comment.sinceTime, style: Styles.mediumText()),
               ],
             )),
             GestureDetector(
@@ -94,7 +92,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
             ),
           ],
         ),
-        Sizer(),
+        const Sizer(),
         Label(
           textAlign: TextAlign.start,
           text: widget.comment.content ?? '',
@@ -106,23 +104,21 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
             child: Row(
               children: [
                 Expanded(
-                    child:
-                TextFormField(
-                maxLines: null,
-                controller: editTextController,
-                onChanged: (v) {
-                setState(() {});
-                },
-                style: Styles.headerText(fontSize: 26),
-                decoration: InputDecoration(
-                fillColor: Colors.white,
-                contentPadding: EdgeInsets.all(5),
-                hintText: '${LocaleKeys.typeYourComment.localize} ....',
-                hintStyle: Styles.mediumText(),
-                ),
-                )
-                    ),
-                Sizer(),
+                    child: TextFormField(
+                  maxLines: null,
+                  controller: editTextController,
+                  onChanged: (v) {
+                    setState(() {});
+                  },
+                  style: Styles.headerText(fontSize: 26),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.all(5),
+                    hintText: '${LocaleKeys.typeYourComment.localize} ....',
+                    hintStyle: Styles.mediumText(),
+                  ),
+                )),
+                const Sizer(),
                 if (editTextController.text.isNotEmpty)
                   IconAppButton(
                       icon: Icons.send,
@@ -130,9 +126,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                       size: 20,
                       onPressed: () async {
                         var result = await widget.onEditComment(
-                            TwitterPostCommentParams(
-                                postId: widget.comment.id,
-                                content: editTextController.text));
+                            TwitterPostCommentParams(postId: widget.comment.id, content: editTextController.text));
                         if (result == true) {
                           widget.comment.content = editTextController.text;
                           widget.comment.edit = false;
@@ -142,7 +136,9 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
               ],
             ),
           ),
-        Sizer(height: 5.h,),
+        Sizer(
+          height: 5.h,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -159,30 +155,24 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                 }
               },
               child: Icon(
-                widget.comment.isReact == false
-                    ? Icons.favorite_border
-                    : Icons.favorite,
-                color:
-                    widget.comment.isReact == false ? Colors.grey : Colors.red,
+                widget.comment.isReact == false ? Icons.favorite_border : Icons.favorite,
+                color: widget.comment.isReact == false ? Colors.grey : Colors.red,
               ),
             ),
-            Label(
-                text: widget.comment.loveCount.toString(),
-                style: Styles.mediumText(color: widget.textColor)),
-            Sizer(),
+            Label(text: widget.comment.loveCount.toString(), style: Styles.mediumText(color: widget.textColor)),
+            const Sizer(),
             TextAppButton(
-                style: Styles.mediumText(),
-                label: LocaleKeys.reply.localize,
-                onPressed: widget.onCommentReply)
+                style: Styles.mediumText(), label: LocaleKeys.reply.localize, onPressed: widget.onCommentReply)
           ],
         ),
-        Sizer(height: 5.h,),
+        Sizer(
+          height: 5.h,
+        ),
       ],
     );
   }
 
-  Widget _buildPostOptions(
-      {required bool isMyComment, required TwitterPostCommentEntity post}) {
+  Widget _buildPostOptions({required bool isMyComment, required TwitterPostCommentEntity post}) {
     return SizedBox(
       height: isMyComment ? 150 : 80,
       child: Column(
@@ -207,8 +197,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
             listTile(
                 icon: Icons.delete,
                 title: LocaleKeys.deleteComment.localize,
-                subTitle:
-                LocaleKeys.youWillDeleteComment.localize,
+                subTitle: LocaleKeys.youWillDeleteComment.localize,
                 onTap: () {
                   widget.onDeleteComment(widget.comment.id);
                 }),
@@ -219,7 +208,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                 subTitle: LocaleKeys.youWillEditComment.localize,
                 onTap: () {
                   widget.comment.edit = !widget.comment.edit!;
-                  editTextController.text = widget.comment.content??'';
+                  editTextController.text = widget.comment.content ?? '';
                   setState(() {});
                 }),
         ],
@@ -229,10 +218,10 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
 
   Widget listTile(
       {required IconData icon,
-        Color? iconColor,
-        required String title,
-        required String subTitle,
-        required Function onTap}) {
+      Color? iconColor,
+      required String title,
+      required String subTitle,
+      required Function onTap}) {
     return ListTile(
       title: Label(text: title),
       onTap: () {
@@ -249,6 +238,4 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
       ),
     );
   }
-
-
 }

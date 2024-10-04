@@ -23,7 +23,7 @@ class BookDoctorAppointmentLocationInfoCard extends StatelessWidget {
           icon: Icons.location_on,
           height: kToolbarHeight);
     } else {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
   }
 }

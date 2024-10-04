@@ -114,7 +114,7 @@ class _ControlsOverlay extends StatelessWidget {
           duration: const Duration(milliseconds: 50),
           reverseDuration: const Duration(milliseconds: 200),
           child: controller.value.isPlaying
-              ? SizedBox.shrink()
+              ? const SizedBox.shrink()
               : const ColoredBox(
                   color: Colors.black26,
                   child: Center(

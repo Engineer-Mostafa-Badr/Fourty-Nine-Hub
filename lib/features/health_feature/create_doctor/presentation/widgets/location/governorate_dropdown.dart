@@ -6,10 +6,15 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreateDoctorGovernorateDropdown extends StatelessWidget {
-  const CreateDoctorGovernorateDropdown(
-      {super.key, this.onSelected, this.validator});
+  const CreateDoctorGovernorateDropdown({
+    super.key,
+    this.onSelected,
+    this.validator,
+    this.hintStyle,
+  });
   final void Function(GovernorateEntity? value)? onSelected;
   final String? Function(Object? value)? validator;
+  final TextStyle? hintStyle;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
@@ -21,27 +26,35 @@ class CreateDoctorGovernorateDropdown extends StatelessWidget {
             validator: validator,
             builder: (field) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DropdownMenu(
                       inputDecorationTheme: InputDecorationTheme(
+                        hintStyle: hintStyle,
+                        // hintStyle: TextStyle(fontSize: 17, color: Colors.red, fontWeight: FontWeight.w600),,
                         border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                                color:
-                                    field.hasError ? Colors.red : Colors.grey)),
+                                color: field.hasError
+                                    ? Colors.red
+                                    : Colors.black)),
                         errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                          color: field.hasError ? Colors.red : Colors.grey,
-                        )),
+                              color: field.hasError ? Colors.red : Colors.black,
+                            )),
                         enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                          color: field.hasError ? Colors.red : Colors.grey,
-                        )),
+                              color: field.hasError ? Colors.red : Colors.black,
+                            )),
                         focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                          color: field.hasError ? Colors.red : Colors.grey,
-                        )),
+                              color: field.hasError ? Colors.red : Colors.black,
+                            )),
                       ),
-                      width: MediaQuery.of(context).size.width * 0.9,
+                      width: MediaQuery.of(context).size.width * 0.95,
                       hintText: "Governorate",
                       dropdownMenuEntries: state.governorates
                           .map((e) =>
@@ -63,7 +76,7 @@ class CreateDoctorGovernorateDropdown extends StatelessWidget {
             },
           );
         } else {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
       },
     );

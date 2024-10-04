@@ -10,7 +10,7 @@ import '../../../../../../../../../../res/style/app_colors.dart';
 
 class ZegoInRoomMessageInput extends StatefulWidget {
   const ZegoInRoomMessageInput({
-    Key? key,
+    super.key,
     this.placeHolder = 'Say something...',
     this.payloadAttributes,
     this.backgroundColor,
@@ -25,7 +25,7 @@ class ZegoInRoomMessageInput extends StatefulWidget {
     this.onSubmit,
     this.valueNotifier,
     this.focusNotifier,
-  }) : super(key: key);
+  });
 
   final String placeHolder;
   final Map<String, String>? payloadAttributes;

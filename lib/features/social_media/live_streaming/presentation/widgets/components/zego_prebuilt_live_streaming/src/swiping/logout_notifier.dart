@@ -4,7 +4,6 @@ import 'dart:async';
 // Flutter imports:
 import 'package:flutter/cupertino.dart';
 
-import '../../../zego_uikit/src/services/uikit_service.dart';
 import '../../../zego_uikit/zego_uikit.dart';
 
 // Package imports:

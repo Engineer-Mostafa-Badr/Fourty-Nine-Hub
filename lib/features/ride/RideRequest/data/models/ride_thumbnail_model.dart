@@ -3,14 +3,11 @@ import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 
 class RideThumbnailModel extends RideThumbnailEntity {
-  RideThumbnailModel({
-    super.id,
-    super.image,
-    super.name,
-    super.service,
-    super.isFavorite,
-    super.numberOfAds,
-  });
+  RideThumbnailModel(
+      {required super.id,
+      required super.image,
+      required super.name,
+      required super.service});
 
   factory RideThumbnailModel.fromJson(Map<String, dynamic> json) {
     return RideThumbnailModel(
@@ -18,8 +15,6 @@ class RideThumbnailModel extends RideThumbnailEntity {
       image: json['picture'] ?? '',
       name: getLang() == 'ar' ? json['nameAr'] ?? '' : json['nameEn'] ?? '',
       service: ((json['nameEn'] ?? '') as String).toRideServiceEnum,
-      isFavorite: json['isFavorite'] as bool?,
-      numberOfAds: json['numberOfAds'] as num?,
     );
   }
 }

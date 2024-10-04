@@ -11,9 +11,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:icons_launcher/utils/cli_logger.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 
 part 'chats_state.dart';
 
@@ -60,18 +57,18 @@ class ChatsCubit extends Cubit<ChatsState> {
     switch (chatCategory) {
       case ChatCategories.social:
         return _getSocialChats();
-      case ChatCategories.greet:
-        return _getGreetChats();
+      // case ChatCategories.greet:
+        // return getGreetChats();
       case ChatCategories.service:
         return _getServicesChats();
-      case ChatCategories.anonymous:
-        return _getAnonymousChats();
-      case ChatCategories.locked:
-        return _getLockedChats();
+      // case ChatCategories.anonymous:
+        // return getAnonymousChats();
+      // case ChatCategories.locked:
+        // return getLockedChats();
       case ChatCategories.unread:
         return _getUnreadChats();
-      case ChatCategories.archived:
-        return _getArchivedChats();
+      // case ChatCategories.archived:
+        // return getArchivedChats();
       default:
         return _getSocialChats();
     }
@@ -116,19 +113,19 @@ class ChatsCubit extends Cubit<ChatsState> {
         params: GetChatsParams(isServices: true));
   }
 
-  Future<void> _getGreetChats() async {
+  Future<void> getGreetChats() async {
     await _getChats(
         flag: (chat) => chat.categoryId == ChatCategoriesIds.greet,
         params: GetChatsParams(categoryId: ChatCategoriesIds.greet));
   }
 
-  Future<void> _getAnonymousChats() async {
+  Future<void> getAnonymousChats() async {
     await _getChats(
         flag: (chat) => chat.categoryId == ChatCategoriesIds.anonymous,
         params: GetChatsParams(privacy: ChatPrivacy.anonymous));
   }
 
-  Future<void> _getLockedChats() async {
+  Future<void> getLockedChats() async {
     await _getChats(
         flag: (chat) => chat.locked, params: GetChatsParams(isLocked: true));
   }
@@ -139,7 +136,7 @@ class ChatsCubit extends Cubit<ChatsState> {
         params: GetChatsParams(isUnread: true));
   }
 
-  Future<void> _getArchivedChats() async {
+  Future<void> getArchivedChats() async {
     await _getChats(
         flag: (chat) => chat.archived, params: GetChatsParams(archived: true));
   }

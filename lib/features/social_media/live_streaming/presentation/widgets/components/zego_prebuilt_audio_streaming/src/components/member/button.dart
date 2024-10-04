@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
@@ -17,7 +16,7 @@ import 'list_sheet.dart';
 /// @nodoc
 class ZegoLiveAudioRoomMemberButton extends StatefulWidget {
   const ZegoLiveAudioRoomMemberButton({
-    Key? key,
+    super.key,
     this.avatarBuilder,
     this.itemBuilder,
     required this.isPluginEnabled,
@@ -30,7 +29,7 @@ class ZegoLiveAudioRoomMemberButton extends StatefulWidget {
     this.iconSize,
     this.buttonSize,
     this.icon,
-  }) : super(key: key);
+  });
 
   final ZegoAvatarBuilder? avatarBuilder;
   final ZegoMemberListItemBuilder? itemBuilder;

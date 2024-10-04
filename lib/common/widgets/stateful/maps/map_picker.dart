@@ -145,7 +145,7 @@ class _MapPickerState extends State<MapPicker> {
                         text: address,
                         style: Styles.mediumText(color: Colors.white)),
                   ),
-                Sizer(),
+                const Sizer(),
                 CircleAvatar(
                   radius: 15,
                   backgroundColor: AppColors.PRIMARY_COLOR,

@@ -18,40 +18,49 @@ class NotificationSocketIoCubit extends Cubit<NotificationSocketIoState> {
 
   Future<void> notificationListener({required String languageCode}) async {
     final getAppNotificationsCubit = context.read<GetAppNotificationsCubit>();
-    final getSocialNotificationsCubit = context.read<GetSocialNotificationsCubit>();
-    final getServicesNotificationsCubit = context.read<GetServicesNotificationsCubit>();
+    final getSocialNotificationsCubit =
+        context.read<GetSocialNotificationsCubit>();
+    final getServicesNotificationsCubit =
+        context.read<GetServicesNotificationsCubit>();
 
     notificationListenerUseCase.call(
       notificationCallback: (Map<String, dynamic> data) async {
         String? type = data['filterType'];
         if (type == null) {
-          emit(NotificationSocketIoFailed('Notfication Type is not Provided From the Server'));
+          emit(NotificationSocketIoFailed(
+              'Notfication Type is not Provided From the Server'));
           return;
         }
         if (type == 'app') {
           getAppNotificationsCubit.notifications = [];
           getAppNotificationsCubit.page = 1;
-          await getAppNotificationsCubit.getAppNotifications(languageCode: languageCode);
+          await getAppNotificationsCubit.getAppNotifications(
+              languageCode: languageCode);
           if (getAppNotificationsCubit.notifications.isNotEmpty) {
-            emit(NotificationSocketIoNewNotification(getAppNotificationsCubit.notifications.first));
+            emit(NotificationSocketIoNewNotification(
+                getAppNotificationsCubit.notifications.first));
           }
           return;
         }
         if (type == 'social') {
           getSocialNotificationsCubit.notifications = [];
           getSocialNotificationsCubit.page = 1;
-          await getSocialNotificationsCubit.getSocialNotifications(languageCode: languageCode);
+          await getSocialNotificationsCubit.getSocialNotifications(
+              languageCode: languageCode);
           if (getSocialNotificationsCubit.notifications.isNotEmpty) {
-            emit(NotificationSocketIoNewNotification(getSocialNotificationsCubit.notifications.first));
+            emit(NotificationSocketIoNewNotification(
+                getSocialNotificationsCubit.notifications.first));
           }
           return;
         }
         if (type == 'services') {
           getServicesNotificationsCubit.notifications = [];
           getServicesNotificationsCubit.page = 1;
-          await getServicesNotificationsCubit.getServicesNotifications(languageCode: languageCode);
+          await getServicesNotificationsCubit.getServicesNotifications(
+              languageCode: languageCode);
           if (getServicesNotificationsCubit.notifications.isNotEmpty) {
-            emit(NotificationSocketIoNewNotification(getServicesNotificationsCubit.notifications.first));
+            emit(NotificationSocketIoNewNotification(
+                getServicesNotificationsCubit.notifications.first));
           }
           return;
         }
@@ -63,16 +72,21 @@ class NotificationSocketIoCubit extends Cubit<NotificationSocketIoState> {
     required String languageCode,
   }) async {
     final getAppNotificationsCubit = context.read<GetAppNotificationsCubit>();
-    final getSocialNotificationsCubit = context.read<GetSocialNotificationsCubit>();
-    final getServicesNotificationsCubit = context.read<GetServicesNotificationsCubit>();
+    final getSocialNotificationsCubit =
+        context.read<GetSocialNotificationsCubit>();
+    final getServicesNotificationsCubit =
+        context.read<GetServicesNotificationsCubit>();
     getAppNotificationsCubit.notifications = [];
     getAppNotificationsCubit.page = 1;
     getSocialNotificationsCubit.notifications = [];
     getSocialNotificationsCubit.page = 1;
     getServicesNotificationsCubit.notifications = [];
     getServicesNotificationsCubit.page = 1;
-    await getAppNotificationsCubit.getAppNotifications(languageCode: languageCode);
-    await getSocialNotificationsCubit.getSocialNotifications(languageCode: languageCode);
-    await getServicesNotificationsCubit.getServicesNotifications(languageCode: languageCode);
+    await getAppNotificationsCubit.getAppNotifications(
+        languageCode: languageCode);
+    await getSocialNotificationsCubit.getSocialNotifications(
+        languageCode: languageCode);
+    await getServicesNotificationsCubit.getServicesNotifications(
+        languageCode: languageCode);
   }
 }

@@ -366,7 +366,7 @@ class _ImagesListState extends State<_ImagesList> {
               builder: (context, constraints) {
                 return BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   buildWhen: (previous, current) =>
-                      current.status == CameraPickerStatus.updateMediaList,
+                  current.status == CameraPickerStatus.updateMediaList,
                   builder: (context, state) {
                     return ListView.separated(
                       padding: EdgeInsets.symmetric(vertical: 5.h),
@@ -426,7 +426,7 @@ class _ImagesListState extends State<_ImagesList> {
               children: [
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   buildWhen: (previous, current) =>
-                      current.pickMode != previous.pickMode,
+                  current.pickMode != previous.pickMode,
                   builder: (context, state) {
                     return ElevatedAppButton(
                       label: LocaleKeys.photo.tr(),
@@ -445,7 +445,7 @@ class _ImagesListState extends State<_ImagesList> {
                 Sizer(),
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   buildWhen: (previous, current) =>
-                      current.pickMode != previous.pickMode,
+                  current.pickMode != previous.pickMode,
                   builder: (context, state) {
                     return ElevatedAppButton(
                       label: LocaleKeys.video.tr(),
@@ -468,10 +468,10 @@ class _ImagesListState extends State<_ImagesList> {
 
   Widget _mediaContainer(
       {required ImageProvider image,
-      required double width,
-      required int index,
-      required List<File> media,
-      bool isPhoto = true}) {
+        required double width,
+        required int index,
+        required List<File> media,
+        bool isPhoto = true}) {
     return InkWell(
       onTap: () {
         if (mounted &&
@@ -493,11 +493,11 @@ class _ImagesListState extends State<_ImagesList> {
         ),
         child: !isPhoto
             ? const Center(
-                child: Icon(
-                  Icons.play_arrow_rounded,
-                  color: Colors.white,
-                ),
-              )
+          child: Icon(
+            Icons.play_arrow_rounded,
+            color: Colors.white,
+          ),
+        )
             : null,
       ),
     );
@@ -530,7 +530,7 @@ class __VideoTimerState extends State<_VideoTimer> {
         int seconds = (timer.tick % 60);
         setState(() {
           _timerText =
-              '${minutes.toString().padLeft(2, '0')} : ${seconds.toString().padLeft(2, '0')}';
+          '${minutes.toString().padLeft(2, '0')} : ${seconds.toString().padLeft(2, '0')}';
         });
         CliLogger.info(_timerText);
       }

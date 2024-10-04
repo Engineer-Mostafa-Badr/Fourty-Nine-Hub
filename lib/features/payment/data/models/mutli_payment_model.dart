@@ -2,14 +2,10 @@ import 'package:fourtyninehub/features/payment/domain/entities/fawry_multi_payme
 
 class MutliPaymentEntityModel extends MutliPaymentEntity {
   MutliPaymentEntityModel({
-    required String amountId,
-    required String providerId,
-    required String paymentMethod,
-  }) : super(
-          amountId: amountId,
-          providerId: providerId,
-          paymentMethod: paymentMethod,
-        );
+    required super.amountId,
+    required super.providerId,
+    required super.paymentMethod,
+  });
 
   factory MutliPaymentEntityModel.fromJson(Map<String, dynamic> json) {
     return MutliPaymentEntityModel(

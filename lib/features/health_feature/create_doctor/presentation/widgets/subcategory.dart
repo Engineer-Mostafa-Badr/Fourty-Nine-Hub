@@ -27,7 +27,7 @@ class CreateDoctorSubcategoryDropdown extends StatelessWidget {
                 }
               });
         } else {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
       },
     );

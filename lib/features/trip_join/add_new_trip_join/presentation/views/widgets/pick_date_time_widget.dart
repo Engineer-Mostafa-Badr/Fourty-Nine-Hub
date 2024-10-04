@@ -57,7 +57,7 @@ class _PickDateAndTimeWidgetState extends State<PickDateAndTimeWidget> {
                     child: Container(
                       width: double.infinity,
                       height: 45.h,
-                      padding: EdgeInsets.symmetric(horizontal: 7),
+                      padding: const EdgeInsets.symmetric(horizontal: 7),
                       alignment: Alignment.centerLeft,
                       decoration: BoxDecoration(
                         border: Border.all(),
@@ -69,7 +69,7 @@ class _PickDateAndTimeWidgetState extends State<PickDateAndTimeWidget> {
                       ),
                     ),
                   ),
-                  Sizer(),
+                  const Sizer(),
                 ],
               ),
             );
@@ -90,7 +90,7 @@ class _PickDateAndTimeWidgetState extends State<PickDateAndTimeWidget> {
           child: Container(
             width: double.infinity,
             height: 45.h,
-            padding: EdgeInsets.symmetric(horizontal: 7),
+            padding: const EdgeInsets.symmetric(horizontal: 7),
             alignment: Alignment.centerLeft,
             decoration: BoxDecoration(
               border: Border.all(),
@@ -102,7 +102,7 @@ class _PickDateAndTimeWidgetState extends State<PickDateAndTimeWidget> {
             ),
           ),
         ),
-        Sizer(),
+        const Sizer(),
       ],
     );
   }

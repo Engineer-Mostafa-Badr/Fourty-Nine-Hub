@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/badged_label.dart';
@@ -26,8 +27,7 @@ class BuildItemAuctionCard extends StatelessWidget {
   final MyAuctionAdsEntity item;
   //final Function(String) onDelete;
 
-  const BuildItemAuctionCard(
-      {super.key, required this.item});
+  const BuildItemAuctionCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +54,7 @@ class BuildItemAuctionCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Label(
-                      text:
-                      "${LocaleKeys.createdOn.localize} ${DateFormat(
-                          'yyyy-MM-dd').format(item.createdAt) }"),
+                  Label(text: "${LocaleKeys.createdOn.localize} ${DateFormat('yyyy-MM-dd').format(item.createdAt)}"),
                   const Sizer(
                     height: 15,
                   ),
@@ -68,9 +65,7 @@ class BuildItemAuctionCard extends StatelessWidget {
                   Row(
                     children: [
                       BadgedLabel(
-                        label: item.isApproved == true
-                            ? LocaleKeys.active.localize
-                            : LocaleKeys.pending.localize,
+                        label: item.isApproved == true ? LocaleKeys.active.localize : LocaleKeys.pending.localize,
                         color: AppColors.SECONDARY_COLOR,
                         style: Styles.smallText(color: Colors.white),
                       ),
@@ -80,8 +75,8 @@ class BuildItemAuctionCard extends StatelessWidget {
                         ),
                         Expanded(
                             child: Text(
-                              LocaleKeys.adReviewSoon.localize,
-                            )),
+                          LocaleKeys.adReviewSoon.localize,
+                        )),
                       ]
                     ],
                   ),
@@ -90,36 +85,35 @@ class BuildItemAuctionCard extends StatelessWidget {
                     children: [
                       Expanded(
                           child: AppButton(
-                            backColor: AppColors.PRIMARY_COLOR,
-                            color: AppColors.AUTH_CONTAINER_COLOR,
-                            label: LocaleKeys.edit.localize,
-                            onPressed: () {}
-                                // showAreYouSure(
-                                //     title: LocaleKeys.deleteAd.localize,
-                                //     subTitle: LocaleKeys.sureRemoveAd.localize,
-                                //     action: () {
-                                //       //  onDelete(item.id);
-                                //     },
-                                //     context: context),
-                          )),
+                              backColor: AppColors.PRIMARY_COLOR,
+                              color: AppColors.AUTH_CONTAINER_COLOR,
+                              label: LocaleKeys.edit.localize,
+                              onPressed: () {}
+                              // showAreYouSure(
+                              //     title: LocaleKeys.deleteAd.localize,
+                              //     subTitle: LocaleKeys.sureRemoveAd.localize,
+                              //     action: () {
+                              //       //  onDelete(item.id);
+                              //     },
+                              //     context: context),
+                              )),
                       const Sizer(),
                       Expanded(
                           child: AppButton(
-                            color: AppColors.AUTH_CONTAINER_COLOR,
-                            label: LocaleKeys.subscriptions.localize,
-                            onPressed: () {
-                              serviceLocator<SubscriptionController>()
-                                  .showSubscriptionPlans(
-                                wallets: [
-                                  WalletTypes.mainWallet,
-                                  WalletTypes.giftWallet,
-                                  WalletTypes.balance,
-                                ],
-                                subCategoryId: item.subCategory.id,
-                                title: LocaleKeys.ads.localize,
-                              );
-                            },
-                          )),
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        label: LocaleKeys.subscriptions.localize,
+                        onPressed: () {
+                          serviceLocator<SubscriptionController>().showSubscriptionPlans(
+                            wallets: [
+                              WalletTypes.mainWallet,
+                              WalletTypes.giftWallet,
+                              WalletTypes.balance,
+                            ],
+                            subCategoryId: item.subCategory.id,
+                            title: LocaleKeys.ads.localize,
+                          );
+                        },
+                      )),
                     ],
                   ),
                 ],
@@ -153,9 +147,7 @@ class BuildItemAuctionCard extends StatelessWidget {
     return Container(
       height: 140.h,
       padding: EdgeInsets.all(10.w),
-      color: Theme
-          .of(context)
-          .primaryColor,
+      color: Theme.of(context).primaryColor,
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Expanded(
           child: ImageFromInternet(
@@ -181,17 +173,13 @@ class BuildItemAuctionCard extends StatelessWidget {
                   text: item.title,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
-                  color: Theme
-                      .of(context)
-                      .scaffoldBackgroundColor,
+                  color: Theme.of(context).scaffoldBackgroundColor,
                 ),
                 Label(
                   text: '${item.price}',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  color: Theme
-                      .of(context)
-                      .scaffoldBackgroundColor,
+                  color: Theme.of(context).scaffoldBackgroundColor,
                 ),
                 // Label(
                 //     text: item.description,
@@ -201,24 +189,16 @@ class BuildItemAuctionCard extends StatelessWidget {
                 Row(
                   children: [
                     Label(
-                        text: context.locale == Locales.english
-                            ? item.mainCategory.nameEn
-                            : item.mainCategory.nameAr,
+                        text: context.locale == Locales.english ? item.mainCategory.nameEn : item.mainCategory.nameAr,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        color: Theme
-                            .of(context)
-                            .scaffoldBackgroundColor),
+                        color: Theme.of(context).scaffoldBackgroundColor),
                     const Sizer(),
                     Label(
-                        text: context.locale == Locales.english
-                            ? item.subCategory.nameEn
-                            : item.subCategory.nameAr,
+                        text: context.locale == Locales.english ? item.subCategory.nameEn : item.subCategory.nameAr,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        color: Theme
-                            .of(context)
-                            .scaffoldBackgroundColor),
+                        color: Theme.of(context).scaffoldBackgroundColor),
                   ],
                 ),
               ],
@@ -235,9 +215,7 @@ class BuildItemAuctionCard extends StatelessWidget {
                       _buildOptionsWidget(
                         label: LocaleKeys.markSsSold.localize,
                         onTap: () {
-                          context
-                              .read<MyAddsCubit>()
-                              .deleteMyInstallment(id: item.id);
+                          context.read<MyAddsCubit>().deleteMyInstallment(id: item.id);
                           Navigator.pop(context);
                         },
                         icon: Icons.hourglass_empty_rounded,
@@ -246,9 +224,7 @@ class BuildItemAuctionCard extends StatelessWidget {
                       _buildOptionsWidget(
                         label: LocaleKeys.deactivate.localize,
                         onTap: () {
-                          context
-                              .read<MyAddsCubit>()
-                              .deleteMyInstallment(id: item.id);
+                          context.read<MyAddsCubit>().deleteMyInstallment(id: item.id);
                           Navigator.pop(context);
                         },
                         icon: Icons.refresh,
@@ -257,9 +233,7 @@ class BuildItemAuctionCard extends StatelessWidget {
                       _buildOptionsWidget(
                         label: LocaleKeys.deleteAd.localize,
                         onTap: () {
-                          context
-                              .read<MyAddsCubit>()
-                              .deleteMyInstallment(id: item.id);
+                          context.read<MyAddsCubit>().deleteMyInstallment(id: item.id);
                           Navigator.pop(context);
                           // showAreYouSure(
                           //   title: LocaleKeys.deleteAd.localize,
@@ -279,10 +253,7 @@ class BuildItemAuctionCard extends StatelessWidget {
                   ],
                 ));
           },
-          child: Icon(Icons.more_vert,
-              color: Theme
-                  .of(context)
-                  .scaffoldBackgroundColor),
+          child: Icon(Icons.more_vert, color: Theme.of(context).scaffoldBackgroundColor),
         )
       ]),
     );
@@ -375,25 +346,18 @@ class BuildItemAuctionCard extends StatelessWidget {
     );
   }
 
-  Widget _buildContactItem({required IconData icon,
-    required String label,
-    required int value,
-    required context}) {
+  Widget _buildContactItem({required IconData icon, required String label, required int value, required context}) {
     return Row(
       children: [
         Container(
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: Theme
-                .of(context)
-                .primaryColor,
+            color: Theme.of(context).primaryColor,
           ),
           child: Icon(
             icon,
-            color: Theme
-                .of(context)
-                .scaffoldBackgroundColor,
+            color: Theme.of(context).scaffoldBackgroundColor,
           ),
         ),
         const Sizer(),

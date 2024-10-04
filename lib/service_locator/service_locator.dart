@@ -167,9 +167,13 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/subscription_interceptor.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
+import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/core/utils/api_service.dart';
-import 'package:fourtyninehub/features/competition/data/repository/competition_repo_impl.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/features/competition/data/repository/competition_repo_impl.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/repositories/reels_repository_impl.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
@@ -177,6 +181,7 @@ import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/s
 import 'package:fourtyninehub/features/social_media/tinder/data/repo/tinder_repo.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
+import 'package:fourtyninehub/service_locator/carpool_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/face_book_service_locator.dart';
 import 'package:fourtyninehub/service_locator/instagram_service_locator.dart';
@@ -245,19 +250,16 @@ class DI {
         OptionBuilder()
             .setTransports(['websocket'])
             .disableAutoConnect()
-            .setExtraHeaders({'authorization': token}) // optional
+            .setExtraHeaders({'Authorization': token}) // optional
             .build()));
     // database
-    serviceLocator.registerLazySingleton<Database>(
-        () => SQFLiteDataSource.instance.database);
+    serviceLocator.registerLazySingleton<Database>(() => SQFLiteDataSource.instance.database);
 
     // dio
     serviceLocator.registerLazySingleton<Dio>(
       () => Dio(
         BaseOptions(
-          baseUrl: kReleaseMode
-              ? EndPoints.productionBaseUrl
-              : EndPoints.developmentBaseUrl,
+          baseUrl: kReleaseMode ? EndPoints.productionBaseUrl : EndPoints.developmentBaseUrl,
           connectTimeout: const Duration(seconds: 60),
           headers: {
             'Accept': 'application/json',
@@ -304,11 +306,20 @@ class DI {
     serviceLocator.registerFactory<StoryCubit>(
       () => StoryCubit(serviceLocator<StoryRepository>()),
     );
+    // serviceLocator
+    //     .registerFactory<SliderCubit>(() => SliderCubit(serviceLocator()));
     //
     // // Register the TinderRepository
-    // serviceLocator.registerLazySingleton<TinderRepository>(
-    //   () => TinderRepository(),
-    // );
+    serviceLocator.registerLazySingleton<GetTripInfoCubit>(
+      () => GetTripInfoCubit(repository: serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<ShowOffersCubit>(
+      () => ShowOffersCubit(repository: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<RequestRiderTripCubit>(
+      () => RequestRiderTripCubit(repository: serviceLocator()),
+    );
     //
     // // Register the TinderCubit
     // serviceLocator.registerFactory<TinderViewCubit>(
@@ -317,12 +328,11 @@ class DI {
     // );
 
     // Register the TinderRepository as a singleton
-    serviceLocator
-        .registerLazySingleton<TinderRepository>(() => TinderRepository());
+    serviceLocator.registerLazySingleton<TinderRepository>(() => TinderRepository());
 
     // Register the TinderViewCubit and inject the TinderRepository dependency
-    serviceLocator.registerFactory<TinderViewCubit>(() =>
-        TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
+    serviceLocator
+        .registerFactory<TinderViewCubit>(() => TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
 
     // Register other dependencies...
     // serviceLocator
@@ -337,7 +347,8 @@ class DI {
     serviceLocator.registerLazySingleton<ApiClientHelper>(
       () => ApiClientHelperImp(),
     );
-
+    //cacheService
+    serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     // base repo
     serviceLocator.registerLazySingleton(
       () => BaseRepository(),
@@ -351,6 +362,8 @@ class DI {
     await AuthServiceLocator.execute(serviceLocator: serviceLocator);
     // Ride Customer
     await RideServiceLocator.execute(serviceLocator: serviceLocator);
+    //Notification
+    // await NotificationServiceLocator.execute(serviceLocator: serviceLocator);
     // Subcategories
     SubcategoriesServiceLocator.execute(serviceLocator: serviceLocator);
     // Fourty-Nine
@@ -378,6 +391,7 @@ class DI {
     SubscriptionServiceLocator.execute(serviceLocator: serviceLocator);
     // Shipping
     ShippingServiceLocatior.execute(serviceLocator: serviceLocator);
+    SocialServiceLocator.execute(serviceLocator: serviceLocator);
     // trip join
     TripJoinServiceLocator.execute(serviceLocator: serviceLocator);
     //live
@@ -396,5 +410,6 @@ class DI {
     PaymentProviderServiceLocator.execute(serviceLocator: serviceLocator);
     TransferMoneyServiceLocator.execute(serviceLocator: serviceLocator);
     CustomPageServiceLocator.execute(serviceLocator: serviceLocator);
+    CarpoolServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

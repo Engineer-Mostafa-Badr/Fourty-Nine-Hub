@@ -1,12 +1,19 @@
 import 'package:fourtyninehub/features/requests_history/domain/usecases/get_food_history_usecase.dart';
 import 'package:fourtyninehub/features/requests_history/domain/usecases/get_shipping_requests_usecase.dart';
+import 'package:fourtyninehub/features/requests_history/presentation/cubit/rating_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/cubit/request_history_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/datasources/remote_data_source.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/datasources/rider_data_source.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/repositories/ride_request_repo_impl.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/domain/repositories/reider_request_repository.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/get_ride_thumbnails.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/add_ride_request_usecase.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_car_types_use_case.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_expected_price_use_case.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/data/datasources/driver_dashboard_remote_data_source.dart';
 import 'package:fourtyninehub/features/requests_history/data/datasources/request_history_remote_data_source.dart';
@@ -22,6 +29,9 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/data/rep
 import 'package:fourtyninehub/features/shipping/create_shipping_request/domain/usecases/get_shipping_expected_price_usecase.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/domain/usecases/get_shipping_subcategories_usecase.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_brands/fetch_car_brands_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_models/fetch_car_models_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_year_type/fetch_car_year_type_cubit.dart';
 import 'package:get_it/get_it.dart';
 import '../features/ride/RideRequest/domain/repositories/ride_request_repo.dart';
 import '../features/ride/RideRequest/domain/usecases/request/get_near_by_places_usecase.dart';
@@ -50,6 +60,8 @@ class RideServiceLocator {
         () => TripDetailsRemoteDataSourceImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<DriverDashboardRemoteDataSource>(
         () => DriverDashboardRemoteDataSourceImpl(serviceLocator()));
+    serviceLocator
+        .registerLazySingleton(() => RiderDataSource(api: serviceLocator()));
 
     // repo
     serviceLocator.registerLazySingleton<RideRequestRepo>(
@@ -63,6 +75,12 @@ class RideServiceLocator {
         () => DriverDashboardRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<CreateShippingRepo>(
         () => CreateShippingRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton(() => ReiderRequestRepository(
+        dataSource: serviceLocator(), socket: serviceLocator()));
+    // serviceLocator.registerLazySingleton<TripJoinRepo>(
+    //     () => TripJoinRepoImp(tripJoinRemoteDataSource: serviceLocator()));
+    // serviceLocator.registerLazySingleton<TripJoinRemoteDataSource>(
+    //     () => TripJoinRemoteDataSourceImp(apiConsumer: serviceLocator()));
     // cubit
     serviceLocator.registerFactory<RiderequestCubit>(() => RiderequestCubit(
           serviceLocator(),
@@ -70,6 +88,20 @@ class RideServiceLocator {
           serviceLocator(),
           serviceLocator(),
         )..loadData());
+    serviceLocator.registerFactory(
+        () => GetCateogryRiderCubit(repo: serviceLocator())..getCateogryData());
+    serviceLocator.registerFactory(
+        () => FetchCarBrandsCubit(fetchCarBrandUseCase: serviceLocator()));
+    serviceLocator.registerFactory(
+        () => FetchCarModelsCubit(fetchCarModelUseCase: serviceLocator()));
+    serviceLocator.registerFactory(
+        () => RiderTripReelTimeCubit(repository: serviceLocator()));
+    serviceLocator.registerFactory(
+        () => FetchCarYearTypeCubit(fetchCarYearTypeUseCase: serviceLocator()));
+    // serviceLocator.registerFactory(
+    //     () => GetTripCubit(fetchCarYearTypeUseCase: serviceLocator()));
+    serviceLocator.registerFactory(() => RegisterRiderCubit(
+        repo: serviceLocator(), repository: serviceLocator()));
     serviceLocator
         .registerFactory<RequestHistoryCubit>(() => RequestHistoryCubit(
               serviceLocator(),
@@ -77,10 +109,17 @@ class RideServiceLocator {
               serviceLocator(),
               serviceLocator(),
             )..loadData());
+    serviceLocator.registerFactory<RatingCubit>(() => RatingCubit(
+          serviceLocator(),
+        ));
     serviceLocator.registerFactory<TripDetailsCubit>(() => TripDetailsCubit(
           serviceLocator(),
           serviceLocator(),
         )..loadData());
+    serviceLocator
+        .registerFactory<LocationSocketCubit>(() => LocationSocketCubit(
+              repository: serviceLocator(),
+            ));
     serviceLocator
         .registerFactory<DriverRegisterCubit>(() => DriverRegisterCubit(
               serviceLocator(),
@@ -137,5 +176,9 @@ class RideServiceLocator {
         () => AcceptRideUseCase(serviceLocator()));
     serviceLocator.registerFactory<GetRideThumbnailsUseCase>(
         () => GetRideThumbnailsUseCase(serviceLocator()));
+    // serviceLocator.registerFactory<FetchCarBrandUseCase>(
+    //     () => FetchCarBrandUseCase(
+    //       tripJoinRepo: serviceLocator()
+    //     ));
   }
 }

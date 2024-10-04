@@ -24,10 +24,12 @@ class LiveServiceLocator {
       ),
     );
     //usecases
-    serviceLocator.registerFactory(() => GetAllTopicsUseCase(liveRepository: serviceLocator()));
+    serviceLocator.registerFactory(
+        () => GetAllTopicsUseCase(liveRepository: serviceLocator()));
     serviceLocator.registerFactory(() => CreateLiveUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => EndLiveUseCase(serviceLocator()));
-    serviceLocator.registerFactory(() => GetAllLivesUseCase(liveRepository: serviceLocator()));
+    serviceLocator.registerFactory(
+        () => GetAllLivesUseCase(liveRepository: serviceLocator()));
 
     //cubit is extension method on stream cubit
   }

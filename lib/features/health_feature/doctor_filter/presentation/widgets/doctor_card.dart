@@ -28,7 +28,7 @@ class DoctorCard extends StatelessWidget {
         context.push(Routes.VISITADOCTORDETAILS, extra: doctor.id);
       },
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
             color: AppColors.LIGHT_COLOR,
             border: Border.all(color: AppColors.LIGHT_GRAY_COLOR),
@@ -47,7 +47,7 @@ class DoctorCard extends StatelessWidget {
                         size: 25,
                         imageURL: doctor.image,
                       ),
-                      Sizer(),
+                      const Sizer(),
                       Expanded(
                           child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,8 +85,8 @@ class DoctorCard extends StatelessWidget {
                               color: Colors.amber.withOpacity(0.5),
                               spreadRadius: 2,
                               blurRadius: 8,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
                             ),
                           ]
                         : null,
@@ -110,7 +110,7 @@ class DoctorCard extends StatelessWidget {
                 const Icon(
                   FontAwesomeIcons.userDoctor,
                 ),
-                Sizer(),
+                const Sizer(),
                 Expanded(
                     child: ReadMoreLabel(
                   text: doctor.description,
@@ -123,7 +123,7 @@ class DoctorCard extends StatelessWidget {
                 const Icon(
                   Icons.attach_money_sharp,
                 ),
-                Sizer(),
+                const Sizer(),
                 Expanded(
                   child: Label(
                     text: '${Labels.fees}: ${doctor.priceToShow}',
@@ -133,7 +133,7 @@ class DoctorCard extends StatelessWidget {
               ],
             ),
             _buildWaitingTime,
-            Sizer(),
+            const Sizer(),
           ],
         ),
       ),
@@ -148,7 +148,7 @@ class DoctorCard extends StatelessWidget {
           const Icon(
             Icons.timer,
           ),
-          Sizer(),
+          const Sizer(),
           Expanded(
             child: Label(
               text:
@@ -159,7 +159,7 @@ class DoctorCard extends StatelessWidget {
         ],
       );
     } else {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
   }
 }

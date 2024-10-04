@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,7 +25,7 @@ class SelectShippingDestination extends StatelessWidget {
       builder: (context, state) {
         return Container(
           height: height * .7,
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -34,7 +36,7 @@ class SelectShippingDestination extends StatelessWidget {
                 children: [
                   Expanded(
                       child: Label(
-                    text: 'Enter Your route',
+                    text: 'Enter Your route'.tr(),
                     style: Styles.mediumText(fontWeight: FontWeight.bold),
                   )),
                   InkWell(
@@ -49,9 +51,9 @@ class SelectShippingDestination extends StatelessWidget {
                   )
                 ],
               ),
-              Sizer(),
+              const Sizer(),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 height: kToolbarHeight * .7,
                 decoration: BoxDecoration(
                   color: Colors.grey[100],
@@ -67,16 +69,16 @@ class SelectShippingDestination extends StatelessWidget {
                         radius: 4,
                       ),
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Expanded(
                         child: Text(
-                      state.fromAddress?.address ?? 'Select Pickup location',
+                      state.fromAddress?.address ?? 'Select Pickup location'.tr(),
                       maxLines: 1,
                     )),
                   ],
                 ),
               ),
-              Sizer(),
+              const Sizer(),
               DefaultTextFormField(
                 maxLines: 1,
                 currentFocusNode: rideCubit.toAddressFocusNode,
@@ -87,16 +89,16 @@ class SelectShippingDestination extends StatelessWidget {
                   children: [
                     AppButton(
                         margin: 5,
-                        label: 'Search',
+                        label: 'Search'.tr(),
                         width: kToolbarHeight,
                         height: 30.h,
                         onPressed: () => rideCubit.loadNearByPlaces(
                             key: rideCubit.toAddressTextController.text)),
                   ],
                 ),
-                hint: 'To',
+                hint: 'To'.tr(),
               ),
-              Sizer(),
+              const Sizer(),
               if (state.nearByPlaces.isNotEmpty)
                 Expanded(
                   child: ListView.separated(
@@ -111,7 +113,7 @@ class SelectShippingDestination extends StatelessWidget {
                                 Icons.location_on_outlined,
                                 color: Colors.grey,
                               ),
-                              Sizer(),
+                              const Sizer(),
                               Expanded(
                                   child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +128,7 @@ class SelectShippingDestination extends StatelessWidget {
                           ),
                         );
                       },
-                      separatorBuilder: (context, index) => Sizer(),
+                      separatorBuilder: (context, index) => const Sizer(),
                       itemCount: state.nearByPlaces.length),
                 )
             ],

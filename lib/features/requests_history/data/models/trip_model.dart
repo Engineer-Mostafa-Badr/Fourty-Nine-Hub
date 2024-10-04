@@ -26,7 +26,7 @@ class TripModel extends TripEntity {
 
   factory TripModel.fromJson(Map<String, dynamic> json) {
     return TripModel(
-      id: json['id'] ?? json['_id'],
+      id: json['id'] ?? json['id'],
       fromCoordinates: json['startLocation']['coordinates'].cast<double>(),
       toCoordinates: json['targetLocation']['coordinates'].cast<double>(),
       fromAddress: json['from'] ?? json['fromTitle'],

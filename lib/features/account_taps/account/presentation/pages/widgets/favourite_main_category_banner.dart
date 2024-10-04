@@ -18,7 +18,7 @@ import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../core/localization/locales.dart';
 
 class FavouriteMainCategoryBanner extends StatefulWidget {
-  FavouriteMainCategoryBanner(
+  const FavouriteMainCategoryBanner(
       {super.key,
       required this.category,
       required this.canRegister,
@@ -66,7 +66,9 @@ class _FavouriteMainCategoryBannerState
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text:context.locale == Locales.english? widget.category.nameEn :widget.category.nameAr,
+              text: context.locale == Locales.english
+                  ? widget.category.nameEn
+                  : widget.category.nameAr,
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -125,7 +127,9 @@ class _FavouriteMainCategoryBannerState
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: context.locale == Locales.english? widget.category.nameEn :widget.category.nameAr,
+              text: context.locale == Locales.english
+                  ? widget.category.nameEn
+                  : widget.category.nameAr,
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -143,7 +147,7 @@ class _FavouriteMainCategoryBannerState
                             color: AppColors.SECONDARY_COLOR,
                           ),
                         )
-                      : SizedBox.shrink(),
+                      : const SizedBox.shrink(),
                   Sizer(
                     height: 15.h,
                   ),

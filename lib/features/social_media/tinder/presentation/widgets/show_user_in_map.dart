@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class MapScreen extends StatefulWidget {
   final LatLng location;
 
-  const MapScreen({Key? key, required this.location}) : super(key: key);
+  const MapScreen({super.key, required this.location});
 
   @override
   _MapScreenState createState() => _MapScreenState();

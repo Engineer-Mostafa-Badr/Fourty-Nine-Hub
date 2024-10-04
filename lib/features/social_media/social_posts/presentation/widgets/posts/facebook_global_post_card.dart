@@ -156,14 +156,15 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                           child: Center(
                             child: Row(
                               children: [
-                                Sizer(),
+                                const Sizer(),
                                 const Icon(
                                   Icons.lock,
                                   color: Colors.black,
                                 ),
-                                Sizer(),
+                                const Sizer(),
                                 Label(
-                                  text: LocaleKeys.thisContentIsNotAvailableNow.localize,
+                                  text: LocaleKeys
+                                      .thisContentIsNotAvailableNow.localize,
                                   style: Styles.headerText(
                                     color: Colors.black,
                                   ),
@@ -206,7 +207,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                             text: myPost.commentsCount.toString(),
                             style: Styles.mediumText(),
                           ),
-                          Sizer(
+                          const Sizer(
                             width: 5,
                           ),
                           Label(
@@ -320,7 +321,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                           text: myPost.commentsCount.toString(),
                           style: Styles.mediumText(),
                         ),
-                        Sizer(
+                        const Sizer(
                           width: 5,
                         ),
                         Label(
@@ -381,7 +382,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
           image,
           height: 20.h,
         ),
-        Sizer(
+        const Sizer(
           width: 5,
         ),
         Label(
@@ -447,7 +448,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                 //       : UIConst.profilePlaceHolder),
                 // ),
                 ),
-            Sizer(),
+            const Sizer(),
             Expanded(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -498,7 +499,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
         ),
         if (post.location != null)
           Padding(
-            padding: EdgeInsetsDirectional.only(start: 40.0),
+            padding: const EdgeInsetsDirectional.only(start: 40.0),
             child: InkWell(
               onTap: () {
                 showDialog(
@@ -547,7 +548,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                 : UIConst.profilePlaceHolder),
           ),
         ),
-        Sizer(),
+        const Sizer(),
         Expanded(
             child: Row(
           children: [
@@ -628,7 +629,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                 if ((images?.isNotEmpty ?? false))
                   SizedBox(
                     child: GridView.builder(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -739,7 +740,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
 
   Widget _buildActivityFeelingWidget(PostEntity post) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -748,7 +749,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
               '${LocaleKeys.feeling.localize} ${post.feeling != null ? post.feeling?.name ?? '' : ''}${post.activity != null ? ', ${post.activity?.name}' : ''}',
               style: Styles.mediumText(),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
           ],

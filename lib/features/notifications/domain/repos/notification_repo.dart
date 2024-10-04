@@ -14,9 +14,11 @@ abstract class NotificationRepo {
   Future<void> setupInteractedMessage({
     required BuildContext context,
   });
-  Future<void> notificationListener({required Function(Map<String, dynamic> data) notificationCallback});
+  Future<void> notificationListener(
+      {required Function(Map<String, dynamic> data) notificationCallback});
 
-  Future<Either<Failure, UnreadNotificationsCountEntity>> getUnreadNotificationsCount();
+  Future<Either<Failure, UnreadNotificationsCountEntity>>
+      getUnreadNotificationsCount();
 
   Future<Either<Failure, bool>> notificationSeen({required String id});
   Future<Either<Failure, bool>> allNotificationSeen({required String type});

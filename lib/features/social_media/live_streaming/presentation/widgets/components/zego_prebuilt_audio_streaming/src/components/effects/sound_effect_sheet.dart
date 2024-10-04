@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 // Package imports:
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
@@ -26,14 +25,14 @@ class ZegoLiveAudioRoomSoundEffectSheet extends StatefulWidget {
   final bool rootNavigator;
 
   const ZegoLiveAudioRoomSoundEffectSheet({
-    Key? key,
+    super.key,
     required this.innerText,
     required this.voiceChangerEffect,
     required this.voiceChangerSelectedIDNotifier,
     required this.reverbEffect,
     required this.reverbSelectedIDNotifier,
     this.rootNavigator = false,
-  }) : super(key: key);
+  });
 
   @override
   State<ZegoLiveAudioRoomSoundEffectSheet> createState() =>

@@ -416,6 +416,7 @@
 
 // ignore_for_file: deprecated_member_use
 
+import 'dart:developer';
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -429,6 +430,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/emoji_keyboard.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:social_media_recorder/audio_encoder_type.dart';
 import 'package:social_media_recorder/screen/social_media_recorder.dart';
 
 import 'replay_message_widget.dart';
@@ -446,6 +448,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   late bool _showMicButton;
   late bool _showEmojiKeyboard;
   final Radius radius = const Radius.circular(32);
+  bool _isRecording = false;
 
   @override
   void initState() {
@@ -476,19 +479,23 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Expanded(
-                flex: 6,
-                child: Column(
-                  children: [
-                    _replayedMessageCard(),
-                    _textField(),
-                  ],
-                ),
-              ),
+              _isRecording
+                  ? const SizedBox.shrink()
+                  : Expanded(
+                      flex: 6,
+                      child: Column(
+                        children: [
+                          _replayedMessageCard(),
+                          _textField(),
+                        ],
+                      ),
+                    ),
               const Sizer(),
               Expanded(
                 flex: 1,
-                child: _showMicButton ? _micButton() : _sendButton(),
+                child: _showMicButton
+                    ? SizedBox(height: 50, child: _micButton(context))
+                    : _sendButton(),
               ),
             ],
           ),
@@ -496,6 +503,69 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
         _emojiKeyboard(),
       ],
     );
+  }
+
+  Widget _micButton(BuildContext context) {
+    return SocialMediaRecorder(
+      startRecording: () {
+        _isRecording = true;
+        setState(() {});
+      },
+      stopRecording: (time) {
+        _isRecording = false;
+        setState(() {});
+      },
+      encode: AudioEncoderType.AAC, // Ensure it's recorded in AAC
+      sendRequestFunction: (File soundFile, String time) async {
+        _isRecording = false;
+        setState(() {});
+
+        // Rename the file to .mp3
+        String newPath = soundFile.path.replaceAll('.m4a', '.mp3');
+        File mp3File = await soundFile.rename(newPath);
+
+        log(mp3File.path); // Log the new file path
+
+        // Add the renamed MP3 file to the media list
+        // ignore: use_build_context_synchronously
+        context.read<ChatRoomCubit>().media.add(mp3File);
+        // ignore: use_build_context_synchronously
+        await context.read<ChatRoomCubit>().sendMessage();
+      },
+      initRecordPackageWidth: 50,
+      fullRecordPackageHeight: 50,
+      recordIcon:
+          Icon(Icons.mic, color: AppColors.BACKGROUND_COLOR, size: 50.h),
+      recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
+      recordIconWhenLockBackGroundColor: AppColors.PRIMARY_COLOR,
+      counterBackGroundColor: AppColors.PRIMARY_COLOR,
+      cancelTextBackGroundColor: AppColors.PRIMARY_COLOR,
+      backGroundColor: AppColors.PRIMARY_COLOR,
+      cancelTextStyle: const TextStyle(color: Colors.white),
+      counterTextStyle: const TextStyle(color: Colors.white),
+      radius: BorderRadius.circular(50),
+    );
+  }
+
+  Widget _sendButton() {
+    return LayoutBuilder(builder: (context, constraints) {
+      return InkWell(
+        onTap: () async {
+          await context.read<ChatRoomCubit>().sendMessage();
+        },
+        child: const CircleAvatar(
+          backgroundColor: AppColors.PRIMARY_COLOR,
+          radius: 25,
+          child: Center(
+            child: Icon(
+              Icons.send,
+              color: Colors.white,
+              size: 20,
+            ),
+          ),
+        ),
+      );
+    });
   }
 
   Widget _textField() {
@@ -660,60 +730,6 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
             ));
       },
     );
-  }
-
-  Widget _micButton() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SocialMediaRecorder(
-          sendRequestFunction: (File soundFile, String time) {},
-          initRecordPackageWidth: constraints.maxWidth,
-          fullRecordPackageHeight: constraints.maxWidth,
-          recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
-          counterBackGroundColor: AppColors.PRIMARY_COLOR,
-          cancelTextBackGroundColor: AppColors.PRIMARY_COLOR,
-          recordIconWhenLockBackGroundColor: AppColors.PRIMARY_COLOR,
-          backGroundColor: AppColors.PRIMARY_COLOR,
-          radius: BorderRadius.circular(50),
-          recordIcon: Icon(Icons.mic, color: Colors.white, size: 50.h),
-        );
-        // return InkWell(
-        //   onTap: () {},
-        //   child: CircleAvatar(
-        //     backgroundColor: AppColors.PRIMARY_COLOR,
-        //     radius: 25,
-        //     child: const Center(
-        //       child: Icon(
-        //         Icons.send,
-        //         color: Colors.white,
-        //         size: 20,
-        //       ),
-        //     ),
-        //   ),
-        // );
-      },
-    );
-  }
-
-  Widget _sendButton() {
-    return LayoutBuilder(builder: (context, constraints) {
-      return InkWell(
-        onTap: () async {
-          await context.read<ChatRoomCubit>().sendMessage();
-        },
-        child: const CircleAvatar(
-          backgroundColor: AppColors.PRIMARY_COLOR,
-          radius: 25,
-          child: Center(
-            child: Icon(
-              Icons.send,
-              color: Colors.white,
-              size: 20,
-            ),
-          ),
-        ),
-      );
-    });
   }
 
   _toggleMicButton(String value) {

@@ -30,8 +30,8 @@ class HealthBookingCard extends StatelessWidget {
         context.push(Routes.VISITADOCTORDETAILS, extra: appointment.doctor.id);
       },
       child: Container(
-        margin: EdgeInsets.all(10),
-        padding: EdgeInsets.all(10),
+        margin: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Theme.of(context).scaffoldBackgroundColor,
@@ -59,7 +59,7 @@ class HealthBookingCard extends StatelessWidget {
                   width: kToolbarHeight,
                   url: appointment.doctor.image,
                 ),
-                Sizer(),
+                const Sizer(),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

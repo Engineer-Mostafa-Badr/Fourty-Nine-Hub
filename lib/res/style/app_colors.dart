@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 abstract class AppColors {
-  static const PRIMARY_COLOR = Color(0xff0b1035);
+  static const PRIMARY_COLOR = Color(0xFF0B1035);
 
   static const DARK_BLUE_COLOR = Color.fromARGB(255, 22, 23, 24);
   static const UNSELECTED_GRAY_COLOR = Color(0xFFD2D2D2);
@@ -88,6 +88,8 @@ abstract class AppColors {
     ),
   ];
   static Color getSecondryColor(BuildContext context) {
-    return context.isDarkMode ? AppColors.SECONDARY_COLOR_DARK : AppColors.SECONDARY_COLOR;
+    return context.isDarkMode
+        ? AppColors.SECONDARY_COLOR_DARK
+        : AppColors.SECONDARY_COLOR;
   }
 }

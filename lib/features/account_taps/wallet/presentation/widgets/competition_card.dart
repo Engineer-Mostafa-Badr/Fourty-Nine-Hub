@@ -23,7 +23,8 @@ class CompetitionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int countOfRequest = (competitionsWalletEntity.countOfRequest ?? 0).toInt();
+    final int countOfRequest =
+        (competitionsWalletEntity.countOfRequest ?? 0).toInt();
     final int maxRequests = (competitionsWalletEntity.maxRequests ?? 0).toInt();
     return GestureDetector(
       onTap: () => onTap(context),
@@ -44,8 +45,8 @@ class CompetitionCard extends StatelessWidget {
                   children: [
                     Label(
                       text: context.locale == Locales.english
-                          ? competitionsWalletEntity.nameEn ??''
-                          : competitionsWalletEntity.nameAr ??'',
+                          ? competitionsWalletEntity.nameEn ?? ''
+                          : competitionsWalletEntity.nameAr ?? '',
                       style: Styles.mediumText(fontWeight: FontWeight.bold),
                     ),
                     Label(
@@ -86,10 +87,12 @@ class CompetitionCard extends StatelessWidget {
                   Icons.info_outline,
                   color: Colors.grey,
                 ),
-                Sizer(width: 10.w,),
+                Sizer(
+                  width: 10.w,
+                ),
                 Expanded(
                     child: Label(
-                      maxLines: 2,
+                  maxLines: 2,
                   text:
                       '${LocaleKeys.minimum.localize} ${competitionsWalletEntity.maxRequests} ${LocaleKeys.requestTransaction.localize}',
                   style: Styles.mediumText(color: Colors.grey),

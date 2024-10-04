@@ -42,8 +42,8 @@ class CreateRestaurantGovernorateDropdown extends StatelessWidget {
                                     ? Colors.red
                                     : Colors.grey),
                           ),
-                          constraints: BoxConstraints.loose(Size.fromHeight(90.h)),
-
+                          constraints:
+                              BoxConstraints.loose(Size.fromHeight(90.h)),
                           border: OutlineInputBorder(
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(8)),
@@ -100,7 +100,7 @@ class CreateRestaurantGovernorateDropdown extends StatelessWidget {
             },
           );
         } else {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
       },
     );

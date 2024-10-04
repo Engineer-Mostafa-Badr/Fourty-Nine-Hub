@@ -7,19 +7,21 @@ class DashboardBanner extends StatelessWidget {
   final String title;
   final String? subTitle;
   final String? route;
+  final void Function()? onTap;
   const DashboardBanner(
-      {super.key, this.subTitle, required this.title, this.route});
+      {super.key, this.subTitle, required this.title, this.route, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        if (route != null) {
-          context.push(route!);
-        }
-      },
+      onTap: onTap ??
+          () {
+            if (route != null) {
+              context.push(route!);
+            }
+          },
       child: Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
               borderRadius: BorderRadius.circular(20.r)),

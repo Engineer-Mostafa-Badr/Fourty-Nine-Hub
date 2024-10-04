@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_facebook_body.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_global_facebook_body.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
@@ -34,6 +41,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
+  // TabController? controller = TabController(length: length, vsync: vsync)
   @override
   void initState() {
     scrollController;
@@ -59,12 +67,34 @@ class _SocialHomeViewState extends State<SocialHomeView>
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
           appBar: widget.hideAppBar
               ? null
-              : const HomeAppbar(
+              : HomeAppbar(
                   isWithBackArrow: true,
+                  toolbarHeight: context.screenHeight/6.5,
+                  bottom: TabBar(
+                    padding: EdgeInsets.zero,
+
+                    indicatorColor: context.isDarkMode
+                        ? Colors.white
+                        : AppColors.PRIMARY_COLOR,
+                    labelColor: context.isDarkMode
+                        ? Colors.white
+                        : AppColors.PRIMARY_COLOR,
+                    tabs: const [
+                      Tab(
+                        icon: Icon(FontAwesomeIcons.facebook),
+                      ),
+                      Tab(
+                        icon: Icon(FontAwesomeIcons.instagram),
+                      ),
+                      Tab(
+                        icon: Icon(FontAwesomeIcons.twitter),
+                      ),
+                    ],
+                  ),
                 ),
           drawer: widget.hideAppBar ? null : const DrawerWidget(),
           bottomNavigationBar: BottomNavigator(
@@ -81,56 +111,73 @@ class _SocialHomeViewState extends State<SocialHomeView>
           floatingActionButtonLocation: _isScrollingDown || widget.hideAppBar
               ? null
               : FloatingActionButtonLocation.centerDocked,
-          body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
-              builder: (context, state) {
-            return context.read<UserCubit>().isLoggedIn
-                ? NestedAppbar(
-                    scrollController: ScrollController(),
-                    appBars: [
-                      SliverAppBar(
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        automaticallyImplyLeading: false,
-                        floating: true,
-                        // pinned: true,
-                        flexibleSpace: const CreatePostBanner(),
-                      ),
-                      SliverAppBar(
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        automaticallyImplyLeading: false,
-                        // floating: true,
-                        pinned: true,
-                        flexibleSpace: _buildTabBar(),
-                      )
-                    ],
-                    body: FacebookBody(
-                      scrollController: scrollController,
-                    ))
-                : NestedAppbar(
-                    scrollController: ScrollController(),
-                    appBars: [
-                      SliverAppBar(
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        automaticallyImplyLeading: false,
-                        floating: true,
-                        // pinned: true,
-                        flexibleSpace: const CreatePostBanner(),
-                      ),
-                      SliverAppBar(
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        automaticallyImplyLeading: false,
-                        // floating: true,
-                        pinned: true,
-                        flexibleSpace: _buildTabBar(),
-                      )
-                    ],
-                    body: FacebookGlobalBody(
-                      scrollController: scrollController,
-                    ));
-          })),
+          body: TabBarView(
+            children: [
+              BlocBuilder<UserCubit, BasicState<UserEntity>>(
+                  builder: (context, state) {
+                return context.read<UserCubit>().isLoggedIn
+                    ? NestedAppbar(
+                        scrollController: ScrollController(),
+                        appBars: [
+                          SliverAppBar(
+                            backgroundColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            automaticallyImplyLeading: false,
+                            floating: true,
+                            // pinned: true,
+                            flexibleSpace: const CreatePostBanner(),
+                          ),
+                          SliverAppBar(
+                            backgroundColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            automaticallyImplyLeading: false,
+                            // floating: true,
+                            pinned: true,
+                            flexibleSpace: _buildTabBar(),
+                          )
+                        ],
+                        body: FacebookBody(
+                          scrollController: scrollController,
+                        ))
+                    : NestedAppbar(
+                        scrollController: ScrollController(),
+                        appBars: [
+                          SliverAppBar(
+                            backgroundColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            automaticallyImplyLeading: false,
+                            floating: true,
+                            // pinned: true,
+                            flexibleSpace: const CreatePostBanner(),
+                          ),
+                          SliverAppBar(
+                            backgroundColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            automaticallyImplyLeading: false,
+                            // floating: true,
+                            pinned: true,
+                            flexibleSpace: _buildTabBar(),
+                          )
+                        ],
+                        body: FacebookGlobalBody(
+                          scrollController: scrollController,
+                        ));
+              }),
+              MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) =>
+                        serviceLocator<InstagramCubit>()..loadData(),
+                  ),
+                  BlocProvider(
+                    create: (context) => serviceLocator<StoryCubit>(),
+                  ),
+                ],
+                child: const InstagramView(),
+              ),
+              const TwitterView(),
+            ],
+          )),
     );
   }
 

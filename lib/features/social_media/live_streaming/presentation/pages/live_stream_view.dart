@@ -59,7 +59,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
     );
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ZegoGiftManager().service.init(
-            appID: context.read<SecretsCubit>().state.secrets?.zegoAppId??0,
+            appID: context.read<SecretsCubit>().state.secrets?.zegoAppId ?? 0,
             liveID: widget.liveID,
             localUserID: context.read<UserCubit>().state.data!.id,
             localUserName: context.read<UserCubit>().state.data!.fullName,
@@ -225,7 +225,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
       valueListenable: ZegoGiftManager().playList.playingDataNotifier,
       builder: (context, playData, _) {
         if (null == playData) {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
 
         if (playData.giftItem.type == ZegoGiftType.svga) {
@@ -295,7 +295,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
 
   Widget mp4Widget(PlayData playData) {
     if (playData.giftItem.type != ZegoGiftType.mp4) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     /// you can define the area and size for displaying your own

@@ -8,8 +8,8 @@ import '../../domain/entities/disable_entity.dart';
 
 abstract class SettingRemoteDataSource {
   Future<Either<Failure, bool>> deleteAccount();
-  Future<Either<Failure,DisableEntity>> disableAccount();
-  Future<Either<Failure,DisableEntity>> enableAccount();
+  Future<Either<Failure, DisableEntity>> disableAccount();
+  Future<Either<Failure, DisableEntity>> enableAccount();
 }
 
 class SettingRemoteDataSourceImpl extends SettingRemoteDataSource {
@@ -22,8 +22,8 @@ class SettingRemoteDataSourceImpl extends SettingRemoteDataSource {
     var response = await _apiConsumer.delete(EndPoints.deleteAccount);
 
     return response.fold(
-      (failure)=>Left(failure),
-      (response)=>Right(response['status']),
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
   }
 
@@ -32,8 +32,8 @@ class SettingRemoteDataSourceImpl extends SettingRemoteDataSource {
     var response = await _apiConsumer.put(EndPoints.disableAccount);
 
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right(DisableModel.fromJson(response['data'])),
+      (failure) => Left(failure),
+      (response) => Right(DisableModel.fromJson(response['data'])),
     );
   }
 
@@ -42,8 +42,8 @@ class SettingRemoteDataSourceImpl extends SettingRemoteDataSource {
     var response = await _apiConsumer.put(EndPoints.enableAccount);
 
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right(DisableModel.fromJson(response['data'])),
+      (failure) => Left(failure),
+      (response) => Right(DisableModel.fromJson(response['data'])),
     );
   }
 }

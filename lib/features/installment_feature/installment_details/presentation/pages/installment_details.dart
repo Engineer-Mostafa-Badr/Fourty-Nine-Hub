@@ -67,7 +67,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                   child: CircularProgressIndicator.adaptive(),
                 )
               : Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: ListView(
                     children: [
                       _buildAdInfoWidget(ad: state.installment!.ad!),
@@ -117,14 +117,14 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Icon(Icons.location_on_outlined),
-              Sizer(),
+              const Sizer(),
               Expanded(child: Label(text: ad.address?.address ?? '')),
-              Sizer(),
+              const Sizer(),
               Label(text: ad.formatedDate)
             ],
           ),
         ),
-        Sizer(),
+        const Sizer(),
         Label(
           text: 'Description',
           style: Styles.mediumText(fontWeight: FontWeight.bold),
@@ -156,8 +156,16 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                         : Colors.white),
                 child: Row(
                   children: [
-                    Expanded(child: Label(text: getLang()=='ar'?detail.value.nameAr:detail.value.nameEn)),
-                    Expanded(child: Label(text: getLang()=='ar'?detail.value.nameAr:detail.value.nameEn)),
+                    Expanded(
+                        child: Label(
+                            text: getLang() == 'ar'
+                                ? detail.value.nameAr
+                                : detail.value.nameEn)),
+                    Expanded(
+                        child: Label(
+                            text: getLang() == 'ar'
+                                ? detail.value.nameAr
+                                : detail.value.nameEn)),
                   ],
                 ),
               );
@@ -174,7 +182,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
         Label(
             text: Labels.description,
             style: Styles.mediumText(fontWeight: FontWeight.bold)),
-        Sizer(),
+        const Sizer(),
         const ReadMoreLabel(text: UIConst.placeholderText),
       ],
     );
@@ -191,7 +199,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
           color: AppColors.PRIMARY_COLOR,
           size: 20,
         ),
-        Sizer(),
+        const Sizer(),
         Expanded(child: Label(text: label, style: Styles.mediumText()))
       ],
     );
@@ -208,7 +216,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                           child: InkWell(
                         onTap: () => controller.changeInstallmentPlan(v: e),
                         child: Container(
-                          margin: EdgeInsets.all(3),
+                          margin: const EdgeInsets.all(3),
                           padding: EdgeInsets.symmetric(
                               horizontal: 10, vertical: 2.h),
                           decoration: BoxDecoration(
@@ -243,7 +251,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
             fit: BoxFit.cover,
             source: NetworkImage(UIConst.productImage)),
         Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -263,7 +271,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
                       children: [0, 1, 2, 3, 4, 5].map((e) {
                 return WidgetSpan(
                     child: Container(
-                  margin: EdgeInsets.all(3),
+                  margin: const EdgeInsets.all(3),
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2.h),
                   decoration: BoxDecoration(
                       color: e == 0 ? AppColors.SECONDARY_COLOR : null,

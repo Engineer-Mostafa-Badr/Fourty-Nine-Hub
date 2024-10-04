@@ -21,7 +21,7 @@ class CreateDoctorIDPhotoPicker extends StatelessWidget {
           text: "ID",
           style: Styles.headerText(),
         ),
-        Sizer(),
+        const Sizer(),
         Row(
           children: [
             InkWell(
@@ -46,7 +46,7 @@ class CreateDoctorIDPhotoPicker extends StatelessWidget {
                 },
               ),
             ),
-            Sizer(),
+            const Sizer(),
             InkWell(
               onTap: () async {
                 await createDoctorCubit.uploadIdBehindImage();

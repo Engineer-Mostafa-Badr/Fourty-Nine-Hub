@@ -40,13 +40,15 @@ class PagePreview extends StatelessWidget {
             MultiBlocProvider(
               providers: [
                 BlocProvider(
-                  create: (context) => serviceLocator<InstagramCubit>()..loadData(),
+                  create: (context) =>
+                      serviceLocator<InstagramCubit>()..loadData(),
                 ),
                 BlocProvider(
                   create: (context) => serviceLocator<StoryCubit>(),
                 ),
                 BlocProvider(
-                  create: (context) => serviceLocator<CustomPageCubit>()..fetchSocialPage(),
+                  create: (context) =>
+                      serviceLocator<CustomPageCubit>()..fetchSocialPage(),
                 ),
               ],
               child: BlocBuilder<InstagramCubit, InstagramState>(
@@ -55,7 +57,8 @@ class PagePreview extends StatelessWidget {
                     builder: (BuildContext context, social) {
                       if (social.status == CustomPageStates.success) {
                         return Padding(
-                          padding: const EdgeInsets.only(right: 8, left: 8, top: 8),
+                          padding:
+                              const EdgeInsets.only(right: 8, left: 8, top: 8),
                           child: social.social?.face == true
                               ? SocialHomeView(
                                   userId: social.social!.userId,

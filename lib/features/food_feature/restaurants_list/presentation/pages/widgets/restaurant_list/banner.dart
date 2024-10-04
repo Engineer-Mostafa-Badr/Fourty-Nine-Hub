@@ -14,13 +14,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../../service_locator/service_locator.dart';
 import '../../../../../create_restaurant/cubit/create_resturant_cubit.dart';
 import '../../../../../create_restaurant/views/create_resturant_view.dart';
+import '../../../cubit/restaurants_list_cubit.dart';
 
 class MealBanner extends StatelessWidget {
   const MealBanner({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RestaurantsMealListCubit, RestaurantsMealListState>(
+    return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
       builder: (context, state) {
         if (state.isLoading) {
           return Shimmer.fromColors(
@@ -34,7 +35,8 @@ class MealBanner extends StatelessWidget {
             ),
           );
         }
-        if (state.mainCategory != null || state.banner != null) {
+        if (state.isSuccess &&
+            (state.mainCategory != null || state.banner != null)) {
           return MainCategoryBanner(
             category: state.mainCategory != null
                 ? MainCategoryEntity(
@@ -44,7 +46,8 @@ class MealBanner extends StatelessWidget {
                     banner: state.mainCategory?.banner ?? "",
                     cover: state.mainCategory?.cover ?? "",
                     isFavorite: state.mainCategory?.isFavorite ?? false,
-                    total: state.mainCategory?.total ?? 0, nameEn: '',
+                    total: state.mainCategory?.total ?? 0,
+                    nameEn: '',
                   )
                 : MainCategoryEntity(
                     id: state.banner?.id ?? "",
@@ -53,7 +56,8 @@ class MealBanner extends StatelessWidget {
                     banner: state.banner?.banner ?? "",
                     cover: state.banner?.cover ?? "",
                     isFavorite: false,
-                    total: state.banner?.numberOfAds ?? 0, nameEn: ''),
+                    total: state.banner?.numberOfAds ?? 0,
+                    nameEn: ''),
             canRegister: state.isResturant?.isRestaurant == true ? false : true,
             onRegister: () {
               if (context.read<UserCubit>().isLoggedIn) {
@@ -72,7 +76,7 @@ class MealBanner extends StatelessWidget {
             },
             onFavorite: () {
               context
-                  .read<RestaurantsMealListCubit>()
+                  .read<RestaurantsCubit>()
                   .toggleFavoriteCategory(state.mainCategory!.id);
             },
             isFavorite: false,

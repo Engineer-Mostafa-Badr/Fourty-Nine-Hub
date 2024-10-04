@@ -54,7 +54,7 @@ class StoryState {
       followers: followers ?? this.followers,
       isLoadingFollower: isLoadingFollower ?? this.isLoadingFollower,
       errorMessage: errorMessage,
-      users: stories ?? this.users,
+      users: stories ?? users,
       isLoading: isLoading ?? this.isLoading,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
       currentPage: currentPage ?? this.currentPage,

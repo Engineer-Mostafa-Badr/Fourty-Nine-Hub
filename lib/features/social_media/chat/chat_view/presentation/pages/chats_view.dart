@@ -270,9 +270,10 @@
 // }
 //after add index to navigate
 
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -285,7 +286,9 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/widgets/my_broadcast_card.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/archived_chats_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/widgets/follow_broadcast_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -311,6 +314,9 @@ class ChatView extends StatefulWidget {
 class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
   late ChatsCubit chatCubit;
   late TabController tabController;
+  bool expandedOptions = false;
+  late ScrollController scrollController;
+  double lastOffset = 0.0;
 
   @override
   void initState() {
@@ -323,12 +329,34 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   ChatCategories.values[tabController.index]);
             }
           });
+
+    scrollController = ScrollController()
+      ..addListener(() {
+        if (lastOffset > scrollController.offset) {
+          // Scrolled down
+          if (!expandedOptions) {
+            setState(() {
+              expandedOptions = true;
+            });
+          }
+        } else if (lastOffset < scrollController.offset) {
+          // Scrolled up
+          if (expandedOptions) {
+            setState(() {
+              expandedOptions = false;
+            });
+          }
+        }
+        lastOffset = scrollController.offset;
+      });
+
     super.initState();
   }
 
   @override
   void dispose() {
     tabController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -340,7 +368,8 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       child: SharedScaffold(
         mainCategoryId: 2,
         body: NestedAppbar(
-          scrollController: ScrollController(),
+          scrollController:
+              scrollController, // Attach the ScrollController here
           appBars: [
             SliverAppBar(
               automaticallyImplyLeading: false,
@@ -505,54 +534,33 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               return context.read<UserCubit>().isLoggedIn
                   ? _buildCategoriesViews()
                   : Center(
-                      child: SingleChildScrollView(
-                        child: GestureDetector(
-                          onTap: () => context.push(Routes.LOGIN),
-                          child: Container(
-                            padding: const EdgeInsets.all(12),
-                            width: 300,
-                            height: 300,
-                            decoration: BoxDecoration(
+                      child: GestureDetector(
+                        onTap: () => context.push(Routes.LOGIN),
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          width: 300,
+                          height: 300,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            shape: BoxShape.circle,
+                            border: Border.all(
                               color: Theme.of(context).primaryColor,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Theme.of(context).primaryColor,
-                                width: 4,
-                              ),
+                              width: 4,
                             ),
-                            child: Center(
-                              child: Text(
-                                LocaleKeys.pleaseLoginRegisterToEnjoyTheApp
-                                    .tr(),
-                                style: Styles.headerText(
-                                  color:
-                                      Theme.of(context).scaffoldBackgroundColor,
-                                ),
-                                textAlign: TextAlign.center,
+                          ),
+                          child: Center(
+                            child: Text(
+                              LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.tr(),
+                              style: Styles.headerText(
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
                               ),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                         ),
                       ),
                     );
-              // Center(
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: [
-              //         GestureDetector(
-              //           onTap: () => context.push(Routes.LOGIN),
-              //           child: Label(
-              //             text: 'Login',
-              //             style: Styles.headerText(
-              //                 color: AppColors.PRIMARY_COLOR_DARK),
-              //           ),
-              //         ),
-              //         Label(
-              //             text: ', To continue in using chat services',
-              //             style: Styles.headerText()),
-              //       ],
-              //     ),
-              //   );
             },
           ),
         ),
@@ -623,20 +631,204 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
   Widget _chatCategoryWidgetMapper(ChatCategories category) {
     switch (category) {
       case ChatCategories.social:
+        return Column(
+          children: [
+            ChatOptions(
+              icon: Icons.archive,
+              text: LocaleKeys.archive.tr(),
+              onTap: () async {
+                final result = await context.push(Routes.ARCHIVEDCHATS,
+                    extra: OptionsChatsViewParams(
+                      category: 'Archive',
+                      chatsCubit: chatCubit,
+                      isSecret: false,
+                    ));
+
+                // Check if the result is true, refresh the home page
+                if (result == true) {
+                  log("pop");
+                  await chatCubit.getChatsByCategory(ChatCategories.social);
+                  setState(() {});
+                }
+              },
+            ),
+            // const Divider(),
+            AnimatedSwitcher(
+              duration:
+                  const Duration(milliseconds: 500), // Duration of animation
+              transitionBuilder: (child, animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+              child: expandedOptions
+                  ? ChatOptions(
+                      key: const ValueKey(1),
+                      icon: Icons.mail_lock,
+                      text: LocaleKeys.lockChat.tr(),
+                      onTap: () async {
+                        final result = await context.push(Routes.ARCHIVEDCHATS,
+                            extra: OptionsChatsViewParams(
+                              category: 'LockedChats',
+                              chatsCubit: chatCubit,
+                              isSecret: true,
+                            ));
+
+                        // Check if the result is true, refresh the home page
+                        if (result == true) {
+                          log("pop");
+                          await chatCubit
+                              .getChatsByCategory(ChatCategories.social);
+                          setState(() {});
+                        }
+                      },
+                    )
+                  : const SizedBox.shrink(),
+            ),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              transitionBuilder: (child, animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+              child: expandedOptions
+                  ? ChatOptions(
+                      key: const ValueKey(2),
+                      icon: Icons.person_off,
+                      text: LocaleKeys.anonymous.tr(),
+                      onTap: () async {
+                        final result = await context.push(Routes.ARCHIVEDCHATS,
+                            extra: OptionsChatsViewParams(
+                              category: ChatCategoriesIds.anonymous,
+                              chatsCubit: chatCubit,
+                              isSecret: false,
+                            ));
+
+                        // Check if the result is true, refresh the home page
+                        if (result == true) {
+                          log("pop");
+                          await chatCubit
+                              .getChatsByCategory(ChatCategories.social);
+                          setState(() {});
+                        }
+                      },
+                    )
+                  : const SizedBox.shrink(),
+            ),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              transitionBuilder: (child, animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+              child: expandedOptions
+                  ? ChatOptions(
+                      key: const ValueKey(3),
+                      icon: Icons.emoji_people,
+                      text: LocaleKeys.greet.tr(),
+                      onTap: () async {
+                        final result = await context.push(Routes.ARCHIVEDCHATS,
+                            extra: OptionsChatsViewParams(
+                              category: ChatCategoriesIds.greet,
+                              chatsCubit: chatCubit,
+                              isSecret: false,
+                            ));
+
+                        // Check if the result is true, refresh the home page
+                        if (result == true) {
+                          log("pop");
+                          await chatCubit
+                              .getChatsByCategory(ChatCategories.social);
+                          setState(() {});
+                        }
+                      },
+                    )
+                  : const SizedBox.shrink(),
+            ),
+            const Divider(),
+            _buildCategoryChats(),
+          ],
+        );
       case ChatCategories.service:
+        return Column(
+          children: [
+            ChatOptions(
+              icon: Icons.archive,
+              text: LocaleKeys.archive.tr(),
+              onTap: () async {
+                final result = await context.push(Routes.ARCHIVEDCHATS,
+                    extra: OptionsChatsViewParams(
+                      category: 'Archive',
+                      chatsCubit: chatCubit,
+                      isSecret: false,
+                    ));
+
+                // Check if the result is true, refresh the home page
+                if (result == true) {
+                  log("pop");
+                  await chatCubit.getChatsByCategory(ChatCategories.service);
+                  setState(() {});
+                }
+              },
+            ),
+            // const Divider(),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              transitionBuilder: (child, animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+              child: expandedOptions
+                  ? ChatOptions(
+                      key: const ValueKey(4),
+                      icon: Icons.mail_lock,
+                      text: LocaleKeys.lockChat.tr(),
+                      onTap: () async {
+                        final result = await context.push(Routes.ARCHIVEDCHATS,
+                            extra: OptionsChatsViewParams(
+                              category: 'LockedChats',
+                              chatsCubit: chatCubit,
+                              isSecret: true,
+                            ));
+
+                        // Check if the result is true, refresh the home page
+                        if (result == true) {
+                          log("pop");
+                          await chatCubit
+                              .getChatsByCategory(ChatCategories.service);
+                          setState(() {});
+                        }
+                      },
+                    )
+                  : const SizedBox.shrink(),
+            ),
+            const Divider(),
+            _buildCategoryChats(),
+          ],
+        );
       case ChatCategories.groups:
       case ChatCategories.unread:
-      case ChatCategories.archived:
-      case ChatCategories.anonymous:
-      case ChatCategories.greet:
         return _buildCategoryChats();
-      case ChatCategories.socialCalls:
-      case ChatCategories.serviceCalls:
+      case ChatCategories.calls:
         return _buildCallingHistory(isVideo: false);
-      case ChatCategories.locked:
-        return _buildCategoryChats(isSecret: true);
       case ChatCategories.broadcast:
         return buildBroadcast();
+      //   case ChatCategories.archived:
+      // case ChatCategories.anonymous:
+      // case ChatCategories.greet:
+      //   return _buildCategoryChats();
+      // case ChatCategories.socialCalls:
+      // case ChatCategories.serviceCalls:
+      // return _buildCallingHistory(isVideo: false);
+      // case ChatCategories.locked:
+      // return _buildCategoryChats(isSecret: true);
     }
   }
 
@@ -707,14 +899,57 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
   }
 
   Widget _buildCallingHistory({required bool isVideo}) {
-    return ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) => CallingCard(
-              isVideo: isVideo,
+    return DefaultTabController(
+      length: 2, // Two tabs: Social and Services
+
+      child: Column(
+        children: [
+          // Tab Bar for Social and Services
+           TabBar(
+            labelColor: AppColors.PRIMARY_COLOR,
+            unselectedLabelColor: AppColors.LIGHT_GRAY_COLOR2,
+            indicator: const BoxDecoration(
+                // color: AppColors.PRIMARY_COLOR_DARK,
+                border: Border(
+              bottom: BorderSide(
+                color: AppColors.PRIMARY_COLOR_DARK,
+                width: 3.0,
+              ),
+            )),
+            tabs: [
+              Tab(text: LocaleKeys.social.tr()),
+              Tab(text: LocaleKeys.services.tr()),
+            ],
+            indicatorColor: Colors.blue,
+          ),
+          Expanded(
+            // TabBarView to display content for each tab
+            child: TabBarView(
+              children: [
+                // Social tab: Show video calls
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) =>
+                      const CallingCard(isVideo: true),
+                  separatorBuilder: (context, index) => const SizedBox(),
+                  itemCount: 8,
+                ),
+                // Services tab: Show voice calls
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) =>
+                      const CallingCard(isVideo: false),
+                  separatorBuilder: (context, index) => const SizedBox(),
+                  itemCount: 8,
+                ),
+              ],
             ),
-        separatorBuilder: (context, index) => const SizedBox(),
-        itemCount: 8);
+          ),
+        ],
+      ),
+    );
   }
 
   Widget buildBroadcast() {
@@ -804,6 +1039,44 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
             physics: const NeverScrollableScrollPhysics(),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ChatOptions extends StatelessWidget {
+  const ChatOptions({
+    super.key,
+    required this.icon,
+    required this.text,
+    this.onTap,
+  });
+  final IconData icon;
+  final String text;
+  final Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: AppColors.PRIMARY_COLOR,
+            ),
+            const SizedBox(width: 8),
+            Label(
+              text: text,
+              style: Styles.mediumText(
+                fontWeight: FontWeight.bold,
+                fontSize: 32,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

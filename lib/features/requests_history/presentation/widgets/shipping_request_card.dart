@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/requests_history/data/models/shipping_request_model.dart';
+import 'package:fourtyninehub/features/requests_history/data/models/shipping_request_model/shipping_request_model.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_static_maps_controller/google_static_maps_controller.dart';
 import '../../../../common/widgets/stateful/maps/static_map.dart';
@@ -73,11 +73,11 @@ class ShippingRequestCard extends StatelessWidget {
                               backgroundColor: Colors.white,
                               radius: 10,
                               backgroundImage:
-                                  NetworkImage(offer.profileImage ?? ''),
+                              NetworkImage(offer.profileImage ?? ''),
                             );
                           },
                           separatorBuilder: (context, index) =>
-                              const SizedBox(),
+                          const SizedBox(),
                           itemCount: trip.offers.length),
                     ),
                   ),

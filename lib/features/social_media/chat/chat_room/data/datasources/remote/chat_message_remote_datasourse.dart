@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 abstract class MessagesRemoteDataSource {
@@ -144,8 +145,6 @@ class MessagesRemoteDataSourceImplementation
           mediaIds.add(id);
         }
       }
-      
-
 
       _socket.connect();
       _socket.emit(
@@ -158,10 +157,10 @@ class MessagesRemoteDataSourceImplementation
           "groupId": null,
           "replyMessageId": params.replyMessageId,
           "oneTimeView": params.oneTimeView,
-          "sharedContacts": params.sharedContacts.map((contact) => contact.toJson()).toList(),
+          "sharedContacts":
+              params.sharedContacts.map((contact) => contact.toJson()).toList(),
         }),
       );
-
       return const Right(true);
     } catch (e) {
       CliLogger.error('Can\'t send message: $e');

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -31,11 +30,11 @@ class HealthView extends StatelessWidget {
               children: [
                 BlocProvider.value(
                   value: serviceLocator<HealthCubit>(),
-                  child: HealthBanner(),
+                  child: const HealthBanner(),
                 ),
                 if (state.isDoctor == false)
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: InkWell(
                       onTap: () {
                         if (context.read<UserCubit>().isLoggedIn) {
@@ -52,17 +51,17 @@ class HealthView extends StatelessWidget {
                       ),
                     ),
                   ),
-                Sizer(),
+                const Sizer(),
                 if (state.isApproved == true) const DoctorDashboardBanner(),
-                Sizer(),
+                const Sizer(),
                 const HealthBookingTypesWidgt(),
-                Sizer(),
+                const Sizer(),
                 const HealthSubCategories(),
-                Sizer(),
+                const Sizer(),
                 const HealthMedicalServices(),
-                Sizer(),
+                const Sizer(),
                 const HealthBookings(),
-                Sizer(),
+                const Sizer(),
               ],
             );
           },

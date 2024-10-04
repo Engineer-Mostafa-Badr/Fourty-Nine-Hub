@@ -57,13 +57,21 @@ class HealthCubit extends Cubit<HealthState> {
 
   final List<HealthBookingFilterModel> services = [
     HealthBookingFilterModel(
-        route: Routes.FILTERDOCTORSUBCATEGORY, bookingType: BookingTypes.clinic, image: Assets.doctorClinicVisit),
+        route: Routes.FILTERDOCTORSUBCATEGORY,
+        bookingType: BookingTypes.clinic,
+        image: Assets.doctorClinicVisit),
     HealthBookingFilterModel(
-        bookingType: BookingTypes.call, image: Assets.doctorCall, route: Routes.FILTERDOCTORSUBCATEGORY),
+        bookingType: BookingTypes.call,
+        image: Assets.doctorCall,
+        route: Routes.FILTERDOCTORSUBCATEGORY),
     HealthBookingFilterModel(
-        bookingType: BookingTypes.home, image: Assets.doctorHomeVisit, route: Routes.FILTERDOCTORSUBCATEGORY),
+        bookingType: BookingTypes.home,
+        image: Assets.doctorHomeVisit,
+        route: Routes.FILTERDOCTORSUBCATEGORY),
     HealthBookingFilterModel(
-        bookingType: BookingTypes.emergency, image: Assets.emergency, route: Routes.VISITAEMERGENCY),
+        bookingType: BookingTypes.emergency,
+        image: Assets.emergency,
+        route: Routes.VISITAEMERGENCY),
   ];
 
   void loadData() async {
@@ -77,39 +85,57 @@ class HealthCubit extends Cubit<HealthState> {
   }
 
   Future<void> _getMainCategoryDetails() async {
-    final response = await _getMainCategoryDetailsUseCase(MainServicesEnum.health.id);
-    response.fold((failure) => emit(state.copyWith(failure: failure, status: HealthStates.error)),
+    final response =
+        await _getMainCategoryDetailsUseCase(MainServicesEnum.health.id);
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
         (data) => emit(state.copyWith(mainCategory: data)));
   }
 
   Future<void> getMyBookings() async {
-    final response = await _getUserUpcomingAppointmentsUseCase.call(const NoParams());
-    response.fold((failure) => emit(state.copyWith(failure: failure, status: HealthStates.error)),
-        (data) => emit(state.copyWith(status: HealthStates.initState, myBookings: data)));
+    final response =
+        await _getUserUpcomingAppointmentsUseCase.call(const NoParams());
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) => emit(
+            state.copyWith(status: HealthStates.initState, myBookings: data)));
   }
 
   Future<void> _isDoctor() async {
     final response = await _isDoctorUseCase.call(const NoParams());
-    response.fold((failure) => emit(state.copyWith(failure: failure, status: HealthStates.error)),
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
         (data) => emit(state.copyWith(isDoctor: data)));
   }
 
   Future<void> _isDoctorApproval() async {
     final response = await _isDoctorApprovalUsecase.call(const NoParams());
-    response.fold((failure) => emit(state.copyWith(failure: failure, status: HealthStates.error)),
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
         (data) => emit(state.copyWith(isApproved: data)));
   }
 
   Future<void> getServices() async {
     final response = await _getMedicalServicesUseCase.call(const NoParams());
-    response.fold((failure) => emit(state.copyWith(failure: failure, status: HealthStates.error)),
-        (data) => emit(state.copyWith(status: HealthStates.initState, medicalServices: data)));
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) => emit(state.copyWith(
+            status: HealthStates.initState, medicalServices: data)));
   }
 
   Future<void> getSubCategories({bool reload = false}) async {
     // if (_healthShare.subCategories.isEmpty || reload) {
-    final response = await _getHealthSubcategoriesUseCase.call(const NoParams());
-    response.fold((failure) => emit(state.copyWith(failure: failure, status: HealthStates.error)), (data) {
+    final response =
+        await _getHealthSubcategoriesUseCase.call(const NoParams());
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) {
       _healthShare.subCategories = data;
       emit(state.copyWith(status: HealthStates.initState, subCategories: data));
     });
@@ -121,7 +147,10 @@ class HealthCubit extends Cubit<HealthState> {
   Future<void> getGovernorates() async {
     // if (_healthShare.subCategories.isEmpty || reload) {
     final response = await _getGovernoratesUseCase.call(const NoParams());
-    response.fold((failure) => emit(state.copyWith(failure: failure, status: HealthStates.error)), (data) {
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) {
       _healthShare.governorates = data;
       emit(state.copyWith(status: HealthStates.initState, governorates: data));
     });
@@ -132,7 +161,10 @@ class HealthCubit extends Cubit<HealthState> {
 
   Future<void> toggleFavoriteSubcategory(String subcategoryId) async {
     final response = await _toggleFavoriteSubcategoryUseCase(subcategoryId);
-    response.fold((failure) => emit(state.copyWith(failure: failure, status: HealthStates.error)), (data) {
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) {
       return getSubCategories(reload: true);
     });
   }
@@ -174,7 +206,6 @@ class HealthCubit extends Cubit<HealthState> {
 
   String? token;
 
-
   Future<void> _ensureTokenInitialized() async {
     token ??= await TokenManager.getAccessToken();
   }
@@ -182,7 +213,8 @@ class HealthCubit extends Cubit<HealthState> {
   Future<void> toggleFavoriteMedicalService(String subcategoryId) async {
     await _ensureTokenInitialized();
 
-    final String url = 'https://49dev.com/api/v1/favorite-sub-category/$subcategoryId'; // API endpoint
+    final String url =
+        'https://49dev.com/api/v1/favorite-sub-category/$subcategoryId'; // API endpoint
 
     // API request headers
     final Map<String, String> headers = {
@@ -218,7 +250,8 @@ class HealthCubit extends Cubit<HealthState> {
   Future<void> toggleFavoriteCategory(String categoryId) async {
     await _ensureTokenInitialized();
 
-    final String url = 'https://49dev.com/api/v1/favorite-category/$categoryId'; // API endpoint for the category
+    final String url =
+        'https://49dev.com/api/v1/favorite-category/$categoryId'; // API endpoint for the category
 
     // API request headers
     final Map<String, String> headers = {
@@ -256,7 +289,10 @@ class HealthCubit extends Cubit<HealthState> {
   Future<bool> deleteMedicalService(String subcategoryId) async {
     final response = await _deleteFavoriteCategoryUseCase(subcategoryId);
     bool result = false;
-    response.fold((failure) => emit(state.copyWith(failure: failure, status: HealthStates.error)), (data) {
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) {
       MainCategoryEntity mainCategoryEntity;
       mainCategoryEntity = state.mainCategory!;
       mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;

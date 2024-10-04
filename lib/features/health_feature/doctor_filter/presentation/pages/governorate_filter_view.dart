@@ -59,12 +59,12 @@ class DoctorGovernorateFilterView extends StatelessWidget {
                   return Expanded(
                       child: ListView.separated(
                     itemCount: state.governorates.length,
-                    separatorBuilder: (context, index) => Divider(),
+                    separatorBuilder: (context, index) => const Divider(),
                     itemBuilder: (context, index) => GovernorateListTitle(
                         governorate: state.governorates[index]),
                   ));
                 } else {
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 }
                 // switch (state) {
                 //   case DoctorGovernorateFilterLoaded _:

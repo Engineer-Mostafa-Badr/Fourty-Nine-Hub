@@ -44,7 +44,7 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
                           context.pop();
                         },
                         child: const Icon(Icons.arrow_back)),
-                    Sizer(),
+                    const Sizer(),
                     Expanded(
                       child: TextFormField(
                         controller: searchController,
@@ -65,7 +65,7 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
                     ),
                   ],
                 ),
-                Sizer(),
+                const Sizer(),
                 if (controller.usersPagingController.itemList != null)
                   Expanded(
                       child: _buildListUsersWidget(
@@ -113,7 +113,7 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
                       userId: '',
                       fromProfile: true,
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Expanded(
                         child:
                             Label(text: "${item.firstName}\t${item.lastName}")),

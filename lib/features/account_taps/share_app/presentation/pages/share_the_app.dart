@@ -67,9 +67,9 @@ class ShareTheApp extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Image.asset(Assets.share),
-                            Sizer(),
+                            const Sizer(),
                             _buildLinkWidget(context: context),
-                            Sizer(),
+                            const Sizer(),
                             _buildStatisticsWidget(context: context),
                           ],
                         ),
@@ -95,7 +95,7 @@ class ShareTheApp extends StatelessWidget {
               color: AppColors.GREY_NORMAL_COLOR,
               label: controller.link),
         ),
-        Sizer(),
+        const Sizer(),
         AppButton(
             color: AppColors.AUTH_CONTAINER_COLOR,
             label: 'Share The App',
@@ -114,7 +114,7 @@ class ShareTheApp extends StatelessWidget {
                   color: AppColors.PRIMARY_COLOR,
                   title: 'Users',
                   subTitle: '30 user')),
-          Sizer(),
+          const Sizer(),
           Expanded(
               child: _buildStatisticsItem(
                   color: AppColors.PRIMARY_COLOR,
@@ -234,7 +234,7 @@ class ShareTheApp extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) => _buildHistoryItemWidget(),
-            separatorBuilder: (context, index) => Sizer(),
+            separatorBuilder: (context, index) => const Sizer(),
             itemCount: 10),
       ],
     );
@@ -247,7 +247,7 @@ class ShareTheApp extends StatelessWidget {
           accountId: 0,
           userId: '',
         ),
-        Sizer(),
+        const Sizer(),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

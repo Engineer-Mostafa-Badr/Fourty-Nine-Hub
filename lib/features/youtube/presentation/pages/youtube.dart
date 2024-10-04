@@ -69,7 +69,7 @@ class _YouTubeViewState extends State<YouTubeView> {
         controller: scrollController,
         shrinkWrap: true,
         itemBuilder: (context, index) => const YoutubeVideoCard(),
-        separatorBuilder: (context, index) => Sizer(),
+        separatorBuilder: (context, index) => const Sizer(),
         itemCount: 8);
   }
 }

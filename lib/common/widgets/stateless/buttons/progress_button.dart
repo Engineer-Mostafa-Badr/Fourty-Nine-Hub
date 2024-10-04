@@ -90,7 +90,7 @@ class _ProgressButtonState extends State<ProgressButton> {
                             size: widget.iconSize ?? 16,
                             color: widget.textColor ?? Colors.white,
                           ),
-                        if (widget.icon != null) Sizer(),
+                        if (widget.icon != null) const Sizer(),
                         Label(
                             text: widget.label,
                             style: widget.style ??

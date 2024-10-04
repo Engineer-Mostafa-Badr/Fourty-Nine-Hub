@@ -67,13 +67,15 @@ class SettingsView extends StatelessWidget {
                         image: Assets.noPerson,
                         trailing:
                             Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
-                        label:  LocaleKeys.disableAccount.localize,
+                        label: LocaleKeys.disableAccount.localize,
                         onTap: () => showAreYouSure(
                             title: LocaleKeys.alert.localize,
                             subTitle: LocaleKeys.disable.localize,
                             action: () {
-                            //  if (state.able?.isDisabled == false) {
-                                return context.read<SettingCubit>().disableAccount();
+                              //  if (state.able?.isDisabled == false) {
+                              return context
+                                  .read<SettingCubit>()
+                                  .disableAccount();
                               // } else {
                               //   return context.read<SettingCubit>().enableAccount();
                               // }

@@ -1,5 +1,3 @@
-import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
-
 class CategoryFavoritesResponse {
   final bool status;
   final List<CategoryFavoriteItem> data;

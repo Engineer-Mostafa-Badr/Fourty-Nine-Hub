@@ -31,7 +31,7 @@ class Biddings extends StatelessWidget {
 
   Widget _buildBiddingItem({required BiddingEntity item}) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: const BoxDecoration(),
       child: Row(
         children: [

@@ -22,7 +22,7 @@ class _SeatsNumberWidgetState extends State<SeatsNumberWidget> {
     return Row(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
             color: AppColors.PRIMARY_COLOR.withOpacity(0.8),
             borderRadius: BorderRadius.circular(10),
@@ -54,7 +54,7 @@ class _SeatsNumberWidgetState extends State<SeatsNumberWidget> {
                       ))
                   .toList()),
         ),
-        Sizer(),
+        const Sizer(),
         Text('Number of seats available',
             style: Styles.headerText(color: AppColors.SECONDARY_COLOR))
       ],

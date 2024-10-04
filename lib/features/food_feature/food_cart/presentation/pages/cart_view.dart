@@ -380,33 +380,65 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/enums/order_status.dart';
 import '../../../../../service_locator/service_locator.dart';
+import '../../../../social_media/reels/presentation/widgets/comments.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 
 class FoodCartView extends StatefulWidget {
-  const FoodCartView({Key? key}) : super(key: key);
+  const FoodCartView({super.key});
 
   @override
   _FoodCartViewState createState() => _FoodCartViewState();
 }
 
 class _FoodCartViewState extends State<FoodCartView> {
+  // int qty = 1;
+
   @override
   void initState() {
     super.initState();
     context.read<RestaurantDetailsCubit>().fetchCart();
   }
 
-  void _increaseQuantity(item) {
+  Future<void> _increaseQuantity({restaurantId, mealId, qty}) async {
     // Implement increase quantity logic
+    setState(() {
+      // qty++;
+    });
+    await context.read<RestaurantDetailsCubit>().addToCart(
+        restaurantId: restaurantId ?? "",
+        foodId: mealId ?? "",
+        quantity: qty.toString());
+    await context.read<RestaurantDetailsCubit>().fetchCart();
+
+    // Update quantity in controller if needed
   }
 
-  void _decreaseQuantity(item) {
+  Future<void> _decreaseQuantity({restaurantId, mealId, qty}) async {
     // Implement decrease quantity logic
+    if (qty > 0) {
+      setState(() {
+        // qty--;
+      });
+      await context.read<RestaurantDetailsCubit>().addToCart(
+          restaurantId: restaurantId ?? "",
+          foodId: mealId ?? "",
+          quantity: qty.toString());
+      await context.read<RestaurantDetailsCubit>().fetchCart();
+
+      // Update quantity in controller if needed
+    }
   }
 
-  void _removeItem(item) {
+  Future<void> _removeItem({restaurantId, foodId}) async {
     // Implement remove item logic
+    await context
+        .read<RestaurantDetailsCubit>()
+        .deleteFromCart(context, restaurantId: restaurantId, foodId: foodId);
+    // await context.read<RestaurantDetailsCubit>().fetchCart();
+
+    Navigator.pop(context);
   }
 
   void _checkout() {
@@ -415,6 +447,7 @@ class _FoodCartViewState extends State<FoodCartView> {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<RestaurantDetailsCubit>().state;
     return Scaffold(
       appBar: AppBar(
         title: const Row(
@@ -434,8 +467,8 @@ class _FoodCartViewState extends State<FoodCartView> {
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
       ),
-      body: BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
-        builder: (context, state) {
+      body: Builder(
+        builder: (context) {
           if (state.isLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state.cart != null && state.cart!.allItems.isNotEmpty) {
@@ -475,8 +508,12 @@ class _FoodCartViewState extends State<FoodCartView> {
                                     motion: const ScrollMotion(),
                                     children: [
                                       SlidableAction(
-                                        onPressed: (context) =>
-                                            _removeItem(item),
+                                        onPressed: (context) {
+                                          _removeItem(
+                                              restaurantId:
+                                                  cartItem.restaurant.id,
+                                              foodId: item.food.id);
+                                        },
                                         backgroundColor: Colors.red,
                                         foregroundColor: Colors.white,
                                         icon: Icons.delete,
@@ -562,7 +599,15 @@ class _FoodCartViewState extends State<FoodCartView> {
                                                       child: InkWell(
                                                         onTap: () =>
                                                             _decreaseQuantity(
-                                                                item),
+                                                                restaurantId:
+                                                                    cartItem
+                                                                        .restaurant
+                                                                        .id,
+                                                                mealId: item
+                                                                    .food.id,
+                                                                qty:
+                                                                    item.quantity -
+                                                                        1),
                                                         child: const Icon(
                                                           Icons.remove,
                                                           size:
@@ -574,6 +619,7 @@ class _FoodCartViewState extends State<FoodCartView> {
                                                     // Adjusted width
                                                     Text(
                                                       '${item.quantity}',
+                                                      // '$qty',
                                                       style: const TextStyle(
                                                         fontSize: 16.0,
                                                         // Adjusted font size
@@ -595,7 +641,15 @@ class _FoodCartViewState extends State<FoodCartView> {
                                                       child: InkWell(
                                                         onTap: () =>
                                                             _increaseQuantity(
-                                                                item),
+                                                                restaurantId:
+                                                                    cartItem
+                                                                        .restaurant
+                                                                        .id,
+                                                                mealId: item
+                                                                    .food.id,
+                                                                qty:
+                                                                    item.quantity +
+                                                                        1),
                                                         child: const Icon(
                                                           Icons.add,
                                                           size:
@@ -687,33 +741,34 @@ class _FoodCartViewState extends State<FoodCartView> {
                       Row(
                         children: [
                           Expanded(
-                            flex: 3,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  serviceLocator<SubscriptionController>()
-                                      .checkIfUserSubscribed(
-                                    showRegular: false,
-                                    onSubscribed: () {
-                                      print('Subscribed');
-                                      // context.push(Routes.RESTAURANTDETAILS, extra: item.id);
-                                    },
-                                    subCategoryId: cart.id,
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  // Adjusted padding
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        12.0), // Adjusted radius
-                                  ),
-                                  backgroundColor: AppColors.SECONDARY_COLOR,
+                            flex: 1,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                showFoodRequestBottomSheet(context,
+                                    cartId: cart.id, orderType: 'premium');
+                                // context
+                                //     .read<RestaurantDetailsCubit>()
+                                //     .createOrder(context,
+                                //         cartId: cart.id,
+                                //         address: 'ascaaaaaaaaaaaaaaaaaa',
+                                //         phone: '0121555158')
+                                //     .then((value) => context
+                                //         .read<RestaurantDetailsCubit>()
+                                //         .fetchCart());
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                // Adjusted padding
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      8.0), // Adjusted radius
                                 ),
+                                backgroundColor: AppColors.SECONDARY_COLOR,
+                              ),
+                              child: FittedBox(
                                 child: Text(
-                                  'Premium Request',
+                                  ' Premium Request ',
                                   style: Styles.headerText(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
@@ -722,22 +777,25 @@ class _FoodCartViewState extends State<FoodCartView> {
                               ),
                             ),
                           ),
+                          const Sizer(),
                           Expanded(
-                            flex: 2,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ElevatedButton(
-                                onPressed: _checkout,
-                                style: ElevatedButton.styleFrom(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  // Adjusted padding
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        12.0), // Adjusted radius
-                                  ),
-                                  backgroundColor: AppColors.PRIMARY_COLOR,
+                            flex: 1,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                showFoodRequestBottomSheet(context,
+                                    cartId: cart.id, orderType: 'normal');
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                // Adjusted padding
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      8.0), // Adjusted radius
                                 ),
+                                backgroundColor: AppColors.PRIMARY_COLOR,
+                              ),
+                              child: FittedBox(
                                 child: Text(
                                   'Request',
                                   style: Styles.headerText(
@@ -766,6 +824,206 @@ class _FoodCartViewState extends State<FoodCartView> {
           }
         },
       ),
+    );
+  }
+}
+
+void showFoodRequestBottomSheet(BuildContext context,
+    {String? cartId, required String? orderType}) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    // Allows the bottom sheet to resize when the keyboard is shown
+
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    backgroundColor: isDarkTheme(context)
+        ? Colors.black.withOpacity(0.9)
+        : Colors.white.withOpacity(0.9),
+    builder: (BuildContext context) {
+      return BlocProvider.value(
+        value: serviceLocator<RestaurantDetailsCubit>(),
+        child: FoodRequestBottomSheet(cartId: cartId!, orderType: orderType!),
+      );
+    },
+  );
+}
+
+class FoodRequestBottomSheet extends StatefulWidget {
+  final String cartId;
+  final String orderType;
+
+  const FoodRequestBottomSheet(
+      {super.key, required this.cartId, required this.orderType});
+
+  @override
+  _FoodRequestBottomSheetState createState() => _FoodRequestBottomSheetState();
+}
+
+class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _addressController.dispose();
+    _phoneController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submitOrder(cartId) async {
+    if (_formKey.currentState?.validate() ?? false) {
+      // final address = _addressController.text.trim();
+      const address = '  ';
+      final phone = _phoneController.text.trim();
+
+      final cartId = widget.cartId;
+
+      if (widget.orderType == 'premium') {
+        await context.read<RestaurantDetailsCubit>().createPremiumOrder(context,
+            cartId: cartId, address: address, phone: phone);
+      }
+      if (widget.orderType == 'normal') {
+        await context.read<RestaurantDetailsCubit>().createNormalOrder(context,
+            cartId: cartId, address: address, phone: phone);
+      }
+
+      Navigator.pop(context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return BlocConsumer<RestaurantDetailsCubit, RestaurantDetailsState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10,
+                  offset: Offset(0, -3),
+                ),
+              ],
+            ),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(
+                left: screenHeight * 0.02,
+                right: screenHeight * 0.02,
+                top: screenHeight * 0.03,
+                bottom: MediaQuery.of(context).viewInsets.bottom +
+                    screenHeight * 0.02,
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Text(
+                    //   'Enter Order Details',
+                    //   style: Theme.of(context).textTheme.headline6?.copyWith(
+                    //       fontWeight: FontWeight.bold,
+                    //       color: Theme.of(context).primaryColor),
+                    // ),
+                    // const SizedBox(height: 20),
+                    // TextFormField(
+                    //   controller: _addressController,
+                    //   decoration: InputDecoration(
+                    //     labelText: 'Your Address',
+                    //     border: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(12),
+                    //     ),
+                    //     focusedBorder: OutlineInputBorder(
+                    //       borderSide: BorderSide(
+                    //           color: Theme.of(context).primaryColor, width: 2),
+                    //       borderRadius: BorderRadius.circular(12),
+                    //     ),
+                    //   ),
+                    //   validator: (value) {
+                    //     if (value == null || value.isEmpty) {
+                    //       return 'Please enter your address';
+                    //     }
+                    //     return null;
+                    //   },
+                    //   maxLines: null,
+                    // ),
+                    const SizedBox(height: 24),
+                    TextFormField(
+                      maxLines: null,
+                      controller: _phoneController,
+                      decoration: InputDecoration(
+                        labelText: 'Your Phone Number',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).primaryColor, width: 2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      keyboardType: TextInputType.phone,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your phone number';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (state.status != RestaurantDetailsStates.loading) {
+                            _submitOrder(widget.cartId);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+                        ),
+                        child: state.status == RestaurantDetailsStates.loading
+                            ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.0,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Text(
+                                'Submit Order',
+                                style: Styles.headerText(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

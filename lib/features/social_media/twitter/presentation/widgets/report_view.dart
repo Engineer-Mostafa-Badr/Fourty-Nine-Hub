@@ -22,11 +22,13 @@ class ReportView extends StatefulWidget {
   const ReportView({
     super.key,
     required this.id,
+    this.loadingTripId,
     required this.categoryId,
   });
 
   final String id;
   final String categoryId;
+  final String? loadingTripId;
 
   @override
   State<ReportView> createState() => _ReportViewState();
@@ -162,7 +164,7 @@ class _ReportViewState extends State<ReportView> {
                 capitalizeAndSplit(report.category),
                 textScaleFactor: 1.0,
                 style: TextStyle(
-                  fontSize: 45.sp,
+                  fontSize: 30.sp,
                   fontWeight: FontWeight.bold,
                   color: selectedReport == report
                       ? AppColors.SECONDARY_COLOR

@@ -17,6 +17,10 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/get_ser
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
@@ -90,11 +94,19 @@ class _MyAppState extends State<MyApp> {
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
         ),
         BlocProvider(
-          create: (BuildContext context) => serviceLocator<MainCategoriesCubit>()..loadData(),
+          create: (BuildContext context) =>
+              serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
-        // BlocProvider(
-        //   create: (context) => serviceLocator<RiderequestCubit>(),
-        // ),
+        BlocProvider(
+          create: (context) => serviceLocator<ShowOffersCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<GetCateogryRiderCubit>(),
+        ), BlocProvider(
+          create: (context) => serviceLocator<RiderTripReelTimeCubit>(),
+        ),BlocProvider(
+          create: (context) => serviceLocator<RequestRiderTripCubit>(),
+        ),
         // BlocProvider(
         //   create: (context) => serviceLocator<CreateShippingRequestCubit>(),
         // ),
@@ -136,6 +148,7 @@ class _MyAppState extends State<MyApp> {
                   context: context,
                   notificationListenerUseCase: serviceLocator(),
                 )),
+        BlocProvider(create: (context) => ShowOffersCubit(repository: serviceLocator(),),),
       ],
       child: ScreenUtilInit(
           designSize: const Size(750, 1334),
@@ -148,11 +161,14 @@ class _MyAppState extends State<MyApp> {
                 return MaterialApp.router(
                   builder: (context, child) {
                     return MediaQuery(
-                      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+                      data: MediaQuery.of(context)
+                          .copyWith(textScaler: TextScaler.noScaling),
                       child: child!,
                     );
                   },
-                  themeMode: context.read<ThemeCubit>().isDarkTheme ? ThemeMode.dark : ThemeMode.light,
+                  themeMode: context.read<ThemeCubit>().isDarkTheme
+                      ? ThemeMode.dark
+                      : ThemeMode.light,
                   theme: lightTheme(),
                   darkTheme: darkTheme(),
                   title: '49',
@@ -166,7 +182,8 @@ class _MyAppState extends State<MyApp> {
                 );
               },
             );
-          }),
+         },
+      ),
     );
   }
 }

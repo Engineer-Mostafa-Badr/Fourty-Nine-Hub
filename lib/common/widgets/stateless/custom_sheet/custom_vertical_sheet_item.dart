@@ -22,8 +22,9 @@ class CustomVerticalSheetItem {
       builder: (context) {
         return CupertinoActionSheet(
           cancelButton: CupertinoActionSheetAction(
-            child: Text(LocaleKeys.cancel.localize,
-            style: Styles.headerText(),
+            child: Text(
+              LocaleKeys.cancel.localize,
+              style: Styles.headerText(),
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -47,10 +48,10 @@ class CustomVerticalSheetItem {
                           ),
                         )
                       else
-                        SizedBox.shrink(),
+                        const SizedBox.shrink(),
                       if (e.image != null)
                         Padding(
-                          padding: EdgeInsets.only(right: 15, left: 5),
+                          padding: const EdgeInsets.only(right: 15, left: 5),
                           child: Image.asset(
                             e.image ?? '',
                             color: selectedItem == e.value ? Colors.red : null,
@@ -59,10 +60,12 @@ class CustomVerticalSheetItem {
                           ),
                         )
                       else
-                        SizedBox.shrink(),
+                        const SizedBox.shrink(),
                       Label(
                         text: e.text,
-                        style: Styles.headerText( fontWeight: FontWeight.w400,color: Theme.of(context).primaryColor),
+                        style: Styles.headerText(
+                            fontWeight: FontWeight.w400,
+                            color: Theme.of(context).primaryColor),
                       ),
                     ],
                   ),
@@ -71,7 +74,7 @@ class CustomVerticalSheetItem {
                   },
                 );
               }
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             },
           ).toList(),
         );

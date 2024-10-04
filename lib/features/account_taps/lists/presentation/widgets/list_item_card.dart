@@ -47,9 +47,9 @@ class ListItemCard extends StatelessWidget {
               userId: '',
               fromProfile: true,
             ),
-            Sizer(),
+            const Sizer(),
             Expanded(child: Label(text: "${user.firstName}\t${user.lastName}")),
-            Sizer(),
+            const Sizer(),
             if (type == ListTypes.requests)
               IconButton(
                   onPressed: () {
@@ -114,8 +114,7 @@ class ListItemCard extends StatelessWidget {
               context.pop();
             },
             subtitle: Label(
-              text:
-                  '${LocaleKeys.stopSeeing.localize} ${user.firstName}',
+              text: '${LocaleKeys.stopSeeing.localize} ${user.firstName}',
               maxLines: 2,
             ),
           ),

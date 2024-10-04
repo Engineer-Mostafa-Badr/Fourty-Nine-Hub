@@ -5,7 +5,6 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -21,8 +20,7 @@ class MyAddsView extends StatefulWidget {
   State<MyAddsView> createState() => _MyAddsViewState();
 }
 
-class _MyAddsViewState extends State<MyAddsView>
-    with SingleTickerProviderStateMixin {
+class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late ScrollController _scrollController;
 
@@ -98,13 +96,9 @@ class _MyAddsViewState extends State<MyAddsView>
                             : i == 1
                                 ? context.read<MyAddsCubit>().getMyInstallment()
                                 : i == 2
-                                    ? context
-                                        .read<MyAddsCubit>()
-                                        .getMyTripJoin()
+                                    ? context.read<MyAddsCubit>().getMyTripJoin()
                                     : i == 3
-                                        ? context
-                                            .read<MyAddsCubit>()
-                                            .getMyOtherAds()
+                                        ? context.read<MyAddsCubit>().getMyOtherAds()
                                         : null;
                       },
                       isScrollable: true,
@@ -140,8 +134,7 @@ class _MyAddsViewState extends State<MyAddsView>
   }
 
   Widget _buildMyInstallmentsWidget() {
-    return BlocConsumer<MyAddsCubit, MyAddsState>(
-        listener: (BuildContext context, MyAddsState state) {
+    return BlocConsumer<MyAddsCubit, MyAddsState>(listener: (BuildContext context, MyAddsState state) {
       if (state.status == MyAddsStates.success) {
         showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
       }
@@ -170,8 +163,7 @@ class _MyAddsViewState extends State<MyAddsView>
   }
 
   Widget _buildMyAuctionsWidget() {
-    return BlocConsumer<MyAddsCubit, MyAddsState>(
-        listener: (BuildContext context, MyAddsState state) {
+    return BlocConsumer<MyAddsCubit, MyAddsState>(listener: (BuildContext context, MyAddsState state) {
       if (state.status == MyAddsStates.success) {
         showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
       }
@@ -200,8 +192,7 @@ class _MyAddsViewState extends State<MyAddsView>
   }
 
   Widget _buildMyAdsWidget() {
-    return BlocConsumer<MyAddsCubit, MyAddsState>(
-        listener: (BuildContext context, MyAddsState state) {
+    return BlocConsumer<MyAddsCubit, MyAddsState>(listener: (BuildContext context, MyAddsState state) {
       if (state.status == MyAddsStates.success) {
         showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
       }

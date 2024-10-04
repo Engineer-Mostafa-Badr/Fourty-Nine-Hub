@@ -20,8 +20,8 @@ class WalletView extends StatelessWidget {
     required BuildContext context,
   }) {
     return Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.only(top: 20, bottom: 10),
+        padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.only(top: 20, bottom: 10),
         decoration: BoxDecoration(
           color: AppColors.PRIMARY_COLOR.withAlpha(230),
           borderRadius: BorderRadius.circular(10),

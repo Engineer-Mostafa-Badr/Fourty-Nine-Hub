@@ -50,19 +50,25 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   void initState() {
     super.initState();
     _setupScrollController();
-    context.read<FirebaseNotficationsCubit>().setupInterceptedMessage(context: context);
-    context.read<NotificationSocketIoCubit>().notificationListener(languageCode: 'en');
+    context
+        .read<FirebaseNotficationsCubit>()
+        .setupInterceptedMessage(context: context);
+    context
+        .read<NotificationSocketIoCubit>()
+        .notificationListener(languageCode: 'en');
   }
 
   void _setupScrollController() {
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
         if (!_isScrollingDown) {
           setState(() {
             _isScrollingDown = true;
           });
         }
-      } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      } else if (scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
         if (_isScrollingDown) {
           setState(() {
             _isScrollingDown = false;
@@ -70,8 +76,12 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         }
       }
     });
-    context.read<FirebaseNotficationsCubit>().setupInterceptedMessage(context: context);
-    context.read<NotificationSocketIoCubit>().notificationListener(languageCode: 'en');
+    context
+        .read<FirebaseNotficationsCubit>()
+        .setupInterceptedMessage(context: context);
+    context
+        .read<NotificationSocketIoCubit>()
+        .notificationListener(languageCode: 'en');
     super.initState();
   }
 
@@ -89,9 +99,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           // pr('new notfication is recieved by the bloc listner');
           // pr(state.notificationEntity);
           notificationSnackBar(
-            context: context,
-            notificationEntity: state.notificationEntity,
-          );
+              context: context,
+              notificationEntity: state.notificationEntity,
+              isAppNotification: state.notificationEntity.filterType == 'app');
         } else if (state is NotificationSocketIoFailed) {
           // pr('Failed to recieve the new notfication ');
           // pr(state.message);
@@ -121,9 +131,13 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           children: [
             //carousel slider
             const AnnounceWidget(),
-            !context.read<UserCubit>().isLoggedIn ? const Sizer() : const SizedBox.shrink(),
+            !context.read<UserCubit>().isLoggedIn
+                ? const Sizer()
+                : const SizedBox.shrink(),
             //wallet
-            context.read<UserCubit>().isLoggedIn ? const WalletWidget() : const SizedBox.shrink(),
+            context.read<UserCubit>().isLoggedIn
+                ? const WalletWidget()
+                : const SizedBox.shrink(),
             //    Sizer(),
             //admob
             //   const GoogleAddsBanner(),
@@ -133,6 +147,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             const Sizer(),
             //auction
             _auctionAndInstallmentWidget(),
+            const Sizer(),
+            _buildChanceWidget(),
             const Sizer(),
             //cats layout
             _buildMainCategoriesViews(),
@@ -151,10 +167,13 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                           (index) => Padding(
                                 padding: EdgeInsets.only(bottom: 15.h),
                                 child: Container(
-                                  height: MediaQuery.of(context).size.height * .15.h,
+                                  height: MediaQuery.of(context).size.height *
+                                      .15.h,
                                   width: double.infinity,
-                                  margin: EdgeInsets.symmetric(horizontal: 10.w),
-                                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                  margin:
+                                      EdgeInsets.symmetric(horizontal: 10.w),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 10.w),
                                   decoration: BoxDecoration(
                                     color: AppColors.AUTH_CONTAINER_COLOR,
                                     borderRadius: BorderRadius.circular(20.r),
@@ -173,19 +192,23 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          context.push(Routes.SUBCATEGORIES, extra: state.data![index]);
+                          context.push(Routes.SUBCATEGORIES,
+                              extra: state.data![index]);
                         },
                         child: MainCategoryBanner(
                           category: state.data![index],
                           onFavorite: () async {
-                            var result = await controller.toggleFavoriteMedicalService(state.data![index].id);
+                            var result =
+                                await controller.toggleFavoriteMedicalService(
+                                    state.data![index].id);
                             print("result$result");
                             return result;
                           },
                         ),
                       );
                     },
-                    separatorBuilder: (BuildContext context, int index) => const Sizer(),
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Sizer(),
                   );
                 } else {
                   return const SizedBox.shrink();
@@ -251,7 +274,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     );
   }
 
-  BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>> _pickMeAndComeWithUWidget() {
+  BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
+      _pickMeAndComeWithUWidget() {
     return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
       builder: (context, state) {
         if (state.status == StateStatus.loading) {
@@ -284,20 +308,21 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   service: state.data![0].service ?? RideServicesEnum.pickMe,
                   title: 'Carpool',
                   image: state.data![0].image ?? '',
-                  isFavorite: state.data![0].isFavorite,
-                  numberOfAds: state.data![0].numberOfAds?.toInt(),
+                  // isFavorite: state.data![0].is,
+                  // numberOfAds: state.data![0].numberOfAds?.toInt(),
                   route: Routes.CAR_POOL,
                 ),
               ),
               const Sizer(),
               Expanded(
                 child: _buildRideSubCategoryItem(
-                  service: state.data![1].service ?? RideServicesEnum.comeWithYou,
+                  service:
+                      state.data![1].service ?? RideServicesEnum.comeWithYou,
                   title: LocaleKeys.tripJoin.localize,
                   image: state.data![1].image ?? '',
                   route: Routes.AVAILABLE_TRIPS,
-                  isFavorite: state.data![1].isFavorite,
-                  numberOfAds: state.data![1].numberOfAds?.toInt(),
+                  // isFavorite: state.data![1].isFavorite,
+                  // numberOfAds: state.data![1].numberOfAds?.toInt(),
                 ),
               )
             ],
@@ -320,15 +345,64 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   Row _auctionAndInstallmentWidget() {
     return Row(
       children: [
-        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize, () => context.push(Routes.MAZADAT), Icons.group),
+        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
+            () => context.push(Routes.MAZADAT), Icons.group),
         const Sizer(),
-        itemAuctionAndInstallmentWidget(
-            LocaleKeys.installments.localize, () => context.push(Routes.INSTALLMENT), Icons.list),
+        itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize,
+            () => context.push(Routes.INSTALLMENT), Icons.list),
       ],
     );
   }
 
-  Widget itemAuctionAndInstallmentWidget(String label, Function function, IconData icon) {
+  Widget _buildChanceWidget() {
+    return SizedBox(
+      height: kToolbarHeight * .9.h,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: AppButton(
+                color: AppColors.AUTH_CONTAINER_COLOR,
+                label: LocaleKeys.chance.localize,
+                style: Styles.mediumText(
+                  color: AppColors.AUTH_CONTAINER_COLOR,
+                  fontWeight: FontWeight.bold,
+                ),
+                icon: Icons.auto_awesome,
+                iconSize: 50.h,
+                onPressed: () {}),
+          ),
+          Positioned(
+              bottom: 5,
+              left: 5,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 0,
+              left: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 15,
+              right: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              ))
+        ],
+      ),
+    );
+  }
+
+  Widget itemAuctionAndInstallmentWidget(
+      String label, Function function, IconData icon) {
     return Expanded(
       child: InkWell(
         onTap: () => context.go(Routes.MAZADAT),
@@ -419,7 +493,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                       url: image,
                     ),
                     Container(
-                      color: Colors.black.withOpacity(0.3), // Darken the background
+                      color: Colors.black
+                          .withOpacity(0.3), // Darken the background
                     ),
                   ],
                 ),
@@ -445,7 +520,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                         InkWell(
                           onTap: () async {},
                           child: Icon(
-                            isFavorite ?? false ? Icons.favorite : Icons.favorite_border,
+                            isFavorite ?? false
+                                ? Icons.favorite
+                                : Icons.favorite_border,
                             // Icons.favorite,
                             color: AppColors.SECONDARY_COLOR,
                             size: 38.h,

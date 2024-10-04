@@ -1,11 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 final List<Map<String, dynamic>> advancedFilters = [
   {
     'name': 'No Filter',
-    'colorFilter': ColorFilter.matrix([
+    'colorFilter': const ColorFilter.matrix([
       1.0,
       0.0,
       0.0,

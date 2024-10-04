@@ -7,7 +7,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/data/models/wallet_model.dart';
 
 class WalletDataSource {
-  ApiConsumer _apiConsumer;
+  final ApiConsumer _apiConsumer;
   Dio dio = Dio();
   WalletDataSource(this._apiConsumer);
   Future<Either<Failure, WalletModel>> getWallet() async {

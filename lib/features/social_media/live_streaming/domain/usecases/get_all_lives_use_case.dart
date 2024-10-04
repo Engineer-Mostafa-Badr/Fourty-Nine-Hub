@@ -10,7 +10,8 @@ import '../entity/live_entity.dart';
 class GetAllLivesUseCase extends UseCase<List<LiveEntity>, PaginationParams> {
   final LiveRepository _liveRepository;
 
-  GetAllLivesUseCase({required LiveRepository liveRepository}) : _liveRepository = liveRepository;
+  GetAllLivesUseCase({required LiveRepository liveRepository})
+      : _liveRepository = liveRepository;
 
   @override
   Future<Either<Failure, List<LiveEntity>>> call(params) {

@@ -6,7 +6,6 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
@@ -31,7 +30,7 @@ import 'top_bar.dart';
 /// user and sdk should be login and init before page enter
 class ZegoLiveAudioRoomPage extends StatefulWidget {
   const ZegoLiveAudioRoomPage({
-    Key? key,
+    super.key,
     this.prebuiltController,
     required this.appID,
     required this.appSign,
@@ -48,7 +47,7 @@ class ZegoLiveAudioRoomPage extends StatefulWidget {
     required this.liveDurationManager,
     required this.minimizeData,
     this.plugins,
-  }) : super(key: key);
+  });
 
   final int appID;
   final String appSign;

@@ -5,7 +5,6 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/reply_message_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ReplayMessageWidget extends StatelessWidget {
   final MessageEntity? messageEntity;
@@ -28,7 +27,7 @@ class ReplayMessageWidget extends StatelessWidget {
               width: 4,
               color: AppColors.PRIMARY_COLOR,
             ),
-            SizedBox(
+            const SizedBox(
               width: 8,
             ),
             Expanded(child: buildReplayMessage()),

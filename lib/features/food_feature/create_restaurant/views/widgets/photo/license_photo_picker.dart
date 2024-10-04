@@ -37,10 +37,12 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                   child:
                       BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                     buildWhen: (previous, current) =>
-                        current is CreateRestaurantUploadLicenseFirstPageImage ||
+                        current
+                            is CreateRestaurantUploadLicenseFirstPageImage ||
                         current is CreateRestaurantInitial,
                     builder: (context, state) {
-                      if (state is CreateRestaurantUploadLicenseFirstPageImage) {
+                      if (state
+                          is CreateRestaurantUploadLicenseFirstPageImage) {
                         return ImagePickerPlaceholder(
                           image: Image.file(
                             File(state.file.path),
@@ -66,10 +68,12 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                   child:
                       BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                     buildWhen: (previous, current) =>
-                        current is CreateRestaurantUploadLicenseSecondPageImage ||
+                        current
+                            is CreateRestaurantUploadLicenseSecondPageImage ||
                         current is CreateRestaurantInitial,
                     builder: (context, state) {
-                      if (state is CreateRestaurantUploadLicenseSecondPageImage) {
+                      if (state
+                          is CreateRestaurantUploadLicenseSecondPageImage) {
                         return ImagePickerPlaceholder(
                           image: Image.file(
                             File(state.file.path),
@@ -95,10 +99,12 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                   child:
                       BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                     buildWhen: (previous, current) =>
-                        current is CreateRestaurantUploadLicenseThiredPageImage ||
+                        current
+                            is CreateRestaurantUploadLicenseThiredPageImage ||
                         current is CreateRestaurantInitial,
                     builder: (context, state) {
-                      if (state is CreateRestaurantUploadLicenseThiredPageImage) {
+                      if (state
+                          is CreateRestaurantUploadLicenseThiredPageImage) {
                         return ImagePickerPlaceholder(
                           image: Image.file(
                             File(state.file.path),

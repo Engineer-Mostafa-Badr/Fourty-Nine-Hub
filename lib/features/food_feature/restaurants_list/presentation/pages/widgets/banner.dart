@@ -13,7 +13,7 @@ class MealBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RestaurantsListCubit, RestaurantsListState>(
+    return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
       builder: (context, state) {
         if (state.isLoading) {
           return Shimmer.fromColors(
@@ -38,10 +38,12 @@ class MealBanner extends StatelessWidget {
                 context.push(Routes.REGISTER);
               }
             },
-            onFavorite: () {},
+            onFavorite: () {
+              return null;
+            },
           );
         } else {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
       },
     );

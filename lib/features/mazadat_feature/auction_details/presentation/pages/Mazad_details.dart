@@ -95,7 +95,7 @@ class _MazadDetailsState extends State<MazadDetails> {
                   child: CircularProgressIndicator.adaptive(),
                 )
               : Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: ListView(
                     children: [
                       _buildAdInfoWidget(
@@ -135,12 +135,16 @@ class _MazadDetailsState extends State<MazadDetails> {
                   children: [
                     Expanded(
                         child: Label(
-                      text: getLang()=='ar'?detail.value.nameAr:detail.value.nameEn,
+                      text: getLang() == 'ar'
+                          ? detail.value.nameAr
+                          : detail.value.nameEn,
                       color: AppColors.QUANTITY_COLOR,
                     )),
                     Expanded(
                         child: Label(
-                      text: getLang()=='ar'?detail.value.nameAr:detail.value.nameEn,
+                      text: getLang() == 'ar'
+                          ? detail.value.nameAr
+                          : detail.value.nameEn,
                       color: AppColors.QUANTITY_COLOR,
                     )),
                   ],
@@ -194,7 +198,7 @@ class _MazadDetailsState extends State<MazadDetails> {
       required BuildContext context}) {
     final controller = context.read<AuctionDetailsCubit>();
     if ((auction?.isMine ?? false)) {
-      return SizedBox();
+      return const SizedBox();
     }
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10.h),
@@ -205,7 +209,7 @@ class _MazadDetailsState extends State<MazadDetails> {
             backgroundColor: Colors.white,
             backgroundImage: NetworkImage(auction?.user?.profilePicture ?? ''),
           ),
-          Sizer(),
+          const Sizer(),
           Expanded(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,7 +222,7 @@ class _MazadDetailsState extends State<MazadDetails> {
                   style: Styles.mediumText(color: Colors.grey)),
             ],
           )),
-          Sizer(),
+          const Sizer(),
           AppButton(
               padding: 3,
               height: 30.h,

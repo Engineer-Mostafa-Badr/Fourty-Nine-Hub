@@ -17,7 +17,7 @@ class BookingDoctorProfileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final doctor = context.read<BookDoctorAppointmentCubit>().doctor;
     return Container(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       margin: EdgeInsets.symmetric(vertical: 5.h),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),

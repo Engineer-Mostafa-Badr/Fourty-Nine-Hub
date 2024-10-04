@@ -83,12 +83,12 @@ class MyAdsRepoImpl implements MyAdsRepo {
 
   @override
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments() {
-   return _remoteDatasource.getMyInstallments();
+    return _remoteDatasource.getMyInstallments();
   }
 
   @override
   Future<Either<Failure, MyAdsTripJoinEntity>> getMyTripJoin() {
-   return _remoteDatasource.getMyTripJoin();
+    return _remoteDatasource.getMyTripJoin();
   }
 
   @override

@@ -25,17 +25,17 @@ class FoodOfferCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Sizer(),
+            const Sizer(),
             Expanded(
                 child: SquareImage(
               url: item.image,
             )),
-            Sizer(),
+            const Sizer(),
             Label(
                 textAlign: TextAlign.center,
                 text: item.name,
                 style: Styles.mediumText()),
-            Sizer(),
+            const Sizer(),
           ],
         ),
       ),

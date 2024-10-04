@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -66,7 +65,7 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                       ? widget.reply.user.image
                       : null,
                 ),
-                Sizer(),
+                const Sizer(),
                 Expanded(
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +98,7 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                 ),
               ],
             ),
-            Sizer(),
+            const Sizer(),
             Label(
               textAlign: TextAlign.start,
               text: widget.reply.content,
@@ -118,12 +117,12 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                     style: Styles.headerText(fontSize: 26),
                     decoration: InputDecoration(
                       fillColor: Colors.white,
-                      contentPadding: EdgeInsets.all(5),
+                      contentPadding: const EdgeInsets.all(5),
                       hintText: '${LocaleKeys.typeYourReply.localize} ....',
                       hintStyle: Styles.mediumText(),
                     ),
                   )),
-                  Sizer(),
+                  const Sizer(),
                   if (editTextController.text.isNotEmpty)
                     IconAppButton(
                         icon: Icons.send,
@@ -142,7 +141,7 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                         })
                 ],
               ),
-            Sizer(),
+            const Sizer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -195,7 +194,7 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                 Label(text: '${widget.reply.loveCount}'),
               ],
             ),
-            Sizer(),
+            const Sizer(),
           ],
         );
       }),
@@ -228,8 +227,7 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
             listTile(
                 icon: Icons.delete,
                 title: LocaleKeys.deleteReply.localize,
-                subTitle:
-                LocaleKeys.youWillDeleteReply.localize,
+                subTitle: LocaleKeys.youWillDeleteReply.localize,
                 onTap: () {
                   widget.onDeleteReply(widget.reply.id);
                 }),

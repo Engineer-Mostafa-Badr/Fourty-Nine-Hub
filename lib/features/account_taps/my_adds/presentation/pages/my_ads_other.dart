@@ -55,7 +55,7 @@ class MyAdsOther extends StatelessWidget {
                   const Sizer(
                     height: 15,
                   ),
-                   _buildContactInfo(context),
+                  _buildContactInfo(context),
                   const Sizer(
                     height: 15,
                   ),
@@ -178,16 +178,17 @@ class MyAdsOther extends StatelessWidget {
                   color: Theme.of(context).scaffoldBackgroundColor,
                 ),
                 Label(
-                    text: '${item.price}',
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    color: Theme.of(context).scaffoldBackgroundColor,),
+                  text: '${item.price}',
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                ),
                 // Label(
                 //     text: item.description,
                 //     overflow: TextOverflow.ellipsis,
                 //     maxLines: 1,
                 //     color: Theme.of(context).scaffoldBackgroundColor),
-                 Row(
+                Row(
                   children: [
                     Label(
                         text: 'Main',
@@ -275,32 +276,35 @@ class MyAdsOther extends StatelessWidget {
             child: _buildContactItem(
                 icon: Icons.visibility_outlined,
                 label: LocaleKeys.view.localize,
-                value: item.statistics?.views ?? 0,context: context)),
+                value: item.statistics?.views ?? 0,
+                context: context)),
         Expanded(
             child: _buildContactItem(
                 icon: Icons.call_outlined,
                 label: LocaleKeys.tel.localize,
-                value: item.statistics?.calls ?? 0,context: context)),
+                value: item.statistics?.calls ?? 0,
+                context: context)),
         Expanded(
             child: _buildContactItem(
                 icon: Icons.chat_bubble_outline,
                 label: LocaleKeys.chats.localize,
-                value: item.statistics?.chats ?? 0, context: context)),
+                value: item.statistics?.chats ?? 0,
+                context: context)),
         Expanded(
             child: _buildContactItem(
                 icon: Icons.favorite_border_outlined,
                 label: LocaleKeys.like.localize,
-                value: item.statistics?.requests ?? 0,context: context)),
+                value: item.statistics?.requests ?? 0,
+                context: context)),
       ],
     );
   }
 
-  Widget _buildContactItem({
-    required IconData icon,
-    required String label,
-    required int value,
-   required context
-  }) {
+  Widget _buildContactItem(
+      {required IconData icon,
+      required String label,
+      required int value,
+      required context}) {
     return Row(
       children: [
         Container(
@@ -309,7 +313,10 @@ class MyAdsOther extends StatelessWidget {
             borderRadius: BorderRadius.circular(5),
             color: Theme.of(context).primaryColor,
           ),
-          child: Icon(icon,color: Theme.of(context).scaffoldBackgroundColor,),
+          child: Icon(
+            icon,
+            color: Theme.of(context).scaffoldBackgroundColor,
+          ),
         ),
         const Sizer(),
         Expanded(

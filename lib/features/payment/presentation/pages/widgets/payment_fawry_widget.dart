@@ -22,11 +22,10 @@ class FawryPayment extends StatefulWidget {
   final num amount;
 
   const FawryPayment(
-      {Key? key,
+      {super.key,
       required this.amountId,
       required this.providerId,
-      required this.amount})
-      : super(key: key);
+      required this.amount});
 
   @override
   _FawryPaymentState createState() => _FawryPaymentState();
@@ -54,6 +53,7 @@ class _FawryPaymentState extends State<FawryPayment> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     final PaymentCubit paymentCubit = context.read<PaymentCubit>();
 
@@ -267,7 +267,7 @@ class _FawryPaymentState extends State<FawryPayment> {
               ),
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }
@@ -275,19 +275,19 @@ class _FawryPaymentState extends State<FawryPayment> {
   Widget _creditCardPayment() {
     final paymentCubit = BlocProvider.of<PaymentCubit>(context);
 
-    void _updateCreditCard() {
+    void updateCreditCard() {
       setState(() {});
     }
 
-    void _initializeListeners() {
-      _cardNumberController.addListener(_updateCreditCard);
-      _expiryMonthController.addListener(_updateCreditCard);
-      _expiryYearController.addListener(_updateCreditCard);
-      _cvvController.addListener(_updateCreditCard);
-      _cardAlias.addListener(_updateCreditCard);
+    void initializeListeners() {
+      _cardNumberController.addListener(updateCreditCard);
+      _expiryMonthController.addListener(updateCreditCard);
+      _expiryYearController.addListener(updateCreditCard);
+      _cvvController.addListener(updateCreditCard);
+      _cardAlias.addListener(updateCreditCard);
     }
 
-    _initializeListeners();
+    initializeListeners();
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -520,7 +520,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                         _handlePayWithCard();
                       }),
                 ),
-                Sizer(
+                const Sizer(
                   width: 5,
                 ),
                 Expanded(
@@ -599,7 +599,7 @@ class _FawryPaymentState extends State<FawryPayment> {
                     },
                   ),
                 ),
-                Sizer(
+                const Sizer(
                   width: 5,
                 ),
                 Expanded(
@@ -821,8 +821,7 @@ class _FawryPaymentState extends State<FawryPayment> {
   }
 
   Widget _qrCode(PaymentCubit paymentCubit) {
-    final qrCodeBase64 =
-        paymentCubit.state.mutliPaymentResponse?.data?.walletQr;
+    final qrCodeBase64 = paymentCubit.state.mutliPaymentResponse?.data.walletQr;
     if (qrCodeBase64 == null || qrCodeBase64.isEmpty) {
       return Padding(
         padding: const EdgeInsets.all(16),
@@ -841,12 +840,12 @@ class _FawryPaymentState extends State<FawryPayment> {
       imageBytes = _decodeBase64Image(qrCodeBase64);
     } catch (e) {
       return Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            Text("QR Code:"),
+            const Text("QR Code:"),
             SizedBox(height: 10.h),
-            Text('Error decoding QR code'),
+            const Text('Error decoding QR code'),
           ],
         ),
       );

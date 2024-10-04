@@ -2,14 +2,10 @@ import 'package:fourtyninehub/features/payment/domain/entities/fawry_delete_card
 
 class DeleteCardResponseModel extends DeleteCardResponse {
   DeleteCardResponseModel({
-    required bool status,
-    required String message,
-    required DeleteCardDataModel data,
-  }) : super(
-          status: status,
-          message: message,
-          data: data,
-        );
+    required super.status,
+    required super.message,
+    required DeleteCardDataModel super.data,
+  });
 
   factory DeleteCardResponseModel.fromJson(Map<String, dynamic> json) {
     return DeleteCardResponseModel(
@@ -30,16 +26,11 @@ class DeleteCardResponseModel extends DeleteCardResponse {
 
 class DeleteCardDataModel extends DeleteCardData {
   DeleteCardDataModel({
-    required String type,
-    required int statusCode,
-    required String statusDescription,
-    required bool basketPayment,
-  }) : super(
-          type: type,
-          statusCode: statusCode,
-          statusDescription: statusDescription,
-          basketPayment: basketPayment,
-        );
+    required super.type,
+    required super.statusCode,
+    required super.statusDescription,
+    required super.basketPayment,
+  });
 
   factory DeleteCardDataModel.fromJson(Map<String, dynamic> json) {
     return DeleteCardDataModel(

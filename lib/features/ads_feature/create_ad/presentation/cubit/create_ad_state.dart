@@ -1,6 +1,14 @@
 part of 'create_ad_cubit.dart';
 
-enum CreateAdStates { loading, error, initState, success, loadCities, loadCitiesSuccess, imageUploading }
+enum CreateAdStates {
+  loading,
+  error,
+  initState,
+  success,
+  loadCities,
+  loadCitiesSuccess,
+  imageUploading
+}
 
 extension CreateAdStateX on CreateAdState {
   bool get isLoading => status == CreateAdStates.loading;

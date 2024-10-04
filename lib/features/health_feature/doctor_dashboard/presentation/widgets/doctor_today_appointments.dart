@@ -24,7 +24,7 @@ class DoctorTodayAppointmentsWidget extends StatelessWidget {
           text: Labels.todayAppointments,
           style: Styles.headerText(),
         ),
-        Sizer(),
+        const Sizer(),
         Container(
           padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10),
           decoration: BoxDecoration(

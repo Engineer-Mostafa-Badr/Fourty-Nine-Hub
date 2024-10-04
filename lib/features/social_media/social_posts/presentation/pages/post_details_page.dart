@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -13,7 +12,6 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../common/widgets/stateless/images/profile_image.dart';
@@ -131,7 +129,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                             builderDelegate:
                                 PagedChildBuilderDelegate<CommentEntity>(
                               noItemsFoundIndicatorBuilder: (context) {
-                                return Center(
+                                return const Center(
                                   child: Text(
                                     "No Comments",
                                     style: TextStyle(
@@ -208,7 +206,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                         imageURL: user?.profilePicture,
                         fromProfile: true,
                       ),
-                      Sizer(),
+                      const Sizer(),
                       Expanded(
                           child: TextFormField(
                         maxLines: null,
@@ -219,12 +217,12 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
                           fillColor: Colors.white,
-                          contentPadding: EdgeInsets.all(5),
+                          contentPadding: const EdgeInsets.all(5),
                           hintText: 'Type your comment ....',
                           hintStyle: Styles.mediumText(),
                         ),
                       )),
-                      Sizer(),
+                      const Sizer(),
                       if (commentTextController.text.isNotEmpty)
                         IconAppButton(
                           icon: Icons.send,
@@ -293,6 +291,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CommentCard(
+          // onEditComment: (p0) {},
           comment: comment,
           onAddReply: (ReplyOnCommentParams params) async {
             var result = await onCommentReply(params);
@@ -307,7 +306,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
         ),
         if (comment.repliesCount != 0)
           Container(
-              margin: EdgeInsets.only(left: 30),
+              margin: const EdgeInsets.only(left: 30),
               child: TextAppButton(
                   label: 'show ${comment.repliesCount} replies',
                   onPressed: () {}))

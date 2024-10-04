@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
@@ -47,13 +46,16 @@ class _DestinationTextFieldAndFindButonState extends State<DestinationTextFieldA
             Expanded(
               child: BlocBuilder<DestinationLocationCubit, DestinationLocationState>(
                 builder: (context, state) {
-                  return DefaultTextFormField(
-                    suffixIcon: _getIcon(state),
-                    currentController: destinationController,
-                    // labelStyle: const TextStyle(color: Colors.black),
-                    // hint: 'Find your destination point..!',
-                    label: LocaleKeys.destinationPoint.localize,
-                    hint: '',
+                  return TextFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                      fillColor: Colors.transparent,
+                      isDense: true, // Added this
+                      contentPadding: const EdgeInsets.all(14),
+                      suffixIcon: _getIcon(state),
+                      labelText: LocaleKeys.destinationPoint.localize,
+                    ),
+                    controller: destinationController,
                     validator: _validator,
                   );
                 },

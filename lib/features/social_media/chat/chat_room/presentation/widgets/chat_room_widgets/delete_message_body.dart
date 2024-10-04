@@ -25,7 +25,7 @@ class DeleteMessageBody extends StatelessWidget {
               color: AppColors.GREY_LIGHT_COLOR),
           margin: EdgeInsets.symmetric(vertical: 15.h),
           child: Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

@@ -14,7 +14,7 @@ import 'build_item_photo_text_post.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PhotoAndTextPostContent extends StatefulWidget {
-  PhotoAndTextPostContent({super.key});
+  const PhotoAndTextPostContent({super.key});
 
   @override
   State<PhotoAndTextPostContent> createState() =>
@@ -34,7 +34,7 @@ class _PhotoAndTextPostContentState extends State<PhotoAndTextPostContent> {
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10.h),
           child: PaginationView<CompanyAdEntity>(
-            loadingWidget: SizedBox.shrink(),
+            loadingWidget: const SizedBox.shrink(),
             build: (scrollController, data) {
               return data.isNotEmpty
                   ? ListView.separated(

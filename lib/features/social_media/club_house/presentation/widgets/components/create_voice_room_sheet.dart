@@ -10,7 +10,6 @@ import 'package:fourtyninehub/features/social_media/club_house/presentation/cont
 import 'package:fourtyninehub/features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
-import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import '../../controller/club_voice_state.dart';

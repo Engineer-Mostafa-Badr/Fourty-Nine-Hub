@@ -1,5 +1,3 @@
-import 'package:fourtyninehub/features/competition/data/models/competion_model.dart';
-
 import '../../../data/models/winners_model.dart';
 
 abstract class WinnerState {}
