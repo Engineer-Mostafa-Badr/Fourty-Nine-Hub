@@ -14,11 +14,10 @@ class ChanceCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: AppColors.SHADOW,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: AppColors.SHADOW_LIGHT,
       ),
       child: Row(
         children: [
@@ -59,7 +58,6 @@ class ChanceCardWidget extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           const ImageCardWidget(),
-
         ],
       ),
     );
