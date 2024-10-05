@@ -23,7 +23,7 @@ class ChanceViewBody extends StatelessWidget {
               ),
             ),
           ),
-          const ChanceCardWidget()
+          const ChanceCardWidget(),
         ],
       ),
     );
