@@ -31,7 +31,8 @@ class AdModel extends AdEntity {
   factory AdModel.fromJson(Map<String, dynamic> json) {
     List<String> images = [];
     try {
-      images = (json['images'] as List).map((e) => e['photo'] as String).toList();
+      images =
+          (json['images'] as List).map((e) => e['photo'] as String).toList();
     } catch (e) {}
     UserModel? user;
     try {
@@ -53,10 +54,16 @@ class AdModel extends AdEntity {
         approved: json['isApproved'] ?? true,
         isFavourite: json['isFavorite'] ?? false,
         // phone: json['phone'] ?? '',
-        statistics: json['statistics'] == null ? null : AdStatisticsModel.fromJson(json['statistics']),
+        statistics: json['statistics'] == null
+            ? null
+            : AdStatisticsModel.fromJson(json['statistics']),
         address: AddressModel.fromJson(json['address']),
         user: user,
-        details: json['props'] == null ? [] : (json['props'] as List).map((e) => CreateAdModel.fromJson(e)).toList(),
+        details: json['props'] == null
+            ? []
+            : (json['props'] as List)
+                .map((e) => CreateAdModel.fromJson(e))
+                .toList(),
         createdAt: DateTime.parse(json['createdAt']));
   }
   Map<String, dynamic> toJson() => {

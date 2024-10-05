@@ -9,10 +9,10 @@ class CategoryTripJoinModel extends CategoryTripJoinEntity {
 
   factory CategoryTripJoinModel.fromJson(Map<String, dynamic> json) {
     return CategoryTripJoinModel(
-      id: json['_id'] ??'',
-      nameAr: json['nameAr'] ??'',
-      nameEn: json['nameEn'] ??'',
-      paymentMethods: json['paymentMethods'] ??'',
+      id: json['_id'] ?? '',
+      nameAr: json['nameAr'] ?? '',
+      nameEn: json['nameEn'] ?? '',
+      paymentMethods: json['paymentMethods'] ?? '',
     );
   }
 }

@@ -9,7 +9,8 @@ class UpdatePrivacyUseCase extends UseCase<PrivacyEntity, UpdatePrivacyParams> {
 
   UpdatePrivacyUseCase(this._privacyRepository);
   @override
-  Future<Either<Failure, PrivacyEntity>> call(UpdatePrivacyParams params) async {
+  Future<Either<Failure, PrivacyEntity>> call(
+      UpdatePrivacyParams params) async {
     return await _privacyRepository.updateDataPrivacy(params);
   }
 }

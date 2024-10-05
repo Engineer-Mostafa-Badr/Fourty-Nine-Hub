@@ -14,6 +14,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -184,49 +185,18 @@ class ReelsScreenState extends State<ReelsScreen> {
                     ),
                   ],
                 ),
+                const Sizer(),
+                const Sizer(),
+
                 //tinder
-                Stack(
-                  children: [
-                    IconButton(
-                      icon: Label(
-                        text: 'Tinder',
-                        style: Styles.headerText(
-                            decoration: TextDecoration.underline,
-                            color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      color: Colors.white,
-                      onPressed: () {
-                        context.push(Routes.Tinder);
-                      },
-                    ),
-                    Positioned(
-                      top: -1,
-                      right: -1,
-                      left: -1,
-                      child: IconButton(
-                        icon: Label(
-                          text: 'Tinder',
-                          style: Styles.headerText(
-                              decoration: TextDecoration.underline,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        color: Colors.white,
-                        onPressed: () {
-                          context.push(Routes.Tinder);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+
                 //spotlight
                 Stack(
                   children: [
                     IconButton(
                       icon: Label(
                         text: 'Spotlight',
-                        style: Styles.headerText(
+                        style: Styles.mediumText(
                             decoration: TextDecoration.underline,
                             color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
                             fontWeight: FontWeight.bold),
@@ -243,7 +213,7 @@ class ReelsScreenState extends State<ReelsScreen> {
                       child: IconButton(
                         icon: Label(
                           text: 'Spotlight',
-                          style: Styles.headerText(
+                          style: Styles.mediumText(
                               fontWeight: FontWeight.bold,
                               decoration: TextDecoration.underline,
                               color: Colors.white),
@@ -256,21 +226,64 @@ class ReelsScreenState extends State<ReelsScreen> {
                     ),
                   ],
                 ),
-
-                //reels
                 Stack(
                   children: [
                     IconButton(
                       icon: Label(
-                        text: 'Reels',
-                        style: Styles.headerText(
+                        text: 'Snap',
+                        style: Styles.mediumText(
                             decoration: TextDecoration.underline,
                             color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
                             fontWeight: FontWeight.bold),
                       ),
                       color: Colors.white,
                       onPressed: () {
-                        // context.push(Routes.SPOTLIGHT);
+                        context.push(Routes.SNAP);
+                      },
+                    ),
+                    Positioned(
+                      top: -1,
+                      right: -1,
+                      left: -1,
+                      child: IconButton(
+                        icon: Label(
+                          text: 'Snap',
+                          style: Styles.mediumText(
+                              decoration: TextDecoration.underline,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        color: Colors.white,
+                        onPressed: () {
+                          context.push(Routes.SNAP);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                //reels
+                Stack(
+                  children: [
+                    IconButton(
+                      icon: Label(
+                        text: 'Reels',
+                        style: Styles.mediumText(
+                            decoration: TextDecoration.underline,
+                            color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      color: Colors.white,
+                      onPressed: () async {
+                        // context.pop();
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ReelsRecordingScreen(
+                                  // advertisementType: 'reel',
+                                  // comeFromCompany: 'company',
+                                  // totalPrice: '500',
+                                  ),
+                            ));
                       },
                     ),
                     Positioned(
@@ -280,57 +293,51 @@ class ReelsScreenState extends State<ReelsScreen> {
                       child: IconButton(
                         icon: Label(
                           text: 'Reels',
-                          style: Styles.headerText(
+                          style: Styles.mediumText(
                               decoration: TextDecoration.underline,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
                         ),
                         color: Colors.white,
-                        onPressed: () {
-                          // context.push(Routes.SPOTLIGHT);
+                        onPressed: () async {
+                          // context.pop();
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ReelsRecordingScreen(
+                                        // advertisementType: 'reel',
+                                        // comeFromCompany: 'company',
+                                        // totalPrice: '500',
+                                        ),
+                              ));
                         },
                       ),
                     ),
                   ],
                 ),
+                const Sizer(),
+                const Sizer(),
                 Stack(
                   children: [
                     IconButton(
                       onPressed: () async {
-                        // context.pop();
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ReelsRecordingScreen(
-                                  // advertisementType: 'reel',
-                                  // comeFromCompany: 'company',
-                                  // totalPrice: '500',
-                                  ),
-                            ));
+                        context.push(Routes.Tinder);
                       },
                       icon: FaIcon(
-                        Icons.camera_alt_outlined,
+                        FontAwesomeIcons.search,
                         color: Colors.white,
-                        size: 50.h,
+                        size: 35.h,
                       ),
                     ),
                     IconButton(
                       onPressed: () async {
-                        // context.pop();
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ReelsRecordingScreen(
-                                  // advertisementType: 'reel',
-                                  // comeFromCompany: 'company',
-                                  // totalPrice: '500',
-                                  ),
-                            ));
+                        context.push(Routes.Tinder);
                       },
                       icon: FaIcon(
-                        Icons.camera_alt_outlined,
+                        FontAwesomeIcons.search,
                         color: AppColors.PRIMARY_COLOR.withOpacity(0.4),
-                        size: 50.h,
+                        size: 35.h,
                       ),
                     ),
                   ],

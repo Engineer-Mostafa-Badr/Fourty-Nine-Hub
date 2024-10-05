@@ -14,6 +14,9 @@ import 'package:fourtyninehub/features/payment/domain/use_cases/fawry_save_card_
 import 'package:fourtyninehub/features/payment/domain/use_cases/multi_payment_use_case.dart';
 import 'package:fourtyninehub/features/payment/domain/use_cases/pay_with_token_use_case.dart';
 
+import '../entities/instapay_cache_out_entity.dart';
+import '../use_cases/cache_out/instapay_cache_out_use_case.dart';
+
 abstract class PaymentProviderRepository {
   Future<Either<Failure, List<PaymentProviderEntity>>> getPaymentProvider();
   Future<Either<Failure, PaymobEntity>> getPaymob(
@@ -30,4 +33,6 @@ abstract class PaymentProviderRepository {
       InstaPayParams params);
   Future<Either<Failure, PayWithTokenResponseEntity>> payWithToken(
       PayWithTokenParams params);
+  Future<Either<Failure, InstapayCacheOutEntity>> instapayCacheOut(
+      InstapayParams params);
 }

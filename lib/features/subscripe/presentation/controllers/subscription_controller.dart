@@ -16,17 +16,25 @@ import '../widgets/subscription_plans.dart';
 
 class SubscriptionController {
   //to pass current context
-  final BuildContext context = AppPages.router.configuration.navigatorKey.currentContext!;
+  final BuildContext context =
+      AppPages.router.configuration.navigatorKey.currentContext!;
   final CheckIfUserSubscribedUseCase _checkIfUserSubscribedUseCase;
   final GetSubscriptionPlansUseCase _getSubscriptionPlansUseCase;
   final SubscribeUseCase _subscribeUseCase;
-  final GetActiveSubscriptionAmountsUseCase _getActiveSubscriptionAmountsUseCase;
+  final GetActiveSubscriptionAmountsUseCase
+      _getActiveSubscriptionAmountsUseCase;
 
-  SubscriptionController(this._checkIfUserSubscribedUseCase, this._getSubscriptionPlansUseCase, this._subscribeUseCase,
+  SubscriptionController(
+      this._checkIfUserSubscribedUseCase,
+      this._getSubscriptionPlansUseCase,
+      this._subscribeUseCase,
       this._getActiveSubscriptionAmountsUseCase);
 
   void checkIfUserSubscribed(
-      {required Function onSubscribed, required String subCategoryId, String? title, showRegular}) async {
+      {required Function onSubscribed,
+      required String subCategoryId,
+      String? title,
+      showRegular}) async {
     showLoadingDialog(context);
     final response = await _checkIfUserSubscribedUseCase(subCategoryId);
     AppPages.router.pop();
@@ -38,7 +46,10 @@ class SubscriptionController {
       if (data) {
         onSubscribed();
       } else {
-        showSubscriptionPlans(subCategoryId: subCategoryId, title: title, showRegular: showRegular);
+        showSubscriptionPlans(
+            subCategoryId: subCategoryId,
+            title: title,
+            showRegular: showRegular);
       }
     });
   }
@@ -46,7 +57,10 @@ class SubscriptionController {
   bool _isBottomSheetShown = false;
 
   Future<void> showSubscriptionPlans(
-      {List<WalletTypes>? wallets, required String subCategoryId, String? title, bool? showRegular}) async {
+      {List<WalletTypes>? wallets,
+      required String subCategoryId,
+      String? title,
+      bool? showRegular}) async {
     if (!_isBottomSheetShown) {
       _isBottomSheetShown = true;
 
@@ -69,7 +83,12 @@ class SubscriptionController {
             title: title,
             subscribePlans: plans,
             subCategoryId: subCategoryId,
-            paymentMenthods: wallets ?? [WalletTypes.balance, WalletTypes.mainWallet, WalletTypes.giftWallet],
+            paymentMenthods: wallets ??
+                [
+                  WalletTypes.balance,
+                  WalletTypes.mainWallet,
+                  WalletTypes.giftWallet
+                ],
           ),
         );
       });
@@ -78,8 +97,10 @@ class SubscriptionController {
     }
   }
 
-  Future<void> showActiveSubscriptionAmounts({required WalletTypes walletType}) async {
-    final response = await _getActiveSubscriptionAmountsUseCase(const NoParams());
+  Future<void> showActiveSubscriptionAmounts(
+      {required WalletTypes walletType}) async {
+    final response =
+        await _getActiveSubscriptionAmountsUseCase(const NoParams());
     response.fold(
       (l) => showErrorMessage(
         context,

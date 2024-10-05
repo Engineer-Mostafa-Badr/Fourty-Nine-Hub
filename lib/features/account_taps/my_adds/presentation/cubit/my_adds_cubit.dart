@@ -10,6 +10,7 @@ import '../../../../../core/error/failure.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
 
 import '../../../../ride/trip_details/domain/entities/trip_and_request_entity.dart';
+import '../../domain/entity/get_all_count_ads_entity.dart';
 import '../../domain/entity/get_all_counts_trip_join_entity.dart';
 import '../../domain/entity/my_ads_auction.dart';
 import '../../domain/entity/my_ads_trip_join_entity.dart';
@@ -18,6 +19,7 @@ import '../../domain/usecases/delete_come_with_me_usecase.dart';
 import '../../domain/usecases/delete_my_installment_usecase.dart';
 import '../../domain/usecases/delete_my_trip_join_usecase.dart';
 import '../../domain/usecases/delete_pick_me_usecase.dart';
+import '../../domain/usecases/get_all_counts_ads_usecase.dart';
 import '../../domain/usecases/get_all_counts_usecase.dart';
 import '../../domain/usecases/get_my_ads_usecase.dart';
 import '../../domain/usecases/get_my_auctions_usecase.dart';
@@ -46,6 +48,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
   final DeleteMyTripJoinUseCase _deleteMyTripJoinUseCase;
   final DeleteMyInstallmentUseCase _deleteMyInstallmentUseCase;
   final GetAllCountsUseCase _allCountsUseCase;
+  final GetAllCountsAdsUseCase _allCountsAdsUseCase;
 
   MyAddsCubit(
       this._getMyAdsUseCase,
@@ -62,7 +65,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
       this._getMyInstallmentUseCase,
       this._getMyTripJoinUseCase,
       this._deleteMyTripJoinUseCase,
-      this._deleteMyInstallmentUseCase, this._getMyOtherAdsUseCase, this._allCountsUseCase)
+      this._deleteMyInstallmentUseCase, this._getMyOtherAdsUseCase, this._allCountsUseCase, this._allCountsAdsUseCase)
       : super(const MyAddsState());
 
   void loadData() async {
@@ -252,5 +255,16 @@ class MyAddsCubit extends Cubit<MyAddsState> {
             emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
             (r) => emit(state.copyWith(
             allCounts: r, status: MyAddsStates.initState)));
+  }
+
+  Future<void> getAllCountAds({
+    required CountAdsParams params,
+  }) async {
+    final response = await _allCountsAdsUseCase(params);
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+            (r) => emit(state.copyWith(
+            countAds: r, status: MyAddsStates.initState)));
   }
 }

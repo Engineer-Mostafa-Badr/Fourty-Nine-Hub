@@ -109,4 +109,8 @@ abstract class Assets {
   static String spotLightDemo = 'assets/images/spot_light_demo.jpg';
   static String spotlightIcon = 'assets/icons/spotlight.svg';
   static String cameraIcon = 'assets/icons/camera_icon.svg';
+
+  //! audio
+  static String notificationAudioApp = 'audio/notification.mp3';
+  static String notificationAudioServieAndSocial = 'audio/notification_social.mp3';
 }

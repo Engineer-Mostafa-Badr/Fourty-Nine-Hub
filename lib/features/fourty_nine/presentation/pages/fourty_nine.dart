@@ -99,9 +99,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           // pr('new notfication is recieved by the bloc listner');
           // pr(state.notificationEntity);
           notificationSnackBar(
-            context: context,
-            notificationEntity: state.notificationEntity,
-          );
+              context: context,
+              notificationEntity: state.notificationEntity,
+              isAppNotification: state.notificationEntity.filterType == 'app');
         } else if (state is NotificationSocketIoFailed) {
           // pr('Failed to recieve the new notfication ');
           // pr(state.message);

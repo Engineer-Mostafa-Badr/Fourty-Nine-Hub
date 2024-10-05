@@ -9,12 +9,10 @@ class UserRequestModel extends UserFriendEntity {
 
   factory UserRequestModel.fromJson(Map<String, dynamic> json) {
     return UserRequestModel(
-      id: json['senderId']['_id'] ??'',
-      firstName: json['senderId']['firstName'] ??'',
-      image: json['senderId']['image'] ??'',
-      lastName: json['senderId']['lastName'] ??'',
+      id: json['senderId']['_id'] ?? '',
+      firstName: json['senderId']['firstName'] ?? '',
+      image: json['senderId']['image'] ?? '',
+      lastName: json['senderId']['lastName'] ?? '',
     );
   }
 }
-
-

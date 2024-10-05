@@ -243,7 +243,8 @@ class Stories extends StatelessWidget {
                         // Localized text
                         maxLines: 1,
 
-                        style: Styles.mediumText(color: Colors.black,fontWeight: FontWeight.bold),
+                        style: Styles.mediumText(
+                            color: Colors.black, fontWeight: FontWeight.bold),
                       )
                     ],
                   ))

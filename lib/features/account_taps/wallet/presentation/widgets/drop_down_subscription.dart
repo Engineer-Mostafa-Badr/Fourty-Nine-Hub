@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/main_category_entity.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
+import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/localization/locales.dart';
 import '../../../../../service_locator/service_locator.dart';
@@ -195,8 +196,13 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
                   print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
                   serviceLocator<SubscriptionController>()
                       .showSubscriptionPlans(
+                    wallets: [
+                      WalletTypes.mainWallet,
+                      WalletTypes.giftWallet,
+                      WalletTypes.balance,
+                    ],
                     subCategoryId: newSubCategoryId,
-                    wallets: [],
+                    title: LocaleKeys.ads.localize,
                   );
                 }
               },

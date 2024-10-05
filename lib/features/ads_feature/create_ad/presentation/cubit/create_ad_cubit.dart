@@ -37,7 +37,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   String? title, description, price, phone;
   final formState = GlobalKey<FormState>();
 
-  CreateAdCubit(this._getAdPropertiesUsecase, this._createAdUseCase, this._governoratesUseCase, this._citiesUseCase)
+  CreateAdCubit(this._getAdPropertiesUsecase, this._createAdUseCase,
+      this._governoratesUseCase, this._citiesUseCase)
       : super(CreateAdState());
 
   void loadData({required String subCategoryId}) async {
@@ -52,7 +53,10 @@ class CreateAdCubit extends Cubit<CreateAdState> {
 
   Future<void> getAdProperties({required String subCategoryId}) async {
     final response = await _getAdPropertiesUsecase(subCategoryId);
-    response.fold((failure) => emit(state.copyWith(failure: failure, status: CreateAdStates.error)), (data) {
+    response.fold(
+        (failure) => emit(
+            state.copyWith(failure: failure, status: CreateAdStates.error)),
+        (data) {
       bool selectedPrice = data.any((element) => element.nameAr == 'السعر');
       print("selectedPrice:$selectedPrice");
       for (int i = 0; i <= data.length - 1; i++) {
@@ -64,7 +68,10 @@ class CreateAdCubit extends Cubit<CreateAdState> {
         print(state.selections![i].nameEn);
       }
       // print(object)
-      final propertiesList = data.where((element) => element.nameAr != 'السعر' && element.nameEn != 'الراتب').toList();
+      final propertiesList = data
+          .where((element) =>
+              element.nameAr != 'السعر' && element.nameEn != 'الراتب')
+          .toList();
 
       emit(state.copyWith(adProperties: propertiesList));
     });
@@ -88,9 +95,12 @@ class CreateAdCubit extends Cubit<CreateAdState> {
         onUploaded: (UploadFileEntity media) {
           final images = state.images ?? [];
           images.add(media);
-          emit(state.copyWith(images: images, status: CreateAdStates.initState));
+          emit(
+              state.copyWith(images: images, status: CreateAdStates.initState));
         });
-    mediaResponse?.fold((l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)), (r) {
+    mediaResponse?.fold(
+        (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
+        (r) {
       emit(state.copyWith(status: CreateAdStates.initState));
     });
   }
@@ -109,27 +119,34 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   }
 
   final user = UserCubit.to.state.data?.id;
-  void createAd({required CategorizationEntity categorize, required BuildContext context}) async {
+  void createAd(
+      {required CategorizationEntity categorize,
+      required BuildContext context}) async {
     print(categorize.subCategory.hasAuction);
 
     String type = '';
     if (categorize.subCategory.hasAuction == false && state.isUser == false) {
       type = "provider";
-    } else if (categorize.subCategory.hasAuction == false && state.isUser == true) {
+    } else if (categorize.subCategory.hasAuction == false &&
+        state.isUser == true) {
       type = "user";
-    } else if (categorize.subCategory.hasAuction == true && state.isSale == false) {
+    } else if (categorize.subCategory.hasAuction == true &&
+        state.isSale == false) {
       print(state.isSale);
       type = "rent";
-    } else if (categorize.subCategory.hasAuction == true && state.isSale == true) {
+    } else if (categorize.subCategory.hasAuction == true &&
+        state.isSale == true) {
       print(state.isSale);
       type = "sale";
     }
     if ((formState.currentState?.validate() ?? false) && (state.images?.isNotEmpty ?? false)&&(state.city !='')&&state.governorate !='') {
       List<CreateAdEntity> details = [];
       for (int i = 0; i < (state.adProperties?.length ?? 0); i++) {
-        details.add(CreateAdEntity(propId: state.adProperties![i].id, value: state.selections![i]));
+        details.add(CreateAdEntity(
+            propId: state.adProperties![i].id, value: state.selections![i]));
       }
-      List<CreateAdEntity> selectedDetails = details.where((element) => element.value.nameAr.isNotEmpty).toList();
+      List<CreateAdEntity> selectedDetails =
+          details.where((element) => element.value.nameAr.isNotEmpty).toList();
       final response = await _createAdUseCase(AdModel(
         id: 'id',
         title: title ?? '',
@@ -148,7 +165,9 @@ class CreateAdCubit extends Cubit<CreateAdState> {
         mainCategoryId: categorize.mainCategory.id, approved: false,
       ));
 
-      response.fold((l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)), (r) {
+      response.fold(
+          (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
+          (r) {
         context.pushReplacement(Routes.MYADDS);
       });
     }else if(state.images==[]||state.images==null){
@@ -158,12 +177,14 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     }else if(state.city == ''){
       showErrorMessage(context, 'messageCity');
     }
-
   }
 
   Future<void> _getGovernorates() async {
     final response = await _governoratesUseCase.call(const NoParams());
-    response.fold((failure) => emit(state.copyWith(failure: failure, status: CreateAdStates.error)), (data) {
+    response.fold(
+        (failure) => emit(
+            state.copyWith(failure: failure, status: CreateAdStates.error)),
+        (data) {
       emit(state.copyWith(governorates: data));
     });
   }

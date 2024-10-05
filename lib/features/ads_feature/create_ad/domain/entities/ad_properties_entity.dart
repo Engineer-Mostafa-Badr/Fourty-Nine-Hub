@@ -8,7 +8,11 @@ class AdPropertiesEntity {
   final List<SelectionEntity> values;
   AdPropertyType get adPropertyType => getAdPropertyTypeValue(type);
   AdPropertiesEntity(
-      {required this.id,required this.nameAr,required this.nameEn, required this.type, required this.values});
+      {required this.id,
+      required this.nameAr,
+      required this.nameEn,
+      required this.type,
+      required this.values});
 }
 
 enum AdPropertyType { select, dropdown, number, text, image, file }

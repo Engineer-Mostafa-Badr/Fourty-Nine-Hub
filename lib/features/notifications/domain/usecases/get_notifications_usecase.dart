@@ -13,6 +13,7 @@ class GetNotficationsUseCase {
     int limit = 10,
     required String languageCode,
   }) {
-    return notificationRepo.fetchNotifications(type: type, page: page, languageCode: languageCode);
+    return notificationRepo.fetchNotifications(
+        type: type, page: page, languageCode: languageCode);
   }
 }

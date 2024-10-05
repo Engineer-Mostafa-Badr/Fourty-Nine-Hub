@@ -12,7 +12,7 @@ class RestaurantEntity {
   final String deliveryTime;
   final String deliveryFee;
   final double rate;
-   bool? isFavorite;
+  bool? isFavorite;
   final int? numberOfContent;
   final int numberOfReviews;
   final CuisineModel? cuisine;

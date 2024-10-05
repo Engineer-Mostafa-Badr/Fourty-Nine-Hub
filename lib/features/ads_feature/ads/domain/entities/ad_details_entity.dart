@@ -53,7 +53,7 @@ class AdDetailsEntity {
         this.isDeleted=false,
         this.isPrimary=false,
       required this.address,
-       this.phone,
+      this.phone,
       this.statistics,
       required this.user,
       this.subCategoryId,

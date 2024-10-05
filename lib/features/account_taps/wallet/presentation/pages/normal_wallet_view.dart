@@ -21,6 +21,7 @@ import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
+import '../../../../payment/presentation/pages/payment_cash_out.dart';
 import '../../domain/entities/wallet/wallet_history_entity.dart';
 import '../cubit/wallet_cubit.dart';
 import '../widgets/drop_down_subscription.dart';
@@ -121,10 +122,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                               MaterialPageRoute(
                                 builder: (context) => BlocProvider<PaymentCubit>(
                                   create: (BuildContext context) => serviceLocator(),
-                                  child: PaymentView(
-                                    amountId: '',
-                                    amount: 500,
-                                  ),
+                                  child:  PaymentCashOut(),
                                 ),
                               ),
                             );
@@ -144,7 +142,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                           },
                         )
                       : AppButton(
-                          label: LocaleKeys.withdraw.localize,
+                          label: LocaleKeys.requestWithdraw.localize,
                           backColor: AppColors.SECONDARY_COLOR.withOpacity(.5),
                           onPressed: () {},
                         ),

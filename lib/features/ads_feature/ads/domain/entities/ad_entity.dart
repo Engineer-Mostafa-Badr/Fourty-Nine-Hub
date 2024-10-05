@@ -31,7 +31,8 @@ class AdEntity {
   String get formatedDate => DateFormat('yyyy-MM-dd').format(createdAt);
   Duration get restTimeDuration => DateTime.now().difference(createdAt);
 
-  String get formattedRestTime => DurationHelper().sinceTime(duration: restTimeDuration);
+  String get formattedRestTime =>
+      DurationHelper().sinceTime(duration: restTimeDuration);
 
   AdEntity(
       {required this.id,

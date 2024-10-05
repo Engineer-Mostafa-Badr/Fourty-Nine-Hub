@@ -8,19 +8,22 @@ import 'package:fourtyninehub/features/trip_join/view_all_pick_me/domain/entitie
 import 'package:fourtyninehub/res/style/const.dart';
 
 abstract class ViewAllPickMeRemoteDataSource {
-  Future<Either<Failure, List<PickMeCardEntity>>> getAllPickMe({required int page});
+  Future<Either<Failure, List<PickMeCardEntity>>> getAllPickMe(
+      {required int page});
   // Future<Either<Failure, bool>> requestTripJoin(
   //     {required String addId,
   //     required String mobile,
   //     bool premuimRequest = false});
 }
 
-class ViewAllPickMeRemoteDataSourceImp implements ViewAllPickMeRemoteDataSource {
+class ViewAllPickMeRemoteDataSourceImp
+    implements ViewAllPickMeRemoteDataSource {
   final ApiConsumer apiConsumer;
 
   ViewAllPickMeRemoteDataSourceImp({required this.apiConsumer});
   @override
-  Future<Either<Failure, List<PickMeCardEntity>>> getAllPickMe({required int page}) async {
+  Future<Either<Failure, List<PickMeCardEntity>>> getAllPickMe(
+      {required int page}) async {
     const t = "ViewAllPickMeRemoteDataSourceImp - getAllPickMe ";
     final response = await apiConsumer.get(
       EndPoints.getAllPickMe,
@@ -45,9 +48,12 @@ class ViewAllPickMeRemoteDataSourceImp implements ViewAllPickMeRemoteDataSource 
         List<PickMeCardModel> allCards = rawData.map<PickMeCardModel>(
           (e) {
             final pickMeCardModel = PickMeCardModel.fromJson(e);
-            pickMeCardModel.subscribedPremium = data['data']['subscribedPremium'] as bool?;
-            pickMeCardModel.hasNextPage = data['data']['pagination']['hasNextPage'] as bool?;
-            pickMeCardModel.nextPage = data['data']['pagination']['nextPage'] as int?;
+            pickMeCardModel.subscribedPremium =
+                data['data']['subscribedPremium'] as bool?;
+            pickMeCardModel.hasNextPage =
+                data['data']['pagination']['hasNextPage'] as bool?;
+            pickMeCardModel.nextPage =
+                data['data']['pagination']['nextPage'] as int?;
             return pickMeCardModel;
           },
         ).toList();

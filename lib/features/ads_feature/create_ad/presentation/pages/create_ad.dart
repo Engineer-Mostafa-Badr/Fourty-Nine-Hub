@@ -41,13 +41,16 @@ class CreateAdView extends StatefulWidget {
 class _CreateAdViewState extends State<CreateAdView> {
   @override
   void initState() {
-    context.read<CreateAdCubit>().loadData(subCategoryId: widget.categorization.mainCategory.id);
+    context
+        .read<CreateAdCubit>()
+        .loadData(subCategoryId: widget.categorization.mainCategory.id);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CreateAdCubit, CreateAdState>(listener: (context, state) {
+    return BlocConsumer<CreateAdCubit, CreateAdState>(
+        listener: (context, state) {
       if (state.isError) {
         showErrorMessage(
           context,
@@ -85,9 +88,12 @@ class _CreateAdViewState extends State<CreateAdView> {
                             children: [
                               Label(
                                 text: widget.categorization.subCategory.name,
-                                style: Styles.mediumText(fontWeight: FontWeight.bold),
+                                style: Styles.mediumText(
+                                    fontWeight: FontWeight.bold),
                               ),
-                              Label(text: widget.categorization.mainCategory.name),
+                              Label(
+                                  text:
+                                      widget.categorization.mainCategory.name),
                             ],
                           )),
                         ],
@@ -101,7 +107,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                               child: InkWell(
                             onTap: () {
                               setState(() {
-                                if (widget.categorization.subCategory.hasAuction == true) {
+                                if (widget.categorization.subCategory
+                                        .hasAuction ==
+                                    true) {
                                   state.isSale = true;
                                 } else {
                                   state.isUser = true;
@@ -111,18 +119,22 @@ class _CreateAdViewState extends State<CreateAdView> {
                             child: Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                  color: (state.isUser == true && state.isSale == true)
+                                  color: (state.isUser == true &&
+                                          state.isSale == true)
                                       ? AppColors.PRIMARY_COLOR
                                       : Colors.white,
                                   borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                                  border: Border.all(
+                                      color: AppColors.PRIMARY_COLOR)),
                               alignment: AlignmentDirectional.center,
                               child: Text(
-                                widget.categorization.subCategory.hasAuction == true
+                                widget.categorization.subCategory.hasAuction ==
+                                        true
                                     ? LocaleKeys.sale.localize
                                     : LocaleKeys.user.localize,
                                 style: Styles.mediumText(
-                                    color: (state.isUser == false || state.isSale == false)
+                                    color: (state.isUser == false ||
+                                            state.isSale == false)
                                         ? AppColors.PRIMARY_COLOR
                                         : Colors.white),
                               ),
@@ -133,7 +145,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  if (widget.categorization.subCategory.hasAuction == true) {
+                                  if (widget.categorization.subCategory
+                                          .hasAuction ==
+                                      true) {
                                     state.isSale = false;
                                     print(state.isSale);
                                     print(state.isSale);
@@ -145,18 +159,23 @@ class _CreateAdViewState extends State<CreateAdView> {
                               child: Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                    color: (state.isUser == false || state.isSale == false)
+                                    color: (state.isUser == false ||
+                                            state.isSale == false)
                                         ? AppColors.PRIMARY_COLOR
                                         : Colors.white,
                                     borderRadius: BorderRadius.circular(15),
-                                    border: Border.all(color: AppColors.PRIMARY_COLOR)),
+                                    border: Border.all(
+                                        color: AppColors.PRIMARY_COLOR)),
                                 alignment: AlignmentDirectional.center,
                                 child: Text(
-                                  widget.categorization.subCategory.hasAuction == true
+                                  widget.categorization.subCategory
+                                              .hasAuction ==
+                                          true
                                       ? LocaleKeys.rent.localize
                                       : LocaleKeys.provider.localize,
                                   style: Styles.mediumText(
-                                      color: (state.isUser == true && state.isSale == true)
+                                      color: (state.isUser == true &&
+                                              state.isSale == true)
                                           ? AppColors.PRIMARY_COLOR
                                           : Colors.white),
                                 ),
@@ -304,7 +323,10 @@ class _CreateAdViewState extends State<CreateAdView> {
                         ],
                       ):const SizedBox.shrink(),
                       const Sizer(),
-                      Label(text: state.isPrice == true ? LocaleKeys.price.localize : LocaleKeys.salary.localize),
+                      Label(
+                          text: state.isPrice == true
+                              ? LocaleKeys.price.localize
+                              : LocaleKeys.salary.localize),
                       TextFormField(
                         maxLines: null,
                         onChanged: (v) => controller.price = v,
@@ -312,7 +334,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                         decoration: InputDecoration(
                             fillColor: Colors.white,
                             contentPadding: const EdgeInsets.all(5),
-                            hintText: state.isPrice == true ? LocaleKeys.price.localize : LocaleKeys.salary.localize,
+                            hintText: state.isPrice == true
+                                ? LocaleKeys.price.localize
+                                : LocaleKeys.salary.localize,
                             hintStyle: Styles.mediumText(),
                             prefix: Sizer(
                               width: 20.w,
@@ -332,8 +356,10 @@ class _CreateAdViewState extends State<CreateAdView> {
                           final property = state.adProperties![index];
                           return AdDynamicInputWidget(
                             property: property,
-                            onChanged: (SelectionEntity v) => controller.onChanged(v: v, index: index),
-                            onTextChanged: (String v) => controller.onTextChanged(v: v, index: index),
+                            onChanged: (SelectionEntity v) =>
+                                controller.onChanged(v: v, index: index),
+                            onTextChanged: (String v) =>
+                                controller.onTextChanged(v: v, index: index),
                           );
                         },
                         separatorBuilder: (context, index) => const Sizer(),
@@ -344,7 +370,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                       DefaultButton(
                           label: LocaleKeys.publish.localize,
                           onPressed: () {
-                            controller.createAd(categorize: widget.categorization, context: context);
+                            controller.createAd(
+                                categorize: widget.categorization,
+                                context: context);
                           }),
                     ],
                   ),
@@ -367,16 +395,20 @@ class _CreateAdViewState extends State<CreateAdView> {
       return Column(
         children: [
           InkWell(
-            onTap: () => controller.uploadImage(subCategoryId: widget.categorization.subCategory.id),
+            onTap: () => controller.uploadImage(
+                subCategoryId: widget.categorization.subCategory.id),
             child: Container(
               height: kToolbarHeight * 3,
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
-              decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(5)),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(5)),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    if (state.isImageUploading) const CircularProgressIndicator.adaptive(),
+                    if (state.isImageUploading)
+                      const CircularProgressIndicator.adaptive(),
                     if (!state.isImageUploading)
                       Image.asset(
                         Assets.image,
@@ -436,7 +468,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                               onPressed: () => showAreYouSure(
                                   context: context,
                                   title: 'Alert',
-                                  subTitle: 'Are you sure you want to remove this image?',
+                                  subTitle:
+                                      'Are you sure you want to remove this image?',
                                   action: () {
                                     controller.removeImage(image: image);
                                   }),

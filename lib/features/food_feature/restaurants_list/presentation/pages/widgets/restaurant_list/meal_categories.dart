@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_category_card.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../../service_locator/service_locator.dart';
 import '../../../cubit/restaurants_list_cubit.dart';
@@ -25,20 +25,18 @@ class MealCategories extends StatelessWidget {
               children: [
                 Expanded(
                   child: ListView.separated(
-                    separatorBuilder: (context, index) => Sizer(),
+                    separatorBuilder: (context, index) => const Sizer(),
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => MealCategoryCard(
                         onTap: (String id) {
                           // controller.getSubCategoryRestaurants(id: id);
                           // if (state.subCategories!.isNotEmpty) {
-                          if (state.mealCategories![index].numberOfRestaurant! >
-                              0) {
+                          if (state.mealCategories![index].numberOfRestaurant! > 0) {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => BlocProvider.value(
-                                    value: serviceLocator<RestaurantsCubit>()
-                                      ..getSubCategoryRestaurants(id: id),
+                                    value: serviceLocator<RestaurantsCubit>()..getSubCategoryRestaurants(id: id),
                                     child: RestaurantForSelectedMeal(
                                       mealId: id,
                                     ),

@@ -22,9 +22,8 @@ class CreateRestaurantSubmitButton extends StatelessWidget {
               });
             },
             label: LocaleKeys.submit.tr(),
-            textStyle:Styles.headerText(color: Colors.white),
-
-    ),
+            textStyle: Styles.headerText(color: Colors.white),
+          ),
         ),
       ],
     );

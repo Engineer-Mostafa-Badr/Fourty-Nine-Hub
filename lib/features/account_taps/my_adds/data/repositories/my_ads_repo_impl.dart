@@ -1,9 +1,12 @@
 import 'package:dartz/dartz.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/get_all_count_ads_entity.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/get_all_counts_trip_join_entity.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/my_ads_trip_join_entity.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/get_all_counts_ads_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/get_all_counts_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/update_my_ads_usecase.dart';
 
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/ride/trip_details/domain/entities/trip_and_request_entity.dart';
@@ -80,12 +83,12 @@ class MyAdsRepoImpl implements MyAdsRepo {
 
   @override
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments() {
-   return _remoteDatasource.getMyInstallments();
+    return _remoteDatasource.getMyInstallments();
   }
 
   @override
   Future<Either<Failure, MyAdsTripJoinEntity>> getMyTripJoin() {
-   return _remoteDatasource.getMyTripJoin();
+    return _remoteDatasource.getMyTripJoin();
   }
 
   @override
@@ -106,5 +109,15 @@ class MyAdsRepoImpl implements MyAdsRepo {
   @override
   Future<Either<Failure, List<GetAllCountsTripJoinEntity>>> getAllCountsTripJoin(Params params) {
     return _remoteDatasource.getAllCountsTripJoin(params);
+  }
+
+  @override
+  Future<Either<Failure, List<GetAllCountAdsEntity>>> getAllCountsAds(CountAdsParams params) {
+    return _remoteDatasource.getAllCountsAds(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateMyAds(UpdateMyAdsParams params) {
+    return _remoteDatasource.updateMyAds(params);
   }
 }

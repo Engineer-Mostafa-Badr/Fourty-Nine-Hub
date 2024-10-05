@@ -22,14 +22,18 @@ class MainCategoriesFlipCardsView extends StatelessWidget {
         children: [
           Expanded(
             child: CardSwiper(
-              padding: EdgeInsets.only(left: 10.w,right: 10.w,bottom: 20.h),
-              cardsCount: context.read<MainCategoriesCubit>().state.data?.length??0,
+              padding: EdgeInsets.only(left: 10.w, right: 10.w, bottom: 20.h),
+              cardsCount:
+                  context.read<MainCategoriesCubit>().state.data?.length ?? 0,
               cardBuilder:
                   (context, index, percentThresholdX, percentThresholdY) {
                 return GestureDetector(
                   onTap: () {
                     context.push(Routes.SUBCATEGORIES,
-                        extra: context.read<MainCategoriesCubit>().state.data?[index]);
+                        extra: context
+                            .read<MainCategoriesCubit>()
+                            .state
+                            .data?[index]);
                   },
                   child: DecoratedBox(
                     decoration: BoxDecoration(
@@ -37,8 +41,12 @@ class MainCategoriesFlipCardsView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16.0),
                       image: DecorationImage(
                         fit: BoxFit.fill,
-                        image: CachedNetworkImageProvider(
-                            context.read<MainCategoriesCubit>().state.data?[index].cover??''                        ),
+                        image: CachedNetworkImageProvider(context
+                                .read<MainCategoriesCubit>()
+                                .state
+                                .data?[index]
+                                .cover ??
+                            ''),
                       ),
                       gradient: const LinearGradient(
                         colors: [Colors.black, Colors.white],
@@ -50,7 +58,6 @@ class MainCategoriesFlipCardsView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16.0),
                       child: Stack(
                         children: [
-
                           Positioned.fill(
                             child: DecoratedBox(
                               decoration: BoxDecoration(
@@ -65,14 +72,18 @@ class MainCategoriesFlipCardsView extends StatelessWidget {
                                 padding: const EdgeInsetsDirectional.all(8),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Align(
                                       alignment:
                                           AlignmentDirectional.bottomStart,
                                       child: Text(
-                                        context.read<MainCategoriesCubit>().state.data?[index].name??'',
+                                        context
+                                                .read<MainCategoriesCubit>()
+                                                .state
+                                                .data?[index]
+                                                .name ??
+                                            '',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 60.sp,
@@ -82,7 +93,7 @@ class MainCategoriesFlipCardsView extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      ' ${context.read<MainCategoriesCubit>().state.data?[index].total??0} Ads',
+                                      ' ${context.read<MainCategoriesCubit>().state.data?[index].total ?? 0} Ads',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 32.sp,

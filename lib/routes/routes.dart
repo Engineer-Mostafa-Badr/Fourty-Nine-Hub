@@ -42,6 +42,7 @@ abstract class Routes {
   static const AUDIOSTREAMSCREEN = '/Social/ClubHouse/ClubHouseRoom';
   static const CHAT = '/Chat';
   static const CHATROOM = '/ChatRoom';
+  static const ARCHIVEDCHATS = '/ArchivedChatsView';
   static const CHATROOMCAMERAPICKER = '/ChatRoom/CameraPicker';
   static const MEDIASLIDER = '/ChatRoom/MediaSlider';
   static const VIEWCONTACT = '/ChatRoom/ViewContact';
@@ -56,10 +57,12 @@ abstract class Routes {
   static const VISITAEMERGENCY = '/Visita/VisitaEmergency';
   static const CREATEDOCTOR = '/Visita/CreateDoctor';
   static const FILTERDOCTORSUBCATEGORY = '/Visita/FilterDoctorSubcategory';
-  static const FILTERDOCTORAREA = '/Visita/FilterDoctorSubcategory/FilterDoctorCity/FilterDoctorArea';
+  static const FILTERDOCTORAREA =
+      '/Visita/FilterDoctorSubcategory/FilterDoctorCity/FilterDoctorArea';
   static const VISITADOCTORLISTBYLOCATION =
       '/Visita/FilterDoctorSubcategory/FilterDoctorGovernorate/FilterDoctorCity/VisitaDoctorsList';
-  static const VISITADOCTORLISTBYCALL = '/Visita/FilterDoctorSubcategory/VisitaDoctorsList';
+  static const VISITADOCTORLISTBYCALL =
+      '/Visita/FilterDoctorSubcategory/VisitaDoctorsList';
   static const FILTERDOCTORGOVERNORATE = '/Visita/FilterDoctorGovernorate';
 
   static const FILTERDOCTORCITY = '/Visita/FilterDoctorCity';
@@ -72,7 +75,8 @@ abstract class Routes {
   static const EDITDOCTORPERSONALINFO = '/Visita/EditDoctorPersonalInfo';
   static const DOCTORSTATISTICS = '/Visita/DoctorStatistics';
   static const DOCTORTODAYAPPOINTMENTS = '/Visita/DoctorTodayAppointments';
-  static const DOCTORUNHANDLEDAPPOINTMENTS = '/Visita/DoctorUnhandledAppointments';
+  static const DOCTORUNHANDLEDAPPOINTMENTS =
+      '/Visita/DoctorUnhandledAppointments';
   static const ALLDOCTORRESERVATIONS = '/Visita/AllDoctorReservations';
   static const FOOD = '/Food';
 
@@ -109,7 +113,8 @@ abstract class Routes {
   static const INSTALLMENT = '/Installment';
   static const CREATEINSTALLMENT = '/Installment/CreateInstallment';
   static const INSTALLMENTDETAILS = '/Installment/Installment-details';
-  static const INSTALLMENTORDERDETAILS = '/Installment/Installment-order-details';
+  static const INSTALLMENTORDERDETAILS =
+      '/Installment/Installment-order-details';
   static const INSTALLMENTORDERS = '/Installment/Installment-orders';
   static const LOGIN = '/Login';
   static const REGISTER = '/Register';
@@ -144,6 +149,7 @@ abstract class Routes {
   static const TRIP_JOIN_REQUEST_HISTORY = '/TripJoinRequestHistory';
 
   static const CAR_POOL = '/CarPool';
+  static const ADD_NEW_ROUTE = '/AddNewRoute';
 
   static const SPOTLIGHT = '/Spotlight';
   static const SNAP = '/Snap';
@@ -162,6 +168,7 @@ abstract class Paths {
   static const FILTERADS = 'FilterAds';
   static const ADS = 'ADS';
   static const ADdetails = 'AD-Details';
+  static const ARCHIVEDCHATS = 'ArchivedChatsView';
   static const CREATEAD = 'CreateAd';
   static const CREATECOMPANYAD = 'CreateCompanyAd';
   static const LUCKYWHEEL = 'LuckyWheel';
@@ -277,6 +284,7 @@ abstract class Paths {
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = 'TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = 'TripJoinRequestHistory';
   static const CAR_POOL = 'CarPool';
+  static const ADD_NEW_ROUTE = 'AddNewRoute';
 
   static const SPOTLIGHT = 'Spotlight';
   static const SNAP = 'Snap';
