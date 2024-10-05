@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 
 part 'chats_state.dart';
@@ -19,6 +20,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   final StopListenToMessagesUseCase _stopListenToMessagesUseCase;
   final MarkMessagesAsDeliveredUseCase _markMeesagesAsDeliveredUseCase;
   final GetChatsUseCase _getChatsUseCase;
+  final ChangeChatToArchiveOrNormalUseCase _changeChatToArchiveOrNormalUseCase;
   final Map<String, ChatEntity> _chats = {};
   ChatCategories _selectedChatCategory = ChatCategories.values.first;
   late ChatEntity _selectedChat;
@@ -29,6 +31,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._listenToNewMessageUseCase,
     this._stopListenToMessagesUseCase,
     this._markMeesagesAsDeliveredUseCase,
+    this._changeChatToArchiveOrNormalUseCase,
   ) : super(const ChatsState());
 
   // Selected Chats
@@ -163,5 +166,12 @@ class ChatsCubit extends Cubit<ChatsState> {
   Future<void> close() {
     _stopListenToMessagesUseCase(const NoParams());
     return super.close();
+  }
+
+  Future<void> changeActiveChat(ChatEntity chat) async {
+    chat.archived = !chat.archived;
+    _changeChatToArchiveOrNormalUseCase(chat.id);
+    getChatsByCategory(_selectedChatCategory);
+    emit(state.copyWith(status: ChatsStates.archived));
   }
 }

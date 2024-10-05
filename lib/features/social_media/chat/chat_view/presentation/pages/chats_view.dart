@@ -421,7 +421,13 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                           ),
                                         ),
                                         IconButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            context
+                                                .read<ChatsCubit>()
+                                                .changeActiveChat(context
+                                                    .read<ChatsCubit>()
+                                                    .selectedChat);
+                                          },
                                           icon: const Icon(
                                             Icons.archive,
                                             color: AppColors.PRIMARY_COLOR,
@@ -905,7 +911,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       child: Column(
         children: [
           // Tab Bar for Social and Services
-           TabBar(
+          TabBar(
             labelColor: AppColors.PRIMARY_COLOR,
             unselectedLabelColor: AppColors.LIGHT_GRAY_COLOR2,
             indicator: const BoxDecoration(
