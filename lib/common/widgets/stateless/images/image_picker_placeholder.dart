@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 
 class ImagePickerPlaceholder extends StatelessWidget {
   final String? tilte;
@@ -58,6 +59,6 @@ class ImagePickerPlaceholder extends StatelessWidget {
     if (tilte == null || tilte!.isEmpty) {
       return SizedBox.shrink();
     }
-    return Center(child: Text(tilte!,textAlign: TextAlign.center,));
+    return Center(child: Text(tilte!,textAlign: TextAlign.center,style: Styles.mediumText(),),);
   }
 }

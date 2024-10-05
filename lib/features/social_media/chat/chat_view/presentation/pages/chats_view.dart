@@ -481,8 +481,10 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               ),
             ),
             SliverAppBar(
-              expandedHeight: MediaQuery.of(context).size.height *
-                  0.15, // Responsive height
+              // expandedHeight: MediaQuery.of(context).size.height *
+              //     0.1, // Responsive height
+              expandedHeight: 0.1.sh, // Responsive height
+
               automaticallyImplyLeading: false,
               floating: true,
               flexibleSpace: BlocProvider(
