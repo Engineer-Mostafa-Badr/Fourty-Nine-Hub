@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/chance_feature/presentation/widgets/chance_view_body.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -18,22 +19,7 @@ class ChanceView extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Center(
-              child: Text(
-                'Just pay at least 1 EGP wait! If you need to pay something!!!\nOne user at least will win every month!!!!',
-                textAlign: TextAlign.center,
-                style: Styles.headerText().copyWith(
-                  color: AppColors.PRIMARY_COLOR_DARK,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+      body: const ChanceViewBody(),
     );
   }
 }
