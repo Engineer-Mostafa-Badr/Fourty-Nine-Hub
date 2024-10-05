@@ -70,16 +70,17 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
         }
         res = 'fail';
       }, (data) {
+        res = 'success';
         emit(CreateRestaurantSuccess(LocaleKeys
             .youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval
             .tr()));
-        res = 'success';
 
         AppPages.router.routerDelegate.navigatorKey.currentContext!
             .read<RestaurantsCubit>()
             .loadData();
 
         AppPages.router.routerDelegate.pop();
+        return res;
       });
     } else {
       res = 'fail';
@@ -103,6 +104,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
       isCity: createRestaurantParams.city?.isEmpty ?? true,
       isGovernorate: createRestaurantParams.government?.isEmpty ?? true,
       isName: createRestaurantParams.name?.isEmpty ?? true,
+      isNumber: createRestaurantParams.name?.isEmpty ?? true,
       isRestaurantPhoto:
           createRestaurantParams.restaurantMedia?.isEmpty ?? true,
       isSubCategory: createRestaurantParams.subcategoryId?.isEmpty ?? true,
@@ -236,10 +238,15 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   }
 
   final name = TextEditingController();
+  final number = TextEditingController();
   final phoneController = TextEditingController();
 
   saveTextEditingController() {
     createRestaurantParams.name = name.text;
+  }
+
+  saveNumberTextEditingController() {
+    createRestaurantParams.number = phoneController.text;
   }
 
   @override

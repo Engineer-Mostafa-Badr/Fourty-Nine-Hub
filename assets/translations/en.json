@@ -880,8 +880,10 @@
   "newRide": "New Ride",
   "cancelRequest": "Cancel Request",
   "sendOffer": "Send Offer",
-  "seeAll": "See All",
   "subscribed" : "Subscribed",
   "unsubscribed" : "Unsubscribed"
+  "seeAll": "See All",
+  "idExpiryDate": "ID Expiry Date",
+  "licenseFrontAndBack": "Upload Your License (Front and Back)"
 
 }

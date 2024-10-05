@@ -15,6 +15,8 @@ class Restaurant extends Equatable {
 
   @JsonKey(name: "name")
   final String? name;
+  @JsonKey(name: "phone")
+  final String? number;
 
   @JsonKey(name: "restaurantMedia")
   final List<RestaurantMediaModel>? restaurantMedia;
@@ -58,6 +60,7 @@ class Restaurant extends Equatable {
   const Restaurant({
     this.id,
     this.name,
+    this.number,
     this.restaurantMedia,
     this.government,
     this.city,
@@ -78,6 +81,7 @@ class Restaurant extends Equatable {
   List<Object?> get props => [
     id,
     name,
+    number,
     restaurantMedia,
     government,
     city,

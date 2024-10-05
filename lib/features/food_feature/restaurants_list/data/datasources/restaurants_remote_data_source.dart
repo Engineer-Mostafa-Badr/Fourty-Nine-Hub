@@ -167,6 +167,7 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
     });
     Map<String, dynamic> data = {
       "name": params.name,
+      "phone": params.number,
       "subcategoryId": params.subcategoryId,
       "restaurantMedia": params.restaurantMedia,
       "licenseMedia": params.licenseMedia,

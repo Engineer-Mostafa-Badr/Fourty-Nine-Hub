@@ -177,8 +177,9 @@ class ShowMneu extends StatelessWidget {
                                     filled: false,
                                     contentPadding: const EdgeInsets.all(10),
                                     hintText: LocaleKeys.itemName.tr(),
-                                    hintStyle:
-                                        const TextStyle(color: Colors.red),
+                                    hintStyle: Styles.mediumText(
+                                        color: AppColors.SECONDARY_COLOR,
+                                        fontSize: 32),
                                     // Set the border color to grey
                                     enabledBorder: OutlineInputBorder(
                                       borderSide:
@@ -226,8 +227,9 @@ class ShowMneu extends StatelessWidget {
                                     filled: false,
                                     contentPadding: const EdgeInsets.all(10),
                                     hintText: LocaleKeys.price.tr(),
-                                    hintStyle:
-                                        const TextStyle(color: Colors.red),
+                                    hintStyle: Styles.mediumText(
+                                        color: AppColors.SECONDARY_COLOR,
+                                        fontSize: 32),
                                     // Set the border color to grey
                                     enabledBorder: OutlineInputBorder(
                                       borderSide:

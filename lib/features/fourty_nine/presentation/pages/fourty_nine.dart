@@ -128,6 +128,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
         drawer: const DrawerWidget(),
         body: ListView(
           controller: scrollController,
+          shrinkWrap: true,
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           children: [
             //carousel slider
@@ -306,9 +307,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             children: [
               Expanded(
                 child: _buildRideSubCategoryItem(
-                  service: state.data![0].service ?? RideServicesEnum.pickMe,
+                  service: state.data?[0].service ?? RideServicesEnum.pickMe,
                   title: 'Carpool',
-                  image: state.data![0].image ?? '',
+                  image: state.data?[0].image ?? '',
                   // isFavorite: state.data![0].is,
                   // numberOfAds: state.data![0].numberOfAds?.toInt(),
                   route: Routes.CAR_POOL,
@@ -318,9 +319,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               Expanded(
                 child: _buildRideSubCategoryItem(
                   service:
-                      state.data![1].service ?? RideServicesEnum.comeWithYou,
+                      state.data?[1].service ?? RideServicesEnum.comeWithYou,
                   title: LocaleKeys.tripJoin.localize,
-                  image: state.data![1].image ?? '',
+                  image: state.data?[1].image ?? '',
                   route: Routes.AVAILABLE_TRIPS,
                   // isFavorite: state.data![1].isFavorite,
                   // numberOfAds: state.data![1].numberOfAds?.toInt(),

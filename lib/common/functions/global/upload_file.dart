@@ -36,7 +36,9 @@ class UploadFile {
           "subcategoryId": subCategoryId
         });
         // send to w3 storage
-        signedURLResponse.fold((l) {}, (data) async {
+        signedURLResponse.fold((l) {
+          print(l.toString());
+        }, (data) async {
           log("response: ${jsonEncode(data)}");
           await sendBinaryFileData(
                   file: file, signedUrl: data['data']['signedUrl'])

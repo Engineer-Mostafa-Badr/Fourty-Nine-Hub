@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -25,30 +27,49 @@ class _CreateDoctorProfilePhotoPickerState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(
-          text: "Photo",
+          text: LocaleKeys.photo.tr(),
           style: Styles.headerText(),
         ),
         const Sizer(),
-        InkWell(
-          onTap: () async {
-            await createDoctorCubit.uploadProfileImage();
-          },
-          child: BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
+        BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
             buildWhen: (previous, current) =>
                 current is CreateDoctorUploadProfileImage ||
                 current is CreateDoctorInitial,
             builder: (context, state) {
               if (state is CreateDoctorUploadProfileImage) {
-                return ImagePickerPlaceholder(
-                  image: Image.file(
-                    File(state.file.path),
+                return Wrap(runSpacing: 10, spacing: 10, children: [
+                  ImagePickerPlaceholder(
+                    image: Image.file(
+                      File(state.file.path),
+                    ),
                   ),
-                );
+                  InkWell(
+                    onTap: () async {
+                      await createDoctorCubit.uploadProfileImage();
+                    },
+                    child: BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
+                        builder: (context, state) {
+                      return const ImagePickerPlaceholder(
+                        borderColor: Colors.grey,
+                        tilte: 'Photo',
+                      );
+                    }),
+                  )
+                ]);
               }
-              return const ImagePickerPlaceholder();
-            },
-          ),
-        ),
+              return InkWell(
+                onTap: () async {
+                  await createDoctorCubit.uploadProfileImage();
+                },
+                child: BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
+                    builder: (context, state) {
+                  return ImagePickerPlaceholder(
+                    borderColor: Colors.grey,
+                    tilte: LocaleKeys.photo.tr(),
+                  );
+                }),
+              );
+            })
       ],
     );
   }

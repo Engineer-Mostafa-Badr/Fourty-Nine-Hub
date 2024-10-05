@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -30,32 +32,31 @@ class CreateDoctorGovernorateDropdown extends StatelessWidget {
                 children: [
                   DropdownMenu(
                       inputDecorationTheme: InputDecorationTheme(
-                        hintStyle: hintStyle,
+                        hintStyle: Styles.mediumText(),
                         // hintStyle: TextStyle(fontSize: 17, color: Colors.red, fontWeight: FontWeight.w600),,
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                                color: field.hasError
-                                    ? Colors.red
-                                    : Colors.black)),
+                                color:
+                                    field.hasError ? Colors.red : Colors.grey)),
                         errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                              color: field.hasError ? Colors.red : Colors.black,
+                              color: field.hasError ? Colors.red : Colors.grey,
                             )),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                              color: field.hasError ? Colors.red : Colors.black,
+                              color: field.hasError ? Colors.red : Colors.grey,
                             )),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                              color: field.hasError ? Colors.red : Colors.black,
+                              color: field.hasError ? Colors.red : Colors.grey,
                             )),
                       ),
                       width: MediaQuery.of(context).size.width * 0.95,
-                      hintText: "Governorate",
+                      hintText: LocaleKeys.governorate.tr(),
                       dropdownMenuEntries: state.governorates
                           .map((e) =>
                               DropdownMenuEntry(value: e, label: e.nameEn))

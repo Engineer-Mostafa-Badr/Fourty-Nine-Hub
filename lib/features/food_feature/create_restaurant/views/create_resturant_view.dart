@@ -62,6 +62,8 @@ class CreateRestaurantForm extends StatelessWidget {
               Sizer(height: 20.h),
               const CreateRestaurantNameField(),
               Sizer(height: 20.h),
+              const CreateRestaurantNumberField(),
+              Sizer(height: 20.h),
               const CreateRestaurantProfilePhotoPicker(),
               Sizer(height: 20.h),
               const CreateRestaurantLicensePhotoPicker(),

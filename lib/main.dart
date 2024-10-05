@@ -101,9 +101,11 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(
           create: (context) => serviceLocator<GetCateogryRiderCubit>(),
-        ), BlocProvider(
+        ),
+        BlocProvider(
           create: (context) => serviceLocator<RiderTripReelTimeCubit>(),
-        ),BlocProvider(
+        ),
+        BlocProvider(
           create: (context) => serviceLocator<RequestRiderTripCubit>(),
         ),
         // BlocProvider(
@@ -147,41 +149,45 @@ class _MyAppState extends State<MyApp> {
                   context: context,
                   notificationListenerUseCase: serviceLocator(),
                 )),
-        BlocProvider(create: (context) => ShowOffersCubit(repository: serviceLocator(),),),
+        BlocProvider(
+          create: (context) => ShowOffersCubit(
+            repository: serviceLocator(),
+          ),
+        ),
       ],
       child: ScreenUtilInit(
-          designSize: const Size(750, 1334),
-          minTextAdapt: true,
-          splitScreenMode: true,
-          builder: (context, child) {
-            context.read<SecretsCubit>().state.secrets?.zegoAppId;
-            return BlocBuilder<ThemeCubit, ThemeStates>(
-              builder: (BuildContext context, state) {
-                return MaterialApp.router(
-                  builder: (context, child) {
-                    return MediaQuery(
-                      data: MediaQuery.of(context)
-                          .copyWith(textScaler: TextScaler.noScaling),
-                      child: child!,
-                    );
-                  },
-                  themeMode: context.read<ThemeCubit>().isDarkTheme
-                      ? ThemeMode.dark
-                      : ThemeMode.light,
-                  theme: lightTheme(),
-                  darkTheme: darkTheme(),
-                  title: '49',
-                  debugShowCheckedModeBanner: false,
-                  routerConfig: AppPages.router,
-                  localizationsDelegates: context.localizationDelegates,
-                  supportedLocales: context.supportedLocales,
-                  locale: context.locale,
-                  // for device preview package
-                  // builder: DevicePreview.appBuilder,
-                );
-              },
-            );
-         },
+        designSize: const Size(750, 1334),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (context, child) {
+          context.read<SecretsCubit>().state.secrets?.zegoAppId;
+          return BlocBuilder<ThemeCubit, ThemeStates>(
+            builder: (BuildContext context, state) {
+              return MaterialApp.router(
+                builder: (context, child) {
+                  return MediaQuery(
+                    data: MediaQuery.of(context)
+                        .copyWith(textScaler: TextScaler.noScaling),
+                    child: child!,
+                  );
+                },
+                themeMode: context.read<ThemeCubit>().isDarkTheme
+                    ? ThemeMode.dark
+                    : ThemeMode.light,
+                theme: lightTheme(),
+                darkTheme: darkTheme(),
+                title: '49',
+                debugShowCheckedModeBanner: false,
+                routerConfig: AppPages.router,
+                localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
+                locale: context.locale,
+                // for device preview package
+                // builder: DevicePreview.appBuilder,
+              );
+            },
+          );
+        },
       ),
     );
   }
