@@ -2773,57 +2773,65 @@ class _MediaPreviewState extends State<MediaPreview> {
                           : Icons.play_arrow,
                     ),
                   )
-                : Sizer(),
+                : const Sizer(),
             Positioned(
               bottom: 0,
               left: 0,
               right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  buildSaveButton(context, widget.mediaPath, widget.mediaType),
-                  buildStoryButton(context,
-                      selectedFile: File(widget.mediaPath)),
-                  Container(
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        _capturePng();
-                        // Handle Send action
-                      },
-                      icon: const Icon(Icons.check_circle_rounded,
-                          color: AppColors.PRIMARY_COLOR),
-                      label: const Text('Apply Filter',
-                          style: TextStyle(color: Colors.black)),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.yellow[700],
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+              child: FittedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const Sizer(),
+                    buildSaveButton(
+                        context, widget.mediaPath, widget.mediaType),
+                    const Sizer(),
+                    buildStoryButton(context,
+                        selectedFile: File(widget.mediaPath)),
+                    const Sizer(),
+                    Container(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          _capturePng();
+                          // Handle Send action
+                        },
+                        icon: const Icon(Icons.check_circle_rounded,
+                            color: AppColors.PRIMARY_COLOR),
+                        label: const Text('Apply Filter',
+                            style: TextStyle(color: Colors.black)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.yellow[700],
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 20),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[800],
-                      shape: BoxShape.circle,
+                    const Sizer(),
+                    Container(
+                      margin: const EdgeInsets.only(right: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[800],
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                          icon: Icon(isCollapsed ? Icons.edit : Icons.edit_off,
+                              size: 30, color: Colors.white),
+                          onPressed: () {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _pageController.jumpToPage(
+                                  selectedFilterIndex); // Change this index to the desired page.
+                            });
+                            setState(() {
+                              isCollapsed = !isCollapsed;
+                            });
+                          }),
                     ),
-                    child: IconButton(
-                        icon: Icon(isCollapsed ? Icons.edit : Icons.edit_off,
-                            size: 30, color: Colors.white),
-                        onPressed: () {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            _pageController.jumpToPage(
-                                selectedFilterIndex); // Change this index to the desired page.
-                          });
-                          setState(() {
-                            isCollapsed = !isCollapsed;
-                          });
-                        }),
-                  )
-                ],
+                    const Sizer(),
+                  ],
+                ),
               ),
             ),
             Align(

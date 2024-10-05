@@ -1046,7 +1046,7 @@ class AppPages {
               builder: (context, state) => MultiBlocProvider(
                     providers: [
                       BlocProvider<RestaurantsCubit>(
-                        create: (context) => serviceLocator()..loadData(),
+                        create: (context) => serviceLocator(),
                       ),
                       BlocProvider<RestaurantsCubit>(
                         create: (context) => serviceLocator(),
