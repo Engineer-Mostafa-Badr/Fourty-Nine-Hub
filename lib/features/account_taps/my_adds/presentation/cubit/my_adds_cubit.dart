@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/get_
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/reject_come_with_me_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/reject_pick_me_usecase.dart';
 
+import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
 
@@ -19,6 +20,7 @@ import '../../domain/usecases/delete_come_with_me_usecase.dart';
 import '../../domain/usecases/delete_my_installment_usecase.dart';
 import '../../domain/usecases/delete_my_trip_join_usecase.dart';
 import '../../domain/usecases/delete_pick_me_usecase.dart';
+import '../../domain/usecases/edit_my_ads_use_case.dart';
 import '../../domain/usecases/get_all_counts_ads_usecase.dart';
 import '../../domain/usecases/get_all_counts_usecase.dart';
 import '../../domain/usecases/get_my_ads_usecase.dart';
@@ -49,6 +51,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
   final DeleteMyInstallmentUseCase _deleteMyInstallmentUseCase;
   final GetAllCountsUseCase _allCountsUseCase;
   final GetAllCountsAdsUseCase _allCountsAdsUseCase;
+  final EditMyAdsUseCase _editMyAdsUseCase;
 
   MyAddsCubit(
       this._getMyAdsUseCase,
@@ -65,7 +68,11 @@ class MyAddsCubit extends Cubit<MyAddsState> {
       this._getMyInstallmentUseCase,
       this._getMyTripJoinUseCase,
       this._deleteMyTripJoinUseCase,
-      this._deleteMyInstallmentUseCase, this._getMyOtherAdsUseCase, this._allCountsUseCase, this._allCountsAdsUseCase)
+      this._deleteMyInstallmentUseCase,
+      this._getMyOtherAdsUseCase,
+      this._allCountsUseCase,
+      this._allCountsAdsUseCase,
+      this._editMyAdsUseCase)
       : super(const MyAddsState());
 
   void loadData() async {
@@ -102,13 +109,14 @@ class MyAddsCubit extends Cubit<MyAddsState> {
         (r) => emit(
             state.copyWith(myInstallments: r, status: MyAddsStates.initState)));
   }
+
   Future<void> getMyOtherAds() async {
     emit(state.copyWith(status: MyAddsStates.loading));
     final response = await _getMyOtherAdsUseCase(const NoParams());
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-            (r) => emit(
+        (r) => emit(
             state.copyWith(myOtherAds: r, status: MyAddsStates.initState)));
   }
 
@@ -248,13 +256,13 @@ class MyAddsCubit extends Cubit<MyAddsState> {
 
   Future<void> getAllCount({
     required Params params,
-}) async {
+  }) async {
     final response = await _allCountsUseCase(params);
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-            (r) => emit(state.copyWith(
-            allCounts: r, status: MyAddsStates.initState)));
+        (r) =>
+            emit(state.copyWith(allCounts: r, status: MyAddsStates.initState)));
   }
 
   Future<void> getAllCountAds({
@@ -262,9 +270,53 @@ class MyAddsCubit extends Cubit<MyAddsState> {
   }) async {
     final response = await _allCountsAdsUseCase(params);
     response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+        (r) =>
+            emit(state.copyWith(countAds: r, status: MyAddsStates.initState)));
+  }
+
+  List<String>? selectedImages;
+
+  uploadPhoto({bool isGallery = true}) async {
+    final UploadFile upload = UploadFile();
+    print("objectssssssssss");
+    await upload.uploadImage(
+        isGallery: isGallery,
+        subCategoryId: '66a3583454e6e337915514db',
+        onUploaded: (UploadFileEntity data) {
+          print("file name ${data.file}");
+          print("mediaId: ${data.mediaId}");
+          selectedImages?.add(data.mediaId);
+          final images = state.images ?? [];
+
+          images.add(data);
+          selectedImages = images.map((e) => e.mediaId).toList();
+          print("selectedImages${selectedImages?.length}");
+          print(images.length);
+          emit(state.copyWith(
+              images: images,
+             // backColor: '#FFFFFFFF',
+              status: MyAddsStates.success));
+        });
+    print("length${state.images?.length}");
+  }
+
+  removePhoto(UploadFileEntity? image) {
+    final images = state.images;
+    images?.remove(image);
+    emit(state.copyWith(images: images, status: MyAddsStates.success));
+    // print(state.fileEntity?.mediaId);
+  }
+
+  Future<void> editMyAds({
+    required EditParams params,
+  }) async {
+    final response = await _editMyAdsUseCase(params);
+    response.fold(
             (failure) =>
             emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-            (r) => emit(state.copyWith(
-            countAds: r, status: MyAddsStates.initState)));
+            (r) =>
+            emit(state.copyWith(status: MyAddsStates.initState)));
   }
 }

@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/get_all_count_ads_entity.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/get_all_counts_trip_join_entity.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/my_ads_trip_join_entity.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/edit_my_ads_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/get_all_counts_ads_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/get_all_counts_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/update_my_ads_usecase.dart';
@@ -119,5 +120,10 @@ class MyAdsRepoImpl implements MyAdsRepo {
   @override
   Future<Either<Failure, bool>> updateMyAds(UpdateMyAdsParams params) {
     return _remoteDatasource.updateMyAds(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> editMyAds(EditParams params) {
+    return _remoteDatasource.editMyAds(params);
   }
 }

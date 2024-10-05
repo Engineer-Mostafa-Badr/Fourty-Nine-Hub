@@ -21,10 +21,12 @@ import '../../../../account_taps/my_adds/domain/entity/my_ads_auction.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../cubit/my_adds_cubit.dart';
+import '../pages/edit_my_ads.dart';
 import 'custom_button_count_ads.dart';
 
 class BuildItemAuctionCard extends StatelessWidget {
   final MyAuctionAdsEntity item;
+
   //final Function(String) onDelete;
 
   const BuildItemAuctionCard({super.key, required this.item});
@@ -54,7 +56,9 @@ class BuildItemAuctionCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Label(text: "${LocaleKeys.createdOn.localize} ${DateFormat('yyyy-MM-dd').format(item.createdAt)}"),
+                  Label(
+                      text:
+                          "${LocaleKeys.createdOn.localize} ${DateFormat('yyyy-MM-dd').format(item.createdAt)}"),
                   const Sizer(
                     height: 15,
                   ),
@@ -65,7 +69,9 @@ class BuildItemAuctionCard extends StatelessWidget {
                   Row(
                     children: [
                       BadgedLabel(
-                        label: item.isApproved == true ? LocaleKeys.active.localize : LocaleKeys.pending.localize,
+                        label: item.isApproved == true
+                            ? LocaleKeys.active.localize
+                            : LocaleKeys.pending.localize,
                         color: AppColors.SECONDARY_COLOR,
                         style: Styles.smallText(color: Colors.white),
                       ),
@@ -88,7 +94,16 @@ class BuildItemAuctionCard extends StatelessWidget {
                               backColor: AppColors.PRIMARY_COLOR,
                               color: AppColors.AUTH_CONTAINER_COLOR,
                               label: LocaleKeys.edit.localize,
-                              onPressed: () {}
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EditMyAds(
+                                              sub: item.subCategory,
+                                              main: item.mainCategory,
+                                              item: item,
+                                            )));
+                              }
                               // showAreYouSure(
                               //     title: LocaleKeys.deleteAd.localize,
                               //     subTitle: LocaleKeys.sureRemoveAd.localize,
@@ -103,7 +118,8 @@ class BuildItemAuctionCard extends StatelessWidget {
                         color: AppColors.AUTH_CONTAINER_COLOR,
                         label: LocaleKeys.subscriptions.localize,
                         onPressed: () {
-                          serviceLocator<SubscriptionController>().showSubscriptionPlans(
+                          serviceLocator<SubscriptionController>()
+                              .showSubscriptionPlans(
                             wallets: [
                               WalletTypes.mainWallet,
                               WalletTypes.giftWallet,
@@ -189,13 +205,17 @@ class BuildItemAuctionCard extends StatelessWidget {
                 Row(
                   children: [
                     Label(
-                        text: context.locale == Locales.english ? item.mainCategory.nameEn : item.mainCategory.nameAr,
+                        text: context.locale == Locales.english
+                            ? item.mainCategory.nameEn
+                            : item.mainCategory.nameAr,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         color: Theme.of(context).scaffoldBackgroundColor),
                     const Sizer(),
                     Label(
-                        text: context.locale == Locales.english ? item.subCategory.nameEn : item.subCategory.nameAr,
+                        text: context.locale == Locales.english
+                            ? item.subCategory.nameEn
+                            : item.subCategory.nameAr,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         color: Theme.of(context).scaffoldBackgroundColor),
@@ -215,7 +235,9 @@ class BuildItemAuctionCard extends StatelessWidget {
                       _buildOptionsWidget(
                         label: LocaleKeys.markSsSold.localize,
                         onTap: () {
-                          context.read<MyAddsCubit>().deleteMyInstallment(id: item.id);
+                          context
+                              .read<MyAddsCubit>()
+                              .deleteMyInstallment(id: item.id);
                           Navigator.pop(context);
                         },
                         icon: Icons.hourglass_empty_rounded,
@@ -224,7 +246,9 @@ class BuildItemAuctionCard extends StatelessWidget {
                       _buildOptionsWidget(
                         label: LocaleKeys.deactivate.localize,
                         onTap: () {
-                          context.read<MyAddsCubit>().deleteMyInstallment(id: item.id);
+                          context
+                              .read<MyAddsCubit>()
+                              .deleteMyInstallment(id: item.id);
                           Navigator.pop(context);
                         },
                         icon: Icons.refresh,
@@ -233,7 +257,9 @@ class BuildItemAuctionCard extends StatelessWidget {
                       _buildOptionsWidget(
                         label: LocaleKeys.deleteAd.localize,
                         onTap: () {
-                          context.read<MyAddsCubit>().deleteMyInstallment(id: item.id);
+                          context
+                              .read<MyAddsCubit>()
+                              .deleteMyInstallment(id: item.id);
                           Navigator.pop(context);
                           // showAreYouSure(
                           //   title: LocaleKeys.deleteAd.localize,
@@ -253,7 +279,8 @@ class BuildItemAuctionCard extends StatelessWidget {
                   ],
                 ));
           },
-          child: Icon(Icons.more_vert, color: Theme.of(context).scaffoldBackgroundColor),
+          child: Icon(Icons.more_vert,
+              color: Theme.of(context).scaffoldBackgroundColor),
         )
       ]),
     );
@@ -264,89 +291,93 @@ class BuildItemAuctionCard extends StatelessWidget {
       children: [
         Expanded(
             child: GestureDetector(
-              onTap: () {
-                print(')))))))))))))))))))');
-                print(item.id);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CustomButtonCountAds(
-                        model: item,
-                        status: 'viewCount',
-                      ),
-                    ));
-              },
-              child: _buildContactItem(
-                  icon: Icons.visibility_outlined,
-                  label: LocaleKeys.view.localize,
-                  value: item.viewCountLength,
-                  context: context),
-            )),
+          onTap: () {
+            print(')))))))))))))))))))');
+            print(item.id);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CustomButtonCountAds(
+                    model: item,
+                    status: 'viewCount',
+                  ),
+                ));
+          },
+          child: _buildContactItem(
+              icon: Icons.visibility_outlined,
+              label: LocaleKeys.view.localize,
+              value: item.viewCountLength,
+              context: context),
+        )),
         Expanded(
             child: GestureDetector(
-              onTap: () {
-                print(')))))))))))))))))))');
-                print(item.id);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CustomButtonCountAds(
-                        model: item,
-                        status: 'phoneCount',
-                      ),
-                    ));
-              },
-              child: _buildContactItem(
-                  icon: Icons.call_outlined,
-                  label: LocaleKeys.tel.localize,
-                  value: item.phoneCountLength,
-                  context: context),
-            )),
+          onTap: () {
+            print(')))))))))))))))))))');
+            print(item.id);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CustomButtonCountAds(
+                    model: item,
+                    status: 'phoneCount',
+                  ),
+                ));
+          },
+          child: _buildContactItem(
+              icon: Icons.call_outlined,
+              label: LocaleKeys.tel.localize,
+              value: item.phoneCountLength,
+              context: context),
+        )),
         Expanded(
             child: GestureDetector(
-              onTap: () {
-                print(')))))))))))))))))))');
-                print(item.id);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CustomButtonCountAds(
-                        model: item,
-                        status: 'chatCount',
-                      ),
-                    ));
-              },
-              child: _buildContactItem(
-                  icon: Icons.chat_bubble_outline,
-                  label: LocaleKeys.chats.localize,
-                  value: item.chatCountLength,
-                  context: context),
-            )),
+          onTap: () {
+            print(')))))))))))))))))))');
+            print(item.id);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CustomButtonCountAds(
+                    model: item,
+                    status: 'chatCount',
+                  ),
+                ));
+          },
+          child: _buildContactItem(
+              icon: Icons.chat_bubble_outline,
+              label: LocaleKeys.chats.localize,
+              value: item.chatCountLength,
+              context: context),
+        )),
         Expanded(
             child: GestureDetector(
-              onTap: () {
-                print(')))))))))))))))))))');
-                print(item.id);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CustomButtonCountAds(
-                        model: item,
-                        status: 'loveCount',
-                      ),
-                    ));
-              },
-              child: _buildContactItem(
-                  icon: Icons.favorite_border_outlined,
-                  label: LocaleKeys.like.localize,
-                  value: item.loveCountLength,
-                  context: context),
-            )),
+          onTap: () {
+            print(')))))))))))))))))))');
+            print(item.id);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CustomButtonCountAds(
+                    model: item,
+                    status: 'loveCount',
+                  ),
+                ));
+          },
+          child: _buildContactItem(
+              icon: Icons.favorite_border_outlined,
+              label: LocaleKeys.like.localize,
+              value: item.loveCountLength,
+              context: context),
+        )),
       ],
     );
   }
 
-  Widget _buildContactItem({required IconData icon, required String label, required int value, required context}) {
+  Widget _buildContactItem(
+      {required IconData icon,
+      required String label,
+      required int value,
+      required context}) {
     return Row(
       children: [
         Container(
