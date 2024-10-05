@@ -51,7 +51,7 @@ final class StreamCubit extends Cubit<StreamState> {
     final String liveId = '${min + Random().nextInt(max - min)}';
     return liveId;
   }
-
+//callable class
   Future<bool> createNewMeeting({
     DateTime? startTime,
     DateTime? endTime,
