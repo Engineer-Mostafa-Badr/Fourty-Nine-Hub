@@ -19,8 +19,12 @@ class SubscribeViewBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(
-            child: SizedBox(
+            child:
+            Container(
               height: 200,
+              decoration: const BoxDecoration(
+
+              ),
               child: Image.asset('assets/images/doctor.png'),
             ),
           ),
