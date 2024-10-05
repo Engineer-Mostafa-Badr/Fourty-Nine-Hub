@@ -859,5 +859,7 @@ abstract class  LocaleKeys {
   static const cancelRequest = 'cancelRequest';
   static const sendOffer = 'sendOffer';
   static const seeAll = 'seeAll';
+  static const subscribed = 'subscribed';
+  static const unsubscribed = 'unsubscribed';
 
 }

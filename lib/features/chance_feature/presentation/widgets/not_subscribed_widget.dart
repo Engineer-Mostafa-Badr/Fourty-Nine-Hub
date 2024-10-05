@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 
 class NotSubscribedWidget extends StatelessWidget {
@@ -25,7 +26,7 @@ class NotSubscribedWidget extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            'غير مشترك',
+              LocaleKeys.unsubscribed.localize ,
             style: Styles.mediumText(
               color: AppColors.PRIMARY_COLOR
             )

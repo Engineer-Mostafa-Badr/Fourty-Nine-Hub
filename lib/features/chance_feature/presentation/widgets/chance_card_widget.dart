@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/features/chance_feature/presentation/widgets/chance_ditails_widget.dart';
+import 'package:fourtyninehub/features/chance_feature/presentation/pages/chance_details_view.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/image_card_widget.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/not_subscribed_widget.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/slider_card_widget.dart';
@@ -15,7 +15,7 @@ class ChanceCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> const ChanceDitailsWidget())) ;
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> const ChanceDetailsView())) ;
       },
       child: Container(
         decoration: BoxDecoration(
@@ -33,27 +33,36 @@ class ChanceCardWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'قسيمة تسوق ب 200 جنيه',
+                    '200 EGP shopping voucher',
                     style:Styles.mediumText(
-                      fontSize: 60.sp
+                      fontSize: 50.sp
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 6),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        '200 ج.م',
+                        '200',
                         style: TextStyle(
-                          fontSize: 35.sp,
+                          fontSize: 40.sp,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.QUANTITY_COLOR,
+                        ),
+                      ),
+                      Text(
+                        'EGP',
+                        style: TextStyle(
+                          fontSize:25.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.SECONDARY_COLOR,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 6),
                   const NotSubscribedWidget(),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 3),
                   const SliderCardWidget(),
                 ],
               ),

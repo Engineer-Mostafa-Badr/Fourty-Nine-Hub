@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../res/style/app_colors.dart';
+
 class SliderCardWidget extends StatefulWidget {
   const SliderCardWidget({super.key});
 
@@ -18,8 +20,8 @@ class _SliderCardWidgetState extends State<SliderCardWidget> {
         data: SliderTheme.of(context).copyWith(
           trackHeight: 9.0,
           thumbShape: SliderComponentShape.noThumb,
-          activeTrackColor: Colors.green,
-          inactiveTrackColor: Colors.grey,
+          activeTrackColor: AppColors.SECONDARY_COLOR,
+          inactiveTrackColor: AppColors.GREY_NORMAL_COLOR,
         ),
         child: Slider(
           value: _sliderValue,

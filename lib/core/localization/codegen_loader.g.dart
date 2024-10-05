@@ -885,7 +885,9 @@ class CodegenLoader extends AssetLoader{
   "newRide": "رحلة جديدة",
   "cancelRequest": "إلغاء الطلب",
   "sendOffer": "إرسال العرض",
-  "seeAll": "شاهد الكل"
+  "seeAll": "شاهد الكل",
+  "subscribed": "مشترك",
+  "unsubscribed": "غير مشرك"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1761,7 +1763,9 @@ static const Map<String,dynamic> en = {
   "newRide": "New Ride",
   "cancelRequest": "Cancel Request",
   "sendOffer": "Send Offer",
-  "seeAll": "See All"
+  "seeAll": "See All",
+  "subscribed": "Subscribed",
+  "unsubscribed": "Unsubscribed"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

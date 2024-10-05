@@ -881,4 +881,7 @@
   "cancelRequest": "Cancel Request",
   "sendOffer": "Send Offer",
   "seeAll": "See All",
+  "subscribed" : "Subscribed",
+  "unsubscribed" : "Unsubscribed"
+
 }
