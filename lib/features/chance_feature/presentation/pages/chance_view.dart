@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/chance_feature/presentation/widgets/chanc
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import '../widgets/floating_action_button_widget.dart';
 
 class ChanceView extends StatelessWidget {
   const ChanceView({super.key});
@@ -19,6 +20,7 @@ class ChanceView extends StatelessWidget {
         ),
         centerTitle: true,
       ),
+      floatingActionButton: const FloatingActionButtonWidget(),
       body: const ChanceViewBody(),
     );
   }
