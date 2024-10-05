@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/image_card_widget.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/not_subscribed_widget.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/slider_card_widget.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../res/style/app_colors.dart';
 

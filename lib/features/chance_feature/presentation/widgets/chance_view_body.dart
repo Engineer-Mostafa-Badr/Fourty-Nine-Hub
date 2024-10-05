@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/LIst_view_card.dart';
-import 'package:fourtyninehub/features/chance_feature/presentation/widgets/chance_card_widget.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
