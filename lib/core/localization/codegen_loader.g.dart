@@ -92,6 +92,7 @@ class CodegenLoader extends AssetLoader{
   "gifts": "هدايا",
   "goalsAreSelectedSuccess": "تم اختيار الاهداف",
   "restaurantName": "إسم المطعم",
+  "restaurantNumber": "رقم المطعم",
   "theCommercialRegister": "السجل التجاري",
   "theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider": "التطبيق لا يخصم اي نسبه من مزود الخدمة",
   "youWillGetEGP3650PerYearIfYouSubscribeDaily": "سوف تحصل على 3650 جنيها في السنه عندما تشترك يوميا",
@@ -887,7 +888,9 @@ class CodegenLoader extends AssetLoader{
   "sendOffer": "إرسال العرض",
   "seeAll": "شاهد الكل",
   "idExpiryDate": "تاريخ انتهاء الهوية",
-  "licenseFrontAndBack": "قم بتحميل الترخيص  (الوجه والظهر)"
+  "licenseFrontAndBack": "قم بتحميل الترخيص  (الوجه والظهر)",
+  "subscribed": "مشترك",
+  "unsubscribed": "غير مشرك"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1763,6 +1766,8 @@ static const Map<String,dynamic> en = {
   "newRide": "New Ride",
   "cancelRequest": "Cancel Request",
   "sendOffer": "Send Offer",
+  "subscribed": "Subscribed",
+  "unsubscribed": "Unsubscribed",
   "seeAll": "See All",
   "idExpiryDate": "ID Expiry Date",
   "licenseFrontAndBack": "Upload Your License (Front and Back)"
