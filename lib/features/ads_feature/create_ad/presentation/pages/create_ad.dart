@@ -66,7 +66,7 @@ class _CreateAdViewState extends State<CreateAdView> {
         appBar: BackAppBar(label: LocaleKeys.createAd.localize),
         body: BlocBuilder<CreateAdCubit, CreateAdState>(
           builder: (context, state) {
-            if (state.status == CreateAdStates.success) {
+            if (state.status == CreateAdStates.success||state.status == CreateAdStates.loadCitiesSuccess||state.status == CreateAdStates.loadCities||state.status == CreateAdStates.imageUploading||state.status == CreateAdStates.initState) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Form(
@@ -250,72 +250,78 @@ class _CreateAdViewState extends State<CreateAdView> {
                           }
                         },
                       ),
-                      // const Sizer(),
-                      //
-                      // Label(text: LocaleKeys.governorate.localize),
-                      // SizedBox(
-                      //   width: double.infinity,
-                      //   child: DropdownButtonFormField<GovernorateEntity>(
-                      //     decoration: InputDecoration(
-                      //       contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                      //       border: OutlineInputBorder(
-                      //         borderRadius: BorderRadius.circular(8),
-                      //         borderSide: const BorderSide(
-                      //           color: Colors.grey, // Border color
-                      //           width: 1.0,         // Border width
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     hint: Text(LocaleKeys.selectGovernorate.tr()),
-                      //     value: null,
-                      //     onChanged: (GovernorateEntity? newValue) {
-                      //       // Handle selection
-                      //     },
-                      //     dropdownColor: Colors.white,
-                      //     items: state.governorates?.map<DropdownMenuItem<GovernorateEntity>>((GovernorateEntity government) {
-                      //       return DropdownMenuItem<GovernorateEntity>(
-                      //         value: government,
-                      //         child: Text(government.nameEn), // Change to city.nameAr for Arabic
-                      //       );
-                      //     }).toList(),
-                      //   ),
-                      // ),
-                      //
-                      // const Sizer(),
-                      // state.cities!=null?Column(
-                      //   crossAxisAlignment: CrossAxisAlignment.start,
-                      //   children:[
-                      //     Label(text: LocaleKeys.city.localize),
-                      //     SizedBox(
-                      //       width: double.infinity,
-                      //       child: DropdownButtonFormField<CityEntity>(
-                      //         decoration: InputDecoration(
-                      //           contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                      //           border: OutlineInputBorder(
-                      //             borderRadius: BorderRadius.circular(8),
-                      //             borderSide: const BorderSide(
-                      //               color: Colors.grey, // Border color
-                      //               width: 1.0,         // Border width
-                      //             ),
-                      //           ),
-                      //         ),
-                      //         hint: Text(LocaleKeys.selectCity.tr()),
-                      //         value: null,
-                      //         onChanged: (CityEntity? newValue) {
-                      //           // Handle selection
-                      //         },
-                      //         dropdownColor: Colors.white,
-                      //         items: state.cities?.map<DropdownMenuItem<CityEntity>>((CityEntity city) {
-                      //           return DropdownMenuItem<CityEntity>(
-                      //             value: city,
-                      //             child: Text(city.nameEn), // Change to city.nameAr for Arabic
-                      //           );
-                      //         }).toList(),
-                      //       ),
-                      //     ),
-                      //
-                      //   ],
-                      // ):const SizedBox.shrink(),
+                      const Sizer(),
+
+                      Label(text: LocaleKeys.governorate.localize),
+                      SizedBox(
+                        width: double.infinity,
+                        child: DropdownButtonFormField<GovernorateEntity>(
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                color: Colors.grey, // Border color
+                                width: 1.0,         // Border width
+                              ),
+                            ),
+                          ),
+                          hint: Text(LocaleKeys.selectGovernorate.tr()),
+                          value: null,
+                          onChanged: (GovernorateEntity? newValue) {
+                            controller.selectGovernorate(newValue?.id??'');
+                            print("state.governorate${state.governorate}");
+                            print("state.city${state.city}");
+                            controller.getCities(newValue?.id??'');
+                          },
+                          dropdownColor: Colors.white,
+                          items: state.governorates?.map<DropdownMenuItem<GovernorateEntity>>((GovernorateEntity government) {
+                            return DropdownMenuItem<GovernorateEntity>(
+                              value: government,
+                              child: Text(government.nameEn), // Change to city.nameAr for Arabic
+                            );
+                          }).toList(),
+                        ),
+                      ),
+
+                      const Sizer(),
+                      state.status==CreateAdStates.loadCities?Center(child: const CircularProgressIndicator()):state.status==CreateAdStates.loadCitiesSuccess?Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children:[
+                          Label(text: LocaleKeys.city.localize),
+                          SizedBox(
+                            width: double.infinity,
+                            child: DropdownButtonFormField<CityEntity>(
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: const BorderSide(
+                                    color: Colors.grey, // Border color
+                                    width: 1.0,         // Border width
+                                  ),
+                                ),
+                              ),
+                              hint: Text(LocaleKeys.selectCity.tr()),
+                              value: null,
+                              onChanged: (CityEntity? newValue) {
+                                print(newValue?.id);
+                                controller.selectCity(newValue?.id??'');
+                                print("state.governorate${state.governorate}");
+                                print("state.city${state.city}");
+                              },
+                              dropdownColor: Colors.white,
+                              items: state.cities?.map<DropdownMenuItem<CityEntity>>((CityEntity city) {
+                                return DropdownMenuItem<CityEntity>(
+                                  value: city,
+                                  child: Text(city.nameEn), // Change to city.nameAr for Arabic
+                                );
+                              }).toList(),
+                            ),
+                          ),
+
+                        ],
+                      ):const SizedBox.shrink(),
                       const Sizer(),
                       Label(
                           text: state.isPrice == true

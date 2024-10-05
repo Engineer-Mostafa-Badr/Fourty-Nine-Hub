@@ -7,6 +7,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
@@ -158,6 +159,8 @@ class _MyAppState extends State<MyApp> {
             context.read<SecretsCubit>().state.secrets?.zegoAppId;
             return BlocBuilder<ThemeCubit, ThemeStates>(
               builder: (BuildContext context, state) {
+                // double width = MediaQuery.sizeOf(context).width;
+                // double widthFromExtensionMethodOfContext = context.screenWidth;
                 return MaterialApp.router(
                   builder: (context, child) {
                     return MediaQuery(

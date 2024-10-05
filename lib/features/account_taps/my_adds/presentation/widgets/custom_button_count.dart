@@ -34,6 +34,9 @@ class CustomButtonCount extends StatelessWidget {
           ..getAllCount(params: Params(id: id, status: status)),
         child: BlocBuilder<MyAddsCubit, MyAddsState>(
           builder: (BuildContext context, state) {
+            if(state.status ==MyAddsStates.loading){
+              return const Center(child: CircularProgressIndicator());
+            }
             if (state.status == MyAddsStates.initState) {
               if (state.allCounts == null || state.allCounts!.isEmpty) {
                 return const EmptyPage();
