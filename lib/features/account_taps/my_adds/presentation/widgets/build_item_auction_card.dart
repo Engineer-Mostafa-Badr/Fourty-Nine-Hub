@@ -99,9 +99,9 @@ class BuildItemAuctionCard extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => EditMyAds(
-                                              sub: item.subCategory,
-                                              main: item.mainCategory,
-                                              item: item,
+                                              // sub: item.subCategory,
+                                              // main: item.mainCategory,
+                                              categorization: item,
                                             )));
                               }
                               // showAreYouSure(
