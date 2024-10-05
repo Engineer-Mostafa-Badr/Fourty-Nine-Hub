@@ -13,6 +13,8 @@ class AdModel extends AdEntity {
       required super.images,
       super.price,
       super.type,
+      super.city,
+      super.governorate,
       super.isFavourite,
       super.hasAuction,
       super.address,
@@ -62,6 +64,7 @@ class AdModel extends AdEntity {
         "phone": phone,
         "title": title,
         "type": type,
+
         // "type": (hasAuction==false&&isUser==false)?"provider":(hasAuction==false&&isUser==true)?"user":(hasAuction==true&&isUser==false)?'rent':'sale',
         "subCategoryId": subCategoryId,
         "mainCategoryId": mainCategoryId,
@@ -76,6 +79,10 @@ class AdModel extends AdEntity {
               "propertyId": e.propId
             };
           }
-        }).toList()
+        }).toList(),
+    "address": {
+      "government": governorate,
+      "city": city
+      }
       };
 }

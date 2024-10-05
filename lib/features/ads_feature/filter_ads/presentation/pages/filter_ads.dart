@@ -1,44 +1,40 @@
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/widgets/ad_dynamic_inputs.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 
-import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
-import '../../../../../common/widgets/stateless/labels/badged_label.dart';
-import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/error/failure.dart';
-import '../../../../../core/messages/messages.dart';
-import '../../../../../res/assets/assets.dart';
-import '../../../../../res/style/app_colors.dart';
-import '../../../../../res/style/styles.dart';
-
-import '../../domain/entities/categorization_entity.dart';
-import '../widgets/ad_dynamic_inputs.dart';
-
-class CreateAdView extends StatefulWidget {
+class FilterAdsView extends StatefulWidget {
   final CategorizationEntity categorization;
-  const CreateAdView({super.key, required this.categorization});
+  const FilterAdsView({super.key, required this.categorization});
 
   @override
-  State<CreateAdView> createState() => _CreateAdViewState();
+  State<FilterAdsView> createState() => _FilterAdsViewState();
 }
 
-class _CreateAdViewState extends State<CreateAdView> {
+class _FilterAdsViewState extends State<FilterAdsView> {
   @override
   void initState() {
     context.read<CreateAdCubit>().loadData(subCategoryId: widget.categorization.mainCategory.id);

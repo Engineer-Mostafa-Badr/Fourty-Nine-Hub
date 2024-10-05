@@ -10,6 +10,8 @@ class AdEntity {
   final String id;
   final String title;
   String? type;
+  String? city;
+  String? governorate;
   bool? hasAuction;
   bool? isFavourite;
   final String description;
@@ -37,6 +39,8 @@ class AdEntity {
       required this.description,
       required this.images,
       this.price,
+      this.city,
+      this.governorate,
       this.type,
       this.isFavourite = false,
       this.hasAuction = false,

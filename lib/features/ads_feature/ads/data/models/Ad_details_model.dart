@@ -18,6 +18,7 @@ class AddDetailsModel extends AdDetailsEntity {
         super.isDeleted,
        super.price,
         super.type,
+        super.cityAr,super.cityEn,super.governorateAr,super.governorateEn,
         super.status,
         super.phone,
         super.views,
@@ -48,6 +49,10 @@ class AddDetailsModel extends AdDetailsEntity {
     return AddDetailsModel(
         id: json['_id'] ?? '',
         userId: json['_id'] ?? '',
+        cityAr: json['cityData']!=null?(json['cityData']['city_name_ar'] ?? ''):'',
+        cityEn: json['cityData']!=null?(json['cityData']['city_name_en'] ?? ''):'',
+        governorateAr: json['governmentData']!=null?(json['governmentData']['governorate_name_ar'] ?? ''):'',
+        governorateEn: json['governmentData']!=null?(json['governmentData']['governorate_name_en'] ?? ''):'',
         subCategoryId: json['subCategoryId']??'',
         mainCategoryId: json['mainCategoryId']??'',
         title: json['title'] ?? '',
