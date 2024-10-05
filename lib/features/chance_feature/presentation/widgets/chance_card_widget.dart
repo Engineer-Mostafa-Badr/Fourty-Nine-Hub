@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/pages/chance_details_view.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/image_card_widget.dart';
-import 'package:fourtyninehub/features/chance_feature/presentation/widgets/not_subscribed_widget.dart';
+import 'package:fourtyninehub/features/chance_feature/presentation/widgets/subscribe_widget_in_card.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/slider_card_widget.dart';
 
 import '../../../../res/style/app_colors.dart';
