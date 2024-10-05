@@ -16,15 +16,16 @@ class ShippingRiderTabScreen extends StatelessWidget {
           children: [
             TabBar(
               tabs: [
+                Text("Ride"),
                 Text("Ship"),
-                Text("Rider"),
               ],
             ),
             Expanded(
               child: TabBarView(
                 children: [
-                  CreateShippingView(),
                   RideRequestView(),
+                  CreateShippingView()
+
                 ],
               ),
             )

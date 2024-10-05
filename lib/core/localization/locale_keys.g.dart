@@ -78,6 +78,7 @@ abstract class  LocaleKeys {
   static const gifts = 'gifts';
   static const goalsAreSelectedSuccess = 'goalsAreSelectedSuccess';
   static const restaurantName = 'restaurantName';
+  static const restaurantNumber = 'restaurantNumber';
   static const theCommercialRegister = 'theCommercialRegister';
   static const theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider = 'theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider';
   static const youWillGetEGP3650PerYearIfYouSubscribeDaily = 'youWillGetEGP3650PerYearIfYouSubscribeDaily';
@@ -861,5 +862,6 @@ abstract class  LocaleKeys {
   static const seeAll = 'seeAll';
   static const idExpiryDate = 'idExpiryDate';
   static const licenseFrontAndBack = 'licenseFrontAndBack';
+  static const expiredRequests = 'expiredRequests';
 
 }

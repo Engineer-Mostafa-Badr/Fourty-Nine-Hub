@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
@@ -110,6 +111,13 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     emit(state.copyWith(images: images));
   }
 
+  void selectGovernorate(String id){
+    emit(state.copyWith(governorate: id,city: ''));
+  }
+  void selectCity(String id){
+    emit(state.copyWith(city: id));
+  }
+
   final user = UserCubit.to.state.data?.id;
   void createAd(
       {required CategorizationEntity categorize,
@@ -131,8 +139,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       print(state.isSale);
       type = "sale";
     }
-    if ((formState.currentState?.validate() ?? false) &&
-        (state.images?.isNotEmpty ?? false)) {
+    if ((formState.currentState?.validate() ?? false) && (state.images?.isNotEmpty ?? false)&&(state.city !='')&&state.governorate !='') {
       List<CreateAdEntity> details = [];
       for (int i = 0; i < (state.adProperties?.length ?? 0); i++) {
         details.add(CreateAdEntity(
@@ -144,6 +151,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
         id: 'id',
         title: title ?? '',
         type: type,
+        city: state.city,
+        governorate: state.governorate,
         // isUser: categorize.subCategory.hasAuction==true?state.isSale:state.isUser,
         description: description ?? '',
         phone: phone ?? '',
@@ -161,6 +170,12 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           (r) {
         context.pushReplacement(Routes.MYADDS);
       });
+    }else if(state.images==[]||state.images==null){
+      showErrorMessage(context, 'messageImages');
+    }else if(state.governorate == ''){
+      showErrorMessage(context, 'messageGovernorate');
+    }else if(state.city == ''){
+      showErrorMessage(context, 'messageCity');
     }
   }
 
@@ -179,10 +194,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     final response = await _citiesUseCase.call(governorateId);
 
     response.fold(
-      (failure) =>
-          emit(state.copyWith(failure: failure, status: CreateAdStates.error)),
-      (data) =>
-          emit(state.copyWith(cities: data, status: CreateAdStates.success)),
+      (failure) => emit(state.copyWith(failure: failure, status: CreateAdStates.error)),
+      (data) => emit(state.copyWith(cities: data, status: CreateAdStates.loadCitiesSuccess)),
     );
   }
 }

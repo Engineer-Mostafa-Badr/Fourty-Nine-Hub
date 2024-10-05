@@ -11,6 +11,10 @@ class AdDetailsEntity {
   final String? userId;
   final String? subCategoryId;
   final String? mainCategoryId;
+  final String? cityAr;
+  final String? cityEn;
+  final String? governorateAr;
+  final String? governorateEn;
   final String title;
   final String description;
   final List<String> images;
@@ -39,15 +43,15 @@ class AdDetailsEntity {
       {required this.id,
       required this.title,
       required this.description,
-      required this.images,
-      this.price,
-      this.type,
-      this.status,
-      this.views,
-      this.requestsCount,
-      this.isFavourite = false,
-      this.isDeleted = false,
-      this.isPrimary = false,
+      required this.images, this.price,
+        this.type,
+        this.cityAr,this.cityEn,this.governorateAr,this.governorateEn,
+        this.status,
+        this.views,
+        this.requestsCount,
+        this.isFavourite=false,
+        this.isDeleted=false,
+        this.isPrimary=false,
       required this.address,
       this.phone,
       this.statistics,

@@ -14,6 +14,7 @@ class Restaurant2Model extends Restaurant {
   const Restaurant2Model(
       {super.id,
       super.name,
+      super.number,
       super.subscriptionType, // Added subscriptionType
       super.city,
       super.mainCategoryId,

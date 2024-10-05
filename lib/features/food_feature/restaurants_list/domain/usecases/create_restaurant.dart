@@ -18,6 +18,7 @@ class CreateRestaurantUseCase {
 
 class CreateRestaurantParams {
   String? name = '';
+  String? number = '';
   String? subcategoryId = '';
   List<String>? restaurantMedia = [];
   List<String>? licenseMedia = [];
@@ -33,6 +34,7 @@ class CreateRestaurantParams {
   String? ownerIdFrontMedia = "";
   List<RestaurantMneuModel>? mneu;
   CreateRestaurantParams({
+    this.number,
     this.name,
     this.subcategoryId,
     this.restaurantMedia,
@@ -52,6 +54,8 @@ class CreateRestaurantParams {
 
   CreateRestaurantParams copyWith({
     String? name,
+    String? number ,
+
     String? subcategoryId,
     List<String>? restaurantMedia,
     List<String>? licenseMedia,
@@ -69,6 +73,7 @@ class CreateRestaurantParams {
   }) {
     return CreateRestaurantParams(
       name: name ?? this.name,
+      number: number ?? this.number,
       subcategoryId: subcategoryId ?? this.subcategoryId,
       restaurantMedia: restaurantMedia ?? this.restaurantMedia,
       licenseMedia: licenseMedia ?? this.licenseMedia,
@@ -91,6 +96,8 @@ class CreateRestaurantParams {
 
     if (name != null) {
       result.addAll({'name': name});
+    } if (number != null) {
+      result.addAll({'phone': number});
     }
     if (subcategoryId != null) {
       result.addAll({'subcategoryId': subcategoryId});
@@ -141,6 +148,7 @@ class CreateRestaurantParams {
   factory CreateRestaurantParams.fromMap(Map<String, dynamic> map) {
     return CreateRestaurantParams(
       name: map['name'],
+      number: map['phone'],
       subcategoryId: map['subcategoryId'],
       restaurantMedia: List<String>.from(map['restaurantMedia']),
       licenseMedia: List<String>.from(map['licenseMedia']),
@@ -168,7 +176,7 @@ class CreateRestaurantParams {
 
   @override
   String toString() {
-    return 'CreateRestaurantParams(name: $name, subcategoryId: $subcategoryId, restaurantMedia: $restaurantMedia, licenseMedia: $licenseMedia, government: $government, city: $city, deliveryTime: $deliveryTime, deliveryFee: $deliveryFee, countryCode: $countryCode, workTo: $workTo, workFrom: $workFrom, expireOwnerIdMedia: $expireOwnerIdMedia, ownerIdBackMedia: $ownerIdBackMedia, ownerIdFrontMedia: $ownerIdFrontMedia, mneu: $mneu)';
+    return 'CreateRestaurantParams(name: $name,phone: $number, subcategoryId: $subcategoryId, restaurantMedia: $restaurantMedia, licenseMedia: $licenseMedia, government: $government, city: $city, deliveryTime: $deliveryTime, deliveryFee: $deliveryFee, countryCode: $countryCode, workTo: $workTo, workFrom: $workFrom, expireOwnerIdMedia: $expireOwnerIdMedia, ownerIdBackMedia: $ownerIdBackMedia, ownerIdFrontMedia: $ownerIdFrontMedia, mneu: $mneu)';
   }
 
   @override
@@ -177,6 +185,7 @@ class CreateRestaurantParams {
 
     return other is CreateRestaurantParams &&
         other.name == name &&
+        other.number == number &&
         other.subcategoryId == subcategoryId &&
         listEquals(other.restaurantMedia, restaurantMedia) &&
         listEquals(other.licenseMedia, licenseMedia) &&
@@ -196,6 +205,7 @@ class CreateRestaurantParams {
   @override
   int get hashCode {
     return name.hashCode ^
+     number.hashCode ^
         subcategoryId.hashCode ^
         restaurantMedia.hashCode ^
         licenseMedia.hashCode ^

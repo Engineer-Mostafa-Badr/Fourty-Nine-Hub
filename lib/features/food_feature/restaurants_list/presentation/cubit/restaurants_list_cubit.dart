@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
@@ -29,6 +30,7 @@ import '../../../../../core/enums/main_services_enum.dart';
 import '../../../../../core/utils/shared_pref.dart';
 import '../../../../social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
+import '../../data/models/expired_requests_model.dart';
 import '../../data/models/restaurant_2_model.dart';
 import '../../domain/entities/restaurant_entity.dart';
 
@@ -79,7 +81,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
         _getMainCategoryDetails(),
         isRestaurant(),
         _getMealCategoriesWithCountRestaurants(),
-        _getAllRestaurant(),
+        getAllRestaurant(),
         _getNumOfRestaurants(),
       ]);
     }
@@ -150,7 +152,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
         (data) => emit(state.copyWith(banner: data)));
   }
 
-  Future<void> _getAllRestaurant() async {
+  Future<void> getAllRestaurant() async {
     final response = await _getAllRestaurantUseCase(
         params: PostCommentsParams(
             userId: serviceLocator<UserCubit>().state.data?.id));
@@ -234,6 +236,40 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
 
   Future<void> _ensureTokenInitialized() async {
     token ??= await TokenManager.getAccessToken();
+  }
+
+  Future<void> getExpiredOrders({int page = 1}) async {
+    emit(state.copyWith(status: RestaurantsListStates.loading));
+
+    const String url = 'https://49dev.com/api/v1/food/expired-orders';
+
+    final Map<String, dynamic> queryParameters = {
+      'page': '$page',
+    };
+
+    final response = await apiConsumer.get(
+      url,
+      queryParameters: queryParameters,
+    );
+
+    response.fold(
+      (failure) {
+        emit(state.copyWith(
+          status: RestaurantsListStates.error,
+          failure: failure,
+        ));
+      },
+      (data) {
+        // final List<dynamic> ordersData = data['data'] ?? [];
+        final orders = ExpiredRequestsResponse.fromJson(data);
+
+        log(orders.data!.first.createdAt.toString());
+        emit(state.copyWith(
+          status: RestaurantsListStates.success,
+          expiredRequestsResponse: orders,
+        ));
+      },
+    );
   }
 }
 
