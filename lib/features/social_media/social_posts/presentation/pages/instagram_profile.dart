@@ -90,15 +90,17 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                               '${state.profileData?.email.split('@')[0]}',
                                           style: Styles.mediumText(
                                               color: Colors.grey)),
-
-                                      if(state.profileData?.isDocument==true)...[
+                                      if (state.profileData?.isDocument ==
+                                          true) ...[
                                         Sizer(
                                           width: 8.w,
-                                        ),Icon(
-                                        Icons.verified,
-                                        size: 35.w,
-                                        color: AppColors.PRIMARY_COLOR_DARK,
-                                      )]
+                                        ),
+                                        Icon(
+                                          Icons.verified,
+                                          size: 35.w,
+                                          color: AppColors.PRIMARY_COLOR_DARK,
+                                        )
+                                      ]
                                     ],
                                   ),
                                   if (loginUser?.id != widget.userId)
@@ -112,14 +114,15 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                           return [
                                             PopupMenuItem<int>(
                                               value: 4,
-                                              child: Text(LocaleKeys.report.localize),
+                                              child: Text(
+                                                  LocaleKeys.report.localize),
                                               onTap: () {
                                                 bottomSheet(
                                                     context: context,
                                                     widget: ReportView(
                                                       id: widget.userId,
-                                                      categoryId:
-                                                          Constants.facebookSubCategory,
+                                                      categoryId: Constants
+                                                          .facebookSubCategory,
                                                     ));
                                               },
                                             ),
@@ -130,8 +133,10 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                                 child: Text(state.profileData
                                                             ?.isBlock ==
                                                         true
-                                                    ? LocaleKeys.unBlock.localize
-                                                    : LocaleKeys.block.localize),
+                                                    ? LocaleKeys
+                                                        .unBlock.localize
+                                                    : LocaleKeys
+                                                        .block.localize),
                                                 onTap: () async {
                                                   // context.pop();
                                                   var result = await controller
@@ -149,13 +154,17 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                                           ?.isBlock = true;
                                                       showSuccessMessage(
                                                           context,
-                                                          LocaleKeys.blockedSuccessfully.localize);
+                                                          LocaleKeys
+                                                              .blockedSuccessfully
+                                                              .localize);
                                                     } else {
                                                       state.profileData
                                                           ?.isBlock = false;
                                                       showSuccessMessage(
                                                           context,
-                                                          LocaleKeys.unBlockedSuccessfully.localize);
+                                                          LocaleKeys
+                                                              .unBlockedSuccessfully
+                                                              .localize);
                                                     }
                                                   }
                                                 },
@@ -208,7 +217,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                     // labelPadding: EdgeInsetsDirectional.only(end: 100),
                                     indicatorSize: TabBarIndicatorSize.tab,
                                     labelPadding:
-                                    EdgeInsetsDirectional.symmetric(
+                                        EdgeInsetsDirectional.symmetric(
                                             horizontal: 90.w),
                                     onTap: (i) {
                                       controller.changeUserPage(i);
@@ -246,7 +255,8 @@ class _InstagramProfileState extends State<InstagramProfile> {
                               child: Padding(
                                 padding: EdgeInsets.only(top: 50.0.h),
                                 child: Label(
-                                  text: LocaleKeys.youHaveBlockedThisUser.localize,
+                                  text: LocaleKeys
+                                      .youHaveBlockedThisUser.localize,
                                 ),
                               ),
                             ),
@@ -298,20 +308,20 @@ class _InstagramProfileState extends State<InstagramProfile> {
                   children: [
                     state.newImage != null
                         ? InkWell(
-                      onTap: (){
-                        showDialog(
-                          context: context,
-                          builder: (context) => ImageDetailsScreen(
-                            image: state.newImage!.file.path,
-                            fromPost: true,
-                            isFile: true,
-                            onRemoveImage: () {
-                              context.pop();
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => ImageDetailsScreen(
+                                  image: state.newImage!.file.path,
+                                  fromPost: true,
+                                  isFile: true,
+                                  onRemoveImage: () {
+                                    context.pop();
+                                  },
+                                ),
+                              );
                             },
-                          ),
-                        );
-                      },
-                      child: CircleAvatar(
+                            child: CircleAvatar(
                               radius: 40.r,
                               child: CircleAvatar(
                                 radius: 40.r,
@@ -320,29 +330,29 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                     FileImage(File(state.newImage!.file.path)),
                               ),
                             ),
-                        )
+                          )
                         : InkWell(
-                      onTap: (){
-                        showDialog(
-                          context: context,
-                          builder: (context) => ImageDetailsScreen(
-                            image: user.profilePicture!,
-                            fromPost: true,
-                            isFile: false,
-                            onRemoveImage: () {
-                              context.pop();
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => ImageDetailsScreen(
+                                  image: user.profilePicture!,
+                                  fromPost: true,
+                                  isFile: false,
+                                  onRemoveImage: () {
+                                    context.pop();
+                                  },
+                                ),
+                              );
                             },
-                          ),
-                        );
-                      },
-                      child: ImageFromInternet(
+                            child: ImageFromInternet(
                               image: user.profilePicture ??
                                   UIConst.profilePlaceHolder,
                               height: 100.h,
                               width: 100.w,
                               isCircle: true,
                             ),
-                        ),
+                          ),
                     if (loginUser?.id == user.id)
                       InkWell(
                         onTap: () {
@@ -398,7 +408,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                     children: [
                       _buildCounter(
                         value: '${user.instagramPosts ?? 0} ',
-                        label: LocaleKeys.post.localize ,
+                        label: LocaleKeys.post.localize,
                       ),
                       const Sizer(),
                       _buildCounter(
@@ -411,7 +421,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                         label: LocaleKeys.follower.localize,
                       ),
                       Sizer(
-                        width:8.w,
+                        width: 8.w,
                       ),
                       _buildCounter(
                         value: '${user.totalView} ',
@@ -599,41 +609,58 @@ class _InstagramProfileState extends State<InstagramProfile> {
                             }),
                       ),
                       const Sizer(),
-                      Expanded(child: MessageButton(user: state.profileData!,  normalPress: () async{
-                        if(context.read<UserCubit>().isLoggedIn){
-                          if(state.profileData?.areFriends==true){
-                            var result = await context.read<SocialPostsCubit>().createNormalChat(widget.userId,ChatCategoriesIds.social);
-                            if(result==true){
-                              context.push(Routes.CHAT);
-                            }
-                          }else{
-                            var result = await context.read<SocialPostsCubit>().createNormalChat(widget.userId,ChatCategoriesIds.greet);
-                            if(result==true){
-                              context.pop();
-                              context.push(Routes.CHAT);
-                            }else{
-                              showErrorMessage(context, getFailureMessage(state.failure!, context));
-                              context.pop();
-                            }
-                          }
-                        }else{
-                          context.push(Routes.LOGIN);
-                        }
-
-                      }, anonymousPress: () async{
-                        if(context.read<UserCubit>().isLoggedIn){
-                          var result = await context.read<SocialPostsCubit>().createAnonymousChat(widget.userId);
-                          if(result==true){
-                            context.pop();
-                            context.push(Routes.CHAT);
-                          }else{
-                            showErrorMessage(context, getFailureMessage(state.failure!, context));
-                            context.pop();
-                          }
-                        }else{
-                          context.push(Routes.LOGIN);
-                        }
-                      })),
+                      Expanded(
+                          child: MessageButton(
+                              user: state.profileData!,
+                              normalPress: () async {
+                                if (context.read<UserCubit>().isLoggedIn) {
+                                  if (state.profileData?.areFriends == true) {
+                                    var result = await context
+                                        .read<SocialPostsCubit>()
+                                        .createNormalChat(widget.userId,
+                                            ChatCategoriesIds.social);
+                                    if (result == true) {
+                                      context.push(Routes.CHAT);
+                                    }
+                                  } else {
+                                    var result = await context
+                                        .read<SocialPostsCubit>()
+                                        .createNormalChat(widget.userId,
+                                            ChatCategoriesIds.greet);
+                                    if (result == true) {
+                                      context.pop();
+                                      context.push(Routes.CHAT);
+                                    } else {
+                                      showErrorMessage(
+                                          context,
+                                          getFailureMessage(
+                                              state.failure!, context));
+                                      context.pop();
+                                    }
+                                  }
+                                } else {
+                                  context.push(Routes.LOGIN);
+                                }
+                              },
+                              anonymousPress: () async {
+                                if (context.read<UserCubit>().isLoggedIn) {
+                                  var result = await context
+                                      .read<SocialPostsCubit>()
+                                      .createAnonymousChat(widget.userId);
+                                  if (result == true) {
+                                    context.pop();
+                                    context.push(Routes.CHAT);
+                                  } else {
+                                    showErrorMessage(
+                                        context,
+                                        getFailureMessage(
+                                            state.failure!, context));
+                                    context.pop();
+                                  }
+                                } else {
+                                  context.push(Routes.LOGIN);
+                                }
+                              })),
                       const Sizer(),
                       InkWell(
                         onTap: showHideSuggestPeople,
@@ -687,7 +714,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                       const Sizer(),
                       Expanded(
                         child: InkWell(
-                          onTap: (){
+                          onTap: () {
                             onFollow();
                           },
                           child: Container(

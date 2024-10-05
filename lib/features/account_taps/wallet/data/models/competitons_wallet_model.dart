@@ -11,7 +11,7 @@ class CompetitionsWalletModel extends CompetitionsWalletEntity {
 
   factory CompetitionsWalletModel.fromJson(Map<String, dynamic> json) {
     return CompetitionsWalletModel(
-      id: json['competition_id']['_id'] ??'',
+      id: json['competition_id']['_id'] ?? '',
       nameAr: json['competition_id']['nameAr'] ?? '',
       nameEn: json['competition_id']['nameEn'] ?? '',
       maxRequests: json['competition_id']['maxRequests'] ?? 0,

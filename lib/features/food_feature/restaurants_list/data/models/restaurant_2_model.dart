@@ -29,8 +29,7 @@ class Restaurant2Model extends Restaurant {
       super.isFavorite,
       super.enableOrDisableChat});
 
-  factory Restaurant2Model.fromJson(Map<String, dynamic> json) =>
-      _$Restaurant2ModelFromJson(json);
+  factory Restaurant2Model.fromJson(Map<String, dynamic> json) => _$Restaurant2ModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$Restaurant2ModelToJson(this);
 }

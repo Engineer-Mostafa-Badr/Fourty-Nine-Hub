@@ -184,7 +184,6 @@ class RestaurantHeader extends StatelessWidget {
                   style: Styles.headerText(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-
                   ),
                 ),
                 Row(

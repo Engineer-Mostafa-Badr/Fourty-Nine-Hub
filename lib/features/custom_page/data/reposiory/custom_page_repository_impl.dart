@@ -12,8 +12,8 @@ import 'package:fourtyninehub/features/custom_page/domain/use_case/update_sub_ta
 
 import '../../domain/reposiory/custom_page_repository.dart';
 
- class CustomPageRepositoryImpl extends CustomPageRepository{
-   final CustomPageRemoteDataSource _customPageRemoteDataSource;
+class CustomPageRepositoryImpl extends CustomPageRepository {
+  final CustomPageRemoteDataSource _customPageRemoteDataSource;
 
   CustomPageRepositoryImpl(this._customPageRemoteDataSource);
   @override
@@ -55,5 +55,4 @@ import '../../domain/reposiory/custom_page_repository.dart';
   Future<Either<Failure, bool>> updateFavouriteCat(FavouriteCatParams params) {
     return _customPageRemoteDataSource.updateFavouriteCat(params);
   }
-
- }
+}

@@ -1,6 +1,14 @@
 part of 'create_ad_cubit.dart';
 
-enum CreateAdStates { loading, error, initState, success, loadCities, loadCitiesSuccess, imageUploading }
+enum CreateAdStates {
+  loading,
+  error,
+  initState,
+  success,
+  loadCities,
+  loadCitiesSuccess,
+  imageUploading
+}
 
 extension CreateAdStateX on CreateAdState {
   bool get isLoading => status == CreateAdStates.loading;
@@ -16,6 +24,8 @@ class CreateAdState {
   final CreateAdStates? status;
   final Failure? failure;
   final bool? isPrice;
+  String? city;
+  String? governorate;
   final List<CityEntity>? cities;
   final List<MainCategoryEntity>? mainCategories;
   final List<SubCategoryEntity>? subCategories;
@@ -37,11 +47,13 @@ class CreateAdState {
       this.selectedSubCategory,
       this.status,
       this.cities,
+      this.city='',
+      this.governorates,
       this.isUser = true,
       this.isSale = true,
       this.isPrice = true,
       this.images,
-      this.governorates,
+      this.governorate='',
       this.subCategories});
 
   CreateAdState copyWith({
@@ -56,6 +68,9 @@ class CreateAdState {
     bool? isUser,
     bool? isSale,
     bool? isPrice,
+    String? city,
+    String? governorate,
+
     List<CityEntity>? cities,
     SubCategoryEntity? selectedSubCategory,
     List<UploadFileEntity>? images,
@@ -73,6 +88,8 @@ class CreateAdState {
       isSale: isSale ?? this.isSale,
       isPrice: isPrice ?? this.isPrice,
       cities: cities ?? this.cities,
+      city: city ?? this.city,
+      governorate: governorate ?? this.governorate,
       governorates: governorates ?? this.governorates,
       selections: selections ?? this.selections,
     );

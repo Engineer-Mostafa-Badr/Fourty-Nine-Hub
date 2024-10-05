@@ -41,6 +41,5 @@ class StreamServiceLocator {
           serviceLocator(),
           serviceLocator(),
         ));
-
   }
 }

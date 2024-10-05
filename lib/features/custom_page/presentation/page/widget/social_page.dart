@@ -32,13 +32,13 @@ class _SocialPageState extends State<SocialPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text(LocaleKeys.socialPage.localize),
+        title: Text(LocaleKeys.socialPage.localize),
       ),
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) => serviceLocator()..fetchSocialPage(),
         child: BlocConsumer<CustomPageCubit, CustomPageState>(
           listener: (BuildContext context, state) {
-            if (state.status ==CustomPageStates.success) {
+            if (state.status == CustomPageStates.success) {
               // Check the state of face to set the selected item
               setState(() {
                 _selectedItem = state.social!.face == true ? 0 : 1;
@@ -46,9 +46,9 @@ class _SocialPageState extends State<SocialPage> {
             }
           },
           builder: (BuildContext context, state) {
-            if (state.status ==CustomPageStates.loading) {
+            if (state.status == CustomPageStates.loading) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state.status ==CustomPageStates.success) {
+            } else if (state.status == CustomPageStates.success) {
               return ListView.builder(
                 itemCount: _items.length,
                 itemBuilder: (context, index) {
@@ -56,7 +56,8 @@ class _SocialPageState extends State<SocialPage> {
                     leading: Radio<int>(
                       value: index,
                       groupValue: _selectedItem, // Currently selected item
-                      activeColor: Theme.of(context).primaryColor, // Color when selected
+                      activeColor:
+                          Theme.of(context).primaryColor, // Color when selected
                       onChanged: (int? value) {
                         setState(() {
                           _selectedItem = value; // Update selected item
@@ -68,48 +69,54 @@ class _SocialPageState extends State<SocialPage> {
                       style: Styles.mediumText(
                         fontSize: 65.sp,
                         fontWeight: FontWeight.w400,
-                        color:  Theme.of(context).primaryColor, // Color changes if selected
+                        color: Theme.of(context)
+                            .primaryColor, // Color changes if selected
                       ),
                     ),
                     selected: _selectedItem == index, // Highlight selected item
-                    selectedTileColor: Colors.transparent, // Optional color change for selected item
+                    selectedTileColor: Colors
+                        .transparent, // Optional color change for selected item
                   );
                 },
               );
             } else {
-              return  Center(child: Text(LocaleKeys.errorLoadingSocialPage.localize));
+              return Center(
+                  child: Text(LocaleKeys.errorLoadingSocialPage.localize));
             }
           },
         ),
       ),
       floatingActionButton: BlocProvider<CustomPageCubit>(
-        create: (BuildContext context) =>serviceLocator(),
-        child: BlocConsumer<CustomPageCubit,CustomPageState>(
-          listener: (BuildContext context, state) { 
-            if(state.status ==CustomPageStates.success){
-              showSuccessMessage(context, LocaleKeys.updateSuccessfully.localize);
+        create: (BuildContext context) => serviceLocator(),
+        child: BlocConsumer<CustomPageCubit, CustomPageState>(
+          listener: (BuildContext context, state) {
+            if (state.status == CustomPageStates.success) {
+              showSuccessMessage(
+                  context, LocaleKeys.updateSuccessfully.localize);
             }
           },
           builder: (BuildContext context, Object? state) {
             return FloatingActionButton(
               backgroundColor: Theme.of(context).primaryColor,
               onPressed: () {
-                  // Map selectedItem index to a boolean for 'face'
-                  bool face = _selectedItem == 0 ? true : false;
+                // Map selectedItem index to a boolean for 'face'
+                bool face = _selectedItem == 0 ? true : false;
 
-                  // Call the updateSocialPage method with the selected value
-                  context.read<CustomPageCubit>().updateSocialPage(SocialPageParams(face: face));
+                // Call the updateSocialPage method with the selected value
+                context
+                    .read<CustomPageCubit>()
+                    .updateSocialPage(SocialPageParams(face: face));
 
-                  print('Selected Item: ${_items[_selectedItem!]}');
-
+                print('Selected Item: ${_items[_selectedItem!]}');
               },
-              child:  Icon(Icons.check,color: Theme.of(context).scaffoldBackgroundColor,),
+              child: Icon(
+                Icons.check,
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
             );
           },
         ),
       ),
-
     );
   }
 }
-

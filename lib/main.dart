@@ -7,6 +7,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
@@ -94,7 +95,8 @@ class _MyAppState extends State<MyApp> {
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
         ),
         BlocProvider(
-          create: (BuildContext context) => serviceLocator<MainCategoriesCubit>()..loadData(),
+          create: (BuildContext context) =>
+              serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
         BlocProvider(
           create: (context) => serviceLocator<ShowOffersCubit>(),
@@ -157,14 +159,19 @@ class _MyAppState extends State<MyApp> {
             context.read<SecretsCubit>().state.secrets?.zegoAppId;
             return BlocBuilder<ThemeCubit, ThemeStates>(
               builder: (BuildContext context, state) {
+                // double width = MediaQuery.sizeOf(context).width;
+                // double widthFromExtensionMethodOfContext = context.screenWidth;
                 return MaterialApp.router(
                   builder: (context, child) {
                     return MediaQuery(
-                      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+                      data: MediaQuery.of(context)
+                          .copyWith(textScaler: TextScaler.noScaling),
                       child: child!,
                     );
                   },
-                  themeMode: context.read<ThemeCubit>().isDarkTheme ? ThemeMode.dark : ThemeMode.light,
+                  themeMode: context.read<ThemeCubit>().isDarkTheme
+                      ? ThemeMode.dark
+                      : ThemeMode.light,
                   theme: lightTheme(),
                   darkTheme: darkTheme(),
                   title: '49',

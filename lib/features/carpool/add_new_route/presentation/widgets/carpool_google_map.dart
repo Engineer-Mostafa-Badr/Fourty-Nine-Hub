@@ -4,34 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/features/carpool/presentation/widgets/car_pool_body.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-class CarPoolView extends StatelessWidget {
-  const CarPoolView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Transform(
-            transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
-            child: Text(
-              'Carpool',
-              style: Styles.headerText(),
-            ),
-          ),
-        ),
-        body: const CarPoolBody(),
-      ),
-    );
-  }
-}
 
 class CarPoolGoogleMap extends StatefulWidget {
   const CarPoolGoogleMap({super.key});
@@ -41,7 +17,8 @@ class CarPoolGoogleMap extends StatefulWidget {
 }
 
 class _CarPoolGoogleMapState extends State<CarPoolGoogleMap> {
-  final Completer<GoogleMapController> _googleMapController = Completer<GoogleMapController>();
+  final Completer<GoogleMapController> _googleMapController =
+      Completer<GoogleMapController>();
   PolylinePoints polylinePoints = PolylinePoints();
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
@@ -103,7 +80,9 @@ class _CarPoolGoogleMapState extends State<CarPoolGoogleMap> {
           markers = _getMarkers(startingCubit, destinationCubit);
           return GoogleMap(
             mapType: MapType.normal,
-            initialCameraPosition: markers.isEmpty ? _egyptLocation : CameraPosition(target: markers[0].position),
+            initialCameraPosition: markers.isEmpty
+                ? _egyptLocation
+                : CameraPosition(target: markers[0].position),
             onMapCreated: (GoogleMapController controller) {
               _googleMapController.complete(controller);
             },
@@ -125,14 +104,17 @@ class _CarPoolGoogleMapState extends State<CarPoolGoogleMap> {
   }
 
   _fetchPriceAndDistance() {
-    if (startingLocationCubit.startingLocation != null && destinationLocationCubit.destinationLocation != null) {
+    if (startingLocationCubit.startingLocation != null &&
+        destinationLocationCubit.destinationLocation != null) {
       LatLng startLocation = LatLng(
         startingLocationCubit.startingLocation!.coordinates![0]!.toDouble(),
         startingLocationCubit.startingLocation!.coordinates![1]!.toDouble(),
       );
       LatLng destinatonLocation = LatLng(
-        destinationLocationCubit.destinationLocation!.coordinates![0]!.toDouble(),
-        destinationLocationCubit.destinationLocation!.coordinates![1]!.toDouble(),
+        destinationLocationCubit.destinationLocation!.coordinates![0]!
+            .toDouble(),
+        destinationLocationCubit.destinationLocation!.coordinates![1]!
+            .toDouble(),
       );
       // fetchPriceDistanceCubit.fetchPriceDistance(
       //   startLocation: startLocation,
@@ -181,7 +163,8 @@ class _CarPoolGoogleMapState extends State<CarPoolGoogleMap> {
   void _animateToMarkers(var state) {
     double lat = 0;
     double long = 0;
-    if (state is StartingLocationSuccess || state is DestinationLocationSuccess) {
+    if (state is StartingLocationSuccess ||
+        state is DestinationLocationSuccess) {
       lat = state.locationEntity.coordinates?[0]?.toDouble() ?? 0;
       long = state.locationEntity.coordinates?[1]?.toDouble() ?? 0;
     }
@@ -216,8 +199,10 @@ class _CarPoolGoogleMapState extends State<CarPoolGoogleMap> {
         Marker(
           markerId: const MarkerId('destinatonMarker'),
           position: LatLng(
-            destinationCubit.destinationLocation!.coordinates?[0]?.toDouble() ?? 0,
-            destinationCubit.destinationLocation!.coordinates?[1]?.toDouble() ?? 0,
+            destinationCubit.destinationLocation!.coordinates?[0]?.toDouble() ??
+                0,
+            destinationCubit.destinationLocation!.coordinates?[1]?.toDouble() ??
+                0,
           ),
         ),
       );

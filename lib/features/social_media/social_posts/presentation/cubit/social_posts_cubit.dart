@@ -120,7 +120,8 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._deleteFriendUseCase,
     this._getGlobalFeedUseCase,
     this._viewProfileUseCase,
-    this._searchUsersUsecase, this._createAnonymousChatUseCase,
+    this._searchUsersUsecase,
+    this._createAnonymousChatUseCase,
   ) : super(const SocialPostsState());
 
   void loadData() async {
@@ -319,12 +320,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   // create normal chat
   Future<bool> createNormalChat(String otherId, String categoryId) async {
     // emit(state.copyWith(status: StateStatus.loading));
-    final response = await _createNormalChatUseCase(CreateNormalChatParams(otherUserId: otherId,categoryId: categoryId));
+    final response = await _createNormalChatUseCase(
+        CreateNormalChatParams(otherUserId: otherId, categoryId: categoryId));
     bool result = false;
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) async {
-          result = data;
+      result = data;
       emit(state.copyWith(status: StateStatus.success));
     });
     return result;
@@ -333,12 +335,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   // create anonymous chat
   Future<bool> createAnonymousChat(String otherId) async {
     // emit(state.copyWith(status: StateStatus.loading));
-    final response = await _createAnonymousChatUseCase(CreateAnonymousChatParams(otherUserId: otherId));
+    final response = await _createAnonymousChatUseCase(
+        CreateAnonymousChatParams(otherUserId: otherId));
     bool result = false;
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) async {
-          result = data;
+      result = data;
       emit(state.copyWith(status: StateStatus.success));
     });
     return result;

@@ -9,12 +9,10 @@ class UserFriendsListModel extends UserFriendEntity {
 
   factory UserFriendsListModel.fromJson(Map<String, dynamic> json) {
     return UserFriendsListModel(
-      id: json['friendId']['_id'] ??'',
-      firstName: json['friendId']['firstName'] ??'',
-      image: json['friendId']['image'] ??'',
-      lastName: json['friendId']['lastName'] ??'',
+      id: json['friendId']['_id'] ?? '',
+      firstName: json['friendId']['firstName'] ?? '',
+      image: json['friendId']['image'] ?? '',
+      lastName: json['friendId']['lastName'] ?? '',
     );
   }
 }
-
-

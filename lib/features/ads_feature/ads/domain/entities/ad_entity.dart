@@ -10,6 +10,8 @@ class AdEntity {
   final String id;
   final String title;
   String? type;
+  String? city;
+  String? governorate;
   bool? hasAuction;
   bool? isFavourite;
   final String description;
@@ -29,7 +31,8 @@ class AdEntity {
   String get formatedDate => DateFormat('yyyy-MM-dd').format(createdAt);
   Duration get restTimeDuration => DateTime.now().difference(createdAt);
 
-  String get formattedRestTime => DurationHelper().sinceTime(duration: restTimeDuration);
+  String get formattedRestTime =>
+      DurationHelper().sinceTime(duration: restTimeDuration);
 
   AdEntity(
       {required this.id,
@@ -37,6 +40,8 @@ class AdEntity {
       required this.description,
       required this.images,
       this.price,
+      this.city,
+      this.governorate,
       this.type,
       this.isFavourite = false,
       this.hasAuction = false,

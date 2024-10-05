@@ -10,13 +10,13 @@ import '../use_case/update_navigate_bar_use_case.dart';
 import '../use_case/update_social_page_use_case.dart';
 import '../use_case/update_sub_tab_use_case.dart';
 
-abstract class CustomPageRepository{
-  Future<Either<Failure,SocialPageEntity>>fetchSocialPage();
-  Future<Either<Failure,bool>>updateSocialPage(SocialPageParams params);
-  Future<Either<Failure,SubTabEntity>>fetchSubTab();
-  Future<Either<Failure,bool>>updateSubTab(SubTabParams params);
-  Future<Either<Failure,NavigateBarEntity>>fetchNavigateBar();
-  Future<Either<Failure,bool>>updateNavigateBar(NavigateBarParams params);
-  Future<Either<Failure,FavouriteCatEntity>>fetchFavouriteCat();
-  Future<Either<Failure,bool>>updateFavouriteCat(FavouriteCatParams params);
+abstract class CustomPageRepository {
+  Future<Either<Failure, SocialPageEntity>> fetchSocialPage();
+  Future<Either<Failure, bool>> updateSocialPage(SocialPageParams params);
+  Future<Either<Failure, SubTabEntity>> fetchSubTab();
+  Future<Either<Failure, bool>> updateSubTab(SubTabParams params);
+  Future<Either<Failure, NavigateBarEntity>> fetchNavigateBar();
+  Future<Either<Failure, bool>> updateNavigateBar(NavigateBarParams params);
+  Future<Either<Failure, FavouriteCatEntity>> fetchFavouriteCat();
+  Future<Either<Failure, bool>> updateFavouriteCat(FavouriteCatParams params);
 }

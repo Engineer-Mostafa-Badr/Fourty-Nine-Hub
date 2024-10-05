@@ -13,6 +13,7 @@ class MyAddsState {
   final List<MyAuctionAdsEntity>? myOtherAds;
   final  List<GetAllCountsTripJoinEntity>? allCounts;
   final MyAdsTripJoinEntity? tripJoin;
+  final List<GetAllCountAdsEntity>? countAds;
 
   const MyAddsState({
     this.status,
@@ -25,6 +26,7 @@ class MyAddsState {
     this.tripJoin,
     this.myOtherAds,
     this.allCounts,
+    this.countAds,
   });
   MyAddsState copyWith({
     MyAddsStates? status,
@@ -36,7 +38,8 @@ class MyAddsState {
     List<MyAuctionAdsEntity>? myInstallments,
     List<MyAuctionAdsEntity>? myOtherAds,
     List<GetAllCountsTripJoinEntity>? allCounts,
-    MyAdsTripJoinEntity? tripJoin
+    MyAdsTripJoinEntity? tripJoin,
+    List<GetAllCountAdsEntity>? countAds
   }) {
     return MyAddsState(
       status: status ?? this.status,
@@ -49,6 +52,7 @@ class MyAddsState {
       tripJoin: tripJoin ?? this.tripJoin,
       myOtherAds: myOtherAds ?? this.myOtherAds,
       allCounts: allCounts ?? this.allCounts,
+      countAds: countAds ?? this.countAds,
     );
   }
 }

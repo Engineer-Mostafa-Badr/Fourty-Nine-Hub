@@ -9,10 +9,10 @@ class SocialPageModel extends SocialPageEntity {
 
   factory SocialPageModel.fromJson(Map<String, dynamic> json) {
     return SocialPageModel(
-      id: json['_id'] ??'',
-      userId: json['userId'] ??'',
-      face: json['49Face'] ??false,
-      insta: json['49Insta'] ??false,
+      id: json['_id'] ?? '',
+      userId: json['userId'] ?? '',
+      face: json['49Face'] ?? false,
+      insta: json['49Insta'] ?? false,
     );
   }
 }

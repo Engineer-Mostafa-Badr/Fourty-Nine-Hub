@@ -14,17 +14,17 @@ class MyAuctionImageModel extends MyAuctionImageEntity {
       required super.photo});
 
   factory MyAuctionImageModel.fromJson(Map<String, dynamic> json) {
-      return MyAuctionImageModel(
-          id: json['_id'],
-          user: json['user'],
-          subcategoryId: json['subcategoryId'],
-          mimetype: json['mimetype'],
-          size: json['size'],
-          mediaKey: json['mediaKey'],
-          successUpload: json['successUpload'],
-          createdAt: json['createdAt'],
-          updatedAt: json['updatedAt'],
-          photo: json['photo'] ??'',
-      );
+    return MyAuctionImageModel(
+      id: json['_id'],
+      user: json['user'],
+      subcategoryId: json['subcategoryId'],
+      mimetype: json['mimetype'],
+      size: json['size'],
+      mediaKey: json['mediaKey'],
+      successUpload: json['successUpload'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+      photo: json['photo'] ?? '',
+    );
   }
 }

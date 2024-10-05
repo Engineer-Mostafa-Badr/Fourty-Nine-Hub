@@ -6,9 +6,9 @@ class VehicleTripJoinModel extends VehicleTripJoinEntity {
 
   factory VehicleTripJoinModel.fromJson(Map<String, dynamic> json) {
     return VehicleTripJoinModel(
-      id: json['_id'] ??'',
-      brand: json['Brand'] ??'',
-      model: json['Model'] ??'',
+      id: json['_id'] ?? '',
+      brand: json['Brand'] ?? '',
+      model: json['Model'] ?? '',
     );
   }
 }

@@ -40,33 +40,25 @@ import '../features/food_feature/restaurants_list/presentation/cubit/restaurants
 
 class FoodServiceLocator {
   static void execute({required GetIt serviceLocator}) async {
-    serviceLocator.registerLazySingleton<RestaurantRemoteDataSource>(
-        () => RestaurantRemoteDataSourceImpl(serviceLocator()));
-    serviceLocator.registerLazySingleton<GetAllRestaurantUseCase>(
-        () => GetAllRestaurantUseCase(serviceLocator()));
+    serviceLocator
+        .registerLazySingleton<RestaurantRemoteDataSource>(() => RestaurantRemoteDataSourceImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetAllRestaurantUseCase>(() => GetAllRestaurantUseCase(serviceLocator()));
     serviceLocator.registerFactory<RestaurantDashboardRemoteDataSource>(
         () => RestaurantDashboardRemoteDataSourceImpl(serviceLocator()));
-    serviceLocator.registerLazySingleton<RestaurantsRemoteDataSource>(
-        () => RestaurantsRemoteDataSourceImpl(serviceLocator()));
-    serviceLocator.registerLazySingleton<FoodCartRemoteDataSource>(
-        () => FoodCartRemoteDataSourceImpl(serviceLocator()));
+    serviceLocator
+        .registerLazySingleton<RestaurantsRemoteDataSource>(() => RestaurantsRemoteDataSourceImpl(serviceLocator()));
+    serviceLocator
+        .registerLazySingleton<FoodCartRemoteDataSource>(() => FoodCartRemoteDataSourceImpl(serviceLocator()));
 
-    serviceLocator.registerLazySingleton<RestaurantListRepo>(
-        () => RestaurantListRepoImpl(serviceLocator()));
-    serviceLocator.registerLazySingleton<RestaurantDetailsRepo>(
-        () => RestaurantDetailsRepoImpl(serviceLocator()));
-    serviceLocator.registerLazySingleton<RestaurantDashboardRepo>(
-        () => RestaurantDashboardRepoImpl(serviceLocator()));
-    serviceLocator.registerLazySingleton<FoodCartRepo>(
-        () => FoodCartRepoImpl(serviceLocator()));
-    serviceLocator.registerLazySingleton<CreateRestaurantUseCase>(
-        () => CreateRestaurantUseCase(
-              serviceLocator(),
-            ));
-    serviceLocator.registerLazySingleton<RestaurantMenuCubit>(
-        () => RestaurantMenuCubit());
-    serviceLocator.registerLazySingleton<RestaurantSharedData>(
-        () => RestaurantSharedData());
+    serviceLocator.registerLazySingleton<RestaurantListRepo>(() => RestaurantListRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<RestaurantDetailsRepo>(() => RestaurantDetailsRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<RestaurantDashboardRepo>(() => RestaurantDashboardRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<FoodCartRepo>(() => FoodCartRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<CreateRestaurantUseCase>(() => CreateRestaurantUseCase(
+          serviceLocator(),
+        ));
+    serviceLocator.registerLazySingleton<RestaurantMenuCubit>(() => RestaurantMenuCubit());
+    serviceLocator.registerLazySingleton<RestaurantSharedData>(() => RestaurantSharedData());
     serviceLocator.registerFactory<CreateRestaurantCubit>(
       () => CreateRestaurantCubit(
         serviceLocator(),
@@ -76,46 +68,41 @@ class FoodServiceLocator {
         serviceLocator(),
       )..loadData(),
     );
-    serviceLocator
-        .registerFactory<RestaurantsCubit>(() => RestaurantsCubit(
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-            )..loadData());
-    serviceLocator
-        .registerFactory<RestaurantDetailsCubit>(() => RestaurantDetailsCubit(
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-            ));
-    serviceLocator
-        .registerFactory<CusineRestaurantsCubit>(() => CusineRestaurantsCubit(
-              serviceLocator(),
-            )..loadData());
+    serviceLocator.registerFactory<RestaurantsCubit>(() => RestaurantsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        )..loadData());
+    serviceLocator.registerFactory<RestaurantDetailsCubit>(() => RestaurantDetailsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
+    serviceLocator.registerFactory<CusineRestaurantsCubit>(() => CusineRestaurantsCubit(
+          serviceLocator(),
+        )..loadData());
 
     serviceLocator.registerFactory<FoodCartCubit>(() => FoodCartCubit(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
         )..loadData());
-    serviceLocator.registerFactory<RestaurantDashboardCubit>(
-        () => RestaurantDashboardCubit(serviceLocator())..loadData());
-    serviceLocator.registerLazySingleton<GetRestaurantDetailsUseCase>(
-        () => GetRestaurantDetailsUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<GetRestaurantOrdersUseCase>(
-        () => GetRestaurantOrdersUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<GetMealsUseCase>(
-        () => GetMealsUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<
-            GetMealCategoriesWithCountRestaurantsUseCase>(
+    serviceLocator
+        .registerFactory<RestaurantDashboardCubit>(() => RestaurantDashboardCubit(serviceLocator())..loadData());
+    serviceLocator
+        .registerLazySingleton<GetRestaurantDetailsUseCase>(() => GetRestaurantDetailsUseCase(serviceLocator()));
+    serviceLocator
+        .registerLazySingleton<GetRestaurantOrdersUseCase>(() => GetRestaurantOrdersUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetMealsUseCase>(() => GetMealsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetMealCategoriesWithCountRestaurantsUseCase>(
         () => GetMealCategoriesWithCountRestaurantsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetNearByRestaurantsUseCase>(
       () => GetNearByRestaurantsUseCase(

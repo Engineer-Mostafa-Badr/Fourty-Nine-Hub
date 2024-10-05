@@ -9,9 +9,10 @@ import '../entity/live_create_response_entity.dart';
 import '../usecases/create_live_use_case.dart';
 
 abstract class LiveRepository {
-  Future<Either<Failure, LiveCreateResponseEntity>> createLive(CreateLiveParams params);
-  Future<Either<Failure, List<LiveEntity>>> getAllRooms(PaginationParams params);
+  Future<Either<Failure, LiveCreateResponseEntity>> createLive(
+      CreateLiveParams params);
+  Future<Either<Failure, List<LiveEntity>>> getAllRooms(
+      PaginationParams params);
   Future<Either<Failure, List<TopicEntity>>> getAllTopics();
   Future<Either<Failure, void>> endLive(MeetingParams params);
-
 }

@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/payment/data/models/fawry_delete_card_mod
 import 'package:fourtyninehub/features/payment/data/models/fawry_pay_with_card_model.dart';
 import 'package:fourtyninehub/features/payment/data/models/fawry_save_card_token_model.dart';
 import 'package:fourtyninehub/features/payment/data/models/fawry_saved_card_model.dart';
+import 'package:fourtyninehub/features/payment/data/models/instapay_cache_out_model.dart';
 import 'package:fourtyninehub/features/payment/data/models/instapay_model.dart';
 import 'package:fourtyninehub/features/payment/data/models/pay_with_token_model.dart';
 import 'package:fourtyninehub/features/payment/data/models/payment_provider_model.dart';
@@ -23,6 +24,8 @@ import 'package:fourtyninehub/features/payment/domain/use_cases/multi_payment_us
 import 'package:fourtyninehub/features/payment/domain/use_cases/pay_with_token_use_case.dart';
 
 import '../../../../core/error/failure.dart';
+import '../../domain/entities/instapay_cache_out_entity.dart';
+import '../../domain/use_cases/cache_out/instapay_cache_out_use_case.dart';
 
 abstract class PaymentProviderRemoteDataSource {
   Future<Either<Failure, List<PaymentProviderEntity>>> getPaymentProvider();
@@ -40,6 +43,8 @@ abstract class PaymentProviderRemoteDataSource {
       InstaPayParams params);
   Future<Either<Failure, PayWithTokenResponseEntity>> payWithToken(
       PayWithTokenParams params);
+  Future<Either<Failure, InstapayCacheOutEntity>> instapayCacheOut(
+      InstapayParams params);
 }
 
 class PaymentProviderRemoteDataSourceImpl
@@ -237,6 +242,20 @@ class PaymentProviderRemoteDataSourceImpl
       (failure) => Left(failure),
       (data) {
         return Right(PayWithTokenModel.fromJson(data));
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, InstapayCacheOutEntity>> instapayCacheOut(InstapayParams params) async {
+    final response = await _apiConsumer.put(
+      EndPoints.instaPay,
+      data: params.toJson(),
+    );
+    return response.fold(
+          (failure) => Left(failure),
+          (data) {
+        return Right(InstapayCacheOutModel.fromJson(data));
       },
     );
   }

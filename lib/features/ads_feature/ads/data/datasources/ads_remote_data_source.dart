@@ -72,18 +72,19 @@ class AdsRemoteDataSourceImpl implements AdsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> favouriteAd({required String params}) async{
+  Future<Either<Failure, bool>> favouriteAd({required String params}) async {
     final response = await _apiConsumer.post(
-        EndPoints.favouriteAd(params),
-        );
+      EndPoints.favouriteAd(params),
+    );
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, bool>> removeFavouriteAd({required String params}) async{
+  Future<Either<Failure, bool>> removeFavouriteAd(
+      {required String params}) async {
     final response = await _apiConsumer.delete(
-        EndPoints.removeFavouriteAd(params),
-        );
+      EndPoints.removeFavouriteAd(params),
+    );
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 }

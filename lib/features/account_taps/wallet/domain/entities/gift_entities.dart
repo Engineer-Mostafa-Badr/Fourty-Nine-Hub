@@ -8,11 +8,11 @@ class GiftEntity {
   final bool? wheelWinner;
   final List<CompetitionsWalletEntity> competitionsWallet;
 
-  GiftEntity(
-      {required this.giftWallet,
-      required this.id,
-      required this.amount,
-      required this.competitionsWallet,
-      required this.wheelWinner,
-      });
+  GiftEntity({
+    required this.giftWallet,
+    required this.id,
+    required this.amount,
+    required this.competitionsWallet,
+    required this.wheelWinner,
+  });
 }
