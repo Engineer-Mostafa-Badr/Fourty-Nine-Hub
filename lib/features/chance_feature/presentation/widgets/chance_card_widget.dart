@@ -1,36 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/chance_feature/presentation/widgets/chance_ditails_widget.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/image_card_widget.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/not_subscribed_widget.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/slider_card_widget.dart';
 
 import '../../../../res/style/app_colors.dart';
+import '../../../../res/style/styles.dart';
 
 class ChanceCardWidget extends StatelessWidget {
   const ChanceCardWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: AppColors.SHADOW_LIGHT,
-      ),
-      child: Row(
-        children: [
-          Directionality(
-            textDirection: TextDirection.rtl,
-            child: Expanded(
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> const ChanceDitailsWidget())) ;
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: AppColors.SHADOW_LIGHT,
+        ),
+        child: Row(
+          children: [
+            const ImageCardWidget(),
+            const SizedBox(width: 10),
+            Expanded(
               flex: 3,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'قسيمة تسوق ب 200 جنيه',
-                    style: TextStyle(
-                      fontSize: 30.sp,
-                      fontWeight: FontWeight.bold,
+                    style:Styles.mediumText(
+                      fontSize: 60.sp
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -41,7 +46,7 @@ class ChanceCardWidget extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 35.sp,
                           fontWeight: FontWeight.bold,
-                          color: Colors.teal,
+                          color: AppColors.SECONDARY_COLOR,
                         ),
                       ),
                     ],
@@ -53,10 +58,8 @@ class ChanceCardWidget extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-          const SizedBox(width: 10),
-          const ImageCardWidget(),
-        ],
+          ],
+        ),
       ),
     );
   }

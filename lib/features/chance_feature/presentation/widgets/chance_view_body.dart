@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/LIst_view_card.dart';
-
-import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/styles.dart';
 
 class ChanceViewBody extends StatelessWidget {
   const ChanceViewBody({super.key});
@@ -14,12 +12,25 @@ class ChanceViewBody extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            Center(
-              child: Text(
-                'Just pay at least 1 EGP wait! If you need to pay something!!!\nOne user at least will win every month!!!!',
-                textAlign: TextAlign.center,
-                style: Styles.headerText().copyWith(
-                  color: AppColors.PRIMARY_COLOR_DARK,
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              elevation: 5,
+              child: Container(
+                width: double.infinity,
+                height: 250.h,
+                decoration: BoxDecoration(
+                  color: Colors.purple,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.asset(
+                    'assets/images/chance.png',
+                    fit: BoxFit.fill,
+
+                  ),
                 ),
               ),
             ),

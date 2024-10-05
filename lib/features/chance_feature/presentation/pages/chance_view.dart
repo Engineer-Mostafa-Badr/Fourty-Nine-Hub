@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/chance_view_body.dart';
 
 import '../../../../res/style/app_colors.dart';
@@ -10,15 +13,9 @@ class ChanceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Chance",
-          style: Styles.headerText().copyWith(
-            color: AppColors.PRIMARY_COLOR_DARK,
-          ),
-        ),
-        centerTitle: true,
+    return  Scaffold(
+      appBar: BackAppBar(
+        label: LocaleKeys.chance.localize,
       ),
       floatingActionButton: const FloatingActionButtonWidget(),
       body: const ChanceViewBody(),

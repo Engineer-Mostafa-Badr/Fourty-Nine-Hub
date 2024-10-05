@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../res/style/app_colors.dart';
+
 class NotSubscribedWidget extends StatelessWidget {
   const NotSubscribedWidget({super.key});
 
@@ -24,7 +26,9 @@ class NotSubscribedWidget extends StatelessWidget {
         children: [
           Text(
             'غير مشترك',
-            style: Styles.headerText()
+            style: Styles.mediumText(
+              color: AppColors.PRIMARY_COLOR
+            )
           ),
           const Spacer(),
           const Icon(Icons.remove_circle, color: Colors.red),
