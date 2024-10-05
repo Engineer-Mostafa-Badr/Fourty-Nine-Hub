@@ -20,6 +20,7 @@ import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
+import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../domain/entity/my_ads_auction.dart';
 import '../../domain/entity/my_auction_main_category.dart';
 import '../../domain/entity/my_auction_sub_category_entity.dart';
@@ -110,7 +111,6 @@ class _EditMyAdsState extends State<EditMyAds> {
                       ],
                     ),
                     const Divider(),
-
                     _buildImagePicker(),
                     const Sizer(),
                     Label(text: LocaleKeys.adTitle.localize),
@@ -205,8 +205,8 @@ class _EditMyAdsState extends State<EditMyAds> {
                         final updatedPhone = _phoneController.text.trim();
                         final updatedPrice = _priceController.text.trim();
 
-
                         print(context.read<MyAddsCubit>().selectedImages);
+                        print(state.images?[0].mediaId);
                         // Perform validation if necessary (can also be managed in the Form's validator)
                         // if (formKey.currentState!.validate()) {
                         //   context.read<MyAddsCubit>().editMyAds(
@@ -225,8 +225,6 @@ class _EditMyAdsState extends State<EditMyAds> {
                         // }
                       },
                     )
-
-
                   ],
                 ),
               ),
@@ -244,117 +242,189 @@ class _EditMyAdsState extends State<EditMyAds> {
         final controller = context.read<MyAddsCubit>();
         return Column(
           children: [
-         //   if (widget.item.images.isEmpty)
-            InkWell(
-              onTap: () {
-                controller.uploadPhoto();
-              },
-              child: Container(
-                height: kToolbarHeight * 3,
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(5)),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      // if (state.status == MyAddsStates.imageUploading)
-                      //   const CircularProgressIndicator.adaptive(),
-                    //  if (widget.item.images.isEmpty)
-                        Image.asset(
-                          Assets.image,
-                          height: kToolbarHeight * .8,
+            //   if (widget.item.images.isEmpty)
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10.r)),
+              child: Center(
+                child: Row(
+                  children: [
+                    SizedBox(
+                      height: 80.h,
+                      width: 100.w,
+                      child: BadgedLabel(
+                        label: '+',
+                        isBordered: true,
+                        style: Styles.headerText(color: Colors.white),
+                        color: AppColors.SECONDARY_COLOR,
+                        isCentered: true,
+                        close: false,
+                      ),
+                    ),
+                    const Sizer(),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        // scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            if (state.images != null &&
+                                state.images!.isNotEmpty)
+                              SizedBox(
+                                height: kToolbarHeight * 1,
+                                child: Row(
+                                  children: List.generate(
+                                      state.images?.length ??0,
+                                          (index)=>SizedBox(
+                                            height: 100.h,
+                                            width: 100.w,
+                                    child: Stack(
+                                      alignment:
+                                      AlignmentDirectional.topStart,
+                                      children: [
+                                        // Positioned.fill(
+                                        //   child: Image.network(widget.item.images[index].photo),
+                                        // //     child: Image.file(
+                                        // //   fit: BoxFit.cover,
+                                        // //   File(image.file.path),
+                                        // // ),
+                                        // ),
+                                        // if (state.images != null &&
+                                        //     state.images!.isNotEmpty)
+                                        Container(
+                                          height: 200,
+                                          width: 200,
+                                          margin:
+                                          const EdgeInsetsDirectional
+                                              .only(
+                                              end: 10, bottom: 10),
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(15),
+                                            image: DecorationImage(
+                                              fit: BoxFit.fill,
+                                              image: FileImage(
+                                                File(state.images![index]
+                                                    .file.path),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        PositionedDirectional(
+                                          start: 5.w,
+                                          top: 0,
+                                          child: IconAppButton(
+                                            width: 35.w,
+                                            height: 35.h,
+                                            icon: Icons.close_sharp,
+                                            color: Colors.red,
+                                            backColor: Colors.white,
+                                            size: 25.w,
+                                            isCircle: true,
+                                            onPressed: () => showAreYouSure(
+                                                context: context,
+                                                title: 'Alert',
+                                                subTitle:
+                                                'Are you sure you want to remove this image?',
+                                                action: () {
+                                                  controller.removePhoto(
+                                                      state.images![index]);
+                                                }),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                                ),
+                              ),
+                            const Sizer(),
+                            if (widget.item.images != null &&
+                                widget.item.images.isNotEmpty)
+                              SizedBox(
+                                height: 80.h,
+                                child: Row(
+                                  children: List.generate(
+                                      widget.item.images.length,
+                                      (index) => SizedBox(
+                                            height: 100.h,
+                                            width: 100.w,
+                                            child: Stack(
+                                              alignment:
+                                                  AlignmentDirectional.topStart,
+                                              children: [
+                                                // Positioned.fill(
+                                                //   child: Image.network(widget.item.images[index].photo),
+                                                // //     child: Image.file(
+                                                // //   fit: BoxFit.cover,
+                                                // //   File(image.file.path),
+                                                // // ),
+                                                // ),
+                                                // if (state.images != null &&
+                                                //     state.images!.isNotEmpty)
+                                                ImageFromInternet(
+                                                  height: 100.h,
+                                                  width: 100.w,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20.r),
+                                                  fit: BoxFit.fill,
+                                                  image: widget
+                                                      .item.images[index].photo,
+                                                ),
+                                                // Container(
+                                                //   height: 100.h,
+                                                //   width: 100.w,
+                                                //   padding: const EdgeInsets.all(10),
+                                                //   decoration: BoxDecoration(
+                                                //     borderRadius:
+                                                //         BorderRadius.circular(20.r),
+                                                //     image: DecorationImage(
+                                                //       fit: BoxFit.fill,
+                                                //       image: NetworkImage(
+                                                //         widget.item.images[index].photo,
+                                                //       ),
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                                PositionedDirectional(
+                                                  start: 5.w,
+                                                  top: 0,
+                                                  child: IconAppButton(
+                                                    width: 35.w,
+                                                    height: 35.h,
+                                                    icon: Icons.close_sharp,
+                                                    color: Colors.red,
+                                                    backColor: Colors.white,
+                                                    size: 25.w,
+                                                    isCircle: true,
+                                                    onPressed: () =>
+                                                        showAreYouSure(
+                                                            context: context,
+                                                            title: 'Alert',
+                                                            subTitle:
+                                                                'Are you sure you want to remove this image?',
+                                                            action: () {
+                                                              controller.removePhoto(
+                                                                  state.images![
+                                                                      index]);
+                                                            }),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )),
+                                ),
+                              ),
+                          ],
                         ),
-                   //   if (widget.item.images.isEmpty)
-                        BadgedLabel(
-                          label: LocaleKeys.addImages.localize,
-                          isBordered: true,
-                          style: Styles.smallText(color: Colors.black),
-                          color: AppColors.SECONDARY_COLOR,
-                          isCentered: true,
-                          close: false,
-                        ),
-                      Label(
-                        text: LocaleKeys.addImagesDesc.localize,
-                        style: Styles.mediumText(
-                          color: Colors.grey,
-                        ),
-                        textAlign: TextAlign.center,
-                      )
-                    ],
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            const Sizer(),
-            if (state.images != null &&
-                state.images!.isNotEmpty)
-              SizedBox(
-                height: kToolbarHeight * 1,
-                child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                 //     final image = state.images![index];
-                      return SizedBox(
-                        height: kToolbarHeight * 2,
-                        width: kToolbarHeight * 2,
-                        child: Stack(
-                          alignment: AlignmentDirectional.topStart,
-                          children: [
-                            // Positioned.fill(
-                            //   child: Image.network(widget.item.images[index].photo),
-                            // //     child: Image.file(
-                            // //   fit: BoxFit.cover,
-                            // //   File(image.file.path),
-                            // // ),
-                            // ),
-                            // if (state.images != null &&
-                            //     state.images!.isNotEmpty)
-                              Container(
-                                height: 200,
-                                width: 200,
-                                margin: const EdgeInsetsDirectional.only(
-                                    end: 10, bottom: 10),
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: FileImage(
-                                      File(state.images![index].file.path),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            PositionedDirectional(
-                              start: 5.w,
-                              top: 0,
-                              child: IconAppButton(
-                                width: 35.w,
-                                height: 35.h,
-                                icon: Icons.close_sharp,
-                                color: Colors.red,
-                                backColor: Colors.white,
-                                size: 25.w,
-                                isCircle: true,
-                                onPressed: () => showAreYouSure(
-                                    context: context,
-                                    title: 'Alert',
-                                    subTitle:
-                                        'Are you sure you want to remove this image?',
-                                    action: () {
-                                   //   controller.removeImage(image: image);
-                                    }),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) => const Sizer(),
-                    itemCount: widget.item.images.length ?? 0),
-              )
           ],
         );
       }),
