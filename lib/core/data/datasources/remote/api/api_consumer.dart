@@ -292,3 +292,4 @@ class BaseApiConsumer extends ApiConsumer {
   @override
   bool get isTokenAttached => _token != null;
 }
+//dependency inversion
