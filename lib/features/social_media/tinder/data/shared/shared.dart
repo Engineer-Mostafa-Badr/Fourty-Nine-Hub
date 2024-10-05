@@ -590,7 +590,12 @@ class BottomSheetContentState extends State<BottomSheetContent> {
           giftId: gift.sId ?? '',
         );
 
-    _handleGiftResponse(context: context, response: data, gift: gift);
+    if (data.toString().contains('sent Gift Successfully') ||
+        data
+            .toString()
+            .contains('You does not have enough money in the wallet')) {
+      _handleGiftResponse(context: context, response: data, gift: gift);
+    }
   }
 
   void _handleGiftResponse({
@@ -604,7 +609,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
         icon: Icons.card_giftcard,
         title: LocaleKeys.gift_body_gift_sent.tr(),
         message:
-            '${LocaleKeys.gift_body_sent_successfully.tr()}\n${LocaleKeys.gift_body_amount_deducted.tr()}: ¥${gift.value}',
+            '${LocaleKeys.gift_body_sent_successfully.tr()}\n${LocaleKeys.gift_body_amount_deducted.tr()}: ${gift.value}',
         isError: false,
         gift: gift,
       );
@@ -831,7 +836,8 @@ void showGiftBottomSheet(BuildContext context,
     backgroundColor: Colors.transparent,
     builder: (context) => MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => GiftsCubit()),
+        BlocProvider.value(value: serviceLocator<GiftsCubit>()),
+        BlocProvider.value(value: serviceLocator<TinderViewCubit>()),
         BlocProvider.value(value: serviceLocator<StreamCubit>()),
       ],
       child: DraggableScrollableSheet(
