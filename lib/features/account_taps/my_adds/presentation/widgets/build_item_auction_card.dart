@@ -21,6 +21,7 @@ import '../../../../account_taps/my_adds/domain/entity/my_ads_auction.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../cubit/my_adds_cubit.dart';
+import 'custom_button_count_ads.dart';
 
 class BuildItemAuctionCard extends StatelessWidget {
   final MyAuctionAdsEntity item;
@@ -262,29 +263,85 @@ class BuildItemAuctionCard extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-            child: _buildContactItem(
-                icon: Icons.visibility_outlined,
-                label: LocaleKeys.view.localize,
-                value: item.viewCountLength,
-                context: context)),
+            child: GestureDetector(
+              onTap: () {
+                print(')))))))))))))))))))');
+                print(item.id);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CustomButtonCountAds(
+                        model: item,
+                        status: 'viewCount',
+                      ),
+                    ));
+              },
+              child: _buildContactItem(
+                  icon: Icons.visibility_outlined,
+                  label: LocaleKeys.view.localize,
+                  value: item.viewCountLength,
+                  context: context),
+            )),
         Expanded(
-            child: _buildContactItem(
-                icon: Icons.call_outlined,
-                label: LocaleKeys.tel.localize,
-                value: item.phoneCountLength,
-                context: context)),
+            child: GestureDetector(
+              onTap: () {
+                print(')))))))))))))))))))');
+                print(item.id);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CustomButtonCountAds(
+                        model: item,
+                        status: 'phoneCount',
+                      ),
+                    ));
+              },
+              child: _buildContactItem(
+                  icon: Icons.call_outlined,
+                  label: LocaleKeys.tel.localize,
+                  value: item.phoneCountLength,
+                  context: context),
+            )),
         Expanded(
-            child: _buildContactItem(
-                icon: Icons.chat_bubble_outline,
-                label: LocaleKeys.chats.localize,
-                value: item.chatCountLength,
-                context: context)),
+            child: GestureDetector(
+              onTap: () {
+                print(')))))))))))))))))))');
+                print(item.id);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CustomButtonCountAds(
+                        model: item,
+                        status: 'chatCount',
+                      ),
+                    ));
+              },
+              child: _buildContactItem(
+                  icon: Icons.chat_bubble_outline,
+                  label: LocaleKeys.chats.localize,
+                  value: item.chatCountLength,
+                  context: context),
+            )),
         Expanded(
-            child: _buildContactItem(
-                icon: Icons.favorite_border_outlined,
-                label: LocaleKeys.like.localize,
-                value: item.loveCountLength,
-                context: context)),
+            child: GestureDetector(
+              onTap: () {
+                print(')))))))))))))))))))');
+                print(item.id);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CustomButtonCountAds(
+                        model: item,
+                        status: 'loveCount',
+                      ),
+                    ));
+              },
+              child: _buildContactItem(
+                  icon: Icons.favorite_border_outlined,
+                  label: LocaleKeys.like.localize,
+                  value: item.loveCountLength,
+                  context: context),
+            )),
       ],
     );
   }

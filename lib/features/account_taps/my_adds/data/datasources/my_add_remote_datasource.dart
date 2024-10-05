@@ -9,10 +9,14 @@ import '../../../../../core/data/datasources/json_parser.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
 import '../../../../ride/trip_details/data/models/trip_and_request_model.dart';
+import '../../domain/entity/get_all_count_ads_entity.dart';
 import '../../domain/entity/get_all_counts_trip_join_entity.dart';
 import '../../domain/entity/my_ads_auction.dart';
 import '../../domain/entity/my_ads_trip_join_entity.dart';
+import '../../domain/usecases/get_all_counts_ads_usecase.dart';
 import '../../domain/usecases/get_all_counts_usecase.dart';
+import '../../domain/usecases/update_my_ads_usecase.dart';
+import '../model/get_all_count_ads_model.dart';
 import '../model/get_all_counts_trip_join_model.dart';
 import '../model/my_ads_auction_model.dart';
 
@@ -35,6 +39,8 @@ abstract class MyAdsRemoteDatasource {
   Future<Either<Failure, bool>> deleteMyTripJoin({required String id});
   Future<Either<Failure, bool>> deleteMyInstallment({required String id});
   Future<Either<Failure, List<GetAllCountsTripJoinEntity>>> getAllCountsTripJoin(Params params);
+  Future<Either<Failure, List<GetAllCountAdsEntity>>> getAllCountsAds(CountAdsParams params);
+  Future<Either<Failure, bool>> updateMyAds(UpdateMyAdsParams params);
 }
 
 class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
@@ -155,5 +161,25 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
     final response = await _apiConsumer.get(EndPoints.getAllCount(params));
     return response.fold((failure) => Left(failure),
         (data) => Right((data['data'] as List).map((e) => GetAllCountsTripJoinModel.fromJson(e)).toList()));
+  }
+
+  @override
+  Future<Either<Failure, List<GetAllCountAdsEntity>>> getAllCountsAds(CountAdsParams params) async {
+    final response = await _apiConsumer.get(EndPoints.getAllAdsCount(params));
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right((data['data'] as List)
+            .map((e) => GetAllCountAdsModel.fromJson(e))
+            .toList()));
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateMyAds(UpdateMyAdsParams params) async {
+    final response = await _apiConsumer.put(EndPoints.updateMyAds(params),
+    data: params.toJson()
+    );
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right(data['status']));
   }
 }
