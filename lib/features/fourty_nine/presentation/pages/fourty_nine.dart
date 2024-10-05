@@ -33,7 +33,7 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../chance_feature/presentation/pages/chance_page.dart';
+import '../../../chance_feature/presentation/pages/chance_view.dart';
 import '../widgets/announce_widget.dart';
 
 class FourtyNineView extends StatefulWidget {

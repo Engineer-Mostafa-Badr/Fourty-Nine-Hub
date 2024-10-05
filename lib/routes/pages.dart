@@ -173,7 +173,7 @@ import '../features/authentication/presentation/pages/forgot_password/forget_pas
 import '../features/authentication/presentation/pages/login_view.dart';
 import '../features/authentication/presentation/pages/register/register_verify_otp.dart';
 import '../features/azkaar/presentation/pages/azkar_view.dart';
-import '../features/chance_feature/presentation/pages/chance_page.dart';
+import '../features/chance_feature/presentation/pages/chance_view.dart';
 import '../features/competition/presentation/pages/competition_view.dart';
 import '../features/competition/presentation/pages/winners.dart';
 import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
