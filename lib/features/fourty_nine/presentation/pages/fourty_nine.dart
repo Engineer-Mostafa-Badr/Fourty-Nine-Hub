@@ -33,6 +33,7 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../chance_feature/presentation/pages/chance_page.dart';
 import '../widgets/announce_widget.dart';
 
 class FourtyNineView extends StatefulWidget {
@@ -370,7 +371,14 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 ),
                 icon: Icons.auto_awesome,
                 iconSize: 50.h,
-                onPressed: () {}),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ChanceView(),
+                    ),
+                  );
+                }),
           ),
           Positioned(
               bottom: 5,
