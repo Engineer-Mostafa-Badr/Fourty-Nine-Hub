@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,28 +11,18 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
-import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/labels/badged_label.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/error/failure.dart';
-import '../../../../../core/messages/messages.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
-import '../../../../ads_feature/create_ad/domain/entities/categorization_entity.dart';
-import '../../../../ads_feature/create_ad/presentation/widgets/ad_dynamic_inputs.dart';
 import '../../domain/entity/my_ads_auction.dart';
-import '../../domain/entity/my_auction_image_entity.dart';
 import '../../domain/entity/my_auction_main_category.dart';
 import '../../domain/entity/my_auction_sub_category_entity.dart';
-import '../../domain/usecases/edit_my_ads_use_case.dart';
 import '../cubit/my_adds_cubit.dart';
 
 class EditMyAds extends StatefulWidget {
