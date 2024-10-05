@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/error/failure.dart';
@@ -12,6 +13,7 @@ import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
+import '../../../domain/use_cases/cache_out/pay_out_request_use_case.dart';
 import '../../../domain/use_cases/cache_out/request_yellow_card_use_case.dart';
 import '../../cache_out_cubit/payment_cubit.dart'; // For image picking
 
@@ -27,6 +29,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
   bool isRequestingYellowCard = false;
   final TextEditingController yellowCardNumberController =
       TextEditingController();
+  final TextEditingController amountController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -79,6 +82,20 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                     Column(
                       children: [
                         TextFormField(
+                          controller: amountController,
+                          decoration: const InputDecoration(
+                            labelText: "Amount",
+                          ),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter the amount";
+                            }
+                            return null;
+                          },
+                        ),
+                        const Sizer(),
+                        TextFormField(
                           controller: yellowCardNumberController,
                           decoration: InputDecoration(
                             labelText: LocaleKeys
@@ -104,7 +121,22 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                         InkWell(
                           onTap: () {
                             if (formKey.currentState!.validate()) {
-                              //  showSuccessMessage(context, 'رقم الهاتف صحيح');
+                               showAreYouSure(
+                                  title: LocaleKeys.alert.localize,
+                                  subTitle:
+                                  'Are you sure of transferring money?',
+                                  action: () {
+                                    context
+                                        .read<PaymentCacheOutCubit>()
+                                        .payOutRequest(
+                                        params: PayoutRequestParams(
+                                          amount:double.parse(amountController.text),
+                                          payoutMethod: 'fawry_card',
+                                          phoneNumber: yellowCardNumberController.text,
+                                          payoutSource: 'main_wallet',
+                                        ));
+                                  },
+                                  context: context);
                             }
                           },
                           child: Container(

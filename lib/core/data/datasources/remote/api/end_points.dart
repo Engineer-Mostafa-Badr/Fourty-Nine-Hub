@@ -234,6 +234,7 @@ class EndPoints {
   static const instaPay = '/payment-profile';
   static const requestYellowCard = '/payout/yellow-card';
   static const banks = '/banks';
+  static const payout = '/payout/request';
 
   static String doctorAcceptAppointment(String appointmentId) => '/health/book-appointment/approve/$appointmentId';
 
