@@ -92,7 +92,6 @@ class CodegenLoader extends AssetLoader{
   "gifts": "هدايا",
   "goalsAreSelectedSuccess": "تم اختيار الاهداف",
   "restaurantName": "إسم المطعم",
-  "restaurantNumber": "رقم المطعم",
   "theCommercialRegister": "السجل التجاري",
   "theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider": "التطبيق لا يخصم اي نسبه من مزود الخدمة",
   "youWillGetEGP3650PerYearIfYouSubscribeDaily": "سوف تحصل على 3650 جنيها في السنه عندما تشترك يوميا",
@@ -887,7 +886,8 @@ class CodegenLoader extends AssetLoader{
   "cancelRequest": "إلغاء الطلب",
   "sendOffer": "إرسال العرض",
   "seeAll": "شاهد الكل",
-  "expiredRequests": "الطلبات منتهية الصلاحية"
+  "idExpiryDate": "تاريخ انتهاء الهوية",
+  "licenseFrontAndBack": "قم بتحميل الترخيص  (الوجه والظهر)"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -964,7 +964,6 @@ static const Map<String,dynamic> en = {
   "lightMode": "Light mode",
   "voice": "Voice",
   "restaurantName": "ٌRestaurant Name",
-  "restaurantNumber": "ٌRestaurant Number",
   "theCommercialRegister": "The Commercial Register",
   "theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider": "The application does not deduct any percentage from the service provider.",
   "youWillGetEGP3650PerYearIfYouSubscribeDaily": "You will get 3650 EGP per year if you subscribe daily.",
@@ -1765,7 +1764,8 @@ static const Map<String,dynamic> en = {
   "cancelRequest": "Cancel Request",
   "sendOffer": "Send Offer",
   "seeAll": "See All",
-  "expiredRequests": "Expired Requests"
+  "idExpiryDate": "ID Expiry Date",
+  "licenseFrontAndBack": "Upload Your License (Front and Back)"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -1,6 +1,13 @@
 part of 'health_cubit.dart';
 
-enum HealthStates { loading, initState, error }
+enum HealthStates { loading, initState, error, success }
+
+extension HealthStateX on HealthState {
+  bool get isInitial => status == HealthStates.initState;
+  bool get isLoading => status == HealthStates.loading;
+  bool get isSuccess => status == HealthStates.success;
+  bool get isError => status == HealthStates.error;
+}
 
 class HealthState {
   final HealthStates status;
@@ -10,6 +17,7 @@ class HealthState {
   final List<HealthSubcategoryEntity>? medicalServices;
   final List<GovernorateEntity>? governorates;
   final MainCategoryEntity? mainCategory;
+  final Banner? banner;
   final bool? isDoctor;
   final bool? isApproved;
 
@@ -23,6 +31,7 @@ class HealthState {
     this.subCategories,
     this.medicalServices,
     this.governorates,
+    this.banner,
   });
 
   HealthState copyWith({
@@ -35,6 +44,7 @@ class HealthState {
     List<HealthSubcategoryEntity>? subCategories,
     List<HealthSubcategoryEntity>? medicalServices,
     List<GovernorateEntity>? governorates,
+    Banner? banner,
   }) {
     return HealthState(
       status: status ?? this.status,
@@ -46,6 +56,7 @@ class HealthState {
       isApproved: isApproved ?? this.isApproved,
       subCategories: subCategories ?? this.subCategories,
       governorates: governorates ?? this.governorates,
+      banner: banner ?? this.banner,
     );
   }
 }

@@ -860,6 +860,8 @@ abstract class  LocaleKeys {
   static const cancelRequest = 'cancelRequest';
   static const sendOffer = 'sendOffer';
   static const seeAll = 'seeAll';
+  static const idExpiryDate = 'idExpiryDate';
+  static const licenseFrontAndBack = 'licenseFrontAndBack';
   static const expiredRequests = 'expiredRequests';
 
 }

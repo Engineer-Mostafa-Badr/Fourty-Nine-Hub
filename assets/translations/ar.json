@@ -871,5 +871,7 @@
   "cancelRequest": "إلغاء الطلب",
   "sendOffer": "إرسال العرض",
   "seeAll": "شاهد الكل",
-  "expiredRequests": "الطلبات منتهية الصلاحية"
+  "idExpiryDate": "تاريخ انتهاء الهوية",
+  "licenseFrontAndBack": "قم بتحميل الترخيص  (الوجه والظهر)"
+
 }
