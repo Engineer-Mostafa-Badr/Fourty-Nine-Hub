@@ -163,6 +163,7 @@ abstract class Labels {
   static const thePremiumPackageGivesYou =
       'The Premium Package gives you the opportunity to be more visible and get more cashback.';
   static const freeCancellation = 'Free cancellation';
+  static const paymentInCash='Payment in cash, and client pay the cost of the gates';
   static const request = 'Request';
   static const driverDashboard = 'Driver dashboard';
   static const premiumRequest = 'Premium Request';
