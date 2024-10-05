@@ -46,7 +46,7 @@ class AddressInfoRow extends StatelessWidget {
             flex: 5,
             child: Text(
               address,
-              style: Styles.headerText(),
+              style: Styles.headerText(fontSize: 24),
             ),
           )
         ],

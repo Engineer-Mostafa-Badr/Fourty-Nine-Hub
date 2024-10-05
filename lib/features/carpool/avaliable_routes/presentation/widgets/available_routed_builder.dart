@@ -42,10 +42,12 @@ class AvailableRoutesBottomSheet extends StatefulWidget {
   });
 
   @override
-  State<AvailableRoutesBottomSheet> createState() => _AvailableRoutesBottomSheetState();
+  State<AvailableRoutesBottomSheet> createState() =>
+      _AvailableRoutesBottomSheetState();
 }
 
-class _AvailableRoutesBottomSheetState extends State<AvailableRoutesBottomSheet> {
+class _AvailableRoutesBottomSheetState
+    extends State<AvailableRoutesBottomSheet> {
   bool isWomanOnly = false;
   bool isDriverWomanOnly = false;
   bool isComfort = false;
@@ -154,7 +156,8 @@ class _AvailableRoutesBottomSheetState extends State<AvailableRoutesBottomSheet>
                 isDriverWomanOnly
                     ? Text(
                         "You will find fewer drivers if you select this option",
-                        style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
+                        style:
+                            Styles.mediumText(color: AppColors.SECONDARY_COLOR),
                       )
                     : SizedBox(height: 70.h),
               ],
