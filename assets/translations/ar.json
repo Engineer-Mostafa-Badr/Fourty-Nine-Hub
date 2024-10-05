@@ -871,6 +871,8 @@
   "newRide": "رحلة جديدة",
   "cancelRequest": "إلغاء الطلب",
   "sendOffer": "إرسال العرض",
-  "seeAll": "شاهد الكل"
+  "seeAll": "شاهد الكل",
+  "idExpiryDate": "تاريخ انتهاء الهوية",
+  "licenseFrontAndBack": "قم بتحميل الترخيص  (الوجه والظهر)"
 
 }

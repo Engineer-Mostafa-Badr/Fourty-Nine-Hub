@@ -215,7 +215,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
 
   Future<void> _getMealCategoriesWithCountRestaurants() async {
     final response = await _getMealCategoriesWithCountRestaurantsUseCase(
-        params: PostCommentsParams( userId: user?.id));
+        params: PostCommentsParams(userId: user?.id));
     response.fold(
         (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
         (data) => emit(state.copyWith(mealCategories: data)));

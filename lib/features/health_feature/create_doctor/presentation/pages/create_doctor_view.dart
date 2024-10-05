@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/address_field.dart';
@@ -62,8 +64,9 @@ class CreateDoctorView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                    text: Labels.doctor,
+                    text: LocaleKeys.doctor.tr(),
                     style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
+                Sizer(height: 20.h),
                 const CreateDoctorSubcategoryDropdown(),
                 Sizer(height: 20.h),
                 CreateDoctorOptionsCheckbox(),
