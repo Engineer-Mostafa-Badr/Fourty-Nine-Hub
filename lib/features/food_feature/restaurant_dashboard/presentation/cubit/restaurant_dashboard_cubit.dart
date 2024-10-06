@@ -110,7 +110,7 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
 
             final ordersResponse = RestaurantOrdersModel.fromJson(jsonList);
 
-            print("${jsonList} aaaaaaaaaa");
+            print("$jsonList aaaaaaaaaa");
             emit(state.copyWith(orders: ordersResponse));
           } else {
             // Handle the case where the response is empty
