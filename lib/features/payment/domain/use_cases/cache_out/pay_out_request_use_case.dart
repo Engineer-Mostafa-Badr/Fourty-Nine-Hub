@@ -19,17 +19,21 @@ class PayoutRequestParams {
   final String payoutMethod;
   final String phoneNumber;
   final String payoutSource;
+  String? idNumber;
 
   PayoutRequestParams(
       {required this.amount,
       required this.payoutMethod,
       required this.phoneNumber,
-      required this.payoutSource});
+      required this.payoutSource,
+        this.idNumber,
+      });
 
   Map<String, dynamic> toJson() => {
         'amount': amount,
         'payoutMethod': payoutMethod,
         'phoneNumber': phoneNumber,
         'payoutSource': payoutSource,
+        'idNumber': idNumber,
       };
 }

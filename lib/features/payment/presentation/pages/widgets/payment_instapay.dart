@@ -180,7 +180,7 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
                         setState(() {
                           selectedBank = value;
                           if (selectedBank != null) {
-                            print('Selected class: ${selectedBank!.nameEn}');
+                            print('Selected class: ${selectedBank!.id}');
                           } else {
                             print('No class selected');
                           }
@@ -274,8 +274,18 @@ void _submitForm(BuildContext context) {
     }
   } else if (selectedOption == 'bank') {
     if(formKey.currentState!.validate()) {
-      result =
+      if(selectedBank !=null){
+        context.read<PaymentCacheOutCubit>().postInstaPay(
+            params:
+            InstapayParams(
+              bankId: selectedBank?.id,
+              accountNumber: bankAccountController.text,
+            ));
+        result =
         'Bank Account: ${bankAccountController.text}, Bank: ${bankNameController.text}';
+      }else{
+        showErrorMessage(context, 'Please Enter Bank Name');
+      }
     }
   } else if (selectedOption == 'card') {
     if (formKey.currentState!.validate()) {

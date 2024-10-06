@@ -82,20 +82,6 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                     Column(
                       children: [
                         TextFormField(
-                          controller: amountController,
-                          decoration: const InputDecoration(
-                            labelText: "Amount",
-                          ),
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Please enter the amount";
-                            }
-                            return null;
-                          },
-                        ),
-                        const Sizer(),
-                        TextFormField(
                           controller: yellowCardNumberController,
                           decoration: InputDecoration(
                             labelText: LocaleKeys
@@ -115,6 +101,20 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                                   .localize; // Invalid phone number
                             }
                             return null; // Valid
+                          },
+                        ),
+                        const Sizer(),
+                        TextFormField(
+                          controller: amountController,
+                          decoration: const InputDecoration(
+                            labelText: "Amount",
+                          ),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter the amount";
+                            }
+                            return null;
                           },
                         ),
                         const Sizer(),

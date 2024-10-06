@@ -133,6 +133,12 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
                         if (value == null || value.isEmpty) {
                           return "Please enter your national ID";
                         }
+                        if (value.length != 14) {
+                          return "National ID must be 14 digits";
+                        }
+                        if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                          return "National ID must contain only numbers";
+                        }
                         return null;
                       },
                     ),
@@ -188,6 +194,7 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
                                       payoutMethod: 'id_card',
                                       phoneNumber: phoneNumberController.text,
                                       payoutSource: 'main_wallet',
+                                      idNumber: nationalIdController.text
                                     ));
                               },
                               context: context);
