@@ -7,7 +7,9 @@ import '../../repositories/cache_out/payment_cache_out_repository.dart';
 class InstapayCacheOutUseCase
     extends UseCase<InstapayCacheOutEntity, InstapayParams> {
   final PaymentCacheOutRepository _repo;
+
   InstapayCacheOutUseCase(this._repo);
+
   @override
   Future<Either<Failure, InstapayCacheOutEntity>> call(
       InstapayParams params) async {
@@ -16,12 +18,24 @@ class InstapayCacheOutUseCase
 }
 
 class InstapayParams {
-  final String instaPay;
+   String? instaPay;
+   String? accountNumber;
+   String? accountName;
+   String? iban;
+   String? bankId;
 
   InstapayParams(
-      {required this.instaPay,});
+  {this.instaPay, this.accountNumber, this.accountName, this.iban,
+      this.bankId});
 
-  Map<String,dynamic> toJson()=>{
-   'instaPay':instaPay,
-  };
+   Map<String, dynamic> toJson() => {
+     'instaPay': instaPay,
+     'bankAccount': {
+       'accountNumber': accountNumber,
+       'accountName': accountName,
+       'iban': iban,
+       'bankId': bankId,
+     },
+   };
+
 }

@@ -1,6 +1,6 @@
 part of 'my_adds_cubit.dart';
 
-enum MyAddsStates { loading, error, initState ,success}
+enum MyAddsStates { loading, error, initState ,success,imageUploading}
 
 class MyAddsState {
   final MyAddsStates? status;
@@ -14,6 +14,7 @@ class MyAddsState {
   final  List<GetAllCountsTripJoinEntity>? allCounts;
   final MyAdsTripJoinEntity? tripJoin;
   final List<GetAllCountAdsEntity>? countAds;
+  final List<UploadFileEntity>? images;
 
   const MyAddsState({
     this.status,
@@ -27,6 +28,7 @@ class MyAddsState {
     this.myOtherAds,
     this.allCounts,
     this.countAds,
+    this.images,
   });
   MyAddsState copyWith({
     MyAddsStates? status,
@@ -39,7 +41,8 @@ class MyAddsState {
     List<MyAuctionAdsEntity>? myOtherAds,
     List<GetAllCountsTripJoinEntity>? allCounts,
     MyAdsTripJoinEntity? tripJoin,
-    List<GetAllCountAdsEntity>? countAds
+    List<GetAllCountAdsEntity>? countAds,
+     List<UploadFileEntity>? images
   }) {
     return MyAddsState(
       status: status ?? this.status,
@@ -53,6 +56,7 @@ class MyAddsState {
       myOtherAds: myOtherAds ?? this.myOtherAds,
       allCounts: allCounts ?? this.allCounts,
       countAds: countAds ?? this.countAds,
+      images: images ?? this.images,
     );
   }
 }

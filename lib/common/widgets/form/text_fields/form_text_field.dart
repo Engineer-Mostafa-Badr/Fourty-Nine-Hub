@@ -179,12 +179,12 @@ class FormTextField extends StatelessWidget {
                 Expanded(
                     child: Label(
                   text: info ?? '',
-                  style: Styles.smallText(color: Colors.grey),
+                  style: Styles.smallText(color: Colors.grey)
                 ))
-              ],
-            ),
+              ]
+            )
           )
-      ],
+      ]
     );
   }
 }
