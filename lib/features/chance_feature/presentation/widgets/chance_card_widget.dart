@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/pages/chance_details_view.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/image_card_widget.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/subscribe_widget_in_card.dart';
-import 'package:fourtyninehub/features/chance_feature/presentation/widgets/slider_card_widget.dart';
+import 'package:fourtyninehub/features/chance_feature/presentation/widgets/rate_product_widget.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -15,7 +15,7 @@ class ChanceCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> const ChanceDetailsView())) ;
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>  ChanceDetailsView())) ;
       },
       child: Container(
         decoration: BoxDecoration(
@@ -60,10 +60,11 @@ class ChanceCardWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 6),
+                   SizedBox(height: 10.h),
                   const NotSubscribedWidget(),
-                  const SizedBox(height: 3),
-                  const SliderCardWidget(),
+                   SizedBox(height: 20.h),
+
+                  const LinerProgressIndicator(),
                 ],
               ),
             ),
