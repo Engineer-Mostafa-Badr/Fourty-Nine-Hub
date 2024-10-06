@@ -8,6 +8,8 @@ import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/filter_ad_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
@@ -31,14 +33,16 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   final GetGovernoratesUseCase _governoratesUseCase;
   final GetCitiesUseCase _citiesUseCase;
   final CreateAdUseCase _createAdUseCase;
+  final FilterAdUseCase _filterAdUseCase;
 
   List<SelectionEntity> values = [];
 
-  String? title, description, price, phone;
+  String? title, description,price, priceFrom,priceTo, phone;
   final formState = GlobalKey<FormState>();
+  final formStatic = GlobalKey<FormState>();
 
   CreateAdCubit(this._getAdPropertiesUsecase, this._createAdUseCase,
-      this._governoratesUseCase, this._citiesUseCase)
+      this._governoratesUseCase, this._citiesUseCase, this._filterAdUseCase)
       : super(CreateAdState());
 
   void loadData({required String subCategoryId}) async {
@@ -70,10 +74,10 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       // print(object)
       final propertiesList = data
           .where((element) =>
-              element.nameAr != 'السعر' && element.nameEn != 'الراتب')
+              element.nameAr != 'السعر' && element.nameAr != 'الراتب')
           .toList();
 
-      emit(state.copyWith(adProperties: propertiesList));
+      emit(state.copyWith(adProperties: propertiesList,filterAdProperties:data));
     });
   }
 
@@ -82,10 +86,23 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     print(values.length);
   }
 
-  void onTextChanged({required String v, required int index}) {
-    SelectionEntity data = SelectionEntity(nameAr: v, nameEn: v);
-    values[index] = data;
-    print(values.length);
+  void onTextChanged({required String v, required int index,bool? isNumber=false,bool? from =true,String? type}) {
+    if(isNumber==true){
+      if(from==true){
+        var model = values[index];
+        SelectionEntity data = SelectionEntity(nameAr: v, nameEn: model.nameEn,type: type);
+        values[index] = data;
+      }else{
+        var model = values[index];
+        SelectionEntity data = SelectionEntity(nameAr: model.nameAr, nameEn: v);
+        values[index] = data;
+      }
+    }else {
+      SelectionEntity data = SelectionEntity(nameAr: v, nameEn: v);
+      values[index] = data;
+    }
+    print(values[index].nameAr);
+    print(values[index].nameEn);
   }
 
   void uploadImage({required String subCategoryId}) async {
@@ -139,6 +156,12 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       print(state.isSale);
       type = "sale";
     }
+
+    if(formStatic.currentState?.validate()??false){
+      print("object");
+    }else{
+      print("object3132");
+    }
     if ((formState.currentState?.validate() ?? false) && (state.images?.isNotEmpty ?? false)&&(state.city !='')&&state.governorate !='') {
       List<CreateAdEntity> details = [];
       for (int i = 0; i < (state.adProperties?.length ?? 0); i++) {
@@ -176,6 +199,34 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       showErrorMessage(context, 'messageGovernorate');
     }else if(state.city == ''){
       showErrorMessage(context, 'messageCity');
+    }
+  }
+
+  void filterAds(
+      {required CategorizationEntity categorize,
+        required BuildContext context}) async{
+    if(formState.currentState?.validate() ?? false){
+      print("ss");
+      List<CreateAdEntity> details = [];
+      for (int i = 0; i < (state.filterAdProperties?.length ?? 0); i++) {
+        details.add(CreateAdEntity(
+            propId: state.filterAdProperties![i].id, value: SelectionEntity(nameAr: state.selections![i].nameAr, nameEn: state.selections![i].nameEn,type: state.filterAdProperties![i].type)));
+      }
+      String priceId = state.filterAdProperties?.firstWhere((element) => element.nameAr== 'السعر'||element.nameAr=='الراتب').id??'';
+      List<CreateAdEntity> selectedDetails =
+      details.where((element) => element.value.nameAr.isNotEmpty&&element.propId!=priceId).toList();
+      CreateAdEntity price = details.firstWhere((element) => element.propId == priceId);
+      for (var item in selectedDetails){
+        print(item.toJson());
+      }
+
+      FilterModel model =FilterModel(price: price, props: selectedDetails, cityId: state.city??'',governorateId: state.governorate??'', limit: 10, page: 1, subCategoryId:categorize.subCategory.id);
+      final response = await _filterAdUseCase(model);
+      response.fold(
+              (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
+              (r) {
+                context.pop(model);
+          });
     }
   }
 

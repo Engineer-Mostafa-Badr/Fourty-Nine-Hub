@@ -875,5 +875,8 @@ abstract class  LocaleKeys {
   static const subscribed = 'subscribed';
   static const unsubscribed = 'unsubscribed';
   static const expiredRequests = 'expiredRequests';
+  static const filter = 'filter';
+  static const beAStar = 'beAStar';
+  static const select = 'select';
 
 }

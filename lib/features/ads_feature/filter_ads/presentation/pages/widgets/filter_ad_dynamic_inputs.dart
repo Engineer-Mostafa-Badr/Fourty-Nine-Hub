@@ -1,35 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/widgets/custom_text_field.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../res/style/app_colors.dart';
-
-class AdDynamicInputWidget extends StatefulWidget {
+class FilterAdDynamicInputWidget extends StatefulWidget {
   final AdPropertiesEntity property;
   final Function(SelectionEntity) onChanged;
-  final Function(String) onTextChanged;
-  const AdDynamicInputWidget(
+  final Function(String, bool,String) onTextChanged;
+  const FilterAdDynamicInputWidget(
       {super.key,
       required this.property,
       required this.onChanged,
       required this.onTextChanged});
 
   @override
-  State<AdDynamicInputWidget> createState() => _AdDynamicInputWidgetState();
+  State<FilterAdDynamicInputWidget> createState() =>
+      _FilterAdDynamicInputWidgetState();
 }
 
-class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
+class _FilterAdDynamicInputWidgetState
+    extends State<FilterAdDynamicInputWidget> {
   SelectionEntity? value;
   @override
   void initState() {
@@ -62,7 +65,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
                 : widget.property.nameEn),
         TextFormField(
           maxLines: null,
-          onChanged: (v) => widget.onTextChanged(v),
+          onChanged: (v) => widget.onTextChanged(v, true,widget.property.type),
           style: Styles.headerText(fontSize: 26),
           decoration: InputDecoration(
               fillColor: Colors.white,
@@ -137,7 +140,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
     required List<SelectionEntity> values,
   }) {
     return Scaffold(
-      appBar: const BackAppBar(
+      appBar:  BackAppBar(
         label: LocaleKeys.select.localize,
       ),
       body: ListView.builder(
@@ -164,15 +167,56 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             text: getLang() == 'ar'
                 ? widget.property.nameAr
                 : widget.property.nameEn),
-        FormTextField(
-          label: getLang() == 'ar'
-              ? widget.property.nameAr
-              : widget.property.nameEn,
-          type: TextInputType.number,
-          height: kToolbarHeight * .8,
-          hint: 'Type here',
-          action: (String v) => widget.onTextChanged(v),
-        ),
+        Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                maxLines: null,
+                onChanged: (v) => widget.onTextChanged(v, true,widget.property.type),
+                keyboardType: TextInputType.number,
+                style: Styles.headerText(fontSize: 26),
+                decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.all(5),
+                    hintText: LocaleKeys.from.localize,
+                    hintStyle: Styles.mediumText(),
+                    prefix: Sizer(
+                      width: 20.w,
+                    )),
+                validator: (value) {
+                  if ((value == null || value.isEmpty)) {
+                    return LocaleKeys.required.localize;
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+            ),
+            const Sizer(),
+            Expanded(
+                child: TextFormField(
+              maxLines: null,
+              onChanged: (v) => widget.onTextChanged(v, false,widget.property.type),
+              keyboardType: TextInputType.number,
+              style: Styles.headerText(fontSize: 26),
+              decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.all(5),
+                  hintText: LocaleKeys.to.localize,
+                  hintStyle: Styles.mediumText(),
+                  prefix: Sizer(
+                    width: 20.w,
+                  )),
+              validator: (value) {
+                if ((value == null || value.isEmpty)) {
+                  return LocaleKeys.required.localize;
+                } else {
+                  return null;
+                }
+              },
+            )),
+          ],
+        )
       ],
     );
   }

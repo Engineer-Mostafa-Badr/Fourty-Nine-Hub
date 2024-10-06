@@ -143,14 +143,14 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             //    Sizer(),
             //admob
             //   const GoogleAddsBanner(),
-            //  Sizer(),
+            _buildStarWidget(),
+            Sizer(),
             //pick me and come with U
             _pickMeAndComeWithUWidget(),
             const Sizer(),
-            //auction
-            _auctionAndInstallmentWidget(),
-            const Sizer(),
             _buildChanceWidget(),
+            const Sizer(),
+            _auctionAndInstallmentWidget(),
             const Sizer(),
             //cats layout
             _buildMainCategoriesViews(),
@@ -409,6 +409,52 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       ),
     );
   }
+  Widget _buildStarWidget() {
+    return SizedBox(
+      height: kToolbarHeight * .9.h,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: AppButton(
+                color: AppColors.AUTH_CONTAINER_COLOR,
+                label: LocaleKeys.beAStar.localize,
+                style: Styles.mediumText(
+                  color: AppColors.AUTH_CONTAINER_COLOR,
+                  fontWeight: FontWeight.bold,
+                ),
+                icon: Icons.star,
+                iconSize: 50.h,
+                onPressed: () {}),
+          ),
+          Positioned(
+              bottom: 5,
+              left: 5,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 0,
+              left: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 15,
+              right: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              ))
+        ],
+      ),
+    );
+  }
 
   Widget itemAuctionAndInstallmentWidget(
       String label, Function function, IconData icon) {
@@ -422,6 +468,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               Positioned.fill(
                 child: AppButton(
                     color: AppColors.AUTH_CONTAINER_COLOR,
+                    backColor: AppColors.PRIMARY_COLOR,
                     label: label,
                     style: Styles.mediumText(
                       color: AppColors.AUTH_CONTAINER_COLOR,
@@ -537,13 +584,13 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                             size: 38.h,
                           ),
                         ),
-                        const Spacer(),
-                        Label(
-                          text: '$numberOfAds ${LocaleKeys.ads.tr()}',
-                          style: Styles.mediumText(
-                            color: Colors.white,
-                          ),
-                        ),
+                        // const Spacer(),
+                        // Label(
+                        //   text: '$numberOfAds ${LocaleKeys.ads.tr()}',
+                        //   style: Styles.mediumText(
+                        //     color: Colors.white,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
