@@ -13,6 +13,7 @@ import '../../domain/entity/get_all_count_ads_entity.dart';
 import '../../domain/entity/get_all_counts_trip_join_entity.dart';
 import '../../domain/entity/my_ads_auction.dart';
 import '../../domain/entity/my_ads_trip_join_entity.dart';
+import '../../domain/usecases/edit_my_ads_use_case.dart';
 import '../../domain/usecases/get_all_counts_ads_usecase.dart';
 import '../../domain/usecases/get_all_counts_usecase.dart';
 import '../../domain/usecases/update_my_ads_usecase.dart';
@@ -41,6 +42,7 @@ abstract class MyAdsRemoteDatasource {
   Future<Either<Failure, List<GetAllCountsTripJoinEntity>>> getAllCountsTripJoin(Params params);
   Future<Either<Failure, List<GetAllCountAdsEntity>>> getAllCountsAds(CountAdsParams params);
   Future<Either<Failure, bool>> updateMyAds(UpdateMyAdsParams params);
+  Future<Either<Failure, bool>> editMyAds(EditParams params);
 }
 
 class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
@@ -177,6 +179,16 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
   Future<Either<Failure, bool>> updateMyAds(UpdateMyAdsParams params) async {
     final response = await _apiConsumer.put(EndPoints.updateMyAds(params),
     data: params.toJson()
+    );
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> editMyAds(EditParams params) async {
+    final response = await _apiConsumer.put(EndPoints.editMyAds(params),
+        data: params.toJson()
     );
     return response.fold(
             (failure) => Left(failure),
