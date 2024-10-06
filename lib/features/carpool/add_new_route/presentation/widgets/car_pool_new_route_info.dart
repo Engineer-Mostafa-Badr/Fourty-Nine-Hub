@@ -53,23 +53,18 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
             builder: (context, state) {
               return Text(
                 _getPrice(),
-                style: Styles.headerText(fontWeight: FontWeight.bold, fontSize: 50),
+                style: Styles.headerText(
+                    fontWeight: FontWeight.bold, fontSize: 50),
               );
             },
           ),
           Text(
             ' EGP',
-            style: Styles.mediumText(fontWeight: FontWeight.bold, color: AppColors.SECONDARY_COLOR),
+            style: Styles.mediumText(
+                fontWeight: FontWeight.bold, color: AppColors.SECONDARY_COLOR),
           ),
         ],
       ),
-      // Text(
-      //   'Premuim',
-      //   style: Styles.mediumText(
-      //     fontWeight: FontWeight.bold,
-      //     color: AppColors.SECONDARY_COLOR,
-      //   ),
-      // ),
       const Sizer(),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -159,7 +154,6 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
           ),
         ],
       ),
-
       const Sizer(height: 30),
       Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -189,9 +183,12 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
 
   String _getPrice() {
     if (isComfort) {
-      return (getPriceCarpoolCubit.carpoolRouteInfoModel?.driverPriceComfort ?? 0).toString();
+      return (getPriceCarpoolCubit.carpoolRouteInfoModel?.driverPriceComfort ??
+              0)
+          .toString();
     } else {
-      return (getPriceCarpoolCubit.carpoolRouteInfoModel?.driverPrice ?? 0).toString();
+      return (getPriceCarpoolCubit.carpoolRouteInfoModel?.driverPrice ?? 0)
+          .toString();
     }
   }
 }

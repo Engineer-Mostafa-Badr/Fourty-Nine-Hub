@@ -581,6 +581,16 @@ abstract class  LocaleKeys {
   static const reel_voices_other_voice = 'reel_voices.other_voice';
   static const reel_voices_mix_voices = 'reel_voices.mix_voices';
   static const reel_voices = 'reel_voices';
+  static const free = 'free';
+  static const booked = 'booked';
+  static const inProgress = 'inProgress';
+  static const comfort = 'comfort';
+  static const egp = 'egp';
+  static const minutesAgo = 'minutesAgo';
+  static const womenOnly = 'womenOnly';
+  static const bookSeat = 'bookSeat';
+  static const pricePerSeat = 'pricePerSeat';
+  static const book = 'book';
   static const comments_header = 'comments_header';
   static const add_comment_hint = 'add_comment_hint';
   static const write_reply_hint = 'write_reply_hint';
