@@ -103,7 +103,7 @@ class RestaurantStatisticsView extends StatelessWidget {
             value,
             style: const TextStyle(
               // fontSize: 16.sp,
-              color: AppColors.PRIMARY_COLOR_DARK,
+              color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
           ),
