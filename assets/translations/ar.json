@@ -871,6 +871,9 @@
   "newRide": "رحلة جديدة",
   "cancelRequest": "إلغاء الطلب",
   "sendOffer": "إرسال العرض",
-  "seeAll": "شاهد الكل"
+  "seeAll": "شاهد الكل",
+  "filter": "تصفية",
+  "beAStar": "كن نجم"
+
 
 }

@@ -880,5 +880,7 @@
   "newRide": "New Ride",
   "cancelRequest": "Cancel Request",
   "sendOffer": "Send Offer",
-  "seeAll": "See All"
+  "seeAll": "See All",
+  "filter": "Filter",
+  "beAStar": "Be A Star"
 }
