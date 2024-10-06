@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +12,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/localization/locales.dart';
+import '../../../domain/entities/cache_out_entity/list_bank_entity.dart';
 import '../../../domain/use_cases/cache_out/instapay_cache_out_use_case.dart';
 
 class PaymentInstapay extends StatefulWidget {
@@ -31,11 +34,12 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
   final TextEditingController bankNameController = TextEditingController();
   final TextEditingController cardNumberController = TextEditingController();
   var formKey=GlobalKey<FormState>();
+  ListBankEntity? selectedBank;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<PaymentCacheOutCubit>(
-      create: (BuildContext context) => serviceLocator(),
+      create: (BuildContext context) => serviceLocator()..fetchAllBank(),
       child: BlocConsumer<PaymentCacheOutCubit, PaymentCacheOutState>(
         listener: (BuildContext context, state) {
           if (state.status == StateStatus.success) {
@@ -54,7 +58,7 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
             );
           }
         },
-        builder: (BuildContext context, Object? state) {
+        builder: (BuildContext context, state) {
           return Padding(
             padding: EdgeInsets.all(16.w),
             child: Form(
@@ -137,9 +141,17 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
                   if (selectedOption == 'bank') ...[
                     TextFormField(
                       controller: bankAccountController,
-                      decoration:  InputDecoration(
+                      decoration: InputDecoration(
                         labelText: LocaleKeys.bankAccountNumber.localize,
+                        labelStyle: TextStyle(color: Theme.of(context).primaryColor), // Match label color
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                        ),
                       ),
+                      style: TextStyle(color: Theme.of(context).primaryColor), // Match text color
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -152,22 +164,50 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
                       },
                     ),
 
-                    TextFormField(
-                      controller: bankNameController,
-                      decoration:  InputDecoration(
-                        labelText: LocaleKeys.bankName.localize,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return LocaleKeys.pleaseEnterBankName.localize;
-                        }
-                        if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
-                          return LocaleKeys.bankNameCanOnlyContainLetters.localize;
-                        }
-                        return null;
-                      },
-                    ),
+                    Sizer(),
 
+                    DropdownButtonFormField<ListBankEntity>(
+                      isExpanded: true,
+                      value: selectedBank,
+                      iconSize: 40.sp,
+                      hint: Text(
+                        selectedBank?.nameEn ?? 'Select Bank Name',
+                        style: TextStyle(color: Theme.of(context).primaryColor), // Match text color
+                      ),
+                      menuMaxHeight: 400.h,
+                      dropdownColor: Theme.of(context).scaffoldBackgroundColor, // Dropdown background color
+                      onChanged: (ListBankEntity? value) {
+                        setState(() {
+                          selectedBank = value;
+                          if (selectedBank != null) {
+                            print('Selected class: ${selectedBank!.id}');
+                          } else {
+                            print('No class selected');
+                          }
+                        });
+                      },
+                      items: (state != null)
+                          ? state.banks!.map((banks) {
+                        return DropdownMenuItem<ListBankEntity>(
+                          value: banks,
+                          child: Text(
+                            context.locale == Locales.english ? banks.nameEn : banks.nameAr,
+                            style: TextStyle(color: Theme.of(context).primaryColor), // Match text color
+                          ),
+                        );
+                      }).toList()
+                          : [],
+                      decoration: InputDecoration(
+                        labelStyle: TextStyle(color: Theme.of(context).primaryColor), // Match label color
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                        ),
+                      ),
+                      style: TextStyle(fontSize: 14, color: Theme.of(context).primaryColor), // Match text color
+                    ),
                   ],
                   if (selectedOption == 'card') ...[
                     TextFormField(
@@ -234,8 +274,18 @@ void _submitForm(BuildContext context) {
     }
   } else if (selectedOption == 'bank') {
     if(formKey.currentState!.validate()) {
-      result =
+      if(selectedBank !=null){
+        context.read<PaymentCacheOutCubit>().postInstaPay(
+            params:
+            InstapayParams(
+              bankId: selectedBank?.id,
+              accountNumber: bankAccountController.text,
+            ));
+        result =
         'Bank Account: ${bankAccountController.text}, Bank: ${bankNameController.text}';
+      }else{
+        showErrorMessage(context, 'Please Enter Bank Name');
+      }
     }
   } else if (selectedOption == 'card') {
     if (formKey.currentState!.validate()) {

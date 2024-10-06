@@ -76,7 +76,7 @@ class BadgedLabel extends StatelessWidget {
   Widget _buildLabelWidget() {
     return Label(
       text: label,
-      style: Styles.mediumText(color: textColor),
+      style:style?? Styles.mediumText(color: textColor),
       textAlign: TextAlign.center,
     );
   }
