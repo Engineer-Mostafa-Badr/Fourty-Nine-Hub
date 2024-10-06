@@ -890,7 +890,8 @@ class CodegenLoader extends AssetLoader{
   "idExpiryDate": "تاريخ انتهاء الهوية",
   "licenseFrontAndBack": "قم بتحميل الترخيص  (الوجه والظهر)",
   "subscribed": "مشترك",
-  "unsubscribed": "غير مشرك"
+  "unsubscribed": "غير مشرك",
+  "expiredRequests": "تاريخ  النتهاء"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1770,7 +1771,8 @@ static const Map<String,dynamic> en = {
   "unsubscribed": "Unsubscribed",
   "seeAll": "See All",
   "idExpiryDate": "ID Expiry Date",
-  "licenseFrontAndBack": "Upload Your License (Front and Back)"
+  "licenseFrontAndBack": "Upload Your License (Front and Back)",
+  "expiredRequests": "expiredRequests"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

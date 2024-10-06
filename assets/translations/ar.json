@@ -874,6 +874,7 @@
   "idExpiryDate": "تاريخ انتهاء الهوية",
   "licenseFrontAndBack": "قم بتحميل الترخيص  (الوجه والظهر)",
   "subscribed" : "مشترك",
-  "unsubscribed" : "غير مشرك"
+  "unsubscribed" : "غير مشرك",
+  "expiredRequests" : "تاريخ  النتهاء"
 
 }

@@ -864,5 +864,6 @@ abstract class  LocaleKeys {
   static const licenseFrontAndBack = 'licenseFrontAndBack';
   static const subscribed = 'subscribed';
   static const unsubscribed = 'unsubscribed';
+  static const expiredRequests = 'expiredRequests';
 
 }

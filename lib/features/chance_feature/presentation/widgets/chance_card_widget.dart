@@ -15,7 +15,7 @@ class ChanceCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> const ChanceDetailsView())) ;
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>  ChanceDetailsView())) ;
       },
       child: Container(
         decoration: BoxDecoration(
