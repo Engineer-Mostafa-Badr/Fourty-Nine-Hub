@@ -749,7 +749,6 @@
   "repeated": "مكرر",
   "subscription": "اشتراك",
   "tripJoinAds": "إعلانات الانضمام إلى الرحلة",
-  "other": "اخري",
   "adSoldout": "هل أنت متأكد أنك تريد تعيين هذا الإعلان على أنه مباع؟",
   "viewAll": "عرض الكل",
   "addACaption": "...اضافة تعليق",
@@ -884,6 +883,7 @@
   "idExpiryDate": "تاريخ انتهاء الهوية",
   "licenseFrontAndBack": "قم بتحميل الترخيص  (الوجه والظهر)",
   "subscribed" : "مشترك",
-  "unsubscribed" : "غير مشرك"
-
+  "unsubscribed" : "غير مشرك",
+  "expiredRequests": "طلبات منتهية الصلاحية",
+  "other": "أخرى"
 }

@@ -750,7 +750,6 @@
   "repeated": "Repeated",
   "subscription": "Subscription",
   "tripJoinAds": "Trip Join Ads",
-  "other": "Other",
   "adSoldout": "Are you sure, you want to set this AD as soldout?",
   "viewAll": "View All",
   "addACaption": "Add a caption...",
@@ -894,6 +893,8 @@
   "unsubscribed" : "Unsubscribed",
   "seeAll": "See All",
   "idExpiryDate": "ID Expiry Date",
-  "licenseFrontAndBack": "Upload Your License (Front and Back)"
+  "expiredRequests": "Expired Requests",
+  "licenseFrontAndBack": "Upload Your License (Front and Back)",
+  "other": "Others"
 
 }
