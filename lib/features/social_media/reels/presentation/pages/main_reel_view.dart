@@ -44,8 +44,7 @@ class ReelView extends StatelessWidget {
   }
 }
 
-void showSnackBarAfterBuild(
-  BuildContext context, {
+void showSnackBarAfterBuild(BuildContext context, {
   required String message,
   String? actionLabel,
   VoidCallback? onActionPressed,
@@ -80,10 +79,10 @@ void showSnackBarAfterBuild(
     duration: duration,
     action: actionLabel != null
         ? SnackBarAction(
-            label: actionLabel,
-            onPressed: onActionPressed ?? () {},
-            textColor: actionTextColor,
-          )
+      label: actionLabel,
+      onPressed: onActionPressed ?? () {},
+      textColor: actionTextColor,
+    )
         : null,
     behavior: SnackBarBehavior.floating,
     shape: RoundedRectangleBorder(
@@ -352,17 +351,20 @@ class ReelsScreenState extends State<ReelsScreen> {
 
   Widget _buildAppBar(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
       decoration: const BoxDecoration(
-          // gradient: LinearGradient(
-          //   colors: [
-          //     Colors.deepPurpleAccent,
-          //     Colors.blueAccent,
-          //   ],
-          //   begin: Alignment.topLeft,
-          //   end: Alignment.bottomRight,
-          // ),
-          ),
+        // gradient: LinearGradient(
+        //   colors: [
+        //     Colors.deepPurpleAccent,
+        //     Colors.blueAccent,
+        //   ],
+        //   begin: Alignment.topLeft,
+        //   end: Alignment.bottomRight,
+        // ),
+      ),
       padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -370,6 +372,8 @@ class ReelsScreenState extends State<ReelsScreen> {
           // Back Button Row
           Row(
             children: [
+              Sizer(width: 12.w),
+
               _buildGradientIconButton(
                 iconData: Icons.arrow_back,
                 onPressed: () => context.pop(),
@@ -379,48 +383,47 @@ class ReelsScreenState extends State<ReelsScreen> {
           ),
           const Sizer(),
           // Buttons Row
-          FittedBox(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // Live Button
-                _buildGradientSvgButton(
-                  assetName: 'assets/images/live_icon.svg',
-                  onPressed: () => context.push(Routes.LIVE),
-                ),
-                const Sizer(),
-                // Spotlight Button
-                _buildGradientTextButton(
-                  text: 'Spotlight',
-                  onPressed: () => context.push(Routes.SPOTLIGHT),
-                ),
-                const Sizer(),
-                // Snap Button
-                _buildGradientTextButton(
-                  text: 'Snap',
-                  onPressed: () => context.push(Routes.SNAP),
-                ),
-                const Sizer(),
-                // Reels Button
-                _buildGradientTextButton(
-                  text: 'Reels',
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ReelsRecordingScreen(),
-                      ),
-                    );
-                  },
-                ),
-                const Sizer(),
-                // Search Button
-                _buildGradientIconButton(
-                  iconData: FontAwesomeIcons.search,
-                  onPressed: () => context.push(Routes.Tinder),
-                )
-              ],
-            ),
+          Row(
+
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              // Live Button
+              _buildGradientSvgButton(
+                assetName: 'assets/images/live_icon.svg',
+                onPressed: () => context.push(Routes.LIVE),
+              ),
+              const Sizer(),
+              // Spotlight Button
+              _buildGradientTextButton(
+                text: 'Spotlight',
+                onPressed: () => context.push(Routes.SPOTLIGHT),
+              ),
+              const Sizer(),
+              // Snap Button
+              _buildGradientTextButton(
+                text: 'Snap',
+                onPressed: () => context.push(Routes.SNAP),
+              ),
+              const Sizer(),
+              // Reels Button
+              _buildGradientTextButton(
+                text: 'Reels',
+                onPressed: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ReelsRecordingScreen(),
+                    ),
+                  );
+                },
+              ),
+              const Sizer(),
+              // Search Button
+              _buildGradientIconButton(
+                iconData: FontAwesomeIcons.search,
+                onPressed: () => context.push(Routes.Tinder),
+              )
+            ],
           ),
         ],
       ),
@@ -669,42 +672,42 @@ class RoundedButtonWithImage extends StatelessWidget {
                 style: TextStyle(color: Colors.white),
               )),
         )
-        // ElevatedButton(
-        //   style: ElevatedButton.styleFrom(
-        //     backgroundColor: Colors.transparent,
-        //     shadowColor: Colors.transparent,
-        //     shape: RoundedRectangleBorder(
-        //       borderRadius: BorderRadius.circular(12),
-        //       side: const BorderSide(color: Colors.white, width: 1),
-        //     ),
-        //     padding: EdgeInsets.zero,
-        //   ),
-        //   onPressed: ,
-        //   child: ClipRRect(
-        //     borderRadius: BorderRadius.circular(12),
-        //     child: Stack(
-        //       children: [
-        //         Image.network(
-        //           width: double.infinity,
-        //           height: double.infinity,
-        //           imagePath,
-        //           fit: BoxFit.fill,
-        //         ),
-        //         const Positioned(
-        //           bottom: 4,
-        //           right: 4,
-        //           child: Center(
-        //             child: FaIcon(
-        //               FontAwesomeIcons.music,
-        //               size: 15,
-        //               color: Colors.white,
-        //             ),
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
-        );
+      // ElevatedButton(
+      //   style: ElevatedButton.styleFrom(
+      //     backgroundColor: Colors.transparent,
+      //     shadowColor: Colors.transparent,
+      //     shape: RoundedRectangleBorder(
+      //       borderRadius: BorderRadius.circular(12),
+      //       side: const BorderSide(color: Colors.white, width: 1),
+      //     ),
+      //     padding: EdgeInsets.zero,
+      //   ),
+      //   onPressed: ,
+      //   child: ClipRRect(
+      //     borderRadius: BorderRadius.circular(12),
+      //     child: Stack(
+      //       children: [
+      //         Image.network(
+      //           width: double.infinity,
+      //           height: double.infinity,
+      //           imagePath,
+      //           fit: BoxFit.fill,
+      //         ),
+      //         const Positioned(
+      //           bottom: 4,
+      //           right: 4,
+      //           child: Center(
+      //             child: FaIcon(
+      //               FontAwesomeIcons.music,
+      //               size: 15,
+      //               color: Colors.white,
+      //             ),
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
+    );
   }
 }

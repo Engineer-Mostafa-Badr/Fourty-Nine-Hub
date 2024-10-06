@@ -138,7 +138,7 @@ class _ZegoLiveStreamingPreviewPageState
                     backgroundBuilder: audioVideoViewBackground,
                     avatarConfig: ZegoAvatarConfig(
                       showInAudioMode:
-                          widget.config.audioVideoView.showAvatarInAudioMode,
+                      widget.config.audioVideoView.showAvatarInAudioMode,
                       showSoundWavesInAudioMode: widget
                           .config.audioVideoView.showSoundWavesInAudioMode,
                       builder: widget.config.avatarBuilder,
@@ -177,8 +177,12 @@ class _ZegoLiveStreamingPreviewPageState
                 children: [
                   ImageFromInternet(
                     image:
-                        context.read<UserCubit>().state.data?.profilePicture ??
-                            UIConst.profilePlaceHolder,
+                    context
+                        .read<UserCubit>()
+                        .state
+                        .data
+                        ?.profilePicture ??
+                        UIConst.profilePlaceHolder,
                     height: 100.h,
                     width: 100.w,
                     borderRadius: BorderRadius.circular(15),
@@ -188,10 +192,10 @@ class _ZegoLiveStreamingPreviewPageState
                     child: Theme(
                       data: Theme.of(context).copyWith(
                           textSelectionTheme: const TextSelectionThemeData(
-                        selectionColor: AppColors.PRIMARY_COLOR,
-                        cursorColor: AppColors.PRIMARY_COLOR,
-                        selectionHandleColor: AppColors.PRIMARY_COLOR,
-                      )),
+                            selectionColor: AppColors.PRIMARY_COLOR,
+                            cursorColor: AppColors.PRIMARY_COLOR,
+                            selectionHandleColor: AppColors.PRIMARY_COLOR,
+                          )),
                       child: TextFormField(
                         controller: _titleController,
                         selectionHeightStyle: BoxHeightStyle.tight,
@@ -212,7 +216,7 @@ class _ZegoLiveStreamingPreviewPageState
                           // errorText: _errorMessage,
                           counterText: '',
                           labelStyle:
-                              TextStyle(color: AppColors.QUANTITY_COLOR),
+                          TextStyle(color: AppColors.QUANTITY_COLOR),
                           // hintStyle: TextStyle(color: AppColors.QUANTITY_COLOR),
 
                           border: OutlineInputBorder(
@@ -255,7 +259,9 @@ class _ZegoLiveStreamingPreviewPageState
                       onTap: () {
                         _showTopicSheet(
                           context,
-                          context.read<StreamCubit>().topics,
+                          context
+                              .read<StreamCubit>()
+                              .topics,
                         );
                       },
                       child: Row(
@@ -298,7 +304,8 @@ class _ZegoLiveStreamingPreviewPageState
                               value: serviceLocator<StreamCubit>()),
                           BlocProvider(
                               create: (context) =>
-                                  serviceLocator<GiftsCubit>()..fetchGifts()),
+                              serviceLocator<GiftsCubit>()
+                                ..fetchGifts()),
                         ], child: const SelectLiveGoalsScreen()),
                         TransitionType.bottomToTop,
                       ));
@@ -310,20 +317,22 @@ class _ZegoLiveStreamingPreviewPageState
                       decoration: BoxDecoration(
                         color: Colors.grey.withOpacity(0.7),
                       ),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/49-New-icons/goal.png',
-                            width: 25,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            LocaleKeys.addLiveGoal.localize,
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        ],
+                      child: FittedBox(
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/49-New-icons/goal.png',
+                              width: 25,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              LocaleKeys.addLiveGoal.localize,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -334,40 +343,43 @@ class _ZegoLiveStreamingPreviewPageState
         ));
   }
 
-  Future<dynamic> _showTopicSheet(
-      BuildContext context, List<TopicEntity> topics) {
+  Future<dynamic> _showTopicSheet(BuildContext context,
+      List<TopicEntity> topics) {
     return showModalBottomSheet(
       context: context,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: BlocProvider.value(
-          value: serviceLocator<StreamCubit>(),
-          child:
+      builder: (context) =>
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: BlocProvider.value(
+              value: serviceLocator<StreamCubit>(),
+              child:
               BlocBuilder<StreamCubit, StreamState>(builder: (context, state) {
-            return Column(mainAxisSize: MainAxisSize.min, children: [
-              Label(
-                text: LocaleKeys.selectATopic.localize,
-                style: Styles.headerText(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              ...topics.map((topic) {
-                return RadioListTile<String>(
-                  title: Label(text: topic.name),
-                  value: topic.name,
-                  groupValue: state.topic.isEmpty ? null : state.topic,
-                  onChanged: (value) {
-                    context.read<StreamCubit>().setTopic(topic.name, topic.id);
-                    Future.delayed(
-                        const Duration(milliseconds: 100), () => context.pop());
-                    // print('new topic is ${state.topic}');
-                  },
-                );
+                return Column(mainAxisSize: MainAxisSize.min, children: [
+                  Label(
+                    text: LocaleKeys.selectATopic.localize,
+                    style: Styles.headerText(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  ...topics.map((topic) {
+                    return RadioListTile<String>(
+                      title: Label(text: topic.name),
+                      value: topic.name,
+                      groupValue: state.topic.isEmpty ? null : state.topic,
+                      onChanged: (value) {
+                        context.read<StreamCubit>().setTopic(
+                            topic.name, topic.id);
+                        Future.delayed(
+                            const Duration(milliseconds: 100), () =>
+                            context.pop());
+                        // print('new topic is ${state.topic}');
+                      },
+                    );
+                  }),
+                ]);
               }),
-            ]);
-          }),
-        ),
-      ),
+            ),
+          ),
     );
   }
 
@@ -396,7 +408,7 @@ class _ZegoLiveStreamingPreviewPageState
           text: LocaleKeys.startAMeeting.localize,
           style: Styles.headerText(
               color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+              context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
               fontSize: 35,
               fontWeight: FontWeight.bold),
         ),
@@ -602,7 +614,7 @@ class _ZegoLiveStreamingPreviewPageState
     final iconSize = Size(56.zR, 56.zR);
 
     final beautyButtonPlaceHolder =
-        SizedBox(width: buttonSize.width, height: buttonSize.height);
+    SizedBox(width: buttonSize.width, height: buttonSize.height);
 
     return Positioned(
       bottom: 50,
@@ -622,17 +634,17 @@ class _ZegoLiveStreamingPreviewPageState
             children: [
               widget.config.preview.bottomBar.showBeautyEffectButton
                   ? ZegoLiveStreamingBeautyEffectButton(
-                      translationText: widget.config.innerText,
-                      rootNavigator: widget.config.rootNavigator,
-                      effectConfig: widget.config.effect,
-                      buttonSize: buttonSize,
-                      iconSize: iconSize,
-                      icon: widget.config.preview.beautyEffectIcon != null
-                          ? ButtonIcon(
-                              icon: widget.config.preview.beautyEffectIcon,
-                            )
-                          : null,
-                    )
+                translationText: widget.config.innerText,
+                rootNavigator: widget.config.rootNavigator,
+                effectConfig: widget.config.effect,
+                buttonSize: buttonSize,
+                iconSize: iconSize,
+                icon: widget.config.preview.beautyEffectIcon != null
+                    ? ButtonIcon(
+                  icon: widget.config.preview.beautyEffectIcon,
+                )
+                    : null,
+              )
                   : beautyButtonPlaceHolder,
               SizedBox(width: 48.zR),
               startButton(),
@@ -665,7 +677,7 @@ class _ZegoLiveStreamingPreviewPageState
         popUpManager: widget.popUpManager,
         kickOutNotifier: widget.kickOutNotifier,
       ).then(
-        (value) async {
+            (value) async {
           if (!widget.liveStreamingPageReady.value) {
             ZegoLoggerService.logInfo(
               'live streaming page is waiting room login',
@@ -718,32 +730,30 @@ class _ZegoLiveStreamingPreviewPageState
         );
   }
 
-  Widget audioVideoViewForeground(
-    BuildContext context,
-    Size size,
-    ZegoUIKitUser? user,
-    Map<String, dynamic> extraInfo,
-  ) {
+  Widget audioVideoViewForeground(BuildContext context,
+      Size size,
+      ZegoUIKitUser? user,
+      Map<String, dynamic> extraInfo,) {
     return Stack(
       children: [
         widget.config.audioVideoView.foregroundBuilder?.call(
-              context,
-              size,
-              user,
-              extraInfo,
-            ) ??
+          context,
+          size,
+          user,
+          extraInfo,
+        ) ??
             Container(color: Colors.transparent),
       ],
     );
   }
 
-  Widget audioVideoViewBackground(
-    BuildContext context,
-    Size size,
-    ZegoUIKitUser? user,
-    Map<String, dynamic> extraInfo,
-  ) {
-    final screenSize = MediaQuery.of(context).size;
+  Widget audioVideoViewBackground(BuildContext context,
+      Size size,
+      ZegoUIKitUser? user,
+      Map<String, dynamic> extraInfo,) {
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
     final isSmallView = (screenSize.width - size.width).abs() > 1;
     return Stack(
       children: [
@@ -752,11 +762,11 @@ class _ZegoLiveStreamingPreviewPageState
                 ? const Color(0xff333437)
                 : const Color(0xff4A4B4D)),
         widget.config.audioVideoView.backgroundBuilder?.call(
-              context,
-              size,
-              user,
-              extraInfo,
-            ) ??
+          context,
+          size,
+          user,
+          extraInfo,
+        ) ??
             Container(color: Colors.transparent),
       ],
     );
@@ -784,7 +794,9 @@ class _ZegoLiveStreamingPreviewPageState
             children: [
               ValueListenableBuilder<bool>(
                   valueListenable: ZegoUIKit()
-                      .getCameraStateNotifier(ZegoUIKit().getLocalUser().id),
+                      .getCameraStateNotifier(ZegoUIKit()
+                      .getLocalUser()
+                      .id),
                   builder: (context, videoOn, child) {
                     return SwitchListTile(
                       title: Label(
@@ -885,7 +897,7 @@ class _ZegoLiveStreamingPreviewPageState
         popUpManager: widget.popUpManager,
         kickOutNotifier: widget.kickOutNotifier,
       ).then(
-        (value) async {
+            (value) async {
           if (!widget.liveStreamingPageReady.value) {
             ZegoLoggerService.logInfo(
               'live streaming page is waiting room login',
@@ -944,8 +956,12 @@ class _ZegoLiveStreamingPreviewPageState
       ZegoUIKit().turnCameraOn(false);
     }
 
-    ZegoUIKit().getCameraStateNotifier(ZegoUIKit().getLocalUser().id).value =
-        !v;
+    ZegoUIKit()
+        .getCameraStateNotifier(ZegoUIKit()
+        .getLocalUser()
+        .id)
+        .value =
+    !v;
   }
 }
 
