@@ -54,6 +54,7 @@ abstract class SocketIOListeners {
 
 abstract class SocketIOEvents {
   static const String reactMessage = 'Message:React';
+  static const String disconnectMe = 'Message:React';
   static const String sendMessage = 'Message:Send';
   static const String markMessageAsSeen = 'Message:Seen';
   static const String markMessageAsDelivered = 'Message:Delivered';

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/widgets/restaurant_statistics_view.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../res/strings/labels.dart';
@@ -31,7 +32,9 @@ class RestaurantDashboardView extends StatelessWidget {
                       children: [
                         Expanded(
                             child: Label(
-                          text: Labels.connected,
+                          text: state.connected
+                              ? Labels.connected
+                              : Labels.notConnected,
                           style: Styles.headerText(),
                         )),
                         if (state.connected)
@@ -48,20 +51,19 @@ class RestaurantDashboardView extends StatelessWidget {
                                 await controller.changeConnectivityStatus())
                       ],
                     ),
+                    Divider(),
+                    RestaurantStatisticsView(),
+                    Divider(),
                     Expanded(
-                      child: !state.connected
-                          ? const Center(
-                              child: Label(text: 'Not Connected'),
-                            )
-                          : ListView.separated(
-                              itemBuilder: (context, index) {
-                                // print(state.orders!.length.toString() +
-                                //     '455555555555555555555555');
-                                return RestaurantOrderCard(
-                                    item: state.orders!.data[index]);
-                              },
-                              separatorBuilder: (context, index) => Sizer(),
-                              itemCount: state.orders?.data.length ?? 0),
+                      child: ListView.separated(
+                          itemBuilder: (context, index) {
+                            print(state.orders!.data.length.toString() +
+                                '455555555555555555555555');
+                            return RestaurantOrderCard(
+                                item: state.orders!.data[index]);
+                          },
+                          separatorBuilder: (context, index) => Sizer(),
+                          itemCount: state.orders?.data.length ?? 0),
                     ),
                   ],
                 ),

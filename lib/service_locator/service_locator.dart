@@ -294,7 +294,7 @@ class DI {
 
     // Register the ReelsCubit
     serviceLocator.registerFactory<ReelsCubit>(
-      () => ReelsCubit(repository: serviceLocator<ReelsRepository>()),
+      () => ReelsCubit(serviceLocator(),repository: serviceLocator<ReelsRepository>()),
     );
 
     // Register the StoryRepository

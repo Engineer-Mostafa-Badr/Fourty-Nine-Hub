@@ -90,6 +90,31 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
   }
 
   /// Initializes the video player and Chewie controller.
+  // Future<void> _initializePlayer() async {
+  //   _videoPlayerController =
+  //       VideoPlayerController.network(widget.reel.videoMedia);
+  //   try {
+  //     await _videoPlayerController.initialize();
+  //     _setupChewieController();
+  //     if (mounted) {
+  //       setState(() {
+  //         _isInitialized = true;
+  //         _isPlaying = widget.isVisible;
+  //       });
+  //     }
+  //     if (widget.isVisible) {
+  //       _playVideo();
+  //     }
+  //   } catch (error) {
+  //     if (mounted) {
+  //       setState(() {
+  //         _isInitialized = false;
+  //       });
+  //       _showError('Failed to load video');
+  //     }
+  //   }
+  // }
+
   Future<void> _initializePlayer() async {
     _videoPlayerController =
         VideoPlayerController.network(widget.reel.videoMedia);
@@ -102,9 +127,13 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
           _isPlaying = widget.isVisible;
         });
       }
+
       if (widget.isVisible) {
         _playVideo();
       }
+
+      // Add listener for video progress
+      _videoPlayerController.addListener(_onVideoProgress);
     } catch (error) {
       if (mounted) {
         setState(() {
@@ -267,8 +296,26 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
     );
   }
 
+  void _onVideoProgress() {
+    if (_videoPlayerController.value.isInitialized) {
+      final position = _videoPlayerController.value.position;
+      final duration = _videoPlayerController.value.duration;
+
+      // Check if the video has reached 60% of its duration
+      if (position.inSeconds > 0.6 * duration.inSeconds) {
+        // Dispatch the createReelView event once
+        serviceLocator<ReelsCubit>()
+            .createReelView(widget.reel.id, duration.inSeconds);
+
+        // Remove the listener after the event is dispatched to prevent repeated calls
+        _videoPlayerController.removeListener(_onVideoProgress);
+      }
+    }
+  }
+
   @override
   void dispose() {
+    _videoPlayerController.removeListener(_onVideoProgress);
     _chewieController?.dispose();
     _videoPlayerController.dispose();
     _rotationController.dispose();
