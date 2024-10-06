@@ -186,7 +186,9 @@ class ReelsRepository {
             .map((e) => (e as String).toWalletType)
             .toList();
         await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-            subCategoryId: responseData['subCategoryId'], wallets: wallets);
+            subCategoryId: responseData['subCategoryId'],
+            wallets: wallets,
+            title: 'Reels Subscription');
       }
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return response;

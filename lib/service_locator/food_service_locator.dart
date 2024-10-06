@@ -96,7 +96,7 @@ class FoodServiceLocator {
           serviceLocator(),
         )..loadData());
     serviceLocator
-        .registerFactory<RestaurantDashboardCubit>(() => RestaurantDashboardCubit(serviceLocator())..loadData());
+        .registerFactory<RestaurantDashboardCubit>(() => RestaurantDashboardCubit(serviceLocator(),serviceLocator())..loadData());
     serviceLocator
         .registerLazySingleton<GetRestaurantDetailsUseCase>(() => GetRestaurantDetailsUseCase(serviceLocator()));
     serviceLocator

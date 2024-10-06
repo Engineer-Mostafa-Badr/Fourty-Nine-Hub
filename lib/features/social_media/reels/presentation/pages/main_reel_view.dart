@@ -377,7 +377,7 @@ class ReelsScreenState extends State<ReelsScreen> {
               Expanded(child: Container()),
             ],
           ),
-          const SizedBox(height: 10),
+          const Sizer(),
           // Buttons Row
           FittedBox(
             child: Row(
@@ -393,12 +393,14 @@ class ReelsScreenState extends State<ReelsScreen> {
                 _buildGradientTextButton(
                   text: 'Spotlight',
                   onPressed: () => context.push(Routes.SPOTLIGHT),
-                ),const Sizer(),
+                ),
+                const Sizer(),
                 // Snap Button
                 _buildGradientTextButton(
                   text: 'Snap',
                   onPressed: () => context.push(Routes.SNAP),
-                ),const Sizer(),
+                ),
+                const Sizer(),
                 // Reels Button
                 _buildGradientTextButton(
                   text: 'Reels',
@@ -410,7 +412,8 @@ class ReelsScreenState extends State<ReelsScreen> {
                       ),
                     );
                   },
-                ),const Sizer(),
+                ),
+                const Sizer(),
                 // Search Button
                 _buildGradientIconButton(
                   iconData: FontAwesomeIcons.search,
@@ -428,7 +431,7 @@ class ReelsScreenState extends State<ReelsScreen> {
   Widget _buildGradientIconButton(
       {required IconData iconData, required VoidCallback onPressed}) {
     return Container(
-      height: 60.h,
+      height: 70.h,
       decoration: _buttonDecoration(),
       child: IconButton(
         icon: FittedBox(
@@ -446,7 +449,7 @@ class ReelsScreenState extends State<ReelsScreen> {
   Widget _buildGradientSvgButton(
       {required String assetName, required VoidCallback onPressed}) {
     return Container(
-      height: 60.h,
+      height: 70.h,
       decoration: _buttonDecoration(),
       child: IconButton(
         icon: SvgPicture.asset(
@@ -462,7 +465,7 @@ class ReelsScreenState extends State<ReelsScreen> {
   Widget _buildGradientTextButton(
       {required String text, required VoidCallback onPressed}) {
     return Container(
-      height: 60.h,
+      height: 70.h,
       decoration: _buttonDecoration(),
       child: TextButton(
         onPressed: onPressed,
