@@ -171,7 +171,7 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
                       value: selectedBank,
                       iconSize: 40.sp,
                       hint: Text(
-                        selectedBank?.nameEn ?? 'Select Class',
+                        selectedBank?.nameEn ?? 'Select Bank Name',
                         style: TextStyle(color: Theme.of(context).primaryColor), // Match text color
                       ),
                       menuMaxHeight: 400.h,
