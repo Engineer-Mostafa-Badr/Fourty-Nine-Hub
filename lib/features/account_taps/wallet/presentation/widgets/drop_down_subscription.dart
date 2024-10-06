@@ -28,7 +28,6 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
   List<MainCategoryWalletEntity> subCategories = [];
   bool isCategoryLoading = true;
   bool isSubCategoryLoading = false;
-
   @override
   void initState() {
     super.initState();

@@ -590,6 +590,16 @@
     "other_voice": "صوت آخر",
     "mix_voices": "دمج الأصوات"
   },
+  "free":"متاح",
+  "booked":"محجوز",
+  "inProgress":"قيد التقدم",
+  "comfort":"مريح",
+  "egp":"جنيه",
+  "minutesAgo":"دقائق متبقية",
+  "womenOnly":"نساء فقط",
+  "bookSeat":"حجز مقعد",
+  "pricePerSeat":"سعر المقعد الواحد",
+  "book":"حجز",
   "comments_header": "التعليقات",
   "add_comment_hint": "أضف تعليقًا...",
   "write_reply_hint": "اكتب ردًا...",
@@ -739,7 +749,6 @@
   "repeated": "مكرر",
   "subscription": "اشتراك",
   "tripJoinAds": "إعلانات الانضمام إلى الرحلة",
-  "other": "اخري",
   "adSoldout": "هل أنت متأكد أنك تريد تعيين هذا الإعلان على أنه مباع؟",
   "viewAll": "عرض الكل",
   "addACaption": "...اضافة تعليق",
@@ -871,5 +880,10 @@
   "cancelRequest": "إلغاء الطلب",
   "sendOffer": "إرسال العرض",
   "seeAll": "شاهد الكل",
-  "expiredRequests": "الطلبات منتهية الصلاحية"
+  "idExpiryDate": "تاريخ انتهاء الهوية",
+  "licenseFrontAndBack": "قم بتحميل الترخيص  (الوجه والظهر)",
+  "subscribed" : "مشترك",
+  "unsubscribed" : "غير مشرك",
+  "expiredRequests": "طلبات منتهية الصلاحية",
+  "other": "أخرى"
 }

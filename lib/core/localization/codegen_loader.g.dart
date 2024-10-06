@@ -887,7 +887,11 @@ class CodegenLoader extends AssetLoader{
   "cancelRequest": "إلغاء الطلب",
   "sendOffer": "إرسال العرض",
   "seeAll": "شاهد الكل",
-  "expiredRequests": "الطلبات منتهية الصلاحية"
+  "idExpiryDate": "تاريخ انتهاء الهوية",
+  "licenseFrontAndBack": "قم بتحميل الترخيص  (الوجه والظهر)",
+  "subscribed": "مشترك",
+  "unsubscribed": "غير مشرك",
+  "expiredRequests": "تاريخ  النتهاء"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -964,7 +968,6 @@ static const Map<String,dynamic> en = {
   "lightMode": "Light mode",
   "voice": "Voice",
   "restaurantName": "ٌRestaurant Name",
-  "restaurantNumber": "ٌRestaurant Number",
   "theCommercialRegister": "The Commercial Register",
   "theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider": "The application does not deduct any percentage from the service provider.",
   "youWillGetEGP3650PerYearIfYouSubscribeDaily": "You will get 3650 EGP per year if you subscribe daily.",
@@ -1764,8 +1767,12 @@ static const Map<String,dynamic> en = {
   "newRide": "New Ride",
   "cancelRequest": "Cancel Request",
   "sendOffer": "Send Offer",
+  "subscribed": "Subscribed",
+  "unsubscribed": "Unsubscribed",
   "seeAll": "See All",
-  "expiredRequests": "Expired Requests"
+  "idExpiryDate": "ID Expiry Date",
+  "licenseFrontAndBack": "Upload Your License (Front and Back)",
+  "expiredRequests": "expiredRequests"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
