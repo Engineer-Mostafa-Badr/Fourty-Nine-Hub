@@ -1,128 +1,126 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import '../widgets/time_card.dart';
+import '../widgets/card_details_widget_of_details_view.dart';
 
 class ChanceDetailsView extends StatelessWidget {
-   ChanceDetailsView({super.key});
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  const ChanceDetailsView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: const BackAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "Honor 90 Lite Dual Sided",
-              style: TextStyle(
-                fontSize: 24.sp,
-                fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const CardDetails(),
+              Text(
+                'participation  with wallet balance (pounds)',
+                textAlign: TextAlign.center,
+                style: Styles.mediumText(),
               ),
-            ),
-            SizedBox(height: 20.h),
-            Center(
-              child: Container(
-                height: 200.h,
-                width: 200.w,
-                decoration:  const BoxDecoration(
-                  boxShadow:  AppColors.SHADOW_LIGHT,
-                  color: Colors.white,
-                ),
-                child: Image.asset(
-                  'assets/images/honor.png', // Replace with your image path
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-            SizedBox(height: 20.h),
-            Text(
-              "Subscriber Completion Rate",
-              style: TextStyle(
-                fontSize: 16.sp,
-              ),
-            ),
-            SizedBox(height: 10.h),
-            LinearProgressIndicator(
-              value: 0.8,
-              color: Colors.green,
-              backgroundColor: Colors.grey.shade300,
-            ),
-            SizedBox(height: 20.h),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TimeCard(timeUnit: "Day", value: "13"),
-                TimeCard(timeUnit: "Hour", value: "23"),
-                TimeCard(timeUnit: "minute", value: "52"),
-                TimeCard(timeUnit: "second", value: "58"),
-              ],
-            ),
-
-            SizedBox(height: 20.h),
-        ElevatedButton.icon(
-          onPressed: () {
-            _scaffoldKey.currentState!.showBottomSheet(
-                  (context) {
-                return Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(20)),
-                  ),
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'شرح المنتج',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+              SizedBox(height: 5.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        padding:  EdgeInsets.symmetric(
+                          horizontal: 20.w, vertical: 25.h,
                         ),
+                        backgroundColor: AppColors.PRIMARY_COLOR,
                       ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'هذا المنتج هو هاتف هونر 90 لايت ثنائي الشريحة يأتي بشاشة FHD وكاميرا خلفية بدقة عالية ومعالج قوي.',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'يتميز الهاتف بتصميم أنيق وسعة تخزين كبيرة ودعم للاتصال السريع.',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context); // Close the sheet
-                        },
-                        child: const Text('إغلاق'),
-                      ),
-                    ],
+                      child: Icon(
+                        Icons.remove,
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                      )),
+                  const Spacer(),
+                  Container(
+                    width: context.screenWidth / 2,
+                    padding:
+                    EdgeInsets.only(top: 3.h, bottom: 3.h, left: 2.w, right: 25.w),
+                    decoration: BoxDecoration(
+                      color: AppColors.PRIMARY_COLOR,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.close, color: Colors.white),
+                          onPressed: () {},
+                        ),
+                        const Spacer(),
+                        Text('0',
+                            style: Styles.mediumText(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                              fontSize: 100.sp,
+                            )),
+                      ],
+                    ),
                   ),
-                );
-              },
-            );
-          },
-          icon: const Icon(Icons.arrow_drop_down),
-          label: const Text(
-            "توقيت تحول السحب الى مزاد",
-            style: TextStyle(fontSize: 18),
+                  const Spacer(),
+                  ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        padding:  EdgeInsets.symmetric(
+                          horizontal: 20.w, vertical: 25.h,
+                        ),
+                        backgroundColor: AppColors.PRIMARY_COLOR,
+                      ),
+                      child: Icon(
+                        Icons.add,
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                      ))
+                ],
+              ),
+              const SizedBox(height: 30),
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      padding:
+                      EdgeInsets.symmetric(horizontal: 40.w, vertical: 25.h),
+                      backgroundColor: AppColors.SECONDARY_COLOR,
+                    ),
+                    child: Text('Subscribe to the product',
+                        style: Styles.mediumText(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            fontSize: 50.sp)),
+                  ),
+                  const Spacer(),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        padding:  EdgeInsets.symmetric(
+                            horizontal: 20.w, vertical: 25.h),
+                        backgroundColor: AppColors.SECONDARY_COLOR,
+                      ),
+                      child: Icon(
+                        Icons.arrow_forward_ios,
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                      ))
+                ],
+              ),
+            ],
           ),
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-            backgroundColor: Colors.blue,
-          )
-        )
-          ],
         ),
       ),
     );

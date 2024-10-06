@@ -1,38 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/style/app_colors.dart';
 
-class SliderCardWidget extends StatefulWidget {
-  const SliderCardWidget({super.key});
+class LinerProgressIndicator extends StatelessWidget {
+  const LinerProgressIndicator({super.key});
 
-  @override
-  State<SliderCardWidget> createState() => _SliderCardWidgetState();
-}
-
-class _SliderCardWidgetState extends State<SliderCardWidget> {
-  double _sliderValue = 0;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: SliderTheme(
-        data: SliderTheme.of(context).copyWith(
-          trackHeight: 9.0,
-          thumbShape: SliderComponentShape.noThumb,
-          activeTrackColor: AppColors.SECONDARY_COLOR,
-          inactiveTrackColor: AppColors.GREY_NORMAL_COLOR,
-        ),
-        child: Slider(
-          value: _sliderValue,
-          min: 0,
-          max: 100,
-          divisions: 100,
-          onChanged: (value) {
-            setState(() {
-              _sliderValue = value; // تحديث القيمة عند سحب الشريحة
-            });
-          },
+    return Container(
+      height: 20.h,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: LinearProgressIndicator(
+          value: 0.65,
+          color: AppColors.SECONDARY_COLOR,
+          backgroundColor: Colors.grey.shade300,
         ),
       ),
     );
