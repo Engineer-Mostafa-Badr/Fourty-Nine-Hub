@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity/live_entity.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity/live_create_response_entity.dart';
@@ -36,4 +37,14 @@ class LiveRepositoryImpl extends LiveRepository {
   @override
   Future<Either<Failure, void>> endLive(MeetingParams params) =>
       _liveDataSource.endLive(params);
+
+  @override
+  Future<void> sendPoints(PointsParams params) {
+    return _liveDataSource.sendPoints(params);
+  }
+
+  @override
+  Future<void> listenToSendPoints(NoParams noParams) {
+    return _liveDataSource.listenToSendLiveGoal(noParams);
+  }
 }

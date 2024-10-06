@@ -13,6 +13,7 @@ class CreateLiveUseCase
 
   CreateLiveUseCase(LiveRepository liveRepository)
       : _liveRepository = liveRepository;
+
   @override
   Future<Either<Failure, LiveCreateResponseEntity>> call(
       CreateLiveParams params) {
@@ -42,9 +43,21 @@ class CreateLiveParams {
 class GoalParams {
   final String giftId;
   final int amount;
+
   GoalParams({required this.giftId, required this.amount});
 
   Map<String, dynamic> toJson() {
     return {"giftId": giftId, "goal": amount};
+  }
+}
+
+class PointsParams {
+  final String streamId;
+  final String memberId;
+
+  PointsParams({required this.streamId, required this.memberId});
+
+  Map<String, dynamic> toJson() {
+    return {"streamId": streamId, "memberId": memberId};
   }
 }
