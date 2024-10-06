@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../widgets/card_details_widget_of_details_view.dart';
+import '../widgets/subscribe_button_widget.dart';
 
 class ChanceDetailsView extends StatelessWidget {
   const ChanceDetailsView({super.key});
@@ -12,24 +13,29 @@ class ChanceDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(
-        label: "Chance details",
-      ),
+      appBar: const BackAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const CardDetails(),
-            SizedBox(height: 35.h),
+            SizedBox(height: 20.h),
             Text(
-              'participation  with wallet balance (pounds)',
-              textAlign: TextAlign.center,
-              style: Styles.mediumText(
-                fontSize: 50.sp,
-                fontWeight: FontWeight.w500
-              ),
-            ),
+                'Subscribe',
+                style: Styles.mediumText(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 70.sp,
+                    fontWeight: FontWeight.bold
+                )),
+            SizedBox(height: 10.h),
+            Text(
+                'Type the value you want to participation',
+                style: Styles.mediumText(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 50.sp,
+
+                )),
             SizedBox(height: 15.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -59,8 +65,12 @@ class ChanceDetailsView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white),
+                        onPressed: () {},
+                      ),
+                      const Spacer(),
                       Text('0',
                           style: Styles.mediumText(
                             color: Theme.of(context).scaffoldBackgroundColor,
@@ -86,26 +96,9 @@ class ChanceDetailsView extends StatelessWidget {
                     ))
               ],
             ),
-             SizedBox(height: 50.h),
-            SizedBox(width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  padding:
-                  EdgeInsets.symmetric(horizontal: 40.w, vertical: 25.h),
-                  backgroundColor: AppColors.SECONDARY_COLOR,
-                ),
-                child: Text('Subscribe to the product',
-                    style: Styles.mediumText(
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        fontSize: 55.sp,
-                      fontWeight: FontWeight.w400
-                    )),
-              ),
-            ),
-
+            const Spacer(),
+            const SubscribeButtonWidget(),
+            SizedBox(height: 80.h),
           ],
         ),
       ),
