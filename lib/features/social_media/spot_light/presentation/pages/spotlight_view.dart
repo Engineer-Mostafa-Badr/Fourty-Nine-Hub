@@ -2598,12 +2598,17 @@ class _FollowingSectionState extends State<FollowingSection> {
                         )
                       ],
                     ),
-                    body: MainReelItem(
-                      key: ValueKey(reel.id),
+                    body: UnifiedReelItem(
                       reel: reel,
-                      fromSpotlight: true,
                       isVisible: true,
-                    )
+                      itemType: ReelItemType.spotlight,
+                    ),
+                    // MainReelItem(
+                    //   key: ValueKey(reel.id),
+                    //   reel: reel,
+                    //   fromSpotlight: true,
+                    //   isVisible: true,
+                    // )
                     // SpotlightReelItem(
                     //   key: ValueKey(reel.id),
                     //   reel: reel,
@@ -2769,12 +2774,11 @@ class DiscoverSectionState extends State<DiscoverSection> {
                       )
                     ],
                   ),
-                  body: MainReelItem(
-                    key: ValueKey(reel.id),
+                  body: UnifiedReelItem(
                     reel: reel,
-                    fromSpotlight: true,
                     isVisible: true,
-                  )
+                    itemType: ReelItemType.spotlight,
+                  ),
                   // SpotlightReelItem(
                   //   key: ValueKey(reel.id),
                   //   reel: reel,

@@ -7,7 +7,6 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
@@ -24,7 +23,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-
 import 'core/service/background_service.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
@@ -103,9 +101,11 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(
           create: (context) => serviceLocator<GetCateogryRiderCubit>(),
-        ), BlocProvider(
+        ),
+        BlocProvider(
           create: (context) => serviceLocator<RiderTripReelTimeCubit>(),
-        ),BlocProvider(
+        ),
+        BlocProvider(
           create: (context) => serviceLocator<RequestRiderTripCubit>(),
         ),
         // BlocProvider(
@@ -149,43 +149,45 @@ class _MyAppState extends State<MyApp> {
                   context: context,
                   notificationListenerUseCase: serviceLocator(),
                 )),
-        BlocProvider(create: (context) => ShowOffersCubit(repository: serviceLocator(),),),
+        BlocProvider(
+          create: (context) => ShowOffersCubit(
+            repository: serviceLocator(),
+          ),
+        ),
       ],
       child: ScreenUtilInit(
-          designSize: const Size(750, 1334),
-          minTextAdapt: true,
-          splitScreenMode: true,
-          builder: (context, child) {
-            context.read<SecretsCubit>().state.secrets?.zegoAppId;
-            return BlocBuilder<ThemeCubit, ThemeStates>(
-              builder: (BuildContext context, state) {
-                // double width = MediaQuery.sizeOf(context).width;
-                // double widthFromExtensionMethodOfContext = context.screenWidth;
-                return MaterialApp.router(
-                  builder: (context, child) {
-                    return MediaQuery(
-                      data: MediaQuery.of(context)
-                          .copyWith(textScaler: TextScaler.noScaling),
-                      child: child!,
-                    );
-                  },
-                  themeMode: context.read<ThemeCubit>().isDarkTheme
-                      ? ThemeMode.dark
-                      : ThemeMode.light,
-                  theme: lightTheme(),
-                  darkTheme: darkTheme(),
-                  title: '49',
-                  debugShowCheckedModeBanner: false,
-                  routerConfig: AppPages.router,
-                  localizationsDelegates: context.localizationDelegates,
-                  supportedLocales: context.supportedLocales,
-                  locale: context.locale,
-                  // for device preview package
-                  // builder: DevicePreview.appBuilder,
-                );
-              },
-            );
-         },
+        designSize: const Size(750, 1334),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (context, child) {
+          context.read<SecretsCubit>().state.secrets?.zegoAppId;
+          return BlocBuilder<ThemeCubit, ThemeStates>(
+            builder: (BuildContext context, state) {
+              return MaterialApp.router(
+                builder: (context, child) {
+                  return MediaQuery(
+                    data: MediaQuery.of(context)
+                        .copyWith(textScaler: TextScaler.noScaling),
+                    child: child!,
+                  );
+                },
+                themeMode: context.read<ThemeCubit>().isDarkTheme
+                    ? ThemeMode.dark
+                    : ThemeMode.light,
+                theme: lightTheme(),
+                darkTheme: darkTheme(),
+                title: '49',
+                debugShowCheckedModeBanner: false,
+                routerConfig: AppPages.router,
+                localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
+                locale: context.locale,
+                // for device preview package
+                // builder: DevicePreview.appBuilder,
+              );
+            },
+          );
+        },
       ),
     );
   }

@@ -699,6 +699,16 @@
   "errorLoadingSocialPage": "Error loading social page",
   "updateSuccessfully": "Update Successfully",
   "carpool": "Carpool",
+  "free":"Free",
+  "booked":"Booked",
+  "inProgress":"In Progress",
+  "comfort":"Comfort",
+  "egp":"EGP",
+  "minutesAgo":"Minutes ago",
+  "womenOnly":"Women only",
+  "bookSeat":"Book Seat",
+  "pricePerSeat":"Price Per Seat",
+  "book":"Book",
   "chance": "Chance",
   "subTab": "Sub Tab",
   "exactly2items": "Please select exactly 2 items.",
@@ -740,7 +750,6 @@
   "repeated": "Repeated",
   "subscription": "Subscription",
   "tripJoinAds": "Trip Join Ads",
-  "other": "Other",
   "adSoldout": "Are you sure, you want to set this AD as soldout?",
   "viewAll": "View All",
   "addACaption": "Add a caption...",
@@ -880,5 +889,12 @@
   "newRide": "New Ride",
   "cancelRequest": "Cancel Request",
   "sendOffer": "Send Offer",
-  "seeAll": "See All"
+  "subscribed" : "Subscribed",
+  "unsubscribed" : "Unsubscribed",
+  "seeAll": "See All",
+  "idExpiryDate": "ID Expiry Date",
+  "expiredRequests": "Expired Requests",
+  "licenseFrontAndBack": "Upload Your License (Front and Back)",
+  "other": "Others"
+
 }

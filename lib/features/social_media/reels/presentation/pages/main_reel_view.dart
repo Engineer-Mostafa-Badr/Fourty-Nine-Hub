@@ -120,233 +120,382 @@ class ReelsScreenState extends State<ReelsScreen> {
     }
   }
 
+  // Widget _buildAppBar(BuildContext context) {
+  //   return SizedBox(
+  //     width: context.screenWidth,
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(8.0),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Row(
+  //             children: [
+  //               Stack(
+  //                 children: [
+  //                   IconButton(
+  //                     icon: FaIcon(
+  //                       Icons.arrow_back,
+  //                       color: Colors.white,
+  //                       size: 40.h,
+  //                     ),
+  //                     color: Colors.white,
+  //                     onPressed: () => context.pop(),
+  //                   ),
+  //                   IconButton(
+  //                     icon: FaIcon(
+  //                       Icons.arrow_back,
+  //                       color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
+  //                       size: 40.h,
+  //                     ),
+  //                     color: Colors.white,
+  //                     onPressed: () => context.pop(),
+  //                   ),
+  //                 ],
+  //               ),
+  //               Expanded(child: Container()),
+  //             ],
+  //           ),
+  //           Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //             children: [
+  //               //live
+  //               Stack(
+  //                 children: [
+  //                   IconButton(
+  //                     icon: SvgPicture.asset(
+  //                       'assets/images/live_icon.svg',
+  //                       height: 50.w,
+  //                       width: 50.w,
+  //                       color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
+  //                     ),
+  //                     onPressed: () {
+  //                       context.push(Routes.LIVE);
+  //                     },
+  //                   ),
+  //                   IconButton(
+  //                     icon: SvgPicture.asset(
+  //                       'assets/images/live_icon.svg',
+  //                       height: 50.w,
+  //                       width: 50.w,
+  //                     ),
+  //                     color: Colors.white,
+  //                     onPressed: () {
+  //                       context.push(Routes.LIVE);
+  //                     },
+  //                   ),
+  //                 ],
+  //               ),
+  //               const Sizer(),
+  //               const Sizer(),
+  //
+  //               //tinder
+  //
+  //               //spotlight
+  //               Stack(
+  //                 children: [
+  //                   IconButton(
+  //                     icon: Label(
+  //                       text: 'Spotlight',
+  //                       style: Styles.mediumText(
+  //                           decoration: TextDecoration.underline,
+  //                           color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
+  //                           fontWeight: FontWeight.bold),
+  //                     ),
+  //                     color: Colors.white,
+  //                     onPressed: () {
+  //                       context.push(Routes.SPOTLIGHT);
+  //                     },
+  //                   ),
+  //                   Positioned(
+  //                     top: -1,
+  //                     right: -1,
+  //                     left: -1,
+  //                     child: IconButton(
+  //                       icon: Label(
+  //                         text: 'Spotlight',
+  //                         style: Styles.mediumText(
+  //                             fontWeight: FontWeight.bold,
+  //                             decoration: TextDecoration.underline,
+  //                             color: Colors.white),
+  //                       ),
+  //                       color: Colors.white,
+  //                       onPressed: () {
+  //                         context.push(Routes.SPOTLIGHT);
+  //                       },
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //               Stack(
+  //                 children: [
+  //                   IconButton(
+  //                     icon: Label(
+  //                       text: 'Snap',
+  //                       style: Styles.mediumText(
+  //                           decoration: TextDecoration.underline,
+  //                           color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
+  //                           fontWeight: FontWeight.bold),
+  //                     ),
+  //                     color: Colors.white,
+  //                     onPressed: () {
+  //                       context.push(Routes.SNAP);
+  //                     },
+  //                   ),
+  //                   Positioned(
+  //                     top: -1,
+  //                     right: -1,
+  //                     left: -1,
+  //                     child: IconButton(
+  //                       icon: Label(
+  //                         text: 'Snap',
+  //                         style: Styles.mediumText(
+  //                             decoration: TextDecoration.underline,
+  //                             color: Colors.white,
+  //                             fontWeight: FontWeight.bold),
+  //                       ),
+  //                       color: Colors.white,
+  //                       onPressed: () {
+  //                         context.push(Routes.SNAP);
+  //                       },
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //               //reels
+  //               Stack(
+  //                 children: [
+  //                   IconButton(
+  //                     icon: Label(
+  //                       text: 'Reels',
+  //                       style: Styles.mediumText(
+  //                           decoration: TextDecoration.underline,
+  //                           color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
+  //                           fontWeight: FontWeight.bold),
+  //                     ),
+  //                     color: Colors.white,
+  //                     onPressed: () async {
+  //                       // context.pop();
+  //                       await Navigator.push(
+  //                           context,
+  //                           MaterialPageRoute(
+  //                             builder: (context) => const ReelsRecordingScreen(
+  //                                 // advertisementType: 'reel',
+  //                                 // comeFromCompany: 'company',
+  //                                 // totalPrice: '500',
+  //                                 ),
+  //                           ));
+  //                     },
+  //                   ),
+  //                   Positioned(
+  //                     top: -1,
+  //                     right: -1,
+  //                     left: -1,
+  //                     child: IconButton(
+  //                       icon: Label(
+  //                         text: 'Reels',
+  //                         style: Styles.mediumText(
+  //                             decoration: TextDecoration.underline,
+  //                             color: Colors.white,
+  //                             fontWeight: FontWeight.bold),
+  //                       ),
+  //                       color: Colors.white,
+  //                       onPressed: () async {
+  //                         // context.pop();
+  //                         await Navigator.push(
+  //                             context,
+  //                             MaterialPageRoute(
+  //                               builder: (context) =>
+  //                                   const ReelsRecordingScreen(
+  //                                       // advertisementType: 'reel',
+  //                                       // comeFromCompany: 'company',
+  //                                       // totalPrice: '500',
+  //                                       ),
+  //                             ));
+  //                       },
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //               const Sizer(),
+  //               const Sizer(),
+  //               Stack(
+  //                 children: [
+  //                   IconButton(
+  //                     onPressed: () async {
+  //                       context.push(Routes.Tinder);
+  //                     },
+  //                     icon: FaIcon(
+  //                       FontAwesomeIcons.search,
+  //                       color: Colors.white,
+  //                       size: 35.h,
+  //                     ),
+  //                   ),
+  //                   IconButton(
+  //                     onPressed: () async {
+  //                       context.push(Routes.Tinder);
+  //                     },
+  //                     icon: FaIcon(
+  //                       FontAwesomeIcons.search,
+  //                       color: AppColors.PRIMARY_COLOR.withOpacity(0.4),
+  //                       size: 35.h,
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ],
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
   Widget _buildAppBar(BuildContext context) {
-    return SizedBox(
-      width: context.screenWidth,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Stack(
-                  children: [
-                    IconButton(
-                      icon: FaIcon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                        size: 40.h,
-                      ),
-                      color: Colors.white,
-                      onPressed: () => context.pop(),
-                    ),
-                    IconButton(
-                      icon: FaIcon(
-                        Icons.arrow_back,
-                        color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
-                        size: 40.h,
-                      ),
-                      color: Colors.white,
-                      onPressed: () => context.pop(),
-                    ),
-                  ],
-                ),
-                Expanded(child: Container()),
-              ],
-            ),
-            Row(
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      decoration: const BoxDecoration(
+          // gradient: LinearGradient(
+          //   colors: [
+          //     Colors.deepPurpleAccent,
+          //     Colors.blueAccent,
+          //   ],
+          //   begin: Alignment.topLeft,
+          //   end: Alignment.bottomRight,
+          // ),
+          ),
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Back Button Row
+          Row(
+            children: [
+              _buildGradientIconButton(
+                iconData: Icons.arrow_back,
+                onPressed: () => context.pop(),
+              ),
+              Expanded(child: Container()),
+            ],
+          ),
+          const SizedBox(height: 10),
+          // Buttons Row
+          FittedBox(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                //live
-                Stack(
-                  children: [
-                    IconButton(
-                      icon: SvgPicture.asset(
-                        'assets/images/live_icon.svg',
-                        height: 50.w,
-                        width: 50.w,
-                        color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
-                      ),
-                      onPressed: () {
-                        context.push(Routes.LIVE);
-                      },
-                    ),
-                    IconButton(
-                      icon: SvgPicture.asset(
-                        'assets/images/live_icon.svg',
-                        height: 50.w,
-                        width: 50.w,
-                      ),
-                      color: Colors.white,
-                      onPressed: () {
-                        context.push(Routes.LIVE);
-                      },
-                    ),
-                  ],
+                // Live Button
+                _buildGradientSvgButton(
+                  assetName: 'assets/images/live_icon.svg',
+                  onPressed: () => context.push(Routes.LIVE),
                 ),
                 const Sizer(),
-                const Sizer(),
-
-                //tinder
-
-                //spotlight
-                Stack(
-                  children: [
-                    IconButton(
-                      icon: Label(
-                        text: 'Spotlight',
-                        style: Styles.mediumText(
-                            decoration: TextDecoration.underline,
-                            color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
-                            fontWeight: FontWeight.bold),
+                // Spotlight Button
+                _buildGradientTextButton(
+                  text: 'Spotlight',
+                  onPressed: () => context.push(Routes.SPOTLIGHT),
+                ),const Sizer(),
+                // Snap Button
+                _buildGradientTextButton(
+                  text: 'Snap',
+                  onPressed: () => context.push(Routes.SNAP),
+                ),const Sizer(),
+                // Reels Button
+                _buildGradientTextButton(
+                  text: 'Reels',
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ReelsRecordingScreen(),
                       ),
-                      color: Colors.white,
-                      onPressed: () {
-                        context.push(Routes.SPOTLIGHT);
-                      },
-                    ),
-                    Positioned(
-                      top: -1,
-                      right: -1,
-                      left: -1,
-                      child: IconButton(
-                        icon: Label(
-                          text: 'Spotlight',
-                          style: Styles.mediumText(
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
-                              color: Colors.white),
-                        ),
-                        color: Colors.white,
-                        onPressed: () {
-                          context.push(Routes.SPOTLIGHT);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                Stack(
-                  children: [
-                    IconButton(
-                      icon: Label(
-                        text: 'Snap',
-                        style: Styles.mediumText(
-                            decoration: TextDecoration.underline,
-                            color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      color: Colors.white,
-                      onPressed: () {
-                        context.push(Routes.SNAP);
-                      },
-                    ),
-                    Positioned(
-                      top: -1,
-                      right: -1,
-                      left: -1,
-                      child: IconButton(
-                        icon: Label(
-                          text: 'Snap',
-                          style: Styles.mediumText(
-                              decoration: TextDecoration.underline,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        color: Colors.white,
-                        onPressed: () {
-                          context.push(Routes.SNAP);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                //reels
-                Stack(
-                  children: [
-                    IconButton(
-                      icon: Label(
-                        text: 'Reels',
-                        style: Styles.mediumText(
-                            decoration: TextDecoration.underline,
-                            color: AppColors.PRIMARY_COLOR.withOpacity(0.5),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      color: Colors.white,
-                      onPressed: () async {
-                        // context.pop();
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ReelsRecordingScreen(
-                                  // advertisementType: 'reel',
-                                  // comeFromCompany: 'company',
-                                  // totalPrice: '500',
-                                  ),
-                            ));
-                      },
-                    ),
-                    Positioned(
-                      top: -1,
-                      right: -1,
-                      left: -1,
-                      child: IconButton(
-                        icon: Label(
-                          text: 'Reels',
-                          style: Styles.mediumText(
-                              decoration: TextDecoration.underline,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        color: Colors.white,
-                        onPressed: () async {
-                          // context.pop();
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const ReelsRecordingScreen(
-                                        // advertisementType: 'reel',
-                                        // comeFromCompany: 'company',
-                                        // totalPrice: '500',
-                                        ),
-                              ));
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const Sizer(),
-                const Sizer(),
-                Stack(
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        context.push(Routes.Tinder);
-                      },
-                      icon: FaIcon(
-                        FontAwesomeIcons.search,
-                        color: Colors.white,
-                        size: 35.h,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () async {
-                        context.push(Routes.Tinder);
-                      },
-                      icon: FaIcon(
-                        FontAwesomeIcons.search,
-                        color: AppColors.PRIMARY_COLOR.withOpacity(0.4),
-                        size: 35.h,
-                      ),
-                    ),
-                  ],
-                ),
+                    );
+                  },
+                ),const Sizer(),
+                // Search Button
+                _buildGradientIconButton(
+                  iconData: FontAwesomeIcons.search,
+                  onPressed: () => context.push(Routes.Tinder),
+                )
               ],
             ),
-          ],
+          ),
+        ],
+      ),
+    );
+  }
+
+// Helper method for gradient icon buttons
+  Widget _buildGradientIconButton(
+      {required IconData iconData, required VoidCallback onPressed}) {
+    return Container(
+      height: 60.h,
+      decoration: _buttonDecoration(),
+      child: IconButton(
+        icon: FittedBox(
+          child: Icon(
+            iconData,
+            color: Colors.white,
+          ),
+        ),
+        onPressed: onPressed,
+      ),
+    );
+  }
+
+// Helper method for gradient SVG buttons
+  Widget _buildGradientSvgButton(
+      {required String assetName, required VoidCallback onPressed}) {
+    return Container(
+      height: 60.h,
+      decoration: _buttonDecoration(),
+      child: IconButton(
+        icon: SvgPicture.asset(
+          assetName,
+          fit: BoxFit.fitHeight,
+        ),
+        onPressed: onPressed,
+      ),
+    );
+  }
+
+// Helper method for gradient text buttons
+  Widget _buildGradientTextButton(
+      {required String text, required VoidCallback onPressed}) {
+    return Container(
+      height: 60.h,
+      decoration: _buttonDecoration(),
+      child: TextButton(
+        onPressed: onPressed,
+        child: Text(
+          text,
+          style: Styles.mediumText(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
       ),
+    );
+  }
+
+// Button decoration with gradient and rounded corners
+  BoxDecoration _buttonDecoration() {
+    return BoxDecoration(
+      gradient: const LinearGradient(
+        colors: [
+          Colors.white10,
+          Colors.black12,
+        ],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ),
+      borderRadius: BorderRadius.circular(12),
+      boxShadow: [
+        const BoxShadow(
+          color: Colors.black26,
+          blurRadius: 2,
+          offset: Offset(0, 2),
+        ),
+      ],
     );
   }
 
@@ -378,11 +527,16 @@ class ReelsScreenState extends State<ReelsScreen> {
                       child: CupertinoActivityIndicator(radius: 25),
                     );
                   }
-                  return MainReelItem(
+                  return UnifiedReelItem(
                     reel: state.globalReels[index],
-                    fromSpotlight: false,
-                    isVisible: _currentPage == index,
+                    isVisible: true,
+                    itemType: ReelItemType.main,
                   );
+                  //   MainReelItem(
+                  //   reel: state.globalReels[index],
+                  //   fromSpotlight: false,
+                  //   isVisible: _currentPage == index,
+                  // );
                 },
               ),
             ),

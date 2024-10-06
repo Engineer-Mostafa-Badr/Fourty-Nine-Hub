@@ -26,7 +26,9 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
                 return DropdownMenu<FoodCategoryEntity>(
                     inputDecorationTheme: InputDecorationTheme(
                       isDense: true,
-                      constraints: BoxConstraints.loose(Size.fromHeight(90.h)),
+                      constraints: BoxConstraints.loose(
+                        Size.fromHeight(90.h),
+                      ),
 
                       enabledBorder: OutlineInputBorder(
                         borderRadius:
