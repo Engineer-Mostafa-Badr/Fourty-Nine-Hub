@@ -53,10 +53,15 @@ class ReelsScreenForAudioState extends State<ReelsScreenForAudio> {
                   child: CupertinoActivityIndicator(radius: 25),
                 );
               }
-              return ReelItemForInstagram(
+              return UnifiedReelItem(
                 reel: widget.reels[index],
-                isVisible: _currentPage == index,
+                isVisible: true,
+                itemType: ReelItemType.instagram,
               );
+              //   ReelItemForInstagram(
+              //   reel: widget.reels[index],
+              //   isVisible: _currentPage == index,
+              // );
             },
           );
         },

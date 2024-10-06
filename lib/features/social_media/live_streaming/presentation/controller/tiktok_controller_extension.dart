@@ -173,4 +173,10 @@ extension TiktokControllerExtension on StreamCubit {
       emit(state.copyWith(status: StreamsStates.success));
     });
   }
+  void sendPoints(String memberId,String liveId){
+    sendPointsUseCase(PointsParams(memberId: memberId,streamId: liveId));
+  }
+  void listenToSendPoints(){
+    listenToSendPointsUseCase(const NoParams());
+  }
 }

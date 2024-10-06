@@ -21,6 +21,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/rider_banner.dart';
+import 'package:fourtyninehub/features/ride/rider_shipping/presentation/pages/create_trip_rider.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/sub_category.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card_selected.dart';
@@ -559,7 +560,7 @@ class _RideRequestViewState extends State<RideRequestView> {
                               ),
                             );
                           }
-                          return Container();
+                          return CreateTripRider();
                         },
                       ),
                       // Padding(
