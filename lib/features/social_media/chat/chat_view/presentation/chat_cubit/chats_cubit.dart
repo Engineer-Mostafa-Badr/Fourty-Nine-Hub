@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatMuteState_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 
@@ -22,6 +23,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   final MarkMessagesAsDeliveredUseCase _markMeesagesAsDeliveredUseCase;
   final GetChatsUseCase _getChatsUseCase;
   final ChangeChatToArchiveOrNormalUseCase _changeChatToArchiveOrNormalUseCase;
+  final ChangeChatMuteStateUseCase _changeChatMuteStateUseCase;
   final Map<String, ChatEntity> _chats = {};
   ChatCategories _selectedChatCategory = ChatCategories.values.first;
   late ChatEntity _selectedChat;
@@ -33,6 +35,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._stopListenToMessagesUseCase,
     this._markMeesagesAsDeliveredUseCase,
     this._changeChatToArchiveOrNormalUseCase,
+    this._changeChatMuteStateUseCase,
   ) : super(const ChatsState());
 
   // Selected Chats
@@ -136,7 +139,7 @@ class ChatsCubit extends Cubit<ChatsState> {
 
   Future<void> _getUnreadChats() async {
     await _getChats(
-        flag: (chat) => chat.lastMessage?.seen ?? false,
+        flag: (chat) => (chat.lastMessage?.seen ?? false) && (!(chat.lastMessage?.byMe ?? true)),
         params: GetChatsParams(isUnread: true));
   }
 
@@ -183,5 +186,21 @@ class ChatsCubit extends Cubit<ChatsState> {
     }
     selectedChats.clear();
     await getArchivedChats();
+  }
+
+  Future<void> changeMuteChat() async {
+    for (var chat in selectedChats) {
+      // chat.archived = !chat.archived;
+      log("muted = ${chat.muted}");
+      final respons = await _changeChatMuteStateUseCase(chat.id);
+      respons.fold((l) => null, (r) {
+        if (_chats.containsKey(chat.id)) {
+          _chats[chat.id]?.muted = !(_chats[chat.id]!.muted);
+        }
+      });
+      chat.isSelected = false; // setter getter in chatsEntity
+    }
+    selectedChats.clear();
+    await getChatsByCategory(_selectedChatCategory);
   }
 }

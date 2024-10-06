@@ -88,7 +88,9 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                             ),
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await context.read<ChatsCubit>().changeMuteChat();
+                            },
                             icon: const Icon(
                               Icons.notifications_off,
                               color: AppColors.BACKGROUND_COLOR,

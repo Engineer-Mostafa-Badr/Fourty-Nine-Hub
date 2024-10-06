@@ -420,7 +420,11 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                               ),
                                             ),
                                             IconButton(
-                                              onPressed: () {},
+                                              onPressed: ()async {
+                                                await context
+                                                    .read<ChatsCubit>()
+                                                    .changeMuteChat();
+                                              },
                                               icon: const Icon(
                                                 Icons.notifications_off,
                                                 color: AppColors.PRIMARY_COLOR,
