@@ -3,13 +3,11 @@ class RestaurantOrdersModel {
   final bool status;
   final String message;
   final List<RestaurantOrder> data;
-  final Pagination pagination;
 
   RestaurantOrdersModel({
     required this.status,
     required this.message,
     required this.data,
-    required this.pagination,
   });
 
   factory RestaurantOrdersModel.fromJson(Map<String, dynamic> json) {
@@ -17,83 +15,75 @@ class RestaurantOrdersModel {
       status: json['status'],
       message: json['message'],
       data: List<RestaurantOrder>.from(
-          json['data'].map((x) => RestaurantOrder.fromJson(x))),
-      pagination: Pagination.fromJson(json['pagination']),
+        json['data'].map((x) => RestaurantOrder.fromJson(x)),
+      ),
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'status': status,
-        'message': message,
-        'data': List<dynamic>.from(data.map((x) => x.toJson())),
-        'pagination': pagination.toJson(),
-      };
-}
-
-// Pagination Class
-class Pagination {
-  final int countItem;
-  final int pageCount;
-
-  Pagination({
-    required this.countItem,
-    required this.pageCount,
-  });
-
-  factory Pagination.fromJson(Map<String, dynamic> json) {
-    return Pagination(
-      countItem: json['countItem'],
-      pageCount: json['pageCount'],
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-        'countItem': countItem,
-        'pageCount': pageCount,
-      };
+    'status': status,
+    'message': message,
+    'data': List<dynamic>.from(data.map((x) => x.toJson())),
+  };
 }
 
 // RestaurantOrder Class
 class RestaurantOrder {
+  final String id;
+  final UserInfo userInfo;
   final String restaurantId;
   final List<Order> orders;
   final double total;
-  final String id;
-  final UserInfo userInfo;
+  final bool isPremium;
   final String address;
   final String phone;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final String currency;
 
   RestaurantOrder({
+    required this.id,
+    required this.userInfo,
     required this.restaurantId,
     required this.orders,
     required this.total,
-    required this.id,
-    required this.userInfo,
+    required this.isPremium,
     required this.address,
     required this.phone,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.currency,
   });
 
   factory RestaurantOrder.fromJson(Map<String, dynamic> json) {
     return RestaurantOrder(
+      id: json['_id'],
+      userInfo: UserInfo.fromJson(json['userId']),
       restaurantId: json['restaurantId'],
       orders: List<Order>.from(json['orders'].map((x) => Order.fromJson(x))),
       total: (json['total'] as num).toDouble(),
-      id: json['_id'],
-      userInfo: UserInfo.fromJson(json['userInfo']),
+      isPremium: json['isPremium'],
       address: json['address'],
       phone: json['phone'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      currency: json['currency'],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'restaurantId': restaurantId,
-        'orders': List<dynamic>.from(orders.map((x) => x.toJson())),
-        'total': total,
-        '_id': id,
-        'userInfo': userInfo.toJson(),
-        'address': address,
-        'phone': phone,
-      };
+    '_id': id,
+    'userId': userInfo.toJson(),
+    'restaurantId': restaurantId,
+    'orders': List<dynamic>.from(orders.map((x) => x.toJson())),
+    'total': total,
+    'isPremium': isPremium,
+    'address': address,
+    'phone': phone,
+    'createdAt': createdAt.toIso8601String(),
+    'updatedAt': updatedAt.toIso8601String(),
+    'currency': currency,
+  };
 }
 
 // Order Class
@@ -123,39 +113,35 @@ class Order {
   }
 
   Map<String, dynamic> toJson() => {
-        'foodId': foodId.toJson(),
-        'quantity': quantity,
-        'price': price,
-        'totalPriceOfItem': totalPriceOfItem,
-        '_id': id,
-      };
+    'foodId': foodId.toJson(),
+    'quantity': quantity,
+    'price': price,
+    'totalPriceOfItem': totalPriceOfItem,
+    '_id': id,
+  };
 }
 
 // Food Class
 class Food {
   final String id;
   final Picture picture;
-  final String originalId; // Original "_id" field
 
   Food({
     required this.id,
     required this.picture,
-    required this.originalId,
   });
 
   factory Food.fromJson(Map<String, dynamic> json) {
     return Food(
       id: json['id'],
       picture: Picture.fromJson(json['picture']),
-      originalId: json['_id'],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'picture': picture.toJson(),
-        '_id': originalId,
-      };
+    'id': id,
+    'picture': picture.toJson(),
+  };
 }
 
 // Picture Class
@@ -176,9 +162,9 @@ class Picture {
   }
 
   Map<String, dynamic> toJson() => {
-        '_id': id,
-        'mediaKey': mediaKey,
-      };
+    '_id': id,
+    'mediaKey': mediaKey,
+  };
 }
 
 // UserInfo Class
@@ -197,7 +183,7 @@ class UserInfo {
 
   factory UserInfo.fromJson(Map<String, dynamic> json) {
     return UserInfo(
-      id: json['id'],
+      id: json['_id'],
       firstName: json['firstName'],
       lastName: json['lastName'],
       userProfile: UserProfile.fromJson(json['USER_PROFILE']),
@@ -205,11 +191,11 @@ class UserInfo {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'firstName': firstName,
-        'lastName': lastName,
-        'USER_PROFILE': userProfile.toJson(),
-      };
+    '_id': id,
+    'firstName': firstName,
+    'lastName': lastName,
+    'USER_PROFILE': userProfile.toJson(),
+  };
 }
 
 // UserProfile Class
@@ -227,8 +213,8 @@ class UserProfile {
   }
 
   Map<String, dynamic> toJson() => {
-        'profilePictureKey': profilePictureKey.toJson(),
-      };
+    'profilePictureKey': profilePictureKey.toJson(),
+  };
 }
 
 // ProfilePictureKey Class
@@ -249,7 +235,7 @@ class ProfilePictureKey {
   }
 
   Map<String, dynamic> toJson() => {
-        '_id': id,
-        'mediaKey': mediaKey,
-      };
+    '_id': id,
+    'mediaKey': mediaKey,
+  };
 }

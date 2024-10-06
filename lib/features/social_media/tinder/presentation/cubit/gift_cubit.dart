@@ -97,7 +97,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/utils/shared_pref.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 
 class GiftsCubit extends Cubit<GiftsState> {
   String? token;
@@ -163,7 +166,16 @@ class GiftsCubit extends Cubit<GiftsState> {
           'Content-Type': 'application/json',
         },
       );
-
+      var responseData = json.decode(response.body);
+      if (responseData['endPointSubscription'] != null &&
+          responseData['endPointSubscription'] == true &&
+          responseData['userSubscription'] == false) {
+        List<WalletTypes> wallets = (responseData['paymentMethod'] as List)
+            .map((e) => (e as String).toWalletType)
+            .toList();
+        await serviceLocator<SubscriptionController>().showSubscriptionPlans(
+            subCategoryId: responseData['subCategoryId'], wallets: wallets);
+      }
       if (response.statusCode == 200) {
         return response;
       } else {

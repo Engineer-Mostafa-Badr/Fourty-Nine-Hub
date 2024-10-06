@@ -29,6 +29,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cu
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/datasources/create_ad_remote_datasource.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/repositories/create_ad_repo_impl.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/create_ad_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/filter_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/get_ad_properties_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/data_sources/remote_data_source/fourty_nine_remote_data_source.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/repositories/fourty_nine_repository_impl.dart';
@@ -362,6 +363,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+serviceLocator.registerLazySingleton<FilterAdUseCase>(
+      () => FilterAdUseCase(
+        serviceLocator(),
+      ),
+    );
 
     // cubits
     serviceLocator.registerLazySingleton<GetSliderItemsUseCase>(
@@ -439,6 +445,7 @@ class FourtyNineServiceLocator {
     // CreateAdCubit
     serviceLocator.registerFactory<CreateAdCubit>(
       () => CreateAdCubit(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

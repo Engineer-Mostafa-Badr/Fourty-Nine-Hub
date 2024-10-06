@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../../../core/abstract/use_case.dart';
@@ -15,14 +16,15 @@ part 'restaurant_dashboard_state.dart';
 
 class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
   final GetRestaurantOrdersUseCase _getRestaurantOrdersUseCase;
+  final ApiConsumer apiConsumer;
 
-  RestaurantDashboardCubit(this._getRestaurantOrdersUseCase)
+  RestaurantDashboardCubit(this._getRestaurantOrdersUseCase, this.apiConsumer)
       : super(const RestaurantDashboardState());
 
   void loadData() async {
     print('fromRestaurantDashboardCubitloadData');
 
-    await getRestaurantOrders();
+    await getRestaurantOrders1();
   }
 
   String? _token;
@@ -66,7 +68,7 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
           final RestaurantOrdersModel ordersResponse =
               RestaurantOrdersModel.fromJson(jsonList[0]);
 
-          print(ordersResponse.data.length.toString() + "aaaaaaaaaa");
+          print("${ordersResponse.data.length}aaaaaaaaaa");
           emit(state.copyWith(orders: ordersResponse));
         } else {
           emit(state.copyWith(status: RestaurantDashboardStates.error));
@@ -75,6 +77,49 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
         emit(state.copyWith(status: RestaurantDashboardStates.error));
       }
     } catch (e) {
+      emit(state.copyWith(status: RestaurantDashboardStates.error));
+    }
+  }
+
+  Future<void> getRestaurantOrders1() async {
+    emit(state.copyWith(status: RestaurantDashboardStates.initState));
+
+    // The API endpoint URL
+    const String url = 'https://49dev.com/api/v1/food/get-restaurant-orders';
+
+    try {
+      // Make the GET request using ApiConsumer
+      final response = await apiConsumer.get(
+        url,
+      );
+
+      // Handle the response from the API
+      response.fold(
+        (failure) {
+          print('asffadvvvdbsdv11b');
+
+          // Handle error state
+          emit(state.copyWith(status: RestaurantDashboardStates.error));
+        },
+        (jsonList) {
+          print('asffadvvvdbsdvb');
+
+          // Assuming the response is a JSON array with a single object
+          if (jsonList.isNotEmpty) {
+            print('asffadvvvdbsdvb11');
+
+            final ordersResponse = RestaurantOrdersModel.fromJson(jsonList);
+
+            print("$jsonList aaaaaaaaaa");
+            emit(state.copyWith(orders: ordersResponse));
+          } else {
+            // Handle the case where the response is empty
+            emit(state.copyWith(status: RestaurantDashboardStates.error));
+          }
+        },
+      );
+    } catch (e) {
+      // Handle exceptions
       emit(state.copyWith(status: RestaurantDashboardStates.error));
     }
   }

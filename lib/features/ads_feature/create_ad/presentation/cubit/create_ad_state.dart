@@ -30,6 +30,7 @@ class CreateAdState {
   final List<MainCategoryEntity>? mainCategories;
   final List<SubCategoryEntity>? subCategories;
   final List<AdPropertiesEntity>? adProperties;
+  final List<AdPropertiesEntity>? filterAdProperties;
   final List<SelectionEntity>? selections;
   final MainCategoryEntity? selectedCategory;
   final SubCategoryEntity? selectedSubCategory;
@@ -42,6 +43,7 @@ class CreateAdState {
       {this.failure,
       this.mainCategories,
       this.adProperties,
+      this.filterAdProperties,
       this.selectedCategory,
       this.selections,
       this.selectedSubCategory,
@@ -62,6 +64,7 @@ class CreateAdState {
     List<MainCategoryEntity>? mainCategories,
     List<SubCategoryEntity>? subCategories,
     List<AdPropertiesEntity>? adProperties,
+    List<AdPropertiesEntity>? filterAdProperties,
     MainCategoryEntity? selectedCategory,
     List<SelectionEntity>? selections,
     List<GovernorateEntity>? governorates,
@@ -79,6 +82,7 @@ class CreateAdState {
       status: status ?? this.status,
       failure: failure ?? this.failure,
       adProperties: adProperties ?? this.adProperties,
+      filterAdProperties: filterAdProperties ?? this.filterAdProperties,
       mainCategories: mainCategories ?? this.mainCategories,
       subCategories: subCategories ?? this.subCategories,
       selectedCategory: selectedCategory ?? this.selectedCategory,

@@ -8,6 +8,7 @@ class DashboardBanner extends StatelessWidget {
   final String? subTitle;
   final String? route;
   final void Function()? onTap;
+
   const DashboardBanner(
       {super.key, this.subTitle, required this.title, this.route, this.onTap});
 
@@ -31,7 +32,7 @@ class DashboardBanner extends StatelessWidget {
                 child: RichText(
                     text: TextSpan(children: [
                   TextSpan(
-                    text: '$title ',
+                    text: title,
                     style: Styles.mediumText(
                         color: Theme.of(context).scaffoldBackgroundColor,
                         fontWeight: FontWeight.bold),

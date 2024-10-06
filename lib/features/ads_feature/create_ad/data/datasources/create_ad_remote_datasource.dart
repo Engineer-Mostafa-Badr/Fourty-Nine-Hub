@@ -5,12 +5,14 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/models/ad_property_model.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 
 abstract class CreateAdRemoteDatasource {
   Future<Either<Failure, List<AdPropertiesEntity>>> getAdProperties({
     required String subCategoryId,
   });
   Future<Either<Failure, bool>> creatAd({required AdModel ad});
+  Future<Either<Failure, bool>> filterAd({required FilterModel ad});
 }
 
 class CreateAdRemoteDatasourceImpl implements CreateAdRemoteDatasource {
@@ -34,5 +36,13 @@ class CreateAdRemoteDatasourceImpl implements CreateAdRemoteDatasource {
         await _apiConsumer.post(EndPoints.createAd, data: ad.toJson());
     return response.fold(
         (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> filterAd({required FilterModel ad}) async {
+    final response =
+        await _apiConsumer.post(EndPoints.filterAd(ad), data: ad.toJson());
+    return response.fold(
+            (failure) => Left(failure), (data) => Right(data['status']));
   }
 }

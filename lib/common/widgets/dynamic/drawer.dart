@@ -58,7 +58,6 @@ class DrawerWidget extends StatelessWidget {
 
                     competitionSubscription(context: context),
 
-                    // walletCircularProgress(context: context), gemy3617@gmail.com
                     drawerListTile(
                         image: Assets.microphone,
                         label: LocaleKeys.advertiseYourCompany.localize,
@@ -83,7 +82,6 @@ class DrawerWidget extends StatelessWidget {
                                   builder: (context) => const CustomPage()));
                         }),
                     drawerListTile(
-                        // icon: Icons.star_rounded,
                         image: Assets.favorite_main_category_icon,
                         label: LocaleKeys.favouriteCategories.localize,
                         requireLogin: true,
@@ -618,14 +616,10 @@ class DrawerWidget extends StatelessWidget {
                       },
                     );
                   },
-                  child: Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Icon(
-                      Icons.camera_alt_outlined,
-                      size: 40.w,
-                      color: Theme.of(context).primaryColor,
-                    ),
+                  child: Icon(
+                    Icons.camera_alt_outlined,
+                    size: 40.w,
+                    color: Theme.of(context).primaryColor,
                   ),
                 )
               ],
