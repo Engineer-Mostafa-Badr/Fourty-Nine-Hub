@@ -576,13 +576,13 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                             size: 38.h,
                           ),
                         ),
-                        const Spacer(),
-                        Label(
-                          text: '$numberOfAds ${LocaleKeys.ads.tr()}',
-                          style: Styles.mediumText(
-                            color: Colors.white,
-                          ),
-                        ),
+                        // const Spacer(),
+                        // Label(
+                        //   text: '$numberOfAds ${LocaleKeys.ads.tr()}',
+                        //   style: Styles.mediumText(
+                        //     color: Colors.white,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
