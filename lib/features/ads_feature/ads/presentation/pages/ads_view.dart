@@ -131,7 +131,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                 alignment: AlignmentDirectional.topStart,
                 child: Container(
                     margin: EdgeInsetsDirectional.all(10.w),
-                    child: BadgedLabel(label: 'Filter',
+                    child: BadgedLabel(label: LocaleKeys.filter.localize,
                                 onTap: () async{
                                   dynamic data = await context.push(Routes.FILTERADS,extra:CategorizationEntity(mainCategory: widget.params.mainCategory,subCategory: widget.params.subCategory) );
                                   if(data!=null){

@@ -140,8 +140,8 @@ class _FilterAdDynamicInputWidgetState
     required List<SelectionEntity> values,
   }) {
     return Scaffold(
-      appBar: const BackAppBar(
-        label: 'Select',
+      appBar:  BackAppBar(
+        label: LocaleKeys.select.localize,
       ),
       body: ListView.builder(
           itemCount: values.length,

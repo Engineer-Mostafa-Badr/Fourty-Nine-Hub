@@ -138,7 +138,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
   }) {
     return Scaffold(
       appBar: const BackAppBar(
-        label: 'Select',
+        label: LocaleKeys.select.localize,
       ),
       body: ListView.builder(
           itemCount: values.length,
