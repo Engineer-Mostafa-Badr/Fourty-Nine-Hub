@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/style/app_colors.dart';
+import '../../../../res/style/styles.dart';
 
 class CardDetails extends StatelessWidget {
   const CardDetails({super.key});
@@ -27,7 +28,7 @@ class CardDetails extends StatelessWidget {
               ),
               child: Image.asset(
                 'assets/images/doctor.png',
-                fit: BoxFit.contain,
+                fit: BoxFit.fill,
               ),
             ),
             const SizedBox(height: 20),
@@ -53,7 +54,7 @@ class CardDetails extends StatelessWidget {
               ),
             ),
             SizedBox(height: 30.h),
-            const Column(
+             Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -67,7 +68,9 @@ class CardDetails extends StatelessWidget {
                 SizedBox(height: 10),
                 Text(
                   'This product is the Honor 90 Lite Dual SIM phone that comes with FHD screen, high resolution rear camera and powerful processor.',
-                  style: TextStyle(fontSize: 16),
+                  style: Styles.mediumText(
+
+                  ),
                 ),
               ],
             ),
