@@ -36,6 +36,7 @@ class ChatsState {
   final List<ChatEntity>? chats;
   final MessageEntity? newMessage;
   final bool? archived;
+  final List<ChatEntity>? archivedChats;
 
   const ChatsState({
     this.status = ChatsStates.init,
@@ -43,6 +44,7 @@ class ChatsState {
     this.chats,
     this.newMessage,
     this.archived,
+    this.archivedChats = const [],
   });
 
   ChatsState copyWith({
@@ -50,12 +52,16 @@ class ChatsState {
     Failure? failure,
     List<ChatEntity>? chats,
     MessageEntity? newMessage,
+    bool? archived,
+    List<ChatEntity>? archivedChats,
   }) {
     return ChatsState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
       chats: chats ?? this.chats,
       newMessage: newMessage,
+      archived: archived ?? this.archived,
+      archivedChats: archivedChats ?? this.archivedChats,
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -61,17 +62,17 @@ class ChatsCubit extends Cubit<ChatsState> {
       case ChatCategories.social:
         return _getSocialChats();
       // case ChatCategories.greet:
-        // return getGreetChats();
+      // return getGreetChats();
       case ChatCategories.service:
         return _getServicesChats();
       // case ChatCategories.anonymous:
-        // return getAnonymousChats();
+      // return getAnonymousChats();
       // case ChatCategories.locked:
-        // return getLockedChats();
+      // return getLockedChats();
       case ChatCategories.unread:
         return _getUnreadChats();
       // case ChatCategories.archived:
-        // return getArchivedChats();
+      // return getArchivedChats();
       default:
         return _getSocialChats();
     }
@@ -168,10 +169,19 @@ class ChatsCubit extends Cubit<ChatsState> {
     return super.close();
   }
 
-  Future<void> changeActiveChat(ChatEntity chat) async {
-    chat.archived = !chat.archived;
-    _changeChatToArchiveOrNormalUseCase(chat.id);
-    getChatsByCategory(_selectedChatCategory);
-    emit(state.copyWith(status: ChatsStates.archived));
+  Future<void> changeActiveChat() async {
+    for (var chat in selectedChats) {
+      // chat.archived = !chat.archived;
+      log("archived = ${chat.archived}");
+      final respons = await _changeChatToArchiveOrNormalUseCase(chat.id);
+      respons.fold((l) => null, (r) {
+        if (_chats.containsKey(chat.id)) {
+          _chats[chat.id]?.archived = !(_chats[chat.id]!.archived);
+        }
+      });
+      chat.isSelected = false; // setter getter in chatsEntity
+    }
+    selectedChats.clear();
+    await getArchivedChats();
   }
 }
