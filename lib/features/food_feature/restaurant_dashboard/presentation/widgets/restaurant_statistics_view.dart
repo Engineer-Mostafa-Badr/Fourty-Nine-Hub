@@ -20,14 +20,14 @@ class RestaurantStatisticsView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Label(
-            text: 'Statistics',
-            style: Styles.headerText(),
-          ),
+          // Label(
+          //   text: 'Statistics',
+          //   style: Styles.headerText(),
+          // ),
           Container(
             decoration: const BoxDecoration(
-                color: AppColors.PRIMARY_COLOR,
-                borderRadius: BorderRadius.all(Radius.circular(18))),
+                // color: AppColors.PRIMARY_COLOR,
+                borderRadius: BorderRadius.all(Radius.circular(6))),
             width: 1.sw,
             // height: 0.3.sw,
             child: BlocBuilder<RestaurantStatisticsCubit,
@@ -35,9 +35,10 @@ class RestaurantStatisticsView extends StatelessWidget {
               builder: (context, statea) {
                 final state = context.read<RestaurantStatisticsCubit>();
                 if (state.restaurantStatistics != null) {
-                  return Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    alignment: WrapAlignment.center,
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    // crossAxisAlignment: WrapCrossAlignment.center,
+                    // alignment: WrapAlignment.center,
                     children: [
                       _buildStatisticColumn(
                           'Total Orders',
@@ -46,6 +47,7 @@ class RestaurantStatisticsView extends StatelessWidget {
                       _buildStatisticColumn(
                           'Total Revenue',
                           state.restaurantStatistics!.data.totalRevenue
+                              .ceil()
                               .toString()),
                       _buildStatisticColumn(
                           'Avg Rating',
@@ -56,7 +58,7 @@ class RestaurantStatisticsView extends StatelessWidget {
                           state.restaurantStatistics!.data.numberOfReviews
                               .toString()),
                       _buildStatisticColumn(
-                          'Sub Deadline',
+                          'Subscription Deadline',
                           state.restaurantStatistics!.data.deadLineSubscription
                               .toString()),
                       // Text(
@@ -95,27 +97,30 @@ class RestaurantStatisticsView extends StatelessWidget {
 
   Widget _buildStatisticColumn(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
+      padding: const EdgeInsets.all(4.0),
+      child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            value,
-            style: const TextStyle(
-              // fontSize: 16.sp,
-              color: AppColors.PRIMARY_COLOR_DARK,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 4.h),
           Text(
             label,
             style: const TextStyle(
               // fontSize: 14.sp,
-              color: Colors.white,
+              color: Colors.black,
               fontWeight: FontWeight.w400,
             ),
           ),
+          Spacer(),
+          Text(
+            value,
+            style: const TextStyle(
+              // fontSize: 16.sp,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(
+            width: 0.06.sw,
+          )
         ],
       ),
     );
