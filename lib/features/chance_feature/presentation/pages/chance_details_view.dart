@@ -8,7 +8,9 @@ class ChanceDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      appBar: BackAppBar(),
+      appBar: BackAppBar(
+        label: "Chance Details",
+      ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: ChanceDetailsBody(),
