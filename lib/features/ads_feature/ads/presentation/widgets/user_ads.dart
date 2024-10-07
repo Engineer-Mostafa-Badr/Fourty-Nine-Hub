@@ -23,14 +23,14 @@ class _UserAdsState extends State<UserAds> {
   void initState() {
     context.read<AdvertisementCubit>().loadData(
         subCategoryId: widget.params.subCategory.id,
-        filter:
-        widget.params.subCategory.hasAuction == true ? 'sale' : 'provider');
+        filter:widget.userType);
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return BlocBuilder<AdvertisementCubit, AdsState>(
         builder: (context,state) {
           final controller = context.read<AdvertisementCubit>();

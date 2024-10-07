@@ -223,7 +223,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
         print(item.toJson());
       }
 
-      FilterModel model =FilterModel(price: price, props: selectedDetails, cityId: state.city??'',governorateId: state.governorate??'', limit: 10, page: 1, subCategoryId:categorize.subCategory.id);
+      FilterModel model =FilterModel(price: price, props: selectedDetails, cityId: state.city??'',governorateId: state.governorate??'', limit: 10, page: 1, subCategoryId:categorize.mainCategory.id);
       final response = await _filterAdUseCase(model);
       response.fold(
               (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
