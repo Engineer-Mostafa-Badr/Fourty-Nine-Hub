@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -12,10 +14,14 @@ import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/mobile_ad_card.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class AdsView extends StatefulWidget {
@@ -120,6 +126,24 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                         : LocaleKeys.user.localize),
               ],
             ),
+            // const Sizer(),
+            Align(
+                alignment: AlignmentDirectional.topStart,
+                child: Container(
+                    margin: EdgeInsetsDirectional.all(10.w),
+                    child: BadgedLabel(label: LocaleKeys.filter.localize,
+                                onTap: () async{
+                                  dynamic data = await context.push(Routes.FILTERADS,extra:CategorizationEntity(mainCategory: widget.params.mainCategory,subCategory: widget.params.subCategory) );
+                                  if(data!=null){
+                                    FilterModel model = data;
+                                    print("Pop Data : ${model.toJson()}");
+                                    // controller.
+
+                                  }
+
+                                },
+                    ))),
+            // const Sizer(),
             state.status == AdsStates.success
                 ? Expanded(
                     child: PagedListView<int, AdModel>(

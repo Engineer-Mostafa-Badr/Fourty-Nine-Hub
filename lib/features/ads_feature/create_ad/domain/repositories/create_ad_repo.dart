@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../ads/data/models/Ad_model.dart';
@@ -9,4 +10,5 @@ abstract class CreateAdRepo {
     required String subCategoryId,
   });
   Future<Either<Failure, bool>> creatAd({required AdModel ad});
+  Future<Either<Failure, bool>> filterAd({required FilterModel ad});
 }

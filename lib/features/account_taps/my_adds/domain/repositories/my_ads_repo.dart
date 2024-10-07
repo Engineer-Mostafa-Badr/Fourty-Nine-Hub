@@ -7,6 +7,7 @@ import '../../../../ride/trip_details/domain/entities/trip_and_request_entity.da
 import '../entity/get_all_counts_trip_join_entity.dart';
 import '../entity/my_ads_auction.dart';
 import '../entity/my_ads_trip_join_entity.dart';
+import '../usecases/edit_my_ads_use_case.dart';
 import '../usecases/get_all_counts_ads_usecase.dart';
 import '../usecases/get_all_counts_usecase.dart';
 import '../usecases/update_my_ads_usecase.dart';
@@ -32,4 +33,5 @@ abstract class MyAdsRepo {
   Future<Either<Failure, List<GetAllCountsTripJoinEntity>>> getAllCountsTripJoin(Params params);
   Future<Either<Failure, List<GetAllCountAdsEntity>>> getAllCountsAds(CountAdsParams params);
   Future<Either<Failure, bool>> updateMyAds(UpdateMyAdsParams params);
+  Future<Either<Failure, bool>> editMyAds(EditParams params);
 }

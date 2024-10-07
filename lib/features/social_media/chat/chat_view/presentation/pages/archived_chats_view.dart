@@ -67,6 +67,50 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                   color: Colors.white,
                 ),
               ),
+              actions: [
+                BlocBuilder<ChatsCubit, ChatsState>(
+                  builder: (context, state) {
+                    if (context.read<ChatsCubit>().selectedChats.isEmpty) {
+                      return const SizedBox();
+                    } else {
+                      return Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.push_pin),
+                            color: AppColors.BACKGROUND_COLOR,
+                          ),
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.delete_forever,
+                              color: AppColors.BACKGROUND_COLOR,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.notifications_off,
+                              color: AppColors.BACKGROUND_COLOR,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              await context
+                                  .read<ChatsCubit>()
+                                  .changeActiveChat();
+                            },
+                            icon: const Icon(
+                              Icons.unarchive,
+                              color: AppColors.BACKGROUND_COLOR,
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                  },
+                )
+              ],
               title: Text(
                 widget.params.category == ChatCategoriesIds.greet
                     ? LocaleKeys.greet.tr()
@@ -111,50 +155,57 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                       : ListView.separated(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) => Slidable(
-                            key: ValueKey(index),
-                            closeOnScroll: false,
-                            endActionPane: ActionPane(
-                              motion: const ScrollMotion(),
-                              dismissible: DismissiblePane(onDismissed: () {}),
-                              children: [
-                                SlidableAction(
-                                  onPressed: (value) {
-                                    // bottomSheet(
-                                    //     backColor:
-                                    //         Theme.of(context).scaffoldBackgroundColor,
-                                    //     context: context,
-                                    //     isScrollControlled: true,
-                                    //     widget: MoreIconBottomSheet(
-                                    //       ChatCategoryEntity: state.chats![index],
-                                    //       chatsCubit: chatCubit,
-                                    //     ));
-                                  },
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 191, 191, 191),
-                                  foregroundColor: Colors.white,
-                                  icon: Icons.more_horiz,
-                                  label: LocaleKeys.more.tr(),
-                                  padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) => (!state
+                                      .chats![index].archived) &&
+                                  widget.params.category == "Archive"
+                              ? const SizedBox()
+                              : Slidable(
+                                  key: ValueKey(index),
+                                  closeOnScroll: false,
+                                  endActionPane: ActionPane(
+                                    motion: const ScrollMotion(),
+                                    dismissible:
+                                        DismissiblePane(onDismissed: () {}),
+                                    children: [
+                                      SlidableAction(
+                                        onPressed: (value) {
+                                          // bottomSheet(
+                                          //     backColor:
+                                          //         Theme.of(context).scaffoldBackgroundColor,
+                                          //     context: context,
+                                          //     isScrollControlled: true,
+                                          //     widget: MoreIconBottomSheet(
+                                          //       ChatCategoryEntity: state.chats![index],
+                                          //       chatsCubit: chatCubit,
+                                          //     ));
+                                        },
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 191, 191, 191),
+                                        foregroundColor: Colors.white,
+                                        icon: Icons.more_horiz,
+                                        label: LocaleKeys.more.tr(),
+                                        padding: EdgeInsets.zero,
+                                      ),
+                                      SlidableAction(
+                                        onPressed: (value) async {},
+                                        backgroundColor:
+                                            AppColors.PRIMARY_COLOR,
+                                        foregroundColor: Colors.white,
+                                        icon: Icons.delete_outlined,
+                                        label: state.chats![index].archived
+                                            ? LocaleKeys.unarchive.tr()
+                                            : LocaleKeys.archive.tr(),
+                                        padding: EdgeInsets.zero,
+                                      ),
+                                    ],
+                                  ),
+                                  child: ChatCard(
+                                    isSecret:
+                                        widget.params.category == "LockedChats",
+                                    chat: state.chats?[index],
+                                    chatsCubit: widget.params.chatsCubit,
+                                  ),
                                 ),
-                                SlidableAction(
-                                  onPressed: (value) async {},
-                                  backgroundColor: AppColors.PRIMARY_COLOR,
-                                  foregroundColor: Colors.white,
-                                  icon: Icons.delete_outlined,
-                                  label: state.chats![index].archived
-                                      ? LocaleKeys.unarchive.tr()
-                                      : LocaleKeys.archive.tr(),
-                                  padding: EdgeInsets.zero,
-                                ),
-                              ],
-                            ),
-                            child: ChatCard(
-                              isSecret: widget.params.category == "LockedChats",
-                              chat: state.chats?[index],
-                              chatsCubit: widget.params.chatsCubit,
-                            ),
-                          ),
                           separatorBuilder: (context, index) =>
                               const SizedBox(),
                           itemCount: state.chats?.length ?? 0,

@@ -885,5 +885,9 @@
   "subscribed" : "مشترك",
   "unsubscribed" : "غير مشرك",
   "expiredRequests": "طلبات منتهية الصلاحية",
-  "other": "أخرى"
+  "filter": "تصفية",
+  "beAStar": "كن نجم",
+  "select": "اختيار"
+
+
 }
