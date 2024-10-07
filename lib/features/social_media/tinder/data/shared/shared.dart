@@ -826,11 +826,11 @@ class BottomSheetContentState extends State<BottomSheetContent> {
   }
 }
 
-void showGiftBottomSheet(BuildContext context,
+Future<void> showGiftBottomSheet(BuildContext context,
     {required String? receiverId,
     bool forSelect = false,
-    void Function(GiftData)? selectGift}) {
-  showModalBottomSheet(
+    void Function(GiftData)? selectGift}) async {
+  await showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,

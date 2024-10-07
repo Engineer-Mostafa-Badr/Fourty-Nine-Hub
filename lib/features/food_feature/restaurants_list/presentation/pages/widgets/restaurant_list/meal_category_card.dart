@@ -30,70 +30,74 @@ class MealCategoryCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
-        child: InkWell(
-          onTap: () => onTap(subCategory?.id ?? ""),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
-                  children: [
-                    // Heart image
-                    Container(
-                      height: 300.h,
-                      width: 300.h,
-                      decoration: BoxDecoration(
-                        // color: Colors.green,
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            subCategory!
-                                .picture!, // Replace with your image URL
+        child: Container(
+          width: 0.38.sw,
+          color: Colors.white,
+          child: InkWell(
+            onTap: () => onTap(subCategory?.id ?? ""),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: [
+                      // Heart image
+                      Container(
+                        height: 300.h,
+                        width: 300.h,
+                        decoration: BoxDecoration(
+                          // color: Colors.green,
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              subCategory!
+                                  .picture!, // Replace with your image URL
+                            ),
+                            fit: BoxFit.fitHeight,
                           ),
-                          fit: BoxFit.fitHeight,
                         ),
                       ),
-                    ),
-                    // Favorite Icon (Heart)
-                    Positioned(
-                      top: 5,
-                      right: 5,
-                      child: IconAppButton(
-                          size: 25,
-                          icon: subCategory?.isFavorite ?? false
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: ThemeCubit.get(context).isDarkTheme
-                              ? Theme.of(context).scaffoldBackgroundColor
-                              : AppColors.PRIMARY_COLOR_DARK,
-                          onPressed: () {
-                            context
-                                .read<RestaurantsCubit>()
-                                .toggleFavoriteSubcategory(
-                                    subCategory?.id ?? "");
-                          }),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Label(
-                  text: (getLang() == "ar"
-                          ? subCategory?.nameAr
-                          : subCategory?.nameEn) ??
-                      "",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 45.sp,
-                      color: Colors.black),
-                ),
-                Label(
-                  text:
-                      '${subCategory?.numberOfRestaurant ?? "0"} ${LocaleKeys.restaurants.tr()}',
-                  style: TextStyle(
-                      fontSize: 35.sp, color: Colors.black.withOpacity(0.8)),
-                ),
-              ],
+                      // Favorite Icon (Heart)
+                      Positioned(
+                        top: 5,
+                        right: 5,
+                        child: IconAppButton(
+                            size: 25,
+                            icon: subCategory?.isFavorite ?? false
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: ThemeCubit.get(context).isDarkTheme
+                                ? Theme.of(context).scaffoldBackgroundColor
+                                : AppColors.PRIMARY_COLOR_DARK,
+                            onPressed: () {
+                              context
+                                  .read<RestaurantsCubit>()
+                                  .toggleFavoriteSubcategory(
+                                      subCategory?.id ?? "");
+                            }),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Label(
+                    text: (getLang() == "ar"
+                            ? subCategory?.nameAr
+                            : subCategory?.nameEn) ??
+                        "",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 45.sp,
+                        color: Colors.black),
+                  ),
+                  Label(
+                    text:
+                        '${subCategory?.numberOfRestaurant ?? "0"} ${LocaleKeys.restaurants.tr()}',
+                    style: TextStyle(
+                        fontSize: 35.sp, color: Colors.black.withOpacity(0.8)),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

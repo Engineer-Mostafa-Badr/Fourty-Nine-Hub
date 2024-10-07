@@ -2570,32 +2570,32 @@ class _FollowingSectionState extends State<FollowingSection> {
                         onPressed: () => context.pop(),
                       ),
                       actions: [
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: IconButton(
-                            onPressed: () async {
-                              // context.pop();
-                              await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ReelsRecordingScreen(
-                                            // advertisementType: 'reel',
-                                            // comeFromCompany: 'company',
-                                            // totalPrice: '500',
-                                            ),
-                                  ));
-                            },
-                            icon: FaIcon(
-                              Icons.camera_alt_outlined,
-                              color: isDarkTheme(context)
-                                  ? Colors.white
-                                  : Colors.grey,
-                              size: 50.h,
-                            ),
-                          ),
-                        )
+                        // const Spacer(),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(8.0),
+                        //   child: IconButton(
+                        //     onPressed: () async {
+                        //       // context.pop();
+                        //       await Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(
+                        //             builder: (context) =>
+                        //                 const ReelsRecordingScreen(
+                        //                     // advertisementType: 'reel',
+                        //                     // comeFromCompany: 'company',
+                        //                     // totalPrice: '500',
+                        //                     ),
+                        //           ));
+                        //     },
+                        //     icon: FaIcon(
+                        //       Icons.camera_alt_outlined,
+                        //       color: isDarkTheme(context)
+                        //           ? Colors.white
+                        //           : Colors.grey,
+                        //       size: 50.h,
+                        //     ),
+                        //   ),
+                        // )
                       ],
                     ),
                     body: UnifiedReelItem(
@@ -2746,32 +2746,32 @@ class DiscoverSectionState extends State<DiscoverSection> {
                       onPressed: () => context.pop(),
                     ),
                     actions: [
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: IconButton(
-                          onPressed: () async {
-                            // context.pop();
-                            await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ReelsRecordingScreen(
-                                          // advertisementType: 'reel',
-                                          // comeFromCompany: 'company',
-                                          // totalPrice: '500',
-                                          ),
-                                ));
-                          },
-                          icon: FaIcon(
-                            Icons.camera_alt_outlined,
-                            color: isDarkTheme(context)
-                                ? Colors.white
-                                : Colors.grey,
-                            size: 50.h,
-                          ),
-                        ),
-                      )
+                      // const Spacer(),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: IconButton(
+                      //     onPressed: () async {
+                      //       // context.pop();
+                      //       await Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder: (context) =>
+                      //                 const ReelsRecordingScreen(
+                      //                     // advertisementType: 'reel',
+                      //                     // comeFromCompany: 'company',
+                      //                     // totalPrice: '500',
+                      //                     ),
+                      //           ));
+                      //     },
+                      //     icon: FaIcon(
+                      //       Icons.camera_alt_outlined,
+                      //       color: isDarkTheme(context)
+                      //           ? Colors.white
+                      //           : Colors.grey,
+                      //       size: 50.h,
+                      //     ),
+                      //   ),
+                      // )
                     ],
                   ),
                   body: UnifiedReelItem(

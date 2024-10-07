@@ -238,6 +238,16 @@ class ReelsCubit extends Cubit<ReelsState> {
             globalReelsCurrentPage: 0));
 
 //---------------------------------------------------------------------------------------
+
+  var pauseChild = false;
+
+  pauseChildVideo({bool pause = false}) {
+    pauseChild = pause;
+    print(pauseChild.toString() + "asfsldhfnsd");
+
+    emit(state);
+  }
+
   Future<void> createReelView(String reelId, int duration) async {
     emit(state.copyWith(isCreatingReelView: true));
 
@@ -373,6 +383,7 @@ class ReelsCubit extends Cubit<ReelsState> {
         page: state.globalReelsCurrentPage + 1,
       );
 
+      print(response.data.reels.length.toString()+"asfadjcbalc");
       emit(state.copyWith(
         reels: [...state.globalReels, ...response.data.reels],
         isLoading: false,
