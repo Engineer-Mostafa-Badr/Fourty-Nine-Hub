@@ -37,24 +37,18 @@ class CounterMoneyWidget extends StatelessWidget {
             color: AppColors.PRIMARY_COLOR,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Row(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.close, color: Colors.white),
-                onPressed: () {},
-              ),
-              const Spacer(),
-              Text('0',
-                  style: Styles.mediumText(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    fontSize: 80.sp,
-                  )),
-            ],
+          child:  Center(
+            child: Text('0',
+                style: Styles.mediumText(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  fontSize: 80.sp,
+                )),
           ),
         ),
         const Spacer(),
         ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+            },
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),
@@ -66,8 +60,10 @@ class CounterMoneyWidget extends StatelessWidget {
             child: Icon(
               Icons.add,
               color: Theme.of(context).scaffoldBackgroundColor,
-            ))
+            ),
+        )
       ],
     );
   }
 }
+

@@ -15,13 +15,6 @@ class ChanceDetailsBody extends StatelessWidget {
       children: [
         const CardDetails(),
         SizedBox(height: 20.h),
-        Text(
-            'Subscribe',
-            style: Styles.mediumText(
-                color: Theme.of(context).primaryColor,
-                fontSize: 70.sp,
-                fontWeight: FontWeight.bold
-            )),
         SizedBox(height: 10.h),
         Text(
             'Type the value you want to participation',
