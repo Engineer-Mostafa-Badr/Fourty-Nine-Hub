@@ -288,9 +288,9 @@ class _ZegoLiveStreamingLivePageSurfaceState
                               //       });
                               // },
                               onTap: () {
-                                context
-                                    .read<StreamCubit>()
-                                    .sendPoints("66b9da437b1fafcdf897bbe1", "6702b91d870285d189a6e408");
+                                context.read<StreamCubit>().sendPoints(
+                                    "66b9da437b1fafcdf897bbe1",
+                                    "6702b91d870285d189a6e408");
                               },
                               child: Container(
                                 width: context.screenWidth * 0.4,

@@ -95,6 +95,7 @@ extension TiktokControllerExtension on StreamCubit {
   }
 
   Future<void> createLive({required String title}) async {
+
     emit(state.copyWith(status: StreamsStates.loading));
     //extract data from state
     final List<GoalParams> goalParamsList = state.selectedGifts.map((gift) {
@@ -117,7 +118,7 @@ extension TiktokControllerExtension on StreamCubit {
     });
   }
 
-  void loadData() async {
+  void loadLives() async {
     getAllLives(1);
     roomsPagingController.addPageRequestListener((pageKey) {
       getAllLives(pageKey);
@@ -159,7 +160,7 @@ extension TiktokControllerExtension on StreamCubit {
         // );
       });
     }).catchError((onError) {
-      CliLogger.error('there is an error from catch',
+      CliLogger.error('there is an error from catch${onError.toString()}',
           level: CliLoggerLevel.three);
     });
   }
@@ -174,6 +175,7 @@ extension TiktokControllerExtension on StreamCubit {
     });
   }
   void sendPoints(String memberId,String liveId){
+    print('tapped');
     sendPointsUseCase(PointsParams(memberId: memberId,streamId: liveId));
   }
   void listenToSendPoints(){
