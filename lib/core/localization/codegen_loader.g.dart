@@ -903,7 +903,8 @@ class CodegenLoader extends AssetLoader{
   "expiredRequests": "طلبات منتهية الصلاحية",
   "filter": "تصفية",
   "beAStar": "كن نجم",
-  "select": "اختيار"
+  "select": "اختيار",
+  "uploadOneImage": "قم بتحميل صورة واحدة على الأقل!"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1797,8 +1798,8 @@ static const Map<String,dynamic> en = {
   "seeAll": "See All",
   "filter": "Filter",
   "beAStar": "Be A Star",
-  "select": "Select"
+  "select": "Select",
+  "uploadOneImage": "Upload At Least One Photo!"
 };
-
-static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en,};
+static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

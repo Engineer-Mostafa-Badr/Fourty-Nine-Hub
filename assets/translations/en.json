@@ -899,5 +899,6 @@
   "seeAll": "See All",
   "filter": "Filter",
   "beAStar": "Be A Star",
-  "select": "Select"
+  "select": "Select",
+  "uploadOneImage": "Upload At Least One Photo!"
 }

@@ -10,5 +10,5 @@ abstract class CreateAdRepo {
     required String subCategoryId,
   });
   Future<Either<Failure, bool>> creatAd({required AdModel ad});
-  Future<Either<Failure, bool>> filterAd({required FilterModel ad});
+  Future<Either<Failure, List<AdModel>>> filterAd({required FilterModel ad});
 }
