@@ -21,7 +21,8 @@ class FilterModel extends FilterEntity {
       }
     }
     return {
-        "filterCriteria": filterCriteria,
+        "filterCriteria": filterCriteria
+      ,
       "price":{
         "min": "number",
         "max": {"min": price.value.nameAr, "max": price.value.nameEn}
