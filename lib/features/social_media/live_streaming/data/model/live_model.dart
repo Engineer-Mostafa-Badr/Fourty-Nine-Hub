@@ -13,10 +13,10 @@ class LiveModel extends LiveEntity {
   //from json
   factory LiveModel.fromJson(Map<String, dynamic> json) {
     return LiveModel(
-      id: json['id'],
+      id: json['_id'],
       title: json['title'],
       topicName: json['topicName'],
-      gift: List.from(json['gift']).map((e) => GoalModel.fromJson(e)).toList(),
+      gift: List.from(json['goals']).map((e) => GoalModel.fromJson(e)).toList(),
       description: json['description'],
     );
   }

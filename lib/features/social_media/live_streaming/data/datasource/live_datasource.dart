@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
@@ -160,9 +162,19 @@ class LiveDataSourceImpl extends LiveDataSource {
   Future<void> sendPoints(PointsParams params) async {
     // TODO: connect socket
     _socket.connect();
+    print('Connected');
 
     /// TODO: emit event
-    _socket.emit(SocketIOListeners.sendPoints, params.toJson());
+    _socket.emit(
+        SocketIOListeners.sendPoints,
+        jsonEncode({
+          "memberId": params.memberId,
+          "streamId": params.streamId,
+        }));
+    print(jsonEncode({
+      "memberId": params.memberId,
+      "streamId": params.streamId,
+    }));
   }
 
   @override
