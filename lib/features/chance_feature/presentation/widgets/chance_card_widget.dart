@@ -47,7 +47,7 @@ class ChanceCardWidget extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 40.sp,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.QUANTITY_COLOR,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                       Text(

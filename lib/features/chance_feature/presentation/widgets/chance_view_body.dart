@@ -8,7 +8,7 @@ class ChanceViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(18.0),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -19,7 +19,7 @@ class ChanceViewBody extends StatelessWidget {
               elevation: 5,
               child: Container(
                 width: double.infinity,
-                height: 220.h,
+                height: 190.h,
                 decoration: BoxDecoration(
                   color: Colors.purple,
                   borderRadius: BorderRadius.circular(15),

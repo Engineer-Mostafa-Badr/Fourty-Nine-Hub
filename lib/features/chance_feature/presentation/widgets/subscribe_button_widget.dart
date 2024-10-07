@@ -22,7 +22,7 @@ class SubscribeButtonWidget extends StatelessWidget {
         ),
         child: Text('Subscribe',
             style: Styles.mediumText(
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: Colors.white,
                 fontSize: 55.sp,
                 fontWeight: FontWeight.w400
             )),

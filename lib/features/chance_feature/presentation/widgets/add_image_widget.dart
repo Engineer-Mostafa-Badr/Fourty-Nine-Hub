@@ -27,24 +27,18 @@ class AddImageWidget extends StatelessWidget {
             const SizedBox(height: 20),
             Container(
               width: double.infinity,
-              height: 30.h,
+              height: 40.h,
               decoration: BoxDecoration(
                 color: AppColors.SECONDARY_COLOR,
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Text("Add Imaage", textAlign: TextAlign.center,
                   style: Styles.smallText(
-                    color: Theme
-                      .of(context)
-                      .scaffoldBackgroundColor,
+                      color: Colors.white,
+                    fontSize: 50.sp
                   ) ,),
             ),
             const SizedBox(height: 20),
-             Text(
-              '5MB maximum file size accepted in the following formats:',
-              textAlign: TextAlign.center,
-              style: Styles.smallText(),
-            ),
           ],
         ),
       ),

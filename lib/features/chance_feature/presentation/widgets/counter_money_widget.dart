@@ -25,7 +25,7 @@ class CounterMoneyWidget extends StatelessWidget {
             ),
             child: Icon(
               Icons.remove,
-              color: Theme.of(context).scaffoldBackgroundColor,
+              color: Colors.white,
             )),
         const Spacer(),
         Container(
@@ -40,7 +40,7 @@ class CounterMoneyWidget extends StatelessWidget {
           child:  Center(
             child: Text('0',
                 style: Styles.mediumText(
-                  color: Theme.of(context).scaffoldBackgroundColor,
+                  color: Colors.white,
                   fontSize: 80.sp,
                 )),
           ),
@@ -59,7 +59,7 @@ class CounterMoneyWidget extends StatelessWidget {
             ),
             child: Icon(
               Icons.add,
-              color: Theme.of(context).scaffoldBackgroundColor,
+              color: Colors.white,
             ),
         )
       ],
