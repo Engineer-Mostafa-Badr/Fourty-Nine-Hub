@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../../res/style/app_colors.dart';
+import '../../../../res/style/styles.dart';
 
 
 class AddImageWidget extends StatelessWidget {
@@ -6,42 +10,44 @@ class AddImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        // Icon indicating image upload
-        Icon(
-          Icons.image,
-          size: 100,
-          color: Colors.blueAccent,
+    return GestureDetector(
+      onTap: (){},
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          boxShadow: AppColors.SHADOW_LIGHT,
+          color: Theme.of(context).scaffoldBackgroundColor
         ),
-        SizedBox(height: 20),
-        // Add Images Button
-        ElevatedButton(
-          onPressed: () {
-            // أضف الإجراء الذي تريد تنفيذه عند الضغط على الزر
-            print("Add Images button pressed!");
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red, // لون الزر
-            padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/images/image.png",
             ),
-          ),
-          child: Text(
-            'Add Images',
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
+            const SizedBox(height: 20),
+            Container(
+              width: double.infinity,
+              height: 30.h,
+              decoration: BoxDecoration(
+                color: AppColors.SECONDARY_COLOR,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Text("Add Imaage", textAlign: TextAlign.center,
+                  style: Styles.smallText(
+                    color: Theme
+                      .of(context)
+                      .scaffoldBackgroundColor,
+                  ) ,),
+            ),
+            const SizedBox(height: 20),
+             Text(
+              '5MB maximum file size accepted in the following formats:',
+              textAlign: TextAlign.center,
+              style: Styles.smallText(),
+            ),
+          ],
         ),
-        SizedBox(height: 20),
-        // Text showing file size limit
-        Text(
-          '5MB maximum file size accepted in the following formats:',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 14),
-        ),
-      ],
+      ),
     );
   }
 }
