@@ -6,10 +6,14 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateless/pages/empty.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -34,7 +38,7 @@ class CustomButtonCount extends StatelessWidget {
           ..getAllCount(params: Params(id: id, status: status)),
         child: BlocBuilder<MyAddsCubit, MyAddsState>(
           builder: (BuildContext context, state) {
-            if(state.status ==MyAddsStates.loading){
+            if (state.status == MyAddsStates.loading) {
               return const Center(child: CircularProgressIndicator());
             }
             if (state.status == MyAddsStates.initState) {
@@ -75,14 +79,14 @@ class CustomButtonCount extends StatelessWidget {
                   width: kToolbarHeight * 2.5.w,
                   child: ImageFromInternet(
                     isCircle: true,
-                    image:model.gender == 'male'
+                    image: model.gender == 'male'
                         ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwC-ZR1TdJ7VIAMeqhjm-u29-HB0PyAuSFFQ&s'
                         : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKc-oaCL6lH4WNLuY-A6H7UyEJmZQ5HdN6Os89NNXXANez6DAEM9SJdKu-Drj6L2LSfpM&usqp=CAU',
                   ),
                 ),
                 const Sizer(),
                 Label(
-                  text: '${model.firstName} ${model.lastName}',
+                  text: model.firstName,
                   style: Styles.headerText(),
                 ),
               ],
@@ -98,7 +102,16 @@ class CustomButtonCount extends StatelessWidget {
                     title: LocaleKeys.call.localize,
                     icon: Icons.phone,
                     color: AppColors.PRIMARY_COLOR,
-                    onTap: () {},
+                    onTap: () async{
+                      launchUrlString("tel://01023765247");
+                      // if (await _isPremuim(
+                      // tripJoinCardEntity,
+                      // UIConst.chatNormalId,
+                      // LocaleKeys.chatSubscription.localize,
+                      // )) {
+                      //
+                      // }
+                    },
                   ),
                 ),
                 Sizer(width: 10.w),
@@ -118,7 +131,14 @@ class CustomButtonCount extends StatelessWidget {
                     title: LocaleKeys.report.localize,
                     icon: Icons.report,
                     color: AppColors.SECONDARY_COLOR,
-                    onTap: () {},
+                    onTap: () {
+                      bottomSheet(
+                          context: context,
+                          widget: ReportView(
+                            id: model.userId,
+                            categoryId: model.tripId,
+                          ));
+                    },
                   ),
                 ),
               ],

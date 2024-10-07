@@ -7,12 +7,14 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
 
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateless/pages/empty.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import '../../domain/entity/get_all_count_ads_entity.dart';
 import '../../domain/entity/my_ads_auction.dart';
@@ -60,7 +62,7 @@ class CustomButtonCountAds extends StatelessWidget {
     );
   }
 
-  Widget buildItem(context, GetAllCountAdsEntity model) => Container(
+  Widget buildItem(context, GetAllCountAdsEntity count) => Container(
     padding: EdgeInsets.all(12.w),
     decoration: BoxDecoration(
       color: Theme.of(context).scaffoldBackgroundColor,
@@ -76,14 +78,14 @@ class CustomButtonCountAds extends StatelessWidget {
               width: kToolbarHeight * 2.5.w,
               child: ImageFromInternet(
                 isCircle: true,
-                image:model.gender == 'male'
+                image:count.gender == 'male'
                     ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwC-ZR1TdJ7VIAMeqhjm-u29-HB0PyAuSFFQ&s'
                     : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKc-oaCL6lH4WNLuY-A6H7UyEJmZQ5HdN6Os89NNXXANez6DAEM9SJdKu-Drj6L2LSfpM&usqp=CAU',
               ),
             ),
             const Sizer(),
             Label(
-              text: '${model.firstName} ${model.lastName}',
+              text: count.firstName,
               style: Styles.headerText(),
             ),
           ],
@@ -119,7 +121,14 @@ class CustomButtonCountAds extends StatelessWidget {
                 title: LocaleKeys.report.localize,
                 icon: Icons.report,
                 color: AppColors.SECONDARY_COLOR,
-                onTap: () {},
+                onTap: () {
+                  bottomSheet(
+                      context: context,
+                      widget: ReportView(
+                        id: count.id,
+                        categoryId: model.id,
+                      ));
+                },
               ),
             ),
           ],
