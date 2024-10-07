@@ -7,9 +7,9 @@ import 'goal_entity.dart';
 
 class LiveEntity extends Equatable {
   final String id;
-  final String description;
+  final String? description;
   final String title;
-  final String topicName;
+  final String? topicName;
   final List<GoalEntity> gift;
 
   const LiveEntity({
@@ -21,5 +21,5 @@ class LiveEntity extends Equatable {
   });
 
   @override
-  List<Object> get props => [id, title, topicName, gift, description];
+  List<Object?> get props => [id, title, topicName, gift, description];
 }
