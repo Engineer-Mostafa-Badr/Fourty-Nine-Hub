@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -32,7 +34,7 @@ class AddImageWidget extends StatelessWidget {
                 color: AppColors.SECONDARY_COLOR,
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: Text("Add Imaage", textAlign: TextAlign.center,
+              child: Text(LocaleKeys.addImages.localize, textAlign: TextAlign.center,
                   style: Styles.smallText(
                       color: Colors.white,
                     fontSize: 50.sp

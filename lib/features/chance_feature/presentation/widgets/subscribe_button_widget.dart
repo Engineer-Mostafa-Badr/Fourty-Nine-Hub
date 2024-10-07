@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -20,7 +22,8 @@ class SubscribeButtonWidget extends StatelessWidget {
           EdgeInsets.symmetric(horizontal: 40.w, vertical: 25.h),
           backgroundColor: AppColors.SECONDARY_COLOR,
         ),
-        child: Text('Subscribe',
+        child: Text(
+            LocaleKeys.subscribe.localize,
             style: Styles.mediumText(
                 color: Colors.white,
                 fontSize: 55.sp,

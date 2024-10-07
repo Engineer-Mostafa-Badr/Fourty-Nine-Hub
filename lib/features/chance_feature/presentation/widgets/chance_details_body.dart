@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import '../../../../res/style/styles.dart';
 import '../widgets/card_details_widget_of_details_view.dart';
 import '../widgets/counter_money_widget.dart';
 import '../widgets/subscribe_button_widget.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 class ChanceDetailsBody extends StatelessWidget {
   const ChanceDetailsBody({super.key});
@@ -17,7 +19,7 @@ class ChanceDetailsBody extends StatelessWidget {
         SizedBox(height: 20.h),
         SizedBox(height: 10.h),
         Text(
-            'Type the value you want to participation',
+            LocaleKeys.Typethevalueyouwanttoparticipation.localize,
             style: Styles.mediumText(
               color: Theme.of(context).primaryColor,
               fontSize: 50.sp,

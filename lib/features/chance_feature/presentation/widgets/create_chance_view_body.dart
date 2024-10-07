@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/add_image_widget.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/drop_down_widget.dart';
 
@@ -26,7 +28,7 @@ class CreateChanceViewBody extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    'Pay at least 1 EGP and publish your dream product you want to buy!!!',
+                    LocaleKeys.payAtLeast1.localize,
                     textAlign: TextAlign.center,
                     style: Styles.headerText(
                       color: AppColors.SECONDARY_COLOR
@@ -34,13 +36,13 @@ class CreateChanceViewBody extends StatelessWidget {
                   ),
                   SizedBox(height: 20.h),
                   Text(
-                    'One User will win randomly every month cycle',
+                    LocaleKeys.oneUserWillR.localize,
                     textAlign: TextAlign.center,
                     style: Styles.mediumText(),
                   ),
                   SizedBox(height: 20.h),
                   Text(
-                    'More subscription more chance!',
+                    LocaleKeys.moreSubscriptionMore.localize,
                     textAlign: TextAlign.center,
                     style: Styles.mediumText(
                       color: AppColors.CHECK_MARK_COLOR
@@ -60,43 +62,43 @@ class CreateChanceViewBody extends StatelessWidget {
             SizedBox(
               height: 20.h,
             ),
-            const Text(
-              'Title',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+             Text(
+              LocaleKeys.title.localize,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             TextFormField(
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.title),
-                hintText: 'Enter title',
-                border: OutlineInputBorder(),
+              decoration:  InputDecoration(
+                prefixIcon: const Icon(Icons.title),
+                hintText: LocaleKeys.enterTitle.localize,
+                border: const OutlineInputBorder(),
               ),
               onChanged: (value) {
                 // Handle change
               },
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Description',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+             Text(
+              LocaleKeys.desc.localize,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             TextFormField(
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.description),
-                hintText: 'Enter description',
-                border: OutlineInputBorder(),
+              decoration:  InputDecoration(
+                prefixIcon: const Icon(Icons.description),
+                hintText: LocaleKeys.enterDescription.localize,
+                border: const OutlineInputBorder(),
               ),
               onChanged: (value) {},
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Price',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+             Text(
+              LocaleKeys.price.localize,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             TextFormField(
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.attach_money),
-                hintText: 'Enter price',
-                border: OutlineInputBorder(),
+              decoration:  InputDecoration(
+                prefixIcon: const Icon(Icons.attach_money),
+                hintText: LocaleKeys.enterPrice.localize,
+                border: const OutlineInputBorder(),
               ),
               onChanged: (value) {
                 // Handle change
@@ -116,9 +118,9 @@ class CreateChanceViewBody extends StatelessWidget {
                   backgroundColor: AppColors.PRIMARY_COLOR,
                 ),
                 child: Text(
-                    'Create Chance',
+                    LocaleKeys.CreateChance.localize,
                     style: Styles.mediumText(
-                        color: Theme.of(context).scaffoldBackgroundColor,
+                        color:Colors.white,
                         fontSize: 55.sp,
                         fontWeight: FontWeight.w400)),
               ),
