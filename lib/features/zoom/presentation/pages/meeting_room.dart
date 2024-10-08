@@ -72,26 +72,23 @@ class _MeetingRoomState extends State<MeetingRoom> {
           ..showBackgroundTips = true;
 
     return SafeArea(
-      child: BlocProvider.value(
-        value: serviceLocator<StreamCubit>(),
-        child: BlocBuilder<StreamCubit, StreamState>(
-          builder: (context, state) {
-            // var cubit = context.read<MeetingCubit>();
-            return ZegoUIKitPrebuiltLiveStreaming(
-              appID: context.read<SecretsCubit>().state.secrets!.zegoAppId,
-              appSign: context.read<SecretsCubit>().state.secrets!.zegoAppSign,
-              userID: userId,
-              isLiveStream: false,
-              userName: widget.userName,
-              liveID: widget.liveID,
+      child: BlocBuilder<StreamCubit, StreamState>(
+        builder: (context, state) {
+          // var cubit = context.read<MeetingCubit>();
+          return ZegoUIKitPrebuiltLiveStreaming(
+            appID: context.read<SecretsCubit>().state.secrets!.zegoAppId,
+            appSign: context.read<SecretsCubit>().state.secrets!.zegoAppSign,
+            userID: userId,
+            isLiveStream: false,
+            userName: widget.userName,
+            liveID: widget.liveID,
 
-              // Modify your custom configurations here.
-              config: widget.isHost
-                  ? zegoUIKitPrebuiltLiveStreamingHostConfig()
-                  : zegoUIKitPrebuiltLiveStreamingConfig(),
-            );
-          },
-        ),
+            // Modify your custom configurations here.
+            config: widget.isHost
+                ? zegoUIKitPrebuiltLiveStreamingHostConfig()
+                : zegoUIKitPrebuiltLiveStreamingConfig(),
+          );
+        },
       ),
     );
   }

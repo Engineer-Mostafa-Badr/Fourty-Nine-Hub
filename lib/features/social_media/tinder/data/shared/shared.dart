@@ -838,7 +838,7 @@ void showGiftBottomSheet(BuildContext context,
       providers: [
         BlocProvider.value(value: serviceLocator<GiftsCubit>()),
         BlocProvider.value(value: serviceLocator<TinderViewCubit>()),
-        BlocProvider.value(value: serviceLocator<StreamCubit>()),
+        // BlocProvider.value(value: serviceLocator<StreamCubit>()),
       ],
       child: DraggableScrollableSheet(
         initialChildSize: 0.6,

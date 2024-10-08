@@ -9,6 +9,7 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import '../../../../zoom/presentation/controller/stream_cubit.dart';
 import '../../../../zoom/presentation/controller/stream_state.dart';
 import '../../../tinder/data/models/gift_model.dart';
+import '../../domain/entity/live_entity.dart';
 
 extension TiktokControllerExtension on StreamCubit {
   void setTopic(String? option, String? optionId) {
@@ -153,11 +154,11 @@ extension TiktokControllerExtension on StreamCubit {
         CliLogger.success('there is an success', level: CliLoggerLevel.two);
         rooms = r;
         roomsLength = r.length;
-        // emit(
-        //   state
-        //       .copyWith(status: StreamsStates.success,roomsList: r)
+        emit(
+          state
+              .copyWith(status: StreamsStates.success,lives: r)
 
-        // );
+        );
       });
     }).catchError((onError) {
       CliLogger.error('there is an error from catch${onError.toString()}',
@@ -180,5 +181,9 @@ extension TiktokControllerExtension on StreamCubit {
   }
   void listenToSendPoints(){
     listenToSendPointsUseCase(const NoParams());
+  }
+  void updateLiveIndex(LiveEntity live){
+
+    emit(state.copyWith(status: StreamsStates.success,live: live));
   }
 }
