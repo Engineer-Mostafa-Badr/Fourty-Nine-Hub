@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/chance_feature/domain/entity/image_chance_entity.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/pages/chance_details_view.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/image_card_widget.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/subscribe_widget_in_card.dart';
@@ -7,9 +8,12 @@ import 'package:fourtyninehub/features/chance_feature/presentation/widgets/rate_
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import '../../domain/entity/chance_entity.dart';
 
 class ChanceCardWidget extends StatelessWidget {
-  const ChanceCardWidget({super.key});
+  const ChanceCardWidget({super.key, required this.chance, });
+  final ChanceEntity chance;
+  // final ImageChanceEntity image;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +29,7 @@ class ChanceCardWidget extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const ImageCardWidget(),
+           //  ImageCardWidget(image: image.photo,),
             const SizedBox(width: 10),
             Expanded(
               flex: 3,
@@ -33,7 +37,7 @@ class ChanceCardWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '200 EGP shopping voucher',
+                    chance.description ??'',
                     style:Styles.mediumText(
                       fontSize: 50.sp
                     ),
@@ -43,7 +47,7 @@ class ChanceCardWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        '200',
+                        '${chance.price}',
                         style: TextStyle(
                           fontSize: 40.sp,
                           fontWeight: FontWeight.bold,

@@ -802,4 +802,7 @@ class EndPoints {
   static String deleteTrip(String id) => '/ride/come-with-you/Delete/$id';
   static String getRequest(String id) => '/ride/come-with-you/trip/requests//$id';
   static String carpoolRoutePrice = '/carpool/price';
+
+  // Chance
+  static String chance = '/chance-ads/my-ads';
 }

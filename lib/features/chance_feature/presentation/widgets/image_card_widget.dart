@@ -3,7 +3,8 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 
 class ImageCardWidget extends StatelessWidget {
-  const ImageCardWidget({super.key});
+  const ImageCardWidget({super.key, required this.image});
+  final String image;
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +13,9 @@ class ImageCardWidget extends StatelessWidget {
       child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            image: const DecorationImage(
-              image: AssetImage(
-                'assets/images/doctor.png',
+            image: DecorationImage(
+              image: NetworkImage(
+                image,
               ),
               fit: BoxFit.cover,
             ),
