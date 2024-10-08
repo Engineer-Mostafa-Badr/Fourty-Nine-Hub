@@ -83,7 +83,20 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
     return Scaffold(
       appBar: const HomeAppbar(),
       body:
-          BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
+          BlocConsumer<AdvertisementCubit, AdsState>(
+              listener: (context,state){
+                if(state.status == AdsStates.loading){
+                  print("state.status${state.status}");
+
+                }else if(state.status == AdsStates.error){
+                  print("state.status${state.status}");
+
+                }else if(state.status == AdsStates.success){
+                  print("state.status${state.status}");
+
+                }
+              },
+              builder: (context, state) {
         final controller = context.read<AdvertisementCubit>();
         return Column(
           children: [

@@ -110,6 +110,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
       {required String subCategoryId,
       required String filter,
       required int page}) async {
+    emit(state.copyWith(status: AdsStates.loading));
     final response = await _getAdsUseCase(GetAdsParams(
         subCategoryId: subCategoryId, filter: filter, page: page, limit: 10));
     response
