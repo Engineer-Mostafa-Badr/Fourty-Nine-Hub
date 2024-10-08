@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateless/pages/empty.dart';
@@ -101,7 +102,9 @@ class CustomButtonCountAds extends StatelessWidget {
                 title: LocaleKeys.call.localize,
                 icon: Icons.phone,
                 color: AppColors.PRIMARY_COLOR,
-                onTap: () {},
+                onTap: () {
+                  launchUrlString("tel://01023765247");
+                },
               ),
             ),
             Sizer(width: 10.w),

@@ -11,11 +11,13 @@ import '../../../../../core/error/failure.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
 
 import '../../../../ride/trip_details/domain/entities/trip_and_request_entity.dart';
+import '../../domain/entity/click_entity.dart';
 import '../../domain/entity/get_all_count_ads_entity.dart';
 import '../../domain/entity/get_all_counts_trip_join_entity.dart';
 import '../../domain/entity/my_ads_auction.dart';
 import '../../domain/entity/my_ads_trip_join_entity.dart';
 import '../../domain/usecases/cancel_ad_usecase.dart';
+import '../../domain/usecases/click_use_case.dart';
 import '../../domain/usecases/delete_come_with_me_usecase.dart';
 import '../../domain/usecases/delete_my_installment_usecase.dart';
 import '../../domain/usecases/delete_my_trip_join_usecase.dart';
@@ -52,6 +54,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
   final GetAllCountsUseCase _allCountsUseCase;
   final GetAllCountsAdsUseCase _allCountsAdsUseCase;
   final EditMyAdsUseCase _editMyAdsUseCase;
+  final ClickUseCase _clickUseCase;
 
   MyAddsCubit(
       this._getMyAdsUseCase,
@@ -72,7 +75,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
       this._getMyOtherAdsUseCase,
       this._allCountsUseCase,
       this._allCountsAdsUseCase,
-      this._editMyAdsUseCase)
+      this._editMyAdsUseCase, this._clickUseCase)
       : super(const MyAddsState());
 
   void loadData() async {
@@ -318,5 +321,16 @@ class MyAddsCubit extends Cubit<MyAddsState> {
             emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
             (r) =>
             emit(state.copyWith(status: MyAddsStates.initState)));
+  }
+
+  Future<void> click({
+    required ClickParams params,
+  }) async {
+    final response = await _clickUseCase(params);
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+            (r) =>
+            emit(state.copyWith(click: r,status: MyAddsStates.success)));
   }
 }
