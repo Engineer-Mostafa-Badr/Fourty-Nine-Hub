@@ -11,7 +11,6 @@ import '../../../../res/style/app_colors.dart';
 
 class ListViewCard extends StatelessWidget {
   const ListViewCard({super.key});
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ChanceCubit>(
