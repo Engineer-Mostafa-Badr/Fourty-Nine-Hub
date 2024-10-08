@@ -8,7 +8,6 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/user_ads.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/user_filter_ads.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -32,19 +31,14 @@ class UserAdsView extends StatelessWidget {
                       child: BadgedLabel(label: LocaleKeys.filter.localize,
                           onTap: () async{
                             dynamic data = await context.push(Routes.FILTERADS,extra:CategorizationEntity(mainCategory: params.mainCategory,subCategory: params.subCategory) );
-                            if(state.hasFilter==true){
-                              Future.delayed(const Duration(seconds: 1),()=>context.read<AdvertisementCubit>().changeState(data,data!=null));
-                              context.read<AdvertisementCubit>().loadFilterData(
-                                  model: data,
-                                  filter:userType);
-                            }else{
-                              Future.delayed(const Duration(seconds: 1),()=>context.read<AdvertisementCubit>().changeState(data,data!=null));
+                            if (data != null) {
+                              print("objectsdaa");
+                              controller.loadFilterData(model: data, filter: userType);
                             }
                           }
                       ))),
               Expanded(
-                  child: state.hasFilter==false?UserAds(params: params, userType: userType,):
-                  UserFilterAds(userType: userType,params: params, model: state.filterModel!,)
+                  child: UserAds(params: params, userType: userType,)
               )            ],
           );
         }

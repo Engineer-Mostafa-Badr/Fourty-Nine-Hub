@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -37,15 +35,14 @@ class ProviderAdsView extends StatelessWidget {
                             extra: CategorizationEntity(
                                 mainCategory: params.mainCategory,
                                 subCategory: params.subCategory));
-                        if (controller.state.hasFilter == true && data != null) {
-                          Future.delayed(const Duration(seconds: 1), () =>
-                              controller.changeState(data, data != null));
-                          context.read<AdvertisementCubit>().loadFilterData(
-                              model: data,
-                              filter: userType);
-                        } else {
-                          Future.delayed(const Duration(seconds: 1), () =>
-                              controller.changeState(data, data != null));
+                        if (data != null) {
+                          print("objectsdaa");
+                          // Future.delayed(const Duration(seconds: 1), () =>
+                          //     controller.changeState(data, data != null));
+                          // context.read<AdvertisementCubit>().loadFilterData(
+                          //     model: data,
+                          //     filter: userType);
+                          controller.loadFilterData(model: data, filter: userType);
                         }
                       }
                   ))),
