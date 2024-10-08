@@ -3,7 +3,7 @@ class UserChanceEntity {
   final String firstName;
   final String lastName;
   final String email;
-  final String twitterDocumentation;
+  final bool twitterDocumentation;
   final String image;
 
   UserChanceEntity(

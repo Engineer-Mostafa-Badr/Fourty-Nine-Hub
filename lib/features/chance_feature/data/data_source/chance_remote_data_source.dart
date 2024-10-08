@@ -1,36 +1,80 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/chance_feature/data/model/chance_model.dart';
 
 import '../../../../core/error/failure.dart';
+import '../../../../core/utils/const.dart';
+import '../../../../core/utils/shared_pref.dart';
 import '../../domain/entity/chance_entity.dart';
 
 abstract class ChanceRemoteDataSource {
-  Future<Either<Failure, List<ChanceEntity>>> fetchChance();
+  Future<List<ChanceEntity>> fetchChance();
 }
 
 class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
-  final ApiConsumer _apiConsumer;
+  final Dio _dio = Dio();
 
-  ChanceRemoteDataSourceImpl(this._apiConsumer);
-
-  @override
-  Future<Either<Failure, List<ChanceEntity>>> fetchChance() async {
-    final response = await _apiConsumer.get(EndPoints.chance);
-
-    return response.fold(
-      (failure) {
-        print('object');
-        return Left(failure);
-      },
-      (response) {
-        print(response.toString());
-        final list = (response['data'] as List)
-            .map((e) => ChanceModel.fromJson(e))
-            .toList();
-        return Right(list);
-      },
-    );
+  ChanceRemoteDataSourceImpl(){
+    _initializeToken();
   }
-}
+  Future<void> _ensureTokenInitialized() async {
+    token ??= await TokenManager.getAccessToken();
+  }
+
+  String? token;
+  Future<void> _initializeToken() async {
+    token = await TokenManager.getAccessToken();
+  }
+  @override
+  Future<List<ChanceEntity>> fetchChance() async {
+
+     try {
+       await _ensureTokenInitialized();
+        final response = await _dio.get('${EndPoints.developmentBaseUrl}${EndPoints.chance}',
+
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $token',
+                'Content-Type': 'application/json',
+              }
+            )
+            );
+        // Handle the response based on the API structure
+        print('object');
+        print(response.statusCode);
+        if (response.statusCode == 200) {
+          print('response 1');
+          print(response.data);
+          final data=response.data as Map<String,dynamic>;
+          final list = (data['data'] as List)
+                    .map((e) => ChanceModel.fromJson(e))
+                    .toList();
+
+          return list;  // Assuming the API returns JSON data
+        } else {
+          throw Exception("Failed to fetch data. Status code: ${response.statusCode}");
+        }
+      } catch (error) {
+        throw Exception("Error occurred while fetching data: $error");
+      }
+    }
+
+  }
+  //   final response = await _dio.get(EndPoints.chance);
+  //
+  //   return response.fold(
+  //     (failure) {
+  //       print('object');
+  //       return Left(failure);
+  //     },
+  //     (response) {
+  //       print(response.toString());
+  //       final list = (response['data'] as List)
+  //           .map((e) => ChanceModel.fromJson(e))
+  //           .toList();
+  //       return Right(list);
+  //     },
+  //   );
+  // }

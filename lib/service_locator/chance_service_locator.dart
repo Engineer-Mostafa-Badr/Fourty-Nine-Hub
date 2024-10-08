@@ -9,9 +9,7 @@ import '../features/chance_feature/presentation/controller/cubit/chance_cubit.da
 class ChanceServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<ChanceRemoteDataSource>(
-            () => ChanceRemoteDataSourceImpl(
-          serviceLocator(),
-        ));
+            () => ChanceRemoteDataSourceImpl());
 
     serviceLocator
         .registerLazySingleton<ChanceRepository>(() => ChanceRepositoryImpl(

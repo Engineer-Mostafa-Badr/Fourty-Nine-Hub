@@ -15,7 +15,7 @@ class UserChanceModel extends UserChanceEntity {
       firstName: json['firstName'] ??'',
       lastName: json['lastName'] ??'',
       email: json['email'] ??'',
-      twitterDocumentation: json['twitter_documentation'] ??'',
+      twitterDocumentation: json['twitter_documentation'] ??false,
       image: json['image'] ??'',
     );
   }

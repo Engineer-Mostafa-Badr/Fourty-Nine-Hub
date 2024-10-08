@@ -3,5 +3,5 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/entity/chance_entity.dart';
 
 abstract class ChanceRepository{
-  Future<Either<Failure,List<ChanceEntity>>> fetchChance();
+  Future<List<ChanceEntity>> fetchChance();
 }

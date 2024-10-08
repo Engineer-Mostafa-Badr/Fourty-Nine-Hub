@@ -12,7 +12,7 @@ class ChanceRepositoryImpl extends ChanceRepository{
 
   ChanceRepositoryImpl(this._chanceRemoteDataSource);
   @override
-  Future<Either<Failure, List<ChanceEntity>>> fetchChance() {
+  Future<List<ChanceEntity>> fetchChance() {
    return _chanceRemoteDataSource.fetchChance();
   }
 }

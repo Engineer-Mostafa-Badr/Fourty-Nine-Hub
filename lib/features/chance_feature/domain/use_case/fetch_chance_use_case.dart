@@ -5,12 +5,12 @@ import 'package:fourtyninehub/features/chance_feature/domain/repository/chance_r
 
 import '../../../../core/abstract/use_case.dart';
 
-class FetchChanceUseCase extends UseCase<List<ChanceEntity>,NoParams>{
+class FetchChanceUseCase extends NormalUseCase<Future<List<ChanceEntity>>,NoParams>{
   final ChanceRepository _chanceRepository;
 
   FetchChanceUseCase(this._chanceRepository);
   @override
-  Future<Either<Failure, List<ChanceEntity>>> call(NoParams params) async{
+  Future<List<ChanceEntity>> call(NoParams params) async{
     return _chanceRepository.fetchChance();
   }
 
