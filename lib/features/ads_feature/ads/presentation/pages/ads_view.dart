@@ -41,21 +41,6 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
         subCategoryId: widget.params.subCategory.id,
         filter:
         widget.params.subCategory.hasAuction == true ? 'sale' : 'provider', fromTab: true);
-
-    _tabController.addListener(() {
-      if (_tabController.index == 0) {
-        context.read<AdvertisementCubit>().loadData(
-            subCategoryId: widget.params.subCategory.id,
-            filter: widget.params.subCategory.hasAuction == true
-                ? 'sale'
-                : 'provider', fromTab: true);
-      } else {
-        context.read<AdvertisementCubit>().loadData(
-            subCategoryId: widget.params.subCategory.id,
-            filter:
-                widget.params.subCategory.hasAuction == true ? 'rent' : 'user', fromTab: true);
-      }
-    });
   }
 
   @override

@@ -62,11 +62,13 @@ class AdvertisementCubit extends Cubit<AdsState> {
   }
 
   void loadFilterData({required FilterModel model,required String filter,}) async {
+    emit(state.copyWith(status: AdsStates.loading));
     await filterAds(model: model, filter: filter, page: 1);
     adsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
       filterAds(model: model, filter: filter, page: pageKey);
     });
+    emit(state.copyWith(status: AdsStates.success));
   }
 
   void onRefresh() async {
@@ -107,7 +109,6 @@ class AdvertisementCubit extends Cubit<AdsState> {
                   final nextPageKey = page + 1;
                   adsPagingController.appendPage(data, nextPageKey);
                 }
-                emit(state.copyWith(ads: data, status: AdsStates.success));
                 print(data.toString());
           });
   }
