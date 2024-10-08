@@ -878,5 +878,6 @@ abstract class  LocaleKeys {
   static const filter = 'filter';
   static const beAStar = 'beAStar';
   static const select = 'select';
+  static const uploadOneImage = 'uploadOneImage';
 
 }

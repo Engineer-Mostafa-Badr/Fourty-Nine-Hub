@@ -25,7 +25,7 @@ class CreateAdRepoImpl implements CreateAdRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> filterAd({required FilterModel ad}) {
+  Future<Either<Failure, List<AdModel>>> filterAd({required FilterModel ad}) {
     return _remoteDatasource.filterAd(ad: ad);
   }
 }

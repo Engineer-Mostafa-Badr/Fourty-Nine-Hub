@@ -901,7 +901,10 @@ class CodegenLoader extends AssetLoader{
   "subscribed": "مشترك",
   "unsubscribed": "غير مشرك",
   "expiredRequests": "طلبات منتهية الصلاحية",
-  "other": "أخرى"
+  "filter": "تصفية",
+  "beAStar": "كن نجم",
+  "select": "اختيار",
+  "uploadOneImage": "قم بتحميل صورة واحدة على الأقل!"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1788,11 +1791,15 @@ static const Map<String,dynamic> en = {
   "sendOffer": "Send Offer",
   "subscribed": "Subscribed",
   "unsubscribed": "Unsubscribed",
-  "seeAll": "See All",
   "idExpiryDate": "ID Expiry Date",
   "expiredRequests": "Expired Requests",
   "licenseFrontAndBack": "Upload Your License (Front and Back)",
-  "other": "Others"
+  "other": "Others",
+  "seeAll": "See All",
+  "filter": "Filter",
+  "beAStar": "Be A Star",
+  "select": "Select",
+  "uploadOneImage": "Upload At Least One Photo!"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
