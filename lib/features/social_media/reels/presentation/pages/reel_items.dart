@@ -1,19 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:go_router/go_router.dart';
+import 'package:readmore/readmore.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:video_player/video_player.dart';
 
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
-import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
@@ -23,503 +23,27 @@ import '../../../tinder/data/shared/shared.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import '../../data/models/new_reels_model.dart';
 import '../controllers/explore_reels_cubit/explore_reels_cubit.dart';
-import '../widgets/comments.dart';
 import 'audio_screen.dart';
-import 'profile_buttom_sheet.dart';
 
 /// A unified reel item widget that can function as MainReelItem, ReelItemForInstagram, or SpotlightReelItem.
-class UnifiedReelItem extends StatefulWidget {
-  final Reel reel;
-  final bool isVisible;
-  final ReelItemType itemType;
-
-  const UnifiedReelItem({
-    super.key,
-    required this.reel,
-    required this.isVisible,
-    this.itemType = ReelItemType.main,
-  });
-
-  @override
-  State<UnifiedReelItem> createState() => _UnifiedReelItemState();
-}
-
-enum ReelItemType { main, instagram, spotlight }
-
-class _UnifiedReelItemState extends State<UnifiedReelItem>
-    with
-        WidgetsBindingObserver,
-        AutomaticKeepAliveClientMixin,
-        SingleTickerProviderStateMixin {
-  late final VideoPlayerController _videoPlayerController;
-
-  // ChewieController? _chewieController;
-  bool _isInitialized = false;
-  bool _isPlaying = false;
-  bool _showPlayPauseIcon = true;
-
-  late final AnimationController _rotationController;
-
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance
-        .addObserver(this); // Start observing lifecycle changes
-
-    _initializeRotationController();
-    _initializePlayer();
-  }
-
-  /// Initializes the rotation controller for any rotating UI elements.
-  void _initializeRotationController() {
-    _rotationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 5),
-    )..repeat();
-  }
-
-  @override
-  void didUpdateWidget(covariant UnifiedReelItem oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.isVisible != oldWidget.isVisible) {
-      widget.isVisible ? _playVideo() : _pauseVideo();
-    }
-  }
-
-  // Implement didChangeAppLifecycleState for handling lifecycle events
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      _pauseVideo();
-    } else if (state == AppLifecycleState.resumed && widget.isVisible) {
-      _playVideo();
-    }
-  }
-
-  /// Initializes the video player and Chewie controller.
-  // Future<void> _initializePlayer() async {
-  //   _videoPlayerController =
-  //       VideoPlayerController.network(widget.reel.videoMedia);
-  //   try {
-  //     await _videoPlayerController.initialize();
-  //     _setupChewieController();
-  //     if (mounted) {
-  //       setState(() {
-  //         _isInitialized = true;
-  //         _isPlaying = widget.isVisible;
-  //       });
-  //     }
-  //     if (widget.isVisible) {
-  //       _playVideo();
-  //     }
-  //   } catch (error) {
-  //     if (mounted) {
-  //       setState(() {
-  //         _isInitialized = false;
-  //       });
-  //       _showError('Failed to load video');
-  //     }
-  //   }
-  // }
-
-  Future<void> _initializePlayer() async {
-    _videoPlayerController =
-        VideoPlayerController.networkUrl(Uri.parse(widget.reel.videoMedia));
-    try {
-      await _videoPlayerController
-          .initialize()
-          .then((value) => _videoPlayerController.play());
-      // _setupChewieController();
-      if (mounted) {
-        setState(() {
-          _isInitialized = true;
-          _isPlaying = widget.isVisible;
-          _playVideo();
-        });
-      }
-
-      if (widget.isVisible) {
-        _playVideo();
-      }
-
-      // Add listener for video progress
-      _videoPlayerController.addListener(_onVideoProgress);
-    } catch (error) {
-      if (mounted) {
-        setState(() {
-          _isInitialized = false;
-        });
-        _showError('Failed to load video');
-      }
-    }
-  }
-
-  /// Sets up the Chewie controller after the video player is initialized.
-  // void _setupChewieController() {
-  //   _chewieController = ChewieController(
-  //     videoPlayerController: _videoPlayerController,
-  //     autoPlay: true,
-  //     looping: true,
-  //     showControls: true,
-  //     hideControlsTimer: const Duration(milliseconds: 500),
-  //     aspectRatio: _videoPlayerController.value.aspectRatio,
-  //   );
-  // }
-
-  /// Displays an error message using a SnackBar.
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-  }
-
-  /// Starts video playback.
-  void _playVideo() {
-    if (_isInitialized && !_isPlaying) {
-      _videoPlayerController.play();
-      // _chewieController?.play();
-      setState(() {
-        _isPlaying = true;
-        _showPlayPauseIcon = true;
-      });
-      _hidePlayPauseIconAfterDelay();
-    }
-  }
-
-  /// Pauses video playback.
-  void _pauseVideo() {
-    if (_isInitialized && _isPlaying) {
-      _videoPlayerController.pause();
-
-      // _chewieController?.pause();
-      setState(() {
-        _isPlaying = false;
-        _showPlayPauseIcon = true;
-      });
-      _hidePlayPauseIconAfterDelay();
-    }
-  }
-
-  /// Toggles between play and pause states.
-  void _togglePlayPause() {
-    _isPlaying ? _pauseVideo() : _playVideo();
-  }
-
-  /// Hides the play/pause icon after a short delay.
-  void _hidePlayPauseIconAfterDelay() {
-    Future.delayed(const Duration(seconds: 1), () {
-      if (mounted) {
-        setState(() {
-          _showPlayPauseIcon = false;
-        });
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-// _playVideo();
-    return GestureDetector(
-      onTap: _togglePlayPause,
-      onVerticalDragEnd: widget.itemType == ReelItemType.spotlight
-          ? _handleVerticalDrag
-          : null,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          _buildVideoContent(),
-          if (_showPlayPauseIcon) _buildPlayPauseIcon(),
-          _buildOverlay(),
-          if (!_isInitialized)
-            const Center(
-              child: CupertinoActivityIndicator(radius: 25),
-            ),
-          if (widget.itemType == ReelItemType.main)
-            Positioned(
-              top: 4,
-              child: _buildAppBar(context),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAppBar(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Back Button Row
-          Row(
-            children: [
-              _buildGradientIconButton(
-                iconData: Icons.arrow_back,
-                onPressed: () => context.pop(),
-              ),
-              const Spacer(),
-            ],
-          ),
-          const Sizer(),
-          // Buttons Row
-          FittedBox(
-            child: Row(
-              // mainAxisSize: MainAxisSize.max,
-              // mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                // Live Button
-                _buildGradientSvgButton(
-                  assetName: 'assets/images/live_icon.svg',
-                  onPressed: () {
-                    _pauseVideo();
-                    context.push(Routes.LIVE);
-                  },
-                ),
-                const Sizer(),
-                // Spotlight Button
-                _buildGradientTextButton(
-                  text: 'Spotlight',
-                  onPressed: () {
-                    _pauseVideo();
-
-                    context.push(Routes.SPOTLIGHT);
-                  },
-                ),
-                const Sizer(),
-                // Snap Button
-                _buildGradientTextButton(
-                  text: 'Snap',
-                  onPressed: () {
-                    _pauseVideo();
-
-                    context.push(Routes.SNAP);
-                  },
-                ),
-                const Sizer(),
-                // Reels Button
-                _buildGradientTextButton(
-                  text: 'Reels',
-                  onPressed: () async {
-                    _pauseVideo();
-
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ReelsRecordingScreen(),
-                      ),
-                    );
-                  },
-                ),
-                const Sizer(),
-                // Search Button
-                _buildGradientIconButton(
-                  iconData: FontAwesomeIcons.magnifyingGlass,
-                  onPressed: () {
-                    _pauseVideo();
-
-                    context.push(Routes.Tinder);
-                  },
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-// Helper method for gradient icon buttons
-  Widget _buildGradientIconButton(
-      {required IconData iconData, required VoidCallback onPressed}) {
-    return Container(
-      height: 70.h,
-      decoration: _buttonDecoration(),
-      child: IconButton(
-        icon: FittedBox(
-          child: Icon(
-            iconData,
-            color: Colors.white,
-          ),
-        ),
-        onPressed: onPressed,
-      ),
-    );
-  }
-
-// Helper method for gradient SVG buttons
-  Widget _buildGradientSvgButton(
-      {required String assetName, required VoidCallback onPressed}) {
-    return Container(
-      height: 70.h,
-      decoration: _buttonDecoration(),
-      child: IconButton(
-        icon: SvgPicture.asset(
-          assetName,
-          fit: BoxFit.fitHeight,
-        ),
-        onPressed: onPressed,
-      ),
-    );
-  }
-
-// Helper method for gradient text buttons
-  Widget _buildGradientTextButton(
-      {required String text, required VoidCallback onPressed}) {
-    return Container(
-      height: 70.h,
-      decoration: _buttonDecoration(),
-      child: TextButton(
-        onPressed: onPressed,
-        child: Text(
-          text,
-          style: Styles.mediumText(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
-  }
-
-// Button decoration with gradient and rounded corners
-  BoxDecoration _buttonDecoration() {
-    return BoxDecoration(
-      gradient: const LinearGradient(
-        colors: [
-          Colors.white10,
-          Colors.black12,
-        ],
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-      ),
-      borderRadius: BorderRadius.circular(12),
-      boxShadow: const [
-        BoxShadow(
-          color: Colors.black26,
-          blurRadius: 2,
-          offset: Offset(0, 2),
-        ),
-      ],
-    );
-  }
-
-  /// Handles vertical drag events for the spotlight item type.
-  void _handleVerticalDrag(DragEndDetails details) async {
-    if (details.primaryVelocity != null && details.primaryVelocity! < 0) {
-      _pauseVideo();
-      await ProfileBottomSheet.show(context, widget.reel);
-      _playVideo();
-    }
-  }
-
-  /// Builds the video content or displays a placeholder if not initialized.
-  Widget _buildVideoContent() {
-    // if (_isInitialized && _chewieController != null) {
-    if (_isInitialized) {
-      return FittedBox(
-        fit: BoxFit.cover,
-        child: SizedBox(
-          width: _videoPlayerController.value.size.width,
-          height: _videoPlayerController.value.size.height,
-          child: VideoPlayer(_videoPlayerController),
-        ),
-      );
-    } else {
-      return CachedNetworkImage(
-        imageUrl: widget.reel.thumbnailSignedUrl,
-        fit: BoxFit.cover,
-        placeholder: (context, url) => const Center(
-          child: CupertinoActivityIndicator(radius: 25),
-        ),
-        errorWidget: (context, url, error) =>
-            const Center(child: Icon(Icons.error)),
-      );
-    }
-  }
-
-  /// Builds the play/pause icon with an animation.
-  Widget _buildPlayPauseIcon() {
-    return AnimatedOpacity(
-      opacity: _showPlayPauseIcon ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 300),
-      child: Center(
-        child: Icon(
-          _isPlaying ? Icons.pause : Icons.play_arrow,
-          color: Colors.white,
-          size: 100,
-        ),
-      ),
-    );
-  }
-
-  /// Builds the overlay that contains additional UI elements like reel info.
-  Widget _buildOverlay() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (widget.itemType != ReelItemType.instagram)
-          Expanded(
-            child: GestureDetector(
-              onTap: _togglePlayPause,
-              behavior: HitTestBehavior.opaque,
-            ),
-          ),
-        _ReelInfo(
-          reel: widget.reel,
-          itemType: widget.itemType,
-          rotationController: _rotationController,
-        ),
-      ],
-    );
-  }
-
-  void _onVideoProgress() {
-    if (_videoPlayerController.value.isInitialized) {
-      final position = _videoPlayerController.value.position;
-      final duration = _videoPlayerController.value.duration;
-
-      // Check if the video has reached 60% of its duration
-      if (position.inSeconds > 0.6 * duration.inSeconds) {
-        // Dispatch the createReelView event once
-        serviceLocator<ReelsCubit>()
-            .createReelView(widget.reel.id, duration.inSeconds);
-
-        // Remove the listener after the event is dispatched to prevent repeated calls
-        _videoPlayerController.removeListener(_onVideoProgress);
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this); // Stop observing
-    _pauseVideo();
-    _videoPlayerController.removeListener(_onVideoProgress);
-    // _chewieController?.dispose();
-    _videoPlayerController.dispose();
-    _rotationController.dispose();
-    super.dispose();
-  }
-}
 
 /// Widget to display reel information such as user info, actions, and audio.
-class _ReelInfo extends StatelessWidget {
+class ReelInfo extends StatefulWidget {
   final Reel reel;
   final ReelItemType itemType;
   final AnimationController rotationController;
 
-  const _ReelInfo({
+  const ReelInfo({
     required this.reel,
     required this.itemType,
     required this.rotationController,
   });
 
+  @override
+  State<ReelInfo> createState() => _ReelInfoState();
+}
+
+class _ReelInfoState extends State<ReelInfo> {
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -528,32 +52,32 @@ class _ReelInfo extends StatelessWidget {
     return SizedBox(
       height: height,
       width: width,
-      child: Row(
-        children: [
-          Expanded(
-            flex: 4,
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 18.0),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 4,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _UserSection(reel: reel),
-                  const SizedBox(height: 8),
-                  _AudioAndButtons(reel: reel, width: width),
+                  _UserSection(reel: widget.reel),
+                  const SizedBox(height: 4),
+                  // _AudioAndButtons(reel: widget.reel, width: width),
                 ],
               ),
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: _ActionButtons(
-              reel: reel,
-              itemType: itemType,
-              rotationController: rotationController,
+            Expanded(
+              flex: 1,
+              child: AdvancedTikTokReactionsColumn(
+                reel: widget.reel,
+                itemType: widget.itemType,
+                rotationController: widget.rotationController,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -567,15 +91,13 @@ class _UserSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _UserAvatar(reel: reel),
-          const SizedBox(width: 12),
-          _UserInfo(reel: reel),
-        ],
-      ),
+    return Row(
+      children: [
+        SizedBox(
+          width: 10,
+        ),
+        _UserInfo(reel: reel),
+      ],
     );
   }
 }
@@ -589,6 +111,8 @@ class _UserAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 90.h,
+      height: 90.h,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
@@ -600,19 +124,16 @@ class _UserAvatar extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          final state =
-              context.findAncestorStateOfType<_UnifiedReelItemState>();
-          state?._pauseVideo();
           if (!serviceLocator<UserCubit>().isLoggedIn) {
-            context.pushReplacement(Routes.LOGIN);
+            context.push(Routes.LOGIN);
           } else {
             context.push(Routes.OTHERSACCOUNT, extra: reel.user.id);
           }
         },
         child: CircleAvatar(
-          radius: reel.user.profilePictureSignedUrl != null
-              ? 60.h
-              : 20.h, // Adjust based on item type if needed
+          // radius: reel.user.profilePictureSignedUrl != null
+          //     ? 70.h
+          //     : 20.h, // Adjust based on item type if needed
           backgroundImage: reel.user.profilePictureSignedUrl != null
               ? CachedNetworkImageProvider(reel.user.profilePictureSignedUrl!)
               : null,
@@ -626,18 +147,25 @@ class _UserAvatar extends StatelessWidget {
 }
 
 /// Widget to display the user's name and reel details.
-class _UserInfo extends StatelessWidget {
+class _UserInfo extends StatefulWidget {
   final Reel reel;
 
   const _UserInfo({required this.reel});
 
-  String get _displayName =>
-      capitalizeAndSplit('${reel.user.firstName} ${reel.user.lastName}');
+  @override
+  State<_UserInfo> createState() => _UserInfoState();
+}
+
+class _UserInfoState extends State<_UserInfo> {
+  String get _displayName => capitalizeAndSplit(
+      '${widget.reel.user.firstName} ${widget.reel.user.lastName}');
 
   String get _displayReelName {
-    final maxLength = (reel.name.length * 0.75).round();
-    return "${reel.name.substring(0, maxLength)}...";
+    final maxLength = (widget.reel.name.length * 0.75).round();
+    return "${widget.reel.name.substring(0, maxLength)}...";
   }
+
+  bool _isCollapsed = true;
 
   @override
   Widget build(BuildContext context) {
@@ -646,13 +174,10 @@ class _UserInfo extends StatelessWidget {
       children: [
         InkWell(
           onTap: () {
-            final state =
-                context.findAncestorStateOfType<_UnifiedReelItemState>();
-            state?._pauseVideo();
             if (!serviceLocator<UserCubit>().isLoggedIn) {
-              context.pushReplacement(Routes.LOGIN);
+              context.push(Routes.LOGIN);
             } else {
-              context.push(Routes.OTHERSACCOUNT, extra: reel.user.id);
+              context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
             }
           },
           child: Row(
@@ -662,7 +187,7 @@ class _UserInfo extends StatelessWidget {
                 textScaler: TextScaler.noScaling,
                 style: _nameTextStyle,
               ),
-              if (reel.user.verified)
+              if (widget.reel.user.verified)
                 const Icon(
                   Icons.verified,
                   color: AppColors.PRIMARY_COLOR_DARK,
@@ -671,7 +196,36 @@ class _UserInfo extends StatelessWidget {
             ],
           ),
         ),
-        _ReelDetails(name: _displayReelName, viewCount: reel.viewCount),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _isCollapsed = !_isCollapsed;
+            });
+          },
+          child: SizedBox(
+            width: 0.7.sw,
+            child: ReadMoreText(
+              "${widget.reel.name}\n${widget.reel.audio.audioName}\nعايز نحط ايه هنا  ",
+              trimLines: 1,
+              colorClickableText: AppColors.PRIMARY_COLOR_DARK,
+              trimMode: TrimMode.Line,
+              trimCollapsedText: ' See more',
+              trimExpandedText: ' Hide',
+              // isExpandable: ,
+              isCollapsed: ValueNotifier(_isCollapsed),
+              textScaler: TextScaler.noScaling,
+              lessStyle: Styles.headerText(
+                color: AppColors.PRIMARY_COLOR_DARK,
+              ),
+              moreStyle: Styles.headerText(
+                fontSize: 30,
+                color: AppColors.PRIMARY_COLOR_DARK,
+              ),
+              style: Styles.mediumText(color: Colors.white),
+            ),
+          ),
+        ),
+        // _ReelDetails(name: _displayReelName, viewCount: reel.viewCount),
       ],
     );
   }
@@ -762,6 +316,309 @@ class _AudioAndButtons extends StatelessWidget {
 }
 
 /// Widget to display action buttons like like, comment, share, etc.
+///
+///
+
+class AdvancedTikTokReactionsColumn extends StatelessWidget {
+  final Reel reel;
+  final ReelItemType itemType;
+  final AnimationController rotationController;
+
+  const AdvancedTikTokReactionsColumn(
+      {super.key,
+      required this.reel,
+      required this.itemType,
+      required this.rotationController});
+
+  @override
+  Widget build(BuildContext context) {
+    final ReelsCubit reelsCubit = context.read<ReelsCubit>();
+
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        // Profile Icon with Plus Button (Follow)
+        Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            _UserAvatar(reel: reel),
+            Positioned(
+              bottom: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: Colors.white, width: 2),
+                ),
+                child: const Icon(Icons.add, color: Colors.white, size: 15),
+              ),
+            ),
+          ],
+        ).animate().scale(duration: 200.ms), // Simple scaling animation
+        const SizedBox(height: 6),
+
+        // Heart Icon (Like) with Animation
+        /*
+
+
+        _ActionButton(
+          icon: Icons.card_giftcard,
+          count: 0,
+          onTap: () {
+            if (!serviceLocator<UserCubit>().isLoggedIn) {
+              context.push(Routes.LOGIN);
+            } else {
+              _showGiftBottomSheet(context);
+            }
+          },
+        ),
+
+       */
+        _buildReactionButton(
+          icon: Icons.favorite,
+          color: reel.likeCount > 0 ? Colors.pinkAccent : Colors.white,
+          count: reel.likeCount.toString(),
+          onTap: () {
+            if (!serviceLocator<UserCubit>().isLoggedIn) {
+              context.push(Routes.LOGIN);
+            } else {
+              _handleLikeAction(context, reelsCubit);
+            }
+          },
+        ),
+        const SizedBox(height: 4),
+
+        // Comment Icon
+        _buildReactionButton(
+          icon: Icons.chat_bubble,
+          color: Colors.white,
+          count: reel.commentCount.toString(),
+          onTap: () {
+            if (!serviceLocator<UserCubit>().isLoggedIn) {
+              context.push(Routes.LOGIN);
+            } else {
+              _handleCommentAction(context, reelsCubit);
+            }
+          },
+        ),
+        const SizedBox(height: 4),
+
+        // Bookmark Icon
+        _buildReactionButton(
+          icon: Icons.bookmark,
+          color: reel.saveCount == 0 ? Colors.white : Colors.yellowAccent,
+          count: reel.saveCount.toString(),
+          onTap: () {
+            if (!serviceLocator<UserCubit>().isLoggedIn) {
+              context.push(Routes.LOGIN);
+            } else {
+              _handleSaveAction(context, reelsCubit);
+            }
+          },
+        ),
+        const SizedBox(height: 4),
+
+        // Share Icon (Note: reversed arrow for "Share")
+        _buildReactionButton(
+          icon: Icons.reply,
+          color: Colors.white,
+          count: reel.shareCount.toString(),
+          onTap: () {
+            if (!serviceLocator<UserCubit>().isLoggedIn) {
+              context.push(Routes.LOGIN);
+            } else {
+              _handleShareAction(context, reel.videoMedia);
+            }
+          },
+        ),
+        const SizedBox(height: 4),
+
+        // card_giftcard_outlined Icon (Note: reversed arrow for "Share")
+        _buildReactionButton(
+          icon: Icons.card_giftcard,
+          color: Colors.white,
+          count: '0',
+          onTap: () {
+            if (!serviceLocator<UserCubit>().isLoggedIn) {
+              context.push(Routes.LOGIN);
+            } else {
+              _showGiftBottomSheet(context);
+            }
+          },
+        ),
+        const SizedBox(height: 4),
+
+        // report Icon (Note: reversed arrow for "Share")
+        _buildReactionButton(
+          icon: Icons.report,
+          color: Colors.white,
+          count: '0',
+          onTap: () {
+            if (!serviceLocator<UserCubit>().isLoggedIn) {
+              context.push(Routes.LOGIN);
+            } else {
+              _showReportBottomSheet(context);
+            }
+          },
+        ),
+        const SizedBox(height: 4),
+
+        if (itemType != ReelItemType.instagram)
+          RotatingCircularButton(
+            reel: reel,
+            rotationController: rotationController,
+          ),
+      ],
+    );
+  }
+
+  // Helper widget for building reaction buttons with scaling animation
+  Widget _buildReactionButton({
+    required IconData icon,
+    required VoidCallback onTap,
+    required String count,
+    required Color color,
+    bool isReversed = false,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Directionality(
+            textDirection: TextDirection.rtl,
+            child: Icon(
+              icon,
+              size: 0.1.sw,
+              color: color,
+              shadows: [
+                Shadow(
+                    blurRadius: 10,
+                    color: Colors.black.withOpacity(0.3),
+                    offset: const Offset(0, 3))
+              ],
+            ).animate().scale(duration: 200.ms),
+          ),
+          const SizedBox(height: 2),
+          if (count.isNotEmpty && count != '0')
+            Text(
+              count,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600),
+            )
+          // else
+          //   const Text(
+          //     '',
+          //     // '1551.5k',
+          //     style: TextStyle(
+          //         color: Colors.white,
+          //         fontSize: 13,
+          //         fontWeight: FontWeight.w600),
+          //   ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _handleLikeAction(BuildContext context, ReelsCubit cubit) async {
+    try {
+      await cubit.likeReel(reel.id).then((value) {
+        final response = cubit.state.likeReelResponse;
+        if (response?.message == "Reel liked successfully") {
+          (++reel.likeCount);
+        } else if (response?.message == "Reel unlike successfully") {
+          if (reel.likeCount > 0) --reel.likeCount;
+        }
+      });
+
+      // Force rebuild to update UI
+      (context as Element).markNeedsBuild();
+    } catch (e) {
+      _showSnackBar(context, 'Error liking reel: $e');
+    }
+  }
+
+  Future<void> _handleCommentAction1(
+      BuildContext context, ReelsCubit cubit) async {
+    try {
+      await cubit.getComments(reel.id);
+    } catch (e) {
+      _showSnackBar(context, 'Error fetching comments: $e');
+    }
+  }
+
+  Future<void> _handleCommentAction(context, ReelsCubit reelsCubit) async {
+    try {
+      // await reelsCubit.getComments(reel.id);
+      // _togglePlayPause();
+
+      await showCommentsBottomSheet(context, reel: reel);
+      // _togglePlayPause();
+    } catch (e) {
+      // Handle error (e.g., show a snackbar)
+    }
+  }
+
+  Future<void> _handleShareAction(context, String videoUrl) async {
+    await Share.share(
+      videoUrl,
+      subject: 'Check out this reel!',
+    );
+  }
+
+  Future<void> _handleSaveAction(BuildContext context, ReelsCubit cubit) async {
+    try {
+      await cubit.saveReel(reel.id);
+      final response = cubit.state.reelSaveResponse;
+      if (response?.message == "saved successfully") {
+        (reel.saveCount++);
+      } else if (response?.message == "unsaved successfully") {
+        (reel.saveCount--);
+      }
+      // Force rebuild to update UI
+      (context as Element).markNeedsBuild();
+    } catch (e) {
+      _showSnackBar(context, 'Error saving reel: $e');
+    }
+  }
+
+  Future<void> _showGiftBottomSheet(BuildContext context) async {
+    await showGiftBottomSheet(context, receiverId: reel.user.id);
+  }
+
+  Future<void> _showReportBottomSheet(BuildContext context) async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return SizedBox(
+          height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+          child: ReportView(
+            id: reel.user.id,
+            categoryId: '66684135dbb427ee42aa0141',
+          ),
+        );
+      },
+    );
+    // await bottomSheet(
+    //   context: context,
+    //   widget: ReportView(
+    //     id: reel.user.id,
+    //     categoryId: '66684135dbb427ee42aa0141',
+    //   ),
+    // );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+}
+
 class _ActionButtons extends StatelessWidget {
   final Reel reel;
   final ReelItemType itemType;
@@ -790,7 +647,7 @@ class _ActionButtons extends StatelessWidget {
             count: reel.likeCount,
             onTap: () {
               if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.pushReplacement(Routes.LOGIN);
+                context.push(Routes.LOGIN);
               } else {
                 _handleLikeAction(context, reelsCubit);
               }
@@ -802,7 +659,7 @@ class _ActionButtons extends StatelessWidget {
             count: reel.commentCount,
             onTap: () {
               if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.pushReplacement(Routes.LOGIN);
+                context.push(Routes.LOGIN);
               } else {
                 _handleCommentAction(context, reelsCubit);
               }
@@ -813,7 +670,7 @@ class _ActionButtons extends StatelessWidget {
             count: reel.shareCount,
             onTap: () {
               if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.pushReplacement(Routes.LOGIN);
+                context.push(Routes.LOGIN);
               } else {
                 _handleShareAction(context, reel.videoMedia);
               }
@@ -826,7 +683,7 @@ class _ActionButtons extends StatelessWidget {
             count: reel.saveCount,
             onTap: () {
               if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.pushReplacement(Routes.LOGIN);
+                context.push(Routes.LOGIN);
               } else {
                 _handleSaveAction(context, reelsCubit);
               }
@@ -837,12 +694,8 @@ class _ActionButtons extends StatelessWidget {
             icon: Icons.card_giftcard,
             count: 0,
             onTap: () {
-              final state =
-                  context.findAncestorStateOfType<_UnifiedReelItemState>();
-              state?._pauseVideo();
-
               if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.pushReplacement(Routes.LOGIN);
+                context.push(Routes.LOGIN);
               } else {
                 _showGiftBottomSheet(context);
               }
@@ -853,7 +706,7 @@ class _ActionButtons extends StatelessWidget {
             count: 0,
             onTap: () {
               if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.pushReplacement(Routes.LOGIN);
+                context.push(Routes.LOGIN);
               } else {
                 _showReportBottomSheet(context);
               }
@@ -891,19 +744,12 @@ class _ActionButtons extends StatelessWidget {
       BuildContext context, ReelsCubit cubit) async {
     try {
       await cubit.getComments(reel.id);
-      final state = context.findAncestorStateOfType<_UnifiedReelItemState>();
-      state?._pauseVideo();
-
-      await showCommentsBottomSheet(context, reel: reel);
-      state?._playVideo();
     } catch (e) {
       _showSnackBar(context, 'Error fetching comments: $e');
     }
   }
 
   Future<void> _handleShareAction(context, String videoUrl) async {
-    final state = context.findAncestorStateOfType<_UnifiedReelItemState>();
-    state?._pauseVideo();
     await Share.share(
       videoUrl,
       subject: 'Check out this reel!',
@@ -927,15 +773,10 @@ class _ActionButtons extends StatelessWidget {
   }
 
   Future<void> _showGiftBottomSheet(BuildContext context) async {
-    final state = context.findAncestorStateOfType<_UnifiedReelItemState>();
-    state?._pauseVideo();
     await showGiftBottomSheet(context, receiverId: reel.user.id);
-    state?._playVideo();
   }
 
   Future<void> _showReportBottomSheet(BuildContext context) async {
-    final state = context.findAncestorStateOfType<_UnifiedReelItemState>();
-    state?._pauseVideo();
     await bottomSheet(
       context: context,
       widget: ReportView(
@@ -943,12 +784,6 @@ class _ActionButtons extends StatelessWidget {
         categoryId: '66684135dbb427ee42aa0141',
       ),
     );
-    state?._playVideo();
-  }
-
-  void _toggleVideoPlayback(BuildContext context) {
-    final state = context.findAncestorStateOfType<_UnifiedReelItemState>();
-    state?._togglePlayPause();
   }
 
   void _showSnackBar(BuildContext context, String message) {
@@ -1028,8 +863,8 @@ class RotatingCircularButton extends StatelessWidget {
       child: RotationTransition(
         turns: rotationController,
         child: Container(
-          width: 55.h,
-          height: 55.h,
+          width: 65.h,
+          height: 65.h,
           decoration: BoxDecoration(
             color: reel.audio.audioPicture.isEmpty
                 ? Colors.black
@@ -1044,12 +879,8 @@ class RotatingCircularButton extends StatelessWidget {
           ),
           child: InkWell(
             onTap: () {
-              final state =
-                  context.findAncestorStateOfType<_UnifiedReelItemState>();
-              state?._pauseVideo();
-
               if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.pushReplacement(Routes.LOGIN);
+                context.push(Routes.LOGIN);
               } else {
                 Navigator.push(
                   context,
@@ -1090,4 +921,3 @@ class RotatingCircularButton extends StatelessWidget {
     );
   }
 }
-

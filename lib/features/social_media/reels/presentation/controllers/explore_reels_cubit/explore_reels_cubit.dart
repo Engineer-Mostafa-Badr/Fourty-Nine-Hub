@@ -383,7 +383,7 @@ class ReelsCubit extends Cubit<ReelsState> {
         page: state.globalReelsCurrentPage + 1,
       );
 
-      print(response.data.reels.length.toString()+"asfadjcbalc");
+      print(response.data.reels.length.toString() + "asfadjcbalc");
       emit(state.copyWith(
         reels: [...state.globalReels, ...response.data.reels],
         isLoading: false,

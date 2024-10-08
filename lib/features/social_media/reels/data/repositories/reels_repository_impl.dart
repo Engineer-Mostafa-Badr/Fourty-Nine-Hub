@@ -229,7 +229,7 @@ class ReelsRepository {
               wallets: wallets,
               title: 'Reels Subscription');
         }
-        log("${r.toString()}");
+        log("${r.toString()} knsaln");
         res = r;
       });
       // var responseData = json.decode(response.body);
@@ -394,6 +394,10 @@ class ReelsRepository {
 
     final response =
         await _makeGetRequest(url: url, fromMethod: 'fetchComments');
+    log("${response} from fetchComments repo *******************************************************************");
+
+    return GetCommentsResponse.fromJson(response);
+
     if (response != null) {
       log("${response.body} from fetchComments repo *******************************************************************");
       return GetCommentsResponse.fromJson(jsonDecode(response.body));
