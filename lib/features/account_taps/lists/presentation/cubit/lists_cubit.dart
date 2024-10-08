@@ -223,7 +223,8 @@ class ListsCubit extends Cubit<ListsState> {
         (failure) =>
             emit(state.copWith(failure: failure, status: ListsStates.error)),
         (r) {
-      value = r;getFriends(1, '');
+      value = r;
+      getFriends(1, '');
     });
     return value;
   }

@@ -39,7 +39,9 @@ class _CarPoolBodyState extends State<CarPoolBody> {
                         decoration: BoxDecoration(
                           border: Border(
                             bottom: BorderSide(
-                              color: showAvailableRoutes ? AppColors.PRIMARY_COLOR : Colors.grey,
+                              color: showAvailableRoutes
+                                  ? AppColors.PRIMARY_COLOR
+                                  : Colors.grey,
                               width: showAvailableRoutes ? 2 : 1,
                             ),
                           ),
@@ -63,7 +65,9 @@ class _CarPoolBodyState extends State<CarPoolBody> {
                         decoration: BoxDecoration(
                           border: Border(
                             bottom: BorderSide(
-                              color: !showAvailableRoutes ? AppColors.PRIMARY_COLOR : Colors.grey,
+                              color: !showAvailableRoutes
+                                  ? AppColors.PRIMARY_COLOR
+                                  : Colors.grey,
                               width: !showAvailableRoutes ? 2 : 1,
                             ),
                           ),

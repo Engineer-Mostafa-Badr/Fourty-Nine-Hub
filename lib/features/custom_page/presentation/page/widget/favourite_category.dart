@@ -75,17 +75,15 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
     };
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text(LocaleKeys.favoriteCategory.localize),
+        title: Text(LocaleKeys.favoriteCategory.localize),
       ),
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) =>
-        serviceLocator<CustomPageCubit>()..fetchFavouriteCat(),
+            serviceLocator<CustomPageCubit>()..fetchFavouriteCat(),
         child: BlocBuilder<CustomPageCubit, CustomPageState>(
           builder: (BuildContext context, state) {
             if (state.status == CustomPageStates.success) {
@@ -125,7 +123,8 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
             } else if (state.status == CustomPageStates.loading) {
               return const Center(child: CircularProgressIndicator());
             } else {
-              return Center(child: Text(LocaleKeys.failedToLoadCategories.localize));
+              return Center(
+                  child: Text(LocaleKeys.failedToLoadCategories.localize));
             }
           },
         ),
@@ -135,7 +134,8 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
         child: BlocConsumer<CustomPageCubit, CustomPageState>(
           listener: (BuildContext context, state) {
             if (state.status == CustomPageStates.success) {
-              showSuccessMessage(context, LocaleKeys.updateSuccessfully.localize);
+              showSuccessMessage(
+                  context, LocaleKeys.updateSuccessfully.localize);
             }
           },
           builder: (BuildContext context, Object? state) {
@@ -150,66 +150,83 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
 
                 if (selectedCategories.length >= 3 &&
                     selectedCategories.length <= 8) {
-                  context.read<CustomPageCubit>().updateFavouriteCat(FavouriteCatParams(
-                    animals: _categoriesMap["Animals"] ?? false,
-                    cars: _categoriesMap["Cars"] ?? false,
-                    collectiblesGifts: _categoriesMap["Collectibles Gifts"] ?? false,
-                    computersCameras: _categoriesMap["Computers Cameras"] ?? false,
-                    craft: _categoriesMap["Craft"] ?? false,
-                    dating: _categoriesMap["Dating"] ?? false,
-                    discountsOffers: _categoriesMap["Discounts Offers"] ?? false,
-                    doctorJob: _categoriesMap["Doctor Job"] ?? false,
-                    electricalDevices: _categoriesMap["Electrical Devices"] ?? false,
-                    equipment: _categoriesMap["Equipment"] ?? false,
-                    farming: _categoriesMap["Farming"] ?? false,
-                    fashionBeauty: _categoriesMap["Fashion Beauty"] ?? false,
-                    governmentServices: _categoriesMap["Government Services"] ?? false,
-                    homeEssentials: _categoriesMap["Home Essentials"] ?? false,
-                    homeService: _categoriesMap["Home Service"] ?? false,
-                    marketingSales: _categoriesMap["Marketing Sales"] ?? false,
-                    medicalService: _categoriesMap["Medical Service"] ?? false,
-                    mobilesTablets: _categoriesMap["Mobiles Tablets"] ?? false,
-                    packaging: _categoriesMap["Packaging"] ?? false,
-                    ports: _categoriesMap["Ports"] ?? false,
-                    projects: _categoriesMap["Projects"] ?? false,
-                    rawMaterials: _categoriesMap["Raw Materials"] ?? false,
-                    realEstate: _categoriesMap["Real Estate"] ?? false,
-                    remnants: _categoriesMap["Remnants"] ?? false,
-                    smoking: _categoriesMap["Smoking"] ?? false,
-                    social: _categoriesMap["Social"] ?? false,
-                    spareParts: _categoriesMap["Spare Parts"] ?? false,
-                    technology: _categoriesMap["Technology"] ?? false,
-                    vehicles: _categoriesMap["Vehicles"] ?? false,
-                    wholesaleTrade: _categoriesMap["Wholesale Trade"] ?? false,
-                    // Adding the missing fields
-                    accessories: _categoriesMap["Accessories"] ?? false,
-                    accountantJob: _categoriesMap["Accountant Job"] ?? false,
-                    charitys: _categoriesMap["Charitys"] ?? false,
-                    education: _categoriesMap["Education"] ?? false,
-                    engineerJob: _categoriesMap["Engineer Job"] ?? false,
-                    events: _categoriesMap["Events"] ?? false,
-                    fitness: _categoriesMap["Fitness"] ?? false,
-                    handmades: _categoriesMap["Handmades"] ?? false,
-                    healthyTools: _categoriesMap["Healthy Tools"] ?? false,
-                    jewelryWatches: _categoriesMap["Jewelry Watches"] ?? false,
-                    libraries: _categoriesMap["Libraries"] ?? false,
-                    musicalInstruments: _categoriesMap["Musical Instruments"] ?? false,
-                    scenery: _categoriesMap["Scenery"] ?? false,
-                    talent: _categoriesMap["Talent"] ?? false,
-                    travelTourism: _categoriesMap["Travel Tourism"] ?? false,
-                    otherJob: _categoriesMap["Other Job"] ?? false,
-                  ));
-
+                  context
+                      .read<CustomPageCubit>()
+                      .updateFavouriteCat(FavouriteCatParams(
+                        animals: _categoriesMap["Animals"] ?? false,
+                        cars: _categoriesMap["Cars"] ?? false,
+                        collectiblesGifts:
+                            _categoriesMap["Collectibles Gifts"] ?? false,
+                        computersCameras:
+                            _categoriesMap["Computers Cameras"] ?? false,
+                        craft: _categoriesMap["Craft"] ?? false,
+                        dating: _categoriesMap["Dating"] ?? false,
+                        discountsOffers:
+                            _categoriesMap["Discounts Offers"] ?? false,
+                        doctorJob: _categoriesMap["Doctor Job"] ?? false,
+                        electricalDevices:
+                            _categoriesMap["Electrical Devices"] ?? false,
+                        equipment: _categoriesMap["Equipment"] ?? false,
+                        farming: _categoriesMap["Farming"] ?? false,
+                        fashionBeauty:
+                            _categoriesMap["Fashion Beauty"] ?? false,
+                        governmentServices:
+                            _categoriesMap["Government Services"] ?? false,
+                        homeEssentials:
+                            _categoriesMap["Home Essentials"] ?? false,
+                        homeService: _categoriesMap["Home Service"] ?? false,
+                        marketingSales:
+                            _categoriesMap["Marketing Sales"] ?? false,
+                        medicalService:
+                            _categoriesMap["Medical Service"] ?? false,
+                        mobilesTablets:
+                            _categoriesMap["Mobiles Tablets"] ?? false,
+                        packaging: _categoriesMap["Packaging"] ?? false,
+                        ports: _categoriesMap["Ports"] ?? false,
+                        projects: _categoriesMap["Projects"] ?? false,
+                        rawMaterials: _categoriesMap["Raw Materials"] ?? false,
+                        realEstate: _categoriesMap["Real Estate"] ?? false,
+                        remnants: _categoriesMap["Remnants"] ?? false,
+                        smoking: _categoriesMap["Smoking"] ?? false,
+                        social: _categoriesMap["Social"] ?? false,
+                        spareParts: _categoriesMap["Spare Parts"] ?? false,
+                        technology: _categoriesMap["Technology"] ?? false,
+                        vehicles: _categoriesMap["Vehicles"] ?? false,
+                        wholesaleTrade:
+                            _categoriesMap["Wholesale Trade"] ?? false,
+                        // Adding the missing fields
+                        accessories: _categoriesMap["Accessories"] ?? false,
+                        accountantJob:
+                            _categoriesMap["Accountant Job"] ?? false,
+                        charitys: _categoriesMap["Charitys"] ?? false,
+                        education: _categoriesMap["Education"] ?? false,
+                        engineerJob: _categoriesMap["Engineer Job"] ?? false,
+                        events: _categoriesMap["Events"] ?? false,
+                        fitness: _categoriesMap["Fitness"] ?? false,
+                        handmades: _categoriesMap["Handmades"] ?? false,
+                        healthyTools: _categoriesMap["Healthy Tools"] ?? false,
+                        jewelryWatches:
+                            _categoriesMap["Jewelry Watches"] ?? false,
+                        libraries: _categoriesMap["Libraries"] ?? false,
+                        musicalInstruments:
+                            _categoriesMap["Musical Instruments"] ?? false,
+                        scenery: _categoriesMap["Scenery"] ?? false,
+                        talent: _categoriesMap["Talent"] ?? false,
+                        travelTourism:
+                            _categoriesMap["Travel Tourism"] ?? false,
+                        otherJob: _categoriesMap["Other Job"] ?? false,
+                      ));
                 } else {
                   // Show a message if the selection is not valid
                   ScaffoldMessenger.of(context).showSnackBar(
-                     SnackBar(
+                    SnackBar(
                       content: Text(LocaleKeys.atLeast3atMost8items.localize),
                     ),
                   );
                 }
               },
-              child: Icon(Icons.check, color: Theme.of(context).scaffoldBackgroundColor),
+              child: Icon(Icons.check,
+                  color: Theme.of(context).scaffoldBackgroundColor),
             );
           },
         ),

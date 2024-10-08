@@ -76,19 +76,18 @@ class FoodServiceLocator {
         serviceLocator(),
       )..loadData(),
     );
-    serviceLocator
-        .registerFactory<RestaurantsCubit>(() => RestaurantsCubit(
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-              serviceLocator(),
-            )..loadData());
+    serviceLocator.registerFactory<RestaurantsCubit>(() => RestaurantsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        )..loadData());
     serviceLocator
         .registerFactory<RestaurantDetailsCubit>(() => RestaurantDetailsCubit(
               serviceLocator(),

@@ -1,13 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_meal_list_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -16,7 +13,6 @@ import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
-import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -26,7 +22,6 @@ import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../../../../trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
 import '../../../restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
-import '../../domain/entities/restaurant_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SubCatigoriesRestaurantCard extends StatefulWidget {
@@ -314,7 +309,7 @@ class _PropertyCardState extends State<PropertyCard> {
   // }
 
   Widget _buildDetailsSection(Restaurant2Model item) {
-    return Container(
+    return SizedBox(
       // color: Colors.red,
       width: double.infinity,
       height: double.infinity,

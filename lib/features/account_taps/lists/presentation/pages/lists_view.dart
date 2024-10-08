@@ -22,7 +22,8 @@ class ListsView extends StatefulWidget {
   State<ListsView> createState() => _ListsViewState();
 }
 
-class _ListsViewState extends State<ListsView> with SingleTickerProviderStateMixin {
+class _ListsViewState extends State<ListsView>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   TextEditingController searchController = TextEditingController();
 
@@ -98,16 +99,24 @@ class _ListsViewState extends State<ListsView> with SingleTickerProviderStateMix
           isScrollable: true,
           controller: _tabController,
           tabAlignment: TabAlignment.start,
-          labelPadding: context.locale == Locales.english ? EdgeInsets.only(left: 30.w) : EdgeInsets.only(right: 30.w),
+          labelPadding: context.locale == Locales.english
+              ? EdgeInsets.only(left: 30.w)
+              : EdgeInsets.only(right: 30.w),
           labelStyle: Styles.mediumText(fontSize: 50.sp),
           tabs: [
             Tab(
               child: listItem(
-                  label: LocaleKeys.friends.localize, icon: Icons.handshake, context: context, type: ListTypes.friends),
+                  label: LocaleKeys.friends.localize,
+                  icon: Icons.handshake,
+                  context: context,
+                  type: ListTypes.friends),
             ),
             Tab(
               child: listItem(
-                  label: LocaleKeys.followers.localize, icon: Icons.group, context: context, type: ListTypes.followers),
+                  label: LocaleKeys.followers.localize,
+                  icon: Icons.group,
+                  context: context,
+                  type: ListTypes.followers),
             ),
             Tab(
               child: listItem(
@@ -118,7 +127,10 @@ class _ListsViewState extends State<ListsView> with SingleTickerProviderStateMix
             ),
             Tab(
               child: listItem(
-                  label: LocaleKeys.blocked.localize, icon: Icons.block, context: context, type: ListTypes.blocked),
+                  label: LocaleKeys.blocked.localize,
+                  icon: Icons.block,
+                  context: context,
+                  type: ListTypes.blocked),
             ),
           ],
         ),
@@ -169,10 +181,13 @@ class _ListsViewState extends State<ListsView> with SingleTickerProviderStateMix
                       acceptRequest: (params) {},
                       unblockUser: (id) {},
                       deleteFriend: (id) async {
-                        var result = await context.read<ListsCubit>().deleteFriend(userId: id);
+                        var result = await context
+                            .read<ListsCubit>()
+                            .deleteFriend(userId: id);
                         if (result == true) {
                           state.friends!.removeWhere((e) => e.id == id);
-                          showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
+                          showSuccessMessage(
+                              context, LocaleKeys.deleteSuccessfully.localize);
                           setState(() {});
                         }
                       },
@@ -218,10 +233,12 @@ class _ListsViewState extends State<ListsView> with SingleTickerProviderStateMix
                       unblockUser: (id) {},
                       deleteFriend: (id) async {},
                       unfollowUser: (id) async {
-                        var result = await controller.unFollowRequest(userId: id, context: context);
+                        var result = await controller.unFollowRequest(
+                            userId: id, context: context);
                         if (result == true) {
                           state.followers?.removeWhere((e) => e.id == id);
-                          showSuccessMessage(context, LocaleKeys.unFollowSuccessfully.localize);
+                          showSuccessMessage(context,
+                              LocaleKeys.unFollowSuccessfully.localize);
                           setState(() {});
                         }
                       },
@@ -263,18 +280,24 @@ class _ListsViewState extends State<ListsView> with SingleTickerProviderStateMix
                       list: state.requests ?? [],
                       type: ListTypes.requests,
                       removeRequest: (params) async {
-                        var result = await controller.acceptRejectFriend(params: params);
+                        var result =
+                            await controller.acceptRejectFriend(params: params);
                         if (result == true) {
-                          state.requests?.removeWhere((e) => e.id == params.userId);
-                          showSuccessMessage(context, LocaleKeys.removeRequestSuccessfully.localize);
+                          state.requests
+                              ?.removeWhere((e) => e.id == params.userId);
+                          showSuccessMessage(context,
+                              LocaleKeys.removeRequestSuccessfully.localize);
                           setState(() {});
                         }
                       },
                       acceptRequest: (params) async {
-                        var result = await controller.acceptRejectFriend(params: params);
+                        var result =
+                            await controller.acceptRejectFriend(params: params);
                         if (result == true) {
-                          state.requests?.removeWhere((e) => e.id == params.userId);
-                          showSuccessMessage(context, LocaleKeys.acceptRequestSuccessfully.localize);
+                          state.requests
+                              ?.removeWhere((e) => e.id == params.userId);
+                          showSuccessMessage(context,
+                              LocaleKeys.acceptRequestSuccessfully.localize);
                           setState(() {});
                         }
                       },
@@ -320,10 +343,12 @@ class _ListsViewState extends State<ListsView> with SingleTickerProviderStateMix
                       removeRequest: (params) {},
                       acceptRequest: (params) {},
                       unblockUser: (id) async {
-                        var result = await controller.blockUser(userId: id, context: context);
+                        var result = await controller.blockUser(
+                            userId: id, context: context);
                         if (result == true) {
                           state.blocked?.removeWhere((e) => e.id == id);
-                          showSuccessMessage(context, LocaleKeys.unBlockedSuccessfully.localize);
+                          showSuccessMessage(context,
+                              LocaleKeys.unBlockedSuccessfully.localize);
                           setState(() {});
                         }
                       },

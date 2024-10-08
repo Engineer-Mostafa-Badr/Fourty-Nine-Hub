@@ -84,7 +84,7 @@ class SubCategorySearchView extends StatelessWidget {
                   ],
                 ),
               ),
-              Sizer(),
+              const Sizer(),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0.w),
                 child: Row(

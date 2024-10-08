@@ -72,7 +72,7 @@ class CustomButtonCount extends StatelessWidget {
                   width: kToolbarHeight * 2.5.w,
                   child: ImageFromInternet(
                     isCircle: true,
-                    image:model.gender == 'male'
+                    image: model.gender == 'male'
                         ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwC-ZR1TdJ7VIAMeqhjm-u29-HB0PyAuSFFQ&s'
                         : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKc-oaCL6lH4WNLuY-A6H7UyEJmZQ5HdN6Os89NNXXANez6DAEM9SJdKu-Drj6L2LSfpM&usqp=CAU',
                   ),

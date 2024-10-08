@@ -63,7 +63,7 @@ class _ReportViewState extends State<ReportView> {
                       _buildHandleIndicator(),
                       SizedBox(height: 12.h),
                       _buildHeader(context, screenWidth),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       if (reports.isEmpty)
                         Center(
                           child: Text(
@@ -197,7 +197,8 @@ class _ReportViewState extends State<ReportView> {
       children: [
         Expanded(
           child: MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: const TextScaler.linear(1.0)),
             // Disable scaling
 
             child: TextField(
@@ -248,7 +249,7 @@ class _ReportViewState extends State<ReportView> {
           duration: const Duration(milliseconds: 300),
           child: IconButton(
             color: AppColors.PRIMARY_COLOR_DARK,
-            icon: Icon(
+            icon: const Icon(
               Icons.send,
             ),
             onPressed: reportTextController.text.isNotEmpty
@@ -282,7 +283,7 @@ class _ReportViewState extends State<ReportView> {
                       }
                     }
                   }
-                : () => null,
+                : () {},
           ),
         ),
       ],

@@ -11,7 +11,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/snap/utils/filters.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_filter_pro/named_color_filter.dart';
+// import 'package:image_filter_pro/named_color_filter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
@@ -29,7 +29,7 @@ import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import 'package:path/path.dart' as path;
-import 'package:image_filter_pro/photo_filter.dart';
+// import 'package:image_filter_pro/photo_filter.dart';
 
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
@@ -42,7 +42,7 @@ class SnapView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AdvancedSnapchatCameraScreen();
+    return const AdvancedSnapchatCameraScreen();
   }
 }
 
@@ -592,6 +592,8 @@ class Filter1 {
 }
 
 class AdvancedSnapchatCameraScreen extends StatefulWidget {
+  const AdvancedSnapchatCameraScreen({super.key});
+
   @override
   _AdvancedSnapchatCameraScreenState createState() =>
       _AdvancedSnapchatCameraScreenState();
@@ -659,7 +661,7 @@ class _AdvancedSnapchatCameraScreenState
   final PageController _pageController =
       PageController(viewportFraction: 0.3); // Controls the page scrolling
   int totalFilters = 10; // Total number of filters
-  GlobalKey _globalKey = GlobalKey();
+  final GlobalKey _globalKey = GlobalKey();
   bool isSelected = false;
 
   @override
@@ -1612,36 +1614,36 @@ class FilteredImageWidgetState extends State<FilteredImageWidget> {
   Future<void> _applyFilterToImage() async {
     if (_selectedImage == null) return;
 
-    final filteredImage = await Navigator.of(context).push<File>(
-      MaterialPageRoute(
-        builder: (context) => PhotoFilter(
-          image: _selectedImage!,
-          presets: defaultColorFilters,
-          cancelIcon: Icons.cancel,
-          applyIcon: Icons.check,
-          backgroundColor: Colors.black,
-          sliderColor: Colors.blue,
-          sliderLabelStyle: const TextStyle(color: Colors.white),
-          bottomButtonsTextStyle: const TextStyle(color: Colors.white),
-          presetsLabelTextStyle: const TextStyle(color: Colors.white),
-          applyingTextStyle: const TextStyle(color: Colors.white),
-          compressImage: true,
-          onFinishApplyingFilter: (p0) async {
-            if (p0 != null) {
-              await GallerySaver.saveImage(p0.path);
-              _selectedImage = p0;
-              setState(() {});
-            }
-          },
-        ),
-      ),
-    );
+    // final filteredImage = await Navigator.of(context).push<File>(
+      // MaterialPageRoute(
+        // builder: (context) => PhotoFilter(
+        //   image: _selectedImage!,
+        //   presets: defaultColorFilters,
+        //   cancelIcon: Icons.cancel,
+        //   applyIcon: Icons.check,
+        //   backgroundColor: Colors.black,
+        //   sliderColor: Colors.blue,
+        //   sliderLabelStyle: const TextStyle(color: Colors.white),
+        //   bottomButtonsTextStyle: const TextStyle(color: Colors.white),
+        //   presetsLabelTextStyle: const TextStyle(color: Colors.white),
+        //   applyingTextStyle: const TextStyle(color: Colors.white),
+        //   compressImage: true,
+        //   onFinishApplyingFilter: (p0) async {
+        //     if (p0 != null) {
+        //       await GallerySaver.saveImage(p0.path);
+        //       _selectedImage = p0;
+        //       setState(() {});
+        //     }
+        //   },
+        // ),
+      // ),
+    // );
 
-    if (filteredImage != null) {
-      setState(() {
-        _selectedImage = filteredImage;
-      });
-    }
+    // if (filteredImage != null) {
+    //   setState(() {
+    //     _selectedImage = filteredImage;
+    //   });
+    // }
   }
 
   @override
@@ -1898,31 +1900,31 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
   Future<void> _applyFilterToImage() async {
     File file = File(filePath);
 
-    await Navigator.of(context).push<File>(
-      MaterialPageRoute(
-        builder: (context) => PhotoFilter(
-          image: file,
-          presets: defaultColorFilters,
-          cancelIcon: Icons.cancel,
-          applyIcon: Icons.check,
-          backgroundColor: Colors.black,
-          sliderColor: Colors.blue,
-          sliderLabelStyle: const TextStyle(color: Colors.white),
-          bottomButtonsTextStyle: const TextStyle(color: Colors.white),
-          presetsLabelTextStyle: const TextStyle(color: Colors.white),
-          applyingTextStyle: const TextStyle(color: Colors.white),
-          // compressImage: true,
+    // await Navigator.of(context).push<File>(
+    //   MaterialPageRoute(
+    //     builder: (context) => PhotoFilter(
+    //       image: file,
+    //       presets: defaultColorFilters,
+    //       cancelIcon: Icons.cancel,
+    //       applyIcon: Icons.check,
+    //       backgroundColor: Colors.black,
+    //       sliderColor: Colors.blue,
+    //       sliderLabelStyle: const TextStyle(color: Colors.white),
+    //       bottomButtonsTextStyle: const TextStyle(color: Colors.white),
+    //       presetsLabelTextStyle: const TextStyle(color: Colors.white),
+    //       applyingTextStyle: const TextStyle(color: Colors.white),
+    //       // compressImage: true,
 
-          onFinishApplyingFilter: (p0) async {
-            if (p0 != null) {
-              setState(() {
-                filePath = p0.path;
-              });
-            }
-          },
-        ),
-      ),
-    );
+    //       onFinishApplyingFilter: (p0) async {
+    //         if (p0 != null) {
+    //           setState(() {
+    //             filePath = p0.path;
+    //           });
+    //         }
+    //       },
+    //     ),
+    //   ),
+    // );
   }
 
   @override
@@ -2637,7 +2639,7 @@ class _MediaPreviewState extends State<MediaPreview> {
   int selectedFilterIndex = 0; // Tracks which filter is applied
   final PageController _pageController =
       PageController(viewportFraction: 0.3); // Controls the page scrolling
-  GlobalKey _globalKey = GlobalKey();
+  final GlobalKey _globalKey = GlobalKey();
   bool isSelected = false;
   bool isCollapsed = false;
 
@@ -2773,7 +2775,7 @@ class _MediaPreviewState extends State<MediaPreview> {
                           : Icons.play_arrow,
                     ),
                   )
-                : Sizer(),
+                : const Sizer(),
             Positioned(
               bottom: 0,
               left: 0,

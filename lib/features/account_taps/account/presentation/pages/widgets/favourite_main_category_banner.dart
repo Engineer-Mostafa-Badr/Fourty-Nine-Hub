@@ -66,7 +66,9 @@ class _FavouriteMainCategoryBannerState
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text:context.locale == Locales.english? widget.category.nameEn :widget.category.nameAr,
+              text: context.locale == Locales.english
+                  ? widget.category.nameEn
+                  : widget.category.nameAr,
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -125,7 +127,9 @@ class _FavouriteMainCategoryBannerState
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: context.locale == Locales.english? widget.category.nameEn :widget.category.nameAr,
+              text: context.locale == Locales.english
+                  ? widget.category.nameEn
+                  : widget.category.nameAr,
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

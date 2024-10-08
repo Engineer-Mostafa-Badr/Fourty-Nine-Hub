@@ -73,23 +73,22 @@ class Restaurant extends Equatable {
     this.description,
   });
 
-
   @override
   List<Object?> get props => [
-    id,
-    name,
-    restaurantMedia,
-    government,
-    city,
-    isActive,
-    subscriptionType,
-    totalRating,
-    numberOfReviews,
-    menu,
-    subcategoryId,
-    mainCategoryId,
-    isFavorite,
-    enableOrDisableChat,
-    description,
-  ];
+        id,
+        name,
+        restaurantMedia,
+        government,
+        city,
+        isActive,
+        subscriptionType,
+        totalRating,
+        numberOfReviews,
+        menu,
+        subcategoryId,
+        mainCategoryId,
+        isFavorite,
+        enableOrDisableChat,
+        description,
+      ];
 }

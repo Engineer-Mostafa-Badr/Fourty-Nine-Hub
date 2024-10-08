@@ -14,7 +14,6 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../reels/presentation/widgets/comments.dart';
 import '../../../tinder/data/shared/shared.dart';
 import '../cubit/stories_cubit.dart';
 import 'more_stories.dart';
@@ -243,7 +242,8 @@ class Stories extends StatelessWidget {
                         // Localized text
                         maxLines: 1,
 
-                        style: Styles.mediumText(color: Colors.black,fontWeight: FontWeight.bold),
+                        style: Styles.mediumText(
+                            color: Colors.black, fontWeight: FontWeight.bold),
                       )
                     ],
                   ))

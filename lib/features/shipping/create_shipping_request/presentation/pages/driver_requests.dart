@@ -61,9 +61,10 @@ class DriverRequests extends StatelessWidget {
                                         walletType: WalletTypes.balance);
                               },
                               child: Text(
-                                "Subscribe to send offer / contact the client".tr(),
-                                style:
-                                    TextStyle(fontSize: 16, color: Colors.red),
+                                "Subscribe to send offer / contact the client"
+                                    .tr(),
+                                style: const TextStyle(
+                                    fontSize: 16, color: Colors.red),
                               ),
                             ))
                       ],

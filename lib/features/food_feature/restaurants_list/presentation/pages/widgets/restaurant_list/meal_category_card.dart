@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/meal_cubit/restaurants_meal_list_cubit.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../../../common/theme/cubit/cubit.dart';
 import '../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../res/style/app_colors.dart';
@@ -82,12 +78,13 @@ class MealCategoryCard extends StatelessWidget {
                           ? subCategory?.nameAr
                           : subCategory?.nameEn) ??
                       "",
-                  style: TextStyle(fontWeight: FontWeight.bold,fontSize:45.sp),
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 45.sp),
                 ),
                 Label(
                   text:
                       '${subCategory?.numberOfRestaurant ?? "0"} ${LocaleKeys.restaurants.tr()}',
-                  style: TextStyle(fontSize:35.sp),
+                  style: TextStyle(fontSize: 35.sp),
                 ),
               ],
             ),

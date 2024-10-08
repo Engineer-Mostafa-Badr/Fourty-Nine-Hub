@@ -1,9 +1,7 @@
-import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -105,7 +103,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                       children: [
                         _buildMainCategoriesWidget(
                           category: MainCategoryEntity(
-                            nameEn: state.model.mainCategory?.nameEn,
+                              nameEn: state.model.mainCategory?.nameEn,
                               id: state.model.mainCategory?.mainCategoryId ??
                                   "",
                               name: "Choose your favorite sub category!".tr(),
@@ -165,7 +163,8 @@ class _CreateTripFormState extends State<CreateTripForm> {
                       child: DefaultTextFormField(
                         validator: (value) {
                           return shippingcubit.validation(
-                              message: "You have to fill your receipt point!".tr(),
+                              message:
+                                  "You have to fill your receipt point!".tr(),
                               condition: receiptPoint.text.isEmpty);
                         },
                         currentController: receiptPoint,
@@ -177,20 +176,18 @@ class _CreateTripFormState extends State<CreateTripForm> {
                     //   width: 5,
                     // ),
                     Expanded(
-
                       child: DefaultTextFormField(
-                        constraints: BoxConstraints(
-                          maxWidth: double.infinity
-                        ),
+                        constraints:
+                            const BoxConstraints(maxWidth: double.infinity),
                         validator: (value) {
                           return shippingcubit.validation(
-                              message: "You have to fill your devlivery point!".tr(),
+                              message:
+                                  "You have to fill your devlivery point!".tr(),
                               condition: deliveryPoint.text.isEmpty);
                         },
                         currentController: deliveryPoint,
                         currentFocusNode: deliveryPointFocusNode,
                         hint: Labels.deliveryPoint,
-
                       ),
                     )
                   ],
@@ -322,7 +319,8 @@ class _CreateTripFormState extends State<CreateTripForm> {
                       child: DefaultTextFormField(
                         validator: (value) {
                           return shippingcubit.validation(
-                              message: "You have to fill your offer price!".tr(),
+                              message:
+                                  "You have to fill your offer price!".tr(),
                               condition: offerPrice.text.isEmpty);
                         },
                         currentController: offerPrice,
@@ -462,7 +460,6 @@ class _CreateTripFormState extends State<CreateTripForm> {
                       scrollController.jumpTo(0);
                       if (select != null) {
                         if (select!.id == category.subcategories![index].id) {
-
                           select = null;
                         } else {
                           select = category.subcategories![index];

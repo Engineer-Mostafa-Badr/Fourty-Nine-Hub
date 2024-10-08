@@ -16,7 +16,7 @@ class CustomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         label: LocaleKeys.customPage.localize,
       ),
       body: Column(

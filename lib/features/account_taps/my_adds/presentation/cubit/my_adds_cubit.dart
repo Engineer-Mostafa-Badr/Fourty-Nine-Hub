@@ -62,7 +62,9 @@ class MyAddsCubit extends Cubit<MyAddsState> {
       this._getMyInstallmentUseCase,
       this._getMyTripJoinUseCase,
       this._deleteMyTripJoinUseCase,
-      this._deleteMyInstallmentUseCase, this._getMyOtherAdsUseCase, this._allCountsUseCase)
+      this._deleteMyInstallmentUseCase,
+      this._getMyOtherAdsUseCase,
+      this._allCountsUseCase)
       : super(const MyAddsState());
 
   void loadData() async {
@@ -99,13 +101,14 @@ class MyAddsCubit extends Cubit<MyAddsState> {
         (r) => emit(
             state.copyWith(myInstallments: r, status: MyAddsStates.initState)));
   }
+
   Future<void> getMyOtherAds() async {
     emit(state.copyWith(status: MyAddsStates.loading));
     final response = await _getMyOtherAdsUseCase(const NoParams());
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-            (r) => emit(
+        (r) => emit(
             state.copyWith(myOtherAds: r, status: MyAddsStates.initState)));
   }
 
@@ -245,12 +248,12 @@ class MyAddsCubit extends Cubit<MyAddsState> {
 
   Future<void> getAllCount({
     required Params params,
-}) async {
+  }) async {
     final response = await _allCountsUseCase(params);
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-            (r) => emit(state.copyWith(
-            allCounts: r, status: MyAddsStates.initState)));
+        (r) =>
+            emit(state.copyWith(allCounts: r, status: MyAddsStates.initState)));
   }
 }

@@ -18,21 +18,21 @@ class NavigateBarModel extends NavigateBarEntity {
       required super.tweet});
 
   factory NavigateBarModel.fromJson(Map<String, dynamic> json) {
-      return NavigateBarModel(
-          id: json['_id'],
-          userId: json['userId'],
-          chat: json['Chat'],
-          find: json['Find'],
-          health: json['Health'],
-          live: json['Live'],
-          loading: json['Loading'],
-          meal: json['Meal'],
-          meet: json['Meet'],
-          reel: json['Reel'],
-          ride: json['Ride'],
-          snap: json['Snap'],
-          spotlight: json['Spotlight'],
-          tweet: json['Tweet'],
-      );
+    return NavigateBarModel(
+      id: json['_id'],
+      userId: json['userId'],
+      chat: json['Chat'],
+      find: json['Find'],
+      health: json['Health'],
+      live: json['Live'],
+      loading: json['Loading'],
+      meal: json['Meal'],
+      meet: json['Meet'],
+      reel: json['Reel'],
+      ride: json['Ride'],
+      snap: json['Snap'],
+      spotlight: json['Spotlight'],
+      tweet: json['Tweet'],
+    );
   }
 }

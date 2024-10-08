@@ -85,7 +85,7 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
+      bottomNavigationBar: SizedBox(
         height: kToolbarHeight,
         child: PageView.builder(
           controller: _controller,

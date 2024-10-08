@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -28,7 +27,10 @@ class _AttachmentTypesState extends State<AttachmentTypes> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ?  const Center(child: CircularProgressIndicator(color: AppColors.PRIMARY_COLOR,))
+        ? const Center(
+            child: CircularProgressIndicator(
+            color: AppColors.PRIMARY_COLOR,
+          ))
         : GridView(
             shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

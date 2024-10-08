@@ -3,13 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../cubit/meal_cubit/restaurants_meal_list_cubit.dart';
 import '../cubit/restaurants_list_cubit.dart';
 
 class RestaurantForSelectedMeal extends StatefulWidget {
   final mealId;
 
-  RestaurantForSelectedMeal({super.key, required this.mealId});
+  const RestaurantForSelectedMeal({super.key, required this.mealId});
 
   @override
   State<RestaurantForSelectedMeal> createState() =>
@@ -34,7 +33,7 @@ class _RestaurantForSelectedMealState extends State<RestaurantForSelectedMeal> {
     return SharedScaffold(
       // appBar: AppBar(),
       body: SafeArea(
-        child: BlocBuilder< RestaurantsCubit, RestaurantsListState>(
+        child: BlocBuilder<RestaurantsCubit, RestaurantsListState>(
             builder: (context, state) {
           return SizedBox(
               height: MediaQuery.of(context).size.height,

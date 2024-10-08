@@ -2092,7 +2092,6 @@ class DiscoverSectionState extends State<DiscoverSection> {
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -2516,18 +2515,14 @@ class _FollowingSectionState extends State<FollowingSection> {
                       itemCount: state.reelsForFollower.length,
                       itemBuilder: (context, index) {
                         final reel = state.reelsForFollower[index];
-                        if (reel != null) {
-                          return SizedBox(
-                            width: MediaQuery.of(context).size.width / 2.5,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 4.0, vertical: 12.h),
-                              child: _buildReelCard(context, reel),
-                            ),
-                          );
-                        } else {
-                          return const SizedBox.shrink();
-                        }
+                        return SizedBox(
+                          width: MediaQuery.of(context).size.width / 2.5,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 4.0, vertical: 12.h),
+                            child: _buildReelCard(context, reel),
+                          ),
+                        );
                       },
                     ),
                   ),
@@ -2706,11 +2701,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
                     );
                   }
                   final reel = state.globalReels[index];
-                  if (reel != null) {
-                    return _buildReelCard(context, reel);
-                  } else {
-                    return const SizedBox.shrink();
-                  }
+                  return _buildReelCard(context, reel);
                 },
               );
             },

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -215,7 +214,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
 
   Future<void> _getMealCategoriesWithCountRestaurants() async {
     final response = await _getMealCategoriesWithCountRestaurantsUseCase(
-        params: PostCommentsParams( userId: user?.id));
+        params: PostCommentsParams(userId: user?.id));
     response.fold(
         (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
         (data) => emit(state.copyWith(mealCategories: data)));

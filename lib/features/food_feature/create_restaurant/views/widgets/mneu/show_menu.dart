@@ -1,10 +1,8 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
@@ -66,7 +64,7 @@ class ShowMneu extends StatelessWidget {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              Sizer(),
+                              const Sizer(),
                               Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -81,7 +79,7 @@ class ShowMneu extends StatelessWidget {
                                     "${e.price ?? ""}",
                                     style: Styles.headerText(color: Colors.red),
                                   ),
-                                  Sizer(),
+                                  const Sizer(),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.red,
@@ -110,7 +108,7 @@ class ShowMneu extends StatelessWidget {
                   ),
                 ),
               ],
-              Sizer(),
+              const Sizer(),
               Container(
                 // height: MediaQuery.of(context).size.width * 0.5,
                 // width: MediaQuery.of(context).size.width,
@@ -145,7 +143,7 @@ class ShowMneu extends StatelessWidget {
                                       ),
                                     );
                                   }
-                                  return Container(
+                                  return SizedBox(
                                     // color: Colors.red,
                                     height: 195.h,
                                     child: ImagePickerPlaceholder(
@@ -157,7 +155,7 @@ class ShowMneu extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Sizer(),
+                          const Sizer(),
                           Expanded(
                             flex: 3,
                             child: Column(
@@ -203,7 +201,7 @@ class ShowMneu extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                Sizer(),
+                                const Sizer(),
                                 TextFormField(
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -257,7 +255,7 @@ class ShowMneu extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Sizer(),
+                      const Sizer(),
                       ElevatedAppButton(
                         onPressed: () {
                           final foodName = foodNameController.text;

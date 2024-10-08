@@ -33,7 +33,7 @@ class _ReelSearchViewState extends State<ReelSearchView> {
 class VideoGridItem extends StatefulWidget {
   final String videoUrl;
 
-  const VideoGridItem({Key? key, required this.videoUrl}) : super(key: key);
+  const VideoGridItem({super.key, required this.videoUrl});
 
   @override
   _VideoGridItemState createState() => _VideoGridItemState();

@@ -8,7 +8,6 @@ import 'package:fourtyninehub/features/account_taps/account/domain/entities/favo
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_ads_cubit.dart';
 
 import '../../../../../core/states/basic_state.dart';
-import '../../../../../res/strings/labels.dart';
 import '../../../../ads_feature/ads/presentation/widgets/ad_card.dart';
 
 class FavouriteView extends StatefulWidget {

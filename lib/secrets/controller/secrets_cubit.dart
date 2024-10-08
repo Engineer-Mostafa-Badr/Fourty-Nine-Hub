@@ -3,8 +3,6 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_state.dart';
 import 'package:fourtyninehub/secrets/domain/use_cases/get_all_secrets_use_case.dart';
 
-import '../../features/trip_join/helpers/print_helper.dart';
-
 class SecretsCubit extends Cubit<SecretsState> {
   SecretsCubit(this._allSecretsUseCase) : super(const SecretsState());
   final GetAllSecretsUseCase _allSecretsUseCase;

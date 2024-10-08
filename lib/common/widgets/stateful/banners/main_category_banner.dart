@@ -7,8 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -90,7 +88,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                           color: AppColors.SECONDARY_COLOR,
                           onPressed: () async {
                             final result = await widget.onFavorite();
-                            print("resutlt=${result}");
+                            print("resutlt=$result");
                             if (result == true) {
                               print(result);
                               setState(() {

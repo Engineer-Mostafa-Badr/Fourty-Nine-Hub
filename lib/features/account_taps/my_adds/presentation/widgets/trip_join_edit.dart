@@ -7,7 +7,9 @@ class TripJoinEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      appBar: BackAppBar(label: 'Edit',),
+      appBar: BackAppBar(
+        label: 'Edit',
+      ),
       body: Column(
         children: [],
       ),

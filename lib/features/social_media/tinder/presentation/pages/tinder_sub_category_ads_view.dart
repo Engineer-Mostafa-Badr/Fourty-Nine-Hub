@@ -1,17 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 
 class TinderSubCategoryAdsView extends StatefulWidget {
   final TinderSubAdsViewParams params;
@@ -65,7 +62,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
           return tinderCubit.state.mainCategoryResponse?.data != null
               ? Column(
                   children: [
-                    Sizer(),
+                    const Sizer(),
                     Container(
                       padding: EdgeInsets.symmetric(
                           vertical: padding, horizontal: padding),
@@ -98,7 +95,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                                             : AppColors.GREY_DARK_COLOR,
                                   ),
                                 ),
-                                Sizer(),
+                                const Sizer(),
                                 Text(
                                   '${tinderCubit.state.mainCategoryResponse!.data.mainCategory.numberOfAds} ${Labels.ads}',
                                   textScaler: TextScaler.noScaling,
@@ -130,7 +127,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                         ],
                       ),
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Text(
                       widget.params.subCategory.name,
                       textScaler: TextScaler.noScaling,
@@ -139,7 +136,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                           color: AppColors.SECONDARY_COLOR,
                           fontWeight: FontWeight.bold),
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Builder(builder: (context) {
                       String provider =
                           getServiceName(widget.params.subCategory.name);

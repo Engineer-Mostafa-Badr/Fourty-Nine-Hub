@@ -2204,6 +2204,8 @@ class ReactionWidget extends StatelessWidget {
     {'icon': '😠', 'color': Colors.redAccent, 'label': 'Angry'},
   ];
 
+  ReactionWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MediaQuery(

@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
@@ -14,20 +13,16 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/presentatio
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_categories.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/resturant_dashboard_banner.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../create_restaurant/cubit/create_resturant_cubit.dart';
 import '../../../create_restaurant/views/create_resturant_view.dart';
-import '../cubit/meal_cubit/restaurants_meal_list_cubit.dart';
 import '../cubit/restaurants_list_cubit.dart';
-import '../widgets/restaurant_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'dart:convert'; // For JSON decoding

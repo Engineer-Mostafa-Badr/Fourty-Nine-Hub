@@ -33,7 +33,8 @@ abstract class MyAdsRemoteDatasource {
   Future<Either<Failure, bool>> deactivateAd({required int id});
   Future<Either<Failure, bool>> deleteMyTripJoin({required String id});
   Future<Either<Failure, bool>> deleteMyInstallment({required String id});
-  Future<Either<Failure, List<GetAllCountsTripJoinEntity>>> getAllCountsTripJoin(Params params);
+  Future<Either<Failure, List<GetAllCountsTripJoinEntity>>>
+      getAllCountsTripJoin(Params params);
 }
 
 class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
@@ -57,8 +58,9 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
     final response = await _apiConsumer.get(EndPoints.myAds);
     return response.fold(
         (failure) => Left(failure),
-        (data) => Right(
-            (data['data']['ads'] as List).map((e) => AdModel.fromJson(e)).toList()));
+        (data) => Right((data['data']['ads'] as List)
+            .map((e) => AdModel.fromJson(e))
+            .toList()));
   }
 
   @override
@@ -135,11 +137,11 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
   }
 
   @override
-  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments()  async {
+  Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyInstallments() async {
     final response = await _apiConsumer.get(EndPoints.myAdsInstallment);
     return response.fold(
-            (failure) => Left(failure),
-            (data) => Right((data['data']['ads'] as List)
+        (failure) => Left(failure),
+        (data) => Right((data['data']['ads'] as List)
             .map((e) => MyAuctionAdsModel.fromJson(e))
             .toList()));
   }
@@ -147,43 +149,44 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
   @override
   Future<Either<Failure, MyAdsTripJoinEntity>> getMyTripJoin() async {
     final response = await _apiConsumer.get(EndPoints.myAdsTripJoin);
-    return response.fold(
-            (failure) => Left(failure),
-            (data) => Right(MyAdsTripJoinModel.fromJson(data['data']['trips'])));
-}
-
-  @override
-  Future<Either<Failure, bool>> deleteMyTripJoin({required String id}) async {
-    final response = await _apiConsumer.delete(EndPoints.deleteMyTripJoin(id: id));
-    return response.fold(
-            (failure) => Left(failure),
-            (data) => Right(data['status']));
+    return response.fold((failure) => Left(failure),
+        (data) => Right(MyAdsTripJoinModel.fromJson(data['data']['trips'])));
   }
 
   @override
-  Future<Either<Failure, bool>> deleteMyInstallment({required String id}) async {
-    final response = await _apiConsumer.delete(EndPoints.deleteMyInstallment(id: id));
+  Future<Either<Failure, bool>> deleteMyTripJoin({required String id}) async {
+    final response =
+        await _apiConsumer.delete(EndPoints.deleteMyTripJoin(id: id));
     return response.fold(
-            (failure) => Left(failure),
-            (data) => Right(data['status']));
+        (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteMyInstallment(
+      {required String id}) async {
+    final response =
+        await _apiConsumer.delete(EndPoints.deleteMyInstallment(id: id));
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
   }
 
   @override
   Future<Either<Failure, List<MyAuctionAdsEntity>>> getMyOtherAds() async {
     final response = await _apiConsumer.get(EndPoints.myAdsOther);
     return response.fold(
-            (failure) => Left(failure),
-            (data) => Right((data['data']['ads'] as List)
+        (failure) => Left(failure),
+        (data) => Right((data['data']['ads'] as List)
             .map((e) => MyAuctionAdsModel.fromJson(e))
             .toList()));
   }
 
   @override
-  Future<Either<Failure, List<GetAllCountsTripJoinEntity>>> getAllCountsTripJoin(Params params) async {
+  Future<Either<Failure, List<GetAllCountsTripJoinEntity>>>
+      getAllCountsTripJoin(Params params) async {
     final response = await _apiConsumer.get(EndPoints.getAllCount(params));
     return response.fold(
-            (failure) => Left(failure),
-            (data) => Right((data['data'] as List)
+        (failure) => Left(failure),
+        (data) => Right((data['data'] as List)
             .map((e) => GetAllCountsTripJoinModel.fromJson(e))
             .toList()));
   }

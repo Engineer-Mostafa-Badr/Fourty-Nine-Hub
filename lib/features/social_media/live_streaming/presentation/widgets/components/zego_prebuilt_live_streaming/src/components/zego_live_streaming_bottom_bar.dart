@@ -382,7 +382,7 @@ class ZoomParticipantsBuilder extends StatelessWidget {
               popUpManager: widgetBottom!.popUpManager,
               translationText: widgetBottom!.translationText,
               builder: widgetBottom!.config.memberButton.builder,
-              icon: Icon(Icons.person, color: Colors.white),
+              icon: const Icon(Icons.person, color: Colors.white),
               backgroundColor: Colors.transparent,
               avatarBuilder: widgetBottom!.config.avatarBuilder,
               itemBuilder: widgetBottom!.config.memberList.itemBuilder,

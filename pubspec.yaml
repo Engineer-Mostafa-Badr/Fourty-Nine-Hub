@@ -55,8 +55,9 @@ dependencies:
   google_maps_flutter: ^2.6.1
   google_sign_in: ^6.2.1
   google_static_maps_controller: ^1.1.0
-  icons_launcher: ^2.1.7
-  image: any
+  # icons_launcher: ^2.1.7
+  mapbox_gl: ^0.14.0
+  # image: ^3.0.0
   image_gallery_saver: 2.0.3
   image_picker: ^1.1.2
   infinite_scroll_pagination: ^4.0.0
@@ -90,7 +91,7 @@ dependencies:
   webview_flutter: ^4.8.0
   # zego_uikit_prebuilt_live_audio_room: ^3.7.5
   zego_uikit_signaling_plugin: ^2.8.2
-  image_filter_pro: ^0.1.11
+  # image_filter_pro: ^0.1.11
   path: 1.9.0
   open_file: ^3.5.4
   html: ^0.15.0
@@ -108,6 +109,9 @@ dependencies:
   statemachine: ^3.3.1
   native_device_orientation: ^2.0.3
   win32: ^5.5.4
+  # mapbox_maps_flutter: ^2.3.0
+  icons_launcher: ^2.0.7
+  # mapbox_maps_flutter: ^2.3.0
 dependency_overrides:
   http: ^0.13.3
 dev_dependencies:

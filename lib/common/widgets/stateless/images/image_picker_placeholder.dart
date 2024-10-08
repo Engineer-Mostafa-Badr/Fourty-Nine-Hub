@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -56,8 +55,12 @@ class ImagePickerPlaceholder extends StatelessWidget {
 
   Widget _buildTitle() {
     if (tilte == null || tilte!.isEmpty) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
-    return Center(child: Text(tilte!,textAlign: TextAlign.center,));
+    return Center(
+        child: Text(
+      tilte!,
+      textAlign: TextAlign.center,
+    ));
   }
 }

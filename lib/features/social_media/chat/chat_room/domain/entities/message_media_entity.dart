@@ -6,5 +6,10 @@ class MessageMediaEntity {
   FileTypeEnum type;
   String? fileName;
   int? fileSize;
-  MessageMediaEntity({required this.id, required this.url, required this.type, this.fileName, this.fileSize});
+  MessageMediaEntity(
+      {required this.id,
+      required this.url,
+      required this.type,
+      this.fileName,
+      this.fileSize});
 }

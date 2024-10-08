@@ -11,11 +11,11 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-
 class InstagramView extends StatefulWidget {
   final bool hideAppBar;
 
-  const InstagramView({super.key, this.hideAppBar = false});  // Default: show AppBar
+  const InstagramView(
+      {super.key, this.hideAppBar = false}); // Default: show AppBar
 
   @override
   State<InstagramView> createState() => _InstagramViewState();
@@ -30,13 +30,15 @@ class _InstagramViewState extends State<InstagramView> {
     super.initState();
 
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
         if (!_isScrollingDown) {
           setState(() {
             _isScrollingDown = true;
           });
         }
-      } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      } else if (scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
         if (_isScrollingDown) {
           setState(() {
             _isScrollingDown = false;
@@ -55,21 +57,22 @@ class _InstagramViewState extends State<InstagramView> {
           builder: (context, state) {
             return context.read<UserCubit>().isLoggedIn
                 ? Column(
-              children: [
-                _buildTabBar(context),
-                Expanded(
-                  child: InstagramPosts(scrollController: scrollController),
-                ),
-              ],
-            )
+                    children: [
+                      _buildTabBar(context),
+                      Expanded(
+                        child:
+                            InstagramPosts(scrollController: scrollController),
+                      ),
+                    ],
+                  )
                 : Column(
-              children: [
-                _buildTabBar(context),
-                Expanded(
-                    child: InstagramGlobalPosts(
-                        scrollController: scrollController)),
-              ],
-            );
+                    children: [
+                      _buildTabBar(context),
+                      Expanded(
+                          child: InstagramGlobalPosts(
+                              scrollController: scrollController)),
+                    ],
+                  );
           },
         ),
       ),
@@ -84,7 +87,7 @@ class _InstagramViewState extends State<InstagramView> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: List.generate(
           2,
-              (i) => GestureDetector(
+          (i) => GestureDetector(
             onTap: () {
               if (i == 1) {
                 print(context.read<UserCubit>().token);
@@ -96,11 +99,11 @@ class _InstagramViewState extends State<InstagramView> {
             child: Container(
               decoration: i == 0
                   ? const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                      color: AppColors.PRIMARY_COLOR, width: 2),
-                ),
-              )
+                      border: Border(
+                        bottom: BorderSide(
+                            color: AppColors.PRIMARY_COLOR, width: 2),
+                      ),
+                    )
                   : null,
               child: Icon(
                 i == 0 ? Icons.grid_4x4_outlined : Icons.person,
@@ -114,4 +117,3 @@ class _InstagramViewState extends State<InstagramView> {
     );
   }
 }
-

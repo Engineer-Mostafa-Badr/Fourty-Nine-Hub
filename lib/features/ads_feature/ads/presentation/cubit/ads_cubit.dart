@@ -29,7 +29,9 @@ class AdvertisementCubit extends Cubit<AdsState> {
       this._getAllComeWithMeUseCase,
       this._getAllPickMeUseCase,
       this._requestComeWithMeUseCase,
-      this._requestPickMeUseCase, this._removeFavouriteAdUseCase, this._favouriteAdUseCase)
+      this._requestPickMeUseCase,
+      this._removeFavouriteAdUseCase,
+      this._favouriteAdUseCase)
       : super(const AdsState());
 
   // void loadData({required String subCategoryId,required String filter}) async {
@@ -100,9 +102,9 @@ class AdvertisementCubit extends Cubit<AdsState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
         (data) {
-          result = data;
-          emit(state.copyWith( status: AdsStates.success));
-        });
+      result = data;
+      emit(state.copyWith(status: AdsStates.success));
+    });
     return result;
   }
 
@@ -113,9 +115,9 @@ class AdvertisementCubit extends Cubit<AdsState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
         (data) {
-          result = data;
-          emit(state.copyWith( status: AdsStates.success));
-        });
+      result = data;
+      emit(state.copyWith(status: AdsStates.success));
+    });
     return result;
   }
 

@@ -60,7 +60,8 @@ class RestaurantDashboardView extends StatelessWidget {
                                 return RestaurantOrderCard(
                                     item: state.orders!.data[index]);
                               },
-                              separatorBuilder: (context, index) => Sizer(),
+                              separatorBuilder: (context, index) =>
+                                  const Sizer(),
                               itemCount: state.orders?.data.length ?? 0),
                     ),
                   ],

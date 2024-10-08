@@ -270,32 +270,32 @@ class FourtyNineServiceLocator {
       ),
     );
     serviceLocator.registerLazySingleton<GetMyTripJoinUseCase>(
-          () => GetMyTripJoinUseCase(
+      () => GetMyTripJoinUseCase(
         serviceLocator(),
       ),
     );
     serviceLocator.registerLazySingleton<GetAllCountsUseCase>(
-          () => GetAllCountsUseCase(
+      () => GetAllCountsUseCase(
         serviceLocator(),
       ),
     );
     serviceLocator.registerLazySingleton<DeleteMyTripJoinUseCase>(
-          () => DeleteMyTripJoinUseCase(
+      () => DeleteMyTripJoinUseCase(
         serviceLocator(),
       ),
     );
     serviceLocator.registerLazySingleton<DeleteMyInstallmentUseCase>(
-          () => DeleteMyInstallmentUseCase(
+      () => DeleteMyInstallmentUseCase(
         serviceLocator(),
       ),
     );
     serviceLocator.registerLazySingleton<GetMyInstallmentUseCase>(
-          () => GetMyInstallmentUseCase(
+      () => GetMyInstallmentUseCase(
         serviceLocator(),
       ),
     );
     serviceLocator.registerLazySingleton<GetMyOtherAdsUseCase>(
-          () => GetMyOtherAdsUseCase(
+      () => GetMyOtherAdsUseCase(
         serviceLocator(),
       ),
     );

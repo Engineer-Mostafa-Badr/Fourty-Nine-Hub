@@ -12,10 +12,10 @@ import '../models/favourite_subcategory_model.dart';
 
 abstract class AccountRemoteDataSource {
   Future<Either<Failure, List<FavouriteCategoryEntity>>>
-  getFavouriteCategories();
+      getFavouriteCategories();
 
   Future<Either<Failure, List<FavouriteSubcategoryEntity>>>
-  getFavouriteSubcategories();
+      getFavouriteSubcategories();
 
   Future<Either<Failure, List<FavouriteAdEntity>>> getFavouriteAds();
 }
@@ -26,11 +26,11 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
 
   @override
   Future<Either<Failure, List<FavouriteCategoryEntity>>>
-  getFavouriteCategories() async {
+      getFavouriteCategories() async {
     final response = await _apiConsumer.get(EndPoints.favouriteCategories);
     return response.fold(
-            (failure) => Left(failure),
-            (data) => Right((data['data']['favorites'] as List)
+        (failure) => Left(failure),
+        (data) => Right((data['data']['favorites'] as List)
             .map((e) => FavouriteCategoryModel.fromJson(e))
             .toList()));
   }
@@ -39,19 +39,19 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
   Future<Either<Failure, List<FavouriteAdEntity>>> getFavouriteAds() async {
     final response = await _apiConsumer.get(EndPoints.favouriteAds);
     return response.fold(
-            (failure) => Left(failure),
-            (data) => Right((data['data'] as List)
+        (failure) => Left(failure),
+        (data) => Right((data['data'] as List)
             .map((e) => FavouriteAdModel.fromJson(e))
             .toList()));
   }
 
   @override
   Future<Either<Failure, List<FavouriteSubcategoryEntity>>>
-  getFavouriteSubcategories() async {
+      getFavouriteSubcategories() async {
     final response = await _apiConsumer.get(EndPoints.favouriteSubCategories);
     return response.fold(
-            (failure) => Left(failure),
-            (data) => Right((data['data'] as List)
+        (failure) => Left(failure),
+        (data) => Right((data['data'] as List)
             .map((e) => FavouriteSubcategoryModel.fromJson(e))
             .toList()));
   }

@@ -5,13 +5,13 @@ import 'package:fourtyninehub/features/custom_page/domain/reposiory/custom_page_
 
 import '../entity/navigate_bar_entity.dart';
 
-class FetchNavigateBarUseCase extends UseCase<NavigateBarEntity,NoParams>{
+class FetchNavigateBarUseCase extends UseCase<NavigateBarEntity, NoParams> {
   final CustomPageRepository _customPageRepository;
 
   FetchNavigateBarUseCase(this._customPageRepository);
 
   @override
-  Future<Either<Failure, NavigateBarEntity>> call(NoParams params)async {
+  Future<Either<Failure, NavigateBarEntity>> call(NoParams params) async {
     return await _customPageRepository.fetchNavigateBar();
   }
 }

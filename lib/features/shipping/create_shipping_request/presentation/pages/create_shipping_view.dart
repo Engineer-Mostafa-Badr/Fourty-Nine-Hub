@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -189,13 +188,13 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                       }
                                     },
                                     child: Padding(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                         horizontal: 10,
                                       ),
                                       child: Text(
                                         "You can enjoy serving your clients using your car by clicking the register button above."
                                             .tr(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Colors.red,
                                         ),
                                       ),
@@ -409,7 +408,7 @@ class NotFoundOffers extends StatelessWidget {
         Center(
           child: Text(
             "Your request has been sent. You'll receive offers shortly.".tr(),
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 25,
             ),
             textAlign: TextAlign.center,
@@ -522,7 +521,7 @@ class RequestOfferCard extends StatelessWidget {
                       children: [
                         Text(
                           "car model".tr(),
-                          style: TextStyle(fontSize: 15),
+                          style: const TextStyle(fontSize: 15),
                         ),
                         const SizedBox(
                           height: 5,
@@ -785,7 +784,7 @@ class RequestOfferCard extends StatelessWidget {
                   },
                   child: Text(
                     "Subscribe to contact to the driver".tr(),
-                    style: TextStyle(fontSize: 16, color: Colors.red),
+                    style: const TextStyle(fontSize: 16, color: Colors.red),
                   ),
                 )),
           const SizedBox(

@@ -14,17 +14,17 @@ class GetAllCountsTripJoinModel extends GetAllCountsTripJoinEntity {
       required super.createdAt});
 
   factory GetAllCountsTripJoinModel.fromJson(Map<String, dynamic> json) {
-      return GetAllCountsTripJoinModel(
-          id: json['_id'] ??'',
-          tripId: json['trip']['_id'] ??'',
-          userId: json['trip']['userId'] ??'',
-          time: json['trip']['time'], // dynamic type, can be any
-          userIdId: json['userId']['_id'] ??'',
-          firstName: json['userId']['firstName'] ??'',
-          lastName: json['userId']['lastName'] ??'',
-          gender: json['userId']['gender'] ??'',
-          status: json['status'] ??'',
-          createdAt: json['createdAt'] ??'',
-      );
+    return GetAllCountsTripJoinModel(
+      id: json['_id'] ?? '',
+      tripId: json['trip']['_id'] ?? '',
+      userId: json['trip']['userId'] ?? '',
+      time: json['trip']['time'], // dynamic type, can be any
+      userIdId: json['userId']['_id'] ?? '',
+      firstName: json['userId']['firstName'] ?? '',
+      lastName: json['userId']['lastName'] ?? '',
+      gender: json['userId']['gender'] ?? '',
+      status: json['status'] ?? '',
+      createdAt: json['createdAt'] ?? '',
+    );
   }
 }

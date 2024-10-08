@@ -25,8 +25,7 @@ class BuildItemAuctionCard extends StatelessWidget {
   final MyAuctionAdsEntity item;
   //final Function(String) onDelete;
 
-  const BuildItemAuctionCard(
-      {super.key, required this.item});
+  const BuildItemAuctionCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +54,7 @@ class BuildItemAuctionCard extends StatelessWidget {
                 children: [
                   Label(
                       text:
-                      "${LocaleKeys.createdOn.localize} ${DateFormat(
-                          'yyyy-MM-dd').format(item.createdAt) }"),
+                          "${LocaleKeys.createdOn.localize} ${DateFormat('yyyy-MM-dd').format(item.createdAt)}"),
                   const Sizer(
                     height: 15,
                   ),
@@ -79,8 +77,8 @@ class BuildItemAuctionCard extends StatelessWidget {
                         ),
                         Expanded(
                             child: Text(
-                              LocaleKeys.adReviewSoon.localize,
-                            )),
+                          LocaleKeys.adReviewSoon.localize,
+                        )),
                       ]
                     ],
                   ),
@@ -89,36 +87,36 @@ class BuildItemAuctionCard extends StatelessWidget {
                     children: [
                       Expanded(
                           child: AppButton(
-                            backColor: AppColors.PRIMARY_COLOR,
-                            color: AppColors.AUTH_CONTAINER_COLOR,
-                            label: LocaleKeys.edit.localize,
-                            onPressed: () {}
-                                // showAreYouSure(
-                                //     title: LocaleKeys.deleteAd.localize,
-                                //     subTitle: LocaleKeys.sureRemoveAd.localize,
-                                //     action: () {
-                                //       //  onDelete(item.id);
-                                //     },
-                                //     context: context),
-                          )),
+                              backColor: AppColors.PRIMARY_COLOR,
+                              color: AppColors.AUTH_CONTAINER_COLOR,
+                              label: LocaleKeys.edit.localize,
+                              onPressed: () {}
+                              // showAreYouSure(
+                              //     title: LocaleKeys.deleteAd.localize,
+                              //     subTitle: LocaleKeys.sureRemoveAd.localize,
+                              //     action: () {
+                              //       //  onDelete(item.id);
+                              //     },
+                              //     context: context),
+                              )),
                       const Sizer(),
                       Expanded(
                           child: AppButton(
-                            color: AppColors.AUTH_CONTAINER_COLOR,
-                            label: LocaleKeys.subscriptions.localize,
-                            onPressed: () {
-                              serviceLocator<SubscriptionController>()
-                                  .showSubscriptionPlans(
-                                wallets: [
-                                  WalletTypes.mainWallet,
-                                  WalletTypes.giftWallet,
-                                  WalletTypes.balance,
-                                ],
-                                subCategoryId: item.subCategory.id,
-                                title: LocaleKeys.ads.localize,
-                              );
-                            },
-                          )),
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        label: LocaleKeys.subscriptions.localize,
+                        onPressed: () {
+                          serviceLocator<SubscriptionController>()
+                              .showSubscriptionPlans(
+                            wallets: [
+                              WalletTypes.mainWallet,
+                              WalletTypes.giftWallet,
+                              WalletTypes.balance,
+                            ],
+                            subCategoryId: item.subCategory.id,
+                            title: LocaleKeys.ads.localize,
+                          );
+                        },
+                      )),
                     ],
                   ),
                 ],
@@ -152,9 +150,7 @@ class BuildItemAuctionCard extends StatelessWidget {
     return Container(
       height: 140.h,
       padding: EdgeInsets.all(10.w),
-      color: Theme
-          .of(context)
-          .primaryColor,
+      color: Theme.of(context).primaryColor,
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Expanded(
           child: ImageFromInternet(
@@ -180,17 +176,13 @@ class BuildItemAuctionCard extends StatelessWidget {
                   text: item.title,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
-                  color: Theme
-                      .of(context)
-                      .scaffoldBackgroundColor,
+                  color: Theme.of(context).scaffoldBackgroundColor,
                 ),
                 Label(
                   text: '${item.price}',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  color: Theme
-                      .of(context)
-                      .scaffoldBackgroundColor,
+                  color: Theme.of(context).scaffoldBackgroundColor,
                 ),
                 // Label(
                 //     text: item.description,
@@ -205,9 +197,7 @@ class BuildItemAuctionCard extends StatelessWidget {
                             : item.mainCategory.nameAr,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        color: Theme
-                            .of(context)
-                            .scaffoldBackgroundColor),
+                        color: Theme.of(context).scaffoldBackgroundColor),
                     const Sizer(),
                     Label(
                         text: context.locale == Locales.english
@@ -215,9 +205,7 @@ class BuildItemAuctionCard extends StatelessWidget {
                             : item.subCategory.nameAr,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        color: Theme
-                            .of(context)
-                            .scaffoldBackgroundColor),
+                        color: Theme.of(context).scaffoldBackgroundColor),
                   ],
                 ),
               ],
@@ -279,9 +267,7 @@ class BuildItemAuctionCard extends StatelessWidget {
                 ));
           },
           child: Icon(Icons.more_vert,
-              color: Theme
-                  .of(context)
-                  .scaffoldBackgroundColor),
+              color: Theme.of(context).scaffoldBackgroundColor),
         )
       ]),
     );
@@ -318,25 +304,22 @@ class BuildItemAuctionCard extends StatelessWidget {
     );
   }
 
-  Widget _buildContactItem({required IconData icon,
-    required String label,
-    required int value,
-    required context}) {
+  Widget _buildContactItem(
+      {required IconData icon,
+      required String label,
+      required int value,
+      required context}) {
     return Row(
       children: [
         Container(
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: Theme
-                .of(context)
-                .primaryColor,
+            color: Theme.of(context).primaryColor,
           ),
           child: Icon(
             icon,
-            color: Theme
-                .of(context)
-                .scaffoldBackgroundColor,
+            color: Theme.of(context).scaffoldBackgroundColor,
           ),
         ),
         const Sizer(),

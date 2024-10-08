@@ -5,11 +5,11 @@ import 'package:fourtyninehub/secrets/domain/repositories/secrets_repository_con
 
 import '../entities/secrets.dart';
 
-class GetAllSecretsUseCase extends UseCase<Secrets, NoParams>{
+class GetAllSecretsUseCase extends UseCase<Secrets, NoParams> {
   final SecretsRepository _secretsRepository;
 
-  GetAllSecretsUseCase(SecretsRepository secretsRepository) : _secretsRepository = secretsRepository;
-
+  GetAllSecretsUseCase(SecretsRepository secretsRepository)
+      : _secretsRepository = secretsRepository;
 
   @override
   Future<Either<Failure, Secrets>> call(NoParams noParams) {

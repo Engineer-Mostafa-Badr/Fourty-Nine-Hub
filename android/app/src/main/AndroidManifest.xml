@@ -45,6 +45,9 @@
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
         <meta-data
+        android:name="com.mapbox.token"
+        android:value="sk.eyJ1IjoiNDlhcHAiLCJhIjoiY20xem83MGQ5MDg3aDJqczhhYnlmMGI1ZSJ9.8sYHBUyxYXncueYcckCBMg" />
+        <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBMtQpwW-qKq89zuXJr62e9iQC5cVmvsWg" />
         <meta-data

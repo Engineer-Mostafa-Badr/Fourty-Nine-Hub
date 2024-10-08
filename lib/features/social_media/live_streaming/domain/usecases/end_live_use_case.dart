@@ -4,7 +4,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/repository/live_repository.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
 
-class EndLiveUseCase extends UseCase<void, MeetingParams>{
+class EndLiveUseCase extends UseCase<void, MeetingParams> {
   final LiveRepository _liveRepository;
 
   EndLiveUseCase(this._liveRepository);
@@ -12,5 +12,4 @@ class EndLiveUseCase extends UseCase<void, MeetingParams>{
   Future<Either<Failure, void>> call(MeetingParams params) {
     return _liveRepository.endLive(params);
   }
-
 }

@@ -62,11 +62,15 @@ class _AdCardState extends State<AdCard> {
                     height: kToolbarHeight * 4,
                     width: double.infinity,
                     child: Swiper(
-                      itemCount: widget.item.images.length > 4 ? 4 : widget.item.images.length,
+                      itemCount: widget.item.images.length > 4
+                          ? 4
+                          : widget.item.images.length,
                       onIndexChanged: (i) {},
                       outer: false,
                       loop: false,
-                      physics: widget.item.images.length > 1 ? null : const NeverScrollableScrollPhysics(),
+                      physics: widget.item.images.length > 1
+                          ? null
+                          : const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) => Padding(
                         padding: EdgeInsets.only(bottom: 5.h),
                         child: Stack(
@@ -76,26 +80,31 @@ class _AdCardState extends State<AdCard> {
                               image: widget.item.images[index],
                               defaultLogo: true,
                               fit: BoxFit.fill,
-                              borderRadius:
-                                  BorderRadius.only(topLeft: Radius.circular(5.r), topRight: Radius.circular(5.r)),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(5.r),
+                                  topRight: Radius.circular(5.r)),
                             ),
                             if (index == 3)
                               Positioned.fill(
                                   child: InkWell(
-                                onTap: () => context.push(Routes.ADdetails, extra: widget.item.id),
+                                onTap: () => context.push(Routes.ADdetails,
+                                    extra: widget.item.id),
                                 child: Container(
                                   color: Colors.black.withOpacity(0.8),
                                   alignment: AlignmentDirectional.center,
                                   child: Label(
                                     text: 'See More',
-                                    style: Styles.headerText(color: Colors.white, decoration: TextDecoration.underline),
+                                    style: Styles.headerText(
+                                        color: Colors.white,
+                                        decoration: TextDecoration.underline),
                                   ),
                                 ),
                               ))
                           ],
                         ),
                       ),
-                      pagination: SwiperPagination(builder: SwiperCustomPagination(builder: (context, config) {
+                      pagination: SwiperPagination(builder:
+                          SwiperCustomPagination(builder: (context, config) {
                         return const DotSwiperPaginationBuilder(
                                 color: AppColors.GREY_DARK_COLOR,
                                 activeColor: AppColors.SECONDARY_COLOR,
@@ -109,18 +118,23 @@ class _AdCardState extends State<AdCard> {
                     start: 10.w,
                     child: IconAppButton(
                         size: 18,
-                        icon: widget.item.isFavourite == false ? Icons.favorite_border : Icons.favorite,
+                        icon: widget.item.isFavourite == false
+                            ? Icons.favorite_border
+                            : Icons.favorite,
                         color: AppColors.SECONDARY_COLOR,
                         onPressed: () async {
                           if (widget.item.isFavourite == false) {
                             var result = await widget.onFav(widget.item.id);
                             if (result == true) {
-                              widget.item.isFavourite = !widget.item.isFavourite!;
+                              widget.item.isFavourite =
+                                  !widget.item.isFavourite!;
                             }
                           } else {
-                            var result = await widget.onRemoveFav(widget.item.id);
+                            var result =
+                                await widget.onRemoveFav(widget.item.id);
                             if (result == true) {
-                              widget.item.isFavourite = !widget.item.isFavourite!;
+                              widget.item.isFavourite =
+                                  !widget.item.isFavourite!;
                             }
                           }
                         }),

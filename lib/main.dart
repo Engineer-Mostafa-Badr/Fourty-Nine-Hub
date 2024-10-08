@@ -32,9 +32,14 @@ import 'features/authentication/presentation/controllers/user_cubit/user_cubit.d
 import 'firebase_options.dart';
 import 'routes/pages.dart';
 
+// import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mapbox;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  String ACCESS_TOKEN = const String.fromEnvironment("");
+  // MapboxOptions.setAccessToken(
+      // "sk.eyJ1IjoiNDlhcHAiLCJhIjoiY20xem83MGQ5MDg3aDJqczhhYnlmMGI1ZSJ9.8sYHBUyxYXncueYcckCBMg");
 
+  // mapbox.MapboxOptions.setAccessToken("sk.eyJ1IjoiNDlhcHAiLCJhIjoiY20xem83MGQ5MDg3aDJqczhhYnlmMGI1ZSJ9.8sYHBUyxYXncueYcckCBMg");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -94,16 +99,19 @@ class _MyAppState extends State<MyApp> {
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
         ),
         BlocProvider(
-          create: (BuildContext context) => serviceLocator<MainCategoriesCubit>()..loadData(),
+          create: (BuildContext context) =>
+              serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
         BlocProvider(
           create: (context) => serviceLocator<ShowOffersCubit>(),
         ),
         BlocProvider(
           create: (context) => serviceLocator<GetCateogryRiderCubit>(),
-        ), BlocProvider(
+        ),
+        BlocProvider(
           create: (context) => serviceLocator<RiderTripReelTimeCubit>(),
-        ),BlocProvider(
+        ),
+        BlocProvider(
           create: (context) => serviceLocator<RequestRiderTripCubit>(),
         ),
         // BlocProvider(
@@ -147,38 +155,45 @@ class _MyAppState extends State<MyApp> {
                   context: context,
                   notificationListenerUseCase: serviceLocator(),
                 )),
-        BlocProvider(create: (context) => ShowOffersCubit(repository: serviceLocator(),),),
+        BlocProvider(
+          create: (context) => ShowOffersCubit(
+            repository: serviceLocator(),
+          ),
+        ),
       ],
       child: ScreenUtilInit(
-          designSize: const Size(750, 1334),
-          minTextAdapt: true,
-          splitScreenMode: true,
-          builder: (context, child) {
-            context.read<SecretsCubit>().state.secrets?.zegoAppId;
-            return BlocBuilder<ThemeCubit, ThemeStates>(
-              builder: (BuildContext context, state) {
-                return MaterialApp.router(
-                  builder: (context, child) {
-                    return MediaQuery(
-                      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
-                      child: child!,
-                    );
-                  },
-                  themeMode: context.read<ThemeCubit>().isDarkTheme ? ThemeMode.dark : ThemeMode.light,
-                  theme: lightTheme(),
-                  darkTheme: darkTheme(),
-                  title: '49',
-                  debugShowCheckedModeBanner: false,
-                  routerConfig: AppPages.router,
-                  localizationsDelegates: context.localizationDelegates,
-                  supportedLocales: context.supportedLocales,
-                  locale: context.locale,
-                  // for device preview package
-                  // builder: DevicePreview.appBuilder,
-                );
-              },
-            );
-         },
+        designSize: const Size(750, 1334),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (context, child) {
+          context.read<SecretsCubit>().state.secrets?.zegoAppId;
+          return BlocBuilder<ThemeCubit, ThemeStates>(
+            builder: (BuildContext context, state) {
+              return MaterialApp.router(
+                builder: (context, child) {
+                  return MediaQuery(
+                    data: MediaQuery.of(context)
+                        .copyWith(textScaler: TextScaler.noScaling),
+                    child: child!,
+                  );
+                },
+                themeMode: context.read<ThemeCubit>().isDarkTheme
+                    ? ThemeMode.dark
+                    : ThemeMode.light,
+                theme: lightTheme(),
+                darkTheme: darkTheme(),
+                title: '49',
+                debugShowCheckedModeBanner: false,
+                routerConfig: AppPages.router,
+                localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
+                locale: context.locale,
+                // for device preview package
+                // builder: DevicePreview.appBuilder,
+              );
+            },
+          );
+        },
       ),
     );
   }

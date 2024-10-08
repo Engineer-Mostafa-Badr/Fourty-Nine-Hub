@@ -39,8 +39,12 @@ class Trip {
 
   factory Trip.fromJson(Map<String, dynamic> json) => Trip(
         id: json['_id'] as String?,
-        userId: json['userId'] == null ? null : UserId.fromJson(json['userId'] as Map<String, dynamic>),
-        categoryId: json['categoryId'] == null ? null : CategoryId.fromJson(json['categoryId'] as Map<String, dynamic>),
+        userId: json['userId'] == null
+            ? null
+            : UserId.fromJson(json['userId'] as Map<String, dynamic>),
+        categoryId: json['categoryId'] == null
+            ? null
+            : CategoryId.fromJson(json['categoryId'] as Map<String, dynamic>),
         fromEn: json['fromEn'] as String?,
         toEn: json['toEn'] as String?,
         fromAr: json['fromAr'] as String?,

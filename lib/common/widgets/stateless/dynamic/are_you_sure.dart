@@ -10,7 +10,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
- showAreYouSure({
+showAreYouSure({
   required String title,
   required String subTitle,
   required Function action,

@@ -67,7 +67,7 @@ class CameraPickerView extends StatelessWidget {
 class _CamView extends StatefulWidget {
   final void Function(List<camera.XFile> media)? onDone;
 
-  _CamView({required this.onDone, required this.chatRoomCubit});
+  const _CamView({required this.onDone, required this.chatRoomCubit});
   final ChatRoomCubit chatRoomCubit;
 
   @override
@@ -323,8 +323,7 @@ class _BaseIcon extends StatelessWidget {
   final double? iconSize;
   final void Function()? onTap;
 
-  _BaseIcon(
-      {super.key, this.color, required this.icon, this.onTap, this.iconSize});
+  const _BaseIcon({required this.icon, this.onTap, this.iconSize, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -366,13 +365,13 @@ class _ImagesListState extends State<_ImagesList> {
               builder: (context, constraints) {
                 return BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   buildWhen: (previous, current) =>
-                  current.status == CameraPickerStatus.updateMediaList,
+                      current.status == CameraPickerStatus.updateMediaList,
                   builder: (context, state) {
                     return ListView.separated(
                       padding: EdgeInsets.symmetric(vertical: 5.h),
                       scrollDirection: Axis.horizontal,
                       itemCount: state.mediaList?.length ?? 0,
-                      separatorBuilder: (context, index) => Sizer(),
+                      separatorBuilder: (context, index) => const Sizer(),
                       itemBuilder: (context, index) {
                         final file = File(state.mediaList![index].path);
                         if (file.isImage) {
@@ -426,7 +425,7 @@ class _ImagesListState extends State<_ImagesList> {
               children: [
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   buildWhen: (previous, current) =>
-                  current.pickMode != previous.pickMode,
+                      current.pickMode != previous.pickMode,
                   builder: (context, state) {
                     return ElevatedAppButton(
                       label: LocaleKeys.photo.tr(),
@@ -442,10 +441,10 @@ class _ImagesListState extends State<_ImagesList> {
                     );
                   },
                 ),
-                Sizer(),
+                const Sizer(),
                 BlocBuilder<CameraPickerCubit, CameraPickerState>(
                   buildWhen: (previous, current) =>
-                  current.pickMode != previous.pickMode,
+                      current.pickMode != previous.pickMode,
                   builder: (context, state) {
                     return ElevatedAppButton(
                       label: LocaleKeys.video.tr(),
@@ -468,10 +467,10 @@ class _ImagesListState extends State<_ImagesList> {
 
   Widget _mediaContainer(
       {required ImageProvider image,
-        required double width,
-        required int index,
-        required List<File> media,
-        bool isPhoto = true}) {
+      required double width,
+      required int index,
+      required List<File> media,
+      bool isPhoto = true}) {
     return InkWell(
       onTap: () {
         if (mounted &&
@@ -493,11 +492,11 @@ class _ImagesListState extends State<_ImagesList> {
         ),
         child: !isPhoto
             ? const Center(
-          child: Icon(
-            Icons.play_arrow_rounded,
-            color: Colors.white,
-          ),
-        )
+                child: Icon(
+                  Icons.play_arrow_rounded,
+                  color: Colors.white,
+                ),
+              )
             : null,
       ),
     );
@@ -507,7 +506,7 @@ class _ImagesListState extends State<_ImagesList> {
 class _VideoTimer extends StatefulWidget {
   final Duration duration;
 
-  _VideoTimer({required this.duration});
+  const _VideoTimer({required this.duration});
 
   @override
   State<_VideoTimer> createState() => __VideoTimerState();
@@ -530,7 +529,7 @@ class __VideoTimerState extends State<_VideoTimer> {
         int seconds = (timer.tick % 60);
         setState(() {
           _timerText =
-          '${minutes.toString().padLeft(2, '0')} : ${seconds.toString().padLeft(2, '0')}';
+              '${minutes.toString().padLeft(2, '0')} : ${seconds.toString().padLeft(2, '0')}';
         });
         CliLogger.info(_timerText);
       }
@@ -562,7 +561,7 @@ class __VideoTimerState extends State<_VideoTimer> {
 class _VideoCircularIndicator extends StatefulWidget {
   final Duration duration;
 
-  _VideoCircularIndicator({required this.duration});
+  const _VideoCircularIndicator({required this.duration});
 
   @override
   State<_VideoCircularIndicator> createState() =>

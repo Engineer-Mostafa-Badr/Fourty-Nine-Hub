@@ -685,7 +685,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
   final TinderRepository tinderRepository;
   int _currentPage = 1;
   bool _isLoadingMore = false;
-  bool _hasMoreData = true;
+  final bool _hasMoreData = true;
   String? _currentGender;
 
   TinderViewCubit({required this.tinderRepository})

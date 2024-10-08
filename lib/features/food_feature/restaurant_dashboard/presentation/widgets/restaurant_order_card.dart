@@ -2,11 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/data/models/restaurant_orders_model.dart';
-import 'package:fourtyninehub/features/requests_history/domain/entities/food_order_entity.dart';
-import 'package:fourtyninehub/res/style/const.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
@@ -28,14 +24,14 @@ class RestaurantOrderCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // _buildRestaurantInfoWidget(),
-          Sizer(),
+          const Sizer(),
           // _buildAddressWidget(),
           Label(
             text: 'Meals',
             style: Styles.mediumText(fontWeight: FontWeight.bold),
           ),
           // _buildMealsWidget(),
-          Sizer(),
+          const Sizer(),
           Row(
             children: [
               Expanded(
@@ -48,7 +44,7 @@ class RestaurantOrderCard extends StatelessWidget {
                           subTitle: 'Do you want to approve this request?',
                           action: () => (int v) {},
                           context: context))),
-              Sizer(),
+              const Sizer(),
               Expanded(
                   child: AppButton(
                       icon: Icons.clear,

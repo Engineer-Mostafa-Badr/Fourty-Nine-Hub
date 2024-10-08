@@ -3377,42 +3377,23 @@
 //   }
 // }
 
-import 'dart:async';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chewie/chewie.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_items.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:video_player/video_player.dart';
 
-import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
-import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../res/assets/assets.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
-import '../../../tinder/data/shared/shared.dart';
-import '../../../tinder/presentation/pages/user_profile.dart';
-import '../../../twitter/presentation/widgets/report_view.dart';
-import 'audio_screen.dart';
 
 class ReelView extends StatelessWidget {
   const ReelView({super.key});
@@ -3737,7 +3718,7 @@ class RoundedButtonWithImage extends StatelessWidget {
           child: ElevatedButton.icon(
               onPressed: onPressed,
               style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll<Color>(
+                  backgroundColor: WidgetStatePropertyAll<Color>(
                       Colors.blueGrey.withOpacity(0.2))),
               icon: const Icon(
                 FontAwesomeIcons.music,

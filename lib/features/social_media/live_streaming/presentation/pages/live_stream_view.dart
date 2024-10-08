@@ -8,7 +8,6 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/liveview/gifts/simple_gifts_sheet.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/pk_widgets/configs.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/pk_widgets/surfuce.dart';
-import 'package:fourtyninehub/res/style/const.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 // import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_bottom_navigator.dart';
@@ -59,7 +58,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
     );
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ZegoGiftManager().service.init(
-            appID: context.read<SecretsCubit>().state.secrets?.zegoAppId??0,
+            appID: context.read<SecretsCubit>().state.secrets?.zegoAppId ?? 0,
             liveID: widget.liveID,
             localUserID: context.read<UserCubit>().state.data!.id,
             localUserName: context.read<UserCubit>().state.data!.fullName,

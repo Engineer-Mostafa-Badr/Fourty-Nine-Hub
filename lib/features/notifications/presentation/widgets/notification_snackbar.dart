@@ -16,7 +16,8 @@ notificationSnackBar({
     description: Text(trimmedBody),
     onDismiss: () {},
     onNotificationPressed: () {
-      context.push(notificationEntity.path ?? '', extra: notificationEntity.payload);
+      context.push(notificationEntity.path ?? '',
+          extra: notificationEntity.payload);
     },
     onCloseButtonPressed: () {},
     toastDuration: const Duration(seconds: 7),

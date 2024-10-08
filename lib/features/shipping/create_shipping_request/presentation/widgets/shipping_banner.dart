@@ -39,7 +39,6 @@ class _ShippingBannerState extends State<ShippingBanner> {
   @override
   Widget build(BuildContext context) {
     return MainCategoryBanner(
-
       // noCount: true,
       onFavorite: () {
         if (isFavrote) {

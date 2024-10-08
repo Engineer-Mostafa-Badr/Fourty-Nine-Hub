@@ -9,7 +9,8 @@ part 'view_all_pick_me_state.dart';
 
 class ViewAllPickMeCubit extends Cubit<ViewAllPickMeState> {
   final ViewAllPickMeUseCase viewAllPickMeUseCase;
-  ViewAllPickMeCubit({required this.viewAllPickMeUseCase}) : super(ViewAllPickMeInitial());
+  ViewAllPickMeCubit({required this.viewAllPickMeUseCase})
+      : super(ViewAllPickMeInitial());
   List<PickMeCardEntity> cards = [];
   int page = 1;
   Future<void> getAllPickMe() async {

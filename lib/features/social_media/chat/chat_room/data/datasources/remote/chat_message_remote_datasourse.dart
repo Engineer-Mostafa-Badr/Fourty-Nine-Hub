@@ -143,8 +143,6 @@ class MessagesRemoteDataSourceImplementation
           mediaIds.add(id);
         }
       }
-      
-
 
       _socket.connect();
       _socket.emit(
@@ -157,7 +155,8 @@ class MessagesRemoteDataSourceImplementation
           "groupId": null,
           "replyMessageId": params.replyMessageId,
           "oneTimeView": params.oneTimeView,
-          "sharedContacts": params.sharedContacts.map((contact) => contact.toJson()).toList(),
+          "sharedContacts":
+              params.sharedContacts.map((contact) => contact.toJson()).toList(),
         }),
       );
 

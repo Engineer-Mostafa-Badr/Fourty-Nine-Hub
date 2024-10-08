@@ -1,8 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity/topic_entity.dart';
 
-import '../../../tinder/data/models/gift_model.dart';
 import 'goal_entity.dart';
 
 class LiveEntity extends Equatable {

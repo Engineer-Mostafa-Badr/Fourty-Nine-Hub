@@ -128,16 +128,13 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class RestaurantHeader extends StatelessWidget {
   final Restaurant restaurant;
 
-  const RestaurantHeader({Key? key, required this.restaurant})
-      : super(key: key);
+  const RestaurantHeader({super.key, required this.restaurant});
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +181,6 @@ class RestaurantHeader extends StatelessWidget {
                   style: Styles.headerText(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-
                   ),
                 ),
                 Row(

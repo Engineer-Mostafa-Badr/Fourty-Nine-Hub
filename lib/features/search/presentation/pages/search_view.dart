@@ -12,6 +12,8 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
 class SearchView extends StatefulWidget {
+  const SearchView({super.key});
+
   @override
   _SearchViewState createState() => _SearchViewState();
 }

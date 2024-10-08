@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -26,7 +25,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
             text: LocaleKeys.theCommercialRegister.tr(),
             style: Styles.headerText(),
           ),
-          Sizer(),
+          const Sizer(),
           FittedBox(
             child: Row(
               children: [
@@ -37,10 +36,12 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                   child:
                       BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                     buildWhen: (previous, current) =>
-                        current is CreateRestaurantUploadLicenseFirstPageImage ||
+                        current
+                            is CreateRestaurantUploadLicenseFirstPageImage ||
                         current is CreateRestaurantInitial,
                     builder: (context, state) {
-                      if (state is CreateRestaurantUploadLicenseFirstPageImage) {
+                      if (state
+                          is CreateRestaurantUploadLicenseFirstPageImage) {
                         return ImagePickerPlaceholder(
                           image: Image.file(
                             File(state.file.path),
@@ -58,7 +59,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                     },
                   ),
                 ),
-                Sizer(),
+                const Sizer(),
                 InkWell(
                   onTap: () async {
                     await createRestaurantCubit.uploadLicenseSecondPageImage();
@@ -66,10 +67,12 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                   child:
                       BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                     buildWhen: (previous, current) =>
-                        current is CreateRestaurantUploadLicenseSecondPageImage ||
+                        current
+                            is CreateRestaurantUploadLicenseSecondPageImage ||
                         current is CreateRestaurantInitial,
                     builder: (context, state) {
-                      if (state is CreateRestaurantUploadLicenseSecondPageImage) {
+                      if (state
+                          is CreateRestaurantUploadLicenseSecondPageImage) {
                         return ImagePickerPlaceholder(
                           image: Image.file(
                             File(state.file.path),
@@ -87,7 +90,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                     },
                   ),
                 ),
-                Sizer(),
+                const Sizer(),
                 InkWell(
                   onTap: () async {
                     await createRestaurantCubit.uploadLicenseThiredPageImage();
@@ -95,10 +98,12 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                   child:
                       BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                     buildWhen: (previous, current) =>
-                        current is CreateRestaurantUploadLicenseThiredPageImage ||
+                        current
+                            is CreateRestaurantUploadLicenseThiredPageImage ||
                         current is CreateRestaurantInitial,
                     builder: (context, state) {
-                      if (state is CreateRestaurantUploadLicenseThiredPageImage) {
+                      if (state
+                          is CreateRestaurantUploadLicenseThiredPageImage) {
                         return ImagePickerPlaceholder(
                           image: Image.file(
                             File(state.file.path),

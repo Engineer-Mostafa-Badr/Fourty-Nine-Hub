@@ -3,28 +3,30 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 
 import '../../../../../core/abstract/use_case.dart';
-import '../../../tinder/data/models/gift_model.dart';
 import '../entity/live_create_response_entity.dart';
 import '../repository/live_repository.dart';
 
-class CreateLiveUseCase extends UseCase<LiveCreateResponseEntity, CreateLiveParams> {
+class CreateLiveUseCase
+    extends UseCase<LiveCreateResponseEntity, CreateLiveParams> {
   final LiveRepository _liveRepository;
 
-  CreateLiveUseCase( LiveRepository liveRepository)
+  CreateLiveUseCase(LiveRepository liveRepository)
       : _liveRepository = liveRepository;
   @override
-  Future<Either<Failure, LiveCreateResponseEntity>> call(CreateLiveParams params) {
+  Future<Either<Failure, LiveCreateResponseEntity>> call(
+      CreateLiveParams params) {
     return _liveRepository.createLive(params);
   }
 }
+
 class CreateLiveParams {
   final String title;
   final String? topicId;
   final String? description;
   final List<GoalParams>? goals;
 
-  CreateLiveParams({required this.title,  this.topicId,  this.description,  this.goals});
-
+  CreateLiveParams(
+      {required this.title, this.topicId, this.description, this.goals});
 
   Map<String, dynamic> toJson() {
     return {
@@ -35,15 +37,13 @@ class CreateLiveParams {
     };
   }
 }
-class GoalParams{
+
+class GoalParams {
   final String giftId;
   final int amount;
   GoalParams({required this.giftId, required this.amount});
 
   Map<String, dynamic> toJson() {
-    return {
-      "giftId": giftId,
-      "goal": amount
-    };
+    return {"giftId": giftId, "goal": amount};
   }
 }

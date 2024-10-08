@@ -16,7 +16,8 @@ class CreateRestaurantNameField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
-            onChanged: (value) => restaurantLoginCubit.saveTextEditingController(),
+            onChanged: (value) =>
+                restaurantLoginCubit.saveTextEditingController(),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return null;
@@ -61,15 +62,16 @@ class CreateRestaurantNameField extends StatelessWidget {
               focusedErrorBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 borderSide: BorderSide(
-                  color: Colors.red, // Keep red border when focused with an error
+                  color:
+                      Colors.red, // Keep red border when focused with an error
                 ),
               ),
               filled: false,
-              contentPadding: const EdgeInsets.all(10), // Padding inside the text field
+              contentPadding:
+                  const EdgeInsets.all(10), // Padding inside the text field
               hintText: LocaleKeys.restaurantName.tr(), // Hint text
             ),
-          )
-,
+          ),
           Visibility(
             visible: state is ValidationState && (state.isName ?? false),
             child: const Padding(

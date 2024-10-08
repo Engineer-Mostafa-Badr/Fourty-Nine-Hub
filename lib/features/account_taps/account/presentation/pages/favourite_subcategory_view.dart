@@ -34,30 +34,29 @@ class FavSubCategoryView extends StatelessWidget {
                 List<FavouriteSubcategoryEntity> data) {
               if (data.isNotEmpty) {
                 return GridView.builder(
-                itemCount: data.length,
-                controller: scrollController,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, childAspectRatio: 1),
-                itemBuilder: (context, index) => FavouriteSubCategoryCard(
-                  item: data[index],
-                  onFav: () async {
-                    var result = await controller
-                        .toggleSubCategoryToFavorites(data[index].id);
-                    if (result == true) {
-                      data.removeWhere(
-                          (element) => element.id == data[index].id);
-                    }
-                  },
-                ),
-              );
+                  itemCount: data.length,
+                  controller: scrollController,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, childAspectRatio: 1),
+                  itemBuilder: (context, index) => FavouriteSubCategoryCard(
+                    item: data[index],
+                    onFav: () async {
+                      var result = await controller
+                          .toggleSubCategoryToFavorites(data[index].id);
+                      if (result == true) {
+                        data.removeWhere(
+                            (element) => element.id == data[index].id);
+                      }
+                    },
+                  ),
+                );
               } else {
                 return Center(
-                  child: Label(
-                      style: Styles.mediumText(fontSize: 60.sp),
-                      maxLines: 3,
-                      textAlign: TextAlign.center,
-                      text:
-                      LocaleKeys.noFavouriteSubCategory.localize));
+                    child: Label(
+                        style: Styles.mediumText(fontSize: 60.sp),
+                        maxLines: 3,
+                        textAlign: TextAlign.center,
+                        text: LocaleKeys.noFavouriteSubCategory.localize));
               }
             },
             fetchData: (PaginationParams paginationParams) => context

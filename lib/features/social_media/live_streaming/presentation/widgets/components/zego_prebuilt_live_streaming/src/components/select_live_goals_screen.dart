@@ -15,8 +15,6 @@ import '../../../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../../../core/messages/messages.dart';
 import '../../../../../../../../../res/style/app_colors.dart';
-import '../../../../../../../../../routes/pages.dart';
-import '../../../../../../../../../service_locator/service_locator.dart';
 import '../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../../../../../zoom/presentation/controller/stream_cubit.dart';
 import '../../../../../../../../zoom/presentation/controller/stream_state.dart';
@@ -33,7 +31,8 @@ class SelectLiveGoalsScreen extends StatefulWidget {
 }
 
 class _SelectLiveGoalsScreenState extends State<SelectLiveGoalsScreen> {
-  late TextEditingController _descriptionController = TextEditingController();
+  late final TextEditingController _descriptionController =
+      TextEditingController();
 
   //dispose
   @override

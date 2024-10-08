@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
@@ -342,7 +341,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                         children: [
                                           Text(
                                             "Car Picture".tr(),
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 17,
                                                 color: AppColors.PRIMARY_COLOR,
                                                 fontWeight: FontWeight.w600),
@@ -408,7 +407,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                         children: [
                                           Label(
                                             text: "ID".tr(),
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 17,
                                                 color: AppColors.PRIMARY_COLOR,
                                                 fontWeight: FontWeight.w600),

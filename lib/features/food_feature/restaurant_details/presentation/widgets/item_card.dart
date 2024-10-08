@@ -140,11 +140,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
 
@@ -153,10 +151,10 @@ class ItemCard extends StatefulWidget {
   final RestaurantMenu meal;
 
   const ItemCard({
-    Key? key,
+    super.key,
     required this.meal,
     required this.restaurantId,
-  }) : super(key: key);
+  });
 
   @override
   State<ItemCard> createState() => _ItemCardState();

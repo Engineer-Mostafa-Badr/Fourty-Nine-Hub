@@ -1,7 +1,8 @@
 //import 'package:admob_flutter/admob_flutter.dart';
 
 class UIConst {
-  static const String googleMapAPIKey = 'AIzaSyCSzHt1y3RDKvC2D67mF-WJdyZKE9hBIxA';
+  static const String googleMapAPIKey =
+      'AIzaSyCSzHt1y3RDKvC2D67mF-WJdyZKE9hBIxA';
   static const String mapPlaceHolderImage =
       'https://developers.google.com/static/maps/images/docs-landing-get-started-hero.png';
   static const double radius = 10.0;
@@ -10,7 +11,8 @@ class UIConst {
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc_iRDeJNz8_915cxSL3MMzPI_J5IAtDoeP-ATU4cJrg&s';
   static const String profilePlaceHolder =
       'https://st3.depositphotos.com/9998432/13335/v/450/depositphotos_133352010-stock-illustration-default-placeholder-man-and-woman.jpg';
-  static const String imagePlaceHolder = 'https://archive.org/download/placeholder-image/placeholder-image.jpg';
+  static const String imagePlaceHolder =
+      'https://archive.org/download/placeholder-image/placeholder-image.jpg';
   static const String placeholderText =
       'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups. Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups. Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups. Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.';
   static const String mrbeast =
@@ -18,7 +20,8 @@ class UIConst {
 
   static const String restaurantPlaceHolder =
       'https://www.mowglistreetfood.com/wp-content/uploads/2023/01/Landing_image_Desktop.jpg';
-  static const String burgerPNG = 'https://www.pngall.com/wp-content/uploads/2016/03/Food-PNG-File.png';
+  static const String burgerPNG =
+      'https://www.pngall.com/wp-content/uploads/2016/03/Food-PNG-File.png';
   static const String productImage =
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBxSZEqruWTMC6Kuq6Ia0ZRe5s2VAxdQPU_3jTP5X3as0YTVTZ6mqW6uhwD1QHyxv5dA4&usqp=CAU';
 
@@ -26,7 +29,8 @@ class UIConst {
   static const String quraanWeb = 'https://surahquran.com/';
   static const String azkar = 'https://www.islambook.com/azkar/';
 
-  static const String appSign = 'c36fcee81d507f8b23d90f66b5d93119735f6c3c451a8562f8163a76cc24943c';
+  static const String appSign =
+      'c36fcee81d507f8b23d90f66b5d93119735f6c3c451a8562f8163a76cc24943c';
   static const String whiteBoard = 'https://app.ziteboard.com/';
   static const int appId = 20063182;
 
@@ -35,7 +39,8 @@ class UIConst {
   static const String chatGreetId = '668e7af1e8cfec5bcc752af8';
 
   // static const String googleGeocodingApiKey = 'AIzaSyCSzHt1y3RDKvC2D67mF-WJdyZKE9hBIxA';
-  static const String googleGeocodingApiKey = 'AIzaSyBMtQpwW-qKq89zuXJr62e9iQC5cVmvsWg';
+  static const String googleGeocodingApiKey =
+      'AIzaSyBMtQpwW-qKq89zuXJr62e9iQC5cVmvsWg';
   static const String tripJoinCategoryId = '62ea00e269ea29c91dfc390c';
   static const String pickmeCategoryId = '62ea008d69ea29c91dfc3908';
   static const String addTripJoinCategoryId = '62ea00e269ea29c91dfc390c';

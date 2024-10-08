@@ -13,7 +13,8 @@ class AdDetailsRepoImpl implements AdDetailsRepo {
   final AdDetailsRemoteDataSource _remoteDataSource;
   AdDetailsRepoImpl(this._remoteDataSource);
   @override
-  Future<Either<Failure, AddDetailsModel>> getAdDetails({required String id}) async {
+  Future<Either<Failure, AddDetailsModel>> getAdDetails(
+      {required String id}) async {
     return await _remoteDataSource.getAdDetails(id: id);
   }
 

@@ -12,13 +12,13 @@ class SubTabModel extends SubTabEntity {
 
   factory SubTabModel.fromJson(Map<String, dynamic> json) {
     return SubTabModel(
-      id: json['_id'] ??'',
-      userId: json['userId'] ??'',
-      auction: json['Auction'] ??false,
-      carpool: json['Carpool'] ??false,
-      chance: json['Chance'] ??false,
-      installment: json['Installment'] ??false,
-      tripJoin: json['TripJoin'] ??false,
+      id: json['_id'] ?? '',
+      userId: json['userId'] ?? '',
+      auction: json['Auction'] ?? false,
+      carpool: json['Carpool'] ?? false,
+      chance: json['Chance'] ?? false,
+      installment: json['Installment'] ?? false,
+      tripJoin: json['TripJoin'] ?? false,
     );
   }
 }
