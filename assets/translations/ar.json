@@ -887,7 +887,9 @@
   "expiredRequests": "طلبات منتهية الصلاحية",
   "filter": "تصفية",
   "beAStar": "كن نجم",
-  "select": "اختيار"
-
+  "select": "اختيار",
+  "pleaseEnterTheAmount": "الرجاء إدخال المبلغ",
+  "selectBankName": "حدد اسم البنك",
+  "pleaseSelectPaymentMethod": "الرجاء تحديد طريقة الدفع"
 
 }

@@ -18,7 +18,7 @@ class RequestInstapayParams {
   final String amount;
   final String payoutMethod;
   String? phoneNumber;
-  final String payoutSource;
+   String payoutSource;
   String? bankAccountNumber;
   String? bankName;
   String? cardNumber;
@@ -27,7 +27,7 @@ class RequestInstapayParams {
   RequestInstapayParams(
       {required this.amount,
       required this.payoutMethod,
-      required this.payoutSource,
+       this.payoutSource='main_wallet',
         this.cardNumber,
         this.bankName,
         this.bankAccountNumber,

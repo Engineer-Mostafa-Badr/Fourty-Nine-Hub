@@ -901,7 +901,12 @@ class CodegenLoader extends AssetLoader{
   "subscribed": "مشترك",
   "unsubscribed": "غير مشرك",
   "expiredRequests": "طلبات منتهية الصلاحية",
-  "other": "أخرى"
+  "filter": "تصفية",
+  "beAStar": "كن نجم",
+  "select": "اختيار",
+  "pleaseEnterTheAmount": "الرجاء إدخال المبلغ",
+  "selectBankName": "حدد اسم البنك",
+  "pleaseSelectPaymentMethod": "الرجاء تحديد طريقة الدفع"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1792,7 +1797,13 @@ static const Map<String,dynamic> en = {
   "idExpiryDate": "ID Expiry Date",
   "expiredRequests": "Expired Requests",
   "licenseFrontAndBack": "Upload Your License (Front and Back)",
-  "other": "Others"
+  "other": "Others",
+  "filter": "Filter",
+  "beAStar": "Be A Star",
+  "select": "Select",
+  "pleaseEnterTheAmount": "Please enter the amount",
+  "selectBankName": "Select Bank Name",
+  "pleaseSelectPaymentMethod": "Please select a payment method"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

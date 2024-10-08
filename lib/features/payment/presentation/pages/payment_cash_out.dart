@@ -211,7 +211,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
         return const PaymentYellowCard();
       default:
         return Center(
-          child: Text('Please select a payment method.'),
+          child: Text(LocaleKeys.pleaseSelectPaymentMethod.localize),
         );
     }
   }

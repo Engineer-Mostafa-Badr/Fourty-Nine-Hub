@@ -878,5 +878,8 @@ abstract class  LocaleKeys {
   static const filter = 'filter';
   static const beAStar = 'beAStar';
   static const select = 'select';
+  static const pleaseEnterTheAmount = 'pleaseEnterTheAmount';
+  static const selectBankName = 'selectBankName';
+  static const pleaseSelectPaymentMethod = 'pleaseSelectPaymentMethod';
 
 }
