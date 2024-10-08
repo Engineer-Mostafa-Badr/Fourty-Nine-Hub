@@ -20,13 +20,14 @@ class ProviderAds extends StatefulWidget {
 class _ProviderAdsState extends State<ProviderAds> {
 
   @override
-  void initState() {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     widget.controller.loadData(
         subCategoryId: widget.params.subCategory.id,
         filter:
-        widget.params.subCategory.hasAuction == true ? 'sale' : 'provider');
+        widget.params.subCategory.hasAuction == true ? 'sale' : 'provider', fromTab: false);
 
-    super.initState();
+    // super.initState();
   }
 
   @override

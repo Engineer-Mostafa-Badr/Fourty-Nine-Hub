@@ -40,7 +40,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
     context.read<AdvertisementCubit>().loadData(
         subCategoryId: widget.params.subCategory.id,
         filter:
-        widget.params.subCategory.hasAuction == true ? 'sale' : 'provider');
+        widget.params.subCategory.hasAuction == true ? 'sale' : 'provider', fromTab: true);
 
     _tabController.addListener(() {
       if (_tabController.index == 0) {
@@ -48,12 +48,12 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
             subCategoryId: widget.params.subCategory.id,
             filter: widget.params.subCategory.hasAuction == true
                 ? 'sale'
-                : 'provider');
+                : 'provider', fromTab: true);
       } else {
         context.read<AdvertisementCubit>().loadData(
             subCategoryId: widget.params.subCategory.id,
             filter:
-                widget.params.subCategory.hasAuction == true ? 'rent' : 'user');
+                widget.params.subCategory.hasAuction == true ? 'rent' : 'user', fromTab: true);
       }
     });
   }
@@ -98,67 +98,81 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
               },
               builder: (context, state) {
         final controller = context.read<AdvertisementCubit>();
-        return Column(
-          children: [
-            const Sizer(),
-            SizedBox(
+        return SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  const Sizer(),
+                  SizedBox(
+                      width: double.infinity,
+                      child: MainCategoryBanner(
+                        category: widget.params.mainCategory,
+                        onFavorite: () {},
+                        isFavorite: widget.params.mainCategory.isFavorite,
+                      )),
+                  const Sizer(),
+                  Label(
+                    text: widget.params.subCategory.name,
+                    style: Styles.headerText(),
+                  ),
+                  const Sizer(),
+                  TabBar(
+                    controller: _tabController,
+                    labelColor: AppColors.SECONDARY_COLOR,
+                    unselectedLabelColor: Theme.of(context).primaryColor,
+                    indicatorColor: AppColors.SECONDARY_COLOR,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    labelStyle: Styles.headerText(),
+                    onTap: (i) {
+                      if (i == 1) {
+                        controller.loadData(
+                            subCategoryId: widget.params.subCategory.id,
+                            filter: widget.params.subCategory.hasAuction == true
+                                ? 'rent'
+                                : 'user', fromTab: true);
+                      } else {
+                        controller.loadData(
+                            subCategoryId: widget.params.subCategory.id,
+                            filter: widget.params.subCategory.hasAuction == true
+                                ? 'sale'
+                                : 'provider', fromTab: true);
+                      }
+                    },
+                    tabs: [
+                      Tab(
+                          text: widget.params.subCategory.hasAuction == true
+                              ? LocaleKeys.sale.localize
+                              : LocaleKeys.provider.localize),
+                      Tab(
+                          text: widget.params.subCategory.hasAuction == true
+                              ? LocaleKeys.rent.localize
+                              : LocaleKeys.user.localize),
+                    ],
+                  ),
+                  state.status == AdsStates.success
+                      ? Expanded(
+                          child: TabBarView(
+                            physics: const NeverScrollableScrollPhysics(),
+                            controller: _tabController,
+                            children: [
+                              ProviderAdsView(params: widget.params, userType: userType, controller: controller,),
+                              UserAdsView(params: widget.params, userType: userType,),
+                            ],
+                          ))
+                      :state.status == AdsStates.loading?const Center(child: CircularProgressIndicator(),): const SizedBox.shrink()
+                ],
+              ),
+              if(state.isFilterLoading) Container(
                 width: double.infinity,
-                child: MainCategoryBanner(
-                  category: widget.params.mainCategory,
-                  onFavorite: () {},
-                  isFavorite: widget.params.mainCategory.isFavorite,
-                )),
-            const Sizer(),
-            Label(
-              text: widget.params.subCategory.name,
-              style: Styles.headerText(),
-            ),
-            const Sizer(),
-            TabBar(
-              controller: _tabController,
-              labelColor: AppColors.SECONDARY_COLOR,
-              unselectedLabelColor: Theme.of(context).primaryColor,
-              indicatorColor: AppColors.SECONDARY_COLOR,
-              indicatorSize: TabBarIndicatorSize.tab,
-              labelStyle: Styles.headerText(),
-              onTap: (i) {
-                if (i == 1) {
-                  controller.loadData(
-                      subCategoryId: widget.params.subCategory.id,
-                      filter: widget.params.subCategory.hasAuction == true
-                          ? 'rent'
-                          : 'user');
-                } else {
-                  controller.loadData(
-                      subCategoryId: widget.params.subCategory.id,
-                      filter: widget.params.subCategory.hasAuction == true
-                          ? 'sale'
-                          : 'provider');
-                }
-              },
-              tabs: [
-                Tab(
-                    text: widget.params.subCategory.hasAuction == true
-                        ? LocaleKeys.sale.localize
-                        : LocaleKeys.provider.localize),
-                Tab(
-                    text: widget.params.subCategory.hasAuction == true
-                        ? LocaleKeys.rent.localize
-                        : LocaleKeys.user.localize),
-              ],
-            ),
-            state.status == AdsStates.success
-                ? Expanded(
-                    child: TabBarView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      controller: _tabController,
-                      children: [
-                        ProviderAdsView(params: widget.params, userType: userType, controller: controller,),
-                        UserAdsView(params: widget.params, userType: userType,),
-                      ],
-                    ))
-                : const SizedBox.shrink()
-          ],
+                height: double.infinity,
+                color: Colors.black.withOpacity(0.3),
+                child: const Center(child: CircularProgressIndicator(color: Colors.white,),),
+              )
+            ],
+          ),
         );
       }),
     );

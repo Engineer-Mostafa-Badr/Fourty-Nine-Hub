@@ -23,12 +23,13 @@ class ProviderFilterAds extends StatefulWidget {
 class _ProviderFilterAdsState extends State<ProviderFilterAds> {
 
   @override
-  void initState() {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     widget.controller.loadFilterData(
         model: widget.model,
         filter:widget.userType);
 
-    super.initState();
+    // super.initState();
   }
 
   @override
