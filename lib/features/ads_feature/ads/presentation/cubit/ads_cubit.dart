@@ -50,14 +50,15 @@ class AdvertisementCubit extends Cubit<AdsState> {
   // }
 
   void loadData({required String subCategoryId, required String filter,required bool fromTab}) async {
-    // if(fromTab==true){
-    //   emit(state.copyWith(status: AdsStates.loading));
-    // }
+    if(fromTab==true){
+      emit(state.copyWith(status: AdsStates.loading));
+    }
     await getAds(subCategoryId: subCategoryId, filter: filter, page: 1);
     adsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
       getAds(subCategoryId: subCategoryId, filter: filter, page: pageKey);
     });
+    emit(state.copyWith( status: AdsStates.success));
   }
 
   void loadFilterData({required FilterModel model,required String filter,}) async {
@@ -79,6 +80,9 @@ class AdvertisementCubit extends Cubit<AdsState> {
   filterAds(
       {required FilterModel model,required int page,required String filter,}) async
   {
+    if(page==1){
+      adsPagingController.itemList=[];
+    }
     // emit(state.copyWith(status: AdsStates.filterLoading));
     print("object");
     print(page);
@@ -114,6 +118,9 @@ class AdvertisementCubit extends Cubit<AdsState> {
       {required String subCategoryId,
       required String filter,
       required int page}) async {
+    if(page==1){
+      adsPagingController.itemList=[];
+    }
     final response = await _getAdsUseCase(GetAdsParams(
         subCategoryId: subCategoryId, filter: filter, page: page, limit: 10));
     response
@@ -135,7 +142,6 @@ class AdvertisementCubit extends Cubit<AdsState> {
         final nextPageKey = page + 1;
         adsPagingController.appendPage(data, nextPageKey);
       }
-      emit(state.copyWith(ads: data, status: AdsStates.success));
     });
   }
 
