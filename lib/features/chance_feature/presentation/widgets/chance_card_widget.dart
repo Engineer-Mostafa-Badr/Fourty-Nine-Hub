@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/features/chance_feature/domain/entity/image_chance_entity.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/pages/chance_details_view.dart';
-import 'package:fourtyninehub/features/chance_feature/presentation/widgets/image_card_widget.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/subscribe_widget_in_card.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/rate_product_widget.dart';
 
@@ -37,7 +35,7 @@ class ChanceCardWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    chance.description ??'',
+                    chance.description,
                     style:Styles.mediumText(
                       fontSize: 50.sp
                     ),
