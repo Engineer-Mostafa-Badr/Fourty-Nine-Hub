@@ -18,17 +18,17 @@ class ProviderAds extends StatefulWidget {
 }
 
 class _ProviderAdsState extends State<ProviderAds> {
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    widget.controller.loadData(
-        subCategoryId: widget.params.subCategory.id,
-        filter:
-        widget.params.subCategory.hasAuction == true ? 'sale' : 'provider', fromTab: false);
-
-    // super.initState();
-  }
+  //
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   widget.controller.loadData(
+  //       subCategoryId: widget.params.subCategory.id,
+  //       filter:
+  //       widget.params.subCategory.hasAuction == true ? 'sale' : 'provider', fromTab: false);
+  //
+  //   // super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {

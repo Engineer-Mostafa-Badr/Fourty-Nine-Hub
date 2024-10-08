@@ -19,15 +19,15 @@ class UserAds extends StatefulWidget {
 
 class _UserAdsState extends State<UserAds> {
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    context.read<AdvertisementCubit>().loadData(
-        subCategoryId: widget.params.subCategory.id,
-        filter:widget.userType, fromTab: false);
-
-    // super.initState();
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   context.read<AdvertisementCubit>().loadData(
+  //       subCategoryId: widget.params.subCategory.id,
+  //       filter:widget.userType, fromTab: false);
+  //
+  //   // super.initState();
+  // }
 
 
   @override
