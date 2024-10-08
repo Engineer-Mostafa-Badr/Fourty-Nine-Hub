@@ -913,7 +913,7 @@ class CodegenLoader extends AssetLoader{
   "enterTitle": "ادخل العنوان",
   "enterDescription": "ادخل وصف",
   "payAtLeast1": "ادفع 1 جنيه مصري على الأقل ونشر منتج أحلامك الذي تريد شراءه!!!",
-  "oneUserWillR": "سيفوز مستخدم واحد بشكل عشوائي في كل دورة شهرية",
+  "oneUserWillR": "سيفوز مستخدم واحد بشكل عشوائي في كل شهر",
   "moreSubscriptionMore": "كلما زاد الاشتراك زادت الفرصة!"
 };
 static const Map<String,dynamic> en = {
