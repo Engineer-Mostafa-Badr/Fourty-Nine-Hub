@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -40,7 +41,9 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<PaymentCacheOutCubit>(
-      create: (BuildContext context) => serviceLocator()..fetchAllBank(),
+      create: (BuildContext context) =>
+      serviceLocator()
+        ..fetchAllBank(),
       child: BlocConsumer<PaymentCacheOutCubit, PaymentCacheOutState>(
         listener: (BuildContext context, state) {
           if (state.status == StateStatus.success) {
@@ -69,8 +72,22 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
                   DropdownButtonFormField<String>(
                     borderRadius: BorderRadius.circular(20.r),
                     decoration: InputDecoration(
-                        labelText: LocaleKeys.chooseInstaPayOption.localize),
-                    dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+                        fillColor: Colors.transparent,
+                        labelText: LocaleKeys.chooseInstaPayOption.localize,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Theme
+                            .of(context)
+                            .primaryColor),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Theme
+                            .of(context)
+                            .primaryColor),
+                      ),
+                    ),
+                    dropdownColor: Theme
+                        .of(context)
+                        .scaffoldBackgroundColor,
                     items: [
                       DropdownMenuItem(
                         value: 'instapay',
@@ -97,11 +114,9 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
                   ),
                   const Sizer(),
                   if (selectedOption == 'instapay') ...[
-                    TextFormField(
+                    buildInputField(
                       controller: amountController,
-                      decoration: InputDecoration(
-                        labelText: LocaleKeys.amount.localize,
-                      ),
+                      labelText: LocaleKeys.amount.localize,
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -111,21 +126,16 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
                       },
                     ),
                     const Sizer(),
-                    TextFormField(
+                    buildInputField(
                       controller: instaPayController,
-                      decoration: InputDecoration(
-                        labelText:
-                            LocaleKeys.instaPayUsernameOrShortcut.localize,
-                      ),
+                      labelText: LocaleKeys.instaPayUsernameOrShortcut.localize,
                       validator: _validateUsername,
                     ),
                   ],
                   if (selectedOption == 'phone') ...[
-                    TextFormField(
+                    buildInputField(
                       controller: amountController,
-                      decoration:  InputDecoration(
-                        labelText: LocaleKeys.amount.localize,
-                      ),
+                      labelText: LocaleKeys.amount.localize,
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -135,45 +145,17 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
                       },
                     ),
                     const Sizer(),
-                    TextFormField(
+                    buildInputField(
                       controller: phoneController,
-                      decoration: InputDecoration(
-                        labelText: LocaleKeys.phoneNumber.localize,
-                      ),
+                      labelText: LocaleKeys.phoneNumber.localize,
                       validator: _validatePhoneNumber,
                     ),
-                    Row(
-                      children: [
-                        Label(text: '${LocaleKeys.type.localize} '),
-                        Radio(
-                          value: true,
-                          groupValue: isPhoneWallet,
-                          onChanged: (value) {
-                            setState(() {
-                              isPhoneWallet = value!;
-                            });
-                          },
-                        ),
-                        Label(text: LocaleKeys.wallet.localize),
-                        Radio(
-                          value: false,
-                          groupValue: isPhoneWallet,
-                          onChanged: (value) {
-                            setState(() {
-                              isPhoneWallet = value!;
-                            });
-                          },
-                        ),
-                        Label(text: LocaleKeys.account.localize),
-                      ],
-                    ),
+                    buildPhoneTypeSelection(),
                   ],
                   if (selectedOption == 'bank') ...[
-                    TextFormField(
+                    buildInputField(
                       controller: amountController,
-                      decoration:  InputDecoration(
-                        labelText: LocaleKeys.amount.localize,
-                      ),
+                      labelText: LocaleKeys.amount.localize,
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -188,81 +170,75 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
                       value: selectedBank,
                       iconSize: 40.sp,
                       hint: Text(
-                        context.locale == Locales.english?  selectedBank?.nameEn ?? 'Select Bank Name':selectedBank?.nameAr ?? 'حدد اسم البنك',
+                        context.locale == Locales.english
+                            ? selectedBank?.nameEn ?? 'Select Bank Name'
+                            : selectedBank?.nameAr ?? 'حدد اسم البنك',
                         style: TextStyle(
-                            color: Theme.of(context)
-                                .primaryColor), // Match text color
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
+                        ),
                       ),
                       menuMaxHeight: 400.h,
-                      dropdownColor: Theme.of(context).scaffoldBackgroundColor,
-                      // Dropdown background color
+                      dropdownColor: Theme
+                          .of(context)
+                          .scaffoldBackgroundColor,
                       onChanged: (ListBankEntity? value) {
                         setState(() {
                           selectedBank = value;
-                          if (selectedBank != null) {
-                            print('Selected class: ${selectedBank!.id}');
-                          } else {
-                            print('No class selected');
-                          }
                         });
                       },
                       items: (state != null)
                           ? state.banks!.map((banks) {
-                              return DropdownMenuItem<ListBankEntity>(
-                                value: banks,
-                                child: Text(
-                                  context.locale == Locales.english
-                                      ? banks.nameEn
-                                      : banks.nameAr,
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .primaryColor), // Match text color
-                                ),
-                              );
-                            }).toList()
+                        return DropdownMenuItem<ListBankEntity>(
+                          value: banks,
+                          child: Text(
+                            context.locale == Locales.english
+                                ? banks.nameEn
+                                : banks.nameAr,
+                            style: TextStyle(
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
+                            ),
+                          ),
+                        );
+                      }).toList()
                           : [],
                       decoration: InputDecoration(
+                        fillColor: Colors.transparent,
                         labelStyle: TextStyle(
-                            color: Theme.of(context)
-                                .primaryColor), // Match label color
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
+                        ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Theme.of(context).primaryColor),
+                          borderSide: BorderSide(color: Theme
+                              .of(context)
+                              .primaryColor),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Theme.of(context).primaryColor),
+                          borderSide: BorderSide(color: Theme
+                              .of(context)
+                              .primaryColor),
                         ),
                       ),
                       style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context)
-                              .primaryColor), // Match text color
+                        fontSize: 14,
+                        color: Theme
+                            .of(context)
+                            .primaryColor,
+                      ),
                     ),
                     const Sizer(),
-                    TextFormField(
+                    buildInputField(
                       controller: bankAccountController,
-                      decoration: InputDecoration(
-                        labelText: LocaleKeys.bankAccountNumber.localize,
-                        labelStyle: TextStyle(
-                            color: Theme.of(context)
-                                .primaryColor), // Match label color
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Theme.of(context).primaryColor),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Theme.of(context).primaryColor),
-                        ),
-                      ),
-                      style: TextStyle(color: Theme.of(context).primaryColor),
-                      // Match text color
+                      labelText: LocaleKeys.bankAccountNumber.localize,
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return LocaleKeys
-                              .pleaseEnterBankAccountNumber.localize;
+                          return LocaleKeys.pleaseEnterBankAccountNumber
+                              .localize;
                         }
                         if (!RegExp(r'^[0-9]{10,16}$').hasMatch(value)) {
                           return LocaleKeys.pleaseEnter1016digits.localize;
@@ -272,11 +248,9 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
                     ),
                   ],
                   if (selectedOption == 'card') ...[
-                    TextFormField(
+                    buildInputField(
                       controller: amountController,
-                      decoration:  InputDecoration(
-                        labelText: LocaleKeys.amount.localize,
-                      ),
+                      labelText: LocaleKeys.amount.localize,
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -286,11 +260,9 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
                       },
                     ),
                     const Sizer(),
-                    TextFormField(
+                    buildInputField(
                       controller: cardNumberController,
-                      decoration: InputDecoration(
-                        labelText: LocaleKeys.cardNumber.localize,
-                      ),
+                      labelText: LocaleKeys.cardNumber.localize,
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -316,10 +288,14 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
                           vertical: 20.h, horizontal: 100.w),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20.r),
-                          color: Theme.of(context).primaryColor),
+                          color: Theme
+                              .of(context)
+                              .primaryColor),
                       child: Label(
                         text: LocaleKeys.submit.localize,
-                        color: Theme.of(context).scaffoldBackgroundColor,
+                        color: Theme
+                            .of(context)
+                            .scaffoldBackgroundColor,
                       ),
                     ),
                   ),
@@ -332,72 +308,157 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
     );
   }
 
+  Widget buildInputField({
+    required TextEditingController controller,
+    required String labelText,
+    TextInputType keyboardType = TextInputType.text,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: labelText,
+        fillColor: Colors.transparent,
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Theme
+              .of(context)
+              .primaryColor),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Theme
+              .of(context)
+              .primaryColor),
+        ),
+      ),
+      keyboardType: keyboardType,
+      validator: validator,
+    );
+  }
+
+  Widget buildPhoneTypeSelection() {
+    return Row(
+      children: [
+        Label(text: '${LocaleKeys.type.localize} '),
+        Radio(
+          value: true,
+          groupValue: isPhoneWallet,
+          onChanged: (value) {
+            setState(() {
+              isPhoneWallet = value!;
+            });
+          },
+        ),
+        Label(text: LocaleKeys.wallet.localize),
+        Radio(
+          value: false,
+          groupValue: isPhoneWallet,
+          onChanged: (value) {
+            setState(() {
+              isPhoneWallet = value!;
+            });
+          },
+        ),
+        Label(text: LocaleKeys.account.localize),
+      ],
+    );
+  }
+
   void _submitForm(BuildContext context) {
     String result = '';
 
     if (selectedOption == 'instapay') {
       if (formKey.currentState!.validate()) {
-        result = 'InstaPay: ${instaPayController.text}';
-        context.read<PaymentCacheOutCubit>().requestInstapay(
-                params: RequestInstapayParams(
-              amount: amountController.text,
-              payoutMethod: 'instapay_user_name_account',
-              instapayAccount: instaPayController.text,
-            ));
-        print('Instapay Account');
+        showAreYouSure(title: LocaleKeys.alert.localize,
+            subTitle: 'Are you sure of transferring money?',
+            action: (){
+              result = 'InstaPay: ${instaPayController.text}';
+              context.read<PaymentCacheOutCubit>().requestInstapay(
+                  params: RequestInstapayParams(
+                    amount: amountController.text,
+                    payoutMethod: 'instapay_user_name_account',
+                    instapayAccount: instaPayController.text,
+                  ));
+              print('Instapay Account');
+            },
+            context: context);
       }
     } else if (selectedOption == 'phone') {
-
       if (formKey.currentState!.validate()) {
         result =
-            'Phone: ${phoneController.text}, Type: ${isPhoneWallet ? 'Wallet' : 'Account'}';
-        if(isPhoneWallet){
-          context.read<PaymentCacheOutCubit>().requestInstapay(
-              params: RequestInstapayParams(
-                amount: amountController.text,
-                payoutMethod: 'instapay_wallet',
-                phoneNumber: phoneController.text,
-              ));
-          print('Wallet');
-        }else{
-          context.read<PaymentCacheOutCubit>().requestInstapay(
-              params: RequestInstapayParams(
-                amount: amountController.text,
-                payoutMethod: 'instapay_account',
-                phoneNumber: phoneController.text,
-              ));
-          print('account');
+        'Phone: ${phoneController.text}, Type: ${isPhoneWallet
+            ? 'Wallet'
+            : 'Account'}';
+        if (isPhoneWallet) {
+          showAreYouSure(title: LocaleKeys.alert.localize,
+              subTitle: 'Are you sure of transferring money?',
+              action: (){
+                context.read<PaymentCacheOutCubit>().requestInstapay(
+                    params: RequestInstapayParams(
+                      amount: amountController.text,
+                      payoutMethod: 'instapay_wallet',
+                      phoneNumber: phoneController.text,
+                    ));
+                print('Wallet');
+              },
+              context: context);
+
+        } else {
+          showAreYouSure(title: LocaleKeys.alert.localize,
+              subTitle: 'Are you sure of transferring money?',
+              action: (){
+                context.read<PaymentCacheOutCubit>().requestInstapay(
+                    params: RequestInstapayParams(
+                      amount: amountController.text,
+                      payoutMethod: 'instapay_account',
+                      phoneNumber: phoneController.text,
+                    ));
+                print('account');
+              },
+              context: context);
+
         }
       }
     } else if (selectedOption == 'bank') {
       if (formKey.currentState!.validate()) {
         if (selectedBank != null) {
-          context.read<PaymentCacheOutCubit>().requestInstapay(
-                  params: RequestInstapayParams(
-                amount: amountController.text,
-                bankName: context.locale == Locales.english
-                    ? selectedBank?.nameEn
-                    : selectedBank?.nameAr,
-                payoutMethod: 'bank_account',
-                bankAccountNumber: bankAccountController.text,
-              ));
-          print('Bank Account');
-          result =
-              'Bank Account: ${bankAccountController.text}, Bank: ${bankNameController.text}';
+          showAreYouSure(title: LocaleKeys.alert.localize,
+              subTitle: 'Are you sure of transferring money?',
+              action: (){
+                context.read<PaymentCacheOutCubit>().requestInstapay(
+                    params: RequestInstapayParams(
+                      amount: amountController.text,
+                      bankName: context.locale == Locales.english
+                          ? selectedBank?.nameEn
+                          : selectedBank?.nameAr,
+                      payoutMethod: 'bank_account',
+                      bankAccountNumber: bankAccountController.text,
+                    ));
+                print('Bank Account');
+                result =
+                'Bank Account: ${bankAccountController
+                    .text}, Bank: ${bankNameController.text}';
+              },
+              context: context);
+
         } else {
           showErrorMessage(context, LocaleKeys.pleaseEnterBankName.localize);
         }
       }
     } else if (selectedOption == 'card') {
       if (formKey.currentState!.validate()) {
-        result = 'Card Number: ${cardNumberController.text}';
-        context.read<PaymentCacheOutCubit>().requestInstapay(
-            params: RequestInstapayParams(
-              amount: amountController.text,
-              payoutMethod: 'instapay_card',
-              cardNumber: cardNumberController.text,
-            ));
-        print('Card Number');
+        showAreYouSure(title: LocaleKeys.alert.localize,
+            subTitle: 'Are you sure of transferring money?',
+            action: (){
+              result = 'Card Number: ${cardNumberController.text}';
+              context.read<PaymentCacheOutCubit>().requestInstapay(
+                  params: RequestInstapayParams(
+                    amount: amountController.text,
+                    payoutMethod: 'instapay_card',
+                    cardNumber: cardNumberController.text,
+                  ));
+              print('Card Number');
+            },
+            context: context);
       }
     }
   }
@@ -448,4 +509,5 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
 
     return sum % 10 == 0;
   }
+
 }
