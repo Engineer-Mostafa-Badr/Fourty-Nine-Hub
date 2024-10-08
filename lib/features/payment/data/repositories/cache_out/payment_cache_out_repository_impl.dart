@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/payment/domain/entities/cache_out_entity/
 import 'package:fourtyninehub/features/payment/domain/entities/instapay_cache_out_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/use_cases/cache_out/instapay_cache_out_use_case.dart';
 import 'package:fourtyninehub/features/payment/domain/use_cases/cache_out/pay_out_request_use_case.dart';
+import 'package:fourtyninehub/features/payment/domain/use_cases/cache_out/request_instapay_use_case.dart';
 import 'package:fourtyninehub/features/payment/domain/use_cases/cache_out/request_yellow_card_use_case.dart';
 
 import '../../../domain/repositories/cache_out/payment_cache_out_repository.dart';
@@ -33,5 +34,10 @@ class PaymentCacheOutRepositoryImpl implements PaymentCacheOutRepository {
   @override
   Future<Either<Failure, bool>> payoutRequest(PayoutRequestParams params) {
     return _remoteDataSource.payoutRequest(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> requestInstapay(RequestInstapayParams params) {
+    return _remoteDataSource.requestInstapay(params);
   }
 }

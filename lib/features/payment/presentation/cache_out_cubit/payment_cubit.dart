@@ -11,6 +11,7 @@ import '../../domain/entities/instapay_cache_out_entity.dart';
 import '../../domain/use_cases/cache_out/fetch_all_bank_use_case.dart';
 import '../../domain/use_cases/cache_out/instapay_cache_out_use_case.dart';
 import '../../domain/use_cases/cache_out/pay_out_request_use_case.dart';
+import '../../domain/use_cases/cache_out/request_instapay_use_case.dart';
 import '../../domain/use_cases/cache_out/request_yellow_card_use_case.dart';
 
 part 'payment_state.dart';
@@ -18,20 +19,24 @@ part 'payment_state.dart';
 class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
   PaymentCacheOutCubit(
     this._instapayCacheOutUseCase,
-    this._requestYellowCardUseCase, this._getWalletHomeUseCase, this._allBankUseCase, this._payOutRequestUseCase,
+    this._requestYellowCardUseCase,
+    this._getWalletHomeUseCase,
+    this._allBankUseCase,
+    this._payOutRequestUseCase,
+    this._requestInstapayUseCase,
   ) : super(PaymentCacheOutState());
 
   final InstapayCacheOutUseCase _instapayCacheOutUseCase;
   final RequestYellowCardUseCase _requestYellowCardUseCase;
   final GetWalletHomeUseCase _getWalletHomeUseCase;
-  final FetchAllBankUseCase _allBankUseCase;//
+  final FetchAllBankUseCase _allBankUseCase; //
   final PayOutRequestUseCase _payOutRequestUseCase;
-
+  final RequestInstapayUseCase _requestInstapayUseCase;
 
   List<String>? selectedImages;
 
   Future<void> getWallet() async {
-    emit(state.copyWith( status: StateStatus.loading));
+    emit(state.copyWith(status: StateStatus.loading));
     final response = await _getWalletHomeUseCase.call(const NoParams());
     response.fold((l) {
       emit(state.copyWith(failure: l, status: StateStatus.error));
@@ -82,7 +87,8 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
 
   Future<void> uploadPhoto({
     bool isGallery = true,
-    required bool isFrontImage, // New parameter to differentiate between front and back images
+    required bool
+        isFrontImage, // New parameter to differentiate between front and back images
   }) async {
     final UploadFile upload = UploadFile();
     await upload.uploadImage(
@@ -105,12 +111,12 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
 
   void removePhoto({bool isFrontImage = true}) {
     if (isFrontImage) {
-      state.frontImage==null;
+      state.frontImage == null;
       emit(state.copyWith(
         frontImage: null, // Remove front image
       ));
     } else {
-      state.frontImage==null;
+      state.frontImage == null;
       emit(state.copyWith(
         backImage: null, // Remove back image
       ));
@@ -118,7 +124,7 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
   }
 
   Future<void> fetchAllBank() async {
-    emit(state.copyWith( status: StateStatus.loading));
+    emit(state.copyWith(status: StateStatus.loading));
     final response = await _allBankUseCase.call(const NoParams());
     response.fold((l) {
       emit(state.copyWith(failure: l, status: StateStatus.error));
@@ -134,6 +140,25 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
 
     final response = await _payOutRequestUseCase(params);
     response.fold(
+      (failure) {
+        emit(state.copyWith(failure: failure, status: StateStatus.error));
+      },
+      (data) {
+        emit(state.copyWith(
+          status: StateStatus.success,
+        ));
+        // print("InstaPay Data: ${data.message}");
+      },
+    );
+  }
+
+  Future<void> requestInstapay({
+    required RequestInstapayParams params,
+  }) async {
+    emit(state.copyWith(status: StateStatus.loading));
+
+    final response = await _requestInstapayUseCase(params);
+    response.fold(
           (failure) {
         emit(state.copyWith(failure: failure, status: StateStatus.error));
       },
@@ -141,7 +166,6 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
         emit(state.copyWith(
           status: StateStatus.success,
         ));
-        // print("InstaPay Data: ${data.message}");
       },
     );
   }

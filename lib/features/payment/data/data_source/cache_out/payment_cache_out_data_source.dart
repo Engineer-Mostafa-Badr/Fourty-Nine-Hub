@@ -9,6 +9,7 @@ import '../../../domain/entities/cache_out_entity/list_bank_entity.dart';
 import '../../../domain/entities/instapay_cache_out_entity.dart';
 import '../../../domain/use_cases/cache_out/instapay_cache_out_use_case.dart';
 import '../../../domain/use_cases/cache_out/pay_out_request_use_case.dart';
+import '../../../domain/use_cases/cache_out/request_instapay_use_case.dart';
 import '../../../domain/use_cases/cache_out/request_yellow_card_use_case.dart';
 
 abstract class PaymentCacheOutRemoteDataSource {
@@ -18,6 +19,7 @@ abstract class PaymentCacheOutRemoteDataSource {
       RequestYellowCardParams params);
   Future<Either<Failure,List<ListBankEntity>>>fetchAllBank();
   Future<Either<Failure,bool>>payoutRequest(PayoutRequestParams params);
+  Future<Either<Failure,bool>> requestInstapay(RequestInstapayParams params);
 }
 
 class PaymentCacheOutRemoteDataSourceImpl
@@ -74,6 +76,20 @@ class PaymentCacheOutRemoteDataSourceImpl
     final response = await _apiConsumer.post(
       EndPoints.payout,
       data: params.toJson()
+    );
+    return response.fold(
+          (failure) => Left(failure),
+          (data) {
+        return Right((data['status']));
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> requestInstapay(RequestInstapayParams params) async {
+    final response = await _apiConsumer.post(
+        EndPoints.requestInstapay,
+        data: params.toJson()
     );
     return response.fold(
           (failure) => Left(failure),
