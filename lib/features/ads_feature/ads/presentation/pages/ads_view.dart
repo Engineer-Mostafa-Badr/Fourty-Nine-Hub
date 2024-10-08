@@ -153,7 +153,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                       physics: const NeverScrollableScrollPhysics(),
                       controller: _tabController,
                       children: [
-                        ProviderAdsView(params: widget.params, userType: userType,),
+                        ProviderAdsView(params: widget.params, userType: userType, controller: controller,),
                         UserAdsView(params: widget.params, userType: userType,),
                       ],
                     ))

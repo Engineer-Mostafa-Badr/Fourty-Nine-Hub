@@ -14,44 +14,51 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 class ProviderAdsView extends StatelessWidget {
-  const ProviderAdsView({super.key, required this.params, required this.userType});
+  const ProviderAdsView(
+      {super.key, required this.params, required this.userType, required this.controller});
+
   final AdsViewParams params;
   final String userType;
+  final AdvertisementCubit controller;
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AdvertisementCubit, AdsState>(
-      builder: (context,state) {
-        final controller = context.read<AdvertisementCubit>();
-        if(state.status == AdsStates.loading){
-          return Center(child: CircularProgressIndicator(),);
-        }else{
-          return Column(
-              children: [
-                Align(
-                    alignment: AlignmentDirectional.topStart,
-                    child: Container(
-                        margin: EdgeInsetsDirectional.all(10.w),
-                        child: BadgedLabel(label: LocaleKeys.filter.localize,
-                            onTap: () async{
-                              dynamic data = await context.push(Routes.FILTERADS,extra:CategorizationEntity(mainCategory: params.mainCategory,subCategory: params.subCategory) );
-                              if(state.hasFilter==true&&data!=null){
-                                Future.delayed(const Duration(seconds: 1),()=>controller.changeState(data,data!=null));
-                                context.read<AdvertisementCubit>().loadFilterData(
-                                    model: data,
-                                    filter:userType);
-                              }else{
-                                Future.delayed(const Duration(seconds: 1),()=>controller.changeState(data,data!=null));
-                              }
-                            }
-                        ))),
-                Expanded(
-                    child: state.hasFilter==false?ProviderAds(params: params, userType: userType,):
-                    ProviderFilterAds(userType: userType,params: params, model: state.filterModel!,)
-                )
-              ]
-          );
-        }
-      }
+    return controller.state.status == AdsStates.loading ? Center(
+        child: CircularProgressIndicator()
+    ) : Column(
+        children: [
+          Align(
+              alignment: AlignmentDirectional.topStart,
+              child: Container(
+                  margin: EdgeInsetsDirectional.all(10.w),
+                  child: BadgedLabel(label: LocaleKeys.filter.localize,
+                      onTap: () async {
+                        dynamic data = await context.push(Routes.FILTERADS,
+                            extra: CategorizationEntity(
+                                mainCategory: params.mainCategory,
+                                subCategory: params.subCategory));
+                        if (controller.state.hasFilter == true && data != null) {
+                          Future.delayed(const Duration(seconds: 1), () =>
+                              controller.changeState(data, data != null));
+                          context.read<AdvertisementCubit>().loadFilterData(
+                              model: data,
+                              filter: userType);
+                        } else {
+                          Future.delayed(const Duration(seconds: 1), () =>
+                              controller.changeState(data, data != null));
+                        }
+                      }
+                  ))),
+          Expanded(
+              child: controller.state.hasFilter == false ? ProviderAds(
+                params: params, userType: userType, controller: controller,) :
+              ProviderFilterAds(
+                userType: userType,
+                params: params,
+                model: controller.state.filterModel!,
+                controller: controller,)
+          )
+        ]
     );
   }
 }
