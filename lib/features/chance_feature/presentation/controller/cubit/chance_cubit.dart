@@ -1,7 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_chance_use_case.dart';
 
+import '../../../../../routes/pages.dart';
 import 'chance_states.dart';
 
 class ChanceCubit extends Cubit<ChanceState> {
@@ -9,13 +11,26 @@ class ChanceCubit extends Cubit<ChanceState> {
 
   ChanceCubit(this._fetchChanceUseCase) : super(const ChanceState());
 
-  Future<void> fetchChance() async {
-    emit(state.copyWith(status: ChanceStates.loading));
-    final result = await _fetchChanceUseCase(const NoParams());
+  // Future<void> fetchChance() async {
+  //   emit(state.copyWith(status: ChanceStates.loading));
+  //   final result = await _fetchChanceUseCase(const NoParams());
+  //
+  //   result.fold(
+  //     (failure) => emit(state.copyWith(status: ChanceStates.error, failure: failure)),
+  //     (chance) => emit(state.copyWith(chance: chance, status: ChanceStates.success)),
+  //   );
+  // }
 
-    emit(result.fold(
-      (failure) => state.copyWith(status: ChanceStates.error, failure: failure),
-      (chance) => state.copyWith(chance: chance, status: ChanceStates.success),
-    ));
+  Future<void> fetchChance() async {
+    emit(state.copyWith( status: ChanceStates.loading));
+    final response = await _fetchChanceUseCase.call(const NoParams());
+    response.fold((l) {
+      print(getFailureMessage(l, AppPages.router.configuration.navigatorKey.currentContext!));
+      emit(state.copyWith(failure: l, status: ChanceStates.error));
+    }, (data) {
+      print('*********************');
+      print(data);
+      emit(state.copyWith(chance: data));
+    });
   }
 }

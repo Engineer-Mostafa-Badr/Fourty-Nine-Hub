@@ -20,7 +20,9 @@ class ListViewCard extends StatelessWidget {
       child: BlocBuilder<ChanceCubit,ChanceState>(
         builder: (BuildContext context, state) {
 
-          if(state.status ==ChanceStates.success) {
+          if(state.status ==ChanceStates.loading) {
+            return const Center(child: CircularProgressIndicator());
+          }
             return ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -36,9 +38,6 @@ class ListViewCard extends StatelessWidget {
             ),
             itemCount: state.chance?.length ??0,
           );
-          }else{
-            return const CustomLoading();
-          }
         },
       ),
     );

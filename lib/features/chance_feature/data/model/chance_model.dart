@@ -36,12 +36,10 @@ class ChanceModel extends ChanceEntity {
           subCategoryId: json['subCategoryId'] ??'',
           mainCategoryId: json['mainCategoryId'] ??'',
           userId: json['userId'] ??'',
-          cycles: json['cycles'] as List<dynamic>,
-          totalContributions: json['totalContributions'] as int,
+          cycles: json['cycles'] ??[],
+          totalContributions: json['totalContributions'] ??0,
           createdAt: DateTime.parse(json['createdAt'] ??''),
-          user: (json['user'] as List)
-          .map((user) => UserChanceModel.fromJson(user))
-          .toList(),
+          user: UserChanceModel.fromJson(json['user']),
       );
   }
 }

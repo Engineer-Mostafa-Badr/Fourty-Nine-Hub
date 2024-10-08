@@ -16,7 +16,7 @@ class ChanceEntity {
   final List<dynamic> cycles;
   final int totalContributions;
   final DateTime createdAt;
-  final List<UserChanceEntity> user;
+  final UserChanceEntity user;
 
   ChanceEntity(
       {required this.id,

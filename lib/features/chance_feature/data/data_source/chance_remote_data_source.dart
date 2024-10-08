@@ -20,8 +20,12 @@ class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
     final response = await _apiConsumer.get(EndPoints.chance);
 
     return response.fold(
-      (failure)=>Left(failure),
+      (failure) {
+        print('object');
+        return Left(failure);
+      },
       (response) {
+        print(response.toString());
         final list = (response['data'] as List)
             .map((e) => ChanceModel.fromJson(e))
             .toList();

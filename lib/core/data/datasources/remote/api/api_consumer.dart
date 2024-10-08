@@ -117,15 +117,20 @@ class BaseApiConsumer extends ApiConsumer {
           // }
           // )
           );
-      // log(url);
+       log(result.toString());
       // log(_dio.options.headers['Authorization'], name: "Authorization$url");
+      print('Welcome ${result.data['status']}');
       if (result.data['status']) {
+        print('result os io');
         return Right(result.data as Map<String, dynamic>);
       } else {
+        print('reselt 2');
         return Left(ValidationFailure(
             result.data['message'] ?? result.data['error']['message']));
       }
     } catch (e) {
+      print('result 3');
+      print(e.toString());
       // if (e is DioException &&
       //     e.response?.statusCode == 401 &&
       //     isTokenAttached) {
@@ -226,15 +231,45 @@ class BaseApiConsumer extends ApiConsumer {
     }
   }
 
-  Failure _getFailure(dynamic error) {
-    if (error is Map<String, dynamic> && error['message'] is String) {
-      return ServerFailure( message: error['message']); // Assuming ServerFailure is a subclass of Failure
-    } else {
-      return UnknownFailure('An unexpected error occurred');
+  Failure _getFailure(dynamic e) {
+    if (e is DioException) {
+      if (e.response?.statusCode == 413) {
+        return const ServerFailure(
+          message: 'File size is too large',
+        );
+      } else if (e.response?.statusCode == 401) {
+        return const UnauthorizedFailure();
+      } else if (e.response?.data is Map &&
+          e.response?.data['message'] is String) {
+        return ServerFailure(
+          message: e.response?.data['message'] as String,
+          statusCode: e.response?.statusCode,
+        );
+      } else if (e.response?.data is Map && e.response?.data['error'] is Map) {
+        final error = e.response?.data['error'] as Map;
+        List<String>? errors;
+        if (error['data'] is List) {
+          final data = e.response?.data['error']['data'] as List;
+          errors = data
+              .map((e) => e['message'] as String)
+              .whereType<String>()
+              .toList();
+        }
+        return ServerFailure(
+          message: error['message'] as String,
+          statusCode: e.response?.statusCode,
+          errors: errors,
+        );
+      } else if (e.response?.data is Map &&
+          e.response?.data['data'] is String) {
+        return ServerFailure(
+          message: e.response?.data['data'] as String,
+          statusCode: e.response?.statusCode,
+        );
+      }
     }
+    return UnknownFailure(e.toString());
   }
-
-
 
   Future<void> refreshToken() async {
     if (_token == null) return;
