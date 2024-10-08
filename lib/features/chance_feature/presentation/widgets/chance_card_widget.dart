@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/pages/chance_details_view.dart';
+import 'package:fourtyninehub/features/chance_feature/presentation/widgets/image_card_widget.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/subscribe_widget_in_card.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/rate_product_widget.dart';
 
@@ -9,10 +10,9 @@ import '../../../../res/style/styles.dart';
 import '../../domain/entity/chance_entity.dart';
 
 class ChanceCardWidget extends StatelessWidget {
-  const ChanceCardWidget({super.key, required this.chance, });
+  const ChanceCardWidget({super.key, required this.chance, required this.index, });
   final ChanceEntity chance;
-  // final ImageChanceEntity image;
-
+final int index  ;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -27,7 +27,7 @@ class ChanceCardWidget extends StatelessWidget {
         ),
         child: Row(
           children: [
-           //  ImageCardWidget(image: image.photo,),
+           ImageCardWidget(image: chance.images[index].photo,),
             const SizedBox(width: 10),
             Expanded(
               flex: 3,

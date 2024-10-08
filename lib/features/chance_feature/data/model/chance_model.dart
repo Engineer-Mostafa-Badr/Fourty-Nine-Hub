@@ -9,16 +9,6 @@ class ChanceModel extends ChanceEntity {
       required super.images,
       required super.description,
       required super.price,
-      required super.isActive,
-      required super.isRejected,
-      required super.isBlocked,
-      required super.isBanned,
-      required super.subCategoryId,
-      required super.mainCategoryId,
-      required super.userId,
-      required super.cycles,
-      required super.totalContributions,
-      required super.createdAt,
       required super.user});
 
   factory ChanceModel.fromJson(Map<String, dynamic> json) {
@@ -27,19 +17,10 @@ class ChanceModel extends ChanceEntity {
           images: (json['images'] as List)
               .map((image) => ImageChanceModel.fromJson(image))
               .toList(),
-          description: json['description'] ??'',
-          price: json['price'] ??0,
-          isActive: json['isActive'] ??false,
-          isRejected: json['isRejected'] ??false,
-          isBlocked: json['isBlocked'] ??false,
-          isBanned: json['isBanned'] ??false,
-          subCategoryId: json['subCategoryId'] ??'',
-          mainCategoryId: json['mainCategoryId'] ??'',
-          userId: json['userId'] ??'',
-          cycles: json['cycles'] ??[],
-          totalContributions: json['totalContributions'] ??0,
-          createdAt: DateTime.parse(json['createdAt'] ??''),
-          user: UserChanceModel.fromJson(json['user']),
+          description: json['description'] ?? '' ,
+          price: json['price'] ?? 0 ,
+          user: UserChanceModel.fromJson(json["user"],),
+
       );
   }
 }

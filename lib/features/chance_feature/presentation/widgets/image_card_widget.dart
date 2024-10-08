@@ -8,7 +8,7 @@ class ImageCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return    Expanded(
+    return Expanded(
       flex: context.screenWidth > 600 ? 1 : 2,
       child: Container(
           decoration: BoxDecoration(
