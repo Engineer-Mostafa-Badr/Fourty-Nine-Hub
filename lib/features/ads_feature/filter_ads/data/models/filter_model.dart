@@ -23,10 +23,8 @@ class FilterModel extends FilterEntity {
     return {
         "filterCriteria": filterCriteria
       ,
-      "price":{
-        "min": "number",
-        "max": {"min": price.value.nameAr, "max": price.value.nameEn}
-      }
+      "price":{"min": int.parse(price.value.nameAr), "max": int.parse(price.value.nameEn)},
+
       };
   }
 }

@@ -140,12 +140,8 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                       physics: const NeverScrollableScrollPhysics(),
                       controller: _tabController,
                       children: [
-                        BlocProvider<AdvertisementCubit>(
-                            create: (context) => serviceLocator(),
-                            child: ProviderAdsView(params: widget.params, userType: userType,)),
-                        BlocProvider<AdvertisementCubit>(
-                            create: (context) => serviceLocator(),
-                            child: UserAdsView(params: widget.params, userType: userType,)),
+                        ProviderAdsView(params: widget.params, userType: userType,),
+                        UserAdsView(params: widget.params, userType: userType,),
                       ],
                     ))
                 : const SizedBox.shrink()

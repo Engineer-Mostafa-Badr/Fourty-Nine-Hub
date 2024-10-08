@@ -33,12 +33,12 @@ class UserAdsView extends StatelessWidget {
                           onTap: () async{
                             dynamic data = await context.push(Routes.FILTERADS,extra:CategorizationEntity(mainCategory: params.mainCategory,subCategory: params.subCategory) );
                             if(state.hasFilter==true){
-                              Future.delayed(const Duration(seconds: 1),()=>controller.changeState(data,data!=null));
+                              Future.delayed(const Duration(seconds: 1),()=>context.read<AdvertisementCubit>().changeState(data,data!=null));
                               context.read<AdvertisementCubit>().loadFilterData(
                                   model: data,
                                   filter:userType);
                             }else{
-                              Future.delayed(const Duration(seconds: 1),()=>controller.changeState(data,data!=null));
+                              Future.delayed(const Duration(seconds: 1),()=>context.read<AdvertisementCubit>().changeState(data,data!=null));
                             }
                           }
                       ))),

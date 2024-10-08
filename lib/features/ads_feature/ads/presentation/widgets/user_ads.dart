@@ -31,49 +31,44 @@ class _UserAdsState extends State<UserAds> {
   @override
   Widget build(BuildContext context) {
 
-    return BlocBuilder<AdvertisementCubit, AdsState>(
-        builder: (context,state) {
-          final controller = context.read<AdvertisementCubit>();
-          return PagedListView<int, AdModel>(
-            pagingController: controller.adsPagingController,
-            builderDelegate: PagedChildBuilderDelegate<AdModel>(
-                noItemsFoundIndicatorBuilder: (context) {
-                  print(
-                      controller.adsPagingController.itemList?.length);
-                  return Center(
-                    child: Text(
-                      LocaleKeys.noAds.localize,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                      ),
-                    ),
-                  );
-                },
-                itemBuilder: (context, item, index) {
-                  return CategoriesExtension.fromNameEn(
-                      widget.params.mainCategory.nameEn ?? '')
-                      .view(
-                    item: item,
-                    onFav: (String id) async {
-                      var result = await controller.favouriteAd(id);
-                      return result;
-                    },
-                    onRemoveFav: (String id) async {
-                      var result = await controller.unFavouriteAd(id);
-                      return result;
-                    },
-                  );
-                },
-                noMoreItemsIndicatorBuilder: (context) => Container(),
-                firstPageProgressIndicatorBuilder: (context) =>
-                    Container(
-                        margin: const EdgeInsets.only(top: 150),
-                        child: const Center(child: CircularProgressIndicator())),
-                newPageProgressIndicatorBuilder: (context) =>
-                const Center(child: CircularProgressIndicator())),
-          );
-        }
+    return PagedListView<int, AdModel>(
+      pagingController: context.read<AdvertisementCubit>().adsPagingController,
+      builderDelegate: PagedChildBuilderDelegate<AdModel>(
+          noItemsFoundIndicatorBuilder: (context) {
+            print(
+                "controller.adsPagingController.itemList?.length${context.read<AdvertisementCubit>().adsPagingController.itemList?.length}");
+            return Center(
+              child: Text(
+                LocaleKeys.noAds.localize,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                ),
+              ),
+            );
+          },
+          itemBuilder: (context, item, index) {
+            return CategoriesExtension.fromNameEn(
+                widget.params.mainCategory.nameEn ?? '')
+                .view(
+              item: item,
+              onFav: (String id) async {
+                var result = await context.read<AdvertisementCubit>().favouriteAd(id);
+                return result;
+              },
+              onRemoveFav: (String id) async {
+                var result = await context.read<AdvertisementCubit>().unFavouriteAd(id);
+                return result;
+              },
+            );
+          },
+          noMoreItemsIndicatorBuilder: (context) => Container(),
+          firstPageProgressIndicatorBuilder: (context) =>
+              Container(
+                  margin: const EdgeInsets.only(top: 150),
+                  child: const Center(child: CircularProgressIndicator())),
+          newPageProgressIndicatorBuilder: (context) =>
+          const Center(child: CircularProgressIndicator())),
     );
   }
 }

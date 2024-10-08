@@ -122,7 +122,10 @@ class AdvertisementCubit extends Cubit<AdsState> {
       }
       if (isLastPage) {
         print("isLastPage = $isLastPage");
+        print(data.length);
+        print(data.toString());
         adsPagingController.appendLastPage(data);
+
       } else {
         print("isNotLastPage = $isLastPage");
         final nextPageKey = page + 1;
