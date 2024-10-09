@@ -24,6 +24,8 @@ abstract class ChatsRemoteDataSource {
     required String chatId,
   });
 
+  Future<Either<Failure, bool>> deleteChat({required String chatId});
+
   Future<Either<Failure, bool>> lockChat({
     required String chatId,
     String? lockChatPassword,
@@ -194,5 +196,13 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
   @override
   void stopListenToNewChats() {
     // TODO: implement stopListenToNewChats
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteChat({required String chatId}) async {
+   final response =
+        await _apiConsumer.delete(EndPoints.deleteChat(chatId));
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
   }
 }

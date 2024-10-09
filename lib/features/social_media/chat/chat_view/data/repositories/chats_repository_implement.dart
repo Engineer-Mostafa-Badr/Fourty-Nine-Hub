@@ -78,4 +78,9 @@ class ChatsRepositoryImplementation extends ChatsRepository {
   void stopListenToNewChats() {
     _chatsRemoteDataSource.stopListenToNewChats();
   }
+  
+  @override
+  Future<Either<Failure, bool>> deleteChat({required String chatId}) {
+    return _chatsRemoteDataSource.deleteChat(chatId: chatId);
+  }
 }

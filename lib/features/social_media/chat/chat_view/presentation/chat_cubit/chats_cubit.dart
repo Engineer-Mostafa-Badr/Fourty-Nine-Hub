@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatMuteState_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/delete_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 
 part 'chats_state.dart';
@@ -22,6 +23,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   final StopListenToMessagesUseCase _stopListenToMessagesUseCase;
   final MarkMessagesAsDeliveredUseCase _markMeesagesAsDeliveredUseCase;
   final GetChatsUseCase _getChatsUseCase;
+  final DeleteChatUseCase _deleteChatUseCase;
   final ChangeChatToArchiveOrNormalUseCase _changeChatToArchiveOrNormalUseCase;
   final ChangeChatMuteStateUseCase _changeChatMuteStateUseCase;
   final Map<String, ChatEntity> _chats = {};
@@ -36,6 +38,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._markMeesagesAsDeliveredUseCase,
     this._changeChatToArchiveOrNormalUseCase,
     this._changeChatMuteStateUseCase,
+    this._deleteChatUseCase,
   ) : super(const ChatsState());
 
   // Selected Chats
@@ -139,7 +142,9 @@ class ChatsCubit extends Cubit<ChatsState> {
 
   Future<void> _getUnreadChats() async {
     await _getChats(
-        flag: (chat) => (chat.lastMessage?.seen ?? false) && (!(chat.lastMessage?.byMe ?? true)),
+        flag: (chat) =>
+            (chat.lastMessage?.seen ?? false) &&
+            (!(chat.lastMessage?.byMe ?? true)),
         params: GetChatsParams(isUnread: true));
   }
 
@@ -196,6 +201,21 @@ class ChatsCubit extends Cubit<ChatsState> {
       respons.fold((l) => null, (r) {
         if (_chats.containsKey(chat.id)) {
           _chats[chat.id]?.muted = !(_chats[chat.id]!.muted);
+        }
+      });
+      chat.isSelected = false; // setter getter in chatsEntity
+    }
+    selectedChats.clear();
+    await getChatsByCategory(_selectedChatCategory);
+  }
+
+  Future<void> deleteChat() async {
+    for (var chat in selectedChats) {
+      log("delete = ${chat.id}");
+      final respons = await _deleteChatUseCase(chat.id);
+      respons.fold((l) => null, (r) {
+        if (_chats.containsKey(chat.id)) {
+          _chats.remove(chat.id);
         }
       });
       chat.isSelected = false; // setter getter in chatsEntity

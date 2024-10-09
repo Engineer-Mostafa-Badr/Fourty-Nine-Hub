@@ -740,6 +740,10 @@ class EndPoints {
     return '/chat/mute-chat/$chatId';
   }
 
+  static String deleteChat(String chatId) {
+    return '/chat/delete-chat/$chatId';
+  }
+
   static String changeChatToArchiveOrNormal(String chatId) {
     return '/chat/archive-chat/$chatId';
   }

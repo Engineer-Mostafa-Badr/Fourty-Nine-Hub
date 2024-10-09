@@ -81,7 +81,9 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                             color: AppColors.BACKGROUND_COLOR,
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await context.read<ChatsCubit>().deleteChat();
+                            },
                             icon: const Icon(
                               Icons.delete_forever,
                               color: AppColors.BACKGROUND_COLOR,

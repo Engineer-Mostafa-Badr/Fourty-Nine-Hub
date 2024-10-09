@@ -20,6 +20,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_anonymous_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_normal_chat_use_case.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/delete_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getGroupsChats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getSeenHistoryUseCase.dart';
@@ -71,7 +72,10 @@ class SocialServiceLocator {
         () => ChangeChatMuteStateUseCase(
               serviceLocator(),
             ));
-
+    serviceLocator.registerLazySingleton<DeleteChatUseCase>(
+        () => DeleteChatUseCase(
+              serviceLocator(),
+            ));
     serviceLocator.registerLazySingleton<ChangeChatToArchiveOrNormalUseCase>(
         () => ChangeChatToArchiveOrNormalUseCase(
               serviceLocator(),
@@ -132,6 +136,7 @@ class SocialServiceLocator {
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerFactory<ChatsCubit>(() => ChatsCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

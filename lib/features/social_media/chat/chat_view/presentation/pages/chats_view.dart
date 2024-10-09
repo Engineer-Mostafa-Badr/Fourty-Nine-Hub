@@ -413,7 +413,11 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                               color: AppColors.PRIMARY_COLOR,
                                             ),
                                             IconButton(
-                                              onPressed: () {},
+                                              onPressed: ()async {
+                                                await context
+                                                    .read<ChatsCubit>()
+                                                    .deleteChat();
+                                              },
                                               icon: const Icon(
                                                 Icons.delete_forever,
                                                 color: AppColors.PRIMARY_COLOR,
