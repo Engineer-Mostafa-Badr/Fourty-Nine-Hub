@@ -28,6 +28,8 @@ class ListViewCard extends StatelessWidget {
               itemBuilder: (context, index) => ChanceCardWidget(
                 chance: state.chance![index],
                 image: state.chance![index].images[0],
+                subCategoryEntity: state.chance![index].subCategoryId,
+                mainCategoryEntity: state.chance![index].mainCategoryId,
               ),
               separatorBuilder: (context, index) => Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.h),

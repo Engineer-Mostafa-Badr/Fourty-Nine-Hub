@@ -119,7 +119,9 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                             LocaleKeys.moreSubscriptionMore.localize,
                             textAlign: TextAlign.center,
                             style: Styles.mediumText(
-                                color: AppColors.CHECK_MARK_COLOR),
+                                color: AppColors.CHECK_MARK_COLOR,
+                              fontSize: 65.sp
+                            ),
                           ),
                         ],
                       ),

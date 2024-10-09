@@ -15,7 +15,7 @@ class CreateChanceView extends StatelessWidget {
       appBar: BackAppBar(
         label: LocaleKeys.CreateChance.localize,
       ),
-      body:  CreateChanceViewBody(),
+      body:  const CreateChanceViewBody(),
     );
   }
 }

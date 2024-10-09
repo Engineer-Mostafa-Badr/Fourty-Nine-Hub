@@ -27,7 +27,6 @@ class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
   Future<void> _ensureTokenInitialized() async {
     token ??= await TokenManager.getAccessToken();
   }
-
   String? token;
 
   Future<void> _initializeToken() async {
