@@ -340,10 +340,7 @@ class MeetingView extends StatelessWidget {
 
   void _scheduleAMeeting(BuildContext context) {
     Navigator.of(context).push(createCustomTransitionRoute(
-        BlocProvider.value(
-          value: serviceLocator<StreamCubit>(),
-          child: const ScheduleMeetingScreen(),
-        ),
+        const ScheduleMeetingScreen(),
         TransitionType.bottomToTop));
   }
 

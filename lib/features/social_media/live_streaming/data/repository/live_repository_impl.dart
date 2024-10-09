@@ -47,4 +47,14 @@ class LiveRepositoryImpl extends LiveRepository {
   Future<void> listenToSendPoints(NoParams noParams) {
     return _liveDataSource.listenToSendLiveGoal(noParams);
   }
+
+  @override
+  Future<void> listenToRequestBattle(NoParams noParams) {
+    return _liveDataSource.listenToRequestBattle(noParams);
+  }
+
+  @override
+  Future<void> requestBattle(RequestBattleParams params) {
+    return _liveDataSource.requestBattle(params);
+  }
 }

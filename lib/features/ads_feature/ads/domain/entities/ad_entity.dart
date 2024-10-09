@@ -28,6 +28,7 @@ class AdEntity {
   final String? subCategoryId;
   final String? mainCategoryId;
   final String? userId;
+  final String? subscriptionStatus;
   String get formatedDate => DateFormat('yyyy-MM-dd').format(createdAt);
   Duration get restTimeDuration => DateTime.now().difference(createdAt);
 
@@ -52,6 +53,7 @@ class AdEntity {
       this.subCategoryId,
       this.mainCategoryId,
       this.userId,
+      this.subscriptionStatus,
       required this.active,
       required this.approved,
       required this.details,

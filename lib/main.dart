@@ -121,7 +121,7 @@ class _MyAppState extends State<MyApp> {
           create: (context) => ThemeCubit(),
         ),
         BlocProvider(
-          create: (context) => serviceLocator<StreamCubit>()..loadLives(),
+          create: (context) => serviceLocator<StreamCubit>()..loadLives()..getScheduledMeetings()..getTopics(),
         ),
         BlocProvider<FirebaseNotficationsCubit>(
           create: (context) => FirebaseNotficationsCubit(serviceLocator()),
