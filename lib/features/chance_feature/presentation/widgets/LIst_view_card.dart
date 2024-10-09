@@ -11,6 +11,7 @@ import '../../../../res/style/app_colors.dart';
 
 class ListViewCard extends StatelessWidget {
   const ListViewCard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ChanceCubit>(
@@ -26,7 +27,7 @@ class ListViewCard extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) => ChanceCardWidget(
                 chance: state.chance![index],
-                index: index,
+                image: state.chance![index].images[0],
               ),
               separatorBuilder: (context, index) => Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -40,25 +41,7 @@ class ListViewCard extends StatelessWidget {
           } else if (state.status == ChanceStates.loading) {
             return const CustomLoading();
           } else if (state.status == ChanceStates.error) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Problem'),
-                    content: Text(' ${state.failure.toString()}'),
-                    actions: [
-                      TextButton(
-                        child: const Text('OK'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            });
+            Text(' you should login   ${state.failure.toString()}');
             return const SizedBox();
           } else {
             return const CustomLoading();
@@ -68,3 +51,4 @@ class ListViewCard extends StatelessWidget {
     );
   }
 }
+

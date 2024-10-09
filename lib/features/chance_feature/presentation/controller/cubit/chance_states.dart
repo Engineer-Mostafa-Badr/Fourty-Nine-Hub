@@ -2,7 +2,7 @@ import 'package:fourtyninehub/features/chance_feature/domain/entity/chance_entit
 
 import '../../../../../../core/error/failure.dart';
 
-enum ChanceStates { loading, initial, error,success }
+enum ChanceStates { loading, initial, error, success }
 
 class ChanceState {
   final ChanceStates status;
@@ -14,11 +14,12 @@ class ChanceState {
     this.failure,
     this.chance,
   });
-  ChanceState copyWith(
-      {ChanceStates? status,
-      Failure? failure,
-        List<ChanceEntity>? chance
-      }) {
+
+  ChanceState copyWith({
+    ChanceStates? status,
+    Failure? failure,
+    List<ChanceEntity>? chance,
+  }) {
     return ChanceState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

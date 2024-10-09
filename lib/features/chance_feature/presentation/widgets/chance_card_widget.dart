@@ -8,11 +8,12 @@ import 'package:fourtyninehub/features/chance_feature/presentation/widgets/rate_
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../domain/entity/chance_entity.dart';
+import '../../domain/entity/image_chance_entity.dart';
 
 class ChanceCardWidget extends StatelessWidget {
-  const ChanceCardWidget({super.key, required this.chance, required this.index, });
+  const ChanceCardWidget({super.key, required this.chance, required this.image, });
   final ChanceEntity chance;
-final int index  ;
+  final ImageChanceEntity image ;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -27,7 +28,7 @@ final int index  ;
         ),
         child: Row(
           children: [
-           ImageCardWidget(image: chance.images[index].photo,),
+           ImageCardWidget(image: image.photo,),
             const SizedBox(width: 10),
             Expanded(
               flex: 3,
@@ -65,7 +66,6 @@ final int index  ;
                    SizedBox(height: 10.h),
                   const NotSubscribedWidget(),
                    SizedBox(height: 20.h),
-
                   const LinerProgressIndicator(),
                 ],
               ),

@@ -9,8 +9,12 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
 class CreateChanceViewBody extends StatelessWidget {
-  const CreateChanceViewBody({super.key});
+    CreateChanceViewBody({super.key});
+   var titleController = TextEditingController() ;
 
+   var desController = TextEditingController() ;
+
+   var priceController = TextEditingController() ;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -67,13 +71,13 @@ class CreateChanceViewBody extends StatelessWidget {
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             TextFormField(
+              controller: titleController,
               decoration:  InputDecoration(
                 prefixIcon: const Icon(Icons.title),
                 hintText: LocaleKeys.enterTitle.localize,
                 border: const OutlineInputBorder(),
               ),
               onChanged: (value) {
-                // Handle change
               },
             ),
             const SizedBox(height: 16),
@@ -82,6 +86,7 @@ class CreateChanceViewBody extends StatelessWidget {
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             TextFormField(
+              controller:desController ,
               decoration:  InputDecoration(
                 prefixIcon: const Icon(Icons.description),
                 hintText: LocaleKeys.enterDescription.localize,
@@ -95,13 +100,13 @@ class CreateChanceViewBody extends StatelessWidget {
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             TextFormField(
+              controller: priceController,
               decoration:  InputDecoration(
                 prefixIcon: const Icon(Icons.attach_money),
                 hintText: LocaleKeys.enterPrice.localize,
                 border: const OutlineInputBorder(),
               ),
               onChanged: (value) {
-                // Handle change
               },
               keyboardType: TextInputType.number, // To show numeric keyboard
             ),
@@ -109,7 +114,10 @@ class CreateChanceViewBody extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: ()
+                {
+
+                },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8)),
