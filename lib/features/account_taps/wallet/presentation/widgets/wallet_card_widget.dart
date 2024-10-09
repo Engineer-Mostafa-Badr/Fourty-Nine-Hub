@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class WalletCardWidget extends StatelessWidget {
   final String balance;
+  final String currency;
   final double? target;
   final WalletTypes type;
   const WalletCardWidget(
-      {super.key, required this.balance, this.target, required this.type});
+      {super.key, required this.balance, this.target, required this.type, required this.currency});
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +51,22 @@ class WalletCardWidget extends StatelessWidget {
                     style: Styles.mediumText(
                         color: Theme.of(context).scaffoldBackgroundColor),
                   ),
-                Label(
-                  text: balance,
-                  style: Styles.headerText(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      fontSize: 50.sp),
+                Row(
+                  children: [
+                    Label(
+                      text: balance,
+                      style: Styles.headerText(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          fontSize: 50.sp),
+                    ),
+                    Sizer(width: 50.w,),
+                    Label(
+                      text: currency,
+                      style: Styles.headerText(
+                          color: AppColors.SECONDARY_COLOR,
+                          fontSize: 50.sp),
+                    ),
+                  ],
                 ),
                 Label(
                   text: LocaleKeys.hUB.localize,

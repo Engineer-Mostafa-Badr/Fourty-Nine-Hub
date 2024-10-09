@@ -60,7 +60,7 @@ class BalanceWalletView extends StatelessWidget {
                       WalletCardWidget(
                         balance: '${state.balance?.balance ?? ''}',
                         target: 1002,
-                        type: WalletTypes.balance,
+                        type: WalletTypes.balance, currency: state.balance?.currency ??'',
                       ),
                       const Sizer(),
                       Padding(

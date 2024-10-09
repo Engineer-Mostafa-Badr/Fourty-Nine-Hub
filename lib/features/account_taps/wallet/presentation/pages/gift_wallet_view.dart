@@ -38,7 +38,7 @@ class GiftWalletView extends StatelessWidget {
                   children: [
                     WalletCardWidget(
                       balance: '${state.gift?.giftWallet.amount ?? ''}',
-                      type: WalletTypes.giftWallet,
+                      type: WalletTypes.giftWallet, currency: '',
                     ),
                     const Sizer(),
                     Label(
