@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/send_points_use_case.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/end_room_use_case.dart';
@@ -20,7 +21,9 @@ import '../../../social_media/live_streaming/domain/usecases/create_live_use_cas
 import '../../../social_media/live_streaming/domain/usecases/end_live_use_case.dart';
 import '../../../social_media/live_streaming/domain/usecases/get_all_lives_use_case.dart';
 import '../../../social_media/live_streaming/domain/usecases/get_all_topics_use_case.dart';
+import '../../../social_media/live_streaming/domain/usecases/listen_batttle_request_use_case.dart';
 import '../../../social_media/live_streaming/domain/usecases/listen_to_send_points_use_case.dart';
+import '../../../social_media/live_streaming/domain/usecases/request_battle_use_case.dart';
 import 'stream_state.dart';
 
 final class StreamCubit extends Cubit<StreamState> {
@@ -34,8 +37,10 @@ final class StreamCubit extends Cubit<StreamState> {
     this.getAllLivesUseCase,
     this.endLiveUseCase,
     this.sendPointsUseCase,
-    this.listenToSendPointsUseCase,
-  ) : super(const StreamState());
+    this.listenToSendPointsUseCase, this.listenBattleRequestUseCase, this.requestBattleUseCase,
+  ) : super(const StreamState()){
+   initSocketListeners();
+  }
   final AddRoomUseCase addRoomUseCase;
   final JoinRoomUseCase joinRoomUseCase;
   final EndRoomUseCase endRoomUseCase;
@@ -48,6 +53,8 @@ final class StreamCubit extends Cubit<StreamState> {
   final EndLiveUseCase endLiveUseCase;
   final SendPointsUseCase sendPointsUseCase;
   final ListenToSendPointsUseCase listenToSendPointsUseCase;
+  final ListenBattleRequestUseCase listenBattleRequestUseCase;
+  final RequestBattleUseCase requestBattleUseCase;
   String meetingId = '';
   List<TopicEntity> topics = [];
   String liveId = '';

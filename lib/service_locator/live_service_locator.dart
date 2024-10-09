@@ -1,7 +1,9 @@
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/get_all_lives_use_case.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/get_all_topics_use_case.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/create_live_use_case.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/listen_batttle_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/listen_to_send_points_use_case.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/request_battle_use_case.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/send_points_use_case.dart';
 import 'package:get_it/get_it.dart';
 
@@ -31,6 +33,8 @@ class LiveServiceLocator {
     serviceLocator.registerFactory(() => CreateLiveUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => EndLiveUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => SendPointsUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => RequestBattleUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => ListenBattleRequestUseCase(serviceLocator()));
     serviceLocator
         .registerFactory(() => ListenToSendPointsUseCase(serviceLocator()));
     serviceLocator.registerFactory(

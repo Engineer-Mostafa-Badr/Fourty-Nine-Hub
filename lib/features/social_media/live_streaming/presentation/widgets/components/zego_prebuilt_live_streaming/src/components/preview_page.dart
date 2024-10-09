@@ -300,8 +300,6 @@ class _ZegoLiveStreamingPreviewPageState
                       //     receiverId: '', forSelect: true);
                       Navigator.of(context).push(createCustomTransitionRoute(
                         MultiBlocProvider(providers: [
-                          BlocProvider.value(
-                              value: serviceLocator<StreamCubit>()),
                           BlocProvider(
                               create: (context) =>
                               serviceLocator<GiftsCubit>()
@@ -350,35 +348,31 @@ class _ZegoLiveStreamingPreviewPageState
       builder: (context) =>
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: BlocProvider.value(
-              value: serviceLocator<StreamCubit>(),
-              child:
-              BlocBuilder<StreamCubit, StreamState>(builder: (context, state) {
-                return Column(mainAxisSize: MainAxisSize.min, children: [
-                  Label(
-                    text: LocaleKeys.selectATopic.localize,
-                    style: Styles.headerText(
-                      fontWeight: FontWeight.bold,
-                    ),
+            child: BlocBuilder<StreamCubit, StreamState>(builder: (context, state) {
+              return Column(mainAxisSize: MainAxisSize.min, children: [
+                Label(
+                  text: LocaleKeys.selectATopic.localize,
+                  style: Styles.headerText(
+                    fontWeight: FontWeight.bold,
                   ),
-                  ...topics.map((topic) {
-                    return RadioListTile<String>(
-                      title: Label(text: topic.name),
-                      value: topic.name,
-                      groupValue: state.topic.isEmpty ? null : state.topic,
-                      onChanged: (value) {
-                        context.read<StreamCubit>().setTopic(
-                            topic.name, topic.id);
-                        Future.delayed(
-                            const Duration(milliseconds: 100), () =>
-                            context.pop());
-                        // print('new topic is ${state.topic}');
-                      },
-                    );
-                  }),
-                ]);
-              }),
-            ),
+                ),
+                ...topics.map((topic) {
+                  return RadioListTile<String>(
+                    title: Label(text: topic.name),
+                    value: topic.name,
+                    groupValue: state.topic.isEmpty ? null : state.topic,
+                    onChanged: (value) {
+                      context.read<StreamCubit>().setTopic(
+                          topic.name, topic.id);
+                      Future.delayed(
+                          const Duration(milliseconds: 100), () =>
+                          context.pop());
+                      // print('new topic is ${state.topic}');
+                    },
+                  );
+                }),
+              ]);
+            }),
           ),
     );
   }

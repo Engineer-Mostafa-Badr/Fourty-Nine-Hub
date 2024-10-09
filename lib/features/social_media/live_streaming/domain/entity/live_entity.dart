@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity
 
 import '../../../tinder/data/models/gift_model.dart';
 import 'goal_entity.dart';
+import 'members_entity.dart';
 
 class LiveEntity extends Equatable {
   final String id;
@@ -11,6 +12,7 @@ class LiveEntity extends Equatable {
   final String title;
   final String? topicName;
   final List<GoalEntity> gift;
+final List<MembersEntity> members;
 
   const LiveEntity({
     required this.id,
@@ -18,8 +20,9 @@ class LiveEntity extends Equatable {
     required this.topicName,
     required this.description,
     required this.gift,
+    required this.members
   });
 
   @override
-  List<Object?> get props => [id, title, topicName, gift, description];
+  List<Object?> get props => [id, title, topicName, gift, description,members];
 }

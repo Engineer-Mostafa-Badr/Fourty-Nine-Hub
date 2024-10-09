@@ -36,7 +36,7 @@ extension MeetingStateX on StreamState {
 class StreamState extends Equatable {
   final StreamsStates? status;
   final List<ScheduledMeeting>? scheduledMeeting;
-  final List<LiveEntity>? allLives;
+  final List<LiveEntity> allLives;
   final LiveEntity? live;
   final List<GiftData> selectedGifts;
   final String? errorMessage;
