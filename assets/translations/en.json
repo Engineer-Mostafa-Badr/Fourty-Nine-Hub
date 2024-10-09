@@ -893,6 +893,14 @@
   "select": "Select",
   "pleaseEnterTheAmount": "Please enter the amount",
   "selectBankName": "Select Bank Name",
-  "pleaseSelectPaymentMethod": "Please select a payment method"
+  "pleaseSelectPaymentMethod": "Please select a payment method",
+  "sureWithdrawMoney": "Are you sure of withdraw money?",
+  "requestYellowCard": "Request Yellow Card",
+  "deducted": "will be deducted",
+  "fullName": "Full Name",
+  "pleaseEnterFullName": "Please enter full name",
+  "nationalIdNumber": "National Id Number",
+  "pleaseEnterNationalId": "Please enter national id",
+  "pleaseEnter14Digit": "Please enter 14 digit"
 
 }

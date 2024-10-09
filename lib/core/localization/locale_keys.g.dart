@@ -881,5 +881,13 @@ abstract class  LocaleKeys {
   static const pleaseEnterTheAmount = 'pleaseEnterTheAmount';
   static const selectBankName = 'selectBankName';
   static const pleaseSelectPaymentMethod = 'pleaseSelectPaymentMethod';
+  static const sureWithdrawMoney = 'sureWithdrawMoney';
+  static const requestYellowCard = 'requestYellowCard';
+  static const deducted = 'deducted';
+  static const fullName = 'fullName';
+  static const pleaseEnterFullName = 'pleaseEnterFullName';
+  static const nationalIdNumber = 'nationalIdNumber';
+  static const pleaseEnterNationalId = 'pleaseEnterNationalId';
+  static const pleaseEnter14Digit = 'pleaseEnter14Digit';
 
 }

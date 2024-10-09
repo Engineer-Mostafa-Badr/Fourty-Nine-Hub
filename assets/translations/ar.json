@@ -890,6 +890,14 @@
   "select": "اختيار",
   "pleaseEnterTheAmount": "الرجاء إدخال المبلغ",
   "selectBankName": "حدد اسم البنك",
-  "pleaseSelectPaymentMethod": "الرجاء تحديد طريقة الدفع"
+  "pleaseSelectPaymentMethod": "الرجاء تحديد طريقة الدفع",
+  "sureWithdrawMoney": "هل أنت متأكد من سحب الأموال؟",
+  "requestYellowCard": "طلب البطاقة الصفراء",
+  "deducted": "سيتم خصم المبلغ",
+  "fullName": "الاسم الكامل",
+  "pleaseEnterFullName": "الرجاء إدخال الاسم الكامل",
+  "nationalIdNumber": "رقم الهوية الوطنية",
+  "pleaseEnterNationalId": "الرجاء إدخال رقم الهوية الوطنية",
+  "pleaseEnter14Digit": "الرجاء إدخال 14 رقمًا"
 
 }

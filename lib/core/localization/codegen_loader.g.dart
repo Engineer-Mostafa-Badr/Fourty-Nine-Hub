@@ -906,7 +906,15 @@ class CodegenLoader extends AssetLoader{
   "select": "اختيار",
   "pleaseEnterTheAmount": "الرجاء إدخال المبلغ",
   "selectBankName": "حدد اسم البنك",
-  "pleaseSelectPaymentMethod": "الرجاء تحديد طريقة الدفع"
+  "pleaseSelectPaymentMethod": "الرجاء تحديد طريقة الدفع",
+  "sureWithdrawMoney": "هل أنت متأكد من سحب الأموال؟",
+  "requestYellowCard": "طلب البطاقة الصفراء",
+  "deducted": "سيتم خصم المبلغ",
+  "fullName": "الاسم الكامل",
+  "pleaseEnterFullName": "الرجاء إدخال الاسم الكامل",
+  "nationalIdNumber": "رقم الهوية الوطنية",
+  "pleaseEnterNationalId": "الرجاء إدخال رقم الهوية الوطنية",
+  "pleaseEnter14Digit": "الرجاء إدخال 14 رقمًا"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1803,7 +1811,15 @@ static const Map<String,dynamic> en = {
   "select": "Select",
   "pleaseEnterTheAmount": "Please enter the amount",
   "selectBankName": "Select Bank Name",
-  "pleaseSelectPaymentMethod": "Please select a payment method"
+  "pleaseSelectPaymentMethod": "Please select a payment method",
+  "sureWithdrawMoney": "Are you sure of withdraw money?",
+  "requestYellowCard": "Request Yellow Card",
+  "deducted": "will be deducted",
+  "fullName": "Full Name",
+  "pleaseEnterFullName": "Please enter full name",
+  "nationalIdNumber": "National Id Number",
+  "pleaseEnterNationalId": "Please enter national id",
+  "pleaseEnter14Digit": "Please enter 14 digit"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

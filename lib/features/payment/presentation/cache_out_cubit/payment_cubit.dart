@@ -7,8 +7,10 @@ import '../../../../core/abstract/use_case.dart';
 import '../../../fourty_nine/domain/entities/wallet_home_entity.dart';
 import '../../../fourty_nine/domain/use_cases/get_wallet_home_use_case.dart';
 import '../../domain/entities/cache_out_entity/list_bank_entity.dart';
+import '../../domain/entities/cache_out_entity/price_yellow_card_entity.dart';
 import '../../domain/entities/instapay_cache_out_entity.dart';
 import '../../domain/use_cases/cache_out/fetch_all_bank_use_case.dart';
+import '../../domain/use_cases/cache_out/fetch_price_yellow_use_case.dart';
 import '../../domain/use_cases/cache_out/instapay_cache_out_use_case.dart';
 import '../../domain/use_cases/cache_out/pay_out_request_use_case.dart';
 import '../../domain/use_cases/cache_out/request_instapay_use_case.dart';
@@ -23,7 +25,7 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
     this._getWalletHomeUseCase,
     this._allBankUseCase,
     this._payOutRequestUseCase,
-    this._requestInstapayUseCase,
+    this._requestInstapayUseCase, this._priceYellowUseCase,
   ) : super(PaymentCacheOutState());
 
   final InstapayCacheOutUseCase _instapayCacheOutUseCase;
@@ -32,8 +34,14 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
   final FetchAllBankUseCase _allBankUseCase; //
   final PayOutRequestUseCase _payOutRequestUseCase;
   final RequestInstapayUseCase _requestInstapayUseCase;
+  final FetchPriceYellowUseCase _priceYellowUseCase;
 
   List<String>? selectedImages;
+
+  Future<void> loadData()async{
+    await getWallet();
+    await fetchPrice();
+  }
 
   Future<void> getWallet() async {
     emit(state.copyWith(status: StateStatus.loading));
@@ -169,4 +177,24 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
       },
     );
   }
+
+  Future<void> fetchPrice() async {
+    emit(state.copyWith(status: StateStatus.loading));
+
+    final response = await _priceYellowUseCase(const NoParams());
+    response.fold(
+          (failure) {
+            print('failure');
+        emit(state.copyWith(failure: failure, status: StateStatus.error));
+      },
+          (data) {
+            print('data');
+        emit(state.copyWith(
+          price: data,
+          status: StateStatus.updated
+        ));
+      },
+    );
+  }
 }
+

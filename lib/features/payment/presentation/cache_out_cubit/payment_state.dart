@@ -10,6 +10,7 @@ class PaymentCacheOutState {
   final UploadFileEntity? backImage;
   final WalletHomeEntity? wallet;
   final List<ListBankEntity>?banks;
+  final PriceYellowCardEntity? price;
   String? backColor;
 
   PaymentCacheOutState({
@@ -21,6 +22,7 @@ class PaymentCacheOutState {
     this.backImage,
     this.wallet,
     this.banks,
+    this.price,
     this.backColor = "#FFFFFFFF",
   });
 
@@ -33,6 +35,7 @@ class PaymentCacheOutState {
     UploadFileEntity? backImage,
      WalletHomeEntity? wallet,
     List<ListBankEntity>?banks,
+    PriceYellowCardEntity? price,
     String? backColor,
   }) {
     return PaymentCacheOutState(
@@ -45,6 +48,7 @@ class PaymentCacheOutState {
       backColor: backColor ?? this.backColor,
       wallet: wallet ?? this.wallet,
       banks: banks ?? this.banks,
+      price: price ?? this.price,
     );
   }
 }
