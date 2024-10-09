@@ -38,7 +38,8 @@ class GiftWalletView extends StatelessWidget {
                   children: [
                     WalletCardWidget(
                       balance: '${state.gift?.giftWallet.amount ?? ''}',
-                      type: WalletTypes.giftWallet, currency: '',
+                      type: WalletTypes.giftWallet,
+                      currency: state.gift?.currency ??'',
                     ),
                     const Sizer(),
                     Label(
@@ -60,8 +61,16 @@ class GiftWalletView extends StatelessWidget {
                             style:
                                 Styles.mediumText(fontWeight: FontWeight.bold),
                           ),
-                          Label(
-                            text: '${state.gift?.amount ?? 0}',
+                          Row(
+                            children: [
+                              Label(
+                                text: '${state.gift?.amount ?? 0} ',
+                              ),
+                              Label(
+                                text: state.gift?.currency ?? '',
+                                color: AppColors.SECONDARY_COLOR,
+                              ),
+                            ],
                           ),
                           const Sizer(),
                           Row(

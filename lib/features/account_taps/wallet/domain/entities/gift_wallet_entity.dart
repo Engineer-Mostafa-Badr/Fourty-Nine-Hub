@@ -5,6 +5,7 @@ class GiftWalletEntity {
   final bool isActive;
   final String createdAt;
   final String updatedAt;
+  final String currency;
 
   GiftWalletEntity(
       {required this.id,
@@ -12,5 +13,7 @@ class GiftWalletEntity {
       required this.amount,
       required this.isActive,
       required this.createdAt,
-      required this.updatedAt});
+      required this.updatedAt,
+      required this.currency,
+      });
 }
