@@ -890,5 +890,9 @@ abstract class  LocaleKeys {
   static const pleaseEnterNationalId = 'pleaseEnterNationalId';
   static const pleaseEnter14Digit = 'pleaseEnter14Digit';
   static const yellowCardSuccess = 'yellowCardSuccess';
+  static const walletDigital = 'walletDigital';
+  static const notWalletDigital = 'notWalletDigital';
+  static const HaveWallet = 'HaveWallet';
+  static const submitPayment = 'submitPayment';
 
 }

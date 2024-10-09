@@ -902,6 +902,9 @@
   "nationalIdNumber": "National Id Number",
   "pleaseEnterNationalId": "Please enter national id",
   "pleaseEnter14Digit": "Please enter 14 digit",
-  "yellowCardSuccess": "You have successfully submitted your payment check your yellow card balance."
-
+  "yellowCardSuccess": "You have successfully submitted your payment check your yellow card balance.",
+  "walletDigital": "You have successfully submitted your payment. Check your inbox, you will receive your money shortly.",
+  "notWalletDigital": "You have successfully submitted your payment. Check your inbox, you will receive a voucher including your money shortly.",
+  "HaveWallet": "Do you have a wallet?",
+  "submitPayment": "Submit Payment"
 }

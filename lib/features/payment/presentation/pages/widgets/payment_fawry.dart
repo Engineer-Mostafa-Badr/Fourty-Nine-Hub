@@ -44,9 +44,9 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
         listener: (BuildContext context, PaymentCacheOutState state) {
           if (state.status == StateStatus.success) {
             if (hasDigitalWallet) {
-              showSuccessMessage(context, "You have successfully submitted your payment. Check your inbox, you will receive your money shortly.");
+              showSuccessMessage(context, LocaleKeys.walletDigital.localize);
             } else {
-              showSuccessMessage(context, "You have successfully submitted your payment. Check your inbox, you will receive a voucher including your money shortly.");
+              showSuccessMessage(context, LocaleKeys.notWalletDigital.localize);
             }
           }
           if (state.status == StateStatus.error) {
@@ -66,11 +66,12 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SwitchListTile(
-                    title: Label(maxLines: 2,text: "Do you have a wallet?",
+                    title: Label(maxLines: 2,text: LocaleKeys.HaveWallet.localize,
                     style: Styles.mediumText(),
                     ),
                     value: hasDigitalWallet,
                     activeTrackColor: AppColors.SECONDARY_COLOR,
+                    activeColor: AppColors.AUTH_CONTAINER_COLOR,
                     inactiveTrackColor: AppColors.GREY_NORMAL_COLOR,
                     onChanged: (value) {
                       setState(() {
@@ -79,78 +80,53 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
                     },
                   ),
                   if (hasDigitalWallet) ...[
-                    TextFormField(
-                      controller: phoneNumberController,
-                      decoration: const InputDecoration(
-                        labelText: "Phone Number",
-                      ),
-                      keyboardType: TextInputType.phone,
+                    buildInputField(
+                      controller: amountController,
+                      labelText: LocaleKeys.amount.localize,
+                      keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Please enter your phone number";
+                          return LocaleKeys.pleaseEnterTheAmount.localize;
                         }
                         return null;
                       },
                     ),
                     const Sizer(),
-                    TextFormField(
-                      controller: amountController,
-                      decoration: InputDecoration(
-                        labelText: LocaleKeys.amount.localize,
-                      ),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter the amount";
-                        }
-                        return null;
-                      },
+                    buildInputField(
+                      controller: phoneNumberController,
+                      labelText: LocaleKeys.phoneNumber.localize,
+                      validator: _validatePhoneNumber,
                     ),
+
                   ],
                   if (!hasDigitalWallet) ...[
-                    TextFormField(
+                    buildInputField(
                       controller: phoneNumberController,
-                      decoration: const InputDecoration(
-                        labelText: "Phone Number",
-                      ),
-                      keyboardType: TextInputType.phone,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter your phone number";
-                        }
-                        return null;
-                      },
+                      labelText: LocaleKeys.phoneNumber.localize,
+                      validator: _validatePhoneNumber,
                     ),
                     const Sizer(),
-                    TextFormField(
+                    buildInputField(
                       controller: nationalIdController,
-                      decoration: const InputDecoration(
-                        labelText: "National ID",
-                      ),
-                      keyboardType: TextInputType.number,
+                      labelText: LocaleKeys.nationalIdNumber.localize,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Please enter your national ID";
+                          return LocaleKeys.pleaseEnterNationalId.localize;
                         }
-                        if (value.length != 14) {
-                          return "National ID must be 14 digits";
-                        }
-                        if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                          return "National ID must contain only numbers";
+                        if (!RegExp(r'^[0-9]{14}$').hasMatch(value)) {
+                          return LocaleKeys.pleaseEnter14Digit.localize;
                         }
                         return null;
                       },
                     ),
                     const Sizer(),
-                    TextFormField(
+                    buildInputField(
                       controller: amountController,
-                      decoration: InputDecoration(
-                        labelText: LocaleKeys.amount.localize,
-                      ),
+                      labelText: LocaleKeys.amount.localize,
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Please enter the amount";
+                          return LocaleKeys.pleaseEnterTheAmount.localize;
                         }
                         return null;
                       },
@@ -166,7 +142,7 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
                           showAreYouSure(
                               title: LocaleKeys.alert.localize,
                               subTitle:
-                              'Are you sure of transferring money?',
+                              LocaleKeys.sureWithdrawMoney.localize,
                               action: () {
                                 context
                                     .read<PaymentCacheOutCubit>()
@@ -183,7 +159,7 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
                           showAreYouSure(
                               title: LocaleKeys.alert.localize,
                               subTitle:
-                              'Are you sure of transferring money?',
+                              LocaleKeys.sureWithdrawMoney.localize,
                               action: () {
                                 context
                                     .read<PaymentCacheOutCubit>()
@@ -208,7 +184,7 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
                         color: Theme.of(context).primaryColor,
                       ),
                       child: Label(
-                        text: "Submit Payment",
+                        text: LocaleKeys.submitPayment.localize,
                         color: Theme.of(context).scaffoldBackgroundColor,
                       ),
                     ),
@@ -221,4 +197,41 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
       ),
     );
   }
+
+  Widget buildInputField({
+    required TextEditingController controller,
+    required String labelText,
+    TextInputType keyboardType = TextInputType.text,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: labelText,
+        fillColor: Colors.transparent,
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+        ),
+      ),
+      keyboardType: keyboardType,
+      validator: validator,
+    );
+  }
+
+  String? _validatePhoneNumber(String? value) {
+    if (value == null || value.isEmpty) {
+      return LocaleKeys
+          .pleaseEnterYourPhoneNumber.localize; // Please enter a phone number
+    }
+    // Regex for Egyptian phone number
+    final RegExp phoneRegExp = RegExp(r'^(01)[0-9]{9}$');
+    if (!phoneRegExp.hasMatch(value)) {
+      return LocaleKeys.invalidPhoneNumber.localize; // Invalid phone number
+    }
+    return null;
+  }
+
 }

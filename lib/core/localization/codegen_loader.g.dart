@@ -915,7 +915,11 @@ class CodegenLoader extends AssetLoader{
   "nationalIdNumber": "رقم الهوية الوطنية",
   "pleaseEnterNationalId": "الرجاء إدخال رقم الهوية الوطنية",
   "pleaseEnter14Digit": "الرجاء إدخال 14 رقمًا",
-  "yellowCardSuccess": "لقد قمت بنجاح بإرسال الدفعة للتحقق من رصيد البطاقة الصفراء الخاصة بك."
+  "yellowCardSuccess": "لقد قمت بنجاح بإرسال الدفعة للتحقق من رصيد البطاقة الصفراء الخاصة بك.",
+  "walletDigital": "لقد قمت بإرسال الدفعة بنجاح. تحقق من صندوق الوارد الخاص بك، وسوف تتلقى أموالك قريبًا.",
+  "notWalletDigital": "لقد قمت بإرسال الدفعة بنجاح. تحقق من صندوق الوارد الخاص بك، وسوف تتلقى قسيمة تتضمن أموالك قريبًا.",
+  "HaveWallet": "هل لديك محفظة؟",
+  "submitPayment": "إرسال الدفعة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1821,7 +1825,11 @@ static const Map<String,dynamic> en = {
   "nationalIdNumber": "National Id Number",
   "pleaseEnterNationalId": "Please enter national id",
   "pleaseEnter14Digit": "Please enter 14 digit",
-  "yellowCardSuccess": "You have successfully submitted your payment check your yellow card balance."
+  "yellowCardSuccess": "You have successfully submitted your payment check your yellow card balance.",
+  "walletDigital": "You have successfully submitted your payment. Check your inbox, you will receive your money shortly.",
+  "notWalletDigital": "You have successfully submitted your payment. Check your inbox, you will receive a voucher including your money shortly.",
+  "HaveWallet": "Do you have a wallet?",
+  "submitPayment": "Submit Payment"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
