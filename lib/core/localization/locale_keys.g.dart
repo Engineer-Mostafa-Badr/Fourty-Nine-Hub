@@ -877,7 +877,6 @@ abstract class  LocaleKeys {
   static const expiredRequests = 'expiredRequests';
   static const filter = 'filter';
   static const beAStar = 'beAStar';
-  static const select = 'select';
   static const pleaseEnterTheAmount = 'pleaseEnterTheAmount';
   static const selectBankName = 'selectBankName';
   static const pleaseSelectPaymentMethod = 'pleaseSelectPaymentMethod';
@@ -895,5 +894,7 @@ abstract class  LocaleKeys {
   static const HaveWallet = 'HaveWallet';
   static const submitPayment = 'submitPayment';
   static const cashOutOption = 'cashOutOption';
+  static const select = 'select';
+  static const uploadOneImage = 'uploadOneImage';
 
 }

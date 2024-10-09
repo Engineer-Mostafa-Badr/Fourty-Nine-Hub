@@ -903,7 +903,6 @@ class CodegenLoader extends AssetLoader{
   "expiredRequests": "طلبات منتهية الصلاحية",
   "filter": "تصفية",
   "beAStar": "كن نجم",
-  "select": "اختيار",
   "pleaseEnterTheAmount": "الرجاء إدخال المبلغ",
   "selectBankName": "حدد اسم البنك",
   "pleaseSelectPaymentMethod": "الرجاء تحديد طريقة الدفع",
@@ -920,7 +919,9 @@ class CodegenLoader extends AssetLoader{
   "notWalletDigital": "لقد قمت بإرسال الدفعة بنجاح. تحقق من صندوق الوارد الخاص بك، وسوف تتلقى قسيمة تتضمن أموالك قريبًا.",
   "HaveWallet": "هل لديك محفظة؟",
   "submitPayment": "إرسال الدفعة",
-  "cashOutOption": "خيار السحب النقدي"
+  "cashOutOption": "خيار السحب النقدي",
+  "select": "اختيار",
+  "uploadOneImage": "قم بتحميل صورة واحدة على الأقل!"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1814,7 +1815,6 @@ static const Map<String,dynamic> en = {
   "other": "Others",
   "filter": "Filter",
   "beAStar": "Be A Star",
-  "select": "Select",
   "pleaseEnterTheAmount": "Please enter the amount",
   "selectBankName": "Select Bank Name",
   "pleaseSelectPaymentMethod": "Please select a payment method",
@@ -1831,7 +1831,9 @@ static const Map<String,dynamic> en = {
   "notWalletDigital": "You have successfully submitted your payment. Check your inbox, you will receive a voucher including your money shortly.",
   "HaveWallet": "Do you have a wallet?",
   "submitPayment": "Submit Payment",
-  "cashOutOption": "Cash out Option"
+  "cashOutOption": "Cash out Option",
+  "select": "Select",
+  "uploadOneImage": "Upload At Least One Photo!"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
