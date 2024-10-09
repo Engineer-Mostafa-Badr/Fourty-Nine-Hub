@@ -117,15 +117,20 @@ class BaseApiConsumer extends ApiConsumer {
           // }
           // )
           );
-      // log(url);
+       log(result.toString());
       // log(_dio.options.headers['Authorization'], name: "Authorization$url");
+      print('Welcome ${result.data['status']}');
       if (result.data['status']) {
+        print('result os io');
         return Right(result.data as Map<String, dynamic>);
       } else {
+        print('reselt 2');
         return Left(ValidationFailure(
             result.data['message'] ?? result.data['error']['message']));
       }
     } catch (e) {
+      print('result 3');
+      print(e.toString());
       // if (e is DioException &&
       //     e.response?.statusCode == 401 &&
       //     isTokenAttached) {
@@ -263,7 +268,7 @@ class BaseApiConsumer extends ApiConsumer {
         );
       }
     }
-    return UnknownFailure(e);
+    return UnknownFailure(e.toString());
   }
 
   Future<void> refreshToken() async {

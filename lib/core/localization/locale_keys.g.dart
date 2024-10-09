@@ -878,6 +878,16 @@ abstract class  LocaleKeys {
   static const filter = 'filter';
   static const beAStar = 'beAStar';
   static const select = 'select';
-  static const uploadOneImage = 'uploadOneImage';
+  static const SubscriberCompletionRate = 'SubscriberCompletionRate';
+  static const ChanceDetails = 'ChanceDetails';
+  static const ProductDescription = 'ProductDescription';
+  static const Typethevalueyouwanttoparticipation = 'Typethevalueyouwanttoparticipation';
+  static const CreateChance  = 'CreateChance ';
+  static const enterPrice = 'enterPrice';
+  static const enterTitle = 'enterTitle';
+  static const enterDescription = 'enterDescription';
+  static const payAtLeast1 = 'payAtLeast1';
+  static const oneUserWillR = 'oneUserWillR';
+  static const moreSubscriptionMore = 'moreSubscriptionMore';
 
 }

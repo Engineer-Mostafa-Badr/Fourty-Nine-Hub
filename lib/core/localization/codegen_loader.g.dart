@@ -904,7 +904,17 @@ class CodegenLoader extends AssetLoader{
   "filter": "تصفية",
   "beAStar": "كن نجم",
   "select": "اختيار",
-  "uploadOneImage": "قم بتحميل صورة واحدة على الأقل!"
+  "SubscriberCompletionRate": "معدل إكمال المشتركين",
+  "ChanceDetails": "تفاصيل الفرصة",
+  "ProductDescription": "وصف المنتج",
+  "Typethevalueyouwanttoparticipation": "اكتب القيمة التي تريد المشاركة بها",
+  "CreateChance ": "إنشاء فرصه",
+  "enterPrice": "ادخل السعر",
+  "enterTitle": "ادخل العنوان",
+  "enterDescription": "ادخل وصف",
+  "payAtLeast1": "ادفع 1 جنيه مصري على الأقل ونشر منتج أحلامك الذي تريد شراءه!!!",
+  "oneUserWillR": "سيفوز مستخدم واحد بشكل عشوائي في كل شهر",
+  "moreSubscriptionMore": "كلما زاد الاشتراك زادت الفرصة!"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1791,15 +1801,25 @@ static const Map<String,dynamic> en = {
   "sendOffer": "Send Offer",
   "subscribed": "Subscribed",
   "unsubscribed": "Unsubscribed",
+  "seeAll": "See All",
   "idExpiryDate": "ID Expiry Date",
   "expiredRequests": "Expired Requests",
   "licenseFrontAndBack": "Upload Your License (Front and Back)",
   "other": "Others",
-  "seeAll": "See All",
   "filter": "Filter",
   "beAStar": "Be A Star",
   "select": "Select",
-  "uploadOneImage": "Upload At Least One Photo!"
+  "SubscriberCompletionRate": "Subscriber Completion Rate",
+  "ChanceDetails": "Chance Details",
+  "ProductDescription": "Product Description",
+  "Typethevalueyouwanttoparticipation": "Type the value you want to participation",
+  "CreateChance ": "Create Chance ",
+  "enterPrice": "Enter Price",
+  "enterTitle": "Enter Title",
+  "enterDescription": "Enter Description",
+  "payAtLeast1": "Pay at least 1 EGP and publish your dream product you want to buy!!!",
+  "oneUserWillR": "One User will win randomly every month cycle",
+  "moreSubscriptionMore": "More subscription more chance!"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

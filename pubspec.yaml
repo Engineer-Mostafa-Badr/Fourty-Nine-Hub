@@ -105,7 +105,8 @@ dependencies:
   web_socket_channel: ^2.4.5
   zego_express_engine: ^3.16.2
   native_device_orientation: ^2.0.3
-#  win32: ^5.5.1
+  win32: ^5.5.1
+  carousel_slider: ^5.0.0
 dependency_overrides:
   http: ^0.13.3
 dev_dependencies:
