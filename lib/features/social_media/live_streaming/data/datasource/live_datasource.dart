@@ -42,7 +42,9 @@ abstract class LiveDataSource {
 
   Future<void> sendPoints(PointsParams params);
 
-  Future<void> requestBattle(NoParams noParams);
+  Future<void> requestBattle(RequestBattleParams params);
+
+  Future<void> listenToRequestBattle(NoParams noParams);
 
   Future<Either<Failure, void>> acceptBattleRequest(NoParams noParams);
 
@@ -141,9 +143,14 @@ class LiveDataSourceImpl extends LiveDataSource {
   }
 
   @override
-  Future<Either<Failure, void>> requestBattle(NoParams noParams) {
-    // TODO: implement requestBattle
-    throw UnimplementedError();
+  Future<void> requestBattle(RequestBattleParams params) async {
+    _socket.connect();
+    _socket.emit(SocketIOListeners.requestBattle, params.toJson);
+  }
+
+  @override
+  Future< void> listenToRequestBattle(NoParams noParams) async{
+  _socket.on(SocketIOListeners.requestBattle, (data) => print(data));
   }
 
   @override

@@ -96,7 +96,6 @@ extension TiktokControllerExtension on StreamCubit {
   }
 
   Future<void> createLive({required String title}) async {
-
     emit(state.copyWith(status: StreamsStates.loading));
     //extract data from state
     final List<GoalParams> goalParamsList = state.selectedGifts.map((gift) {
@@ -154,11 +153,7 @@ extension TiktokControllerExtension on StreamCubit {
         CliLogger.success('there is an success', level: CliLoggerLevel.two);
         rooms = r;
         roomsLength = r.length;
-        emit(
-          state
-              .copyWith(status: StreamsStates.success,lives: r)
-
-        );
+        emit(state.copyWith(status: StreamsStates.success, lives: r));
       });
     }).catchError((onError) {
       CliLogger.error('there is an error from catch${onError.toString()}',
@@ -175,15 +170,35 @@ extension TiktokControllerExtension on StreamCubit {
       emit(state.copyWith(status: StreamsStates.success));
     });
   }
-  void sendPoints(String memberId,String liveId){
+
+  void sendPoints(String memberId, String liveId) {
     print('tapped');
-    sendPointsUseCase(PointsParams(memberId: memberId,streamId: liveId));
+    sendPointsUseCase(PointsParams(memberId: memberId, streamId: liveId));
   }
-  void listenToSendPoints(){
+
+  void listenToSendPoints() {
     listenToSendPointsUseCase(const NoParams());
   }
-  void updateLiveIndex(LiveEntity live){
 
-    emit(state.copyWith(status: StreamsStates.success,live: live));
+  void updateLiveIndex(LiveEntity live) {
+    emit(state.copyWith(status: StreamsStates.success, live: live));
+  }
+
+  void requestBattle(String streamId, String receiverId) {
+    emit(state.copyWith(status: StreamsStates.loading));
+    requestBattleUseCase(
+            RequestBattleParams(streamId: streamId, receiverId: receiverId))
+        .then((value) => emit(state.copyWith(status: StreamsStates.success)))
+        .catchError(
+            (onError) => emit(state.copyWith(status: StreamsStates.failure)));
+  }
+
+  void listenForBattleRequest() {
+    listenBattleRequestUseCase(const NoParams());
+  }
+
+  void initSocketListeners() {
+    listenForBattleRequest();
+    listenToSendPoints();
   }
 }
