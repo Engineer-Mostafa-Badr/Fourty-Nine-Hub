@@ -43,7 +43,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.paymentOptions.localize),
+        title: Text(LocaleKeys.cashOutOption.localize),
       ),
       body: BlocBuilder<PaymentCubit, PaymentState>(
         builder: (context, state) {

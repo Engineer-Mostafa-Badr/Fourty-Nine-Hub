@@ -906,5 +906,6 @@
   "walletDigital": "You have successfully submitted your payment. Check your inbox, you will receive your money shortly.",
   "notWalletDigital": "You have successfully submitted your payment. Check your inbox, you will receive a voucher including your money shortly.",
   "HaveWallet": "Do you have a wallet?",
-  "submitPayment": "Submit Payment"
+  "submitPayment": "Submit Payment",
+  "cashOutOption": "Cash out Option"
 }

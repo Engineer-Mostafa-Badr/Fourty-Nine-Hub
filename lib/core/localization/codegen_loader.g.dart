@@ -919,7 +919,8 @@ class CodegenLoader extends AssetLoader{
   "walletDigital": "لقد قمت بإرسال الدفعة بنجاح. تحقق من صندوق الوارد الخاص بك، وسوف تتلقى أموالك قريبًا.",
   "notWalletDigital": "لقد قمت بإرسال الدفعة بنجاح. تحقق من صندوق الوارد الخاص بك، وسوف تتلقى قسيمة تتضمن أموالك قريبًا.",
   "HaveWallet": "هل لديك محفظة؟",
-  "submitPayment": "إرسال الدفعة"
+  "submitPayment": "إرسال الدفعة",
+  "cashOutOption": "خيار السحب النقدي"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1829,7 +1830,8 @@ static const Map<String,dynamic> en = {
   "walletDigital": "You have successfully submitted your payment. Check your inbox, you will receive your money shortly.",
   "notWalletDigital": "You have successfully submitted your payment. Check your inbox, you will receive a voucher including your money shortly.",
   "HaveWallet": "Do you have a wallet?",
-  "submitPayment": "Submit Payment"
+  "submitPayment": "Submit Payment",
+  "cashOutOption": "Cash out Option"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

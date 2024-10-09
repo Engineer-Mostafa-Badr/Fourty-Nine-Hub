@@ -894,5 +894,6 @@ abstract class  LocaleKeys {
   static const notWalletDigital = 'notWalletDigital';
   static const HaveWallet = 'HaveWallet';
   static const submitPayment = 'submitPayment';
+  static const cashOutOption = 'cashOutOption';
 
 }
