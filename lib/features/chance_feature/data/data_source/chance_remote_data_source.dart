@@ -12,8 +12,8 @@ import '../../domain/use_case/add_chance_data.dart';
 
 abstract class ChanceRemoteDataSource {
   Future<List<ChanceEntity>> fetchChance();
-  Future<Either<Failure, bool>> addChance(AddChanceParams params);
 
+  Future<Either<Failure, bool>> addChance(AddChanceParams params);
 }
 
 class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
@@ -66,13 +66,9 @@ class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
 
   @override
   Future<Either<Failure, bool>> addChance(AddChanceParams params) async {
-    final response = await _apiConsumer.post(EndPoints.chance, data:
-    {
-      "title" : params.title,
-      "description" : params.description,
-      "price" : params.price,
-      "images" : params.images,
-    }
+    final response = await _apiConsumer.post(
+      EndPoints.addChance,
+      data: params.toJson(),
     );
     return response.fold(
       (failure) => Left(failure),

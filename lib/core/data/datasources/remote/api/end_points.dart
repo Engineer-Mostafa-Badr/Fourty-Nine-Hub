@@ -805,4 +805,5 @@ class EndPoints {
 
   // Chance
   static String chance = '/chance-ads/my-ads';
+  static String addChance = '/chance-ads';
 }

@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/chance_feature/domain/repository/chance_r
 import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_chance_use_case.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/chance_feature/domain/use_case/add_chance_data.dart';
 import '../features/chance_feature/presentation/controller/cubit/chance_cubit.dart';
 
 class ChanceServiceLocator {
@@ -20,8 +21,13 @@ class ChanceServiceLocator {
         .registerLazySingleton<FetchChanceUseCase>(() => FetchChanceUseCase(
       serviceLocator(),
     ));
+    serviceLocator
+        .registerLazySingleton<AddChanceUseCase>(() => AddChanceUseCase(
+      serviceLocator(),
+    ));
 
     serviceLocator.registerFactory<ChanceCubit>(() => ChanceCubit(
+      serviceLocator(),
       serviceLocator(),
     ));
   }

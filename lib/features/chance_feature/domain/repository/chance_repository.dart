@@ -6,5 +6,5 @@ import '../use_case/add_chance_data.dart';
 
 abstract class ChanceRepository{
   Future<List<ChanceEntity>> fetchChance();
-  Future<Either<Failure , bool>> addChance(AddChanceParams params ) ;
+  Future<Either<Failure , bool>> addChance(AddChanceParams params) ;
 }
