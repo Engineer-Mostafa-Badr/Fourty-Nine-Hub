@@ -887,7 +887,6 @@
   "expiredRequests": "طلبات منتهية الصلاحية",
   "filter": "تصفية",
   "beAStar": "كن نجم",
-  "select": "اختيار",
   "pleaseEnterTheAmount": "الرجاء إدخال المبلغ",
   "selectBankName": "حدد اسم البنك",
   "pleaseSelectPaymentMethod": "الرجاء تحديد طريقة الدفع",
@@ -904,7 +903,10 @@
   "notWalletDigital": "لقد قمت بإرسال الدفعة بنجاح. تحقق من صندوق الوارد الخاص بك، وسوف تتلقى قسيمة تتضمن أموالك قريبًا.",
   "HaveWallet": "هل لديك محفظة؟",
   "submitPayment": "إرسال الدفعة",
-  "cashOutOption": "خيار السحب النقدي"
+  "cashOutOption": "خيار السحب النقدي",
+  "select": "اختيار",
+  "uploadOneImage": "قم بتحميل صورة واحدة على الأقل!"
+
 
 
 }

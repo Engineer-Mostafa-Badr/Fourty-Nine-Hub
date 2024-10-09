@@ -5,8 +5,6 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
@@ -91,7 +89,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                   Expanded(
                     child: Label(
                       text: widget.item.name,
-                      style: Styles.mediumText(fontWeight: FontWeight.bold),
+                      style: Styles.smallText(fontWeight: FontWeight.bold,fontSize: 24),
                     ),
                   ),
                   IconAppButton(

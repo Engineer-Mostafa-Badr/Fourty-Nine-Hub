@@ -47,7 +47,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                 itemCount: data.length,
                 controller: scrollController,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, childAspectRatio: 1),
+                    crossAxisCount: 3, childAspectRatio: 1),
                 itemBuilder: (context, index) => SubCategoryCard(
                   mainCategory: widget.mainCategory,
                   item: data[index],

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
@@ -40,7 +42,9 @@ abstract class LiveDataSource {
 
   Future<void> sendPoints(PointsParams params);
 
-  Future<void> requestBattle(NoParams noParams);
+  Future<void> requestBattle(RequestBattleParams params);
+
+  Future<void> listenToRequestBattle(NoParams noParams);
 
   Future<Either<Failure, void>> acceptBattleRequest(NoParams noParams);
 
@@ -139,9 +143,14 @@ class LiveDataSourceImpl extends LiveDataSource {
   }
 
   @override
-  Future<Either<Failure, void>> requestBattle(NoParams noParams) {
-    // TODO: implement requestBattle
-    throw UnimplementedError();
+  Future<void> requestBattle(RequestBattleParams params) async {
+    _socket.connect();
+    _socket.emit(SocketIOListeners.requestBattle, params.toJson);
+  }
+
+  @override
+  Future< void> listenToRequestBattle(NoParams noParams) async{
+  _socket.on(SocketIOListeners.requestBattle, (data) => print(data));
   }
 
   @override
@@ -160,9 +169,19 @@ class LiveDataSourceImpl extends LiveDataSource {
   Future<void> sendPoints(PointsParams params) async {
     // TODO: connect socket
     _socket.connect();
+    print('Connected');
 
     /// TODO: emit event
-    _socket.emit(SocketIOListeners.sendPoints, params.toJson());
+    _socket.emit(
+        SocketIOListeners.sendPoints,
+        jsonEncode({
+          "memberId": params.memberId,
+          "streamId": params.streamId,
+        }));
+    print(jsonEncode({
+      "memberId": params.memberId,
+      "streamId": params.streamId,
+    }));
   }
 
   @override

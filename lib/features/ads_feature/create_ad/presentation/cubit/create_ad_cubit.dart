@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 
@@ -194,18 +196,19 @@ class CreateAdCubit extends Cubit<CreateAdState> {
         context.pushReplacement(Routes.MYADDS);
       });
     }else if(state.images==[]||state.images==null){
-      showErrorMessage(context, 'messageImages');
+      showErrorMessage(context, LocaleKeys.uploadOneImage.localize);
     }else if(state.governorate == ''){
-      showErrorMessage(context, 'messageGovernorate');
+      showErrorMessage(context, LocaleKeys.selectGovernorate.localize);
     }else if(state.city == ''){
-      showErrorMessage(context, 'messageCity');
+      showErrorMessage(context, LocaleKeys.selectCity.localize);
     }
   }
 
   void filterAds(
       {required CategorizationEntity categorize,
-        required BuildContext context}) async{
-    if(formState.currentState?.validate() ?? false){
+        required BuildContext context}) async
+  {
+    if((formState.currentState?.validate() ?? false)&&(state.city !='')&&state.governorate !=''){
       print("ss");
       List<CreateAdEntity> details = [];
       for (int i = 0; i < (state.filterAdProperties?.length ?? 0); i++) {
@@ -227,6 +230,10 @@ class CreateAdCubit extends Cubit<CreateAdState> {
               (r) {
                 context.pop(model);
           });
+    }else if(state.governorate == ''){
+      showErrorMessage(context, LocaleKeys.selectGovernorate.localize);
+    }else if(state.city == ''){
+      showErrorMessage(context, LocaleKeys.selectCity.localize);
     }
   }
 

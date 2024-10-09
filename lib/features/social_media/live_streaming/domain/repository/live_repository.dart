@@ -18,4 +18,6 @@ abstract class LiveRepository {
   Future<Either<Failure, void>> endLive(MeetingParams params);
   Future<void> sendPoints(PointsParams params);
   Future<void> listenToSendPoints(NoParams params);
+  Future<void> requestBattle(RequestBattleParams params);
+  Future<void> listenToRequestBattle(NoParams noParams);
 }

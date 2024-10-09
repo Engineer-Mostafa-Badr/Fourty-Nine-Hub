@@ -9,6 +9,7 @@ import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
@@ -281,6 +282,46 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                   ),
                   Label(
                     text: ad.title,
+                    style: Styles.mediumText(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              Sizer(
+                height: 5.h,
+              ),
+              Sizer(
+                height: 8.h,
+              ),
+              Row(
+                children: [
+                  Label(
+                    text: "${LocaleKeys.governorate.localize} : ",
+                    style: Styles.mediumText(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.SECONDARY_COLOR),
+                  ),
+                  Label(
+                    text: context.isArabic?ad.governorateAr??'':ad.governorateEn??'',
+                    style: Styles.mediumText(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              Sizer(
+                height: 5.h,
+              ),
+              Sizer(
+                height: 8.h,
+              ),
+              Row(
+                children: [
+                  Label(
+                    text: "${LocaleKeys.city.localize} : ",
+                    style: Styles.mediumText(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.SECONDARY_COLOR),
+                  ),
+                  Label(
+                    text: context.isArabic?ad.cityAr??'':ad.cityEn??'',
                     style: Styles.mediumText(fontWeight: FontWeight.bold),
                   ),
                 ],
