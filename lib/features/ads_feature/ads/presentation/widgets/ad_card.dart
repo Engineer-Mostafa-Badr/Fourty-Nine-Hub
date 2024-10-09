@@ -3,17 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
+import 'package:fourtyninehub/common/functions/helper/launch_url.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
+import 'package:fourtyninehub/helpers/subscription_method.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -219,10 +226,12 @@ class _AdCardState extends State<AdCard> {
                     ],
                   ),
                   const Sizer(),
+                  CallMessageButtons(otherUserId: widget.item.userId??'',subcategoryId: widget.item.subCategoryId??'',phone: widget.item.phone??'', id: widget.item.id,hasReport: true,),
                   // FutureBuilder(
                   //     future: ButtonAvailability().isShowButton(
-                  //         otherUserId: widget.item.user?.id ?? '', subcategoryId: widget.item.subCategoryId ?? ''),
+                  //         otherUserId: widget.item.user?.id ?? '66b9da437b1fafcdf897bbe1', subcategoryId: widget.item.subCategoryId ?? ''),
                   //     builder: (context, snap) {
+                  //       print(snap.data);
                   //       return Row(
                   //         crossAxisAlignment: CrossAxisAlignment.center,
                   //         children: [
@@ -232,7 +241,11 @@ class _AdCardState extends State<AdCard> {
                   //               title: 'Call',
                   //               color: snap.data == true ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
                   //               icon: Icons.call,
-                  //               onTap: snap.data == true ? () {} : () {},
+                  //               onTap: snap.data == true ? () {
+                  //                 LaunchURLHelper().call( phone: widget.item.phone??'');
+                  //               } : () {
+                  //                 SubscriptionMethod().subscribe(subscribeId: widget.item.subCategoryId??'', title: LocaleKeys.ads.localize);
+                  //               },
                   //             ),
                   //           ),
                   //           const Sizer(width: 5),

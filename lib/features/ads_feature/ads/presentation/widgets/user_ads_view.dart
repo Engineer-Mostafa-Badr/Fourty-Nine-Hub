@@ -19,29 +19,31 @@ class UserAdsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AdvertisementCubit, AdsState>(
-        builder: (context,state) {
-          final controller = context.read<AdvertisementCubit>();
-          return Column(
-            children: [
-              Align(
-                  alignment: AlignmentDirectional.topStart,
-                  child: Container(
-                      margin: EdgeInsetsDirectional.all(10.w),
-                      child: BadgedLabel(label: LocaleKeys.filter.localize,
-                          onTap: () async{
-                            dynamic data = await context.push(Routes.FILTERADS,extra:CategorizationEntity(mainCategory: params.mainCategory,subCategory: params.subCategory) );
-                            if (data != null) {
-                              print("objectsdaa");
-                              controller.loadFilterData(model: data, filter: userType);
-                            }
-                          }
-                      ))),
-              Expanded(
-                  child: UserAds(params: params, userType: userType,)
-              )            ],
-          );
-        }
-    );
+    return BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
+      final controller = context.read<AdvertisementCubit>();
+      return Column(children: [
+        Align(
+            alignment: AlignmentDirectional.topStart,
+            child: Container(
+                margin: EdgeInsetsDirectional.all(10.w),
+                child: BadgedLabel(
+                    label: LocaleKeys.filter.localize,
+                    onTap: () async {
+                      dynamic data = await context.push(Routes.FILTERADS,
+                          extra: CategorizationEntity(
+                              mainCategory: params.mainCategory,
+                              subCategory: params.subCategory));
+                      if (data != null) {
+                        controller.loadFilterData(
+                            model: data, filter: userType);
+                      }
+                    }))),
+        Expanded(
+            child: UserAds(
+          params: params,
+          userType: userType,
+        ))
+      ]);
+    });
   }
 }
