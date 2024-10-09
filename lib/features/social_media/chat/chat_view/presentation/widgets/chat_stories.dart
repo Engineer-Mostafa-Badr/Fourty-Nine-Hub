@@ -651,6 +651,7 @@ class ChatStories extends StatelessWidget {
                     child: IgnorePointer(
                       ignoring: true,
                       child: Image.network(
+                          fit: BoxFit.cover,
                           state.users[index].user!.profilePictureUrl!),
 
                       // StoryView(

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
@@ -14,6 +16,7 @@ import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/abstract/use_case.dart';
+import '../../../../../core/data/datasources/remote/socket/socket_data_source.dart';
 import '../../../../../routes/pages.dart';
 import '../../../../zoom/domain/usecases/add_room_use_case.dart';
 import '../../domain/usecases/create_live_use_case.dart';
@@ -35,19 +38,23 @@ abstract class LiveDataSource {
 
   Future<Either<Failure, void>> sendLiveGoal(GoalParams params);
 
-  Future<Either<Failure, void>> sendPoints(GoalParams params);
+  Future<void> listenToSendLiveGoal(NoParams noParams);
 
-  Future<Either<Failure, void>> requestBattle(NoParams noparams);
+  Future<void> sendPoints(PointsParams params);
 
-  Future<Either<Failure, void>> acceptBattleRequest(NoParams noparams);
+  Future<void> requestBattle(RequestBattleParams params);
 
-  Future<Either<Failure, void>> rejectBattleRequest(NoParams noparams);
+  Future<void> listenToRequestBattle(NoParams noParams);
 
-  Future<Either<Failure, void>> sendGift(NoParams noparams);
+  Future<Either<Failure, void>> acceptBattleRequest(NoParams noParams);
 
-  Future<Either<Failure, void>> playGiftVideo(NoParams noparams);
+  Future<Either<Failure, void>> rejectBattleRequest(NoParams noParams);
 
-  Future<Either<Failure, void>> determineWinner(NoParams noparams);
+  Future<Either<Failure, void>> sendGift(NoParams noParams);
+
+  Future<Either<Failure, void>> playGiftVideo(NoParams noParams);
+
+  Future<Either<Failure, void>> determineWinner(NoParams noParams);
 }
 
 class LiveDataSourceImpl extends LiveDataSource {
@@ -106,13 +113,13 @@ class LiveDataSourceImpl extends LiveDataSource {
   }
 
   @override
-  Future<Either<Failure, void>> acceptBattleRequest(NoParams noparams) {
+  Future<Either<Failure, void>> acceptBattleRequest(NoParams noParams) {
     // TODO: implement acceptBattleRequest
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, void>> determineWinner(NoParams noparams) {
+  Future<Either<Failure, void>> determineWinner(NoParams noParams) {
     // TODO: implement determineWinner
     throw UnimplementedError();
   }
@@ -124,25 +131,30 @@ class LiveDataSourceImpl extends LiveDataSource {
   }
 
   @override
-  Future<Either<Failure, void>> playGiftVideo(NoParams noparams) {
+  Future<Either<Failure, void>> playGiftVideo(NoParams noParams) {
     // TODO: implement playGiftVideo
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, void>> rejectBattleRequest(NoParams noparams) {
+  Future<Either<Failure, void>> rejectBattleRequest(NoParams noParams) {
     // TODO: implement rejectBattleRequest
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, void>> requestBattle(NoParams noparams) {
-    // TODO: implement requestBattle
-    throw UnimplementedError();
+  Future<void> requestBattle(RequestBattleParams params) async {
+    _socket.connect();
+    _socket.emit(SocketIOListeners.requestBattle, params.toJson);
   }
 
   @override
-  Future<Either<Failure, void>> sendGift(NoParams noparams) {
+  Future< void> listenToRequestBattle(NoParams noParams) async{
+  _socket.on(SocketIOListeners.requestBattle, (data) => print(data));
+  }
+
+  @override
+  Future<Either<Failure, void>> sendGift(NoParams noParams) {
     // TODO: implement sendGift
     throw UnimplementedError();
   }
@@ -154,8 +166,27 @@ class LiveDataSourceImpl extends LiveDataSource {
   }
 
   @override
-  Future<Either<Failure, void>> sendPoints(GoalParams params) {
-    // TODO: implement sendPoints
-    throw UnimplementedError();
+  Future<void> sendPoints(PointsParams params) async {
+    // TODO: connect socket
+    _socket.connect();
+    print('Connected');
+
+    /// TODO: emit event
+    _socket.emit(
+        SocketIOListeners.sendPoints,
+        jsonEncode({
+          "memberId": params.memberId,
+          "streamId": params.streamId,
+        }));
+    print(jsonEncode({
+      "memberId": params.memberId,
+      "streamId": params.streamId,
+    }));
+  }
+
+  @override
+  Future<void> listenToSendLiveGoal(NoParams noParams) async {
+    _socket.connect();
+    _socket.on(SocketIOListeners.sendPoints, (data) => print(data.toString()));
   }
 }

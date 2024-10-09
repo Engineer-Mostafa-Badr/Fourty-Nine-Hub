@@ -7,6 +7,8 @@ import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_all_p
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/remove_favourite_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_come_with_me_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_pick_me_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/filter_ad_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../core/error/failure.dart';
@@ -24,6 +26,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
   final RequestComeWithMeUseCase _requestComeWithMeUseCase;
   final RemoveFavouriteAdUseCase _removeFavouriteAdUseCase;
   final FavouriteAdUseCase _favouriteAdUseCase;
+  final FilterAdUseCase _filterAdUseCase;
   AdvertisementCubit(
       this._getAdsUseCase,
       this._getAllComeWithMeUseCase,
@@ -31,7 +34,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
       this._requestComeWithMeUseCase,
       this._requestPickMeUseCase,
       this._removeFavouriteAdUseCase,
-      this._favouriteAdUseCase)
+      this._favouriteAdUseCase, this._filterAdUseCase)
       : super(const AdsState());
 
   // void loadData({required String subCategoryId,required String filter}) async {
@@ -46,16 +49,68 @@ class AdvertisementCubit extends Cubit<AdsState> {
   //   }
   // }
 
-  void loadData({required String subCategoryId, required String filter}) async {
+  void loadData({required String subCategoryId, required String filter,required bool fromTab}) async {
+    if(fromTab==true){
+      emit(state.copyWith(status: AdsStates.loading));
+    }
     await getAds(subCategoryId: subCategoryId, filter: filter, page: 1);
     adsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
       getAds(subCategoryId: subCategoryId, filter: filter, page: pageKey);
     });
+    emit(state.copyWith( status: AdsStates.success));
+  }
+
+  void loadFilterData({required FilterModel model,required String filter,}) async {
+    emit(state.copyWith(status: AdsStates.loading));
+    await filterAds(model: model, filter: filter, page: 1);
+    adsPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      filterAds(model: model, filter: filter, page: pageKey);
+    });
+    emit(state.copyWith(status: AdsStates.success));
   }
 
   void onRefresh() async {
     adsPagingController.refresh();
+  }
+
+  void changeState(FilterModel model,bool hasFilter){
+    emit(state.copyWith(filterModel: model,hasFilter: hasFilter));
+  }
+
+  filterAds(
+      {required FilterModel model,required int page,required String filter,}) async
+  {
+    if(page==1){
+      adsPagingController.itemList=[];
+    }
+    // emit(state.copyWith(status: AdsStates.filterLoading));
+    print("object");
+    print(page);
+    print(filter);
+    print("objectHiiiiiiiiiiii");
+
+    FilterModel filterModel = FilterModel(price: model.price, props: model.props, cityId: model.cityId, governorateId: model.governorateId, limit: 15, page: page, subCategoryId: model.subCategoryId,filter:filter);
+      final response = await _filterAdUseCase(filterModel);
+      response.fold(
+              (l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
+              (data) {
+                final isLastPage = data.length < 10;
+                if (page == 1) {
+                  print("page == 1 $page");
+                  adsPagingController.itemList = [];
+                }
+                if (isLastPage) {
+                  print("isLastPage = $isLastPage");
+                  adsPagingController.appendLastPage(data);
+                } else {
+                  print("isNotLastPage = $isLastPage");
+                  final nextPageKey = page + 1;
+                  adsPagingController.appendPage(data, nextPageKey);
+                }
+                print(data.toString());
+          });
   }
 
   final PagingController<int, AdModel> adsPagingController =
@@ -64,6 +119,9 @@ class AdvertisementCubit extends Cubit<AdsState> {
       {required String subCategoryId,
       required String filter,
       required int page}) async {
+    if(page==1){
+      adsPagingController.itemList=[];
+    }
     final response = await _getAdsUseCase(GetAdsParams(
         subCategoryId: subCategoryId, filter: filter, page: page, limit: 10));
     response
@@ -76,13 +134,15 @@ class AdvertisementCubit extends Cubit<AdsState> {
       }
       if (isLastPage) {
         print("isLastPage = $isLastPage");
+        print(data.length);
+        print(data.toString());
         adsPagingController.appendLastPage(data);
+
       } else {
         print("isNotLastPage = $isLastPage");
         final nextPageKey = page + 1;
         adsPagingController.appendPage(data, nextPageKey);
       }
-      emit(state.copyWith(ads: data, status: AdsStates.success));
     });
   }
 

@@ -606,6 +606,16 @@ class CodegenLoader extends AssetLoader{
     "other_voice": "صوت آخر",
     "mix_voices": "دمج الأصوات"
   },
+  "free": "متاح",
+  "booked": "محجوز",
+  "inProgress": "قيد التقدم",
+  "comfort": "مريح",
+  "egp": "جنيه",
+  "minutesAgo": "دقائق متبقية",
+  "womenOnly": "نساء فقط",
+  "bookSeat": "حجز مقعد",
+  "pricePerSeat": "سعر المقعد الواحد",
+  "book": "حجز",
   "comments_header": "التعليقات",
   "add_comment_hint": "أضف تعليقًا...",
   "write_reply_hint": "اكتب ردًا...",
@@ -755,7 +765,6 @@ class CodegenLoader extends AssetLoader{
   "repeated": "مكرر",
   "subscription": "اشتراك",
   "tripJoinAds": "إعلانات الانضمام إلى الرحلة",
-  "other": "اخري",
   "adSoldout": "هل أنت متأكد أنك تريد تعيين هذا الإعلان على أنه مباع؟",
   "viewAll": "عرض الكل",
   "addACaption": "...اضافة تعليق",
@@ -891,7 +900,11 @@ class CodegenLoader extends AssetLoader{
   "licenseFrontAndBack": "قم بتحميل الترخيص  (الوجه والظهر)",
   "subscribed": "مشترك",
   "unsubscribed": "غير مشرك",
-  "expiredRequests": "تاريخ  النتهاء"
+  "expiredRequests": "طلبات منتهية الصلاحية",
+  "filter": "تصفية",
+  "beAStar": "كن نجم",
+  "select": "اختيار",
+  "uploadOneImage": "قم بتحميل صورة واحدة على الأقل!"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1594,6 +1607,16 @@ static const Map<String,dynamic> en = {
   "errorLoadingSocialPage": "Error loading social page",
   "updateSuccessfully": "Update Successfully",
   "carpool": "Carpool",
+  "free": "Free",
+  "booked": "Booked",
+  "inProgress": "In Progress",
+  "comfort": "Comfort",
+  "egp": "EGP",
+  "minutesAgo": "Minutes ago",
+  "womenOnly": "Women only",
+  "bookSeat": "Book Seat",
+  "pricePerSeat": "Price Per Seat",
+  "book": "Book",
   "chance": "Chance",
   "subTab": "Sub Tab",
   "exactly2items": "Please select exactly 2 items.",
@@ -1635,7 +1658,6 @@ static const Map<String,dynamic> en = {
   "repeated": "Repeated",
   "subscription": "Subscription",
   "tripJoinAds": "Trip Join Ads",
-  "other": "Other",
   "adSoldout": "Are you sure, you want to set this AD as soldout?",
   "viewAll": "View All",
   "addACaption": "Add a caption...",
@@ -1769,10 +1791,15 @@ static const Map<String,dynamic> en = {
   "sendOffer": "Send Offer",
   "subscribed": "Subscribed",
   "unsubscribed": "Unsubscribed",
-  "seeAll": "See All",
   "idExpiryDate": "ID Expiry Date",
+  "expiredRequests": "Expired Requests",
   "licenseFrontAndBack": "Upload Your License (Front and Back)",
-  "expiredRequests": "expiredRequests"
+  "other": "Others",
+  "seeAll": "See All",
+  "filter": "Filter",
+  "beAStar": "Be A Star",
+  "select": "Select",
+  "uploadOneImage": "Upload At Least One Photo!"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

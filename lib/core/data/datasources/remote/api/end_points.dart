@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
@@ -12,6 +13,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
+import '../../../../../features/account_taps/my_adds/domain/usecases/edit_my_ads_use_case.dart';
 import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_counts_ads_usecase.dart';
 import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_counts_usecase.dart';
 import '../../../../../features/account_taps/my_adds/domain/usecases/update_my_ads_usecase.dart';
@@ -123,6 +125,8 @@ class EndPoints {
       '/ads/users-ads-field/${params.id}?field=${params.status}';
   static String updateMyAds(UpdateMyAdsParams params) =>
       '/ads/update-ads/${params.id}';
+  static String editMyAds(EditParams params) =>
+      '/ads/update-ads/${params.id}';
 
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';
@@ -230,6 +234,8 @@ class EndPoints {
   //  Payment Cache Out
   static const instaPay = '/payment-profile';
   static const requestYellowCard = '/payout/yellow-card';
+  static const banks = '/banks';
+  static const payout = '/payout/request';
 
   static String doctorAcceptAppointment(String appointmentId) => '/health/book-appointment/approve/$appointmentId';
 
@@ -613,6 +619,7 @@ class EndPoints {
   }
 
   static const createAd = '/ads/create-ads';
+  static filterAd (FilterModel filter)=> '/ads/filter-ads/${filter.subCategoryId}?government=${filter.governorateId}&city=${filter.cityId}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
   static const myAds = '/ads/allMyAds?limit=100';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const favouriteAds = '/ads-favourites/allFavouriteAds';

@@ -115,10 +115,17 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
               border: Border.all(color: Colors.grey),
               borderRadius: BorderRadius.circular(5),
             ),
-            child: Label(
-                text: getLang() == 'ar'
-                    ? value?.nameAr ?? ''
-                    : value?.nameEn ?? ''),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Label(
+                      text: getLang() == 'ar'
+                          ? value?.nameAr ?? ''
+                          : value?.nameEn ?? ''),
+                ),
+                const Icon(Icons.arrow_drop_down)
+              ],
+            ),
           ),
         ),
       ],
@@ -130,8 +137,8 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
     required List<SelectionEntity> values,
   }) {
     return Scaffold(
-      appBar: const BackAppBar(
-        label: 'Select',
+      appBar:  BackAppBar(
+        label: LocaleKeys.select.localize,
       ),
       body: ListView.builder(
           itemCount: values.length,

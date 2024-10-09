@@ -9,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 
 // Project imports:
@@ -197,33 +198,44 @@ class FakeTextFieldBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 15),
-      child: ZoomChatBuilder(
-        widget: widget,
-        child: ZegoLiveStreamingInRoomMessageInputBoardButton(
-            translationText: widget.config.innerText,
-            hostManager: widget.hostManager,
-            onSheetPopUp: (int key) {
-              widget.popUpManager.addAPopUpSheet(key);
-            },
-            onSheetPop: (int key) {
-              widget.popUpManager.removeAPopUpSheet(key);
-            },
-            buttonSize: Size(context.screenWidth * 0.8, 40),
-            iconSize: Size(context.screenWidth * 0.8, 40),
-            enabledIcon: ButtonIcon(
-                icon: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Label(
-                  text: LocaleKeys.comment.localize,
-                  color: Colors.grey,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ))),
+      child: Row(
+        children: [
+
+          Expanded(
+            child: ZoomChatBuilder(
+              widget: widget,
+              child: ZegoLiveStreamingInRoomMessageInputBoardButton(
+                  translationText: widget.config.innerText,
+                  hostManager: widget.hostManager,
+                  onSheetPopUp: (int key) {
+                    widget.popUpManager.addAPopUpSheet(key);
+                  },
+                  onSheetPop: (int key) {
+                    widget.popUpManager.removeAPopUpSheet(key);
+                  },
+                  buttonSize: Size(context.screenWidth * 0.8, 40),
+                  iconSize: Size(context.screenWidth * 0.8, 40),
+                  enabledIcon: ButtonIcon(
+                      icon: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Label(
+                        text: LocaleKeys.comment.localize,
+                        color: Colors.grey,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ))),
+            ),
+          ),
+          IconButton(onPressed: (){
+            var cubit = context.read<StreamCubit>();
+            cubit.requestBattle('6706b17a84a6fa95c2c0621b','66cc7223f3e66376f188c48b');
+          }, icon: const Icon(Icons.person_2))
+        ],
       ),
     );
   }

@@ -219,53 +219,53 @@ class _AdCardState extends State<AdCard> {
                     ],
                   ),
                   const Sizer(),
-                  FutureBuilder(
-                      future: ButtonAvailability().isShowButton(
-                          otherUserId: widget.item.user?.id ?? '', subcategoryId: widget.item.subCategoryId ?? ''),
-                      builder: (context, snap) {
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: AvaialbleTripsButton(
-                                title: 'Call',
-                                color: snap.data == true ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
-                                icon: Icons.call,
-                                onTap: snap.data == true ? () {} : () {},
-                              ),
-                            ),
-                            const Sizer(width: 5),
-                            Expanded(
-                              flex: 3,
-                              child: AvaialbleTripsButton(
-                                title: 'Message',
-                                color: snap.data == true ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
-                                icon: Icons.email,
-                                onTap: snap.data == true ? () {} : () {},
-                              ),
-                            ),
-                            const Sizer(width: 5),
-                            Expanded(
-                              flex: 3,
-                              child: AvaialbleTripsButton(
-                                title: 'Report',
-                                color: AppColors.SECONDARY_COLOR,
-                                icon: Icons.report,
-                                onTap: () {
-                                  print("jskdnajksdnjkadn");
-                                  bottomSheet(
-                                      context: context,
-                                      widget: ReportView(
-                                        id: widget.item.id,
-                                        categoryId: '66b77e77bb35968b535dc944',
-                                      ));
-                                },
-                              ),
-                            ),
-                          ],
-                        );
-                      }),
+                  // FutureBuilder(
+                  //     future: ButtonAvailability().isShowButton(
+                  //         otherUserId: widget.item.user?.id ?? '', subcategoryId: widget.item.subCategoryId ?? ''),
+                  //     builder: (context, snap) {
+                  //       return Row(
+                  //         crossAxisAlignment: CrossAxisAlignment.center,
+                  //         children: [
+                  //           Expanded(
+                  //             flex: 3,
+                  //             child: AvaialbleTripsButton(
+                  //               title: 'Call',
+                  //               color: snap.data == true ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                  //               icon: Icons.call,
+                  //               onTap: snap.data == true ? () {} : () {},
+                  //             ),
+                  //           ),
+                  //           const Sizer(width: 5),
+                  //           Expanded(
+                  //             flex: 3,
+                  //             child: AvaialbleTripsButton(
+                  //               title: 'Message',
+                  //               color: snap.data == true ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                  //               icon: Icons.email,
+                  //               onTap: snap.data == true ? () {} : () {},
+                  //             ),
+                  //           ),
+                  //           const Sizer(width: 5),
+                  //           Expanded(
+                  //             flex: 3,
+                  //             child: AvaialbleTripsButton(
+                  //               title: 'Report',
+                  //               color: AppColors.SECONDARY_COLOR,
+                  //               icon: Icons.report,
+                  //               onTap: () {
+                  //                 print("jskdnajksdnjkadn");
+                  //                 bottomSheet(
+                  //                     context: context,
+                  //                     widget: ReportView(
+                  //                       id: widget.item.id,
+                  //                       categoryId: '66b77e77bb35968b535dc944',
+                  //                     ));
+                  //               },
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       );
+                  //     }),
                 ],
               ),
             ),

@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
@@ -32,6 +33,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.defines.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../../../res/style/app_colors.dart';
@@ -130,40 +132,49 @@ class _ZegoLiveStreamingLivePageSurfaceState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       state.selectedGifts.isEmpty
-                          ? Container(
-                              width: context.screenWidth * 0.4,
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                          ? GestureDetector(
+                              onTap: () {
+                                var cubit = context.read<StreamCubit>();
+                                CliLogger.info(cubit.state.live.toString());
+                                context.read<StreamCubit>().sendPoints(
+                                    cubit.state.live!.members[0].id,
+                                    cubit.state.live!.id);
+                              },
+                              child: Container(
+                                  width: context.screenWidth * 0.4,
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Label(
+                                                text: "Add ",
+                                                style: Styles.headerText(),
+                                              ),
+                                              Image.asset(
+                                                'assets/49-New-icons/goal.png',
+                                                width: 70.w,
+                                              ),
+                                            ],
+                                          ),
+                                          const Sizer(),
                                           Label(
-                                            text: "Add ",
+                                            text: "Live goals",
                                             style: Styles.headerText(),
                                           ),
-                                          Image.asset(
-                                            'assets/49-New-icons/goal.png',
-                                            width: 70.w,
-                                          ),
-                                        ],
-                                      ),
-                                      const Sizer(),
-                                      Label(
-                                        text: "Live goals",
-                                        style: Styles.headerText(),
-                                      ),
-                                    ]),
-                              ))
+                                        ]),
+                                  )),
+                            )
                           : GestureDetector(
                               onTap: () {
                                 showModalBottomSheet(
@@ -236,17 +247,15 @@ class _ZegoLiveStreamingLivePageSurfaceState
                                                                             15),
                                                                 child: Row(
                                                                   children: [
-                                                                    SvgPicture
-                                                                        .network(
-                                                                      state
-                                                                          .selectedGifts[
-                                                                              index]
-                                                                          .picture!,
-                                                                      height:
-                                                                          100.h,
-                                                                      width:
-                                                                          100.w,
-                                                                    ),
+                                                                    SvgPicture.network(
+                                                                        state
+                                                                            .selectedGifts[
+                                                                                index]
+                                                                            .picture!,
+                                                                        height: 100
+                                                                            .h,
+                                                                        width: 100
+                                                                            .w),
                                                                     Row(
                                                                       mainAxisAlignment:
                                                                           MainAxisAlignment
@@ -287,6 +296,11 @@ class _ZegoLiveStreamingLivePageSurfaceState
                                                 )
                                               ]));
                                     });
+
+                                // onTap: () {
+                                //   context.read<StreamCubit>().requestBattle(
+                                //       "66b9da437b1fafcdf897bbe1",
+                                //       "6702b91d870285d189a6e408");
                               },
                               child: Container(
                                 width: context.screenWidth * 0.4,
