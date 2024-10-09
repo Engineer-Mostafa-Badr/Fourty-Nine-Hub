@@ -901,6 +901,7 @@
   "pleaseEnterFullName": "Please enter full name",
   "nationalIdNumber": "National Id Number",
   "pleaseEnterNationalId": "Please enter national id",
-  "pleaseEnter14Digit": "Please enter 14 digit"
+  "pleaseEnter14Digit": "Please enter 14 digit",
+  "yellowCardSuccess": "You have successfully submitted your payment check your yellow card balance."
 
 }

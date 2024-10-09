@@ -914,7 +914,8 @@ class CodegenLoader extends AssetLoader{
   "pleaseEnterFullName": "الرجاء إدخال الاسم الكامل",
   "nationalIdNumber": "رقم الهوية الوطنية",
   "pleaseEnterNationalId": "الرجاء إدخال رقم الهوية الوطنية",
-  "pleaseEnter14Digit": "الرجاء إدخال 14 رقمًا"
+  "pleaseEnter14Digit": "الرجاء إدخال 14 رقمًا",
+  "yellowCardSuccess": "لقد قمت بنجاح بإرسال الدفعة للتحقق من رصيد البطاقة الصفراء الخاصة بك."
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1819,7 +1820,8 @@ static const Map<String,dynamic> en = {
   "pleaseEnterFullName": "Please enter full name",
   "nationalIdNumber": "National Id Number",
   "pleaseEnterNationalId": "Please enter national id",
-  "pleaseEnter14Digit": "Please enter 14 digit"
+  "pleaseEnter14Digit": "Please enter 14 digit",
+  "yellowCardSuccess": "You have successfully submitted your payment check your yellow card balance."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

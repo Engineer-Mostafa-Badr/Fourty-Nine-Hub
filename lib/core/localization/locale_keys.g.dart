@@ -889,5 +889,6 @@ abstract class  LocaleKeys {
   static const nationalIdNumber = 'nationalIdNumber';
   static const pleaseEnterNationalId = 'pleaseEnterNationalId';
   static const pleaseEnter14Digit = 'pleaseEnter14Digit';
+  static const yellowCardSuccess = 'yellowCardSuccess';
 
 }

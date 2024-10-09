@@ -1,5 +1,12 @@
  part of 'payment_cubit.dart';
-
+ enum StateStatus {
+   initial,
+   loading,
+   success,
+   success1,
+   updated,
+   error,
+ }
 
 class PaymentCacheOutState {
   final StateStatus? status;

@@ -153,7 +153,7 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
       },
       (data) {
         emit(state.copyWith(
-          status: StateStatus.success,
+          status: StateStatus.success1,
         ));
         // print("InstaPay Data: ${data.message}");
       },

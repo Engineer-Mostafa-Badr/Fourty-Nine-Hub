@@ -898,6 +898,8 @@
   "pleaseEnterFullName": "الرجاء إدخال الاسم الكامل",
   "nationalIdNumber": "رقم الهوية الوطنية",
   "pleaseEnterNationalId": "الرجاء إدخال رقم الهوية الوطنية",
-  "pleaseEnter14Digit": "الرجاء إدخال 14 رقمًا"
+  "pleaseEnter14Digit": "الرجاء إدخال 14 رقمًا",
+  "yellowCardSuccess": "لقد قمت بنجاح بإرسال الدفعة للتحقق من رصيد البطاقة الصفراء الخاصة بك."
+
 
 }
