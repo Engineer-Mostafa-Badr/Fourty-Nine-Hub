@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 
 import '../../../../common/functions/global/upload_file.dart';
@@ -153,7 +152,7 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
       },
       (data) {
         emit(state.copyWith(
-          status: StateStatus.success1,
+          status: StateStatus.success,
         ));
         // print("InstaPay Data: ${data.message}");
       },
