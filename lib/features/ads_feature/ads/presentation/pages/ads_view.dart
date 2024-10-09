@@ -16,7 +16,6 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class AdsView extends StatefulWidget {
   final AdsViewParams params;
@@ -137,8 +136,8 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                               : LocaleKeys.user.localize),
                     ],
                   ),
-                  state.status == AdsStates.success
-                      ? Expanded(
+                      state.status == AdsStates.loading?const Center(child: CircularProgressIndicator(),):
+                           Expanded(
                           child: TabBarView(
                             physics: const NeverScrollableScrollPhysics(),
                             controller: _tabController,
@@ -147,7 +146,6 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                               UserAdsView(params: widget.params, userType: userType,),
                             ],
                           ))
-                      :state.status == AdsStates.loading?const Center(child: CircularProgressIndicator(),): const SizedBox.shrink()
                 ],
               ),
               if(state.isFilterLoading) Container(

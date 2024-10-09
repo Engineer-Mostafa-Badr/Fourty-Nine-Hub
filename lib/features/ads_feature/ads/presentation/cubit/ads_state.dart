@@ -1,6 +1,6 @@
 part of 'ads_cubit.dart';
 
-enum AdsStates { loading,filterLoading, initState, error, success }
+enum AdsStates { loading,filterLoading, initState, error, success,requestSuccess,requestLoading }
 
 extension AdsStateX on AdsState {
   bool get isInitial => status == AdsStates.initState;
@@ -8,7 +8,8 @@ extension AdsStateX on AdsState {
   bool get isFilterLoading => status == AdsStates.filterLoading;
   bool get isError => status == AdsStates.error;
   bool get isSuccess => status == AdsStates.success;
-}
+  bool get isRequestSuccess => status == AdsStates.requestSuccess;
+  bool get isRequestLoading => status == AdsStates.requestLoading;}
 
 @immutable
 class AdsState {
@@ -19,12 +20,14 @@ class AdsState {
   final List<TripEntity>? pickMeAds;
   final FilterModel? filterModel;
   final bool? hasFilter;
+  final bool? makeRequest;
   const AdsState(
       {this.ads,
       this.failure,
       this.status,
       this.filterModel,
       this.hasFilter=false,
+      this.makeRequest=false,
       this.comeWithMeAds,
       this.pickMeAds});
   AdsState copyWith({
@@ -33,6 +36,7 @@ class AdsState {
     List<TripEntity>? comeWithMeAds,
     List<TripEntity>? pickMeAds,
     bool? hasFilter,
+    bool? makeRequest,
     FilterModel? filterModel,
     List<AdModel>? ads,
   }) {
@@ -43,6 +47,7 @@ class AdsState {
         hasFilter: hasFilter ?? this.hasFilter,
         pickMeAds: pickMeAds ?? this.pickMeAds,
         filterModel: filterModel ?? this.filterModel,
+        makeRequest: makeRequest ?? this.makeRequest,
         comeWithMeAds: comeWithMeAds ?? this.comeWithMeAds);
   }
 }
