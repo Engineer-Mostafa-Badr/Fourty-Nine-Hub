@@ -186,7 +186,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     ),
                   );
                 }
-                if (state.status == StateStatus.success && state.data != null) {
+                if (state.data != null) {
                   return ListView.separated(
                     itemCount: state.data?.length ?? 0,
                     physics: const NeverScrollableScrollPhysics(),

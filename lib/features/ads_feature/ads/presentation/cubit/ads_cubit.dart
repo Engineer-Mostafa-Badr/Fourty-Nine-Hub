@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/make_ad_request_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/favourite_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_all_comewithme_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_all_pickme_usecase.dart';
@@ -27,6 +28,8 @@ class AdvertisementCubit extends Cubit<AdsState> {
   final RemoveFavouriteAdUseCase _removeFavouriteAdUseCase;
   final FavouriteAdUseCase _favouriteAdUseCase;
   final FilterAdUseCase _filterAdUseCase;
+  final MakeAdRequestUsecase _makeAdRequestUsecase;
+
   AdvertisementCubit(
       this._getAdsUseCase,
       this._getAllComeWithMeUseCase,
@@ -34,7 +37,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
       this._requestComeWithMeUseCase,
       this._requestPickMeUseCase,
       this._removeFavouriteAdUseCase,
-      this._favouriteAdUseCase, this._filterAdUseCase)
+      this._favouriteAdUseCase, this._filterAdUseCase, this._makeAdRequestUsecase)
       : super(const AdsState());
 
   // void loadData({required String subCategoryId,required String filter}) async {
@@ -205,4 +208,33 @@ class AdvertisementCubit extends Cubit<AdsState> {
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
         (data) => emit(state.copyWith(status: AdsStates.success)));
   }
-}
+
+  String? phone;
+
+  void changePhone({
+    required String v,
+  }) {
+    phone = v;
+    print(phone);
+  }
+  final formKey = GlobalKey<FormState>();
+  void resetRequest(){
+    emit(state.copyWith(makeRequest: false));
+  }
+ Future<void> makeAdRequest({
+    required String id,
+  }) async {
+    if(formKey.currentState!.validate()&&phone!=null){ {
+      print(phone);
+      final response = await _makeAdRequestUsecase(
+        AdRequestParams(adId: id, phone: phone ?? ''),
+      );
+      response.fold((l) {
+        emit(state.copyWith(failure: l,makeRequest: false,status: AdsStates.error));
+      }, (r) {
+        emit(state.copyWith(status: AdsStates.requestSuccess,makeRequest: true));
+      });
+    }
+  }
+
+}}
