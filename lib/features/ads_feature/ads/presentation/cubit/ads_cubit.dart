@@ -230,7 +230,6 @@ class AdvertisementCubit extends Cubit<AdsState> {
         AdRequestParams(adId: id, phone: phone ?? ''),
       );
       response.fold((l) {
-        print("objectLLLLLLLLLLLLLL");
         emit(state.copyWith(failure: l,makeRequest: false,status: AdsStates.error));
       }, (r) {
         emit(state.copyWith(status: AdsStates.requestSuccess,makeRequest: true));

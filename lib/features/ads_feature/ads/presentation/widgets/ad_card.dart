@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cu
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
+import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -243,7 +244,9 @@ class _AdCardState extends State<AdCard> {
                           child: AvaialbleTripsButton(
                             title: 'Premium Request',
                             color: AppColors.SECONDARY_COLOR,
-                            onTap: () {},
+                            onTap: () {
+                              SubscriptionMethod().subscribe(subscribeId: widget.item.subCategoryId??'', title: LocaleKeys.premiumRequest.localize);
+                            },
                           ),
                         ),
                         const Sizer(width: 5),
@@ -392,58 +395,6 @@ class _AdCardState extends State<AdCard> {
                       id: widget.item.id,
                       hasReport: true,
                     ),
-                    // FutureBuilder(
-                    //     future: ButtonAvailability().isShowButton(
-                    //         otherUserId: widget.item.user?.id ?? '66b9da437b1fafcdf897bbe1', subcategoryId: widget.item.subCategoryId ?? ''),
-                    //     builder: (context, snap) {
-                    //       print(snap.data);
-                    //       return Row(
-                    //         crossAxisAlignment: CrossAxisAlignment.center,
-                    //         children: [
-                    //           Expanded(
-                    //             flex: 3,
-                    //             child: AvaialbleTripsButton(
-                    //               title: 'Call',
-                    //               color: snap.data == true ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
-                    //               icon: Icons.call,
-                    //               onTap: snap.data == true ? () {
-                    //                 LaunchURLHelper().call( phone: widget.item.phone??'');
-                    //               } : () {
-                    //                 SubscriptionMethod().subscribe(subscribeId: widget.item.subCategoryId??'', title: LocaleKeys.ads.localize);
-                    //               },
-                    //             ),
-                    //           ),
-                    //           const Sizer(width: 5),
-                    //           Expanded(
-                    //             flex: 3,
-                    //             child: AvaialbleTripsButton(
-                    //               title: 'Message',
-                    //               color: snap.data == true ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
-                    //               icon: Icons.email,
-                    //               onTap: snap.data == true ? () {} : () {},
-                    //             ),
-                    //           ),
-                    //           const Sizer(width: 5),
-                    //           Expanded(
-                    //             flex: 3,
-                    //             child: AvaialbleTripsButton(
-                    //               title: 'Report',
-                    //               color: AppColors.SECONDARY_COLOR,
-                    //               icon: Icons.report,
-                    //               onTap: () {
-                    //                 print("jskdnajksdnjkadn");
-                    //                 bottomSheet(
-                    //                     context: context,
-                    //                     widget: ReportView(
-                    //                       id: widget.item.id,
-                    //                       categoryId: '66b77e77bb35968b535dc944',
-                    //                     ));
-                    //               },
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       );
-                    //     }),
                   ],
                 ),
               ),
