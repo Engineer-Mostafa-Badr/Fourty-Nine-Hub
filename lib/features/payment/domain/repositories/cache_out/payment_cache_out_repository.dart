@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 
 import '../../entities/cache_out_entity/list_bank_entity.dart';
+import '../../entities/cache_out_entity/payout_method_entity.dart';
 import '../../entities/cache_out_entity/price_yellow_card_entity.dart';
 import '../../entities/instapay_cache_out_entity.dart';
 import '../../use_cases/cache_out/instapay_cache_out_use_case.dart';
@@ -19,4 +20,5 @@ abstract class PaymentCacheOutRepository {
   Future<Either<Failure,bool>>payoutRequest(PayoutRequestParams params);
   Future<Either<Failure,bool>> requestInstapay(RequestInstapayParams params);
   Future<Either<Failure,PriceYellowCardEntity>>fetchPrice();
+  Future<Either<Failure,PayoutMethodEntity>>payoutMethod();
 }

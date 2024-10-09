@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/cache_out_entity/list_bank_entity.dart';
+import 'package:fourtyninehub/features/payment/domain/entities/cache_out_entity/payout_method_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/cache_out_entity/price_yellow_card_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/instapay_cache_out_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/use_cases/cache_out/instapay_cache_out_use_case.dart';
@@ -45,5 +46,10 @@ class PaymentCacheOutRepositoryImpl implements PaymentCacheOutRepository {
   @override
   Future<Either<Failure, PriceYellowCardEntity>> fetchPrice() {
     return _remoteDataSource.fetchPrice();
+  }
+
+  @override
+  Future<Either<Failure, PayoutMethodEntity>> payoutMethod() {
+    return _remoteDataSource.payoutMethod();
   }
 }

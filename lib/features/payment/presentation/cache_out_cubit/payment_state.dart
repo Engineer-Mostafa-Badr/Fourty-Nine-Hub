@@ -18,6 +18,7 @@ class PaymentCacheOutState {
   final WalletHomeEntity? wallet;
   final List<ListBankEntity>?banks;
   final PriceYellowCardEntity? price;
+  final PayoutMethodEntity? method;
   String? backColor;
 
   PaymentCacheOutState({
@@ -30,6 +31,7 @@ class PaymentCacheOutState {
     this.wallet,
     this.banks,
     this.price,
+    this.method,
     this.backColor = "#FFFFFFFF",
   });
 
@@ -43,6 +45,7 @@ class PaymentCacheOutState {
      WalletHomeEntity? wallet,
     List<ListBankEntity>?banks,
     PriceYellowCardEntity? price,
+    PayoutMethodEntity? method,
     String? backColor,
   }) {
     return PaymentCacheOutState(
@@ -56,6 +59,7 @@ class PaymentCacheOutState {
       wallet: wallet ?? this.wallet,
       banks: banks ?? this.banks,
       price: price ?? this.price,
+      method: method ?? this.method,
     );
   }
 }
