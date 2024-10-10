@@ -846,8 +846,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
               const Sizer(),
               _buildSearchAndExpiredRequests(),
               const Sizer(),
-              if (state.mealCategories?.isNotEmpty ?? false)
-                MealCategories(),
+              if (state.mealCategories?.isNotEmpty ?? false) MealCategories(),
               if (state.loadingSubCategories)
                 _buildLoadingSubCategoriesPlaceholder(),
               const Sizer(),
@@ -971,7 +970,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
             crossAxisCount: 1,
             mainAxisSpacing: 8,
             crossAxisSpacing: 8,
-            childAspectRatio: 0.7,
+            childAspectRatio: 1.001,
           ),
           itemCount: restaurants.length,
           itemBuilder: (context, index) => Padding(

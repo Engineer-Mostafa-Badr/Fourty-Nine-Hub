@@ -969,7 +969,7 @@ class DetailsSection extends StatelessWidget {
             ),
           ),
           Text(
-            "${item.subcategoryId?.name ?? ''}, ${item.description ?? 'description...'}",
+            "${item.subcategoryId?.name ?? ''}, ${item.description ?? ''}",
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey[600],

@@ -28,11 +28,13 @@ class MealCategoryCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          decoration: BoxDecoration(color: Colors.white, boxShadow: [
+          decoration: BoxDecoration(
+            color: isDarkTheme(context)?Colors.transparent:Colors.white,
+              boxShadow: [
             BoxShadow(
-                color: isDarkTheme(context) ? Colors.black : Colors.grey,
-                blurRadius: 1.0,
-                offset: Offset(0, 1))
+                color: isDarkTheme(context) ? Colors.black54 : Colors.grey,
+                blurRadius: 2.0,
+                offset: Offset(1, 1))
           ]),
           // elevation: 2,
           // shape: RoundedRectangleBorder(
@@ -40,73 +42,69 @@ class MealCategoryCard extends StatelessWidget {
           // ),
           child: Container(
             width: 0.38.sw,
-            color: Colors.white,
             child: InkWell(
               onTap: () => onTap(subCategory?.id ?? ""),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-                        // Heart image
-                        Container(
-                          height: 300.h,
-                          width: 300.h,
-                          decoration: BoxDecoration(
-                            // color: Colors.green,
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                subCategory!
-                                    .picture!, // Replace with your image URL
-                              ),
-                              fit: BoxFit.fitHeight,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: [
+                      // Heart image
+                      Container(
+                        height: 300.h,
+                        width: 300.h,
+                        decoration: BoxDecoration(
+                          // color: Colors.green,
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              subCategory!
+                                  .picture!, // Replace with your image URL
                             ),
+                            fit: BoxFit.fitHeight,
                           ),
                         ),
-                        // Favorite Icon (Heart)
-                        Positioned(
-                          top: 5,
-                          right: 5,
-                          child: IconAppButton(
-                              size: 25,
-                              icon: subCategory?.isFavorite ?? false
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                              color: ThemeCubit.get(context).isDarkTheme
-                                  ? Theme.of(context).scaffoldBackgroundColor
-                                  : AppColors.PRIMARY_COLOR_DARK,
-                              onPressed: () {
-                                context
-                                    .read<RestaurantsCubit>()
-                                    .toggleFavoriteSubcategory(
-                                        subCategory?.id ?? "");
-                              }),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Label(
+                      ),
+                      // Favorite Icon (Heart)
+                      Positioned(
+                        top: 5,
+                        right: 5,
+                        child: IconAppButton(
+                            size: 25,
+                            icon: subCategory?.isFavorite ?? false
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: AppColors.PRIMARY_COLOR_DARK,
+                            onPressed: () {
+                              context
+                                  .read<RestaurantsCubit>()
+                                  .toggleFavoriteSubcategory(
+                                      subCategory?.id ?? "");
+                            }),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Label(
                       text: (getLang() == "ar"
                               ? subCategory?.nameAr
                               : subCategory?.nameEn) ??
                           "",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 45.sp,
-                          color: Colors.black),
+                      style:Styles.headerText(),
                     ),
-                    Label(
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Label(
                       text:
                           '${subCategory?.numberOfRestaurant ?? "0"} ${LocaleKeys.restaurants.tr()}',
-                      style: TextStyle(
-                          fontSize: 35.sp,
-                          color: Colors.black.withOpacity(0.8)),
+                      style:Styles.mediumText(),
+
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
