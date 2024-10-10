@@ -30,11 +30,7 @@ class CustomButtonCount extends StatelessWidget {
         create: (BuildContext context) => serviceLocator()
           ..getAllCount(params: Params(id: id, status: status))..getMyTripJoin(),
         child: BlocConsumer<MyAddsCubit, MyAddsState>(
-          listener: (BuildContext context, MyAddsState state) {
-            if (state.status == MyAddsStates.success) {
-              showSuccessMessage(context, 'Please subscribe to connect!');
-            }
-          },
+          listener: (BuildContext context, MyAddsState state) {},
           builder: (BuildContext context, state) {
             if (state.status == MyAddsStates.loading) {
               return const Center(child: CircularProgressIndicator());
