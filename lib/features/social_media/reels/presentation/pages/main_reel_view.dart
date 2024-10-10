@@ -1237,6 +1237,7 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
   Widget _buildVideoContent() {
     return VisibilityDetector(
       key: Key(widget.reel.videoMedia), // Unique key for each video widget
+
       onVisibilityChanged: (visibilityInfo) {
         final visiblePercentage = visibilityInfo.visibleFraction * 100;
 
@@ -1262,40 +1263,80 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
               onVerticalDragEnd: widget.itemType == ReelItemType.spotlight
                   ? _handleVerticalDrag
                   : null,
-              child: Container(
-                height: double.infinity,
-                color: Colors.black,
-                child: Stack(
-                  children: [
-                    Chewie(
-                      key: PageStorageKey(widget.reel.videoMedia),
-                      controller: ChewieController(
-                        videoPlayerController: _videoPlayerController,
-                        autoInitialize: true,
-                        looping: true,
-                        showOptions: false,
-                        allowFullScreen: false,
-                        showControls: false,
-                        aspectRatio: 2 / 4,
-                        errorBuilder: (context, errorMessage) {
-                          return Center(
-                            child: Text(
-                              errorMessage,
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          );
-                        },
+              child: DoubleTapHeart(
+                onDoubleTap: () async {
+                  await serviceLocator<ReelsCubit>()
+                      .likeReel(widget.reel.id)
+                      .then((val) async {
+                    if (val == "Reel liked successfully") {
+                      setState(() {
+                        widget.reel.likeCount++;
+                      });
+                    } else if (val == "Reel unlike successfully") {
+                      if (widget.reel.likeCount > 0) {
+                        setState(() {
+                          widget.reel.likeCount--;
+                        });
+                      }
+                    }
+                    if (val == "Reel unlike successfully") {
+                      await serviceLocator<ReelsCubit>()
+                          .likeReel(widget.reel.id)
+                          .then((value) {
+                        if (value == "Reel liked successfully") {
+                          setState(() {
+                            widget.reel.likeCount++;
+                          });
+                        } else if (value == "Reel unlike successfully") {
+                          if (widget.reel.likeCount > 0) {
+                            setState(() {
+                              widget.reel.likeCount--;
+                            });
+                          }
+                        }
+                      });
+                    }
+                  });
+                },
+                iconSize: 200,
+                animationDuration: Duration(seconds: 1),
+                heartIcon: Icons.favorite,
+                iconColor: Colors.pink,
+                child: Container(
+                  height: double.infinity,
+                  color: Colors.black,
+                  child: Stack(
+                    children: [
+                      Chewie(
+                        key: PageStorageKey(widget.reel.videoMedia),
+                        controller: ChewieController(
+                          videoPlayerController: _videoPlayerController,
+                          autoInitialize: true,
+                          looping: true,
+                          showOptions: false,
+                          allowFullScreen: false,
+                          showControls: false,
+                          aspectRatio: 2 / 4,
+                          errorBuilder: (context, errorMessage) {
+                            return Center(
+                              child: Text(
+                                errorMessage,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                    Positioned(
-                      bottom: 2,
-                      left: 10,
-                      right: 10,
-                      child: CustomProgressBar(
-                        videoPlayerController: _videoPlayerController,
+                      Positioned(
+                        bottom: 2,
+                        left: 10,
+                        right: 10,
+                        child: CustomProgressBar(
+                          videoPlayerController: _videoPlayerController,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );
@@ -1372,6 +1413,155 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
     _videoPlayerController.dispose();
     _rotationController.dispose();
     super.dispose();
+  }
+}
+
+class DoubleTapHeart extends StatefulWidget {
+  final Widget child;
+  final VoidCallback? onDoubleTap;
+  final IconData heartIcon;
+  final double iconSize;
+  final Color iconColor;
+  final Duration animationDuration;
+
+  const DoubleTapHeart({
+    Key? key,
+    required this.child,
+    this.onDoubleTap,
+    this.heartIcon = Icons.favorite,
+    this.iconSize = 80.0,
+    this.iconColor = Colors.redAccent,
+    this.animationDuration = const Duration(milliseconds: 700),
+  }) : super(key: key);
+
+  @override
+  _DoubleTapHeartState createState() => _DoubleTapHeartState();
+}
+
+class _DoubleTapHeartState extends State<DoubleTapHeart>
+    with SingleTickerProviderStateMixin {
+  Offset _tapPosition = Offset.zero;
+  List<_AnimatedHeartOverlay> _heartOverlays = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onDoubleTapDown: (TapDownDetails details) {
+        final renderBox = context.findRenderObject() as RenderBox;
+        _tapPosition = renderBox.globalToLocal(details.globalPosition);
+      },
+      onDoubleTap: () {
+        _showHeart();
+        if (widget.onDoubleTap != null) {
+          widget.onDoubleTap!();
+        }
+      },
+      behavior: HitTestBehavior.translucent,
+      child: Stack(
+        children: [
+          widget.child,
+          ..._heartOverlays,
+        ],
+      ),
+    );
+  }
+
+  void _showHeart() {
+    final overlay = _AnimatedHeartOverlay(
+      key: UniqueKey(),
+      position: _tapPosition,
+      icon: widget.heartIcon,
+      size: widget.iconSize,
+      color: widget.iconColor,
+      duration: widget.animationDuration,
+      onAnimationComplete: _removeOverlay,
+    );
+
+    setState(() {
+      _heartOverlays.add(overlay);
+    });
+  }
+
+  void _removeOverlay(_AnimatedHeartOverlay overlay) {
+    setState(() {
+      _heartOverlays.remove(overlay);
+    });
+  }
+}
+
+class _AnimatedHeartOverlay extends StatefulWidget {
+  final Offset position;
+  final IconData icon;
+  final double size;
+  final Color color;
+  final Duration duration;
+  final Function(_AnimatedHeartOverlay) onAnimationComplete;
+
+  const _AnimatedHeartOverlay({
+    Key? key,
+    required this.position,
+    required this.icon,
+    required this.size,
+    required this.color,
+    required this.duration,
+    required this.onAnimationComplete,
+  }) : super(key: key);
+
+  @override
+  __AnimatedHeartOverlayState createState() => __AnimatedHeartOverlayState();
+}
+
+class __AnimatedHeartOverlayState extends State<_AnimatedHeartOverlay>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      duration: widget.duration,
+      vsync: this,
+    );
+
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 2.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+
+    _fadeAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+
+    _controller.forward().then((_) {
+      widget.onAnimationComplete(widget);
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      left: widget.position.dx - widget.size / 2,
+      top: widget.position.dy - widget.size / 2,
+      child: FadeTransition(
+        opacity: _fadeAnimation,
+        child: ScaleTransition(
+          scale: _scaleAnimation,
+          child: Icon(
+            widget.icon,
+            color: widget.color,
+            size: widget.size,
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -1558,7 +1748,8 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
     return InkWell(
       onTap: onTap,
       child: SizedBox(
-        height: 60.w,
+        height: 0.08.sw,
+        width: 0.08.sw,
         child: Stack(
           children: [
             // Shadow layer
@@ -1643,7 +1834,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.only(right: 6.0, left: 6.0, top: 8),
+        padding: const EdgeInsets.only(right: 4.0, left: 4.0, top: 8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -1652,7 +1843,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               style: TextStyle(
                 color: isSelected ? Colors.white : Colors.white70,
                 fontWeight: FontWeight.bold,
-                fontSize: 14.0,
+                fontSize: 18.0,
                 shadows: const [
                   Shadow(
                     color: Colors.black,
@@ -1699,12 +1890,12 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
     return InkWell(
       onTap: onTap,
       child: SizedBox(
-        height: 60.w,
-        child: const Icon(
-          Icons.search,
+        child: Icon(
+          size: 0.08.sw,
+          FontAwesomeIcons.magnifyingGlass,
           color: Colors.white,
           shadows: [
-            Shadow(
+            const Shadow(
               color: Colors.black,
               offset: Offset(1, 1),
               blurRadius: 5.0,
@@ -2017,7 +2208,7 @@ class _CustomProgressBarState extends State<CustomProgressBar> {
                             width: thumbSize,
                             height: thumbSize,
                             decoration: const BoxDecoration(
-                              color: AppColors.PRIMARY_COLOR_DARK,
+                              color: Colors.white,
                               shape: BoxShape.circle,
                             ),
                           ),

@@ -249,7 +249,13 @@ class _TinderScreenState extends State<TinderScreen> {
   @override
   Widget build(BuildContext context) {
     log('TinderScreen built');
-    return SharedScaffold(
+    return Scaffold(
+      appBar: AppBar(
+        title: Label(
+          text: LocaleKeys.tinder_find.tr(),
+          style: Styles.headerText(),
+        ),
+      ),
       backgroundColor: Colors.grey,
       body: BlocConsumer<TinderViewCubit, TinderViewState>(
         listener: (context, state) {},
@@ -265,29 +271,31 @@ class _TinderScreenState extends State<TinderScreen> {
           return _buildLoggedInContent(context, state);
         },
       ),
-      mainCategoryId: 2,
     );
   }
 
   Widget _buildLoggedInContent(BuildContext context, TinderViewState state) {
     return Container(
 //000000000000
-      color: Colors.white.withOpacity(0.89),
-      // color: Theme.of(context).scaffoldBackgroundColor,
+//       color: Colors.white,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            _buildHeader(),
+            // _buildHeader(),
             state.userData.isNotEmpty
                 ? const TinderCardStack()
                 : const SizedBox(
                     // height: MediaQuery.of(context).size.height/2,
                     ),
             if (state.userData.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 2),
-                child: Divider(color: Colors.grey, height: 1.h),
+              const Padding(
+                padding: EdgeInsets.only(top: 8.0, bottom: 2),
+                child: Divider(
+                  color: Colors.transparent,
+                  height: 4,
+                ),
               ),
             _buildSubCategoryList(state),
             SizedBox(height: 50.h),
@@ -332,7 +340,7 @@ class _TinderScreenState extends State<TinderScreen> {
                 const Spacer(),
                 Text(
                   context.isArabic ? 'عرض المزيد' : 'More',
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: AppColors.PRIMARY_COLOR_DARK,
                       fontWeight: FontWeight.bold),
                 ),

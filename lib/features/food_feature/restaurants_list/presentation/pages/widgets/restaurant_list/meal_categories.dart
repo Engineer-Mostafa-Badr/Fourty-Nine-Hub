@@ -56,8 +56,7 @@ class MealCategories extends StatelessWidget {
                 ),
               ),
               Container(
-                color: Colors.grey.shade200,
-                height: 0.3.sh,
+                height: 0.31.sh,
                 width: double.infinity,
                 child: ListView.separated(
                   controller:  _scrollController,

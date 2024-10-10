@@ -661,7 +661,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return SizedBox(
-      height: screenHeight * 2.5 / 4,
+      height: 0.55.sh,
       child: BlocConsumer<TinderViewCubit, TinderViewState>(
         listener: (context, state) {
           // Handle any errors in a centralized place
