@@ -902,6 +902,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     emit(state.copyWith(subCategoryDataState: DataState.initial));
     final subCategoryData = await tinderRepository.fetchSubCategoryData();
     if (subCategoryData != null) {
+      // fetchMainCategoryById('62c8b5b09332225799fe335e');
       emit(state.copyWith(
           subCategoryData: subCategoryData,
           subCategoryDataState: DataState.success));

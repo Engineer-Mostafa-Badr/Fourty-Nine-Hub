@@ -9,7 +9,7 @@ import 'package:fourtyninehub/features/social_media/tinder/data/models/near_by_m
 import 'package:fourtyninehub/features/social_media/tinder/data/models/normal_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_subcategory_model.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 import '../../data/models/gift_model.dart';
 
@@ -37,7 +37,7 @@ class TinderViewState {
   final AnonymousChatResponse? anonymousChatResponse;
   final DataState anonymousChatResponseState;
 
-  final List<SubCategoryData> subCategoryData;
+  final List<SubCategoryEntity> subCategoryData;
   final DataState subCategoryDataState;
 
   final DataState uploadImageState;
@@ -190,7 +190,7 @@ class TinderViewState {
     DataState? addCategoryModelState,
     List<UserData>? userData,
     DataState? userDataState,
-    List<SubCategoryData>? subCategoryData,
+    List<SubCategoryEntity>? subCategoryData,
     DataState? subCategoryDataState,
     // GetFavCategoryModel? favoritesResponse,
     DataState? favoritesResponseState,

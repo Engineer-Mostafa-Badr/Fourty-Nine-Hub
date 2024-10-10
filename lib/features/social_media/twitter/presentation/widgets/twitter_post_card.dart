@@ -237,7 +237,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             size: 14,
             color: iconColor ?? Colors.grey,
           ),
-          Sizer(),
+          const Sizer(),
           Label(text: label, style: Styles.mediumText(color: Colors.grey)),
         ],
       ),
@@ -264,13 +264,13 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
         if (label != null || label != '') ...[
           ReadMoreLabel(
             text: label ?? '',
-            style: Styles.headerText(fontSize: 30),
+            style: Styles.headerText(fontSize: 30,color: Colors.black),
           ),
-          Sizer(),
+          const Sizer(),
         ],
         if (myImages!.isNotEmpty)
           GridView.builder(
-            padding: EdgeInsets.only(right: 10, left: 10, bottom: 10),
+            padding: const EdgeInsets.only(right: 10, left: 10, bottom: 10),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -359,11 +359,11 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 fromProfile: widget.fromProfile,
                 userId: post.user.id,
               ),
-        Sizer(),
+        const Sizer(),
         Label(
             text: "${post.user.firstName} ${post.user.lastName}",
             style: Styles.mediumText(fontWeight: FontWeight.w500)),
-        Sizer(
+        const Sizer(
           width: 4,
         ),
         if (post.user.isDocumented == true)
@@ -371,7 +371,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
             Icons.verified,
             color: AppColors.PRIMARY_COLOR,
           ),
-        Sizer(),
+        const Sizer(),
         Expanded(
           child: Label(
               text: '@${post.user.email.split('@')[0]}',
@@ -490,7 +490,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                       fromProfile: widget.fromProfile,
                       userId: post.user.id,
                     ),
-              Sizer(),
+              const Sizer(),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

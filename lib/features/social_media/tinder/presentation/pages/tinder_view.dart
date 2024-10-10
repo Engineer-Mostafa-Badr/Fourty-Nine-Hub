@@ -237,7 +237,7 @@ class _TinderScreenState extends State<TinderScreen> {
     tinderCubit
       ..fetchUserData(gender: 'female')
       ..fetchSubCategoryData()
-      ..fetchFavorites();
+      ..fetchFavorites()..fetchMainCategoryById('62c8b5b09332225799fe335e');
   }
 
   @override
@@ -247,7 +247,7 @@ class _TinderScreenState extends State<TinderScreen> {
       body: BlocConsumer<TinderViewCubit, TinderViewState>(
         listener: (context, state) {},
         builder: (context, state) {
-          if (state.userData.isEmpty && state.subCategoryData.isEmpty) {
+          if (state.userData.isEmpty && state.subCategoryData.isEmpty&&state.mainCategoryResponse==null) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -318,6 +318,7 @@ class _TinderScreenState extends State<TinderScreen> {
             child: TinderSubCategoryCard(
               subCategoryCardData: state.subCategoryData[index],
               index: index,
+              mainCategory: state.mainCategoryResponse!.data.mainCategory,
             ),
           );
         },

@@ -201,6 +201,8 @@ enum Categories {
   engineerJob,
   otherJob,
   events,
+  health,
+  dating,
 }
 
 extension CategoriesExtension on Categories {
@@ -271,6 +273,10 @@ extension CategoriesExtension on Categories {
         return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.events:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.health:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.dating:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       default:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
     }
@@ -340,6 +346,10 @@ extension CategoriesExtension on Categories {
         return Categories.otherJob;
       case "Events":
         return Categories.events;
+      case "Health":
+        return Categories.health;
+      case "Dating":
+        return Categories.dating;
       default:
         throw ArgumentError("Invalid category nameEn: $nameEn");
     }

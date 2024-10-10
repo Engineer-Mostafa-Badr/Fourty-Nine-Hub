@@ -1,3 +1,6 @@
+import 'package:fourtyninehub/features/fourty_nine/data/models/main_category_model.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+
 class MainCategoryResponse {
   final bool status;
   final MainCategoryData data;
@@ -14,16 +17,16 @@ class MainCategoryResponse {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'status': status,
-      'data': data.toJson(),
-    };
-  }
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     'status': status,
+  //     'data': data.toJson(),
+  //   };
+  // }
 }
 
 class MainCategoryData {
-  final MainCategory mainCategory;
+  final MainCategoryEntity mainCategory;
 
   MainCategoryData({
     required this.mainCategory,
@@ -31,15 +34,15 @@ class MainCategoryData {
 
   factory MainCategoryData.fromJson(Map<String, dynamic> json) {
     return MainCategoryData(
-      mainCategory: MainCategory.fromJson(json['mainCategory']),
+      mainCategory: MainCategoryModel.fromJson(json['mainCategory']),
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'mainCategory': mainCategory.toJson(),
-    };
-  }
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     'mainCategory': mainCategory.toJson(),
+  //   };
+  // }
 }
 
 class MainCategory {

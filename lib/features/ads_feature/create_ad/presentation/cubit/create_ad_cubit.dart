@@ -116,7 +116,13 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           images.add(media);
           emit(
               state.copyWith(images: images, status: CreateAdStates.initState));
-        });
+        }).then((value) {
+          if(value==null){
+            emit(
+                state.copyWith( status: CreateAdStates.initState));
+
+          }
+    });
     mediaResponse?.fold(
         (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
         (r) {
