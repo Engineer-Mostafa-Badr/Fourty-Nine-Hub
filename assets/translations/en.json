@@ -919,5 +919,8 @@
   "payAtLeast1":"Pay at least 1 EGP and publish your dream product you want to buy!!!",
   "oneUserWillR" : "One User will win randomly every month cycle",
   "moreSubscriptionMore" : "More subscription more chance!",
-  "uploadOneImage": "Upload At Least One Photo!"
+  "uploadOneImage": "Upload At Least One Photo!",
+  "editMyAds" : "Edit ad",
+  "requestTripJoin": "Request Trip Join",
+  "requestAd": "Request Ad"
 }

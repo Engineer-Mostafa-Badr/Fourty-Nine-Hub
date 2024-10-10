@@ -916,7 +916,10 @@
   "oneUserWillR" : "سيفوز مستخدم واحد بشكل عشوائي في كل شهر",
   "moreSubscriptionMore" : "كلما زاد الاشتراك زادت الفرصة!",
   "select": "اختيار",
-  "uploadOneImage": "قم بتحميل صورة واحدة على الأقل!"
+  "uploadOneImage": "قم بتحميل صورة واحدة على الأقل!",
+  "editMyAds" : "تعديل الاعلان",
+  "requestTripJoin": "طلب الانضمام إلى الرحلة",
+  "requestAd": "طلب إعلان"
 
 
 }

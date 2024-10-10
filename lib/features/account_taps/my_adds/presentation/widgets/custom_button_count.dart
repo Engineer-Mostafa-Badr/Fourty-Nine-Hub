@@ -4,9 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
 import '../../../../../common/widgets/stateless/pages/empty.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/call_message_buttons.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
@@ -23,8 +24,8 @@ class CustomButtonCount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(
-        label: 'Request Trip Join',
+      appBar: BackAppBar(
+        label: LocaleKeys.requestTripJoin.localize,
       ),
       body: BlocProvider<MyAddsCubit>(
         create: (BuildContext context) => serviceLocator()

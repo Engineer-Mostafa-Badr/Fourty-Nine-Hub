@@ -64,7 +64,7 @@ class _EditMyAdsState extends State<EditMyAds> {
     }, builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
       return Scaffold(
-        appBar: BackAppBar(label: LocaleKeys.edit.localize),
+        appBar: BackAppBar(label: LocaleKeys.editMyAds.localize),
         body: BlocBuilder<CreateAdCubit, CreateAdState>(
           builder: (context, state) {
             if (state.status == CreateAdStates.success ||

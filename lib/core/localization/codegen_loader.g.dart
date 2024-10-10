@@ -920,8 +920,22 @@ class CodegenLoader extends AssetLoader{
   "HaveWallet": "هل لديك محفظة؟",
   "submitPayment": "إرسال الدفعة",
   "cashOutOption": "خيار السحب النقدي",
+  "SubscriberCompletionRate": "معدل إكمال المشتركين",
+  "ChanceDetails": "تفاصيل الفرصة",
+  "ProductDescription": "وصف المنتج",
+  "Typethevalueyouwanttoparticipation": "اكتب القيمة التي تريد المشاركة بها",
+  "CreateChance ": "إنشاء فرصه",
+  "enterPrice": "ادخل السعر",
+  "enterTitle": "ادخل العنوان",
+  "enterDescription": "ادخل وصف",
+  "payAtLeast1": "ادفع 1 جنيه مصري على الأقل ونشر منتج أحلامك الذي تريد شراءه!!!",
+  "oneUserWillR": "سيفوز مستخدم واحد بشكل عشوائي في كل شهر",
+  "moreSubscriptionMore": "كلما زاد الاشتراك زادت الفرصة!",
   "select": "اختيار",
-  "uploadOneImage": "قم بتحميل صورة واحدة على الأقل!"
+  "uploadOneImage": "قم بتحميل صورة واحدة على الأقل!",
+  "editMyAds": "تعديل الاعلان",
+  "requestTripJoin": "طلب الانضمام إلى الرحلة",
+  "requestAd": "طلب إعلان"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1833,7 +1847,21 @@ static const Map<String,dynamic> en = {
   "submitPayment": "Submit Payment",
   "cashOutOption": "Cash out Option",
   "select": "Select",
-  "uploadOneImage": "Upload At Least One Photo!"
+  "SubscriberCompletionRate": "Subscriber Completion Rate",
+  "ChanceDetails": "Chance Details",
+  "ProductDescription": "Product Description",
+  "Typethevalueyouwanttoparticipation": "Type the value you want to participation",
+  "CreateChance ": "Create Chance ",
+  "enterPrice": "Enter Price",
+  "enterTitle": "Enter Title",
+  "enterDescription": "Enter Description",
+  "payAtLeast1": "Pay at least 1 EGP and publish your dream product you want to buy!!!",
+  "oneUserWillR": "One User will win randomly every month cycle",
+  "moreSubscriptionMore": "More subscription more chance!",
+  "uploadOneImage": "Upload At Least One Photo!",
+  "editMyAds": "Edit ad",
+  "requestTripJoin": "Request Trip Join",
+  "requestAd": "Request Ad"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
