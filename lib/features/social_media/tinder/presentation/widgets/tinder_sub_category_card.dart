@@ -9,6 +9,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dar
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_subcategory_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
@@ -40,24 +41,133 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
 
   @override
   Widget build(BuildContext context) {
+    final subCategoryId = widget.subCategoryCardData.sId ?? '';
+    final subCategoryName = context.isArabic
+        ? widget.subCategoryCardData.nameAr
+        : widget.subCategoryCardData.nameEn;
+    final subCategoryPicture = widget.subCategoryCardData.picture ?? '';
     return InkWell(
       onTap: () {},
-      child: Container(
-        width: 350.h,
-        padding: const EdgeInsets.all(0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Card(
-          clipBehavior: Clip.hardEdge,
-          color: Theme.of(context).scaffoldBackgroundColor,
-          elevation: 2,
-          child: Column(
-            children: [
-              _buildImageSection(context),
-              const Sizer(),
-              _buildInfoSection(context),
-            ],
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Container(
+          // shape: const RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.all(Radius.circular(4))),
+          // clipBehavior: Clip.hardEdge,
+          // color: Theme.of(context).scaffoldBackgroundColor,
+          // elevation: 4,
+          child: Container(
+            width: 0.35.sw,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                    color: isDarkTheme(context) ? Colors.black : Colors.grey,
+                    blurRadius: 1.0,
+                    offset: Offset(0, 1))
+              ],
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    children: [
+                      const Spacer(),
+                      BlocBuilder<TinderViewCubit, TinderViewState>(
+                        builder: (context, state) {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: IconAppButton(
+                              size: 20,
+                              icon: containsSpecificId(
+                                      state.getFavCategoryModel?.data ?? [],
+                                      widget.subCategoryCardData.sId ?? '')
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: containsSpecificId(
+                                      state.getFavCategoryModel?.data ?? [],
+                                      widget.subCategoryCardData.sId ?? '')
+                                  ? Colors.redAccent
+                                  : Colors.grey,
+                              onPressed: () {
+                                context
+                                    .read<TinderViewCubit>()
+                                    .addFavoriteCategory(
+                                        categoryId:
+                                            widget.subCategoryCardData.sId ??
+                                                '')
+                                    .then((value) => context
+                                        .read<TinderViewCubit>()
+                                        .fetchFavorites());
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Image.network(
+                          widget.subCategoryCardData.picture ?? '',
+                          fit: BoxFit.cover,
+                          // radius: 10,
+                          width: double.infinity,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 1,
+                        right: 1,
+                        child: IconAppButton(
+                          icon: Icons.add,
+                          padding: 0,
+                          margin: 0,
+                          isCircle: true,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BlocProvider.value(
+                                  value: serviceLocator<TinderViewCubit>(),
+                                  child: BlocBuilder<TinderViewCubit,
+                                      TinderViewState>(
+                                    builder: (context, state) {
+                                      return TinderSubCategoryAdsView(
+                                        params: TinderSubAdsViewParams(
+                                          subCategory: SubCategoryEntity(
+                                            id: subCategoryId,
+                                            name: subCategoryName.toString(),
+                                            image: subCategoryPicture,
+                                            isFavorite: containsSpecificId(
+                                                state.getFavCategoryModel
+                                                        ?.data ??
+                                                    [],
+                                                subCategoryId),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Sizer(),
+                _buildInfoSection(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -69,45 +179,50 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
   ) {
     final subCategoryId = widget.subCategoryCardData.sId ?? '';
 
-    return Expanded(
-      child: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: SquareImage(
-                fit: BoxFit.fitWidth,
-                radius: 10,
-                url: widget.subCategoryCardData.picture ?? '',
-              ),
-            ),
-            Positioned(
-              top: 5,
-              right: 5,
-              child: BlocBuilder<TinderViewCubit, TinderViewState>(
+    return FittedBox(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Spacer(),
+              BlocBuilder<TinderViewCubit, TinderViewState>(
                 builder: (context, state) {
-                  return IconAppButton(
-                    size: 25,
-                    icon: Icons.favorite,
-                    color: containsSpecificId(
-                            state.getFavCategoryModel?.data ?? [],
-                            subCategoryId)
-                        ? Colors.redAccent
-                        : Colors.grey,
-                    onPressed: () {
-                      context
-                          .read<TinderViewCubit>()
-                          .addFavoriteCategory(categoryId: subCategoryId)
-                          .then((value) =>
-                              context.read<TinderViewCubit>().fetchFavorites());
-                    },
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: IconAppButton(
+                      size: 20,
+                      icon: containsSpecificId(
+                              state.getFavCategoryModel?.data ?? [],
+                              subCategoryId)
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color: containsSpecificId(
+                              state.getFavCategoryModel?.data ?? [],
+                              subCategoryId)
+                          ? Colors.redAccent
+                          : Colors.grey,
+                      onPressed: () {
+                        context
+                            .read<TinderViewCubit>()
+                            .addFavoriteCategory(categoryId: subCategoryId)
+                            .then((value) => context
+                                .read<TinderViewCubit>()
+                                .fetchFavorites());
+                      },
+                    ),
                   );
                 },
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+          SquareImage(
+            fit: BoxFit.fitWidth,
+            radius: 10,
+            url: widget.subCategoryCardData.picture ?? '',
+          ),
+        ],
       ),
     );
   }
@@ -115,77 +230,33 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
   Widget _buildInfoSection(
     BuildContext context,
   ) {
-    final subCategoryId = widget.subCategoryCardData.sId ?? '';
     final subCategoryName = context.isArabic
         ? widget.subCategoryCardData.nameAr
         : widget.subCategoryCardData.nameEn;
-    final subCategoryPicture = widget.subCategoryCardData.picture ?? '';
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            flex: 4,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  subCategoryName.toString(),
-                  maxLines: 1,
-                  softWrap: true,
-                  textScaler: TextScaler.noScaling,
-                  style: TextStyle(
-                    fontSize: 45.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  '${9355.toShortScale} ${context.isArabic ? "إعلان" : "ads"}',
-                  textScaler: TextScaler.noScaling,
-                  style: TextStyle(
-                    fontSize: 35.sp,
-                  ),
-                ),
-              ],
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 2),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.zero,
+        margin: EdgeInsets.zero,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              subCategoryName.toString(),
+              maxLines: 1,
+              softWrap: true,
+              textScaler: TextScaler.noScaling,
+              style: Styles.headerText(color: Colors.black),
             ),
-          ),
-          Expanded(
-            child: IconAppButton(
-              icon: Icons.add,
-              isCircle: true,
-              color: Colors.white,
-              backColor: AppColors.PRIMARY_COLOR,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider.value(
-                      value: serviceLocator<TinderViewCubit>(),
-                      child: BlocBuilder<TinderViewCubit, TinderViewState>(
-                        builder: (context, state) {
-                          return TinderSubCategoryAdsView(
-                            params: TinderSubAdsViewParams(
-                              subCategory: SubCategoryEntity(
-                                id: subCategoryId,
-                                name: subCategoryName.toString(),
-                                image: subCategoryPicture,
-                                isFavorite: containsSpecificId(
-                                    state.getFavCategoryModel?.data ?? [],
-                                    subCategoryId),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                );
-              },
+            Text(
+              '${9355.toShortScale} ${context.isArabic ? "إعلان" : "ads"}',
+              textScaler: TextScaler.noScaling,
+              style: Styles.mediumText(color: Colors.black),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

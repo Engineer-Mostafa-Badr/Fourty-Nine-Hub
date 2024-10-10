@@ -290,7 +290,7 @@ class DI {
     // serviceLocator.registerLazySingleton<CompanyAdvertiseRepoImpl>(() => CompanyAdvertiseRepoImpl(ApiService(Dio())),);
     // Register the ReelsRepository
     serviceLocator.registerLazySingleton<ReelsRepository>(
-      () => ReelsRepository(),
+      () => ReelsRepository(serviceLocator()),
     );
 
     // Register the ReelsCubit

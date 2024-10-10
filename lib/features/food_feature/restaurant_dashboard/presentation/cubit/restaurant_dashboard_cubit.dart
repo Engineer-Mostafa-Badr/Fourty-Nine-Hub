@@ -68,7 +68,7 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
           final RestaurantOrdersModel ordersResponse =
               RestaurantOrdersModel.fromJson(jsonList[0]);
 
-          print("${ordersResponse.data.length}aaaaaaaaaa");
+          print("${ordersResponse.data.orders.length}aaaaaaaaaa");
           emit(state.copyWith(orders: ordersResponse));
         } else {
           emit(state.copyWith(status: RestaurantDashboardStates.error));
