@@ -347,6 +347,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_items.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -943,7 +944,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                 () async {
                   try {
                     context.read<ReelsCubit>().saveReel(widget.reel.id).then(
-                        (val) => showSnackBarAfterBuild(context,
+                        (val) => showSnackBarAfterBuild(context: context,
                             message: val == 'unsaved successfully'
                                 ? LocaleKeys.reel_unsaved.tr()
                                 : LocaleKeys.reel_saved.tr(),

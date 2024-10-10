@@ -74,7 +74,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   Future<Either<Failure, List<TwitterPostEntity>>> getGlobalFeed(
       {required TwitterFeedParams params}) async {
     final response = await _apiConsumer.get(
-      "${EndPoints.getTwitterFeedPosts}/general?page=${params.page}&limit=${params.limit}&subCategory=66a3583454e6e337915514db",
+      "/twitter/feed/general?page=${params.page}&limit=${params.limit}&subCategory=${Constants.twitterSubCategory}",
     );
 
     return response.fold((l) {
