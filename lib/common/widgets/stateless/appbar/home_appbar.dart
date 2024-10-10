@@ -156,7 +156,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             ),
 
           SizedBox(
-            width: 20.w,
+            width: 30.w,
           ),
           GestureDetector(
             onTap: () {

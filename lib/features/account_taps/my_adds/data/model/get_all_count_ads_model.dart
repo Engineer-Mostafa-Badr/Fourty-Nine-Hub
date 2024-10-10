@@ -7,6 +7,7 @@ class GetAllCountAdsModel extends GetAllCountAdsEntity {
       required super.lastName,
       required super.gender,
       required super.email,
+      required super.phone,
       required super.twitter_documentation});
 
   factory GetAllCountAdsModel.fromJson(Map<String, dynamic> json) {
@@ -16,6 +17,7 @@ class GetAllCountAdsModel extends GetAllCountAdsEntity {
           lastName: json['lastName'] ??'',
           gender: json['gender'] ??'',
           email: json['email'] ??'',
+          phone: json['phone'] ??'',
           twitter_documentation: json['twitter_documentation'] ??false,
       );
   }

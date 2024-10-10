@@ -116,6 +116,7 @@ class EndPoints {
   static const myAdsInstallment='/ads/allMyAds/installment';
   static const myAdsOther='/ads/allMyAds/other';
   static const myAdsTripJoin='/ride/come-with-you/my?subCategory=62ea00e269ea29c91dfc390c';
+  static const clickGlobal='/global/click';
   static String deleteMyTripJoin({required String id}) =>
       '/ride/come-with-you/Delete/$id';
   static String deleteMyInstallment({required String id}) =>
@@ -237,6 +238,9 @@ class EndPoints {
   static const requestYellowCard = '/payout/yellow-card';
   static const banks = '/banks';
   static const payout = '/payout/request';
+  static const requestInstapay = '/payout/request-instapay';
+  static const yellowCardPrice = '/payout/yellow-card/price';
+  static const payoutMethod = '/payout/methods';
 
   static String doctorAcceptAppointment(String appointmentId) => '/health/book-appointment/approve/$appointmentId';
 

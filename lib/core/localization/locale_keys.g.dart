@@ -877,6 +877,23 @@ abstract class  LocaleKeys {
   static const expiredRequests = 'expiredRequests';
   static const filter = 'filter';
   static const beAStar = 'beAStar';
+  static const pleaseEnterTheAmount = 'pleaseEnterTheAmount';
+  static const selectBankName = 'selectBankName';
+  static const pleaseSelectPaymentMethod = 'pleaseSelectPaymentMethod';
+  static const sureWithdrawMoney = 'sureWithdrawMoney';
+  static const requestYellowCard = 'requestYellowCard';
+  static const deducted = 'deducted';
+  static const fullName = 'fullName';
+  static const pleaseEnterFullName = 'pleaseEnterFullName';
+  static const nationalIdNumber = 'nationalIdNumber';
+  static const pleaseEnterNationalId = 'pleaseEnterNationalId';
+  static const pleaseEnter14Digit = 'pleaseEnter14Digit';
+  static const yellowCardSuccess = 'yellowCardSuccess';
+  static const walletDigital = 'walletDigital';
+  static const notWalletDigital = 'notWalletDigital';
+  static const HaveWallet = 'HaveWallet';
+  static const submitPayment = 'submitPayment';
+  static const cashOutOption = 'cashOutOption';
   static const SubscriberCompletionRate = 'SubscriberCompletionRate';
   static const ChanceDetails = 'ChanceDetails';
   static const ProductDescription = 'ProductDescription';
@@ -890,5 +907,8 @@ abstract class  LocaleKeys {
   static const moreSubscriptionMore = 'moreSubscriptionMore';
   static const select = 'select';
   static const uploadOneImage = 'uploadOneImage';
+  static const editMyAds = 'editMyAds';
+  static const requestTripJoin = 'requestTripJoin';
+  static const requestAd = 'requestAd';
 
 }

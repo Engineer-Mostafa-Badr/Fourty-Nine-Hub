@@ -70,19 +70,24 @@ class MyAdsTripJoin extends StatelessWidget {
                     children: [
                       const Icon(Icons.airline_seat_recline_extra_rounded),
                       const Sizer(),
-                      Text('${tripJoinCardEntity.passengers} ${LocaleKeys.seat.localize}', style: Styles.headerText()),
+                      Text(
+                          '${tripJoinCardEntity.passengers} ${LocaleKeys.seat.localize}',
+                          style: Styles.headerText()),
                       const Spacer(),
                       Visibility(
                         visible: tripJoinCardEntity.isRepeat,
                         child: Icon(
-                          (tripJoinCardEntity.isRepeat) ? Icons.check_box : Icons.check_box_outline_blank,
+                          (tripJoinCardEntity.isRepeat)
+                              ? Icons.check_box
+                              : Icons.check_box_outline_blank,
                           color: AppColors.PRIMARY_COLOR,
                         ),
                       ),
                       const Sizer(),
                       Visibility(
                         visible: tripJoinCardEntity.isRepeat,
-                        child: Text(LocaleKeys.repeated.localize, style: Styles.headerText()),
+                        child: Text(LocaleKeys.repeated.localize,
+                            style: Styles.headerText()),
                       ),
                       const Sizer(width: 20),
                     ],
@@ -91,7 +96,8 @@ class MyAdsTripJoin extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.trip_origin, color: AppColors.LIGHT_BLUE, size: 20),
+                      const Icon(Icons.trip_origin,
+                          color: AppColors.LIGHT_BLUE, size: 20),
                       const Sizer(width: 13),
                       Flexible(
                         child: Text(
@@ -107,7 +113,8 @@ class MyAdsTripJoin extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Icon(Icons.trip_origin, color: AppColors.CHECK_MARK_COLOR, size: 20),
+                      const Icon(Icons.trip_origin,
+                          color: AppColors.CHECK_MARK_COLOR, size: 20),
                       const Sizer(width: 13),
                       Flexible(
                         child: Text(
@@ -131,7 +138,8 @@ class MyAdsTripJoin extends StatelessWidget {
                           title: LocaleKeys.subscription.localize,
                           color: AppColors.PRIMARY_COLOR,
                           onTap: () {
-                            serviceLocator<SubscriptionController>().showSubscriptionPlans(
+                            serviceLocator<SubscriptionController>()
+                                .showSubscriptionPlans(
                               wallets: [
                                 WalletTypes.mainWallet,
                                 WalletTypes.giftWallet,
@@ -154,7 +162,8 @@ class MyAdsTripJoin extends StatelessWidget {
                               title: LocaleKeys.deleteAd.localize,
                               subTitle: LocaleKeys.sureRemoveAd.localize,
                               action: () {
-                                context.read<MyAddsCubit>().deleteMyTripJoin(id: tripJoinCardEntity.id);
+                                context.read<MyAddsCubit>().deleteMyTripJoin(
+                                    id: tripJoinCardEntity.id);
                               },
                               context: context,
                             );
@@ -168,13 +177,16 @@ class MyAdsTripJoin extends StatelessWidget {
               Positioned.directional(
                 top: 5,
                 end: 20,
-                textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                textDirection:
+                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
                 child: Column(
                   children: [
                     Text(tripJoinCardEntity.price.toStringAsFixed(0),
-                        style: Styles.headerText(fontSize: 70, color: Colors.green[600])),
+                        style: Styles.headerText(
+                            fontSize: 70, color: Colors.green[600])),
                     Text(tripJoinCardEntity.status,
-                        style: Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR)),
+                        style: Styles.headerText(
+                            fontSize: 30, color: AppColors.SECONDARY_COLOR)),
                   ],
                 ),
               )
@@ -186,13 +198,15 @@ class MyAdsTripJoin extends StatelessWidget {
   }
 
   String _formatDate() {
-    return intl.DateFormat('dd MMM, hh:mm aaa').format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.time));
+    return intl.DateFormat('dd MMM, hh:mm aaa')
+        .format(DateTime.fromMicrosecondsSinceEpoch(tripJoinCardEntity.time));
   }
 
   Widget _buildContactInfo(context) {
     return BlocProvider<MyAddsCubit>(
-      create: (BuildContext context) =>
-          serviceLocator()..getAllCount(params: Params(id: tripJoinCardEntity.id, status: 'chat')),
+      create: (BuildContext context) => serviceLocator()
+        ..getAllCount(
+            params: Params(id: tripJoinCardEntity.id, status: 'chat')),
       child: BlocBuilder<MyAddsCubit, MyAddsState>(
         builder: (BuildContext context, state) {
           return Row(
@@ -258,7 +272,11 @@ class MyAdsTripJoin extends StatelessWidget {
     );
   }
 
-  Widget _buildContactItem({required IconData icon, required String label, required int value, required context}) {
+  Widget _buildContactItem(
+      {required IconData icon,
+      required String label,
+      required int value,
+      required context}) {
     return Row(
       children: [
         Container(
