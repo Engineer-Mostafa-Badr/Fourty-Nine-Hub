@@ -908,5 +908,16 @@
   "submitPayment": "Submit Payment",
   "cashOutOption": "Cash out Option",
   "select": "Select",
+  "SubscriberCompletionRate" : "Subscriber Completion Rate",
+  "ChanceDetails" : "Chance Details",
+  "ProductDescription": "Product Description",
+  "Typethevalueyouwanttoparticipation" : "Type the value you want to participation",
+  "CreateChance " : "Create Chance ",
+  "enterPrice" : "Enter Price",
+  "enterTitle" : "Enter Title",
+  "enterDescription" : "Enter Description",
+  "payAtLeast1":"Pay at least 1 EGP and publish your dream product you want to buy!!!",
+  "oneUserWillR" : "One User will win randomly every month cycle",
+  "moreSubscriptionMore" : "More subscription more chance!",
   "uploadOneImage": "Upload At Least One Photo!"
 }

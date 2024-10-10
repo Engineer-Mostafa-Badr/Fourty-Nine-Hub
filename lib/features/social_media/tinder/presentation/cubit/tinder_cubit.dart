@@ -745,6 +745,8 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     final mainCategoryResponse =
         await tinderRepository.fetchMainCategoryById(id);
     if (mainCategoryResponse != null) {
+      print(mainCategoryResponse.data.mainCategory.nameEn);
+
       emit(state.copyWith(
           mainCategoryResponseState: DataState.success,
           mainCategoryResponse: mainCategoryResponse));
@@ -902,6 +904,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     emit(state.copyWith(subCategoryDataState: DataState.initial));
     final subCategoryData = await tinderRepository.fetchSubCategoryData();
     if (subCategoryData != null) {
+      // fetchMainCategoryById('62c8b5b09332225799fe335e');
       emit(state.copyWith(
           subCategoryData: subCategoryData,
           subCategoryDataState: DataState.success));

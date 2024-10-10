@@ -324,16 +324,21 @@ class _AdCardState extends State<AdCard> {
 
                                                         if(controller.formKey.currentState!.validate()){
                                                           await controller.makeAdRequest(id: widget.item.id).then((value) {
-                                                            if(controller.phone!=null){
-                                                              if(state.status == AdsStates.requestSuccess){
+                                                              if(value==true){
                                                                 context.pop();
                                                                 showSuccessMessage(context, 'Request Sent Successfully');
                                                                 controller.resetRequest();
-                                                              }else if(state.status == AdsStates.error){
+                                                              }else{
                                                                 context.pop();
-                                                                showErrorMessage(context, getFailureMessage(state.failure!, context));
+                                                                if(state.failure!=null){
+                                                                  showErrorMessage(context, getFailureMessage(state.failure!, context));
+
+                                                                }else{
+                                                                  showErrorMessage(context, 'Please Try Again!');
+
+                                                                }
                                                               }
-                                                            }
+
                                                           }
                                                           );
                                                         }

@@ -121,7 +121,7 @@ class UserProfilePageState extends State<UserProfilePage> {
       );
 
       if (uploadResult == null) {
-        log("Image upload failed: No file selected.");
+        log("Image upload failed: No file selecjhgjgted.");
       }
     } catch (e) {
       log("Image upload failed: $e");

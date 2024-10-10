@@ -107,7 +107,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                               child: InkWell(
                             onTap: () {
                               setState(() {
-                                if (widget.categorization.subCategory
+                                if(widget.categorization.mainCategory.nameEn=='Dating') {
+                                  state.isMale=true;
+                                }else if (widget.categorization.subCategory
                                         .hasAuction ==
                                     true) {
                                   state.isSale = true;
@@ -120,7 +122,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                   color: (state.isUser == true &&
-                                          state.isSale == true)
+                                          state.isSale == true&&state.isMale==true)
                                       ? AppColors.PRIMARY_COLOR
                                       : Colors.white,
                                   borderRadius: BorderRadius.circular(15),
@@ -128,13 +130,13 @@ class _CreateAdViewState extends State<CreateAdView> {
                                       color: AppColors.PRIMARY_COLOR)),
                               alignment: AlignmentDirectional.center,
                               child: Text(
-                                widget.categorization.subCategory.hasAuction ==
+                                widget.categorization.mainCategory.nameEn=='Dating'?LocaleKeys.maleUser.localize:widget.categorization.subCategory.hasAuction ==
                                         true
                                     ? LocaleKeys.sale.localize
                                     : LocaleKeys.user.localize,
                                 style: Styles.mediumText(
                                     color: (state.isUser == false ||
-                                            state.isSale == false)
+                                            state.isSale == false||state.isMale==false)
                                         ? AppColors.PRIMARY_COLOR
                                         : Colors.white),
                               ),
@@ -145,7 +147,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  if (widget.categorization.subCategory
+                                  if(widget.categorization.mainCategory.nameEn=='Dating') {
+                                    state.isMale=false;
+                                  }else if (widget.categorization.subCategory
                                           .hasAuction ==
                                       true) {
                                     state.isSale = false;
@@ -160,7 +164,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                     color: (state.isUser == false ||
-                                            state.isSale == false)
+                                            state.isSale == false||state.isMale==false)
                                         ? AppColors.PRIMARY_COLOR
                                         : Colors.white,
                                     borderRadius: BorderRadius.circular(15),
@@ -168,14 +172,14 @@ class _CreateAdViewState extends State<CreateAdView> {
                                         color: AppColors.PRIMARY_COLOR)),
                                 alignment: AlignmentDirectional.center,
                                 child: Text(
-                                  widget.categorization.subCategory
+                                  widget.categorization.mainCategory.nameEn=='Dating'?LocaleKeys.femaleUser.localize: widget.categorization.subCategory
                                               .hasAuction ==
                                           true
                                       ? LocaleKeys.rent.localize
                                       : LocaleKeys.provider.localize,
                                   style: Styles.mediumText(
                                       color: (state.isUser == true &&
-                                              state.isSale == true)
+                                              state.isSale == true&&state.isMale==true)
                                           ? AppColors.PRIMARY_COLOR
                                           : Colors.white),
                                 ),

@@ -9,6 +9,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -100,7 +101,16 @@ class HealthMedicalServiceCard extends StatelessWidget {
                     isCircle: true,
                     color: Theme.of(context).scaffoldBackgroundColor,
                     backColor: AppColors.PRIMARY_COLOR,
-                    onPressed: () {},
+                    onPressed: () {
+                      if (context.read<HealthCubit>().state.mainCategory != null) {
+                        context.push(
+                          Routes.CREATEAD,
+                          extra: CategorizationEntity(
+                              mainCategory: context.read<HealthCubit>().state.mainCategory!,
+                              subCategory: subCategory),
+                        );
+                      }
+                    },
                   )
                 ],
               ),

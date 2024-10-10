@@ -209,6 +209,7 @@ import '../firebase_options.dart';
 import 'account_service_locator.dart';
 import 'auction_service_locator.dart';
 import 'balance_service_locator.dart';
+import 'chance_service_locator.dart';
 import 'company_add_service_locator.dart';
 import 'custom_page_service_locator.dart';
 import 'food_service_locator.dart';
@@ -289,7 +290,7 @@ class DI {
     // serviceLocator.registerLazySingleton<CompanyAdvertiseRepoImpl>(() => CompanyAdvertiseRepoImpl(ApiService(Dio())),);
     // Register the ReelsRepository
     serviceLocator.registerLazySingleton<ReelsRepository>(
-      () => ReelsRepository(),
+      () => ReelsRepository(serviceLocator()),
     );
 
     // Register the ReelsCubit
@@ -411,5 +412,6 @@ class DI {
     TransferMoneyServiceLocator.execute(serviceLocator: serviceLocator);
     CustomPageServiceLocator.execute(serviceLocator: serviceLocator);
     CarpoolServiceLocator.execute(serviceLocator: serviceLocator);
+    ChanceServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

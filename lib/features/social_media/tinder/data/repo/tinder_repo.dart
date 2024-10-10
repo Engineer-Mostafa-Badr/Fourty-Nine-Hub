@@ -247,6 +247,8 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_category_model.dart';
+import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:http/http.dart' as http;
 import 'package:fourtyninehub/features/social_media/tinder/data/models/anonymous_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
@@ -262,7 +264,6 @@ import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../models/tinder_person_model.dart';
-import '../models/tinder_subcategory_model.dart';
 
 class TinderRepository {
   String? token;
@@ -485,14 +486,14 @@ class TinderRepository {
     return null;
   }
 
-  Future<List<SubCategoryData>?> fetchSubCategoryData() async {
+  Future<List<SubCategoryEntity>?> fetchSubCategoryData() async {
     const url = 'https://49dev.com/api/v1/tinder/subCategories';
     final response =
         await _makeGetRequest(url: url, fromMethod: 'fetchSubCategoryData');
     if (response != null) {
       final List<dynamic> responseData = jsonDecode(response.body)['data'];
       return responseData
-          .map<SubCategoryData>((data) => SubCategoryData.fromJson(data))
+          .map<SubCategoryEntity>((data) => SubCategoryModel.fromJson(data))
           .toList();
     }
     return null;

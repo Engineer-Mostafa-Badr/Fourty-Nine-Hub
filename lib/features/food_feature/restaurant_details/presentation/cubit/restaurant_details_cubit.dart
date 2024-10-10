@@ -188,7 +188,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
 
     final data = {
       "cartId": cartId,
-      "address": address,
+      // "address": address,
       "phone": phone,
     };
 
@@ -271,7 +271,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
 
     final data = {
       "cartId": cartId,
-      "address": address,
+      // "address": address,
       "phone": phone,
     };
 

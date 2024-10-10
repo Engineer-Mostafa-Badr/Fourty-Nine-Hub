@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-void bottomSheet(
+bottomSheet(
     {required BuildContext context,
     required Widget widget,
     Color? backColor,
     bool isFloating = false,
     bool isScrollControlled = false}) async {
-  showModalBottomSheet(
+  await showModalBottomSheet(
       context: context,
       isScrollControlled: isScrollControlled,
       builder: (context) {

@@ -1,32 +1,29 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_subcategory_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_sub_category_ads_view.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class TinderSubCategoryCard extends StatefulWidget {
-  final SubCategoryData subCategoryCardData;
+  final SubCategoryEntity subCategoryCardData;
   final int index;
+  final MainCategoryEntity mainCategory;
 
   const TinderSubCategoryCard({
     super.key,
     required this.subCategoryCardData,
-    required this.index,
+    required this.index, required this.mainCategory,
   });
 
   @override
@@ -41,7 +38,9 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        context.push(Routes.ADS, extra: AdsViewParams(subCategory: widget.subCategoryCardData,mainCategory: widget.mainCategory));
+      },
       child: Container(
         width: 350.h,
         padding: const EdgeInsets.all(0),
@@ -56,7 +55,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
             children: [
               _buildImageSection(context),
               const Sizer(),
-              _buildInfoSection(context),
+              _buildInfoSection(context, widget.mainCategory),
             ],
           ),
         ),
@@ -67,7 +66,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
   Widget _buildImageSection(
     BuildContext context,
   ) {
-    final subCategoryId = widget.subCategoryCardData.sId ?? '';
+    final subCategoryId = widget.subCategoryCardData.id;
 
     return Expanded(
       child: SizedBox(
@@ -79,7 +78,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
               child: SquareImage(
                 fit: BoxFit.fitWidth,
                 radius: 10,
-                url: widget.subCategoryCardData.picture ?? '',
+                url: widget.subCategoryCardData.image,
               ),
             ),
             Positioned(
@@ -114,41 +113,29 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
 
   Widget _buildInfoSection(
     BuildContext context,
+  final MainCategoryEntity mainCategory
+
   ) {
-    final subCategoryId = widget.subCategoryCardData.sId ?? '';
-    final subCategoryName = context.isArabic
-        ? widget.subCategoryCardData.nameAr
-        : widget.subCategoryCardData.nameEn;
-    final subCategoryPicture = widget.subCategoryCardData.picture ?? '';
+    final subCategoryId = widget.subCategoryCardData.id;
+    final subCategoryName = widget.subCategoryCardData.name;
+    final subCategoryPicture = widget.subCategoryCardData.image;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: EdgeInsets.symmetric(horizontal: 8.w,vertical: 8.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
             flex: 4,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  subCategoryName.toString(),
-                  maxLines: 1,
-                  softWrap: true,
-                  textScaler: TextScaler.noScaling,
-                  style: TextStyle(
-                    fontSize: 45.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  '${9355.toShortScale} ${context.isArabic ? "إعلان" : "ads"}',
-                  textScaler: TextScaler.noScaling,
-                  style: TextStyle(
-                    fontSize: 35.sp,
-                  ),
-                ),
-              ],
+            child: Text(
+              subCategoryName.toString(),
+              maxLines: 1,
+              softWrap: true,
+              textScaler: TextScaler.noScaling,
+              style: TextStyle(
+                fontSize: 45.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           Expanded(
@@ -158,30 +145,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
               color: Colors.white,
               backColor: AppColors.PRIMARY_COLOR,
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider.value(
-                      value: serviceLocator<TinderViewCubit>(),
-                      child: BlocBuilder<TinderViewCubit, TinderViewState>(
-                        builder: (context, state) {
-                          return TinderSubCategoryAdsView(
-                            params: TinderSubAdsViewParams(
-                              subCategory: SubCategoryEntity(
-                                id: subCategoryId,
-                                name: subCategoryName.toString(),
-                                image: subCategoryPicture,
-                                isFavorite: containsSpecificId(
-                                    state.getFavCategoryModel?.data ?? [],
-                                    subCategoryId),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                );
+                context.push(Routes.CREATEAD,extra: CategorizationEntity(mainCategory: mainCategory, subCategory: widget.subCategoryCardData));
               },
             ),
           ),

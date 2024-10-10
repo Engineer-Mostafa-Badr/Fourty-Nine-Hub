@@ -238,6 +238,16 @@ class ReelsCubit extends Cubit<ReelsState> {
             globalReelsCurrentPage: 0));
 
 //---------------------------------------------------------------------------------------
+
+  var pauseChild = false;
+
+  pauseChildVideo({bool pause = false}) {
+    pauseChild = pause;
+    print(pauseChild.toString() + "asfsldhfnsd");
+
+    emit(state);
+  }
+
   Future<void> createReelView(String reelId, int duration) async {
     emit(state.copyWith(isCreatingReelView: true));
 
@@ -373,6 +383,7 @@ class ReelsCubit extends Cubit<ReelsState> {
         page: state.globalReelsCurrentPage + 1,
       );
 
+      print(response.data.reels.length.toString() + "asfadjcbalc");
       emit(state.copyWith(
         reels: [...state.globalReels, ...response.data.reels],
         isLoading: false,
@@ -455,13 +466,14 @@ class ReelsCubit extends Cubit<ReelsState> {
   }
 
 //--------------------------------------------------------------------------------------------
-  Future<void> likeReel(String reelId) async {
+  Future<String> likeReel(String reelId) async {
     try {
       emit(state.copyWith(
           isLikingReel: false, likeReelErrorMessage: 'loadingLike'));
 
       final response = await repository.likeReel(reelId);
 
+      print(response.message+"dsfdvsdvsdv");
       // Assuming you might want to update the specific reel in the list with the like status
       List<Reel> updatedReels = state.globalReels.map((reel) {
         if (reel.id == reelId) {
@@ -474,12 +486,14 @@ class ReelsCubit extends Cubit<ReelsState> {
           likeReelResponse: response,
           isLikingReel:
               response.message == "Reel liked successfully" ? true : false));
+      return  response.message;
     } catch (e) {
       emit(state.copyWith(
           isLikingReel: false,
           likeReelErrorMessage:
               'errorLike')); // Handle the error, possibly update the UI state or show an error message
     }
+    return '';
   }
 
   //======================================================================================
