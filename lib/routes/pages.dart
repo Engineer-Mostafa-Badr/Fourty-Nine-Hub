@@ -103,19 +103,16 @@ import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cu
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pages/edit_profile_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
-// import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/instagram_profile.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
-// import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_brand_usecase.dart';
@@ -154,6 +151,8 @@ import '../features/account_taps/account/presentation/cubit/managers/favourite_s
 import '../features/account_taps/account/presentation/pages/favourite_category_view.dart';
 import '../features/account_taps/account/presentation/pages/favourite_subcategory_view.dart';
 import '../features/account_taps/lists/presentation/cubit/lists_cubit.dart';
+import '../features/account_taps/my_adds/domain/entity/my_ads_auction.dart';
+import '../features/account_taps/my_adds/presentation/pages/edit_my_ads.dart';
 import '../features/account_taps/my_adds/presentation/pages/my_adds.dart';
 import '../features/account_taps/policies/presentation/pages/policy_view.dart';
 import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
@@ -635,6 +634,15 @@ class AppPages {
                 GoRoute(
                     path: Paths.MYADDS,
                     name: Routes.MYADDS,
+                    routes: [
+                      GoRoute(
+                          path: Paths.EDITAD,
+                          name: Routes.EDITAD,
+                          builder: (context, state) => BlocProvider<CreateAdCubit>(
+                            create: (_) => serviceLocator(),
+                            child:  EditMyAds(categorization: state.extra as MyAuctionAdsEntity,),
+                          ))
+                    ],
                     builder: (context, state) => BlocProvider<MyAddsCubit>(
                           create: (_) => serviceLocator(),
                           child: const MyAddsView(),
