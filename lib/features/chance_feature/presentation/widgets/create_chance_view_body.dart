@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/chance_feature/domain/entity/sub_category_drop_entity.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/controller/cubit/chance_cubit.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/controller/cubit/chance_states.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/add_image_widget.dart';
@@ -358,6 +359,13 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                               showErrorMessage(context, 'Please Enter Main Category and Sub Category');
                             }
                           }
+                          setState(() {
+                            titleController.clear();
+                            desController.clear();
+                            priceController.clear();
+                            selectedCategory =null;
+                            selectedSubCategory =null;
+                          });
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(

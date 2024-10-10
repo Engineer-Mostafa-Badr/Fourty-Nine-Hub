@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/entity/main_categry_entity.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/entity/sup_category_entity.dart';
+import 'package:fourtyninehub/features/chance_feature/presentation/controller/cubit/chance_cubit.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/pages/chance_details_view.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/image_card_widget.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/subscribe_widget_in_card.dart';
@@ -12,7 +14,7 @@ import '../../../../res/style/styles.dart';
 import '../../domain/entity/chance_entity.dart';
 import '../../domain/entity/image_chance_entity.dart';
 
-class ChanceCardWidget extends StatelessWidget {
+class ChanceCardWidget extends StatefulWidget {
   const ChanceCardWidget({
     super.key,
     required this.chance,
@@ -26,6 +28,17 @@ class ChanceCardWidget extends StatelessWidget {
   final MainCategoryEntity mainCategoryEntity;
 
   @override
+  State<ChanceCardWidget> createState() => _ChanceCardWidgetState();
+}
+
+class _ChanceCardWidgetState extends State<ChanceCardWidget> {
+
+
+  initState()
+  {
+    context.read<ChanceCubit>().getChanceRate(id: widget.chance.id) ;
+  }
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -33,10 +46,10 @@ class ChanceCardWidget extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => ChanceDetailsView(
-                      chance: chance,
-                      image: image,
-                      subCategoryEntity: subCategoryEntity.nameEn,
-                      mainCategoryEntity: mainCategoryEntity.nameEn,
+                      chance: widget.chance,
+                      image: widget.image,
+                      subCategoryEntity: widget.subCategoryEntity.nameEn,
+                      mainCategoryEntity: widget.mainCategoryEntity.nameEn,
                     )));
       },
       child: Container(
@@ -48,7 +61,7 @@ class ChanceCardWidget extends StatelessWidget {
         child: Row(
           children: [
             ImageCardWidget(
-              image: image.photo,
+              image: widget.image.photo,
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -57,7 +70,7 @@ class ChanceCardWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    chance.description,
+                    widget.chance.title,
                     style: Styles.mediumText(fontSize: 50.sp),
                   ),
                   const SizedBox(height: 6),
@@ -65,7 +78,7 @@ class ChanceCardWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        '${chance.price}',
+                        '${widget.chance.price}',
                         style: TextStyle(
                           fontSize: 40.sp,
                           fontWeight: FontWeight.bold,
@@ -85,9 +98,7 @@ class ChanceCardWidget extends StatelessWidget {
                   SizedBox(height: 10.h),
                   const NotSubscribedWidget(),
                   SizedBox(height: 20.h),
-                  const LinerProgressIndicator(
-                    
-                  ),
+                   const LinerProgressIndicator(),
                 ],
               ),
             ),

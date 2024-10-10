@@ -21,7 +21,9 @@ class _CounterMoneyWidgetState extends State<CounterMoneyWidget> {
         ElevatedButton(
           onPressed: () {
             setState(() {
-              value = value - 1; // تقليل القيمة
+              if (value > 0) {
+                value = value - 1;
+              }
             });
           },
           style: ElevatedButton.styleFrom(

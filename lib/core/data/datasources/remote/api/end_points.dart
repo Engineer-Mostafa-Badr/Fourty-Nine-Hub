@@ -806,4 +806,6 @@ class EndPoints {
   // Chance
   static String chance = '/chance-ads/my-ads';
   static String addChance = '/chance-ads';
+  static String rateChance(String id ) => '/chance-ads/contribution-percentage/$id';
+  static String mainCatChance = '/categories/main' ;
 }

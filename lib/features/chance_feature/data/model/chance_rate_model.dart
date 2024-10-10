@@ -14,5 +14,4 @@ class ChanceRateModel extends ChanceRateEntity {
       contributionPercentage: json['contributionPercentage'],
     );
   }
-
 }

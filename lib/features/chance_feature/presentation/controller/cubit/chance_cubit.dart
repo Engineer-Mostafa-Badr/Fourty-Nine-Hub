@@ -1,8 +1,15 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/chance_feature/domain/entity/cahnce_rate_entity.dart';
+import 'package:fourtyninehub/features/chance_feature/domain/entity/main_category_drop_entity.dart';
+import 'package:fourtyninehub/features/chance_feature/domain/entity/sub_category_drop_entity.dart';
+import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_chance_rate_use_case.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_chance_use_case.dart';
+import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_main_category.dart';
+import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_sub_category.dart';
 
 import '../../../../../routes/pages.dart';
 import '../../../domain/use_case/add_chance_data.dart';
@@ -11,8 +18,17 @@ import 'chance_states.dart';
 class ChanceCubit extends Cubit<ChanceState> {
   final FetchChanceUseCase _fetchChanceUseCase;
   final AddChanceUseCase _addChanceUseCase;
+  final GetChanceRateUseCase _getChanceRateUseCase;
+  final MainCategoryChanceUseCase _mainCategoryChanceUseCase ;
+  final SubCategoryChanceUseCase _SubCategoryChanceUseCase ;
 
-  ChanceCubit(this._fetchChanceUseCase, this._addChanceUseCase)
+  ChanceCubit(
+      this._fetchChanceUseCase,
+      this._addChanceUseCase,
+      this._getChanceRateUseCase,
+      this._mainCategoryChanceUseCase,
+      this._SubCategoryChanceUseCase,
+      )
       : super(const ChanceState());
 
   // Future<void> fetchChance() async {
@@ -51,11 +67,60 @@ class ChanceCubit extends Cubit<ChanceState> {
     emit(state.copyWith(status: ChanceStates.loading));
     final response = await _addChanceUseCase(params);
     return response.fold(
-      (failure)=>emit(state.copyWith(failure: failure,status: ChanceStates.error)),
-      (response) {
+          (failure) =>
+          emit(state.copyWith(failure: failure, status: ChanceStates.error)),
+          (response) {
         emit(state.copyWith(status: ChanceStates.success));
         fetchChance();
       },
     );
   }
+  Future<void> getChanceRate({required String id}) async
+  {
+    final response = await _getChanceRateUseCase(
+      ChanceRateParams(chanceRateParams: id),
+    );
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: ChanceStates.error));
+    }, (data) {
+      emit(state.copyWith(rate: data,status: ChanceStates.success)) ;
+    });
+  }
+
+
+  Future<List<MainCategoryDropEntity>> fetchMainCategoryChance(
+      {required PaginationParams paginationParams, required String id}) async {
+    List<MainCategoryDropEntity> category = [];
+    final response = await _mainCategoryChanceUseCase(
+      MainCategoryChanceParams(
+        id: id,
+        paginationParams: paginationParams,
+      ),
+    );
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: ChanceStates.error));
+    }, (data) {
+      category = data;
+    });
+    return category;
+  }
+
+
+  Future<List<SubCategoryDropEntity>> fetchSubCategoryChance(
+      {required PaginationParams paginationParams, required String id}) async {
+    List<SubCategoryDropEntity> category = [];
+    final response = await _SubCategoryChanceUseCase(
+      SubCategoryChanceParams(
+        id: id,
+        paginationParams: paginationParams,
+      ),
+    );
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: ChanceStates.error));
+    }, (data) {
+      category = data;
+    });
+    return category;
+  }
+
 }
