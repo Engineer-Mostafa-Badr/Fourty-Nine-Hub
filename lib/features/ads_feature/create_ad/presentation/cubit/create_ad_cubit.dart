@@ -39,7 +39,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
 
   List<SelectionEntity> values = [];
 
-  String? title, description,price, priceFrom,priceTo, phone;
+  String? title, description, price, priceFrom, priceTo, phone;
   final formState = GlobalKey<FormState>();
   final formStatic = GlobalKey<FormState>();
 
@@ -79,7 +79,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
               element.nameAr != 'السعر' && element.nameAr != 'الراتب')
           .toList();
 
-      emit(state.copyWith(adProperties: propertiesList,filterAdProperties:data));
+      emit(state.copyWith(
+          adProperties: propertiesList, filterAdProperties: data));
     });
   }
 
@@ -88,18 +89,24 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     print(values.length);
   }
 
-  void onTextChanged({required String v, required int index,bool? isNumber=false,bool? from =true,String? type}) {
-    if(isNumber==true){
-      if(from==true){
+  void onTextChanged(
+      {required String v,
+      required int index,
+      bool? isNumber = false,
+      bool? from = true,
+      String? type}) {
+    if (isNumber == true) {
+      if (from == true) {
         var model = values[index];
-        SelectionEntity data = SelectionEntity(nameAr: v, nameEn: model.nameEn,type: type);
+        SelectionEntity data =
+            SelectionEntity(nameAr: v, nameEn: model.nameEn, type: type);
         values[index] = data;
-      }else{
+      } else {
         var model = values[index];
         SelectionEntity data = SelectionEntity(nameAr: model.nameAr, nameEn: v);
         values[index] = data;
       }
-    }else {
+    } else {
       SelectionEntity data = SelectionEntity(nameAr: v, nameEn: v);
       values[index] = data;
     }
@@ -136,14 +143,16 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     emit(state.copyWith(images: images));
   }
 
-  void selectGovernorate(String id){
-    emit(state.copyWith(governorate: id,city: ''));
+  void selectGovernorate(String id) {
+    emit(state.copyWith(governorate: id, city: ''));
   }
-  void selectCity(String id){
+
+  void selectCity(String id) {
     emit(state.copyWith(city: id));
   }
 
   final user = UserCubit.to.state.data?.id;
+
   void createAd(
       {required CategorizationEntity categorize,
       required BuildContext context}) async {
@@ -165,12 +174,15 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       type = "sale";
     }
 
-    if(formStatic.currentState?.validate()??false){
+    if (formStatic.currentState?.validate() ?? false) {
       print("object");
-    }else{
+    } else {
       print("object3132");
     }
-    if ((formState.currentState?.validate() ?? false) && (state.images?.isNotEmpty ?? false)&&(state.city !='')&&state.governorate !='') {
+    if ((formState.currentState?.validate() ?? false) &&
+        (state.images?.isNotEmpty ?? false) &&
+        (state.city != '') &&
+        state.governorate != '') {
       List<CreateAdEntity> details = [];
       for (int i = 0; i < (state.adProperties?.length ?? 0); i++) {
         details.add(CreateAdEntity(
@@ -193,7 +205,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
         createdAt: DateTime.now(),
         details: selectedDetails,
         subCategoryId: categorize.subCategory.id,
-        mainCategoryId: categorize.mainCategory.id, approved: false,
+        mainCategoryId: categorize.mainCategory.id,
+        approved: false,
       ));
 
       response.fold(
@@ -201,44 +214,63 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           (r) {
         context.pushReplacement(Routes.MYADDS);
       });
-    }else if(state.images==[]||state.images==null){
+    } else if (state.images == [] || state.images == null) {
       showErrorMessage(context, LocaleKeys.uploadOneImage.localize);
-    }else if(state.governorate == ''){
+    } else if (state.governorate == '') {
       showErrorMessage(context, LocaleKeys.selectGovernorate.localize);
-    }else if(state.city == ''){
+    } else if (state.city == '') {
       showErrorMessage(context, LocaleKeys.selectCity.localize);
     }
   }
 
   void filterAds(
       {required CategorizationEntity categorize,
-        required BuildContext context}) async
-  {
-    if((formState.currentState?.validate() ?? false)&&(state.city !='')&&state.governorate !=''){
+      required BuildContext context}) async {
+    if ((formState.currentState?.validate() ?? false) &&
+        (state.city != '') &&
+        state.governorate != '') {
       print("ss");
       List<CreateAdEntity> details = [];
       for (int i = 0; i < (state.filterAdProperties?.length ?? 0); i++) {
         details.add(CreateAdEntity(
-            propId: state.filterAdProperties![i].id, value: SelectionEntity(nameAr: state.selections![i].nameAr, nameEn: state.selections![i].nameEn,type: state.filterAdProperties![i].type)));
+            propId: state.filterAdProperties![i].id,
+            value: SelectionEntity(
+                nameAr: state.selections![i].nameAr,
+                nameEn: state.selections![i].nameEn,
+                type: state.filterAdProperties![i].type)));
       }
-      String priceId = state.filterAdProperties?.firstWhere((element) => element.nameAr== 'السعر'||element.nameAr=='الراتب').id??'';
-      List<CreateAdEntity> selectedDetails =
-      details.where((element) => element.value.nameAr.isNotEmpty&&element.propId!=priceId).toList();
-      CreateAdEntity price = details.firstWhere((element) => element.propId == priceId);
-      for (var item in selectedDetails){
+      String priceId = state.filterAdProperties
+              ?.firstWhere((element) =>
+                  element.nameAr == 'السعر' || element.nameAr == 'الراتب')
+              .id ??
+          '';
+      List<CreateAdEntity> selectedDetails = details
+          .where((element) =>
+              element.value.nameAr.isNotEmpty && element.propId != priceId)
+          .toList();
+      CreateAdEntity price =
+          details.firstWhere((element) => element.propId == priceId);
+      for (var item in selectedDetails) {
         print(item.toJson());
       }
 
-      FilterModel model =FilterModel(price: price, props: selectedDetails, cityId: state.city??'',governorateId: state.governorate??'', limit: 10, page: 1, subCategoryId:categorize.subCategory.id);
+      FilterModel model = FilterModel(
+          price: price,
+          props: selectedDetails,
+          cityId: state.city ?? '',
+          governorateId: state.governorate ?? '',
+          limit: 10,
+          page: 1,
+          subCategoryId: categorize.subCategory.id);
       final response = await _filterAdUseCase(model);
       response.fold(
-              (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
-              (r) {
-                context.pop(model);
-          });
-    }else if(state.governorate == ''){
+          (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
+          (r) {
+        context.pop(model);
+      });
+    } else if (state.governorate == '') {
       showErrorMessage(context, LocaleKeys.selectGovernorate.localize);
-    }else if(state.city == ''){
+    } else if (state.city == '') {
       showErrorMessage(context, LocaleKeys.selectCity.localize);
     }
   }
@@ -258,8 +290,10 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     final response = await _citiesUseCase.call(governorateId);
 
     response.fold(
-      (failure) => emit(state.copyWith(failure: failure, status: CreateAdStates.error)),
-      (data) => emit(state.copyWith(cities: data, status: CreateAdStates.loadCitiesSuccess)),
+      (failure) =>
+          emit(state.copyWith(failure: failure, status: CreateAdStates.error)),
+      (data) => emit(state.copyWith(
+          cities: data, status: CreateAdStates.loadCitiesSuccess)),
     );
   }
 }

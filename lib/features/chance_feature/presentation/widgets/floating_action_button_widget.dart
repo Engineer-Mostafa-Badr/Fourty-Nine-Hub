@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/chance_feature/presentation/widgets/show_model_bottom_sheet_widget.dart';
 
-import '../../../../res/style/app_colors.dart';
+import '../pages/create_chance_view.dart';
 
 class FloatingActionButtonWidget extends StatelessWidget {
   const FloatingActionButtonWidget({super.key});
@@ -10,9 +9,11 @@ class FloatingActionButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          builder: (context) => const ShowModelBottomSheetWidget(),
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CreateChanceView(),
+          ),
         );
       },
       backgroundColor: Colors.red,

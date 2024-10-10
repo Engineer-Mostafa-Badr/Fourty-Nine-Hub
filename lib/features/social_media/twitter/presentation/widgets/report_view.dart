@@ -43,17 +43,21 @@ class _ReportViewState extends State<ReportView> {
     List<ReportsEnum> reports = ReportsEnum.values;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      body: BlocProvider<TwitterCubit>(
-        create: (_) => serviceLocator<TwitterCubit>(),
-        child: BlocBuilder<TwitterCubit, TwitterState>(
-          builder: (context, state) {
-            final controller = context.read<TwitterCubit>();
-            final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Card(
+        color: Colors.white,
+        child: BlocProvider<TwitterCubit>(
+          create: (_) => serviceLocator<TwitterCubit>(),
+          child: BlocBuilder<TwitterCubit, TwitterState>(
+            builder: (context, state) {
+              final controller = context.read<TwitterCubit>();
+              final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
-            return Container(
-              color: Colors.transparent,
-              child: Padding(
+              return Padding(
                 padding: EdgeInsets.only(bottom: bottomInset),
                 child: SingleChildScrollView(
                   child: Column(
@@ -94,9 +98,9 @@ class _ReportViewState extends State<ReportView> {
                     ],
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

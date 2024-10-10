@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/widgets/restaurant_statistics_view.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../res/strings/labels.dart';
@@ -65,14 +67,32 @@ class RestaurantDashboardView extends StatelessWidget {
 
                     const RestaurantStatisticsView(),
                     // Divider(),
-                    const Align(
+                    const Sizer(),
+                    Align(
                       alignment: Alignment.centerLeft,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Edit Registration'),
-                          Sizer(),
-                          Text('Delete Registration'),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 4),
+                            child: AppButton(
+                              label: 'Edit Registration',
+                              onPressed: () {},
+                              backColor: AppColors.PRIMARY_COLOR,
+                              style: Styles.headerText(color: Colors.white),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 4),
+                            child: AppButton(
+                              label: 'Delete Registration',
+                              onPressed: () {},
+                              backColor: AppColors.PRIMARY_COLOR_DARK,
+                              style: Styles.headerText(color: Colors.white),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -80,13 +100,28 @@ class RestaurantDashboardView extends StatelessWidget {
                     Expanded(
                       child: ListView.separated(
                           itemBuilder: (context, index) {
-                            print(state.orders!.data.length.toString() +
+                            print(state.orders!.data.orders.length.toString() +
                                 '455555555555555555555555');
-                            return RestaurantOrderCard(
-                                item: state.orders!.data[index]);
+                            return Column(
+                              children: [
+                                RestaurantOrderCard(
+                                    item: state.orders!.data.orders[index]),
+                                state.orders!.data.restaurantSubscriptionType ==
+                                        'Not subscribed'
+                                    ? Text(
+                                        'Please Subscribe to contact the client!',
+                                        style: Styles.headerText(
+                                            color:
+                                                AppColors.PRIMARY_COLOR_DARK),
+                                      )
+                                    : const Sizer(),
+                              ],
+                            );
                           },
-                          separatorBuilder: (context, index) => const Sizer(),
-                          itemCount: state.orders?.data.length ?? 0),
+                          separatorBuilder: (context, index) => const Sizer(
+                                height: 20,
+                              ),
+                          itemCount: state.orders?.data.orders.length ?? 0),
                     ),
                   ],
                 ),

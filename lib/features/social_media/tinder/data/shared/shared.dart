@@ -9,7 +9,7 @@
 // import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 // import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
-// import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_cubit.dart';
+// import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/chance_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 // import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 // import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -826,11 +826,11 @@ class BottomSheetContentState extends State<BottomSheetContent> {
   }
 }
 
-void showGiftBottomSheet(BuildContext context,
+Future<void> showGiftBottomSheet(BuildContext context,
     {required String? receiverId,
     bool forSelect = false,
-    void Function(GiftData)? selectGift}) {
-  showModalBottomSheet(
+    void Function(GiftData)? selectGift}) async {
+  await showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
