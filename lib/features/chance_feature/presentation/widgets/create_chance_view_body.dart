@@ -66,7 +66,7 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
     final subCategories = await context
         .read<WalletCubit>()
         .fetchSubCategoryWallet(
-            id: categoryId, paginationParams: PaginationParams(page: 1));
+        id: categoryId, paginationParams: PaginationParams(page: 1));
     setState(() {
       this.subCategories = subCategories;
       isSubCategoryLoading = false;
@@ -76,7 +76,7 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ChanceCubit>(
-      create: (BuildContext context) =>serviceLocator(),
+      create: (BuildContext context) => serviceLocator(),
       child: BlocConsumer<ChanceCubit, ChanceState>(
         listener: (BuildContext context, state) {
           print('Current state: $state');
@@ -105,7 +105,9 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                       padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                           boxShadow: AppColors.SHADOW_LIGHT,
-                          color: Theme.of(context).scaffoldBackgroundColor,
+                          color: Theme
+                              .of(context)
+                              .scaffoldBackgroundColor,
                           borderRadius: BorderRadius.circular(16)),
                       child: Column(
                         children: [
@@ -141,12 +143,16 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 16.w),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
+                            color: Theme
+                                .of(context)
+                                .primaryColor,
                             borderRadius: BorderRadius.circular(12.r),
                             boxShadow: [
                               BoxShadow(
                                 color:
-                                    Theme.of(context).scaffoldBackgroundColor,
+                                Theme
+                                    .of(context)
+                                    .scaffoldBackgroundColor,
                                 spreadRadius: 2,
                                 blurRadius: 5,
                                 offset: const Offset(0, 2),
@@ -160,45 +166,53 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                               style: TextStyle(
                                 fontSize: 30.sp,
                                 color:
-                                    Theme.of(context).scaffoldBackgroundColor,
+                                Theme
+                                    .of(context)
+                                    .scaffoldBackgroundColor,
                               ),
                             ),
                             // menuWidth: double.infinity,
                             menuMaxHeight: 200,
-                            dropdownColor: Theme.of(context).primaryColor,
+                            dropdownColor: Theme
+                                .of(context)
+                                .primaryColor,
                             value: selectedCategory,
                             isExpanded: true,
                             underline: const SizedBox.shrink(),
                             icon: Icon(Icons.arrow_drop_down,
                                 size: 50.sp,
                                 color:
-                                    Theme.of(context).scaffoldBackgroundColor),
+                                Theme
+                                    .of(context)
+                                    .scaffoldBackgroundColor),
                             items: isCategoryLoading
                                 ? [
-                                    DropdownMenuItem(
-                                        value: null,
-                                        child: Label(
-                                          text: LocaleKeys
-                                              .selectCategory.localize,
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                        ))
-                                  ]
+                              DropdownMenuItem(
+                                  value: null,
+                                  child: Label(
+                                    text: LocaleKeys
+                                        .selectCategory.localize,
+                                    color: Theme
+                                        .of(context)
+                                        .scaffoldBackgroundColor,
+                                  ))
+                            ]
                                 : categories.map((category) {
-                                    return DropdownMenuItem<String>(
-                                      value: category.id,
-                                      child: Text(
-                                        context.locale == Locales.english
-                                            ? category.nameEn
-                                            : category.nameAr,
-                                        style: TextStyle(
-                                          fontSize: 30.sp,
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
+                              return DropdownMenuItem<String>(
+                                value: category.id,
+                                child: Text(
+                                  context.locale == Locales.english
+                                      ? category.nameEn
+                                      : category.nameAr,
+                                  style: TextStyle(
+                                    fontSize: 30.sp,
+                                    color: Theme
+                                        .of(context)
+                                        .scaffoldBackgroundColor,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
                             onChanged: (newCategoryId) {
                               setState(() {
                                 selectedCategory = newCategoryId;
@@ -216,12 +230,16 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 16.w),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
                               borderRadius: BorderRadius.circular(12.r),
                               boxShadow: [
                                 BoxShadow(
                                   color:
-                                      Theme.of(context).scaffoldBackgroundColor,
+                                  Theme
+                                      .of(context)
+                                      .scaffoldBackgroundColor,
                                   spreadRadius: 2,
                                   blurRadius: 5,
                                   offset: const Offset(0, 2),
@@ -235,45 +253,52 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                                 style: TextStyle(
                                   fontSize: 30.sp,
                                   color:
-                                      Theme.of(context).scaffoldBackgroundColor,
+                                  Theme
+                                      .of(context)
+                                      .scaffoldBackgroundColor,
                                 ),
                               ),
                               underline: const SizedBox.shrink(),
                               // menuWidth: double.infinity,
                               menuMaxHeight: 200,
-                              dropdownColor: Theme.of(context).primaryColor,
+                              dropdownColor: Theme
+                                  .of(context)
+                                  .primaryColor,
                               value: selectedSubCategory,
                               isExpanded: true,
                               icon: Icon(Icons.arrow_drop_down,
                                   size: 50.sp,
-                                  color: Theme.of(context)
+                                  color: Theme
+                                      .of(context)
                                       .scaffoldBackgroundColor),
                               items: isSubCategoryLoading
                                   ? [
-                                      DropdownMenuItem(
-                                          value: null,
-                                          child: Label(
-                                            text: LocaleKeys
-                                                .selectSubCategory.localize,
-                                            color: Theme.of(context)
-                                                .scaffoldBackgroundColor,
-                                          ))
-                                    ]
+                                DropdownMenuItem(
+                                    value: null,
+                                    child: Label(
+                                      text: LocaleKeys
+                                          .selectSubCategory.localize,
+                                      color: Theme
+                                          .of(context)
+                                          .scaffoldBackgroundColor,
+                                    ))
+                              ]
                                   : subCategories.map((subCategory) {
-                                      return DropdownMenuItem<String>(
-                                        value: subCategory.id,
-                                        child: Text(
-                                          context.locale == Locales.english
-                                              ? subCategory.nameEn
-                                              : subCategory.nameAr,
-                                          style: TextStyle(
-                                            fontSize: 30.sp,
-                                            color: Theme.of(context)
-                                                .scaffoldBackgroundColor,
-                                          ),
-                                        ),
-                                      );
-                                    }).toList(),
+                                return DropdownMenuItem<String>(
+                                  value: subCategory.id,
+                                  child: Text(
+                                    context.locale == Locales.english
+                                        ? subCategory.nameEn
+                                        : subCategory.nameAr,
+                                    style: TextStyle(
+                                      fontSize: 30.sp,
+                                      color: Theme
+                                          .of(context)
+                                          .scaffoldBackgroundColor,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
                               onChanged: (newSubCategoryId) {
                                 setState(() {
                                   selectedSubCategory = newSubCategoryId;
@@ -353,7 +378,7 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                       ),
                       onChanged: (value) {},
                       keyboardType:
-                          TextInputType.number, // To show numeric keyboard
+                      TextInputType.number, // To show numeric keyboard
                     ),
                     SizedBox(height: 60.h),
                     SizedBox(
@@ -366,14 +391,14 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                               context
                                   .read<ChanceCubit>()
                                   .addChance(AddChanceParams(
-                                    title: titleController.text,
-                                    price: double.parse(priceController.text),
-                                    images: ['669262c894fa0441718b74c9'],
-                                    description: desController.text,
-                                    subCategoryId: selectedSubCategory!,
-                                    mainCategoryId: selectedCategory!,
-                                    props: [],
-                                  ));
+                                title: titleController.text,
+                                price: double.parse(priceController.text),
+                                images: ['669262c894fa0441718b74c9'],
+                                description: desController.text,
+                                subCategoryId: selectedSubCategory!,
+                                mainCategoryId: selectedCategory!,
+                                props: [],
+                              ));
                             } else {
                               showErrorMessage(context,
                                   'Please Enter Main Category and Sub Category');
