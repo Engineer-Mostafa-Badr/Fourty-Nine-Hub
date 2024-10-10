@@ -256,7 +256,6 @@ class _TinderScreenState extends State<TinderScreen> {
           style: Styles.headerText(),
         ),
       ),
-      backgroundColor: Colors.grey,
       body: BlocConsumer<TinderViewCubit, TinderViewState>(
         listener: (context, state) {},
         builder: (context, state) {

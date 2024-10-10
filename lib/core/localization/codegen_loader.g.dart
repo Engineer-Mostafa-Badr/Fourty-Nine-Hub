@@ -903,7 +903,6 @@ class CodegenLoader extends AssetLoader{
   "expiredRequests": "طلبات منتهية الصلاحية",
   "filter": "تصفية",
   "beAStar": "كن نجم",
-  "select": "اختيار",
   "SubscriberCompletionRate": "معدل إكمال المشتركين",
   "ChanceDetails": "تفاصيل الفرصة",
   "ProductDescription": "وصف المنتج",
@@ -914,7 +913,9 @@ class CodegenLoader extends AssetLoader{
   "enterDescription": "ادخل وصف",
   "payAtLeast1": "ادفع 1 جنيه مصري على الأقل ونشر منتج أحلامك الذي تريد شراءه!!!",
   "oneUserWillR": "سيفوز مستخدم واحد بشكل عشوائي في كل شهر",
-  "moreSubscriptionMore": "كلما زاد الاشتراك زادت الفرصة!"
+  "moreSubscriptionMore": "كلما زاد الاشتراك زادت الفرصة!",
+  "select": "اختيار",
+  "uploadOneImage": "قم بتحميل صورة واحدة على الأقل!"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1819,7 +1820,8 @@ static const Map<String,dynamic> en = {
   "enterDescription": "Enter Description",
   "payAtLeast1": "Pay at least 1 EGP and publish your dream product you want to buy!!!",
   "oneUserWillR": "One User will win randomly every month cycle",
-  "moreSubscriptionMore": "More subscription more chance!"
+  "moreSubscriptionMore": "More subscription more chance!",
+  "uploadOneImage": "Upload At Least One Photo!"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
