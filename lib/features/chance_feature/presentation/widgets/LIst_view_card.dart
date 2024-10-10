@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
+import 'package:fourtyninehub/features/chance_feature/domain/entity/chance_entity.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/controller/cubit/chance_cubit.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/controller/cubit/chance_states.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/chance_card_widget.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:path/path.dart';
 
 import '../../../../res/style/app_colors.dart';
 
@@ -28,6 +30,8 @@ class ListViewCard extends StatelessWidget {
               itemBuilder: (context, index) => ChanceCardWidget(
                 chance: state.chance![index],
                 image: state.chance![index].images[0],
+                subCategoryEntity: state.chance![index].subCategoryId,
+                mainCategoryEntity: state.chance![index].mainCategoryId,
               ),
               separatorBuilder: (context, index) => Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.h),

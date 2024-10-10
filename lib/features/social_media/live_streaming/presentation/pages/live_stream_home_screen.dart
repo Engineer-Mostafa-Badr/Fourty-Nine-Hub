@@ -33,9 +33,9 @@ class LiveStreamHomeScreen extends StatelessWidget {
           // leading: BackButton(),
           bottom: TabBar(
             indicatorColor:
-            context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
             labelColor:
-            context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
             tabs: [
               Tab(text: LocaleKeys.live.localize),
               Tab(text: LocaleKeys.clubVoice.localize),
@@ -60,12 +60,8 @@ class LiveStreamHomeScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             context.push(Routes.LIVEView,
-                extra: ZegoArgs(
-                    '123', true, context
-                    .read<UserCubit>()
-                    .state
-                    .data!
-                    .fullName));
+                extra: ZegoArgs('123', true,
+                    context.read<UserCubit>().state.data!.fullName));
           },
           backgroundColor: Colors.red,
           child: const Icon(
@@ -87,6 +83,13 @@ class LiveStreamHomeScreen extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           builderDelegate: PagedChildBuilderDelegate<LiveEntity>(
               itemBuilder: (context, item, index) {
+                if (state.live == null && item != state.live) {
+                  print('state is updated to have same paging controller');
+                  context.read<StreamCubit>().updateLiveIndex(item);
+                }
+                print('live item is  ${item.toString()}');
+                print(
+                    'live item is from state  ${state.allLives[index].toString()}');
                 return LiveCard(live: item);
               },
               noItemsFoundIndicatorBuilder: (context) {
@@ -102,12 +105,11 @@ class LiveStreamHomeScreen extends StatelessWidget {
                 );
               },
               noMoreItemsIndicatorBuilder: (context) => Container(),
-              firstPageProgressIndicatorBuilder: (context) =>
-                  Container(
-                      margin: const EdgeInsets.only(top: 150),
-                      child: const CupertinoActivityIndicator()),
+              firstPageProgressIndicatorBuilder: (context) => Container(
+                  margin: const EdgeInsets.only(top: 150),
+                  child: const CupertinoActivityIndicator()),
               newPageProgressIndicatorBuilder: (context) =>
-              const CupertinoActivityIndicator()),
+                  const CupertinoActivityIndicator()),
         );
       },
     );

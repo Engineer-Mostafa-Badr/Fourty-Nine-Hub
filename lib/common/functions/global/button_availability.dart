@@ -8,6 +8,7 @@ class ButtonAvailability {
     required String otherUserId,
     required String subcategoryId,
   }) async {
+    bool result =false;
     try {
       final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
       final response = await serviceLocator<ApiConsumer>()
@@ -17,17 +18,24 @@ class ButtonAvailability {
         "subcategoryId": subcategoryId
       });
       response.fold((l) {
-        return false;
+        result = false;
+        return result;
       }, (data) {
         if (data['data'] == 'disable') {
-          return false;
+          print("object disable");
+          print("object disable");
+          result = false;
+          return result;
         } else {
-          return true;
+          print("object enable");
+          result = true;
+          return result;
         }
       });
     } catch (e) {
-      return false;
+      result = false;
+      return result;
     }
-    return false;
+    return result;
   }
 }

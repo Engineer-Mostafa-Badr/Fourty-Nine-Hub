@@ -877,7 +877,6 @@ abstract class  LocaleKeys {
   static const expiredRequests = 'expiredRequests';
   static const filter = 'filter';
   static const beAStar = 'beAStar';
-  static const select = 'select';
   static const SubscriberCompletionRate = 'SubscriberCompletionRate';
   static const ChanceDetails = 'ChanceDetails';
   static const ProductDescription = 'ProductDescription';
@@ -889,5 +888,7 @@ abstract class  LocaleKeys {
   static const payAtLeast1 = 'payAtLeast1';
   static const oneUserWillR = 'oneUserWillR';
   static const moreSubscriptionMore = 'moreSubscriptionMore';
+  static const select = 'select';
+  static const uploadOneImage = 'uploadOneImage';
 
 }

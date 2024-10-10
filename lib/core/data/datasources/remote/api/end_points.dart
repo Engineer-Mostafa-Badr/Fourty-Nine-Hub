@@ -18,6 +18,7 @@ import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_cou
 import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_counts_usecase.dart';
 import '../../../../../features/account_taps/my_adds/domain/usecases/update_my_ads_usecase.dart';
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
+import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_main_category.dart';
 
 class EndPoints {
   static const pageSize = 20;
@@ -619,7 +620,7 @@ class EndPoints {
   }
 
   static const createAd = '/ads/create-ads';
-  static filterAd (FilterModel filter)=> '/ads/filter-ads/${filter.subCategoryId}?government=${filter.governorateId}&city=${filter.cityId}&limit=${filter.limit}';
+  static filterAd (FilterModel filter)=> '/ads/filter-ads/${filter.subCategoryId}?government=${filter.governorateId}&city=${filter.cityId}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
   static const myAds = '/ads/allMyAds?limit=100';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const favouriteAds = '/ads-favourites/allFavouriteAds';
@@ -806,4 +807,9 @@ class EndPoints {
   // Chance
   static String chance = '/chance-ads/my-ads';
   static String addChance = '/chance-ads';
+  static String subCatChance = '/categories/main/has-auction?page=1&limit=100';
+  static String rateChance(String id ) => '/chance-ads/contribution-percentage/$id';
+  static String mainCatChance(MainCategoryChanceParams params) {
+    return '/categories/main/has-auction?page=${params.paginationParams.page}&limit=${params.paginationParams.limit}';
+  }
 }

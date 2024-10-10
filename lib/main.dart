@@ -10,6 +10,7 @@ import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/features/chance_feature/presentation/controller/cubit/chance_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
@@ -121,7 +122,7 @@ class _MyAppState extends State<MyApp> {
           create: (context) => ThemeCubit(),
         ),
         BlocProvider(
-          create: (context) => serviceLocator<StreamCubit>()..loadLives(),
+          create: (context) => serviceLocator<StreamCubit>()..loadLives()..getScheduledMeetings()..getTopics(),
         ),
         BlocProvider<FirebaseNotficationsCubit>(
           create: (context) => FirebaseNotficationsCubit(serviceLocator()),
