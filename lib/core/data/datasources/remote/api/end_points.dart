@@ -619,7 +619,7 @@ class EndPoints {
   }
 
   static const createAd = '/ads/create-ads';
-  static filterAd (FilterModel filter)=> '/ads/filter-ads/${filter.subCategoryId}?government=${filter.governorateId}&city=${filter.cityId}&limit=${filter.limit}';
+  static filterAd (FilterModel filter)=> '/ads/filter-ads/${filter.subCategoryId}?government=${filter.governorateId}&city=${filter.cityId}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
   static const myAds = '/ads/allMyAds?limit=100';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const favouriteAds = '/ads-favourites/allFavouriteAds';
@@ -802,4 +802,8 @@ class EndPoints {
   static String deleteTrip(String id) => '/ride/come-with-you/Delete/$id';
   static String getRequest(String id) => '/ride/come-with-you/trip/requests//$id';
   static String carpoolRoutePrice = '/carpool/price';
+
+  // Chance
+  static String chance = '/chance-ads/my-ads';
+  static String addChance = '/chance-ads';
 }

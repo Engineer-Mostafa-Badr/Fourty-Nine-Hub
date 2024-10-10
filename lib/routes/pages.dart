@@ -774,13 +774,9 @@ class AppPages {
                           name: Routes.LIVEView,
                           builder: (context, state) {
                             var extras = state.extra as ZegoArgs;
-                            return BlocProvider.value(
-                              //to render topics before entering the live
-                              value: serviceLocator<StreamCubit>()..getTopics(),
-                              child: LiveStreamView(
-                                isHost: extras.isHost,
-                                liveID: extras.liveId,
-                              ),
+                            return LiveStreamView(
+                              isHost: extras.isHost,
+                              liveID: extras.liveId,
                             );
                           }),
 
@@ -1283,11 +1279,7 @@ class AppPages {
           GoRoute(
               path: Paths.ZOOM,
               name: Routes.ZOOM,
-              builder: (context, state) => BlocProvider<StreamCubit>(
-                    create: (context) =>
-                        serviceLocator<StreamCubit>()..getScheduledMeetings(),
-                    child: const MeetingView(),
-                  ),
+              builder: (context, state) => const MeetingView(),
                     // create: (context) => serviceLocator<StreamCubit>()..getScheduledMeetings(),
                     // child: const MeetingView(),
 

@@ -887,7 +887,20 @@
   "expiredRequests": "طلبات منتهية الصلاحية",
   "filter": "تصفية",
   "beAStar": "كن نجم",
-  "select": "اختيار"
+  "SubscriberCompletionRate" : "معدل إكمال المشتركين",
+  "ChanceDetails" : "تفاصيل الفرصة",
+  "ProductDescription": "وصف المنتج",
+  "Typethevalueyouwanttoparticipation" : "اكتب القيمة التي تريد المشاركة بها",
+  "CreateChance " : "إنشاء فرصه",
+  "enterPrice" : "ادخل السعر",
+  "enterTitle" : "ادخل العنوان",
+  "enterDescription" : "ادخل وصف",
+  "payAtLeast1":"ادفع 1 جنيه مصري على الأقل ونشر منتج أحلامك الذي تريد شراءه!!!",
+  "oneUserWillR" : "سيفوز مستخدم واحد بشكل عشوائي في كل شهر",
+  "moreSubscriptionMore" : "كلما زاد الاشتراك زادت الفرصة!",
+  "select": "اختيار",
+  "uploadOneImage": "قم بتحميل صورة واحدة على الأقل!"
+
 
 
 }

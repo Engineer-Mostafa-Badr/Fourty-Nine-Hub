@@ -12,7 +12,7 @@ abstract class CreateAdRemoteDatasource {
     required String subCategoryId,
   });
   Future<Either<Failure, bool>> creatAd({required AdModel ad});
-  Future<Either<Failure, bool>> filterAd({required FilterModel ad});
+  Future<Either<Failure, List<AdModel>>> filterAd({required FilterModel ad});
 }
 
 class CreateAdRemoteDatasourceImpl implements CreateAdRemoteDatasource {
@@ -39,10 +39,13 @@ class CreateAdRemoteDatasourceImpl implements CreateAdRemoteDatasource {
   }
 
   @override
-  Future<Either<Failure, bool>> filterAd({required FilterModel ad}) async {
+  Future<Either<Failure, List<AdModel>>> filterAd({required FilterModel ad}) async {
     final response =
         await _apiConsumer.post(EndPoints.filterAd(ad), data: ad.toJson());
     return response.fold(
-            (failure) => Left(failure), (data) => Right(data['status']));
+            (failure) => Left(failure),
+            (response) => Right((response['data']['allAds']['ads'] as List)
+            .map((e) => AdModel.fromJson(e))
+            .toList()));
   }
 }

@@ -440,6 +440,8 @@ serviceLocator.registerLazySingleton<FilterAdUseCase>(
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
       ),
     );
     // CreateAdCubit

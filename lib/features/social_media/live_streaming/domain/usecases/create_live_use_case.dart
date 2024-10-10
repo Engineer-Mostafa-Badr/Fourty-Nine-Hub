@@ -59,5 +59,14 @@ class PointsParams {
 
   Map<String, dynamic> toJson() {
     return {"streamId": streamId, "memberId": memberId};
+  }}
+  class RequestBattleParams {
+    final String streamId;
+    final String receiverId;
+
+    RequestBattleParams({required this.streamId, required this.receiverId});
+
+    Map<String, dynamic> toJson() {
+      return {"streamId": streamId, "receiverId": receiverId};
+    }
   }
-}

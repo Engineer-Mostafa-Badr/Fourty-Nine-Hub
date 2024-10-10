@@ -1,8 +1,7 @@
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/domain/entities/filter_entity.dart';
 
 class FilterModel extends FilterEntity {
-  FilterModel({required super.price, required super.props,required super.cityId,required super.governorateId,required super.limit,required super.page,required super.subCategoryId});
+  FilterModel({required super.price, required super.props,required super.cityId,required super.governorateId,required super.limit,required super.page,required super.subCategoryId,super.filter});
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> filterCriteria = {};
@@ -22,11 +21,10 @@ class FilterModel extends FilterEntity {
       }
     }
     return {
-        "filterCriteria": filterCriteria,
-      "price":{
-        "min": "number",
-        "max": {"min": price.value.nameAr, "max": price.value.nameEn}
-      }
+        "filterCriteria": filterCriteria
+      ,
+      "price":{"min": int.parse(price.value.nameAr), "max": int.parse(price.value.nameEn)},
+
       };
   }
 }
