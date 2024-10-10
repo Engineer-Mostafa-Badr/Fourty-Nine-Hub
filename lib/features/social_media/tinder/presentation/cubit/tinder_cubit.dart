@@ -745,7 +745,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     final mainCategoryResponse =
         await tinderRepository.fetchMainCategoryById(id);
     if (mainCategoryResponse != null) {
-      print(mainCategoryResponse.data.mainCategory.nameEn+"asfadssldkfsfn");
+      print(mainCategoryResponse.data.mainCategory.nameEn);
 
       emit(state.copyWith(
           mainCategoryResponseState: DataState.success,
