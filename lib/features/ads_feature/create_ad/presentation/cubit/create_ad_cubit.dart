@@ -123,7 +123,13 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           images.add(media);
           emit(
               state.copyWith(images: images, status: CreateAdStates.initState));
-        });
+        }).then((value) {
+          if(value==null){
+            emit(
+                state.copyWith( status: CreateAdStates.initState));
+
+          }
+    });
     mediaResponse?.fold(
         (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
         (r) {
@@ -153,7 +159,11 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     print(categorize.subCategory.hasAuction);
 
     String type = '';
-    if (categorize.subCategory.hasAuction == false && state.isUser == false) {
+    if(categorize.mainCategory.nameEn=='Dating'&& state.isMale == true){
+      type='male';
+    }else if(categorize.mainCategory.nameEn=='Dating'&& state.isMale == false){
+      type='female';
+    }else if (categorize.subCategory.hasAuction == false && state.isUser == false) {
       type = "provider";
     } else if (categorize.subCategory.hasAuction == false &&
         state.isUser == true) {
@@ -233,17 +243,17 @@ class CreateAdCubit extends Cubit<CreateAdState> {
                 nameEn: state.selections![i].nameEn,
                 type: state.filterAdProperties![i].type)));
       }
-      String priceId = state.filterAdProperties
+      String priceId = (state.filterAdProperties!=null&&state.filterAdProperties!.isNotEmpty)?state.filterAdProperties
               ?.firstWhere((element) =>
                   element.nameAr == 'السعر' || element.nameAr == 'الراتب')
               .id ??
-          '';
-      List<CreateAdEntity> selectedDetails = details
+          '':'';
+      List<CreateAdEntity> selectedDetails =details.isNotEmpty? details
           .where((element) =>
               element.value.nameAr.isNotEmpty && element.propId != priceId)
-          .toList();
-      CreateAdEntity price =
-          details.firstWhere((element) => element.propId == priceId);
+          .toList():[];
+      CreateAdEntity? price =details.isNotEmpty?
+          details.firstWhere((element) => element.propId == priceId):null;
       for (var item in selectedDetails) {
         print(item.toJson());
       }

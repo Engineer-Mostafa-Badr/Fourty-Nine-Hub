@@ -36,10 +36,16 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
 
-    context.read<AdvertisementCubit>().loadData(
-        subCategoryId: widget.params.subCategory.id,
-        filter:
-        widget.params.subCategory.hasAuction == true ? 'sale' : 'provider', fromTab: true);
+    if(widget.params.mainCategory.nameEn=='Dating'){
+      context.read<AdvertisementCubit>().loadData(
+          subCategoryId: widget.params.subCategory.id,
+          filter: 'male', fromTab: true);
+    }else{
+      context.read<AdvertisementCubit>().loadData(
+          subCategoryId: widget.params.subCategory.id,
+          filter:
+          widget.params.subCategory.hasAuction == true ? 'sale' : 'provider', fromTab: true);
+    }
   }
 
   @override
@@ -51,7 +57,11 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     String userType = '';
-    if(_tabController.index==0&&widget.params.subCategory.hasAuction == true ){
+    if(_tabController.index==0 && widget.params.mainCategory.nameEn=='Dating'){
+      userType='male';
+    }else if(_tabController.index==1 && widget.params.mainCategory.nameEn=='Dating'){
+      userType='female';
+    }else if(_tabController.index==0&&widget.params.subCategory.hasAuction == true ){
       userType='sale';
     }else if(_tabController.index==1&&widget.params.subCategory.hasAuction == true ){
       userType='rent';
@@ -112,26 +122,39 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                     labelStyle: Styles.headerText(),
                     onTap: (i) {
                       if (i == 1) {
-                        controller.loadData(
-                            subCategoryId: widget.params.subCategory.id,
-                            filter: widget.params.subCategory.hasAuction == true
-                                ? 'rent'
-                                : 'user', fromTab: true);
+                        if(widget.params.mainCategory.nameEn=='Dating'){
+                          controller.loadData(
+                              subCategoryId: widget.params.subCategory.id,
+                              filter:'female', fromTab: true);
+                        }else{
+                          controller.loadData(
+                              subCategoryId: widget.params.subCategory.id,
+                              filter: widget.params.subCategory.hasAuction == true
+                                  ? 'rent'
+                                  : 'user', fromTab: true);
+                        }
                       } else {
-                        controller.loadData(
-                            subCategoryId: widget.params.subCategory.id,
-                            filter: widget.params.subCategory.hasAuction == true
-                                ? 'sale'
-                                : 'provider', fromTab: true);
+                        if(widget.params.mainCategory.nameEn=='Dating'){
+                          controller.loadData(
+                              subCategoryId: widget.params.subCategory.id,
+                              filter: 'male', fromTab: true);
+                        }else{
+                          controller.loadData(
+                              subCategoryId: widget.params.subCategory.id,
+                              filter: widget.params.subCategory.hasAuction == true
+                                  ? 'sale'
+                                  : 'provider', fromTab: true);
+                        }
+
                       }
                     },
                     tabs: [
                       Tab(
-                          text: widget.params.subCategory.hasAuction == true
+                          text: widget.params.mainCategory.nameEn=='Dating'?LocaleKeys.maleUser.localize:widget.params.subCategory.hasAuction == true
                               ? LocaleKeys.sale.localize
                               : LocaleKeys.provider.localize),
                       Tab(
-                          text: widget.params.subCategory.hasAuction == true
+                          text: widget.params.mainCategory.nameEn=='Dating'?LocaleKeys.femaleUser.localize:widget.params.subCategory.hasAuction == true
                               ? LocaleKeys.rent.localize
                               : LocaleKeys.user.localize),
                     ],
@@ -201,6 +224,8 @@ enum Categories {
   engineerJob,
   otherJob,
   events,
+  health,
+  dating,
 }
 
 extension CategoriesExtension on Categories {
@@ -271,6 +296,10 @@ extension CategoriesExtension on Categories {
         return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.events:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.health:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.dating:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       default:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
     }
@@ -340,6 +369,10 @@ extension CategoriesExtension on Categories {
         return Categories.otherJob;
       case "Events":
         return Categories.events;
+      case "Health":
+        return Categories.health;
+      case "Dating":
+        return Categories.dating;
       default:
         throw ArgumentError("Invalid category nameEn: $nameEn");
     }

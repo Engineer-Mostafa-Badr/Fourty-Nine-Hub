@@ -2,7 +2,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/cre
 
 class FilterEntity{
   final List<CreateAdEntity> props;
-  final CreateAdEntity price;
+  final CreateAdEntity? price;
   final String governorateId;
   final String cityId;
   final String? filter;
