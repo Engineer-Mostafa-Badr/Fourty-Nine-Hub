@@ -11,6 +11,7 @@ class ChanceEntity {
   final UserChanceEntity user;
   final SubCategoryEntity subCategoryId;
   final MainCategoryEntity mainCategoryId;
+  final String title ;
 
   ChanceEntity(
       {required this.id,
@@ -20,5 +21,6 @@ class ChanceEntity {
       required this.user,
       required this.subCategoryId,
       required this.mainCategoryId,
+      required this.title,
       });
 }

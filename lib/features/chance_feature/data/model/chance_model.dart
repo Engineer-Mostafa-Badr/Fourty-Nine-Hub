@@ -14,6 +14,7 @@ class ChanceModel extends ChanceEntity {
     required super.user,
     required super.subCategoryId,
     required super.mainCategoryId,
+    required super.title,
   });
 
   factory ChanceModel.fromJson(Map<String, dynamic> json) {
@@ -29,6 +30,7 @@ class ChanceModel extends ChanceEntity {
       ),
       subCategoryId: SupCategoryModel.fromJson(json["subCategoryId"]),
       mainCategoryId: MainCategoryModel.fromJson(json["mainCategoryId"]),
+      title: json['title'] ?? '',
     );
   }
 }

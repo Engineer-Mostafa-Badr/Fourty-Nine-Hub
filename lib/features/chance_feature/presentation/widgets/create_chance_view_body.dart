@@ -17,6 +17,7 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../account_taps/wallet/domain/entities/wallet/main_category_entity.dart';
 import '../../../account_taps/wallet/presentation/cubit/wallet_cubit.dart';
+import '../../domain/entity/main_category_drop_entity.dart';
 import '../../domain/use_case/add_chance_data.dart';
 
 class CreateChanceViewBody extends StatefulWidget {
@@ -25,6 +26,7 @@ class CreateChanceViewBody extends StatefulWidget {
   @override
   State<CreateChanceViewBody> createState() => _CreateChanceViewBodyState();
 }
+
 
 class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
   var titleController = TextEditingController();
@@ -36,23 +38,27 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
 
   String? selectedCategory;
   String? selectedSubCategory;
-  List<MainCategoryWalletEntity> categories = [];
+  List<MainCategoryDropEntity> categories = [];
   List<MainCategoryWalletEntity> subCategories = [];
   bool isCategoryLoading = true;
   bool isSubCategoryLoading = false;
+
   @override
   void initState() {
     super.initState();
     _fetchCategories();
   }
+
   void _fetchCategories() async {
-    final categories = await context.read<WalletCubit>()
-        .fetchMainCategoryWallet(paginationParams: PaginationParams(page: 1));
+    final categories = await context
+        .read<ChanceCubit>()
+        .fetchMainCategoryChance(paginationParams: PaginationParams(page: 1));
     setState(() {
       this.categories = categories;
       isCategoryLoading = false;
     });
   }
+
   void _fetchSubCategories(String categoryId) async {
     setState(() {
       isSubCategoryLoading = true;
@@ -66,6 +72,7 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
       isSubCategoryLoading = false;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ChanceCubit>(
@@ -73,15 +80,15 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
       child: BlocConsumer<ChanceCubit, ChanceState>(
         listener: (BuildContext context, state) {
           print('Current state: $state');
-          if(state.status ==ChanceStates.success){
+          if (state.status == ChanceStates.success) {
             print('Status is success');
             showSuccessMessage(context, 'Create Chance Successfully');
             titleController.clear();
-          desController.clear();
-          priceController.clear();
+            desController.clear();
+            priceController.clear();
             setState(() {
-              selectedCategory =null;
-              selectedSubCategory =null;
+              selectedCategory = null;
+              selectedSubCategory = null;
             });
           }
         },
@@ -98,7 +105,9 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                       padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                           boxShadow: AppColors.SHADOW_LIGHT,
-                          color: Theme.of(context).scaffoldBackgroundColor,
+                          color: Theme
+                              .of(context)
+                              .scaffoldBackgroundColor,
                           borderRadius: BorderRadius.circular(16)),
                       child: Column(
                         children: [
@@ -120,8 +129,7 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                             textAlign: TextAlign.center,
                             style: Styles.mediumText(
                                 color: AppColors.CHECK_MARK_COLOR,
-                              fontSize: 65.sp
-                            ),
+                                fontSize: 65.sp),
                           ),
                         ],
                       ),
@@ -135,11 +143,16 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 16.w),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
+                            color: Theme
+                                .of(context)
+                                .primaryColor,
                             borderRadius: BorderRadius.circular(12.r),
                             boxShadow: [
                               BoxShadow(
-                                color: Theme.of(context).scaffoldBackgroundColor,
+                                color:
+                                Theme
+                                    .of(context)
+                                    .scaffoldBackgroundColor,
                                 spreadRadius: 2,
                                 blurRadius: 5,
                                 offset: const Offset(0, 2),
@@ -148,27 +161,40 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                           ),
                           child: DropdownButton<String>(
                             hint: Text(
-                              selectedCategory ?? LocaleKeys.selectCategory.localize,
+                              selectedCategory ??
+                                  LocaleKeys.selectCategory.localize,
                               style: TextStyle(
                                 fontSize: 30.sp,
-                                color: Theme.of(context).scaffoldBackgroundColor,
+                                color:
+                                Theme
+                                    .of(context)
+                                    .scaffoldBackgroundColor,
                               ),
                             ),
                             // menuWidth: double.infinity,
                             menuMaxHeight: 200,
-                            dropdownColor: Theme.of(context).primaryColor,
+                            dropdownColor: Theme
+                                .of(context)
+                                .primaryColor,
                             value: selectedCategory,
                             isExpanded: true,
                             underline: const SizedBox.shrink(),
                             icon: Icon(Icons.arrow_drop_down,
-                                size: 50.sp, color: Theme.of(context).scaffoldBackgroundColor),
+                                size: 50.sp,
+                                color:
+                                Theme
+                                    .of(context)
+                                    .scaffoldBackgroundColor),
                             items: isCategoryLoading
                                 ? [
                               DropdownMenuItem(
                                   value: null,
                                   child: Label(
-                                    text: LocaleKeys.selectCategory.localize,
-                                    color: Theme.of(context).scaffoldBackgroundColor,
+                                    text: LocaleKeys
+                                        .selectCategory.localize,
+                                    color: Theme
+                                        .of(context)
+                                        .scaffoldBackgroundColor,
                                   ))
                             ]
                                 : categories.map((category) {
@@ -180,7 +206,9 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                                       : category.nameAr,
                                   style: TextStyle(
                                     fontSize: 30.sp,
-                                    color: Theme.of(context).scaffoldBackgroundColor,
+                                    color: Theme
+                                        .of(context)
+                                        .scaffoldBackgroundColor,
                                   ),
                                 ),
                               );
@@ -202,11 +230,16 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 16.w),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
                               borderRadius: BorderRadius.circular(12.r),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Theme.of(context).scaffoldBackgroundColor,
+                                  color:
+                                  Theme
+                                      .of(context)
+                                      .scaffoldBackgroundColor,
                                   spreadRadius: 2,
                                   blurRadius: 5,
                                   offset: const Offset(0, 2),
@@ -215,28 +248,39 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                             ),
                             child: DropdownButton<String>(
                               hint: Text(
-                                selectedSubCategory ?? LocaleKeys.selectSubCategory.localize,
+                                selectedSubCategory ??
+                                    LocaleKeys.selectSubCategory.localize,
                                 style: TextStyle(
                                   fontSize: 30.sp,
-                                  color: Theme.of(context).scaffoldBackgroundColor,
+                                  color:
+                                  Theme
+                                      .of(context)
+                                      .scaffoldBackgroundColor,
                                 ),
                               ),
                               underline: const SizedBox.shrink(),
                               // menuWidth: double.infinity,
                               menuMaxHeight: 200,
-                              dropdownColor: Theme.of(context).primaryColor,
+                              dropdownColor: Theme
+                                  .of(context)
+                                  .primaryColor,
                               value: selectedSubCategory,
                               isExpanded: true,
                               icon: Icon(Icons.arrow_drop_down,
                                   size: 50.sp,
-                                  color: Theme.of(context).scaffoldBackgroundColor),
+                                  color: Theme
+                                      .of(context)
+                                      .scaffoldBackgroundColor),
                               items: isSubCategoryLoading
                                   ? [
                                 DropdownMenuItem(
                                     value: null,
                                     child: Label(
-                                      text: LocaleKeys.selectSubCategory.localize,
-                                      color: Theme.of(context).scaffoldBackgroundColor,
+                                      text: LocaleKeys
+                                          .selectSubCategory.localize,
+                                      color: Theme
+                                          .of(context)
+                                          .scaffoldBackgroundColor,
                                     ))
                               ]
                                   : subCategories.map((subCategory) {
@@ -248,7 +292,9 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                                         : subCategory.nameAr,
                                     style: TextStyle(
                                       fontSize: 30.sp,
-                                      color: Theme.of(context).scaffoldBackgroundColor,
+                                      color: Theme
+                                          .of(context)
+                                          .scaffoldBackgroundColor,
                                     ),
                                   ),
                                 );
@@ -276,12 +322,11 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                           fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     TextFormField(
-                      validator: (value)
-                      {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a title';
-                      }
-                      return null;
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a title';
+                        }
+                        return null;
                       },
                       controller: titleController,
                       decoration: InputDecoration(
@@ -290,7 +335,6 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                         border: const OutlineInputBorder(),
                       ),
                       onChanged: (value) {},
-
                     ),
                     const SizedBox(height: 16),
                     Text(
@@ -299,8 +343,7 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                           fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     TextFormField(
-                      validator: (value)
-                      {
+                      validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a description ';
                         }
@@ -321,8 +364,7 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                           fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     TextFormField(
-                      validator: (value)
-                      {
+                      validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a Price';
                         }
@@ -336,7 +378,7 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                       ),
                       onChanged: (value) {},
                       keyboardType:
-                          TextInputType.number, // To show numeric keyboard
+                      TextInputType.number, // To show numeric keyboard
                     ),
                     SizedBox(height: 60.h),
                     SizedBox(
@@ -344,8 +386,11 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            if (selectedCategory != null && selectedSubCategory != null) {
-                              context.read<ChanceCubit>().addChance(AddChanceParams(
+                            if (selectedCategory != null &&
+                                selectedSubCategory != null) {
+                              context
+                                  .read<ChanceCubit>()
+                                  .addChance(AddChanceParams(
                                 title: titleController.text,
                                 price: double.parse(priceController.text),
                                 images: ['669262c894fa0441718b74c9'],
@@ -355,7 +400,8 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                                 props: [],
                               ));
                             } else {
-                              showErrorMessage(context, 'Please Enter Main Category and Sub Category');
+                              showErrorMessage(context,
+                                  'Please Enter Main Category and Sub Category');
                             }
                           }
                         },
