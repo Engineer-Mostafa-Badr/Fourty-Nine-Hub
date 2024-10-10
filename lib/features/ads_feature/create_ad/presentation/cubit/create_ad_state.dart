@@ -37,6 +37,7 @@ class CreateAdState {
   final List<GovernorateEntity>? governorates;
   bool? isUser;
   bool? isSale;
+  bool? isMale;
   final List<UploadFileEntity>? images;
 
   CreateAdState(
@@ -54,6 +55,7 @@ class CreateAdState {
       this.isUser = true,
       this.isSale = true,
       this.isPrice = true,
+      this.isMale = true,
       this.images,
       this.governorate='',
       this.subCategories});
@@ -70,6 +72,7 @@ class CreateAdState {
     List<GovernorateEntity>? governorates,
     bool? isUser,
     bool? isSale,
+    bool? isMale,
     bool? isPrice,
     String? city,
     String? governorate,
@@ -90,6 +93,7 @@ class CreateAdState {
       images: images ?? this.images,
       isUser: isUser ?? this.isUser,
       isSale: isSale ?? this.isSale,
+      isMale: isMale ?? this.isMale,
       isPrice: isPrice ?? this.isPrice,
       cities: cities ?? this.cities,
       city: city ?? this.city,
