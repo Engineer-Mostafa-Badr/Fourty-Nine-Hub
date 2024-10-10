@@ -76,7 +76,11 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                       return Row(
                         children: [
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await context
+                                  .read<ChatsCubit>()
+                                  .pinAndUnpinChat();
+                            },
                             icon: const Icon(Icons.push_pin),
                             color: AppColors.BACKGROUND_COLOR,
                           ),

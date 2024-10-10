@@ -163,10 +163,10 @@ class _ChatCardState extends State<ChatCard> {
                                         size: 10,
                                       )
                                     : const Icon(
-                              FontAwesomeIcons.check,
-                              color: AppColors.GREY_DARK_COLOR,
-                              size: 10,
-                            ),
+                                        FontAwesomeIcons.check,
+                                        color: AppColors.GREY_DARK_COLOR,
+                                        size: 10,
+                                      ),
                             if (widget.chat!.lastMessage?.seen ?? false)
                               const SizedBox(width: 10),
                             Expanded(
@@ -187,6 +187,13 @@ class _ChatCardState extends State<ChatCard> {
                             widget.chat!.muted
                                 ? const Icon(
                                     Icons.volume_off,
+                                    color: Colors.grey,
+                                    size: 17,
+                                  )
+                                : const SizedBox(),
+                            widget.chat!.isPinned
+                                ? const Icon(
+                                    Icons.push_pin,
                                     color: Colors.grey,
                                     size: 17,
                                   )

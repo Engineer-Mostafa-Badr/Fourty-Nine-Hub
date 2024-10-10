@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/delete_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'chats_state.dart';
 
@@ -84,31 +85,73 @@ class ChatsCubit extends Cubit<ChatsState> {
     }
   }
 
-  /// the [flag] parameter is used to filter the [_chats]
+  // /// the [flag] parameter is used to filter the [_chats]
+  // Future<void> _getChats(
+  //     {required bool Function(ChatEntity) flag,
+  //     required GetChatsParams params}) async {
+  //   emit(state.copyWith(status: ChatsStates.loading));
+
+  //   final List<ChatEntity> chats = [];
+  //   for (final chat in _chats.values) {
+  //     if (flag(chat)) {
+  //       chats.add(chat);
+  //     }
+  //   }
+  //   if (chats.isEmpty) {
+  //     final response = await _getChatsUseCase(params);
+  //     response.fold(
+  //         (l) => emit(state.copyWith(status: ChatsStates.error, failure: l)),
+  //         (chats) {
+  //       for (final chat in chats) {
+  //         _chats[chat.id] = chat;
+  //       }
+  //       emit(state.copyWith(chats: chats, status: ChatsStates.success));
+  //     });
+  //   } else {
+  //     emit(state.copyWith(chats: chats, status: ChatsStates.success));
+  //   }
+  // }
+
   Future<void> _getChats(
       {required bool Function(ChatEntity) flag,
       required GetChatsParams params}) async {
     emit(state.copyWith(status: ChatsStates.loading));
 
-    final List<ChatEntity> chats = [];
-    for (final chat in _chats.values) {
-      if (flag(chat)) {
-        chats.add(chat);
-      }
-    }
-    if (chats.isEmpty) {
-      final response = await _getChatsUseCase(params);
-      response.fold(
-          (l) => emit(state.copyWith(status: ChatsStates.error, failure: l)),
-          (chats) {
-        for (final chat in chats) {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Retrieve the list of pinned chat IDs from SharedPreferences
+    List<String> pinnedChats = prefs.getStringList('pinnedChats') ?? [];
+
+    // Always fetch fresh chats from the use case
+    final response = await _getChatsUseCase(params);
+    response.fold(
+      (l) => emit(state.copyWith(status: ChatsStates.error, failure: l)),
+      (fetchedChats) {
+        final List<ChatEntity> pinnedChatList = [];
+        final List<ChatEntity> unpinnedChatList = [];
+
+        for (final chat in fetchedChats) {
+          // Check if the fetched chat is pinned based on SharedPreferences
+          chat.isPinned = pinnedChats.contains(chat.id);
+
+          // Add to the corresponding list based on pinned status
+          if (chat.isPinned) {
+            pinnedChatList.add(chat);
+          } else {
+            unpinnedChatList.add(chat);
+          }
+
+          // Update the local _chats map with the fresh data
           _chats[chat.id] = chat;
         }
-        emit(state.copyWith(chats: chats, status: ChatsStates.success));
-      });
-    } else {
-      emit(state.copyWith(chats: chats, status: ChatsStates.success));
-    }
+
+        // Combine pinned and unpinned chats, with pinned chats appearing first
+        final sortedChats = [...pinnedChatList, ...unpinnedChatList];
+
+        // Emit the sorted chat list
+        emit(state.copyWith(chats: sortedChats, status: ChatsStates.success));
+      },
+    );
   }
 
   Future<void> _getSocialChats() async {
@@ -221,6 +264,47 @@ class ChatsCubit extends Cubit<ChatsState> {
       chat.isSelected = false; // setter getter in chatsEntity
     }
     selectedChats.clear();
+    await getChatsByCategory(_selectedChatCategory);
+  }
+
+  Future<void> pinAndUnpinChat() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Retrieve the current list of pinned chat IDs from SharedPreferences
+    List<String> pinnedChats = prefs.getStringList('pinnedChats') ?? [];
+
+    for (var chat in selectedChats) {
+      log("toggle pin/unpin = ${chat.id}");
+
+      if (pinnedChats.contains(chat.id)) {
+        // If the chat is already pinned, unpin it
+        pinnedChats.remove(chat.id);
+        chat.isPinned = false; // Update the pinned status in your ChatEntity
+        log("unpin = ${chat.id}");
+      } else {
+        // If the chat is not pinned, pin it
+        pinnedChats.add(chat.id);
+        chat.isPinned = true; // Update the pinned status in your ChatEntity
+        log("pin = ${chat.id}");
+      }
+
+      // Update the chat status in your map (if needed)
+      // if (_chats.containsKey(chat.id)) {
+      //   _chats.update(chat.id, (existingChat) {
+      //     return existingChat.copyWith(isPinned: chat.isPinned);
+      //   });
+      // }
+
+      chat.isSelected = false; // Reset the selection status
+    }
+
+    // Save the updated list of pinned chat IDs back to SharedPreferences
+    await prefs.setStringList('pinnedChats', pinnedChats);
+
+    // Clear selected chats after action is complete
+    selectedChats.clear();
+
+    // Refresh the chat list by category
     await getChatsByCategory(_selectedChatCategory);
   }
 }
