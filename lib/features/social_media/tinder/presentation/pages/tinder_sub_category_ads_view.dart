@@ -4,14 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 
 class TinderSubCategoryAdsView extends StatefulWidget {
   final TinderSubAdsViewParams params;
@@ -100,7 +97,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                                 ),
                                 Sizer(),
                                 Text(
-                                  '${tinderCubit.state.mainCategoryResponse!.data.mainCategory.numberOfAds} ${Labels.ads}',
+                                  '${tinderCubit.state.mainCategoryResponse!.data.mainCategory.numberOfAdsCount} ${Labels.ads}',
                                   textScaler: TextScaler.noScaling,
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 30.sp),
@@ -112,11 +109,8 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                           Expanded(
                             child: FittedBox(
                               child: Text(
-                                context.isArabic
-                                    ? tinderCubit.state.mainCategoryResponse!
-                                        .data.mainCategory.nameAr
-                                    : tinderCubit.state.mainCategoryResponse!
-                                        .data.mainCategory.nameEn,
+                                tinderCubit.state.mainCategoryResponse!
+                                        .data.mainCategory.name,
                                 textScaler: TextScaler.noScaling,
                                 style: TextStyle(
                                     // color: AppColors.PRIMARY_COLOR,

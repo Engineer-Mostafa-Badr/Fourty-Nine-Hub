@@ -221,10 +221,10 @@ class AdvertisementCubit extends Cubit<AdsState> {
   void resetRequest(){
     emit(state.copyWith(makeRequest: false));
   }
- Future<void> makeAdRequest({
+ Future<bool> makeAdRequest({
     required String id,
   }) async {
-    if(formKey.currentState!.validate()&&phone!=null){ {
+    bool data = false;
       print(phone);
       final response = await _makeAdRequestUsecase(
         AdRequestParams(adId: id, phone: phone ?? ''),
@@ -232,9 +232,11 @@ class AdvertisementCubit extends Cubit<AdsState> {
       response.fold((l) {
         emit(state.copyWith(failure: l,makeRequest: false,status: AdsStates.error));
       }, (r) {
+        data=r;
         emit(state.copyWith(status: AdsStates.requestSuccess,makeRequest: true));
       });
-    }
+    return data;
+
   }
 
-}}
+}
