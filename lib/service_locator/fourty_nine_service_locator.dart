@@ -47,6 +47,7 @@ import 'package:get_it/get_it.dart';
 import '../features/account_taps/contact_us/domain/repositories/contact_us_repo.dart';
 import '../features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
 import '../features/account_taps/my_adds/domain/usecases/cancel_ad_usecase.dart';
+import '../features/account_taps/my_adds/domain/usecases/click_use_case.dart';
 import '../features/account_taps/my_adds/domain/usecases/delete_come_with_me_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/delete_my_installment_usecase.dart';
 import '../features/account_taps/my_adds/domain/usecases/delete_my_trip_join_usecase.dart';
@@ -292,6 +293,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<ClickUseCase>(
+          () => ClickUseCase(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<DeleteMyTripJoinUseCase>(
           () => DeleteMyTripJoinUseCase(
         serviceLocator(),
@@ -401,6 +407,7 @@ serviceLocator.registerLazySingleton<FilterAdUseCase>(
 
     serviceLocator.registerFactory<MyAddsCubit>(
       () => MyAddsCubit(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

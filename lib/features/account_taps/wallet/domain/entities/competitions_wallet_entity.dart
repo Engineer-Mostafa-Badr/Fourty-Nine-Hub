@@ -1,10 +1,10 @@
 class CompetitionsWalletEntity {
-  final String? id;
-  final String? nameAr;
-  final String? nameEn;
-  final num? maxRequests;
-  final num? countOfRequest;
-  final bool? isWinner;
+  final String id;
+  final String nameAr;
+  final String nameEn;
+  final int maxRequests;
+  final int countOfRequest;
+  final bool isWinner;
 
   CompetitionsWalletEntity({
     required this.id,

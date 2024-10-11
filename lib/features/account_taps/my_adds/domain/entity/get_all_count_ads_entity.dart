@@ -4,6 +4,7 @@ class GetAllCountAdsEntity {
   final String lastName;
   final String gender;
   final String email;
+  final String phone;
   final bool twitter_documentation;
 
   GetAllCountAdsEntity(
@@ -12,5 +13,6 @@ class GetAllCountAdsEntity {
       required this.lastName,
       required this.gender,
       required this.email,
+      required this.phone,
       required this.twitter_documentation});
 }

@@ -18,6 +18,7 @@ import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_cou
 import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_counts_usecase.dart';
 import '../../../../../features/account_taps/my_adds/domain/usecases/update_my_ads_usecase.dart';
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
+import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_main_category.dart';
 
 class EndPoints {
   static const pageSize = 20;
@@ -115,6 +116,7 @@ class EndPoints {
   static const myAdsInstallment='/ads/allMyAds/installment';
   static const myAdsOther='/ads/allMyAds/other';
   static const myAdsTripJoin='/ride/come-with-you/my?subCategory=62ea00e269ea29c91dfc390c';
+  static const clickGlobal='/global/click';
   static String deleteMyTripJoin({required String id}) =>
       '/ride/come-with-you/Delete/$id';
   static String deleteMyInstallment({required String id}) =>
@@ -236,6 +238,9 @@ class EndPoints {
   static const requestYellowCard = '/payout/yellow-card';
   static const banks = '/banks';
   static const payout = '/payout/request';
+  static const requestInstapay = '/payout/request-instapay';
+  static const yellowCardPrice = '/payout/yellow-card/price';
+  static const payoutMethod = '/payout/methods';
 
   static String doctorAcceptAppointment(String appointmentId) => '/health/book-appointment/approve/$appointmentId';
 
@@ -806,4 +811,9 @@ class EndPoints {
   // Chance
   static String chance = '/chance-ads/my-ads';
   static String addChance = '/chance-ads';
+  static String subCatChance = '/categories/main/has-auction?page=1&limit=100';
+  static String rateChance(String id ) => '/chance-ads/contribution-percentage/$id';
+  static String mainCatChance(MainCategoryChanceParams params) {
+    return '/categories/main/has-auction?page=${params.paginationParams.page}&limit=${params.paginationParams.limit}';
+  }
 }

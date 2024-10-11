@@ -7,7 +7,9 @@ class GiftWalletModel extends GiftWalletEntity {
       super.amount,
       required super.isActive,
       required super.createdAt,
-      required super.updatedAt});
+      required super.updatedAt,
+      required super.currency,
+      });
   factory GiftWalletModel.fromJson(Map<String, dynamic> json) {
     return GiftWalletModel(
       id: json['_id'] ?? '',
@@ -16,6 +18,7 @@ class GiftWalletModel extends GiftWalletEntity {
       isActive: json['isActive'] ?? false,
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',
+      currency: json['currency'] ?? '',
     );
   }
 }

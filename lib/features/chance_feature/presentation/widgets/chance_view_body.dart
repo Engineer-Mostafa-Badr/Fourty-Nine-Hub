@@ -19,7 +19,7 @@ class ChanceViewBody extends StatelessWidget {
               elevation: 5,
               child: Container(
                 width: double.infinity,
-                height: 190.h,
+                height: 180.h,
                 decoration: BoxDecoration(
                   color: Colors.purple,
                   borderRadius: BorderRadius.circular(15),

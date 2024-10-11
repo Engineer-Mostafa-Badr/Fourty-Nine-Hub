@@ -10,6 +10,8 @@ class GetAllCountsTripJoinModel extends GetAllCountsTripJoinEntity {
       required super.firstName,
       required super.lastName,
       required super.gender,
+      required super.categoryId,
+      required super.phone,
       required super.status,
       required super.createdAt});
 
@@ -17,12 +19,14 @@ class GetAllCountsTripJoinModel extends GetAllCountsTripJoinEntity {
       return GetAllCountsTripJoinModel(
           id: json['_id'] ??'',
           tripId: json['trip']['_id'] ??'',
-          userId: json['trip']['userId'] ??'',
+          categoryId: json['trip']['categoryId'] ??'',
+          userId: json['trip']['userId']['_id'] ??'',
           time: json['trip']['time'], // dynamic type, can be any
           userIdId: json['userId']['_id'] ??'',
           firstName: json['userId']['firstName'] ??'',
           lastName: json['userId']['lastName'] ??'',
           gender: json['userId']['gender'] ??'',
+          phone: json['userId']['phone'] ??'',
           status: json['status'] ??'',
           createdAt: json['createdAt'] ??'',
       );

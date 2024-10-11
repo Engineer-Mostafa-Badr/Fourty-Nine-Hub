@@ -21,7 +21,6 @@ import '../../../../account_taps/my_adds/domain/entity/my_ads_auction.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../cubit/my_adds_cubit.dart';
-import '../pages/edit_my_ads.dart';
 import 'custom_button_count_ads.dart';
 
 class BuildItemAuctionCard extends StatelessWidget {
@@ -95,14 +94,15 @@ class BuildItemAuctionCard extends StatelessWidget {
                               color: AppColors.AUTH_CONTAINER_COLOR,
                               label: LocaleKeys.edit.localize,
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => EditMyAds(
-                                              sub: item.subCategory,
-                                              main: item.mainCategory,
-                                              item: item,
-                                            )));
+                                context.push(Routes.EDITAD,extra: item);
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => EditMyAds(
+                                //               sub: item.subCategory,
+                                //               main: item.mainCategory,
+                                //               item: item,
+                                //             )));
                               }
                               // showAreYouSure(
                               //     title: LocaleKeys.deleteAd.localize,

@@ -9,10 +9,9 @@ class ChanceRateModel extends ChanceRateEntity {
 
   factory ChanceRateModel.fromJson(Map<String, dynamic> json) {
     return ChanceRateModel(
-      userContribution: json['userContribution'],
-      totalContributions: json['totalContributions'],
-      contributionPercentage: json['contributionPercentage'],
+      userContribution: json['userContribution'] ?? '',
+      totalContributions: json['totalContributions'] ?? '',
+      contributionPercentage: json['contributionPercentage'] ?? 0,
     );
   }
-
 }

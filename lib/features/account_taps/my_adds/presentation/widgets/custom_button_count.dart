@@ -6,14 +6,12 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
-
 import '../../../../../common/widgets/stateless/pages/empty.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../res/style/app_colors.dart';
+import '../../../../../core/widget/call_message_buttons.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import '../../../../trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import '../../domain/entity/get_all_counts_trip_join_entity.dart';
 import '../../domain/usecases/get_all_counts_usecase.dart';
 
@@ -26,15 +24,16 @@ class CustomButtonCount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(
-        label: 'Request Trip Join',
+      appBar: BackAppBar(
+        label: LocaleKeys.requestTripJoin.localize,
       ),
       body: BlocProvider<MyAddsCubit>(
         create: (BuildContext context) => serviceLocator()
-          ..getAllCount(params: Params(id: id, status: status)),
-        child: BlocBuilder<MyAddsCubit, MyAddsState>(
+          ..getAllCount(params: Params(id: id, status: status))..getMyTripJoin(),
+        child: BlocConsumer<MyAddsCubit, MyAddsState>(
+          listener: (BuildContext context, MyAddsState state) {},
           builder: (BuildContext context, state) {
-            if(state.status ==MyAddsStates.loading){
+            if (state.status == MyAddsStates.loading) {
               return const Center(child: CircularProgressIndicator());
             }
             if (state.status == MyAddsStates.initState) {
@@ -44,8 +43,11 @@ class CustomButtonCount extends StatelessWidget {
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
                 child: ListView.separated(
-                  itemBuilder: (context, index) =>
-                      buildItem(context, state.allCounts![index]),
+                  itemBuilder: (context, index) {
+                    return buildItem(
+                        context, state.allCounts![index],
+                    );
+                  },
                   separatorBuilder: (context, index) => const Sizer(),
                   itemCount: state.allCounts?.length ?? 0,
                 ),
@@ -59,7 +61,8 @@ class CustomButtonCount extends StatelessWidget {
     );
   }
 
-  Widget buildItem(context, GetAllCountsTripJoinEntity model) => Container(
+  Widget buildItem(context, GetAllCountsTripJoinEntity model,) =>
+      Container(
         padding: EdgeInsets.all(12.w),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
@@ -75,14 +78,14 @@ class CustomButtonCount extends StatelessWidget {
                   width: kToolbarHeight * 2.5.w,
                   child: ImageFromInternet(
                     isCircle: true,
-                    image:model.gender == 'male'
+                    image: model.gender == 'male'
                         ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwC-ZR1TdJ7VIAMeqhjm-u29-HB0PyAuSFFQ&s'
                         : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKc-oaCL6lH4WNLuY-A6H7UyEJmZQ5HdN6Os89NNXXANez6DAEM9SJdKu-Drj6L2LSfpM&usqp=CAU',
                   ),
                 ),
                 const Sizer(),
                 Label(
-                  text: '${model.firstName} ${model.lastName}',
+                  text: model.firstName,
                   style: Styles.headerText(),
                 ),
               ],
@@ -90,38 +93,12 @@ class CustomButtonCount extends StatelessWidget {
             Sizer(
               height: 10.h,
             ),
-            Row(
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: AvaialbleTripsButton(
-                    title: LocaleKeys.call.localize,
-                    icon: Icons.phone,
-                    color: AppColors.PRIMARY_COLOR,
-                    onTap: () {},
-                  ),
-                ),
-                Sizer(width: 10.w),
-                Expanded(
-                  flex: 3,
-                  child: AvaialbleTripsButton(
-                    title: LocaleKeys.message.localize,
-                    icon: Icons.mail,
-                    color: AppColors.PRIMARY_COLOR,
-                    onTap: () {},
-                  ),
-                ),
-                Sizer(width: 10.w),
-                Expanded(
-                  flex: 3,
-                  child: AvaialbleTripsButton(
-                    title: LocaleKeys.report.localize,
-                    icon: Icons.report,
-                    color: AppColors.SECONDARY_COLOR,
-                    onTap: () {},
-                  ),
-                ),
-              ],
+            CallMessageButtons(
+              otherUserId: model.userIdId,
+              subcategoryId: model.categoryId,
+              phone: model.phone,
+              id: model.tripId,
+              hasReport: true,
             ),
           ],
         ),

@@ -887,6 +887,23 @@
   "expiredRequests": "طلبات منتهية الصلاحية",
   "filter": "تصفية",
   "beAStar": "كن نجم",
+  "pleaseEnterTheAmount": "الرجاء إدخال المبلغ",
+  "selectBankName": "حدد اسم البنك",
+  "pleaseSelectPaymentMethod": "الرجاء تحديد طريقة الدفع",
+  "sureWithdrawMoney": "هل أنت متأكد من سحب الأموال؟",
+  "requestYellowCard": "طلب البطاقة الصفراء",
+  "deducted": "سيتم خصم المبلغ",
+  "fullName": "الاسم الكامل",
+  "pleaseEnterFullName": "الرجاء إدخال الاسم الكامل",
+  "nationalIdNumber": "رقم الهوية الوطنية",
+  "pleaseEnterNationalId": "الرجاء إدخال رقم الهوية الوطنية",
+  "pleaseEnter14Digit": "الرجاء إدخال 14 رقمًا",
+  "yellowCardSuccess": "لقد قمت بنجاح بإرسال الدفعة للتحقق من رصيد البطاقة الصفراء الخاصة بك.",
+  "walletDigital": "لقد قمت بإرسال الدفعة بنجاح. تحقق من صندوق الوارد الخاص بك، وسوف تتلقى أموالك قريبًا.",
+  "notWalletDigital": "لقد قمت بإرسال الدفعة بنجاح. تحقق من صندوق الوارد الخاص بك، وسوف تتلقى قسيمة تتضمن أموالك قريبًا.",
+  "HaveWallet": "هل لديك محفظة؟",
+  "submitPayment": "إرسال الدفعة",
+  "cashOutOption": "خيار السحب النقدي",
   "SubscriberCompletionRate" : "معدل إكمال المشتركين",
   "ChanceDetails" : "تفاصيل الفرصة",
   "ProductDescription": "وصف المنتج",
@@ -899,8 +916,10 @@
   "oneUserWillR" : "سيفوز مستخدم واحد بشكل عشوائي في كل شهر",
   "moreSubscriptionMore" : "كلما زاد الاشتراك زادت الفرصة!",
   "select": "اختيار",
-  "uploadOneImage": "قم بتحميل صورة واحدة على الأقل!"
-
+  "uploadOneImage": "قم بتحميل صورة واحدة على الأقل!",
+  "editMyAds" : "تعديل الاعلان",
+  "requestTripJoin": "طلب الانضمام إلى الرحلة",
+  "requestAd": "طلب إعلان"
 
 
 }
