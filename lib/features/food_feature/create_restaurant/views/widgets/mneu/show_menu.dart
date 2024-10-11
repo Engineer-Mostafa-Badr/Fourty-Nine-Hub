@@ -20,7 +20,9 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 // ignore: must_be_immutable
 class ShowMneu extends StatelessWidget {
-  ShowMneu({super.key});
+  final String from;
+
+  ShowMneu({super.key, required this.from});
 
   TextEditingController foodNameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
@@ -48,63 +50,72 @@ class ShowMneu extends StatelessWidget {
                     runSpacing: 10,
                     spacing: 10,
                     children: [
+
                       /// show data
                       ...createRestaurantCubit.menu.map(
-                        (RestaurantMneuModel e) => Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(width: .4)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ImagePickerPlaceholder(
-                                image: Image.file(
-                                  File(e.photoPath ?? ""),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Sizer(),
-                              Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.end,
+                            (RestaurantMneuModel e) =>
+                            Container(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(width: .4)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    e.foodName ?? "",
-                                    style: Styles.headerText(color: Colors.red),
-                                  ),
-                                  Sizer(height: 50.h),
-                                  Text(
-                                    "${e.price ?? ""}",
-                                    style: Styles.headerText(color: Colors.red),
+                                  ImagePickerPlaceholder(
+                                    image: Image.file(
+                                      File(e.photoPath ?? ""),
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                   Sizer(),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.red,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
+                                  Column(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        e.foodName ?? "",
+                                        style: Styles.headerText(
+                                            color: Colors.red),
                                       ),
-                                      minimumSize: const Size(100, 40),
-                                      maximumSize: const Size(100, 40),
-                                    ),
-                                    onPressed: () {
-                                      createRestaurantCubit.removeMenuItem(
-                                          context, e);
-                                    },
-                                    child: const Text(
-                                      "Remove",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
+                                      Sizer(height: 50.h),
+                                      Text(
+                                        "${e.price ?? ""}",
+                                        style: Styles.headerText(
+                                            color: Colors.red),
+                                      ),
+                                      Sizer(),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                10),
+                                          ),
+                                          minimumSize: const Size(100, 40),
+                                          maximumSize: const Size(100, 40),
+                                        ),
+                                        onPressed: () {
+                                          createRestaurantCubit.removeMenuItem(
+                                              context, e);
+                                        },
+                                        child: const Text(
+                                          "Remove",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      )
+                                    ],
                                   )
                                 ],
-                              )
-                            ],
-                          ),
-                        ),
+                              ),
+                            ),
                       ),
                     ],
                   ),
@@ -183,23 +194,23 @@ class ShowMneu extends StatelessWidget {
                                     // Set the border color to grey
                                     enabledBorder: OutlineInputBorder(
                                       borderSide:
-                                          const BorderSide(color: Colors.grey),
+                                      const BorderSide(color: Colors.grey),
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide:
-                                          const BorderSide(color: Colors.grey),
+                                      const BorderSide(color: Colors.grey),
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     errorBorder: OutlineInputBorder(
                                       borderSide:
-                                          const BorderSide(color: Colors.red),
+                                      const BorderSide(color: Colors.red),
                                       // Keep red for error state
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     focusedErrorBorder: OutlineInputBorder(
                                       borderSide:
-                                          const BorderSide(color: Colors.red),
+                                      const BorderSide(color: Colors.red),
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                   ),
@@ -215,8 +226,8 @@ class ShowMneu extends StatelessWidget {
                                   maxLines: null,
                                   controller: priceController,
                                   keyboardType:
-                                      const TextInputType.numberWithOptions(
-                                          decimal: true),
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(
                                         RegExp(r"[0-9.]")),
@@ -233,23 +244,23 @@ class ShowMneu extends StatelessWidget {
                                     // Set the border color to grey
                                     enabledBorder: OutlineInputBorder(
                                       borderSide:
-                                          const BorderSide(color: Colors.grey),
+                                      const BorderSide(color: Colors.grey),
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide:
-                                          const BorderSide(color: Colors.grey),
+                                      const BorderSide(color: Colors.grey),
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     errorBorder: OutlineInputBorder(
                                       borderSide:
-                                          const BorderSide(color: Colors.red),
+                                      const BorderSide(color: Colors.red),
                                       // Keep red for error state
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     focusedErrorBorder: OutlineInputBorder(
                                       borderSide:
-                                          const BorderSide(color: Colors.red),
+                                      const BorderSide(color: Colors.red),
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                   ),
@@ -262,21 +273,37 @@ class ShowMneu extends StatelessWidget {
                       Sizer(),
                       ElevatedAppButton(
                         onPressed: () {
+                          // print("1222222dsvvs23");
+
                           final foodName = foodNameController.text;
                           final price = double.tryParse(priceController.text);
                           if (foodName.isNotEmpty &&
-                              price != null &&
-                              imagePath.isNotEmpty) {
+                              price != null ) {
                             final menuItem = RestaurantMneuModel(
+                              // restaurantId:'66ff110be6f198a009c8017e' ,
                               foodName: foodName,
                               price: price,
                               photoPath: imagePath,
                               photo: createRestaurantCubit.imageId,
                             );
 
-                            context
-                                .read<RestaurantMenuCubit>()
-                                .addMenuItem(context, menuItem);
+                            // print("1222222dsvvs23");
+
+
+                            if (from == 'update') {
+                              // context
+                              //     .read<RestaurantMenuCubit>()
+                              //     .addMenuItem(context, menuItem);
+
+                              context
+                                  .read<RestaurantMenuCubit>()
+                                  .updateMenuItem(
+                                  menuItem,);
+                            } else {
+                              context
+                                  .read<RestaurantMenuCubit>()
+                                  .addMenuItem(context, menuItem);
+                            }
 
                             // Clear the input fields
                             foodNameController.clear();
@@ -305,17 +332,18 @@ class ShowMneu extends StatelessWidget {
               ),
               BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                   builder: (context, state) {
-                return Visibility(
-                  visible: state is ValidationState && (state.isMneu ?? false),
-                  child: const Padding(
-                    padding: EdgeInsets.only(right: 5, left: 5, top: 5.0),
-                    child: Text(
-                      "You have to fill at least one item!",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ),
-                );
-              })
+                    return Visibility(
+                      visible: state is ValidationState &&
+                          (state.isMneu ?? false),
+                      child: const Padding(
+                        padding: EdgeInsets.only(right: 5, left: 5, top: 5.0),
+                        child: Text(
+                          "You have to fill at least one item!",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    );
+                  })
             ],
           ),
         );

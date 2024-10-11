@@ -1,8 +1,10 @@
+import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
@@ -32,13 +34,15 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   final GetGovernoratesUseCase _getGovernoratesUseCase;
   final GetCitiesUseCase _getCitiesUseCase;
   final CreateRestaurantUseCase _createREstaurant;
+  final ApiConsumer apiConsumer;
 
   CreateRestaurantCubit(
       this._shareCubit,
       this._getSubSubcategoriesUseCase,
       this._getGovernoratesUseCase,
       this._getCitiesUseCase,
-      this._createREstaurant)
+      this._createREstaurant,
+      this.apiConsumer)
       : super(CreateRestaurantInitial());
 
   Future<void> loadData() async {
@@ -94,6 +98,93 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
     }
     return res;
   }
+
+  updateRestaurant(id) async {
+    CreateRestaurantParams params = createRestaurantParams;
+
+    List<Map<String, dynamic>> mneu = [];
+    params.mneu?.forEach((element) {
+      final toMap = {
+        "foodName": element.foodName,
+        "picture": element.photo,
+        "price": element.price,
+      };
+      mneu.add(toMap);
+    });
+    Map<String, dynamic> data = {
+      "name": params.name,
+      "phone": params.number,
+      "subcategoryId": params.subcategoryId,
+      "restaurantMedia": params.restaurantMedia,
+      "licenseMedia": params.licenseMedia,
+      "government": params.government,
+      "city": params.city,
+      "menu": params.mneu,
+    };
+    var url =
+        'https://49dev.com/api/v1/restaurants/update-restaurant-info/$id';
+
+    final response = await apiConsumer.put(url, data: data);
+
+    return response.fold(
+      (Failure failure) {
+        // return Left(failure);
+      },
+      (data) {
+        print(data.toString() + "122222223");
+        // return Right(data['status']);
+      },
+    );
+  }
+
+  // Future<String> updateRestaurant(id) async {
+  //   var res = 'fail';
+  //   _validationState();
+  //
+  //   if ((createRestaurantParams.name?.isNotEmpty ?? false) &&
+  //       (createRestaurantParams.government?.isNotEmpty ?? false) &&
+  //       (createRestaurantParams.city?.isNotEmpty ?? false) &&
+  //       (createRestaurantParams.licenseMedia?.isNotEmpty ?? false) &&
+  //       (createRestaurantParams.restaurantMedia?.isNotEmpty ?? false) &&
+  //       (createRestaurantParams.mneu?.isNotEmpty ?? false)) {
+  //     saveTextEditingController();
+  //     emit(CreateResturantLoading(LocaleKeys.creatingRestaurant.tr()));
+  //     final response = await _createREstaurant.call(createRestaurantParams);
+  //     emit(CreateRestaurantCloseLoading());
+  //     response.fold((Failure failure) {
+  //       if (failure is ServerFailure) {
+  //         emit(CreateResturantError(failure.message));
+  //       } else if (failure is UnauthorizedFailure) {
+  //         emit(CreateResturantError(failure.toString()));
+  //         AppPages.router.routerDelegate.navigatorKey.currentContext!
+  //             .pushNamed(Routes.LOGIN);
+  //       }
+  //       res = 'fail';
+  //     }, (data) {
+  //       res = 'success';
+  //       emit(CreateRestaurantSuccess(LocaleKeys
+  //           .youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval
+  //           .tr()));
+  //
+  //       AppPages.router.routerDelegate.navigatorKey.currentContext!
+  //           .read<RestaurantsCubit>()
+  //           .loadData();
+  //
+  //       AppPages.router.routerDelegate.pop();
+  //       return res;
+  //     });
+  //   } else {
+  //     res = 'fail';
+  //     ScaffoldMessenger.of(
+  //             AppPages.router.routerDelegate.navigatorKey.currentContext!)
+  //         .showSnackBar(SnackBar(
+  //       content: Text(LocaleKeys.completeAllFields.tr()),
+  //       backgroundColor: Colors.red,
+  //     ));
+  //     return res;
+  //   }
+  //   return res;
+  // }
 
   bool isSubCategory = false;
 

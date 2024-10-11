@@ -17,7 +17,10 @@ class CreateRestaurantSubmitButton extends StatelessWidget {
         Expanded(
           child: ElevatedAppButton(
             onPressed: () async {
-              var res = await context.read<CreateRestaurantCubit>().submit();
+              // var res = await context.read<CreateRestaurantCubit>().submit();
+              var res = await context
+                  .read<CreateRestaurantCubit>()
+                  .updateRestaurant('66ff110be6f198a009c8017e');
               if (res == 'success') {
                 Navigator.pop(context);
               }

@@ -6,12 +6,17 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/views/create_resturant_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/widgets/restaurant_statistics_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
 import '../cubit/restaurant_dashboard_cubit.dart';
 import '../widgets/restaurant_order_card.dart';
 
@@ -78,7 +83,20 @@ class RestaurantDashboardView extends StatelessWidget {
                                 horizontal: 8.0, vertical: 4),
                             child: AppButton(
                               label: 'Edit Registration',
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          BlocProvider<CreateRestaurantCubit>(
+                                        create: (context) => serviceLocator(),
+                                        child: const CreateRestaurantForm(
+                                          from: 'update',
+                                        ),
+                                      ),
+                                    ));
+                                // context.push(Routes.CREATERESTURANT);
+                              },
                               backColor: AppColors.PRIMARY_COLOR,
                               style: Styles.headerText(color: Colors.white),
                             ),
@@ -88,7 +106,10 @@ class RestaurantDashboardView extends StatelessWidget {
                                 horizontal: 8.0, vertical: 4),
                             child: AppButton(
                               label: 'Delete Registration',
-                              onPressed: () {},
+                              onPressed: () {
+                                // controller.deleteRestaurantById(
+                                //     id: state.orders.data.orders)
+                              },
                               backColor: AppColors.PRIMARY_COLOR_DARK,
                               style: Styles.headerText(color: Colors.white),
                             ),

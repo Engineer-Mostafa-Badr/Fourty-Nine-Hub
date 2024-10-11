@@ -55,29 +55,34 @@ class _ReelInfoState extends State<ReelInfo> {
       width: width,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 18.0),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 4,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _UserSection(reel: widget.reel),
-                  const SizedBox(height: 4),
-                  // _AudioAndButtons(reel: widget.reel, width: width),
-                ],
+        child: Directionality(
+          textDirection: TextDirection.ltr,
+          child: Row(
+            // textDirection: TextDirection.ltr,
+
+            children: [
+              Expanded(
+                flex: 4,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _UserSection(reel: widget.reel),
+                    const SizedBox(height: 4),
+                    // _AudioAndButtons(reel: widget.reel, width: width),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              flex: 1,
-              child: AdvancedTikTokReactionsColumn(
-                reel: widget.reel,
-                itemType: widget.itemType,
-                rotationController: widget.rotationController,
+              Expanded(
+                flex: 1,
+                child: AdvancedTikTokReactionsColumn(
+                  reel: widget.reel,
+                  itemType: widget.itemType,
+                  rotationController: widget.rotationController,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

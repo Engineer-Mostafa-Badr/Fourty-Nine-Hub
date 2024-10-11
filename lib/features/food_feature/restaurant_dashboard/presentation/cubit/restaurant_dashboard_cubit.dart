@@ -124,6 +124,35 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
     }
   }
 
+  Future<void> deleteRestaurantById({required String id}) async {
+    emit(state.copyWith(status: RestaurantDashboardStates.initState));
+
+    // The API endpoint URL
+    final String url =
+        'https://49dev.com/api/v1/restaurants/delete-restaurant/$id';
+
+    try {
+      // Make the GET request using ApiConsumer
+      final response = await apiConsumer.delete(
+        url,
+      );
+
+      // Handle the response from the API
+      response.fold(
+        (failure) {
+          // Handle error state
+          emit(state.copyWith(status: RestaurantDashboardStates.error));
+        },
+        (jsonList) {
+          print('${jsonList}1111111111111111');
+        },
+      );
+    } catch (e) {
+      // Handle exceptions
+      emit(state.copyWith(status: RestaurantDashboardStates.error));
+    }
+  }
+
   Future<void> approveRequest({required int id}) async {
     emit(state.copyWith(
         status: RestaurantDashboardStates.success,

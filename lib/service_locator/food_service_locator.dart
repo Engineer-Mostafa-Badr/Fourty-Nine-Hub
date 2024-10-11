@@ -57,10 +57,11 @@ class FoodServiceLocator {
     serviceLocator.registerLazySingleton<CreateRestaurantUseCase>(() => CreateRestaurantUseCase(
           serviceLocator(),
         ));
-    serviceLocator.registerLazySingleton<RestaurantMenuCubit>(() => RestaurantMenuCubit());
+    serviceLocator.registerLazySingleton<RestaurantMenuCubit>(() => RestaurantMenuCubit(serviceLocator()));
     serviceLocator.registerLazySingleton<RestaurantSharedData>(() => RestaurantSharedData());
     serviceLocator.registerFactory<CreateRestaurantCubit>(
       () => CreateRestaurantCubit(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

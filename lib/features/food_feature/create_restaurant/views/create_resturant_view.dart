@@ -19,14 +19,18 @@ import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widg
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
 
 class CreateRestaurantForm extends StatelessWidget {
-  const CreateRestaurantForm({super.key});
+  final String? from;
+
+  const CreateRestaurantForm({super.key, this.from});
 
   @override
   Widget build(BuildContext context) {
+    print(from.toString() + 'sdkvjbskdvblkn');
     return BlocListener<CreateRestaurantCubit, CreateRestaurantState>(
       listener: (context, state) {
         switch (state) {
@@ -83,8 +87,8 @@ class CreateRestaurantForm extends StatelessWidget {
 
               /// mneu
               BlocProvider(
-                create: (_) => RestaurantMenuCubit(),
-                child: ShowMneu(),
+                create: (_) => RestaurantMenuCubit(serviceLocator()),
+                child: ShowMneu(from: 'update'),
               ),
               Sizer(height: 20.h),
 

@@ -88,8 +88,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   }
 
   Future<void> _getUser() async {
-    await AppPages.router.routerDelegate.navigatorKey.currentContext!
-        .read<UserCubit>()
+    await serviceLocator<UserCubit>()
         .getUser()
         .then((Either<Failure, UserEntity>? value) {
       value?.fold(
