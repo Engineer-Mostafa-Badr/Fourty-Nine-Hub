@@ -25,7 +25,14 @@ class RestaurantDashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.read<RestaurantDashboardCubit>()..loadData();
+    final String? restaurantId =
+    ModalRoute
+        .of(context)
+        ?.settings
+        .arguments as String?;
+
+    final controller = context.read<RestaurantDashboardCubit>()
+      ..loadData();
     return BlocConsumer<RestaurantDashboardCubit, RestaurantDashboardState>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -48,11 +55,11 @@ class RestaurantDashboardView extends StatelessWidget {
                         children: [
                           Expanded(
                               child: Label(
-                            text: state.connected
-                                ? Labels.connected
-                                : Labels.notConnected,
-                            style: Styles.headerText(),
-                          )),
+                                text: state.connected
+                                    ? Labels.connected
+                                    : Labels.notConnected,
+                                style: Styles.headerText(),
+                              )),
                           if (state.connected)
                             SizedBox(
                               height: 15.h,
@@ -64,7 +71,7 @@ class RestaurantDashboardView extends StatelessWidget {
                               inactiveThumbColor: Colors.white,
                               inactiveTrackColor: Colors.grey,
                               onChanged: (v) async =>
-                                  await controller.changeConnectivityStatus())
+                              await controller.changeConnectivityStatus())
                         ],
                       ),
                     ),
@@ -89,11 +96,12 @@ class RestaurantDashboardView extends StatelessWidget {
                                     MaterialPageRoute(
                                       builder: (context) =>
                                           BlocProvider<CreateRestaurantCubit>(
-                                        create: (context) => serviceLocator(),
-                                        child: const CreateRestaurantForm(
-                                          from: 'update',
-                                        ),
-                                      ),
+                                            create: (context) =>
+                                                serviceLocator(),
+                                            child: const CreateRestaurantForm(
+                                              from: 'update',
+                                            ),
+                                          ),
                                     ));
                                 // context.push(Routes.CREATERESTURANT);
                               },
@@ -107,8 +115,8 @@ class RestaurantDashboardView extends StatelessWidget {
                             child: AppButton(
                               label: 'Delete Registration',
                               onPressed: () {
-                                // controller.deleteRestaurantById(
-                                //     id: state.orders.data.orders)
+                                controller.deleteRestaurantById(
+                                    id: restaurantId!);
                               },
                               backColor: AppColors.PRIMARY_COLOR_DARK,
                               style: Styles.headerText(color: Colors.white),
@@ -128,20 +136,21 @@ class RestaurantDashboardView extends StatelessWidget {
                                 RestaurantOrderCard(
                                     item: state.orders!.data.orders[index]),
                                 state.orders!.data.restaurantSubscriptionType ==
-                                        'Not subscribed'
+                                    'Not subscribed'
                                     ? Text(
-                                        'Please Subscribe to contact the client!',
-                                        style: Styles.headerText(
-                                            color:
-                                                AppColors.PRIMARY_COLOR_DARK),
-                                      )
+                                  'Please Subscribe to contact the client!',
+                                  style: Styles.headerText(
+                                      color:
+                                      AppColors.PRIMARY_COLOR_DARK),
+                                )
                                     : const Sizer(),
                               ],
                             );
                           },
-                          separatorBuilder: (context, index) => const Sizer(
-                                height: 20,
-                              ),
+                          separatorBuilder: (context, index) =>
+                          const Sizer(
+                            height: 20,
+                          ),
                           itemCount: state.orders?.data.orders.length ?? 0),
                     ),
                   ],

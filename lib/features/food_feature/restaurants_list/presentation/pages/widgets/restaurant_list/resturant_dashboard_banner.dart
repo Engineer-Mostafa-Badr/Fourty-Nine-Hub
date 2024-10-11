@@ -23,11 +23,13 @@ class ResturantDashboardButton extends StatelessWidget {
           log(state.isResturant.toString() + "aaaaaaaa");
           if (state.isResturant!.isRestaurant == true) {
             return DashboardBanner(
+
               title: '${LocaleKeys.restaurantDashboard.tr()}\n',
               subTitle: LocaleKeys
                   .newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore
                   .tr(),
               route: Routes.RestaurantDashboard,
+                restaurantId:state.isResturant!.restaurantId
             );
           } else {
             return SizedBox.shrink();

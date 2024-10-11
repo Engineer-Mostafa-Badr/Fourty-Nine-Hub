@@ -7,10 +7,16 @@ class DashboardBanner extends StatelessWidget {
   final String title;
   final String? subTitle;
   final String? route;
+  final String? restaurantId;
   final void Function()? onTap;
 
   const DashboardBanner(
-      {super.key, this.subTitle, required this.title, this.route, this.onTap});
+      {super.key,
+      this.subTitle,
+      required this.title,
+      this.route,
+      this.onTap,
+      this.restaurantId});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +24,7 @@ class DashboardBanner extends StatelessWidget {
       onTap: onTap ??
           () {
             if (route != null) {
-              context.push(route!);
+              context.push(route!, extra: restaurantId);
             }
           },
       child: Container(
