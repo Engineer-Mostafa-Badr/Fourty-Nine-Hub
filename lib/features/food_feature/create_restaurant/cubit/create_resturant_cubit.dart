@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
@@ -50,7 +51,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
     await _getGovernorates();
   }
 
-  Future<String> submit() async {
+  Future<String> submit(context) async {
     var res = 'fail';
     _validationState();
 
@@ -78,6 +79,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
         emit(CreateRestaurantSuccess(LocaleKeys
             .youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval
             .tr()));
+        Navigator.pop(context);
 
         AppPages.router.routerDelegate.navigatorKey.currentContext!
             .read<RestaurantsCubit>()
@@ -99,18 +101,19 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
     return res;
   }
 
-  updateRestaurant(id) async {
+  updateRestaurant1(context, id) async {
     CreateRestaurantParams params = createRestaurantParams;
+    _validationUpdateState();
 
-    List<Map<String, dynamic>> mneu = [];
-    params.mneu?.forEach((element) {
-      final toMap = {
-        "foodName": element.foodName,
-        "picture": element.photo,
-        "price": element.price,
-      };
-      mneu.add(toMap);
-    });
+    // List<Map<String, dynamic>> mneu = [];
+    // params.mneu?.forEach((element) {
+    //   final toMap = {
+    //     "foodName": element.foodName,
+    //     "picture": element.photo,
+    //     "price": element.price,
+    //   };
+    //   mneu.add(toMap);
+    // });
     Map<String, dynamic> data = {
       "name": params.name,
       "phone": params.number,
@@ -119,10 +122,54 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
       "licenseMedia": params.licenseMedia,
       "government": params.government,
       "city": params.city,
-      "menu": params.mneu,
+      // "menu": mneu,
     };
-    var url =
-        'https://49dev.com/api/v1/restaurants/update-restaurant-info/$id';
+
+    final response = await apiConsumer.put(
+        'https://49dev.com/api/v1/restaurants/update-restaurant-info/$id',
+        data: data);
+
+    return response.fold(
+      (Failure failure) {
+        print(data.toString() + "asfsdggvsdvbsdvzvzvzvfailure");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        // ScaffoldMessenger.of(
+        //         AppPages.router.routerDelegate.navigatorKey.currentContext!)
+        //     .showSnackBar(SnackBar(
+        //   content: Text(LocaleKeys.completeAllFields.tr()),
+        //   backgroundColor: Colors.red,
+        // ));
+        return Left(failure);
+      },
+      (data1) {
+        showSuccessMessage(context, data1['message']);
+        Navigator.pop(context);
+
+        print(data1.toString() + "asfsdggvsdvbsdvzvzvzv");
+
+        return Right(data['status']);
+      },
+    );
+  }
+
+  updateRestaurant(id) async {
+    CreateRestaurantParams params = createRestaurantParams;
+
+    Map<String, dynamic> data = {
+      // "workFrom": params.workFrom,
+      // "workTo": params.workTo,
+      // "countryCode": params.countryCode,
+      // "deliveryFee": params.deliveryFee,
+      // "deliveryTime": params.deliveryTime,
+      "name": params.name,
+      "phone": params.number,
+      "subcategoryId": params.subcategoryId,
+      "restaurantMedia": params.restaurantMedia,
+      "licenseMedia": params.licenseMedia,
+      "government": params.government,
+      "city": params.city,
+    };
+    var url = 'https://49dev.com/api/v1/restaurants/update-restaurant-info/$id';
 
     final response = await apiConsumer.put(url, data: data);
 
@@ -207,6 +254,18 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
       isCommercialThirdPage:
           (createRestaurantParams.licenseMedia?.length ?? 2) < 3,
       isMneu: createRestaurantParams.mneu?.isEmpty ?? true,
+    ));
+  }
+
+  _validationUpdateState() {
+    // isSubCategory = (createRestaurantParams.subcategoryId?.isEmpty ?? true);
+
+    emit(ValidationState(
+      isCity: createRestaurantParams.city?.isEmpty ?? true,
+      isGovernorate: createRestaurantParams.government?.isEmpty ?? true,
+      isName: createRestaurantParams.name?.isEmpty ?? true,
+      isNumber: createRestaurantParams.name?.isEmpty ?? true,
+      isSubCategory: createRestaurantParams.subcategoryId?.isEmpty ?? true,
     ));
   }
 

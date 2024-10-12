@@ -289,7 +289,9 @@ class ShowMneu extends StatelessWidget {
 
                             // print("1222222dsvvs23");
 
-
+                            context
+                                .read<RestaurantMenuCubit>()
+                                .addMenuItem(context, menuItem);
                             if (from == 'update') {
                               // context
                               //     .read<RestaurantMenuCubit>()

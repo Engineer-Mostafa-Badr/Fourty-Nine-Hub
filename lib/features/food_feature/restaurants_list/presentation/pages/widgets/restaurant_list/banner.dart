@@ -66,7 +66,7 @@ class MealBanner extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => BlocProvider<CreateRestaurantCubit>(
                         create: (context) => serviceLocator(),
-                        child: const CreateRestaurantForm(
+                        child:  CreateRestaurantForm(
                           from: 'create',
                         ),
                       ),

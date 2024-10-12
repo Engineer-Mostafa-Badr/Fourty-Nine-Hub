@@ -144,6 +144,17 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     }
   }
 
+  Future<void> changeConnectivityStatus(isActive) async {
+    const url = 'https://49dev.com/api/v1/restaurants/modify-active';
+
+    await apiConsumer.patch(url, data: {
+      'isActive': isActive,
+    });
+
+    await isRestaurant();
+    emit(state);
+  }
+
   Future<void> getBannerById() async {
     final response = await _getBannerByIdUseCase.call(id: service.id);
     response.fold(

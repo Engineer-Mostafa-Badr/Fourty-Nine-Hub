@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -23,14 +25,22 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
 
-class CreateRestaurantForm extends StatelessWidget {
+class CreateRestaurantForm extends StatefulWidget {
   final String? from;
+  final String? restaurantId;
 
-  const CreateRestaurantForm({super.key, this.from});
+  CreateRestaurantForm({super.key, this.from, this.restaurantId});
+
+  @override
+  State<CreateRestaurantForm> createState() => _CreateRestaurantFormState();
+}
+
+class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
+  bool editFood = false;
 
   @override
   Widget build(BuildContext context) {
-    print(from.toString() + 'sdkvjbskdvblkn');
+    print(widget.from.toString() + 'sdkvjbskdvblkn');
     return BlocListener<CreateRestaurantCubit, CreateRestaurantState>(
       listener: (context, state) {
         switch (state) {
@@ -53,13 +63,38 @@ class CreateRestaurantForm extends StatelessWidget {
       child: Scaffold(
         appBar: const HomeAppbar(),
         body: SingleChildScrollView(
-          padding: EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Label(
-                text: LocaleKeys.welcomeToResturantRegisteration.tr(),
-                style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
+              Row(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        editFood = false;
+                      });
+                    },
+                    child: Label(
+                      text: widget.from == 'update'
+                          ? 'Update your Restaurant'
+                          : LocaleKeys.welcomeToResturantRegisteration.tr(),
+                      style:
+                          Styles.headerText(color: AppColors.SECONDARY_COLOR),
+                    ),
+                  ),
+                  const Spacer(),
+                  ElevatedAppButton(
+                    label: 'Edit Food',
+                    onPressed: () {
+                      setState(() {
+                        editFood = true;
+                      });
+                    },
+                    textStyle: Styles.mediumText(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  )
+                ],
               ),
               Sizer(height: 20.h),
               const CreateResturantSubcategoryDropdown(),
@@ -70,7 +105,8 @@ class CreateRestaurantForm extends StatelessWidget {
               Sizer(height: 20.h),
               const CreateRestaurantProfilePhotoPicker(),
               Sizer(height: 20.h),
-              const CreateRestaurantLicensePhotoPicker(),
+              if (widget.from != 'update')
+                const CreateRestaurantLicensePhotoPicker(),
               Sizer(height: 20.h),
               CreateRestaurantGovernorateDropdown(
                 onSelected: (value) {
@@ -86,10 +122,11 @@ class CreateRestaurantForm extends StatelessWidget {
               Sizer(height: 20.h),
 
               /// mneu
-              BlocProvider(
-                create: (_) => RestaurantMenuCubit(serviceLocator()),
-                child: ShowMneu(from: 'update'),
-              ),
+              if (widget.from != 'update')
+                BlocProvider(
+                  create: (_) => RestaurantMenuCubit(serviceLocator()),
+                  child: ShowMneu(from: 'update'),
+                ),
               Sizer(height: 20.h),
 
               AppInfoText(
@@ -101,7 +138,27 @@ class CreateRestaurantForm extends StatelessWidget {
                   text: LocaleKeys.youWillGetEGP3650PerYearIfYouSubscribeDaily
                       .tr()),
               Sizer(height: 20.h),
-              const CreateRestaurantSubmitButton(),
+              if (widget.from == 'update')
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedAppButton(
+                        onPressed: () async {
+                          var res = await context
+                              .read<CreateRestaurantCubit>()
+                              .updateRestaurant1(context, widget.restaurantId);
+                          if (res == 'success') {
+                            Navigator.pop(context);
+                          }
+                        },
+                        label: LocaleKeys.update.tr(),
+                        textStyle: Styles.headerText(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                )
+              else
+                const CreateRestaurantSubmitButton(),
             ],
           ),
         ),

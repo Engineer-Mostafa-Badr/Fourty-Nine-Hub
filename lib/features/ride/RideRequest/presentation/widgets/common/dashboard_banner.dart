@@ -3,11 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../food_feature/restaurants_list/data/models/is_restaurant_model.dart';
+
 class DashboardBanner extends StatelessWidget {
   final String title;
   final String? subTitle;
   final String? route;
-  final String? restaurantId;
+  final IsRestaurantModel? isRestaurantModel;
   final void Function()? onTap;
 
   const DashboardBanner(
@@ -16,7 +18,7 @@ class DashboardBanner extends StatelessWidget {
       required this.title,
       this.route,
       this.onTap,
-      this.restaurantId});
+      this.isRestaurantModel});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class DashboardBanner extends StatelessWidget {
       onTap: onTap ??
           () {
             if (route != null) {
-              context.push(route!, extra: restaurantId);
+              context.push(route!, extra: isRestaurantModel);
             }
           },
       child: Container(

@@ -702,21 +702,35 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<RestaurantsCubit>().state;
     return Scaffold(
       body: BlocProvider<RestaurantsCubit>(
-        create: (_) => serviceLocator<RestaurantsCubit>()..loadData(),
+        create: (_) => RestaurantsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        )..loadData(),
         child: SharedScaffold(
           mainCategoryId: 1,
           body: RefreshIndicator(
             onRefresh: () async {
               if (context.read<UserCubit>().isLoggedIn) {
-                context.read<RestaurantsCubit>().loadData();
+                setState(() {
+                  context.read<RestaurantsCubit>().loadData();
+                });
               }
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: BlocBuilder<RestaurantsCubit, RestaurantsListState>(
-                builder: (context, state) {
+              child: StreamBuilder(
+                builder: (context, snapshot) {
                   if (!context.watch<UserCubit>().isLoggedIn) {
                     return _buildNotLoggedInView(context);
                   }
@@ -724,8 +738,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
                     return const Center(
                         child: CircularProgressIndicator.adaptive());
                   }
-                  return _buildLoggedInView(state);
+                  return _buildLoggedInView(snapshot.data!);
                 },
+                stream: context.watch<RestaurantsCubit>().stream,
               ),
             ),
           ),
@@ -846,8 +861,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
               const Sizer(),
               _buildSearchAndExpiredRequests(),
               const Sizer(),
-              if (state.mealCategories?.isNotEmpty ?? false)
-                MealCategories(),
+              if (state.mealCategories?.isNotEmpty ?? false) MealCategories(),
               if (state.loadingSubCategories)
                 _buildLoadingSubCategoriesPlaceholder(),
               const Sizer(),
@@ -862,7 +876,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
           ),
         ),
         SliverToBoxAdapter(
-          child: _buildAllRestaurants(),
+          child: _buildAllRestaurants(state),
         ),
       ],
     );
@@ -960,9 +974,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
     );
   }
 
-  Widget _buildAllRestaurants() {
-    return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
-      builder: (context, state) {
+  Widget _buildAllRestaurants(state) {
+    return Builder(
+      builder: (context) {
         final restaurants = state.allRestaurant ?? [];
         return GridView.builder(
           shrinkWrap: true,
@@ -971,7 +985,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
             crossAxisCount: 1,
             mainAxisSpacing: 8,
             crossAxisSpacing: 8,
-            childAspectRatio:1.001,
+            childAspectRatio: 1.001,
           ),
           itemCount: restaurants.length,
           itemBuilder: (context, index) => Padding(

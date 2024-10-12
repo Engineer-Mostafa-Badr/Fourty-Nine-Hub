@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
 import 'package:http/http.dart' as http;
@@ -75,9 +76,69 @@ class StoryError extends StoryState {
 
 class StoryCubit extends Cubit<StoryState> {
   final StoryRepository storyRepository;
+  final ApiConsumer apiConsumer;
+
   DateTime? _currentStoryCreatedAt; // Store the current story's createdAt
 
-  StoryCubit(this.storyRepository) : super(StoryInitial());
+  StoryCubit(this.storyRepository, this.apiConsumer) : super(StoryInitial());
+
+
+
+
+
+  // updateRestaurant1(context, id) async {
+  //   CreateRestaurantParams params = createRestaurantParams;
+  //   _validationUpdateState();
+  //
+  //   // List<Map<String, dynamic>> mneu = [];
+  //   // params.mneu?.forEach((element) {
+  //   //   final toMap = {
+  //   //     "foodName": element.foodName,
+  //   //     "picture": element.photo,
+  //   //     "price": element.price,
+  //   //   };
+  //   //   mneu.add(toMap);
+  //   // });
+  //   Map<String, dynamic> data = {
+  //     "name": params.name,
+  //     "phone": params.number,
+  //     "subcategoryId": params.subcategoryId,
+  //     "restaurantMedia": params.restaurantMedia,
+  //     "licenseMedia": params.licenseMedia,
+  //     "government": params.government,
+  //     "city": params.city,
+  //     // "menu": mneu,
+  //   };
+  //
+  //   final response = await apiConsumer.put(
+  //       'https://49dev.com/api/v1/restaurants/update-restaurant-info/$id',
+  //       data: data);
+  //
+  //   return response.fold(
+  //         (Failure failure) {
+  //       print(data.toString() + "asfsdggvsdvbsdvzvzvzvfailure");
+  //       showErrorMessage(context, getFailureMessage(failure, context));
+  //       // ScaffoldMessenger.of(
+  //       //         AppPages.router.routerDelegate.navigatorKey.currentContext!)
+  //       //     .showSnackBar(SnackBar(
+  //       //   content: Text(LocaleKeys.completeAllFields.tr()),
+  //       //   backgroundColor: Colors.red,
+  //       // ));
+  //       return Left(failure);
+  //     },
+  //         (data1) {
+  //       showSuccessMessage(context, data1['message']);
+  //       Navigator.pop(context);
+  //
+  //       print(data1.toString() + "asfsdggvsdvbsdvzvzvzv");
+  //
+  //       return Right(data['status']);
+  //     },
+  //   );
+  // }
+
+
+
 
   /// Fetch all followers based on subCategory ID
   Future<void> fetchFollowers() async {
