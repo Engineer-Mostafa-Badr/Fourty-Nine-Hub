@@ -39,10 +39,11 @@ class UploadFile {
         signedURLResponse.fold((l) {
           print(l.toString());
         }, (data) async {
-          log("response: ${jsonEncode(data)}");
+          log("responseData: ${jsonEncode(data)}");
           await sendBinaryFileData(
                   file: file, signedUrl: data['data']['signedUrl'])
               .then((value) async {
+                print("amdl;maldmaslkd");
             final mediaId = data['data']['mediaId'];
             final confirmUploadResponse = await serviceLocator<ApiConsumer>()
                 .put(EndPoints.confirmUpload(mediaId));
@@ -161,23 +162,57 @@ class UploadFile {
     }
   }
 
-  Future<void> sendBinaryFileData(
-      {required XFile file, required String signedUrl}) async {
+  Future<void> sendBinaryFileData({
+    required XFile file,
+    required String signedUrl,
+  }) async {
     Uint8List image = await file.readAsBytes();
-    String fileName = file.path.split('/').last;
+    print("File size: ${image.length}");
 
-    Options options = Options(contentType: file.mimeType, headers: {
-      'Accept': "*/*",
-      'Content-Type': 'application/octet-stream',
-      'Content-Length': image.length,
-      'Connection': 'keep-alive',
-      'User-Agent': 'ClinicPlush',
-      // 'File-Name': fileName,
-    });
+    Options options = Options(
+      contentType: file.mimeType,
+      headers: {
+        'Accept': "*/*",
+        'Content-Type': 'application/octet-stream',
+        'Content-Length': image.length,
+        'Connection': 'keep-alive',
+        'User-Agent': 'ClinicPlush',
+      },
+    );
 
-    await Dio().put(signedUrl,
-        data: Stream.fromIterable(image.map((e) => [e])), options: options);
+    try {
+      await Dio().put(
+        signedUrl,
+        data: image,  // Directly send the Uint8List
+        options: options,
+      );
+      print("Upload successful.");
+    } catch (e) {
+      print("Upload failed: $e");
+    }
   }
+
+
+// Future<void> sendBinaryFileData(
+  //     {required XFile file, required String signedUrl}) async
+  // {
+  //   Uint8List image = await file.readAsBytes();
+  //   print("object${image.length}");
+  //   String fileName = file.path.split('/').last;
+  //
+  //   Options options = Options(contentType: file.mimeType, headers: {
+  //     'Accept': "*/*",
+  //     'Content-Type': 'application/octet-stream',
+  //     'Content-Length': image.length,
+  //     'Connection': 'keep-alive',
+  //     'User-Agent': 'ClinicPlush',
+  //     // 'File-Name': fileName,
+  //   });
+  //
+  //   await Dio().put(signedUrl,
+  //       data: Stream.fromIterable(image.map((e) => [e])), options: options);
+  //   print("aasl;das;ld,");
+  // }
 }
 
 class UploadFileEntity {
