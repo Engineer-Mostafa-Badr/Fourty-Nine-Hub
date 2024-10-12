@@ -151,12 +151,12 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               onTap: () => context.push(Routes.CHAT),
               child: SvgPicture.asset(
                 Assets.message,
-                height: 25.h,
+                height: 30.h,
               ),
             ),
 
           SizedBox(
-            width: 30.w,
+            width: 40.w,
           ),
           GestureDetector(
             onTap: () {

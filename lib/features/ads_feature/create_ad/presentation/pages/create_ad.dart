@@ -363,7 +363,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                             onChanged: (SelectionEntity v) =>
                                 controller.onChanged(v: v, index: index),
                             onTextChanged: (String v) =>
-                                controller.onTextChanged(v: v, index: index),
+                                controller.onTextChanged(v: v, index: index), selectedProp: '',
                           );
                         },
                         separatorBuilder: (context, index) => const Sizer(),

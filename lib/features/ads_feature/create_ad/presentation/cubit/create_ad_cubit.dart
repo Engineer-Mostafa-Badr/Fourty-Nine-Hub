@@ -40,6 +40,9 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   List<SelectionEntity> values = [];
 
   String? title, description, price, priceFrom, priceTo, phone;
+  TextEditingController titleController=TextEditingController();
+  TextEditingController descController=TextEditingController();
+  TextEditingController phoneController=TextEditingController();
   final formState = GlobalKey<FormState>();
   final formStatic = GlobalKey<FormState>();
 
