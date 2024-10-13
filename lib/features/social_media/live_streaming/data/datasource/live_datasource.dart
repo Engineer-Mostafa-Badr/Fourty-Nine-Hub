@@ -71,7 +71,7 @@ class LiveDataSourceImpl extends LiveDataSource {
     final result =
         await _apiConsumer.post(EndPoints.createLive, data: params.toJson());
     return result.fold((l) => Left(l), (r) {
-      return Right(LiveCreateResponseModel.fromJson(r['data']));
+      return Right(LiveCreateResponseModel.fromJson(r['data']['stream']));
     });
   }
 

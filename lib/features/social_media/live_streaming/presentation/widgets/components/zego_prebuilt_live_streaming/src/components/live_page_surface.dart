@@ -131,227 +131,230 @@ class _ZegoLiveStreamingLivePageSurfaceState
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      state.selectedGifts.isEmpty
-                          ? GestureDetector(
-                              onTap: () {
-                                var cubit = context.read<StreamCubit>();
-                                CliLogger.info(cubit.state.live.toString());
-                                context.read<StreamCubit>().sendPoints(
-                                    cubit.state.live!.members[0].id,
-                                    cubit.state.live!.id);
-                              },
-                              child: Container(
+                      if (widget.config.role == ZegoLiveStreamingRole.host) ...[
+                        state.selectedGifts.isEmpty
+                            ? GestureDetector(
+                                onTap: () {
+                                  var cubit = context.read<StreamCubit>();
+                                  CliLogger.info(cubit.state.live.toString());
+                                  context.read<StreamCubit>().sendPoints(
+                                      cubit.state.live!.members[0].id,
+                                      cubit.state.live!.id);
+                                },
+                                child: Container(
+                                    width: context.screenWidth * 0.4,
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Label(
+                                                  text: "Add ",
+                                                  style: Styles.headerText(),
+                                                ),
+                                                Image.asset(
+                                                  'assets/49-New-icons/goal.png',
+                                                  width: 70.w,
+                                                ),
+                                              ],
+                                            ),
+                                            const Sizer(),
+                                            Label(
+                                              text: "Live goals",
+                                              style: Styles.headerText(),
+                                            ),
+                                          ]),
+                                    )),
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                      context: context,
+                                      builder: (_) {
+                                        return Container(
+                                            constraints: BoxConstraints(
+                                              maxHeight:
+                                                  context.screenHeight / 2,
+                                            ),
+                                            padding: const EdgeInsets.all(8),
+                                            decoration: const BoxDecoration(
+                                              color: Colors.grey,
+                                              // borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      ImageFromInternet(
+                                                        image: context
+                                                                .read<
+                                                                    UserCubit>()
+                                                                .state
+                                                                .data!
+                                                                .profilePicture ??
+                                                            UIConst
+                                                                .imagePlaceHolder,
+                                                        width: 130.w,
+                                                        height: 130.h,
+                                                        isCircle: true,
+                                                      ),
+                                                      SizedBox(width: 20.w),
+                                                      Label(
+                                                        text: context
+                                                            .read<UserCubit>()
+                                                            .state
+                                                            .data!
+                                                            .fullName,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 1,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Container(
+                                                    margin: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 10),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      color: Colors.white10,
+                                                    ),
+                                                    child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: List.generate(
+                                                            state.selectedGifts
+                                                                .length,
+                                                            (index) => Padding(
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      vertical:
+                                                                          15),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      SvgPicture.network(
+                                                                          state
+                                                                              .selectedGifts[
+                                                                                  index]
+                                                                              .picture!,
+                                                                          height: 100
+                                                                              .h,
+                                                                          width:
+                                                                              100.w),
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        children: [
+                                                                          Label(
+                                                                              text: context.isArabic ? state.selectedGifts[index].nameAr! : state.selectedGifts[index].nameEn!),
+                                                                          RichText(
+                                                                              text: TextSpan(
+                                                                                  text: '0',
+                                                                                  style: TextStyle(
+                                                                                    color: Colors.yellow,
+                                                                                    fontSize: 30.sp,
+                                                                                  ),
+                                                                                  children: [
+                                                                                TextSpan(
+                                                                                  text: '/',
+                                                                                  style: TextStyle(
+                                                                                    color: Colors.white,
+                                                                                    fontSize: 30.sp,
+                                                                                  ),
+                                                                                ),
+                                                                                TextSpan(
+                                                                                  text: state.selectedGifts[index].currentValue.toString(),
+                                                                                  style: TextStyle(
+                                                                                    color: Colors.white,
+                                                                                    fontSize: 30.sp,
+                                                                                  ),
+                                                                                ),
+                                                                              ])),
+                                                                        ],
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ))),
+                                                  )
+                                                ]));
+                                      });
+
+                                  // onTap: () {
+                                  //   context.read<StreamCubit>().requestBattle(
+                                  //       "66b9da437b1fafcdf897bbe1",
+                                  //       "6702b91d870285d189a6e408");
+                                },
+                                child: Container(
                                   width: context.screenWidth * 0.4,
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(0.5),
+                                    color: Colors.grey,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Label(
-                                                text: "Add ",
-                                                style: Styles.headerText(),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      RichText(
+                                          text: TextSpan(
+                                              text: '0',
+                                              style: TextStyle(
+                                                color: Colors.yellow,
+                                                fontSize: 30.sp,
                                               ),
-                                              Image.asset(
-                                                'assets/49-New-icons/goal.png',
-                                                width: 70.w,
-                                              ),
-                                            ],
-                                          ),
-                                          const Sizer(),
-                                          Label(
-                                            text: "Live goals",
-                                            style: Styles.headerText(),
-                                          ),
-                                        ]),
-                                  )),
-                            )
-                          : GestureDetector(
-                              onTap: () {
-                                showModalBottomSheet(
-                                    context: context,
-                                    builder: (_) {
-                                      return Container(
-                                          constraints: BoxConstraints(
-                                            maxHeight: context.screenHeight / 2,
-                                          ),
-                                          padding: const EdgeInsets.all(8),
-                                          decoration: const BoxDecoration(
-                                            color: Colors.grey,
-                                            // borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Row(
-                                                  children: [
-                                                    ImageFromInternet(
-                                                      image: context
-                                                              .read<UserCubit>()
-                                                              .state
-                                                              .data!
-                                                              .profilePicture ??
-                                                          UIConst
-                                                              .imagePlaceHolder,
-                                                      width: 130.w,
-                                                      height: 130.h,
-                                                      isCircle: true,
-                                                    ),
-                                                    SizedBox(width: 20.w),
-                                                    Label(
-                                                      text: context
-                                                          .read<UserCubit>()
-                                                          .state
-                                                          .data!
-                                                          .fullName,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      maxLines: 1,
-                                                    ),
-                                                  ],
-                                                ),
-                                                Container(
-                                                  margin: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 10),
-                                                  padding:
-                                                      const EdgeInsets.all(10),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    color: Colors.white10,
-                                                  ),
-                                                  child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: List.generate(
-                                                          state.selectedGifts
-                                                              .length,
-                                                          (index) => Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .symmetric(
-                                                                        vertical:
-                                                                            15),
-                                                                child: Row(
-                                                                  children: [
-                                                                    SvgPicture.network(
-                                                                        state
-                                                                            .selectedGifts[
-                                                                                index]
-                                                                            .picture!,
-                                                                        height: 100
-                                                                            .h,
-                                                                        width: 100
-                                                                            .w),
-                                                                    Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceBetween,
-                                                                      children: [
-                                                                        Label(
-                                                                            text: context.isArabic
-                                                                                ? state.selectedGifts[index].nameAr!
-                                                                                : state.selectedGifts[index].nameEn!),
-                                                                        RichText(
-                                                                            text: TextSpan(
-                                                                                text: '0',
-                                                                                style: TextStyle(
-                                                                                  color: Colors.yellow,
-                                                                                  fontSize: 30.sp,
-                                                                                ),
-                                                                                children: [
-                                                                              TextSpan(
-                                                                                text: '/',
-                                                                                style: TextStyle(
-                                                                                  color: Colors.white,
-                                                                                  fontSize: 30.sp,
-                                                                                ),
-                                                                              ),
-                                                                              TextSpan(
-                                                                                text: state.selectedGifts[index].currentValue.toString(),
-                                                                                style: TextStyle(
-                                                                                  color: Colors.white,
-                                                                                  fontSize: 30.sp,
-                                                                                ),
-                                                                              ),
-                                                                            ])),
-                                                                      ],
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ))),
-                                                )
-                                              ]));
-                                    });
-
-                                // onTap: () {
-                                //   context.read<StreamCubit>().requestBattle(
-                                //       "66b9da437b1fafcdf897bbe1",
-                                //       "6702b91d870285d189a6e408");
-                              },
-                              child: Container(
-                                width: context.screenWidth * 0.4,
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    RichText(
-                                        text: TextSpan(
-                                            text: '0',
-                                            style: TextStyle(
-                                              color: Colors.yellow,
-                                              fontSize: 30.sp,
+                                            TextSpan(
+                                              text: '/',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 30.sp,
+                                              ),
                                             ),
-                                            children: [
-                                          TextSpan(
-                                            text: '/',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 30.sp,
+                                            TextSpan(
+                                              text: context
+                                                  .read<StreamCubit>()
+                                                  .state
+                                                  .selectedGifts[0]
+                                                  .currentValue
+                                                  .toString(),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 30.sp,
+                                              ),
                                             ),
-                                          ),
-                                          TextSpan(
-                                            text: context
-                                                .read<StreamCubit>()
-                                                .state
-                                                .selectedGifts[0]
-                                                .currentValue
-                                                .toString(),
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 30.sp,
-                                            ),
-                                          ),
-                                        ])),
-                                    // const Sizer(width: 30,),
-                                    SvgPicture.network(
-                                      state.selectedGifts[0].picture!,
-                                      height: 75.h,
-                                      width: 75.w,
-                                    ),
-                                  ],
+                                          ])),
+                                      // const Sizer(width: 30,),
+                                      SvgPicture.network(
+                                        state.selectedGifts[0].picture!,
+                                        height: 75.h,
+                                        width: 75.w,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                      participants()
+                        participants()
+                      ],
+                      participants(),
                     ],
                   ),
                 ),
