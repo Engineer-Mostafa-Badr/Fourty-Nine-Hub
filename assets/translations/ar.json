@@ -919,7 +919,8 @@
   "uploadOneImage": "قم بتحميل صورة واحدة على الأقل!",
   "editMyAds" : "تعديل الاعلان",
   "requestTripJoin": "طلب الانضمام إلى الرحلة",
-  "requestAd": "طلب إعلان"
+  "requestAd": "طلب إعلان",
+  "removeFavouriteSuccessfully": "إزالة الإعلان المفضل بنجاح"
 
 
 }

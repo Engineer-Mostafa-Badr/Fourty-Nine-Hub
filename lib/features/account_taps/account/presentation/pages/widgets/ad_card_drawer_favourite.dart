@@ -104,7 +104,7 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
                                       color: Colors.black.withOpacity(0.8),
                                       alignment: AlignmentDirectional.center,
                                       child: Label(
-                                        text: 'See More',
+                                        text: LocaleKeys.showMore.localize,
                                         style: Styles.headerText(
                                             color: Colors.white,
                                             decoration:

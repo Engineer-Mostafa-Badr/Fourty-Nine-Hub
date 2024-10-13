@@ -50,7 +50,7 @@ class _FavouriteViewState extends State<FavouriteView> {
           );
         }, listener: (BuildContext context, FavouriteDrawerState state) {
               if(state.status ==FavouriteDrawerStates.successDelete){
-                showSuccessMessage(context, 'Remove Favourite Successfully');
+                showSuccessMessage(context, LocaleKeys.removeFavouriteSuccessfully.localize);
               }
         },),
       ),

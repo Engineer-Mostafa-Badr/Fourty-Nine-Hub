@@ -922,5 +922,6 @@
   "uploadOneImage": "Upload At Least One Photo!",
   "editMyAds" : "Edit ad",
   "requestTripJoin": "Request Trip Join",
-  "requestAd": "Request Ad"
+  "requestAd": "Request Ad",
+  "removeFavouriteSuccessfully": "Remove Favourite Ad Successfully"
 }
