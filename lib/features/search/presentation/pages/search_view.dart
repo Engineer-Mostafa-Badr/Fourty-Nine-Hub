@@ -46,41 +46,45 @@ class _SearchViewState extends State<SearchView>
             Navigator.pop(context);
           },
         ),
-        title: Card(
-          color: Colors.white,
-          shape: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(40.r),
-            borderSide: BorderSide.none,
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: BorderRadius.circular(40.r),
-            ),
-            child: FormTextField(
-              controller: context.read<SearchCubit>().searchController,
-              action: (v) {
-                if (v.isNotEmpty) {
-                  context.read<SearchCubit>().getSearch(
-                    SearchParams(
-                      search: v,
-                      params: PaginationParams(page: 1),
-                    ),
-                  );
-                }
-              },
-              height: 70.h,
-              hint: 'Search',
-              borderRadius: BorderRadius.circular(40.r),
-              style: Styles.mediumText(color: AppColors.GREY_NORMAL_COLOR),
-              prefix: Icon(
-                Icons.search,
-                size: 30.h,
-                color: AppColors.GREY_NORMAL_COLOR,
+        title: BlocBuilder<SearchCubit,SearchState>(
+          builder: (BuildContext context, state) {
+            return Card(
+              color: Colors.white,
+              shape: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(40.r),
+                borderSide: BorderSide.none,
               ),
-              noBorder: true,
-            ),
-          ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: BorderRadius.circular(40.r),
+                ),
+                child: FormTextField(
+                  controller: context.read<SearchCubit>().searchController,
+                  action: (v) {
+                    if (v.isNotEmpty) {
+                      context.read<SearchCubit>().getSearch(
+                        SearchParams(
+                          search: v,
+                          params: PaginationParams(page: 1),
+                        ),
+                      );
+                    }
+                  },
+                  height: 70.h,
+                  hint: 'Search',
+                  borderRadius: BorderRadius.circular(40.r),
+                  style: Styles.mediumText(color: AppColors.GREY_NORMAL_COLOR),
+                  prefix: Icon(
+                    Icons.search,
+                    size: 30.h,
+                    color: AppColors.GREY_NORMAL_COLOR,
+                  ),
+                  noBorder: true,
+                ),
+              ),
+            );
+          },
         ),
         bottom: TabBar(
           tabAlignment: TabAlignment.start,

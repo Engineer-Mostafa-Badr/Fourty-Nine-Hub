@@ -39,33 +39,33 @@ class MainCategorySearchView extends StatelessWidget {
             });
 
             // Display a loading shimmer when the search is loading
-            if (state.status==SearchStates.loading) {
-              return Shimmer.fromColors(
-                baseColor: Colors.grey[100]!,
-                highlightColor: Colors.white24,
-                child: Column(
-                  children: List.generate(
-                      6,
-                          (index) => Padding(
-                        padding: EdgeInsets.only(bottom: 15.h),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * .15.h,
-                          width: double.infinity,
-                          margin: EdgeInsets.symmetric(horizontal: 10.w),
-                          padding: EdgeInsets.symmetric(horizontal: 10.w),
-                          decoration: BoxDecoration(
-                            color: AppColors.AUTH_CONTAINER_COLOR,
-                            borderRadius: BorderRadius.circular(20.r),
-                            border: Border.all(color: Colors.grey),
-                          ),
-                        ),
-                      )),
-                ),
-              );
-            }
+            // if (state.status==SearchStates.loading) {
+            //   return Shimmer.fromColors(
+            //     baseColor: Colors.grey[100]!,
+            //     highlightColor: Colors.white24,
+            //     child: Column(
+            //       children: List.generate(
+            //           6,
+            //               (index) => Padding(
+            //             padding: EdgeInsets.only(bottom: 15.h),
+            //             child: Container(
+            //               height: MediaQuery.of(context).size.height * .15.h,
+            //               width: double.infinity,
+            //               margin: EdgeInsets.symmetric(horizontal: 10.w),
+            //               padding: EdgeInsets.symmetric(horizontal: 10.w),
+            //               decoration: BoxDecoration(
+            //                 color: AppColors.AUTH_CONTAINER_COLOR,
+            //                 borderRadius: BorderRadius.circular(20.r),
+            //                 border: Border.all(color: Colors.grey),
+            //               ),
+            //             ),
+            //           )),
+            //     ),
+            //   );
+            // }
 
             // Check if search results exist
-          else  if (controller.searchController.text.isNotEmpty) {
+            if (controller.searchController.text.isNotEmpty) {
               return PaginationView<MainSubCategorySearchEntity>(
                 build: (ScrollController scrollController, data) {
                   return ListView.separated(
