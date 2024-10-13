@@ -38,7 +38,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
       this._requestPickMeUseCase,
       this._removeFavouriteAdUseCase,
       this._favouriteAdUseCase, this._filterAdUseCase, this._makeAdRequestUsecase)
-      : super(const AdsState());
+      : super( AdsState());
 
   // void loadData({required String subCategoryId,required String filter}) async {
   //   // emit(state.copyWith(status: AdsStates.loading));
@@ -94,7 +94,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
     print(filter);
     print("objectHiiiiiiiiiiii");
 
-    FilterModel filterModel = FilterModel(price: model.price, props: model.props, cityId: model.cityId, governorateId: model.governorateId, limit: 15, page: page, subCategoryId: model.subCategoryId,filter:filter);
+    FilterModel filterModel = FilterModel(price: model.price, props: model.props, cityId: state.city, governorateId: state.governorate, limit: 15, page: page, subCategoryId: model.subCategoryId,filter:filter);
       final response = await _filterAdUseCase(filterModel);
       response.fold(
               (l) => emit(state.copyWith(failure: l, status: AdsStates.error)),

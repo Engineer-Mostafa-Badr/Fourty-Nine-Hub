@@ -230,9 +230,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   void filterAds(
       {required CategorizationEntity categorize,
       required BuildContext context}) async {
-    if ((formState.currentState?.validate() ?? false) &&
-        (state.city != '') &&
-        state.governorate != '') {
+    if ((formState.currentState?.validate() ?? false) ) {
       print("ss");
       List<CreateAdEntity> details = [];
       for (int i = 0; i < (state.filterAdProperties?.length ?? 0); i++) {
@@ -273,6 +271,28 @@ class CreateAdCubit extends Cubit<CreateAdState> {
         context.pop(model);
       });
     } else if (state.governorate == '') {
+      showErrorMessage(context, LocaleKeys.selectGovernorate.localize);
+    } else if (state.city == '') {
+      showErrorMessage(context, LocaleKeys.selectCity.localize);
+    }
+  }
+
+  void filterGovernorateAds({required CategorizationEntity categorize,
+    required BuildContext context})async{
+    if(state.governorate !=''&&state.city != ''){
+      FilterModel model = FilterModel(
+          cityId: state.city ?? '',
+          governorateId: state.governorate ?? '',
+          limit: 10,
+          page: 1,
+          subCategoryId: categorize.subCategory.id);
+      final response = await _filterAdUseCase(model);
+      response.fold(
+              (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
+              (r) {
+            context.pop(model);
+          });
+    }else if (state.governorate == '') {
       showErrorMessage(context, LocaleKeys.selectGovernorate.localize);
     } else if (state.city == '') {
       showErrorMessage(context, LocaleKeys.selectCity.localize);

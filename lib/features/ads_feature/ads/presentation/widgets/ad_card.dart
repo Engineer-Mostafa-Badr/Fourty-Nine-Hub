@@ -245,7 +245,6 @@ class _AdCardState extends State<AdCard> {
                     ),
                     const Divider(),
                     const Sizer(),
-
                     widget.item.userId!=userId?Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

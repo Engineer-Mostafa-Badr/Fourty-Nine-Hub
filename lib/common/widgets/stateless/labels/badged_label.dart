@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -12,6 +13,8 @@ class BadgedLabel extends StatelessWidget {
   final TextStyle? style;
   final double? height, width, margin;
   final Function? onTap;
+  final IconData? icon;
+  final IconData? iconLeading;
   final bool isBordered;
   final bool isCentered;
   final bool close;
@@ -33,7 +36,7 @@ class BadgedLabel extends StatelessWidget {
       this.isBordered = false,
       this.isCentered = false,
       this.close = true,
-      this.textColor = Colors.white});
+      this.textColor = Colors.white, this.icon, this.iconLeading});
 
   @override
   Widget build(BuildContext context) {
@@ -74,10 +77,28 @@ class BadgedLabel extends StatelessWidget {
   }
 
   Widget _buildLabelWidget() {
-    return Label(
-      text: label,
-      style:style?? Styles.mediumText(color: textColor),
-      textAlign: TextAlign.center,
+    return Row(
+      mainAxisAlignment: (icon != null&&iconLeading!=null)?MainAxisAlignment.spaceBetween:(icon != null||iconLeading!=null)?MainAxisAlignment.start:MainAxisAlignment.center,
+      children: [
+        if (icon != null)
+          Icon(
+            icon,
+            color: textColor,
+            size: 35.sp,
+          ),
+        Label(
+          text: label,
+          style:style?? Styles.mediumText(color: textColor),
+          textAlign: TextAlign.center,
+        ),
+
+        if (iconLeading != null)
+          Icon(
+            iconLeading,
+            color: textColor,
+            size: 35.sp,
+          ),
+      ],
     );
   }
 }

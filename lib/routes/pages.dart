@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_vi
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/create_ad.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/filter_ads.dart';
+import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/governorate_filter_ads.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
@@ -360,6 +361,15 @@ class AppPages {
                         builder: (context, state) => BlocProvider.value(
                             value: serviceLocator<CreateAdCubit>(),
                             child: FilterAdsView(
+                              categorization: state.extra as CategorizationEntity,
+                            )),
+                      ),
+                      GoRoute(
+                        path: Paths.GOVERNORATEFILTERADS,
+                        name: Routes.GOVERNORATEFILTERADS,
+                        builder: (context, state) => BlocProvider.value(
+                            value: serviceLocator<CreateAdCubit>(),
+                            child: GovernorateFilterAdsView(
                               categorization: state.extra as CategorizationEntity,
                             )),
                       ),
