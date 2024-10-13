@@ -2,7 +2,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 
 import '../../../domain/entities/favourite_ad_drawer_entity.dart';
 
-enum FavouriteDrawerStates { loading, success,initial, error }
+enum FavouriteDrawerStates { loading, success,successDelete,initial, error }
 
 class FavouriteDrawerState {
   final FavouriteDrawerStates status;

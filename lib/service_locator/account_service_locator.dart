@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/account_taps/account/data/datasources/account_remote_datasource.dart';
+import 'package:fourtyninehub/features/account_taps/account/domain/usecases/delete_favourite_ads_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/usecases/get_favourite_ads_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/usecases/get_favourite_categories_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/usecases/get_favourite_subcategories_usecase.dart';
@@ -91,6 +92,8 @@ class AccountServiceLocator {
         () => AddSubscriptionUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetDrawerFavouriteAdsUsecase>(
         () => GetDrawerFavouriteAdsUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<DeleteFavouriteAdsUsecase>(
+        () => DeleteFavouriteAdsUsecase(serviceLocator()));
 
     serviceLocator.registerFactory<FavouriteAdsCubit>(
         () => FavouriteAdsCubit(serviceLocator())..loadData());
@@ -113,6 +116,7 @@ class AccountServiceLocator {
           serviceLocator(),
         ));
     serviceLocator.registerFactory<FavouriteDrawerCubit>(() => FavouriteDrawerCubit(
+          serviceLocator(),
           serviceLocator(),
         ));
     serviceLocator.registerFactory<WalletCubit>(() => WalletCubit(

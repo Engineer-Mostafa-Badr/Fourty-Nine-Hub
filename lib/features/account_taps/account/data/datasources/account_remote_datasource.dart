@@ -21,6 +21,7 @@ abstract class AccountRemoteDataSource {
 
   Future<Either<Failure, List<FavouriteAdEntity>>> getFavouriteAds();
   Future<Either<Failure, List<FavouriteAdDrawerEntity>>> getDrawerFavouriteAds();
+  Future<Either<Failure, bool>> deleteFavouriteAds({required String id});
 }
 
 class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
@@ -67,5 +68,13 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
             (data) => Right((data['data'] as List)
             .map((e) => FavouriteAdDrawerModel.fromJson(e))
             .toList()));
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteFavouriteAds({required String id}) async {
+    final response = await _apiConsumer.delete(EndPoints.deleteFavouriteAds(id));
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right(data['status']));
   }
 }

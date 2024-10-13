@@ -36,4 +36,9 @@ class AccountRepoImpl implements AccountRepo {
   Future<Either<Failure, List<FavouriteAdDrawerEntity>>> getDrawerFavouriteAds() {
     return _remoteDataSource.getDrawerFavouriteAds();
   }
+
+  @override
+  Future<Either<Failure, bool>> deleteFavouriteAds({required String id}) {
+    return _remoteDataSource.deleteFavouriteAds(id: id);
+  }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/cubit/favourite_drawer_state.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/ad_card_drawer_favourite.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -25,7 +26,7 @@ class _FavouriteViewState extends State<FavouriteView> {
       ),
       body: BlocProvider<FavouriteDrawerCubit>(
         create: (BuildContext context) =>serviceLocator()..fetchFavourite(),
-        child: BlocBuilder<FavouriteDrawerCubit, FavouriteDrawerState>(
+        child: BlocConsumer<FavouriteDrawerCubit, FavouriteDrawerState>(
             builder: (context, state) {
           if (state.status ==FavouriteDrawerStates.loading) {
             return const Center(child: CircularProgressIndicator.adaptive());
@@ -36,7 +37,9 @@ class _FavouriteViewState extends State<FavouriteView> {
                 itemBuilder: (context, index) => AdCardDrawerFavourite(
                       item: state.favourite![index],
                       onFav: (String) {},
-                      onRemoveFav: (String) {},
+                      onRemoveFav: () {
+                        context.read<FavouriteDrawerCubit>().deleteFavouriteAds(id: state.favourite![index].adId);
+                      },
                     ),
                 // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 //     childAspectRatio: .8,
@@ -45,7 +48,11 @@ class _FavouriteViewState extends State<FavouriteView> {
                 //     crossAxisCount: 2),
                 itemCount: state.favourite?.length ?? 0),
           );
-        }),
+        }, listener: (BuildContext context, FavouriteDrawerState state) {
+              if(state.status ==FavouriteDrawerStates.successDelete){
+                showSuccessMessage(context, 'Remove Favourite Successfully');
+              }
+        },),
       ),
     );
   }

@@ -632,6 +632,9 @@ class EndPoints {
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const favouriteAds = '/ads-favourites/allFavouriteAds';
   static const favouriteSubCategories = '/favorite-sub-category';
+  static String deleteFavouriteAds(String id) {
+    return '/ads-favourites/reomveAdFromFavourites/$id';
+  }
 
   static String deleteAd(String id) {
     return '/ads/deleteAd/$id';
