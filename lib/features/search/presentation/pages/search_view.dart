@@ -16,6 +16,8 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
 class SearchView extends StatefulWidget {
+  const SearchView({super.key});
+
   @override
   _SearchViewState createState() => _SearchViewState();
 }
@@ -90,6 +92,7 @@ class _SearchViewState extends State<SearchView>
           tabAlignment: TabAlignment.start,
           isScrollable: true,
           // Enable scrolling for the TabBar
+          onTap: (i){},
           controller: _tabController,
           labelColor: Theme.of(context).primaryColor,
           unselectedLabelColor: AppColors.GREY_NORMAL_COLOR,
@@ -110,6 +113,7 @@ class _SearchViewState extends State<SearchView>
       ),
       body: TabBarView(
         controller: _tabController,
+        physics: const NeverScrollableScrollPhysics(),
         children: [
           ProfileSearchView(),
           ReelSearchView(),
