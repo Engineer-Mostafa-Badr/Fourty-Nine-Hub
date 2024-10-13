@@ -935,7 +935,8 @@ class CodegenLoader extends AssetLoader{
   "uploadOneImage": "قم بتحميل صورة واحدة على الأقل!",
   "editMyAds": "تعديل الاعلان",
   "requestTripJoin": "طلب الانضمام إلى الرحلة",
-  "requestAd": "طلب إعلان"
+  "requestAd": "طلب إعلان",
+  "removeFavouriteSuccessfully": "إزالة الإعلان المفضل بنجاح"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1861,7 +1862,8 @@ static const Map<String,dynamic> en = {
   "uploadOneImage": "Upload At Least One Photo!",
   "editMyAds": "Edit ad",
   "requestTripJoin": "Request Trip Join",
-  "requestAd": "Request Ad"
+  "requestAd": "Request Ad",
+  "removeFavouriteSuccessfully": "Remove Favourite Ad Successfully"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

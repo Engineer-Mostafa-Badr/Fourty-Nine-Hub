@@ -910,5 +910,6 @@ abstract class  LocaleKeys {
   static const editMyAds = 'editMyAds';
   static const requestTripJoin = 'requestTripJoin';
   static const requestAd = 'requestAd';
+  static const removeFavouriteSuccessfully = 'removeFavouriteSuccessfully';
 
 }
