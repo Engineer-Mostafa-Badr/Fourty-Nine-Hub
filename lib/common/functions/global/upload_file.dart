@@ -62,50 +62,6 @@ class UploadFile {
     return null;
   }
 
-  // static Future<String?> uploadPickedFile(
-  //     {required File file, required String subCategoryId}) async {
-  //   try {
-  //     final fileInBytes = await file.readAsBytes();
-  //     String? mediaId;
-  //     CliLogger.info("creating upload url for : ${file.path}");
-  //     final uploadUrlResponse =
-  //         await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
-  //       "type": "${file.type.name}/${file.path.split('.').last}",
-  //       "size": fileInBytes.length,
-  //       "subcategoryId": subCategoryId,
-  //     });
-
-  //     uploadUrlResponse.fold(
-  //       (l) {
-  //         CliLogger.error("can't get upload url");
-  //       },
-  //       (data) async {
-  //         CliLogger.info(
-  //             "upload url : ${data['data']['signedUrl']}\nmediaId : ${data['data']['mediaId']}");
-  //         final uploadUrl = data['data']['signedUrl'];
-  //         mediaId = data['data']['mediaId'];
-  //         Options options = Options(contentType: file.type.name, headers: {
-  //           'Accept': "*/*",
-  //           // 'Content-Type': 'application/octet-stream',
-  //           'Content-Length': fileInBytes.length,
-  //           'Connection': 'keep-alive',
-  //           'User-Agent': 'ClinicPlush',
-  //         });
-  //         CliLogger.info("uploading file : ${file.path}");
-  //         await Dio().put(uploadUrl, data: fileInBytes, options: options);
-  //         file.length();
-  //         fileInBytes.lengthInBytes;
-  //         CliLogger.success("file uploaded : ${file.path}");
-  //       },
-  //     );
-
-  //     return mediaId;
-  //   } catch (e) {
-  //     CliLogger.error("can't upload file $e");
-  //     return null;
-  //   }
-  // }
-
   static Future<String?> uploadPickedFile({
     required File file,
     required String subCategoryId,
@@ -162,57 +118,28 @@ class UploadFile {
     }
   }
 
-  Future<void> sendBinaryFileData({
-    required XFile file,
-    required String signedUrl,
-  }) async {
+Future<void> sendBinaryFileData(
+      {required XFile file, required String signedUrl}) async
+  {
+    print("signedUrl$signedUrl");
     Uint8List image = await file.readAsBytes();
-    print("File size: ${image.length}");
+    print("object${image.length}");
+    print("object$image");
+    String fileName = file.path.split('/').last;
 
-    Options options = Options(
-      contentType: file.mimeType,
-      headers: {
-        'Accept': "*/*",
-        'Content-Type': 'application/octet-stream',
-        'Content-Length': image.length,
-        'Connection': 'keep-alive',
-        'User-Agent': 'ClinicPlush',
-      },
-    );
+    Options options = Options(contentType: file.mimeType, headers: {
+      'Accept': "*/*",
+      'Content-Type': 'application/octet-stream',
+      'Content-Length': image.length,
+      'Connection': 'keep-alive',
+      'User-Agent': 'ClinicPlush',
+      // 'File-Name': fileName,
+    });
 
-    try {
-      await Dio().put(
-        signedUrl,
-        data: image,  // Directly send the Uint8List
-        options: options,
-      );
-      print("Upload successful.");
-    } catch (e) {
-      print("Upload failed: $e");
-    }
+    await Dio().put(signedUrl,
+        data: image, options: options);
+    print("aasl;das;ld,");
   }
-
-
-// Future<void> sendBinaryFileData(
-  //     {required XFile file, required String signedUrl}) async
-  // {
-  //   Uint8List image = await file.readAsBytes();
-  //   print("object${image.length}");
-  //   String fileName = file.path.split('/').last;
-  //
-  //   Options options = Options(contentType: file.mimeType, headers: {
-  //     'Accept': "*/*",
-  //     'Content-Type': 'application/octet-stream',
-  //     'Content-Length': image.length,
-  //     'Connection': 'keep-alive',
-  //     'User-Agent': 'ClinicPlush',
-  //     // 'File-Name': fileName,
-  //   });
-  //
-  //   await Dio().put(signedUrl,
-  //       data: Stream.fromIterable(image.map((e) => [e])), options: options);
-  //   print("aasl;das;ld,");
-  // }
 }
 
 class UploadFileEntity {

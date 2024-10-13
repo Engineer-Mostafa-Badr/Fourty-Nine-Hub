@@ -167,7 +167,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                             ? state.wallet?.balance ?? 0
                             : state.wallet?.giftWallet ?? 0;
                     print(walletPrice);
-                    print(state.wallet?.giftWallet);
+                    print("state.wallet?.giftWallet${state.wallet?.giftWallet}");
                     print(state.wallet?.realAmount);
                     print(state.wallet?.balance);
                     // print(walletPrice);

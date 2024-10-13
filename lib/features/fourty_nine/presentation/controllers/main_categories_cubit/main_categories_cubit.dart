@@ -106,7 +106,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     response.fold((l) {
       emit(state.copyWith(failure: l, status: StateStatus.error));
     }, (data) {
-      emit(state.copyWith(wallet: data));
+      emit(state.copyWith(wallet: data,));
+      print("state.wallet?.giftWallet ${state.wallet?.giftWallet}");
     });
   }
 }

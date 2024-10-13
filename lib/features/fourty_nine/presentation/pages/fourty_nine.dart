@@ -147,8 +147,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             Sizer(),
             //pick me and come with U
             _pickMeAndComeWithUWidget(),
-            const Sizer(),
-            _buildChanceWidget(),
+            // const Sizer(),
+            // _buildChanceWidget(),
             const Sizer(),
             _auctionAndInstallmentWidget(),
             const Sizer(),
