@@ -8,11 +8,7 @@ import 'package:fourtyninehub/features/search/domain/entity/main_category_search
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shimmer/shimmer.dart';
-
-import '../../../../../res/style/app_colors.dart';
 import 'build_Item_search_main_category.dart';
 
 class MainCategorySearchView extends StatelessWidget {
