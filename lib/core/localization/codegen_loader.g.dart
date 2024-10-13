@@ -936,7 +936,9 @@ class CodegenLoader extends AssetLoader{
   "editMyAds": "تعديل الاعلان",
   "requestTripJoin": "طلب الانضمام إلى الرحلة",
   "requestAd": "طلب إعلان",
-  "removeFavouriteSuccessfully": "إزالة الإعلان المفضل بنجاح"
+  "removeFavouriteSuccessfully": "إزالة الإعلان المفضل بنجاح",
+  "selectValidUser": "لم يتم العثور على المستخدم أو أنه غير صالح، يرجى تحديد مستخدم صالح",
+  "notEnoughMoneyWallet": "لا يوجد ما يكفي من المال في المحفظة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1863,7 +1865,9 @@ static const Map<String,dynamic> en = {
   "editMyAds": "Edit ad",
   "requestTripJoin": "Request Trip Join",
   "requestAd": "Request Ad",
-  "removeFavouriteSuccessfully": "Remove Favourite Ad Successfully"
+  "removeFavouriteSuccessfully": "Remove Favourite Ad Successfully",
+  "selectValidUser": "User not found or not valid, please select a valid user",
+  "notEnoughMoneyWallet": "Not enough money in wallet"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

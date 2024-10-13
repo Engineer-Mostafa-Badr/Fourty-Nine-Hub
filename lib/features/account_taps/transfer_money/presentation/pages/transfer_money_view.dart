@@ -10,6 +10,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/use_case/transfer_money_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/cubit/transfer_money_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/cubit/transfer_money_state.dart';
+import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/pages/transfer_money_success.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
@@ -57,6 +58,12 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
             if (state.status == StateStatus.success) {
               showSuccessMessage(
                   context, LocaleKeys.moneySuccessfully.localize);
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>const TransactionSuccessScreen()));
+              amountController.clear();
+              searchController.clear();
+              setState(() {
+                selectedUsername=null;
+              });
             }
           },
           builder: (BuildContext context, state) {
@@ -145,14 +152,14 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                                       !isUsernameInFilteredUsers(
                                           selectedUsername, filteredUsers)) {
                                     // If no user is selected or the user is not in the filtered list
-                                    showSuccessMessage(context,
-                                        'User not found or not valid, please select a valid user');
+                                    showErrorMessage(context,
+                                        LocaleKeys.selectValidUser.localize);
                                   } else if (int.parse(amountController.text) <
                                       state.wallet!.realAmount!) {
                                     return showAreYouSure(
                                         title: LocaleKeys.alert.localize,
                                         subTitle:
-                                            'Are you sure of transferring money?',
+                                            LocaleKeys.sureWithdrawMoney.localize,
                                         action: () {
                                           context
                                               .read<TransferMoneyCubit>()
@@ -167,16 +174,13 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                                         },
                                         context: context);
                                   } else {
-                                    showSuccessMessage(
+                                    showErrorMessage(
                                       context,
-                                      'Not enough money in wallet',
-                                      color: AppColors.SECONDARY_COLOR,
+                                      LocaleKeys.notEnoughMoneyWallet.localize,
                                     );
                                   }
                                 }
-                                // print(state.wallet?.realAmount);
-                                // print(searchController.text);
-                                // print(selectedUsername);
+
                               },
                             ),
                           ],

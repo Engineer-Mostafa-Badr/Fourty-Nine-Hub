@@ -923,5 +923,8 @@
   "editMyAds" : "Edit ad",
   "requestTripJoin": "Request Trip Join",
   "requestAd": "Request Ad",
-  "removeFavouriteSuccessfully": "Remove Favourite Ad Successfully"
+  "removeFavouriteSuccessfully": "Remove Favourite Ad Successfully",
+  "selectValidUser": "User not found or not valid, please select a valid user",
+  "notEnoughMoneyWallet": "Not enough money in wallet"
+
 }

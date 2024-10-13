@@ -911,5 +911,7 @@ abstract class  LocaleKeys {
   static const requestTripJoin = 'requestTripJoin';
   static const requestAd = 'requestAd';
   static const removeFavouriteSuccessfully = 'removeFavouriteSuccessfully';
+  static const selectValidUser = 'selectValidUser';
+  static const notEnoughMoneyWallet = 'notEnoughMoneyWallet';
 
 }

@@ -30,7 +30,7 @@ class TransferMoneyCubit extends Cubit<TransferMoneyState> {
     return response.fold(
       (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
       (data) {
-        getWallet();
+       // getWallet();
         emit(state.copyWith(status: StateStatus.success));
       },
     );

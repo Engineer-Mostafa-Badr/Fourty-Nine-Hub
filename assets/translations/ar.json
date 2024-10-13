@@ -920,7 +920,9 @@
   "editMyAds" : "تعديل الاعلان",
   "requestTripJoin": "طلب الانضمام إلى الرحلة",
   "requestAd": "طلب إعلان",
-  "removeFavouriteSuccessfully": "إزالة الإعلان المفضل بنجاح"
+  "removeFavouriteSuccessfully": "إزالة الإعلان المفضل بنجاح",
+  "selectValidUser": "لم يتم العثور على المستخدم أو أنه غير صالح، يرجى تحديد مستخدم صالح",
+  "notEnoughMoneyWallet": "لا يوجد ما يكفي من المال في المحفظة"
 
 
 }
