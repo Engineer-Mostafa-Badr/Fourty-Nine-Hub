@@ -59,7 +59,7 @@ class LiveStreamHomeScreen extends StatelessWidget {
         body: _buildLivePages(),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            await context.read<StreamCubit>().createLive(title: '');
+            await context.read<StreamCubit>().createLive(title: 'Mo Salama Mo Salama');
             if (context.mounted) {
               context.push(Routes.LIVEView,
                   extra: ZegoArgs(
