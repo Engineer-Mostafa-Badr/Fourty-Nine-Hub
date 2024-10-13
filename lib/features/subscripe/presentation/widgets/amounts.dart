@@ -41,8 +41,10 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
         ),
         const Sizer(),
         Expanded(
-          child: ListView.builder(
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 0,childAspectRatio: 1/0.4),
             shrinkWrap: true,
+            padding: EdgeInsets.zero,
             itemCount: widget.amounts.length,
             itemBuilder: (context, index) {
               return Row(

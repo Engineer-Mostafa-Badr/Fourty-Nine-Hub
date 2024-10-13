@@ -62,10 +62,12 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               SizedBox(height: 20.h),
               Text(
                 widget.title ?? "",
+                textScaleFactor: 1.0,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                    color: AppColors.PRIMARY_COLOR_LIGHT,
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 55.sp,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               SizedBox(height: 20.h),
               DropdownMenu<WalletTypes>(
@@ -76,6 +78,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                           value: e, label: e.translatedName))
                       .toList(),
                   initialSelection: selectedWallet,
+                  // inputDecorationTheme: ,
                   onSelected: (value) {
                     selectedWallet = value;
                     print(selectedWallet);

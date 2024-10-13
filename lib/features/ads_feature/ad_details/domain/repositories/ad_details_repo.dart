@@ -10,4 +10,6 @@ abstract class AdDetailsRepo {
   Future<Either<Failure, List<AdModel>>> getRelevantAds({required int id});
   Future<Either<Failure, bool>> makeAdRequest(
       {required AdRequestParams params});
+  Future<Either<Failure, bool>> makeAdPremiumRequest(
+      {required AdRequestParams params});
 }

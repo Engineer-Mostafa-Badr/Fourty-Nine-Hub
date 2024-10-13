@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -12,10 +14,14 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -41,6 +47,9 @@ class AdCard extends StatefulWidget {
 class _AdCardState extends State<AdCard> {
   @override
   Widget build(BuildContext context) {
+    final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
+    print(userId);
+    print(widget.item.userId);
     List<CreateAdEntity> details = widget.item.details
         .where((e) => e.value.nameAr != 'السعر' && e.value.nameAr != 'المرتب')
         .toList();
@@ -236,169 +245,56 @@ class _AdCardState extends State<AdCard> {
                     ),
                     const Divider(),
                     const Sizer(),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+
+                    widget.item.userId!=userId?Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: PremiumRequestButton(item: widget.item,),
+                            ),
+                            const Sizer(width: 5),
+                            Expanded(
+                              flex: 3,
+                              child: RequestButton(item: widget.item,),
+                            )
+                          ],
+                        ),
+                        const Sizer(),
+                        CallMessageButtons(
+                          otherUserId: widget.item.userId ?? '',
+                          subcategoryId: widget.item.subCategoryId ?? '',
+                          phone: widget.item.phone ?? '',
+                          id: widget.item.id,
+                          hasReport: true,
+                        ),
+                      ],
+                    ):Row(
                       children: [
                         Expanded(
-                          flex: 3,
-                          child: AvaialbleTripsButton(
-                            title: 'Premium Request',
-                            color: AppColors.SECONDARY_COLOR,
-                            onTap: () {
-                              SubscriptionMethod().subscribe(subscribeId: widget.item.subCategoryId??'', title: LocaleKeys.premiumRequest.localize);
-                            },
-                          ),
-                        ),
-                        const Sizer(width: 5),
+                            child: AppButton(
+                              label: LocaleKeys.edit.localize,
+                              onPressed: () => showAreYouSure(
+                                  title: LocaleKeys.edit.localize,
+                                  subTitle: LocaleKeys.edit.localize,
+                                  action: () {
+                                    //  onDelete(item.id);
+                                  },
+                                  context: context),
+                            )),
+                        const Sizer(),
                         Expanded(
-                          flex: 3,
-                          child: AvaialbleTripsButton(
-                            title: 'Request',
-                            color: AppColors.PRIMARY_COLOR,
-                            onTap: () {
-                              showModalBottomSheet(
-                                backgroundColor: Colors.white,
-                                context: context,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(32.0),
-                                    topRight: Radius.circular(32.0),
-                                  ),
-                                ),
-                                isDismissible: true,
-                                isScrollControlled: true,
-                                builder: (BuildContext context) {
-                                  return AnimatedPadding(
-                                    padding: MediaQuery.of(context).viewInsets,
-                                    duration: const Duration(milliseconds: 50),
-                                    child: Container(
-                                      height: 400.h,
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 10.h,
-                                        horizontal: 10,
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Label(
-                                            text: LocaleKeys
-                                                .enterPhoneNumber.localize,
-                                            style: Styles.headerText(),
-                                          ),
-                                          Sizer(
-                                            height: 30.h,
-                                          ),
-                                          Container(
-                                            constraints:
-                                                BoxConstraints(maxHeight: 180.h),
-                                            child: Form(
-                                              key: controller.formKey,
-                                              child: TextFormField(
-                                                validator: (value) {
-                                                  if ((value == null || value.isEmpty)) {
-                                                    return LocaleKeys.required.localize;
-                                                  } else {
-                                                    return null;
-                                                  }
-                                                },
-                                                // focusNode: focusNode,
-                                                maxLines: null,
-                                                maxLength: 150,
-                                                onChanged: (c) =>controller.changePhone(v: c),
-                                                // controller: controller,
-                                                decoration: InputDecoration(
-                                                    hintText: LocaleKeys
-                                                        .phoneNumber.localize,
-                                                    fillColor: Colors.white,
-                                                    hintStyle: Styles.mediumText(
-                                                        color: AppColors
-                                                            .DARK_GRAY_COLOR)),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: InkWell(
-                                                    onTap: () async {
+                            child: AppButton(
+                              label: LocaleKeys.subscriptions.localize,
+                              onPressed: () {
 
-                                                        if(controller.formKey.currentState!.validate()){
-                                                          await controller.makeAdRequest(id: widget.item.id).then((value) {
-                                                              if(value==true){
-                                                                context.pop();
-                                                                showSuccessMessage(context, 'Request Sent Successfully');
-                                                                controller.resetRequest();
-                                                              }else{
-                                                                context.pop();
-                                                                if(state.failure!=null){
-                                                                  showErrorMessage(context, getFailureMessage(state.failure!, context));
-
-                                                                }else{
-                                                                  showErrorMessage(context, 'Please Try Again!');
-
-                                                                }
-                                                              }
-
-                                                          }
-                                                          );
-                                                        }
-
-                                                    },
-                                                    child: Container(
-                                                      width: 100,
-                                                      height: 80.h,
-                                                      padding:
-                                                          const EdgeInsets.all(5),
-                                                      decoration: BoxDecoration(
-                                                          color: AppColors
-                                                              .PRIMARY_COLOR,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(15)),
-                                                      alignment: Alignment.center,
-                                                      child: Label(
-                                                        text: LocaleKeys
-                                                            .send.localize,
-                                                        style: Styles.headerText(
-                                                            color: Colors.white),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop(); // Close the dialog
-                                                    },
-                                                    child: Label(
-                                                      text: LocaleKeys
-                                                          .cancel.localize,
-                                                      style: Styles.headerText(),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        )
+                                print(widget.item.subscriptionStatus);
+                              },
+                            )),
                       ],
-                    ),
-                    const Sizer(),
-                    CallMessageButtons(
-                      otherUserId: widget.item.userId ?? '',
-                      subcategoryId: widget.item.subCategoryId ?? '',
-                      phone: widget.item.phone ?? '',
-                      id: widget.item.id,
-                      hasReport: true,
                     ),
                   ],
                 ),

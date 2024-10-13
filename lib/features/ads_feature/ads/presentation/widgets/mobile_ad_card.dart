@@ -6,7 +6,10 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
@@ -221,82 +224,30 @@ class _MobileAdCardState extends State<MobileAdCard> {
             Padding(
               padding: EdgeInsets.all(8.w),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
                         flex: 3,
-                        child: AvaialbleTripsButton(
-                          title: 'Premium Request',
-                          color: AppColors.SECONDARY_COLOR,
-                          onTap: () {},
-                        ),
+                        child: PremiumRequestButton(item: widget.item,),
                       ),
                       const Sizer(width: 5),
                       Expanded(
                         flex: 3,
-                        child: AvaialbleTripsButton(
-                          title: 'Request',
-                          color: AppColors.PRIMARY_COLOR,
-                          onTap: () {},
-                        ),
+                        child: RequestButton(item: widget.item,),
                       )
                     ],
                   ),
                   const Sizer(),
-                  FutureBuilder(
-                      future: ButtonAvailability().isShowButton(
-                          otherUserId: widget.item.user?.id ?? '',
-                          subcategoryId: widget.item.subCategoryId ?? ''),
-                      builder: (context, snap) {
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: AvaialbleTripsButton(
-                                title: 'Call',
-                                color: snap.data == true
-                                    ? AppColors.SECONDARY_COLOR
-                                    : AppColors.DARK_GRAY_COLOR,
-                                icon: Icons.call,
-                                onTap: snap.data == true ? () {} : () {},
-                              ),
-                            ),
-                            const Sizer(width: 5),
-                            Expanded(
-                              flex: 3,
-                              child: AvaialbleTripsButton(
-                                title: 'Message',
-                                color: snap.data == true
-                                    ? AppColors.SECONDARY_COLOR
-                                    : AppColors.DARK_GRAY_COLOR,
-                                icon: Icons.email,
-                                onTap: snap.data == true ? () {} : () {},
-                              ),
-                            ),
-                            const Sizer(width: 5),
-                            Expanded(
-                              flex: 3,
-                              child: AvaialbleTripsButton(
-                                title: 'Report',
-                                color: AppColors.SECONDARY_COLOR,
-                                icon: Icons.report,
-                                onTap: () {
-                                  print("jskdnajksdnjkadn");
-                                  bottomSheet(
-                                      context: context,
-                                      widget: ReportView(
-                                        id: widget.item.id,
-                                        categoryId: '66b77e77bb35968b535dc944',
-                                      ));
-                                },
-                              ),
-                            ),
-                          ],
-                        );
-                      }),
+                  CallMessageButtons(
+                    otherUserId: widget.item.userId ?? '',
+                    subcategoryId: widget.item.subCategoryId ?? '',
+                    phone: widget.item.phone ?? '',
+                    id: widget.item.id,
+                    hasReport: true,
+                  ),
                 ],
               ),
             ),
