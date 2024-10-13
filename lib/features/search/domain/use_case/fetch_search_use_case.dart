@@ -3,7 +3,6 @@ import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/search/domain/entity/main_category_search_entity.dart';
-import 'package:fourtyninehub/features/search/domain/entity/search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/repository/search_repository.dart';
 
 class FetchSearchUseCase extends UseCase<List<MainSubCategorySearchEntity>,SearchParams>{

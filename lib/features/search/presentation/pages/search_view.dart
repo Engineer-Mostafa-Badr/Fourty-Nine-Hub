@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
@@ -12,7 +11,6 @@ import 'package:fourtyninehub/features/search/presentation/pages/widget/posts_se
 import 'package:fourtyninehub/features/search/presentation/pages/widget/profile_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/reel_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/subcategory_search_view.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';

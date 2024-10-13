@@ -2,12 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/search/data/model/main_category_search_model.dart';
-import 'package:fourtyninehub/features/search/data/model/search_model.dart';
 import 'package:fourtyninehub/features/search/domain/entity/main_category_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 
 import '../../../../core/error/failure.dart';
-import '../../domain/entity/search_entity.dart';
 
 abstract class SearchRemoteDataSource {
   Future<Either<Failure, List<MainSubCategorySearchEntity>>> fetchSearch(SearchParams params);

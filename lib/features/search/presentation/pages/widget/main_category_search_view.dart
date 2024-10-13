@@ -5,7 +5,6 @@ import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
 import 'package:fourtyninehub/features/search/domain/entity/main_category_search_entity.dart';
-import 'package:fourtyninehub/features/search/domain/entity/search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -13,9 +12,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
-import '../../../../../res/style/styles.dart';
 import 'build_Item_search_main_category.dart';
 
 class MainCategorySearchView extends StatelessWidget {
