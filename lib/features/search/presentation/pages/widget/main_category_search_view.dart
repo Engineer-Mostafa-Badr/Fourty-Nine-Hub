@@ -27,14 +27,14 @@ class MainCategorySearchView extends StatelessWidget {
           final controller = context.read<SearchCubit>();
 
           // Listen for changes in the search text and trigger search
-          controller.searchController.addListener(() {
-            if (controller.searchController.text.isNotEmpty) {
-              controller.getSearch(SearchParams(
-                search: controller.searchController.text,
-                params: PaginationParams(page: 1),
-              ));
-            }
-          });
+          // controller.searchController.addListener(() {
+          //   if (controller.searchController.text.isNotEmpty) {
+          //     controller.getSearch(SearchParams(
+          //       search: controller.searchController.text,
+          //       params: PaginationParams(page: 1),
+          //     ));
+          //   }
+          // });
 
           // Display a loading shimmer when the search is loading
           // if (state.status==SearchStates.loading) {

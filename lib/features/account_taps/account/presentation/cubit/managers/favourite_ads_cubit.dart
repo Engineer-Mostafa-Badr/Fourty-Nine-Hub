@@ -7,8 +7,7 @@ import 'package:fourtyninehub/features/account_taps/account/domain/usecases/get_
 
 import '../../../domain/entities/favourite_ad_entity.dart';
 
-class
-FavouriteAdsCubit extends Cubit<BasicState<List<FavouriteAdEntity>>> {
+class FavouriteAdsCubit extends Cubit<BasicState<List<FavouriteAdEntity>>> {
   final GetFavouriteAdsUsecase _getFavouriteAdsUsecase;
 
   FavouriteAdsCubit(this._getFavouriteAdsUsecase)

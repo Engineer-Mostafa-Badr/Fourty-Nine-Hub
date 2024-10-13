@@ -63,7 +63,7 @@ class _SearchViewState extends State<SearchView>
                 ),
                 child: FormTextField(
                   controller: context.read<SearchCubit>().searchController,
-                  action: (v) {
+                  onConfirm: (v) {
                     if (v.isNotEmpty) {
                       context.read<SearchCubit>().getSearch(
                         SearchParams(
@@ -92,7 +92,14 @@ class _SearchViewState extends State<SearchView>
           tabAlignment: TabAlignment.start,
           isScrollable: true,
           // Enable scrolling for the TabBar
-          onTap: (i){},
+          onTap: (i){
+            if(i==3){
+              context.read<SearchCubit>().getSearch(SearchParams(
+                        search: context.read<SearchCubit>().searchController.text,
+                        params: PaginationParams(page: 1),
+                      ));
+            }
+          },
           controller: _tabController,
           labelColor: Theme.of(context).primaryColor,
           unselectedLabelColor: AppColors.GREY_NORMAL_COLOR,

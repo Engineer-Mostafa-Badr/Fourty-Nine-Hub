@@ -146,6 +146,7 @@ import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_sc
 import 'package:go_router/go_router.dart';
 
 import '../core/enums/wallet_types_enums.dart';
+import '../features/account_taps/account/presentation/cubit/cubit/favourite_drawer_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_ads_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
@@ -614,7 +615,7 @@ class AppPages {
                     path: Paths.FAVOURITE,
                     name: Routes.FAVOURITE,
                     builder: (context, state) => BlocProvider.value(
-                        value: serviceLocator<FavouriteAdsCubit>(),
+                        value: serviceLocator<FavouriteDrawerCubit>(),
                         child: const FavouriteView())),
                 GoRoute(
                     path: Paths.FAVOURITECATEGORIES,
