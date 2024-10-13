@@ -189,6 +189,7 @@ import 'package:fourtyninehub/service_locator/notification_service_locator.dart'
 import 'package:fourtyninehub/service_locator/payment_service_locator.dart';
 import 'package:fourtyninehub/service_locator/privacy_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
+import 'package:fourtyninehub/service_locator/search_service_locator.dart';
 import 'package:fourtyninehub/service_locator/secrets_service_locator.dart';
 import 'package:fourtyninehub/service_locator/setting_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
@@ -413,5 +414,6 @@ class DI {
     CustomPageServiceLocator.execute(serviceLocator: serviceLocator);
     CarpoolServiceLocator.execute(serviceLocator: serviceLocator);
     ChanceServiceLocator.execute(serviceLocator: serviceLocator);
+    SearchServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

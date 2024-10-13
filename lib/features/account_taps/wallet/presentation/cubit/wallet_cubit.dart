@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/walle
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/delete_subscription_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_state.dart';
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../domain/entities/wallet/wallet_entity.dart';
 import '../../domain/entities/wallet/wallet_history_entity.dart';
@@ -14,8 +15,6 @@ import '../../domain/usecases/add_subscribe_use_case.dart';
 import '../../domain/usecases/get_subscription_use_case.dart';
 import '../../domain/usecases/main_category_use_case.dart';
 import '../../domain/usecases/sub_category_use_case.dart';
-
-part 'wallet_state.dart';
 
 class WalletCubit extends Cubit<WalletState> {
   final GetWalletUseCase _getWalletUseCase;

@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
+import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
+import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/ads_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/main_category_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/posts_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/profile_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/reel_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/subcategory_search_view.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -54,6 +60,17 @@ class _SearchViewState extends State<SearchView>
               borderRadius: BorderRadius.circular(40.r),
             ),
             child: FormTextField(
+              controller: context.read<SearchCubit>().searchController,
+              action: (v) {
+                if (v.isNotEmpty) {
+                  context.read<SearchCubit>().getSearch(
+                    SearchParams(
+                      search: v,
+                      params: PaginationParams(page: 1),
+                    ),
+                  );
+                }
+              },
               height: 70.h,
               hint: 'Search',
               borderRadius: BorderRadius.circular(40.r),
@@ -68,7 +85,9 @@ class _SearchViewState extends State<SearchView>
           ),
         ),
         bottom: TabBar(
-          isScrollable: true, // Enable scrolling for the TabBar
+          tabAlignment: TabAlignment.start,
+          isScrollable: true,
+          // Enable scrolling for the TabBar
           controller: _tabController,
           labelColor: Theme.of(context).primaryColor,
           unselectedLabelColor: AppColors.GREY_NORMAL_COLOR,
@@ -89,7 +108,7 @@ class _SearchViewState extends State<SearchView>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: const [
+        children: [
           ProfileSearchView(),
           ReelSearchView(),
           PostsSearchView(),
