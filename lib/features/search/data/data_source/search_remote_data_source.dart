@@ -24,7 +24,7 @@ class SearchRemoteDataSourceImpl extends SearchRemoteDataSource {
     );
     return response.fold(
       (failure)=>Left(failure),
-      (response)=>Right((response['data']['mainCategories'] as List)
+      (response)=>Right((response['data'] as List)
           .map((e) => MainSubCategorySearchModel.fromJson(e))
           .toList()),
     );

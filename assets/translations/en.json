@@ -928,6 +928,7 @@
   "notEnoughMoneyWallet": "Not enough money in wallet",
   "transactionSuccessful": "Transaction Successful",
   "yourTransactionWasSuccessful": "Your transaction was successful",
-  "transferAmount": "Transfer Amount"
+  "transferAmount": "Transfer Amount",
+  "shareTransactionDetails": "Share Transaction Details"
 
 }

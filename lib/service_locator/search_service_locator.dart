@@ -24,6 +24,7 @@ class SearchServiceLocator {
 
     serviceLocator.registerFactory<SearchCubit>(() => SearchCubit(
           serviceLocator(),
+          serviceLocator(),
         ));
   }
 }

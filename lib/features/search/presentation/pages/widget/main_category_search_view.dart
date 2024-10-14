@@ -60,38 +60,67 @@ class MainCategorySearchView extends StatelessWidget {
 
           // Check if search results exist
           if (controller.searchController.text.isNotEmpty) {
-            return PaginationView<MainSubCategorySearchEntity>(
-              build: (ScrollController scrollController, data) {
-                return ListView.separated(
-                  itemCount: data.length,
-                  // physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        context.push(Routes.SUBCATEGORIES, extra: data[index]);
-                      },
-                      child: BuildItemSearchMainCategory(
-                        category: data[index],
-                        onFavorite: () async {
-                          // Implement favorite action if needed
-                        },
-                      ),
-                    );
+            return ListView.separated(
+              itemCount: state.search?.length ??0,
+              // physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    context.push(Routes.SUBCATEGORIES, extra: state.search![index]);
                   },
-                  separatorBuilder: (BuildContext context, int index) =>
-                  const Sizer(),
-                );
-              },
-              fetchData: (PaginationParams paginationParams) {
-                return controller.getSearch(
-                  SearchParams(
-                    search: controller.searchController.text,
-                    params: paginationParams,
+                  child: BuildItemSearchMainCategory(
+                    category: state.search![index],
+                    onFavorite: () async {
+                      var result =
+                      await controller.toggleFavoriteMedicalService(
+                          state.search![index].id);
+                      print("result$result");
+                      return result;
+                    },
                   ),
                 );
               },
+              separatorBuilder: (BuildContext context, int index) =>
+              const Sizer(),
             );
+            // return PaginationView<MainSubCategorySearchEntity>(
+            //   build: (ScrollController scrollController, data) {
+            //     return ListView.separated(
+            //       itemCount: data.length,
+            //       // physics: const NeverScrollableScrollPhysics(),
+            //       shrinkWrap: true,
+            //       itemBuilder: (context, index) {
+            //         return InkWell(
+            //           onTap: () {
+            //             context.push(Routes.SUBCATEGORIES, extra: data[index]);
+            //           },
+            //           child: BuildItemSearchMainCategory(
+            //             category: data[index],
+            //             onFavorite: () async {
+            //               var result =
+            //               await controller.toggleFavoriteMedicalService(
+            //                   state.search![index].id);
+            //               print("result$result");
+            //               return result;
+            //             },
+            //           ),
+            //         );
+            //       },
+            //       separatorBuilder: (BuildContext context, int index) =>
+            //       const Sizer(),
+            //     );
+            //   },
+            //   fetchData: (PaginationParams paginationParams) {
+            //     return controller.getSearch(
+            //       SearchParams(
+            //         search: controller.searchController.text,
+            //         filter: 'mainCategories',
+            //         params: paginationParams,
+            //       ),
+            //     );
+            //   },
+            // );
           }
 
           // If no search results or initial state

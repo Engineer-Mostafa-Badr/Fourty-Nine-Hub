@@ -941,7 +941,8 @@ class CodegenLoader extends AssetLoader{
   "notEnoughMoneyWallet": "لا يوجد ما يكفي من المال في المحفظة",
   "transactionSuccessful": "تمت المعاملة بنجاح",
   "yourTransactionWasSuccessful": "كانت معاملتك ناجحة",
-  "transferAmount": "مبلغ التحويل"
+  "transferAmount": "مبلغ التحويل",
+  "shareTransactionDetails": "مشاركة تفاصيل المعاملة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1873,7 +1874,8 @@ static const Map<String,dynamic> en = {
   "notEnoughMoneyWallet": "Not enough money in wallet",
   "transactionSuccessful": "Transaction Successful",
   "yourTransactionWasSuccessful": "Your transaction was successful",
-  "transferAmount": "Transfer Amount"
+  "transferAmount": "Transfer Amount",
+  "shareTransactionDetails": "Share Transaction Details"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

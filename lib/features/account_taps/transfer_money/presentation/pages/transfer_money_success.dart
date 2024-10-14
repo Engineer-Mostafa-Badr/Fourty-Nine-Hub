@@ -39,7 +39,7 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
       await Share.shareXFiles(
         [XFile(imagePath)],
         text: LocaleKeys.transactionSuccessful.localize,
-        subject: 'Share Transaction Details',
+        subject: LocaleKeys.shareTransactionDetails.localize,
       );
     }
   }

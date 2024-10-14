@@ -12,6 +12,7 @@ class MainSubCategorySearchModel extends MainSubCategorySearchEntity {
       required super.nameEn,
       required super.nameCode,
       required super.isHidden,
+      required super.isFavorite,
       required super.enableInstallmentAndAuction});
 
   factory MainSubCategorySearchModel.fromJson(Map<String, dynamic> json) {
@@ -27,6 +28,7 @@ class MainSubCategorySearchModel extends MainSubCategorySearchEntity {
           nameCode: json['nameCode'] ??'',
           isHidden: json['isHidden'] ??false,
           enableInstallmentAndAuction: json['EnableInstallmentAndAuction'] ??false,
+          isFavorite: json['isFavorite'] ??false,
       );
   }
 }

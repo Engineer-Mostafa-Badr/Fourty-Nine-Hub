@@ -925,7 +925,8 @@
   "notEnoughMoneyWallet": "لا يوجد ما يكفي من المال في المحفظة",
   "transactionSuccessful": "تمت المعاملة بنجاح",
   "yourTransactionWasSuccessful": "كانت معاملتك ناجحة",
-  "transferAmount": "مبلغ التحويل"
+  "transferAmount": "مبلغ التحويل",
+  "shareTransactionDetails": "مشاركة تفاصيل المعاملة"
 
 
 }

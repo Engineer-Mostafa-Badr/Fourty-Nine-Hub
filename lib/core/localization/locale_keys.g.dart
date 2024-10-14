@@ -916,5 +916,6 @@ abstract class  LocaleKeys {
   static const transactionSuccessful = 'transactionSuccessful';
   static const yourTransactionWasSuccessful = 'yourTransactionWasSuccessful';
   static const transferAmount = 'transferAmount';
+  static const shareTransactionDetails = 'shareTransactionDetails';
 
 }

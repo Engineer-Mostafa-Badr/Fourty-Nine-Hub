@@ -63,11 +63,12 @@ class _SearchViewState extends State<SearchView>
                 ),
                 child: FormTextField(
                   controller: context.read<SearchCubit>().searchController,
-                  onConfirm: (v) {
+                  action: (v) {
                     if (v.isNotEmpty) {
                       context.read<SearchCubit>().getSearch(
                         SearchParams(
                           search: v,
+                          filter: 'mainCategories',
                           params: PaginationParams(page: 1),
                         ),
                       );
@@ -96,6 +97,7 @@ class _SearchViewState extends State<SearchView>
             if(i==3){
               context.read<SearchCubit>().getSearch(SearchParams(
                         search: context.read<SearchCubit>().searchController.text,
+                        filter: 'mainCategories',
                         params: PaginationParams(page: 1),
                       ));
             }
