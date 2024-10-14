@@ -913,5 +913,8 @@ abstract class  LocaleKeys {
   static const removeFavouriteSuccessfully = 'removeFavouriteSuccessfully';
   static const selectValidUser = 'selectValidUser';
   static const notEnoughMoneyWallet = 'notEnoughMoneyWallet';
+  static const transactionSuccessful = 'transactionSuccessful';
+  static const yourTransactionWasSuccessful = 'yourTransactionWasSuccessful';
+  static const transferAmount = 'transferAmount';
 
 }

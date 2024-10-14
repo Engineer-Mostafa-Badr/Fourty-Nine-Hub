@@ -925,6 +925,9 @@
   "requestAd": "Request Ad",
   "removeFavouriteSuccessfully": "Remove Favourite Ad Successfully",
   "selectValidUser": "User not found or not valid, please select a valid user",
-  "notEnoughMoneyWallet": "Not enough money in wallet"
+  "notEnoughMoneyWallet": "Not enough money in wallet",
+  "transactionSuccessful": "Transaction Successful",
+  "yourTransactionWasSuccessful": "Your transaction was successful",
+  "transferAmount": "Transfer Amount"
 
 }
