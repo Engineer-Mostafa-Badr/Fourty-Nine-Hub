@@ -58,11 +58,16 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
             if (state.status == StateStatus.success) {
               showSuccessMessage(
                   context, LocaleKeys.moneySuccessfully.localize);
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>const TransactionSuccessScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TransactionSuccessScreen(
+                            model: state.dataTransfer!,
+                          )));
               amountController.clear();
               searchController.clear();
               setState(() {
-                selectedUsername=null;
+                selectedUsername = null;
               });
             }
           },
@@ -158,8 +163,8 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                                       state.wallet!.realAmount!) {
                                     return showAreYouSure(
                                         title: LocaleKeys.alert.localize,
-                                        subTitle:
-                                            LocaleKeys.sureWithdrawMoney.localize,
+                                        subTitle: LocaleKeys
+                                            .sureWithdrawMoney.localize,
                                         action: () {
                                           context
                                               .read<TransferMoneyCubit>()
@@ -180,7 +185,6 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                                     );
                                   }
                                 }
-
                               },
                             ),
                           ],

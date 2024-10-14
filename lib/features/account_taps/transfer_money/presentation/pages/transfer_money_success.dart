@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/features/account_taps/transfer_money/domain/entities/transfer_money_entity.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class TransactionSuccessScreen extends StatelessWidget {
-  const TransactionSuccessScreen({super.key});
+  const TransactionSuccessScreen({super.key, required this.model});
+  final TransferMoneyEntity model;
 
   @override
   Widget build(BuildContext context) {
@@ -38,19 +40,19 @@ class TransactionSuccessScreen extends StatelessWidget {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: '1,000 ',
+                      text: '${model.amount}',
                       style: TextStyle(
-                        fontSize: 60.sp,
+                        fontSize: 100.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
                     ),
                     TextSpan(
-                      text: 'EGP',
+                      text: model.currency,
                       style: TextStyle(
                         fontSize: 40.sp,
                         fontWeight: FontWeight.bold,
-                        color: Colors.orange,
+                        color: AppColors.SECONDARY_COLOR,
                       ),
                     ),
                   ],
@@ -75,38 +77,54 @@ class TransactionSuccessScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'gemy3617@instapay',
+                      model.fromUsername,
                       style: Styles.mediumText(fontWeight: FontWeight.bold),
                     ),
-                     Text('محمد جمال عباس عبدالموجود',
+                     Text(model.from,
                      style: Styles.mediumText(),
                      )
                   ],
                 ),
               ),
-              const Divider(
-                color: AppColors.GREY_NORMAL_COLOR,
-              ),
+             const Row(
+               children: [
+                 Expanded(
+                   child: Divider(
+                     color: AppColors.GREY_NORMAL_COLOR,
+                   ),
+                 ),
+                 CircleAvatar(
+                   radius: 15,
+                   backgroundColor: AppColors.GREY_NORMAL_COLOR,
+                   child: Icon(Icons.check,color: Colors.green,size: 22,),
+                 ),
+                 Expanded(
+                   child: Divider(
+                     color: AppColors.GREY_NORMAL_COLOR,
+                   ),
+                 ),
+               ],
+             ),
               // To Section
               ListTile(
                 leading: Icon(Icons.account_balance_wallet,
                     size: 80.sp, color: Colors.orange),
                 title: Text(
-                  'To Wallet',
-                  style: Styles.mediumText(fontWeight: FontWeight.bold),
+                  'To',
+                  style: Styles.mediumText(),
                 ),
                 subtitle:  Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Moaz M A*******',
-                    style: Styles.mediumText(),
-                    ),
-                    Text('01023765247',
+                    Text(model.toUsername,
                     style: Styles.mediumText(fontWeight: FontWeight.bold),
+                    ),
+                    Text(model.to,
+                    style: Styles.mediumText(),
                     ),
                   ],
                 ),
-                trailing: const Icon(Icons.star_border, color: Colors.orange),
+             //   trailing: const Icon(Icons.star_border, color: Colors.orange),
               ),
               //  const Divider(),
 
@@ -117,9 +135,10 @@ class TransactionSuccessScreen extends StatelessWidget {
               //   ),
               //   title: Text('Reference'),
               // ),
+
               ListTile(
                 trailing: Text(
-                  '31 Aug 2024 12:27 AM',
+                  model.date,
                   style: Styles.headerText(),
                 ),
                 title: Text(
@@ -127,19 +146,7 @@ class TransactionSuccessScreen extends StatelessWidget {
                   style: Styles.headerText(fontWeight: FontWeight.w400),
                 ),
               ),
-
-              // Note
-               ListTile(
-                title: Text('Note',
-                style: Styles.headerText(fontWeight: FontWeight.w400),
-                ),
-                subtitle: Text('Living Expenses',
-                  style: Styles.headerText(),
-                ),
-              ),
-
-              const Sizer(),
-
+              Sizer(height: 70.h,),
               // Powered by Logo
               Image.asset(
                 Assets.logo, // Add the appropriate image asset here
