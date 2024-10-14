@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/search/presentation/pages/widget/posts_se
 import 'package:fourtyninehub/features/search/presentation/pages/widget/profile_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/reel_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/subcategory_search_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -28,6 +29,7 @@ class _SearchViewState extends State<SearchView>
 
   @override
   void initState() {
+    context.read<SearchCubit>().initPref();
     super.initState();
     _tabController = TabController(length: 7, vsync: this); // Updated length
   }
@@ -63,12 +65,15 @@ class _SearchViewState extends State<SearchView>
                 ),
                 child: FormTextField(
                   controller: context.read<SearchCubit>().searchController,
-                  action: (v) {
+                  action: (v) async{
                     if (v.isNotEmpty) {
-                      context.read<SearchCubit>().getSearch(
+                      final prefs = await SharedPreferences.getInstance();
+                      String? filter =  await prefs.getString('filter');
+                      print('context.read<SearchCubit>().state.filter??''${filter??''}');
+                      context.read<SearchCubit>().loadData(
                         SearchParams(
                           search: v,
-                          filter: 'mainCategories',
+                          filter: filter??'',
                           params: PaginationParams(page: 1),
                         ),
                       );
@@ -93,14 +98,33 @@ class _SearchViewState extends State<SearchView>
           tabAlignment: TabAlignment.start,
           isScrollable: true,
           // Enable scrolling for the TabBar
-          onTap: (i){
-            if(i==3){
-              context.read<SearchCubit>().getSearch(SearchParams(
-                        search: context.read<SearchCubit>().searchController.text,
-                        filter: 'mainCategories',
-                        params: PaginationParams(page: 1),
-                      ));
+          onTap: (i)async{
+            final prefs = await SharedPreferences.getInstance();
+
+            if(i==0){
+              await prefs.setString('filter', 'totalUsers');
+            }else if(i==1){
+              await prefs.setString('filter', 'reels');
+            }else if(i==2){
+              await prefs.setString('filter', 'posts');
+            }else if(i==3){
+              await prefs.setString('filter', 'mainCategories');
+            }else if(i==4){
+              await prefs.setString('filter', 'subCategories');
+            }else if(i==5){
+              await prefs.setString('filter', 'ads');
+            }else if(i==6){
+              await prefs.setString('filter', 'trip');
             }
+            String? filter =  await prefs.getString('filter');
+
+            print('context.read<SearchCubit>().state.filter??''${filter??''}');
+              context.read<SearchCubit>().loadData(SearchParams(
+                search: context.read<SearchCubit>().searchController.text,
+                filter: filter??'',
+                params: PaginationParams(page: 1),
+              ));
+            print('context.read<SearchCubit>().state.filter1??''${filter??''}');
           },
           controller: _tabController,
           labelColor: Theme.of(context).primaryColor,
@@ -123,7 +147,7 @@ class _SearchViewState extends State<SearchView>
       body: TabBarView(
         controller: _tabController,
         physics: const NeverScrollableScrollPhysics(),
-        children: [
+        children: const [
           ProfileSearchView(),
           ReelSearchView(),
           PostsSearchView(),
