@@ -24,8 +24,11 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getGroupsChats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getSeenHistoryUseCase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/listen_to_new_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/lock_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/pin_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unlock_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unpin_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:get_it/get_it.dart';
 
@@ -76,6 +79,14 @@ class SocialServiceLocator {
         () => DeleteChatUseCase(
               serviceLocator(),
             ));
+            serviceLocator.registerLazySingleton<PinChatUseCase>(
+        () => PinChatUseCase(
+              serviceLocator(),
+            ));
+            serviceLocator.registerLazySingleton<UnPinChatUseCase>(
+        () => UnPinChatUseCase(
+              serviceLocator(),
+            ));
     serviceLocator.registerLazySingleton<ChangeChatToArchiveOrNormalUseCase>(
         () => ChangeChatToArchiveOrNormalUseCase(
               serviceLocator(),
@@ -92,6 +103,11 @@ class SocialServiceLocator {
 
     serviceLocator.registerLazySingleton<ListenToNewMessageUseCase>(
         () => ListenToNewMessageUseCase(
+              serviceLocator(),
+            ));
+
+serviceLocator.registerLazySingleton<ListenToNewChatUseCase>(
+        () => ListenToNewChatUseCase(
               serviceLocator(),
             ));
 
@@ -136,6 +152,9 @@ class SocialServiceLocator {
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerFactory<ChatsCubit>(() => ChatsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

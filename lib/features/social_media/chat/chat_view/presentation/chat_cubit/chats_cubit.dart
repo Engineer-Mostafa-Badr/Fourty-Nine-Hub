@@ -15,16 +15,22 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/delete_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/listen_to_new_chat_use_case.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/pin_chat_use_case.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unpin_chat_use_case.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'chats_state.dart';
 
 class ChatsCubit extends Cubit<ChatsState> {
+  final ListenToNewChatUseCase _listenToNewChatUseCase;
   final ListenToNewMessageUseCase _listenToNewMessageUseCase;
   final StopListenToMessagesUseCase _stopListenToMessagesUseCase;
   final MarkMessagesAsDeliveredUseCase _markMeesagesAsDeliveredUseCase;
   final GetChatsUseCase _getChatsUseCase;
   final DeleteChatUseCase _deleteChatUseCase;
+  final PinChatUseCase _pinChatUseCase;
+  final UnPinChatUseCase _unPinChatUseCase;
   final ChangeChatToArchiveOrNormalUseCase _changeChatToArchiveOrNormalUseCase;
   final ChangeChatMuteStateUseCase _changeChatMuteStateUseCase;
   final Map<String, ChatEntity> _chats = {};
@@ -40,6 +46,9 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._changeChatToArchiveOrNormalUseCase,
     this._changeChatMuteStateUseCase,
     this._deleteChatUseCase,
+    this._pinChatUseCase,
+    this._unPinChatUseCase,
+    this._listenToNewChatUseCase,
   ) : super(const ChatsState());
 
   // Selected Chats
@@ -59,6 +68,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     await getChatsByCategory(_selectedChatCategory);
 
     _listenToNewMessages();
+    _listenToNewChat();
   }
 
   // ======================================= get chats =======================================
@@ -117,11 +127,6 @@ class ChatsCubit extends Cubit<ChatsState> {
       required GetChatsParams params}) async {
     emit(state.copyWith(status: ChatsStates.loading));
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    // Retrieve the list of pinned chat IDs from SharedPreferences
-    List<String> pinnedChats = prefs.getStringList('pinnedChats') ?? [];
-
     // Always fetch fresh chats from the use case
     final response = await _getChatsUseCase(params);
     response.fold(
@@ -131,9 +136,7 @@ class ChatsCubit extends Cubit<ChatsState> {
         final List<ChatEntity> unpinnedChatList = [];
 
         for (final chat in fetchedChats) {
-          // Check if the fetched chat is pinned based on SharedPreferences
-          chat.isPinned = pinnedChats.contains(chat.id);
-
+          log(chat.isPinned.toString());
           // Add to the corresponding list based on pinned status
           if (chat.isPinned) {
             pinnedChatList.add(chat);
@@ -199,11 +202,27 @@ class ChatsCubit extends Cubit<ChatsState> {
   // ======================================= listening ========================================
   _listenToNewMessages() {
     _listenToNewMessageUseCase((message) {
+      log("new message = $message");
       _chats[message.chatId]?.lastMessage = message;
+      _chats[message.chatId]?.unreadCount =
+          _chats[message.chatId]?.unreadCount ?? 0 + 1;
       // if (!message.byMe && message.chatId != null) {
       //   _markMeesagesAsDeliveredUseCase(MarkMessagesAsDeliveredParams(chatId: message.chatId!));
       // }
+      // emit(state.copyWith(status: ChatsStates.success));
       emit(state.copyWith(newMessage: message, status: ChatsStates.newMessage));
+      // getChatsByCategory(_selectedChatCategory);
+    });
+  }
+
+  _listenToNewChat() {
+    _listenToNewChatUseCase((chat) {
+      log("new chat = $chat");
+      // _chats[chat.id] = chat;
+      // if (!message.byMe && message.chatId != null) {
+      //   _markMeesagesAsDeliveredUseCase(MarkMessagesAsDeliveredParams(chatId: message.chatId!));
+      // }
+      emit(state.copyWith(status: ChatsStates.success));
       getChatsByCategory(_selectedChatCategory);
     });
   }
@@ -220,7 +239,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     return super.close();
   }
 
-  Future<void> changeActiveChat() async {
+  Future<void> changeArchiveChat() async {
     for (var chat in selectedChats) {
       // chat.archived = !chat.archived;
       log("archived = ${chat.archived}");
@@ -267,39 +286,64 @@ class ChatsCubit extends Cubit<ChatsState> {
     await getChatsByCategory(_selectedChatCategory);
   }
 
+  // Local Storage
+  // Future<void> pinAndUnpinChat() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  //   // Retrieve the current list of pinned chat IDs from SharedPreferences
+  //   List<String> pinnedChats = prefs.getStringList('pinnedChats') ?? [];
+
+  //   for (var chat in selectedChats) {
+  //     log("toggle pin/unpin = ${chat.id}");
+
+  //     if (pinnedChats.contains(chat.id)) {
+  //       // If the chat is already pinned, unpin it
+  //       pinnedChats.remove(chat.id);
+  //       chat.isPinned = false; // Update the pinned status in your ChatEntity
+  //       log("unpin = ${chat.id}");
+  //     } else {
+  //       // If the chat is not pinned, pin it
+  //       pinnedChats.add(chat.id);
+  //       chat.isPinned = true; // Update the pinned status in your ChatEntity
+  //       log("pin = ${chat.id}");
+  //     }
+
+  //     chat.isSelected = false; // Reset the selection status
+  //   }
+
+  //   // Save the updated list of pinned chat IDs back to SharedPreferences
+  //   await prefs.setStringList('pinnedChats', pinnedChats);
+
+  //   // Clear selected chats after action is complete
+  //   selectedChats.clear();
+
+  //   // Refresh the chat list by category
+  //   await getChatsByCategory(_selectedChatCategory);
+  // }
+
+  // Remote Storage
   Future<void> pinAndUnpinChat() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    // Retrieve the current list of pinned chat IDs from SharedPreferences
-    List<String> pinnedChats = prefs.getStringList('pinnedChats') ?? [];
-
     for (var chat in selectedChats) {
       log("toggle pin/unpin = ${chat.id}");
 
-      if (pinnedChats.contains(chat.id)) {
+      if (chat.isPinned) {
         // If the chat is already pinned, unpin it
-        pinnedChats.remove(chat.id);
-        chat.isPinned = false; // Update the pinned status in your ChatEntity
-        log("unpin = ${chat.id}");
+        final respons = await _unPinChatUseCase(chat.id);
+        respons.fold((l) => null, (r) {
+          chat.isPinned = false; // Update the pinned status in your ChatEntity
+          log("unpin = ${chat.id}");
+        });
       } else {
         // If the chat is not pinned, pin it
-        pinnedChats.add(chat.id);
-        chat.isPinned = true; // Update the pinned status in your ChatEntity
-        log("pin = ${chat.id}");
+        final respons = await _pinChatUseCase(chat.id);
+        respons.fold((l) => null, (r) {
+          chat.isPinned = true; // Update the pinned status in your ChatEntity
+          log("pin = ${chat.id}");
+        });
       }
-
-      // Update the chat status in your map (if needed)
-      // if (_chats.containsKey(chat.id)) {
-      //   _chats.update(chat.id, (existingChat) {
-      //     return existingChat.copyWith(isPinned: chat.isPinned);
-      //   });
-      // }
 
       chat.isSelected = false; // Reset the selection status
     }
-
-    // Save the updated list of pinned chat IDs back to SharedPreferences
-    await prefs.setStringList('pinnedChats', pinnedChats);
 
     // Clear selected chats after action is complete
     selectedChats.clear();

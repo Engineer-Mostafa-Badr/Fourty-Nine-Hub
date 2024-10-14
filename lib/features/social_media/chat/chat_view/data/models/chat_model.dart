@@ -16,6 +16,7 @@ class ChatModel extends ChatEntity {
     required super.avatar,
     required super.online,
     required super.isService,
+    required super.isPinned,
     super.lastMessage,
   });
 
@@ -32,6 +33,7 @@ class ChatModel extends ChatEntity {
         avatar: json['avatar'],
         typing: false,
         online: false,
+        isPinned: json['pinned'] ?? false,
         isService: json['isService'] ?? false,
         lastMessage: json['lastMessage'] != null
             ? MessageModel.fromJson(json['lastMessage'])

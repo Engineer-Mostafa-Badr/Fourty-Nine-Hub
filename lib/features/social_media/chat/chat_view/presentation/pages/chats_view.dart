@@ -442,7 +442,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                               onPressed: () async {
                                                 await context
                                                     .read<ChatsCubit>()
-                                                    .changeActiveChat();
+                                                    .changeArchiveChat();
                                               },
                                               icon: const Icon(
                                                 Icons.archive,

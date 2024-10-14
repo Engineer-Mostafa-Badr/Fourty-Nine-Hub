@@ -751,6 +751,11 @@ class EndPoints {
     return '/chat/delete-chat/$chatId';
   }
 
+  static String pinAndUnPinChat(String chatId) {
+    return '/chat/pin-chat/$chatId';
+  }
+
+
   static String changeChatToArchiveOrNormal(String chatId) {
     return '/chat/archive-chat/$chatId';
   }

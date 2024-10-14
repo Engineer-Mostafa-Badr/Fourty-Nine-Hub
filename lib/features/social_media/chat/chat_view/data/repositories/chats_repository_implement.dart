@@ -70,8 +70,8 @@ class ChatsRepositoryImplementation extends ChatsRepository {
   }
 
   @override
-  void listenToNewChats(Function(ChatEntity) onNewChat) {
-    _chatsRemoteDataSource.listenToNewChats(onNewChat);
+  void listenToNewChats(Function(ChatEntity) params) {
+    _chatsRemoteDataSource.listenToNewChats(params);
   }
 
   @override
@@ -82,5 +82,15 @@ class ChatsRepositoryImplementation extends ChatsRepository {
   @override
   Future<Either<Failure, bool>> deleteChat({required String chatId}) {
     return _chatsRemoteDataSource.deleteChat(chatId: chatId);
+  }
+  
+  @override
+  Future<Either<Failure, bool>> pinChat({required String chatId}) {
+   return _chatsRemoteDataSource.pinChat(chatId: chatId);
+  }
+  
+  @override
+  Future<Either<Failure, bool>> unPinChat({required String chatId}) {
+    return _chatsRemoteDataSource.unPinChat(chatId: chatId);
   }
 }

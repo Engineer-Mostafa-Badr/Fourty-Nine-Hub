@@ -106,7 +106,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                             onPressed: () async {
                               await context
                                   .read<ChatsCubit>()
-                                  .changeActiveChat();
+                                  .changeArchiveChat();
                             },
                             icon: const Icon(
                               Icons.unarchive,
