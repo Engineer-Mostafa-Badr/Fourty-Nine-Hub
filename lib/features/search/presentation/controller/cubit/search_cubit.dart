@@ -101,5 +101,18 @@ class SearchCubit extends Cubit<SearchState> {
     return result;
   }
 
+  Future<bool> toggleSubCategoryToFavorites(String subcategoryId) async {
+    final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
+    bool result = false;
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: SearchStates.error)),
+            (data) {
+          result = data;
+          emit(state.copyWith(status: SearchStates.success));
+        });
+    return result;
+  }
+
 
 }

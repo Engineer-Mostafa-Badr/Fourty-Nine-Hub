@@ -2,13 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/search/domain/entity/main_category_search_entity.dart';
-import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -104,30 +101,30 @@ class MainCategorySearchView extends StatelessWidget {
                 const CupertinoActivityIndicator(),
               ),
             );
-            return ListView.separated(
-              itemCount: state.search?.length ??0,
-              // physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    context.push(Routes.SUBCATEGORIES, extra: state.search![index]);
-                  },
-                  child: BuildItemSearchMainCategory(
-                    category: state.search![index],
-                    onFavorite: () async {
-                      var result =
-                      await controller.toggleFavoriteMedicalService(
-                          state.search![index].id);
-                      print("result$result");
-                      return result;
-                    },
-                  ),
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) =>
-              const Sizer(),
-            );
+            // return ListView.separated(
+            //   itemCount: state.search?.length ??0,
+            //   // physics: const NeverScrollableScrollPhysics(),
+            //   shrinkWrap: true,
+            //   itemBuilder: (context, index) {
+            //     return InkWell(
+            //       onTap: () {
+            //         context.push(Routes.SUBCATEGORIES, extra: state.search![index]);
+            //       },
+            //       child: BuildItemSearchMainCategory(
+            //         category: state.search![index],
+            //         onFavorite: () async {
+            //           var result =
+            //           await controller.toggleFavoriteMedicalService(
+            //               state.search![index].id);
+            //           print("result$result");
+            //           return result;
+            //         },
+            //       ),
+            //     );
+            //   },
+            //   separatorBuilder: (BuildContext context, int index) =>
+            //   const Sizer(),
+            // );
           }
 
           // If no search results or initial state

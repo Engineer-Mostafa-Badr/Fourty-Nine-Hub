@@ -18,7 +18,7 @@ class MainSubCategorySearchModel extends MainSubCategorySearchEntity {
   factory MainSubCategorySearchModel.fromJson(Map<String, dynamic> json) {
       return MainSubCategorySearchModel(
           id: json['_id'] ??'',
-          banner: json['banner'] ??'',
+          banner: json['banner'] ?? json['picture'],
           cover: json['cover'] ??'',
           index: json['index'] ??0,
           createdAt: DateTime.parse(json['createdAt']),
