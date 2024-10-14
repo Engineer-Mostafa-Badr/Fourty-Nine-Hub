@@ -57,6 +57,7 @@ class EndPoints {
   static String getBannerByID({required String id}) => '/categories/main/$id';
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
   static const getWalletHome = '/main-wallet/user-wallets-amount';
+  static const getCurrency = '/main-wallet/app-currency';
 
   static String getMainCategoryDetails(String id) => '/categories/main/$id';
 
@@ -627,6 +628,7 @@ class EndPoints {
   static filterAd (FilterModel filter)=> '/ads/filter-ads/${filter.subCategoryId}?government=${filter.governorateId}&city=${filter.cityId}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
   static const myAds = '/ads/allMyAds?limit=100';
   static const makeRequest = '/ads-requests/makeAdRequest';
+  static const makePremiumRequest = '/ads-requests/makeAdRequest-Premium';
   static const favouriteAds = '/ads-favourites/allFavouriteAds';
   static const favouriteSubCategories = '/favorite-sub-category';
 

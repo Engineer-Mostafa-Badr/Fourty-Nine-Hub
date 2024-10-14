@@ -53,7 +53,7 @@ class AdDetailsRemoteDataSourceImpl extends AdDetailsRemoteDataSource {
   Future<Either<Failure, bool>> makeAdPremiumRequest(
       {required AdRequestParams params}) async {
     final response =
-        await _apiConsumer.post(EndPoints.makeRequest, data: params.toJson());
+        await _apiConsumer.post(EndPoints.makePremiumRequest, data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 }

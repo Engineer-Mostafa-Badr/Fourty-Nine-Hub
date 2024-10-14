@@ -1,8 +1,6 @@
 import 'package:card_swiper/card_swiper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/global/button_availability.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
@@ -29,9 +27,15 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class AdDetailsView extends StatefulWidget {
-  final String id;
+  dynamic id;
 
-  const AdDetailsView({super.key, required this.id});
+  AdDetailsView({super.key, this.id}){
+    if(id is String){
+      id=id;
+    }else {
+      id=id['id'];
+    }
+  }
 
   @override
   State<AdDetailsView> createState() => _AdDetailsViewState();
@@ -47,7 +51,6 @@ class _AdDetailsViewState extends State<AdDetailsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: const BackAppBar(),
         body: BlocConsumer<AdDetailsCubit, AdDetailsState>(
             listener: (contex, state) {
               if (state.isError) {
@@ -124,7 +127,6 @@ class _AdDetailsViewState extends State<AdDetailsView> {
   Widget _buildActionsWidget() {
     return BlocBuilder<AdDetailsCubit, AdDetailsState>(
         builder: (context, state) {
-          final controller = context.read<AdDetailsCubit>();
           return Container(
             margin: const EdgeInsets.all(10),
             child: Column(
@@ -201,6 +203,13 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                     Icons.arrow_back,
                     color: Colors.white,
                     size: 60.w,
+                    shadows: const [
+                      Shadow(
+                        color: Colors.black,
+                        blurRadius: 5,
+                        offset: Offset(1, 1), // changes position of shadow
+                      ),
+                    ],
                   ),
                 ),
               )

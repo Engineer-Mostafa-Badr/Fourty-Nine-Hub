@@ -392,7 +392,6 @@ class DI {
     SubscriptionServiceLocator.execute(serviceLocator: serviceLocator);
     // Shipping
     ShippingServiceLocatior.execute(serviceLocator: serviceLocator);
-    SocialServiceLocator.execute(serviceLocator: serviceLocator);
     // trip join
     TripJoinServiceLocator.execute(serviceLocator: serviceLocator);
     //live
