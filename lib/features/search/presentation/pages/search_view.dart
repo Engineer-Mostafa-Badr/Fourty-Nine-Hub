@@ -131,7 +131,8 @@ class _SearchViewState extends State<SearchView>
           unselectedLabelColor: AppColors.GREY_NORMAL_COLOR,
           indicatorColor: AppColors.SECONDARY_COLOR,
           dividerColor: AppColors.GREY_LIGHT_COLOR,
-          labelPadding: const EdgeInsets.only(left: 20),
+          padding: EdgeInsets.only(right: 40.w),
+          labelPadding:  EdgeInsets.only(left: 20.w),
           labelStyle: Styles.mediumText(fontSize: 32),
           tabs: const [
             Tab(text: 'Profile'),
