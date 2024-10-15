@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/search/domain/entity/main_category_search_entity.dart';
+import 'package:fourtyninehub/features/search/domain/entity/user_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
+import 'package:fourtyninehub/features/search/domain/use_case/fetch_user_search_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,9 +14,10 @@ part 'search_state.dart';
 class SearchCubit extends Cubit<SearchState> {
   final FetchSearchUseCase _fetchSearchUseCase;
   final ToggleFavoriteCategoryUseCase _toggleFavoriteCategoryUseCase;
+  final FetchUserSearchUseCase _fetchUserSearchUseCase;
 
   SearchCubit(
-      this._fetchSearchUseCase, this._toggleFavoriteCategoryUseCase,
+      this._fetchSearchUseCase, this._toggleFavoriteCategoryUseCase, this._fetchUserSearchUseCase,
     )
       : super( SearchState());
 
@@ -22,6 +25,7 @@ class SearchCubit extends Cubit<SearchState> {
 
   void onRefresh() async {
     searchPagingController.refresh();
+    searchPagingUserController.refresh();
   }
 
   initPref() async {
@@ -31,29 +35,36 @@ class SearchCubit extends Cubit<SearchState> {
   void loadData(SearchParams params) async {
     //   await getFeed(1);
     getPaginatedSearch(params,1);
+    getPaginatedUserSearch(params,1);
     searchPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
       getPaginatedSearch(params,pageKey);
     });
-  }
-  Future<List<MainSubCategorySearchEntity>> getSearch(SearchParams params) async {
-    emit(state.copyWith( status: SearchStates.loading));
-    List<MainSubCategorySearchEntity> main = [];
-    final response = await _fetchSearchUseCase.call(params);
-
-    response.fold((l) {
-      print('Errrrrrrror :$l');
-      emit(state.copyWith(failure: l, status: SearchStates.error));
-    }, (data) {
-      print('Sussecc :$data');
-      main = data;
-      emit(state.copyWith(search: data,status: SearchStates.success));
-
+    searchPagingUserController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getPaginatedUserSearch(params,pageKey);
     });
-    return main;
   }
+  // Future<List<MainSubCategorySearchEntity>> getSearch(SearchParams params) async {
+  //   emit(state.copyWith( status: SearchStates.loading));
+  //   List<MainSubCategorySearchEntity> main = [];
+  //   final response = await _fetchSearchUseCase.call(params);
+  //
+  //   response.fold((l) {
+  //     print('Errrrrrrror :$l');
+  //     emit(state.copyWith(failure: l, status: SearchStates.error));
+  //   }, (data) {
+  //     print('Sussecc :$data');
+  //     main = data;
+  //     emit(state.copyWith(search: data,status: SearchStates.success));
+  //
+  //   });
+  //   return main;
+  // }
 
   final PagingController<int, MainSubCategorySearchEntity> searchPagingController =
+  PagingController(firstPageKey: 1);
+  final PagingController<int, UserSearchEntity> searchPagingUserController =
   PagingController(firstPageKey: 1);
   final int pageSize = 10;
 
@@ -85,6 +96,35 @@ class SearchCubit extends Cubit<SearchState> {
 
     });
     return main;
+  }
+  Future<List<UserSearchEntity>> getPaginatedUserSearch(SearchParams params,int page) async {
+    emit(state.copyWith( status: SearchStates.loading));
+    List<UserSearchEntity> user = [];
+    final response = await _fetchUserSearchUseCase.call(params);
+
+    response.fold((l) {
+      print('Errrrrrrror :$l');
+      emit(state.copyWith(failure: l, status: SearchStates.error));
+    }, (data) {
+      final isLastPage = data.length < pageSize;
+      if (page == 1) {
+        print("page == 1 $page");
+        searchPagingUserController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        searchPagingUserController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        searchPagingUserController.appendPage(data, nextPageKey);
+      }
+      print('Sussecc :$data');
+      user = data;
+      emit(state.copyWith(userSearch: data,status: SearchStates.success));
+
+    });
+    return user;
   }
 
 

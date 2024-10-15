@@ -7,12 +7,14 @@ class SearchState {
   final Failure? failure;
   String? filter;
   final List<MainSubCategorySearchEntity>? search;
+  final List<UserSearchEntity>? userSearch;
 
 
   SearchState({
     this.status = SearchStates.loading,
     this.failure,
     this.search,
+    this.userSearch,
     this.filter='totalUsers',
   });
 
@@ -21,11 +23,13 @@ class SearchState {
     Failure? failure,
     String? filter,
     List<MainSubCategorySearchEntity>? search,
+    List<UserSearchEntity>? userSearch,
   }) {
     return SearchState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
       search: search ?? this.search,
+      userSearch: userSearch ?? this.userSearch,
     );
   }
 }

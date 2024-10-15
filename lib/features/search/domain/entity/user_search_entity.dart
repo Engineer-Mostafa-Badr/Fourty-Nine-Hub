@@ -6,7 +6,7 @@ class UserSearchEntity {
   final String gender;
   final String username;
   final String phone;
-  final String image;
+  final String? image;
 
   UserSearchEntity(
       {required this.id,
@@ -16,5 +16,5 @@ class UserSearchEntity {
       required this.gender,
       required this.username,
       required this.phone,
-      required this.image});
+       this.image});
 }
