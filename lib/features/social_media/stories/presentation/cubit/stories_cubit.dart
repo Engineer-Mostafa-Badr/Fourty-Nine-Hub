@@ -4,10 +4,17 @@ import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
+import 'package:fourtyninehub/features/social_media/stories/data/models/muted_stories_model.dart';
+import 'package:fourtyninehub/features/social_media/stories/data/models/viewers_model.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter/material.dart';
 
 import 'package:path/path.dart' as path;
 import '../../../../../core/utils/shared_pref.dart';
@@ -22,10 +29,16 @@ class StoryState {
   final DateTime? currentStoryCreatedAt; // New field
 
   final List<Follower> followers;
+
+  final ViewersResponse? viewersResponse;
+  final MutedStoriesResponse? mutedStoriesResponse;
+
   final bool isLoadingFollower;
   final String? errorMessage;
 
   StoryState({
+    this.mutedStoriesResponse,
+    this.viewersResponse,
     required this.followers,
     this.isLoadingFollower = false,
     this.errorMessage,
@@ -38,6 +51,8 @@ class StoryState {
   });
 
   StoryState copyWith({
+    MutedStoriesResponse? mutedStoriesResponse,
+    ViewersResponse? viewersResponse,
     List<Follower>? followers,
     bool? isLoadingFollower,
     String? errorMessage,
@@ -49,6 +64,8 @@ class StoryState {
     DateTime? currentStoryCreatedAt, // Include this in copyWith
   }) {
     return StoryState(
+      mutedStoriesResponse: mutedStoriesResponse ?? this.mutedStoriesResponse,
+      viewersResponse: viewersResponse ?? this.viewersResponse,
       currentStoryCreatedAt:
           currentStoryCreatedAt ?? this.currentStoryCreatedAt,
       // New copyWith field
@@ -82,63 +99,146 @@ class StoryCubit extends Cubit<StoryState> {
 
   StoryCubit(this.storyRepository, this.apiConsumer) : super(StoryInitial());
 
+  makeView({storyId, context}) async {
+    getViewersInStory(context: context, storyId: storyId);
 
+    // Map<String, dynamic> data = {};
 
+    final response = await apiConsumer
+        .post('https://49dev.com/api/v1/stories/view/$storyId');
 
+    response.fold(
+      (failure) {
+        emit(state);
+        print(
+            '${getFailureMessage(failure, context)}assssssssssssssssssssssssssssssfffffffdsa');
+      },
+      (data) {
+        emit(state);
 
-  // updateRestaurant1(context, id) async {
-  //   CreateRestaurantParams params = createRestaurantParams;
-  //   _validationUpdateState();
+        print('${data.toString()}assssssssssssssssssssssssssssssfffffffdsa');
+      },
+    );
+  }
+
+  muteUserStories({userId, context}) async {
+    Map<String, dynamic> data = {"muteUser": "$userId"};
+
+    final response = await apiConsumer
+        .post('https://49dev.com/api/v1/stories/muteUserStory', data: data);
+
+    response.fold(
+      (failure) {
+        emit(state);
+        print(
+            '${getFailureMessage(failure, context)}assssssssssssssssssssssssssssssfffffffdsa');
+      },
+      (data) {
+        emit(state);
+
+        print('${data.toString()}assssssssssssssssssssssssssssssfffffffdsa');
+        getMutedStories();
+      },
+    );
+  }
+
+  // getMutedStories({userId, context, limit, page, bool? loadMore}) async {
+  //   final response = await apiConsumer.get(
+  //       'https://49dev.com/api/v1/stories/mutedStories?limit=$limit&page=$page');
+  //   print('from getMutedStories ');
   //
-  //   // List<Map<String, dynamic>> mneu = [];
-  //   // params.mneu?.forEach((element) {
-  //   //   final toMap = {
-  //   //     "foodName": element.foodName,
-  //   //     "picture": element.photo,
-  //   //     "price": element.price,
-  //   //   };
-  //   //   mneu.add(toMap);
-  //   // });
-  //   Map<String, dynamic> data = {
-  //     "name": params.name,
-  //     "phone": params.number,
-  //     "subcategoryId": params.subcategoryId,
-  //     "restaurantMedia": params.restaurantMedia,
-  //     "licenseMedia": params.licenseMedia,
-  //     "government": params.government,
-  //     "city": params.city,
-  //     // "menu": mneu,
-  //   };
-  //
-  //   final response = await apiConsumer.put(
-  //       'https://49dev.com/api/v1/restaurants/update-restaurant-info/$id',
-  //       data: data);
-  //
-  //   return response.fold(
-  //         (Failure failure) {
-  //       print(data.toString() + "asfsdggvsdvbsdvzvzvzvfailure");
-  //       showErrorMessage(context, getFailureMessage(failure, context));
-  //       // ScaffoldMessenger.of(
-  //       //         AppPages.router.routerDelegate.navigatorKey.currentContext!)
-  //       //     .showSnackBar(SnackBar(
-  //       //   content: Text(LocaleKeys.completeAllFields.tr()),
-  //       //   backgroundColor: Colors.red,
-  //       // ));
-  //       return Left(failure);
+  //   response.fold(
+  //     (failure) {
+  //       // emit(state);
+  //       print('assssssssssssssssssgetMutedStoriesssssssssssssfffffffdsa');
   //     },
-  //         (data1) {
-  //       showSuccessMessage(context, data1['message']);
-  //       Navigator.pop(context);
+  //     (data) {
+  //       // emit(state);
+  //       // print(
+  //       //     'assssssssssssssssssgetMutedStoriesssssssssssssfffffffdsa');
   //
-  //       print(data1.toString() + "asfsdggvsdvbsdvzvzvzv");
+  //       log('${data.toString()}assssssssssssssssssgetMutedStoriesssssssssssssfffffffdsa');
   //
-  //       return Right(data['status']);
+  //       emit(state.copyWith(
+  //           mutedStoriesResponse: MutedStoriesResponse.fromJson(data)));
   //     },
   //   );
   // }
+  Future<void> getMutedStories({
+    userId,
+    context,
+    limit = 1,
+    page = 1,
+    loadMore = false,
+  }) async {
+    try {
+      // Make the API call
+      final response = await apiConsumer.get(
+          'https://49dev.com/api/v1/stories/mutedStories?limit=$limit&page=$page');
 
+      response.fold(
+        (failure) {
+          // Handle failure (API error, network issue, etc.)
+          print('Error fetching muted stories');
+        },
+        (data) {
+          // Parse the response
+          final newData = MutedStoriesResponse.fromJson(data);
 
+          // If loadMore is true, append new stories to the existing list
+          if (loadMore) {
+            if (newData.data.stories.isEmpty) return;
+            final currentStories =
+                state.mutedStoriesResponse?.data.stories ?? [];
+            final updatedStories = [
+              ...currentStories,
+              ...newData.data.stories,
+            ];
 
+            final updatedResponse = MutedStoriesResponse(
+              status: newData.status,
+              message: newData.message,
+              data: MutedStoriesData(
+                stories: updatedStories,
+                pagination: newData.data.pagination,
+              ),
+            );
+
+            // Update the state with the appended stories
+            emit(state.copyWith(mutedStoriesResponse: updatedResponse));
+          } else {
+            // If not loading more, replace the current stories with new data
+            emit(state.copyWith(mutedStoriesResponse: newData));
+          }
+        },
+      );
+    } catch (e) {
+      // Handle any unexpected errors
+      print('Unexpected error occurred: $e');
+    }
+  }
+
+  getViewersInStory({storyId, context}) async {
+    final response =
+        await apiConsumer.get('https://49dev.com/api/v1/stories/view/$storyId');
+    emit(state.copyWith(viewersResponse: null)); // Set loading state
+
+    return response.fold(
+      (failure) {
+        print(
+            '${getFailureMessage(failure, context)}assssssssssssssssssssssssssssssfffffffdsa');
+        emit(state.copyWith(viewersResponse: null)); // Set loading state
+      },
+      (data) {
+        // print(
+        //     '${ViewersResponse.fromMap(data).data.first.createdAt.toString()}assssssssssssssssssssssssssssssfffffffdsa');
+
+        emit(state.copyWith(
+            viewersResponse:
+                ViewersResponse.fromMap(data))); // Set loading state
+      },
+    );
+  }
 
   /// Fetch all followers based on subCategory ID
   Future<void> fetchFollowers() async {
@@ -422,3 +522,157 @@ class StoryCubit extends Cubit<StoryState> {
     emit(state.copyWith(stories: List.empty()));
   }
 }
+
+showViewerList(BuildContext context, ViewersResponse viewers) async {
+  await showModalBottomSheet(
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+    ),
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.white,
+    builder: (BuildContext context) {
+      return DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.5,
+        maxChildSize: 0.9,
+        minChildSize: 0.3,
+        builder: (BuildContext context, ScrollController scrollController) {
+          return Column(
+            children: [
+              // Beautiful Header Section with shadow effect
+              Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(0, -3),
+                      blurRadius: 10,
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Viewed by ${viewers.data.length}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(
+                        Icons.close,
+                        size: 26,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(thickness: 1, color: Colors.transparent),
+
+              // Responsive List of Viewers
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.white, Colors.grey[100]!],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                  child: ListView.builder(
+                    controller: scrollController,
+                    itemCount: viewers.data.length,
+                    itemBuilder: (context, index) {
+                      final viewer = viewers.data[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.all(8),
+                          tileColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            side:
+                                BorderSide(color: Colors.grey[300]!, width: 1),
+                          ),
+                          leading: GestureDetector(
+                            onTap: () => context.push(Routes.OTHERSACCOUNT,
+                                extra: viewer.user.id),
+                            child: CircleAvatar(
+                              radius: 30,
+                              backgroundImage: NetworkImage(viewer
+                                  .user.profile!.profilePicture!.mediaKey!),
+                              backgroundColor: Colors.grey[300],
+                            ),
+                          ),
+                          title: Text(
+                            capitalizeAndSplit2Only(
+                                "${viewer.user.firstName} ${viewer.user.lastName}"),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          subtitle: Text(
+                            '',
+                            // getTimeAgo(context, viewer.createdAt.toString()),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          trailing: Text(
+                            getTimeAgo(context, viewer.updatedAt.toString()),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          onTap: () {
+                            // Optional: Add tap functionality here
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}
+
+// Example Data
+final List<Map<String, dynamic>> viewers = [
+  {
+    'name': 'Rasha Hashem',
+    'profilePic': 'https://example.com/rasha.jpg',
+    'time': 'Today, 6:35 AM',
+    'statusIcon': Icons.favorite,
+  },
+  {
+    'name': 'DmitryZ ADNOC',
+    'profilePic': 'https://example.com/dmitry.jpg',
+    'time': 'Today, 4:39 PM',
+  },
+  {
+    'name': 'Sherif Far3',
+    'profilePic': 'https://example.com/sherif.jpg',
+    'time': 'Today, 4:02 PM',
+  },
+];

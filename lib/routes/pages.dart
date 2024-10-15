@@ -22,6 +22,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/get_price_carpool/get_price_carpool_cubit.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/views/add_new_route_view.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/views/carpool_view.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/edit_food_view.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
@@ -258,9 +259,34 @@ class AppPages {
         ),
         routes: <RouteBase>[
           GoRoute(
+            path: Paths.RestaurantDashboard,
+            name: Routes.RestaurantDashboard,
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => RestaurantDashboardCubit(
+                      serviceLocator(), serviceLocator())
+                    ..loadData(),
+                ),
+                BlocProvider(
+                  create: (context) => serviceLocator<RestaurantsCubit>(),
+                ),
+              ],
+              child: RestaurantDashboardView(payload: state.extra),
+            ),
+          ),
+          GoRoute(
             path: Paths.RESTAURANTORDERS,
             name: Routes.RESTAURANTORDERS,
             builder: (context, state) => const RestaurantOrders(),
+          ),
+          GoRoute(
+            path: Paths.EditFoodView,
+            name: Routes.EditFoodView,
+            builder: (context, state) => BlocProvider.value(
+              value: serviceLocator<RestaurantDetailsCubit>(),
+              child: EditFoodView(payload: state.extra),
+            ),
           ),
           // FLIP CARDS
           GoRoute(
@@ -1076,26 +1102,14 @@ class AppPages {
               builder: (context, state) => MultiBlocProvider(
                     providers: [
                       BlocProvider<RestaurantsCubit>(
-                        create: (context) => serviceLocator(),
-                      ),
-                      BlocProvider<RestaurantsCubit>(
-                        create: (context) => serviceLocator(),
+                        create: (context) => serviceLocator()..loadData(),
                       ),
                     ],
                     child: const RestaurantsListsView(),
                   ),
               routes: [
                 // CusineRestaurantsView
-                // GoRoute(
-                //   path: Paths.RestaurantDashboard,
-                //   name: Routes.RestaurantDashboard,
-                //   builder: (context, state) =>
-                //       BlocProvider<RestaurantDashboardCubit>(
-                //     create: (_) => serviceLocator(),
-                //     child: RestaurantDashboardView(
-                //         isRestaurantModel: state.extra ),
-                //   ),
-                // ),
+
                 GoRoute(
                   path: Paths.CusineRestaurants,
                   name: Routes.CusineRestaurants,

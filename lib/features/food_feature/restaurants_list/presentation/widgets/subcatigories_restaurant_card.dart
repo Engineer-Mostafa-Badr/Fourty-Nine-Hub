@@ -701,6 +701,7 @@
 // //   }
 // // }
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -710,6 +711,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -757,7 +759,11 @@ class VerticalRestaurantCard extends StatelessWidget {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.92,
       height: MediaQuery.of(context).size.width * 1.1,
-      child: PropertyCard(item: item!, mealId: mealId),
+      child: PropertyCard(
+        item: item!,
+        mealId: mealId,
+        myRestaurant: false,
+      ),
     );
   }
 }
@@ -821,8 +827,13 @@ class HorizontalRestaurantCard extends StatelessWidget {
 class PropertyCard extends StatelessWidget {
   final Restaurant2Model item;
   final String mealId;
+  final bool myRestaurant;
 
-  const PropertyCard({super.key, required this.item, required this.mealId});
+  const PropertyCard(
+      {super.key,
+      required this.item,
+      required this.mealId,
+      required this.myRestaurant});
 
   @override
   Widget build(BuildContext context) {
@@ -837,7 +848,7 @@ class PropertyCard extends StatelessWidget {
               topRight: Radius.circular(15.0),
             ),
           ),
-          elevation: 5,
+          elevation: myRestaurant ? 0 : 5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -854,11 +865,12 @@ class PropertyCard extends StatelessWidget {
                       autoPlay: true,
                       restaurantMedia: item.restaurantMedia,
                     ),
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      child: FavoriteButton(item: item, mealId: mealId),
-                    ),
+                    if (!myRestaurant)
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        child: FavoriteButton(item: item, mealId: mealId),
+                      ),
                     // if (item.isVerified ?? false)
                     if (false)
                       const Positioned(
@@ -873,12 +885,15 @@ class PropertyCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Expanded(flex: 3, child: DetailsSection(item: item)),
-              const SizedBox(height: 4),
-              PremiumAndRequestButtons(item: item),
-              const SizedBox(height: 4),
-              CallMessageReportButtons(item: item),
-              const SizedBox(height: 2),
+              Flexible(
+                  flex: 3,
+                  child:
+                      DetailsSection(item: item, myRestaurant: myRestaurant)),
+              if (!myRestaurant) const SizedBox(height: 4),
+              if (!myRestaurant) PremiumAndRequestButtons(item: item),
+              if (!myRestaurant) const SizedBox(height: 4),
+              if (!myRestaurant) CallMessageReportButtons(item: item),
+              if (!myRestaurant) const SizedBox(height: 2),
             ],
           ),
         );
@@ -949,7 +964,10 @@ class FavoriteButton extends StatelessWidget {
 class DetailsSection extends StatelessWidget {
   final Restaurant2Model item;
 
-  const DetailsSection({super.key, required this.item});
+  final bool myRestaurant;
+
+  const DetailsSection(
+      {super.key, required this.item, required this.myRestaurant});
 
   @override
   Widget build(BuildContext context) {
@@ -961,32 +979,23 @@ class DetailsSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Text(
-            item.name ?? '',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+          Expanded(child: Text(item.name ?? '', style: Styles.headerText())),
+          Expanded(
+            child: Text("${item.subcategoryId?.name ?? ''}, ${item.description ?? ''}",
+                style: Styles.mediumText(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black.withOpacity(0.8))),
           ),
-          Text(
-            "${item.subcategoryId?.name ?? ''}, ${item.description ?? ''}",
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[600],
-            ),
-          ),
-          Text(
-            '${item.government?.governorateNameEn ?? ''}, ${item.city?.cityNameEn ?? ''}',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[500],
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
+          if (myRestaurant)
+            Expanded(
+              child: Row(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Text(
+                      '${item.government?.governorateNameEn ?? ''}, ${item.city?.cityNameEn ?? ''}',
+                      style: Styles.mediumText(
+                          color: Colors.black.withOpacity(0.7))),
+                  const Spacer(),
                   const Icon(
                     Icons.star_rounded,
                     color: AppColors.ACCENT_COLOR,
@@ -1002,16 +1011,47 @@ class DetailsSection extends StatelessWidget {
                   ),
                 ],
               ),
-              Text(
-                item.isActive! ? 'Available' : 'Not Available',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                ),
+            )
+          else
+            Expanded(
+              child: Text(
+                  '${item.government?.governorateNameEn ?? ''}, ${item.city?.cityNameEn ?? ''}',
+                  style: Styles.mediumText(color: Colors.black.withOpacity(0.7))),
+            ),
+          if (!myRestaurant)
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.star_rounded,
+                        color: AppColors.ACCENT_COLOR,
+                      ),
+                      const Sizer(),
+                      Label(
+                        text: '${item.totalRating}',
+                        style: Styles.mediumText(fontWeight: FontWeight.w500),
+                      ),
+                      Label(
+                        text: '(${item.numberOfReviews}+)',
+                        style: Styles.mediumText(),
+                      ),
+                    ],
+                  ),
+                  if (!myRestaurant)
+                    Text(
+                      item.isActive! ? 'Available' : 'Not Available',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                ],
               ),
-            ],
-          ),
+            ),
         ],
       ),
     );
@@ -1113,14 +1153,22 @@ class CallMessageReportButtons extends StatelessWidget {
             label: 'Report',
             icon: Icons.report,
             color: AppColors.PRIMARY_COLOR_DARK,
-            onPressed: () {
-              bottomSheet(
+            onPressed: () async {
+              await showModalBottomSheet(
                 context: context,
-                widget: ReportView(
-                  id: item.id!,
-                  categoryId: item.subcategoryId!.id,
-                ),
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) {
+                  return SizedBox(
+                    height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+                    child: ReportView(
+                      id: item.id!,
+                      categoryId: item.subcategoryId!.id,
+                    ),
+                  );
+                },
               );
+
               // Implement report functionality here
             },
           ),

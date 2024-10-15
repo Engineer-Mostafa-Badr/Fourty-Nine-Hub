@@ -9,6 +9,7 @@ import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart'
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/data/models/restaurant_orders_model.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/food_order_entity.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -366,14 +367,22 @@ class CallMessageReportButtons extends StatelessWidget {
             label: 'Report',
             icon: Icons.report,
             color: AppColors.PRIMARY_COLOR_DARK,
-            onPressed: () {
-              bottomSheet(
+            onPressed: () async {
+              await showModalBottomSheet(
                 context: context,
-                widget: ReportView(
-                  id: item.id,
-                  categoryId: item.restaurantId,
-                ),
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) {
+                  return SizedBox(
+                    height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+                    child: ReportView(
+                      id: item.id,
+                      categoryId: item.restaurantId,
+                    ),
+                  );
+                },
               );
+
               // Implement report functionality here
             },
           ),
@@ -397,7 +406,8 @@ class CallMessageReportButtons extends StatelessWidget {
         icon: icon,
         iconSize: 70.h,
         backColor: color,
-        style: Styles.mediumText(color: Colors.white,fontWeight: FontWeight.bold),
+        style:
+            Styles.mediumText(color: Colors.white, fontWeight: FontWeight.bold),
         onPressed: onPressed,
       ),
     );

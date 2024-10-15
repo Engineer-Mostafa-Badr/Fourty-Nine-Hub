@@ -101,9 +101,9 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
     return res;
   }
 
-  updateRestaurant1(context, id) async {
+  updateRestaurant1(context) async {
     CreateRestaurantParams params = createRestaurantParams;
-    _validationUpdateState();
+    // _validationUpdateState();
 
     // List<Map<String, dynamic>> mneu = [];
     // params.mneu?.forEach((element) {
@@ -115,23 +115,24 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
     //   mneu.add(toMap);
     // });
     Map<String, dynamic> data = {
-      "name": params.name,
-      "phone": params.number,
-      "subcategoryId": params.subcategoryId,
-      "restaurantMedia": params.restaurantMedia,
-      "licenseMedia": params.licenseMedia,
-      "government": params.government,
-      "city": params.city,
+      if (params.name != null) "name": params.name,
+      if (params.number != null) "phone": params.number,
+      if (params.subcategoryId != null) "subcategoryId": params.subcategoryId,
+      if (params.restaurantMedia != null)
+        "restaurantMedia": params.restaurantMedia,
+      // if (params.licenseMedia!=null) "licenseMedia": params.licenseMedia,
+      if (params.government != null) "government": params.government,
+      if (params.city != null) "city": params.city,
       // "menu": mneu,
     };
 
     final response = await apiConsumer.put(
-        'https://49dev.com/api/v1/restaurants/update-restaurant-info/$id',
+        'https://49dev.com/api/v1/restaurants/update-restaurant-info',
         data: data);
 
     return response.fold(
       (Failure failure) {
-        print(data.toString() + "asfsdggvsdvbsdvzvzvzvfailure");
+        print('from update-restaurant-info  failure');
         showErrorMessage(context, getFailureMessage(failure, context));
         // ScaffoldMessenger.of(
         //         AppPages.router.routerDelegate.navigatorKey.currentContext!)
@@ -139,50 +140,47 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
         //   content: Text(LocaleKeys.completeAllFields.tr()),
         //   backgroundColor: Colors.red,
         // ));
-        return Left(failure);
       },
       (data1) {
+        print('from update-restaurant-info  success');
+
         showSuccessMessage(context, data1['message']);
         Navigator.pop(context);
-
-        print(data1.toString() + "asfsdggvsdvbsdvzvzvzv");
-
-        return Right(data['status']);
       },
     );
   }
 
-  updateRestaurant(id) async {
-    CreateRestaurantParams params = createRestaurantParams;
-
-    Map<String, dynamic> data = {
-      // "workFrom": params.workFrom,
-      // "workTo": params.workTo,
-      // "countryCode": params.countryCode,
-      // "deliveryFee": params.deliveryFee,
-      // "deliveryTime": params.deliveryTime,
-      "name": params.name,
-      "phone": params.number,
-      "subcategoryId": params.subcategoryId,
-      "restaurantMedia": params.restaurantMedia,
-      "licenseMedia": params.licenseMedia,
-      "government": params.government,
-      "city": params.city,
-    };
-    var url = 'https://49dev.com/api/v1/restaurants/update-restaurant-info/$id';
-
-    final response = await apiConsumer.put(url, data: data);
-
-    return response.fold(
-      (Failure failure) {
-        // return Left(failure);
-      },
-      (data) {
-        print(data.toString() + "122222223");
-        // return Right(data['status']);
-      },
-    );
-  }
+  // updateRestaurant(id) async {
+  //   CreateRestaurantParams params = createRestaurantParams;
+  //
+  //   Map<String, dynamic> data = {
+  //     // "workFrom": params.workFrom,
+  //     // "workTo": params.workTo,
+  //     // "countryCode": params.countryCode,
+  //     // "deliveryFee": params.deliveryFee,
+  //     // "deliveryTime": params.deliveryTime,
+  //     "name": params.name,
+  //     "phone": params.number,
+  //     "subcategoryId": params.subcategoryId,
+  //     "restaurantMedia": params.restaurantMedia,
+  //     "licenseMedia": params.licenseMedia,
+  //     "government": params.government,
+  //     "city": params.city,
+  //   };
+  //   var url = 'https://49dev.com/api/v1/restaurants/update-restaurant-info/$id';
+  //
+  //   final response = await apiConsumer.put(url, data: data);
+  //
+  //   return response.fold(
+  //     (Failure failure) {
+  //       // return Left(failure);
+  //     },
+  //     (data) {
+  //       print(data.toString() + "122222223");
+  //       // return Right(data['status']);
+  //     },
+  //   );
+  // }
 
   // Future<String> updateRestaurant(id) async {
   //   var res = 'fail';
@@ -330,12 +328,15 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
 
   // ================================= upload images =================================
   Future<void> _uploadImage(
-      {required dynamic Function(UploadFileEntity) onUploaded}) async {
+      {required dynamic Function(UploadFileEntity) onUploaded,
+      subcategoryId}) async {
     if (createRestaurantParams.subcategoryId != null ||
-        createRestaurantParams.subcategoryId != "") {
+        createRestaurantParams.subcategoryId != "" ||
+        subcategoryId != null) {
       emit(CreateResturantLoading(LocaleKeys.uploadingImage.tr()));
       await UploadFile().uploadImage(
-        subCategoryId: createRestaurantParams.subcategoryId ?? "",
+        subCategoryId:
+            createRestaurantParams.subcategoryId ?? subcategoryId ?? '',
         onUploaded: (value) {
           onUploaded(value);
         },
@@ -350,14 +351,16 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   List<String> restaurantImagesIds = [];
   List<String> licensRestaurantImagesIds = [];
 
-  Future<void> uploadProfileImage() async {
-    await _uploadImage(onUploaded: (media) {
-      restaurantImages.add(media.file);
-      restaurantImagesIds.add(media.mediaId);
-      createRestaurantParams.restaurantMedia = restaurantImagesIds;
+  Future<void> uploadProfileImage({subcategoryId}) async {
+    await _uploadImage(
+        subcategoryId: subcategoryId,
+        onUploaded: (media) {
+          restaurantImages.add(media.file);
+          restaurantImagesIds.add(media.mediaId);
+          createRestaurantParams.restaurantMedia = restaurantImagesIds;
 
-      emit(CreateRestaurantUploadProfileImage(restaurantImages));
-    });
+          emit(CreateRestaurantUploadProfileImage(restaurantImages));
+        });
   }
 
   Future<void> uploadLicenseFirstPageImage() async {

@@ -75,7 +75,7 @@ class FoodServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
-      )..loadData(),
+      ),
     );
     serviceLocator.registerFactory<RestaurantsCubit>(() => RestaurantsCubit(
           serviceLocator(),
@@ -88,7 +88,7 @@ class FoodServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
-        )..loadData());
+        ));
     serviceLocator
         .registerFactory<RestaurantDetailsCubit>(() => RestaurantDetailsCubit(
               serviceLocator(),
@@ -99,16 +99,15 @@ class FoodServiceLocator {
     serviceLocator
         .registerFactory<CusineRestaurantsCubit>(() => CusineRestaurantsCubit(
               serviceLocator(),
-            )..loadData());
+            ));
 
     serviceLocator.registerFactory<FoodCartCubit>(() => FoodCartCubit(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
-        )..loadData());
-    serviceLocator.registerFactory<RestaurantDashboardCubit>(() =>
-        RestaurantDashboardCubit(serviceLocator(), serviceLocator())
-          ..loadData());
+        ));
+    serviceLocator.registerFactory<RestaurantDashboardCubit>(
+        () => RestaurantDashboardCubit(serviceLocator(), serviceLocator()));
     serviceLocator.registerLazySingleton<GetRestaurantDetailsUseCase>(
         () => GetRestaurantDetailsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetRestaurantOrdersUseCase>(
@@ -161,7 +160,7 @@ class FoodServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
-      )..loadData(),
+      ),
     );
 
     serviceLocator.registerLazySingleton<RemoveFromCartUseCase>(

@@ -75,15 +75,20 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
 
   Future<void> loadData() async {
     await _getUser();
-
     if (serviceLocator<UserCubit>().isLoggedIn) {
-      Future.wait([
-        _getMainCategoryDetails(),
-        isRestaurant(),
-        _getMealCategoriesWithCountRestaurants(),
-        getAllRestaurant(),
-        _getNumOfRestaurants(),
-      ]);
+      await isRestaurant();
+      await _getMainCategoryDetails();
+      await _getMealCategoriesWithCountRestaurants();
+      await _getNumOfRestaurants();
+      await getAllRestaurant();
+
+      // Future.wait([
+      //   _getMainCategoryDetails(),
+      //   isRestaurant(),
+      //   _getMealCategoriesWithCountRestaurants(),
+      //   getAllRestaurant(),
+      //   _getNumOfRestaurants(),
+      // ]);
     }
   }
 
@@ -136,7 +141,10 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
       response.fold(
           (failure) =>
               emit(state.copyWith(status: RestaurantsListStates.error)),
-          (data) => emit(state.copyWith(isRestaurant: data)));
+          (data) {
+        print('sadafasfasvsdvd$data');
+        emit(state.copyWith(isRestaurant: data));
+      });
     } else {
       emit(state.copyWith(
           isRestaurant:
@@ -148,7 +156,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     const url = 'https://49dev.com/api/v1/restaurants/modify-active';
 
     await apiConsumer.patch(url, data: {
-      'isActive': isActive,
+      'isActive': isActive ,
     });
 
     await isRestaurant();

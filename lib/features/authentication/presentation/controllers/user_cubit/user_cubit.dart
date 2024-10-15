@@ -54,7 +54,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   Future<Either<Failure, UserEntity>?> getUser() async {
     if (!isTokenAttached) return null;
     final result = await _getUserUseCase(const NoParams());
-
+    emit(
       result.fold(
         (failure) {
           return state.copyWith(
@@ -65,8 +65,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
         (user) {
           return state.copyWith(status: StateStatus.success, data: user);
         },
-      );
-
+      ),
+    );
     return result;
   }
 

@@ -11,7 +11,9 @@ import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/crea
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CreateRestaurantProfilePhotoPicker extends StatefulWidget {
-  const CreateRestaurantProfilePhotoPicker({super.key});
+  var subcategoryId;
+
+  CreateRestaurantProfilePhotoPicker({super.key, this.subcategoryId});
 
   @override
   State<CreateRestaurantProfilePhotoPicker> createState() =>
@@ -55,7 +57,8 @@ class _CreateRestaurantProfilePhotoPickerState
                   ],
                   InkWell(
                     onTap: () async {
-                      await createRestaurantCubit.uploadProfileImage();
+                      await createRestaurantCubit.uploadProfileImage(
+                          subcategoryId: widget.subcategoryId);
                     },
                     child: BlocBuilder<CreateRestaurantCubit,
                         CreateRestaurantState>(builder: (context, state) {

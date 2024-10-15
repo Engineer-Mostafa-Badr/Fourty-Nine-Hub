@@ -646,6 +646,8 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.d
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/views/create_resturant_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/expired_request_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/banner.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_categories.dart';
@@ -704,44 +706,29 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
   Widget build(BuildContext context) {
     final state = context.watch<RestaurantsCubit>().state;
     return Scaffold(
-      body: BlocProvider<RestaurantsCubit>(
-        create: (_) => RestaurantsCubit(
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-        )..loadData(),
-        child: SharedScaffold(
-          mainCategoryId: 1,
-          body: RefreshIndicator(
-            onRefresh: () async {
-              if (context.read<UserCubit>().isLoggedIn) {
-                setState(() {
-                  context.read<RestaurantsCubit>().loadData();
-                });
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: StreamBuilder(
-                builder: (context, snapshot) {
-                  if (!context.watch<UserCubit>().isLoggedIn) {
-                    return _buildNotLoggedInView(context);
-                  }
-                  if (state.isLoading) {
-                    return const Center(
-                        child: CircularProgressIndicator.adaptive());
-                  }
-                  return _buildLoggedInView(snapshot.data!);
-                },
-                stream: context.watch<RestaurantsCubit>().stream,
-              ),
+      body: SharedScaffold(
+        mainCategoryId: 1,
+        body: RefreshIndicator(
+          onRefresh: () async {
+            if (context.read<UserCubit>().isLoggedIn) {
+              setState(() {
+                context.read<RestaurantsCubit>().loadData();
+              });
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Builder(
+              builder: (context) {
+                if (!context.watch<UserCubit>().isLoggedIn) {
+                  return _buildNotLoggedInView(context);
+                }
+                if (state.isLoading) {
+                  return const Center(
+                      child: CircularProgressIndicator.adaptive());
+                }
+                return _buildLoggedInView(state);
+              },
             ),
           ),
         ),
@@ -846,17 +833,19 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
   }
 
   Widget _buildLoggedInView(RestaurantsListState state) {
+    print(
+        "${state.isResturant!.isRestaurant! && state.isResturant!.approved!}asfafasdfasdfafdadsf");
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
           child: Column(
             children: [
               const MealBanner(),
-              if (!(state.isResturant?.isRestaurant ?? false))
-                _buildRegisterRestaurantPrompt(),
+              if (!(state.isResturant!.isRestaurant!))
+                _buildRegisterRestaurantPrompt(state),
               const Sizer(),
-              if ((state.isResturant?.isRestaurant ?? false) &&
-                  (state.isResturant?.approved ?? false))
+              if (state.isResturant!.isRestaurant! &&
+                  state.isResturant!.approved!)
                 const ResturantDashboardButton(),
               const Sizer(),
               _buildSearchAndExpiredRequests(),
@@ -882,9 +871,21 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
     );
   }
 
-  Widget _buildRegisterRestaurantPrompt() {
+  Widget _buildRegisterRestaurantPrompt(RestaurantsListState state) {
     return GestureDetector(
-      onTap: () => context.push(Routes.CREATERESTURANT),
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BlocProvider<CreateRestaurantCubit>(
+                create: (context) => serviceLocator()..loadData(),
+                child: CreateRestaurantForm(
+                  from: 'create',
+                  restaurantId: state.isResturant!.restaurantId!,
+                ),
+              ),
+            ));
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: Text(

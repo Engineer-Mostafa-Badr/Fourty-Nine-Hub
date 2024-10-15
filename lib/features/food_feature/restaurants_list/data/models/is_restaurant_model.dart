@@ -61,7 +61,8 @@ class IsRestaurantModel {
     if (restaurantId != null) {
       result.addAll({'restaurantId': restaurantId});
     }
-    if (isActive != null) { // Add isActive to the map
+    if (isActive != null) {
+      // Add isActive to the map
       result.addAll({'isActive': isActive});
     }
 
@@ -104,8 +105,8 @@ class IsRestaurantModel {
   @override
   int get hashCode {
     return isRestaurant.hashCode ^
-    approved.hashCode ^
-    restaurantId.hashCode ^
-    isActive.hashCode; // Include isActive in hashCode
+        approved.hashCode ^
+        restaurantId.hashCode ^
+        isActive.hashCode; // Include isActive in hashCode
   }
 }

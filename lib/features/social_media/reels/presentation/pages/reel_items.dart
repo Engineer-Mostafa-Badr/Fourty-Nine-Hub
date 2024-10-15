@@ -1119,12 +1119,19 @@ class _ActionButtons extends StatelessWidget {
   }
 
   Future<void> _showReportBottomSheet(BuildContext context) async {
-    await bottomSheet(
+    await showModalBottomSheet(
       context: context,
-      widget: ReportView(
-        id: reel.user.id,
-        categoryId: '66684135dbb427ee42aa0141',
-      ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return SizedBox(
+          height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+          child: ReportView(
+            id: reel.user.id,
+            categoryId: '66684135dbb427ee42aa0141',
+          ),
+        );
+      },
     );
   }
 

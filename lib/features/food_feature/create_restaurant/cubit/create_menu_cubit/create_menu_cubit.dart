@@ -24,14 +24,14 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
     };
     var url = 'https://49dev.com/api/v1/food/add-food';
 
-    final response = await apiConsumer.put(url, data: data);
+    final response = await apiConsumer.post(url, data: data);
 
     return response.fold(
       (failure) {
         // return Left(failure);
       },
       (data) {
-        print(data.toString() + "1222222dsvvs23");
+        print(data.toString() + "v");
       },
     );
   }
@@ -52,7 +52,8 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
 
   // ================================= upload images =================================
   Future<void> _uploadImage(BuildContext context,
-      {required dynamic Function(UploadFileEntity) onUploaded}) async {
+      {required dynamic Function(UploadFileEntity) onUploaded,
+      String? subcategoryId}) async {
     if (context
                 .read<CreateRestaurantCubit>()
                 .createRestaurantParams
@@ -62,14 +63,17 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
                 .read<CreateRestaurantCubit>()
                 .createRestaurantParams
                 .subcategoryId !=
-            "") {
+            "" ||
+        subcategoryId != null ||
+        subcategoryId! != '') {
       emit(RestaurantUpLoadPhototLoading("Uploading Image..."));
       await UploadFile().uploadImage(
         subCategoryId: context
                 .read<CreateRestaurantCubit>()
                 .createRestaurantParams
                 .subcategoryId ??
-            "",
+            subcategoryId ??
+            '',
         onUploaded: (value) {
           onUploaded(value);
         },
@@ -82,8 +86,9 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
 
   String imageId = "";
 
-  Future<void> uploadMealImage(BuildContext context) async {
-    await _uploadImage(context, onUploaded: (media) {
+  Future<void> uploadMealImage(BuildContext context, {subcategoryId}) async {
+    await _uploadImage(context, subcategoryId: subcategoryId,
+        onUploaded: (media) {
       imageId = media.mediaId;
       emit(RestaurantMenuImagePicked(media.file.path));
     });
