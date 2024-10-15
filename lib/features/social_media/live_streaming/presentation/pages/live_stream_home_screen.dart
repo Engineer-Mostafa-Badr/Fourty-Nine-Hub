@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/social_media/club_house/presentation/page
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -25,17 +26,34 @@ class LiveStreamHomeScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 0,
-          leading: const BackButton(),
-          bottom: TabBar(
-            indicatorColor:
-                context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-            labelColor:
-                context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-            tabs: [
-              Tab(text: LocaleKeys.live.localize),
-              Tab(text: LocaleKeys.clubVoice.localize),
-            ],
+          toolbarHeight: 30,
+automaticallyImplyLeading: false,
+          bottom: PreferredSize(
+            preferredSize: const Size(double.infinity, 30),
+            child: Stack(
+              children: [
+                TabBar(
+                  indicatorColor:
+                      context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                  labelColor:
+                      context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+
+                  tabs: [
+                    Tab(text: LocaleKeys.live.localize),
+                    Tab(text: LocaleKeys.clubVoice.localize),
+                  ],
+                ),
+                Positioned.directional(
+                  top: 0,
+                  textDirection: context.textDirection,
+                  start: 20,
+                  child: BackButton(
+                    color: Colors.black,
+                    onPressed: () => context.pop(),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         body: TabBarView(
