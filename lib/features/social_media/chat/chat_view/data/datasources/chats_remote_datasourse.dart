@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_category_model.dart';
@@ -23,6 +27,10 @@ abstract class ChatsRemoteDataSource {
   Future<Either<Failure, bool>> changeChatToArchiveOrToNormal({
     required String chatId,
   });
+
+  Future<Either<Failure, bool>> deleteChat({required String chatId});
+  Future<Either<Failure, bool>> pinChat({required String chatId});
+  Future<Either<Failure, bool>> unPinChat({required String chatId});
 
   Future<Either<Failure, bool>> lockChat({
     required String chatId,
@@ -50,7 +58,7 @@ abstract class ChatsRemoteDataSource {
 
   void stopListenToNewChats();
 
-  void listenToNewChats(Function(ChatEntity) onNewChat);
+  void listenToNewChats(Function(ChatEntity) params);
 }
 
 class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
@@ -171,28 +179,66 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
   }
 
   @override
-  void listenToNewChats(Function(ChatEntity) onNewChat) {
+  void listenToNewChats(Function(ChatEntity) params) {
     try {
       _socket.connect();
-      // TODO
-      // _socket.on(SocketIOListeners.newMessageFromMe, (data) {
-      //   final decodedData = jsonDecode(data);
-      //   if (decodedData is List) {
-      //     data = decodedData[0];
-      //   } else {
-      //     data = decodedData;
-      //   }
-      //   CliLogger.info("newChat :  $data");
-      //   ChatModel messageModel = ChatModel.fromJson(data);
-      //   onNewChat(messageModel);
-      // });
+
+      _socket.on(SocketIOListeners.creatingNewChat, (data) {
+        log("decoded data : \n$data");
+        try {
+          final decodedData =
+              jsonDecode(data); // Decode the string into a JSON object
+          CliLogger.info("new chat created :  $decodedData");
+          // ChatModel chatModel = ChatModel.fromJson(decodedData);
+          // log("new chat created :  $chatModel");
+          // params(chatModel);
+          params(ChatModel(
+            id: "json['_id']",
+            categoryId: "json['categoryId']",
+            archived: "json['archived']" == "",
+            locked: "json['locked']" == "",
+            muted: "json['muted']" == "",
+            name: 'Unknown',
+            lastSeenCount: 0,
+            unreadCount: 0,
+            userId: "json['userId']",
+            avatar: "json['avatar']",
+            typing: false,
+            online: false,
+            isPinned: false,
+            isService: false,
+            lastMessage: null,
+          ));
+        } catch (e) {
+          CliLogger.info("Error decoding or creating chat model: $e");
+        }
+      });
     } catch (e) {
-      CliLogger.info("can't read new chat error $e");
+      CliLogger.info("Can't read new chat error: $e");
     }
   }
 
   @override
   void stopListenToNewChats() {
     // TODO: implement stopListenToNewChats
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteChat({required String chatId}) async {
+    final response = await _apiConsumer.delete(EndPoints.deleteChat(chatId));
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  Future<Either<Failure, bool>> pinChat({required String chatId}) async {
+    final response = await _apiConsumer.put(EndPoints.pinAndUnPinChat(chatId));
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  Future<Either<Failure, bool>> unPinChat({required String chatId}) async {
+    final response = await _apiConsumer.put(EndPoints.pinAndUnPinChat(chatId));
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
   }
 }

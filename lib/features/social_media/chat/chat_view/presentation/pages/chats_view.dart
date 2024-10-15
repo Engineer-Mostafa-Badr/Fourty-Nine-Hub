@@ -408,19 +408,31 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                       : Row(
                                           children: [
                                             IconButton(
-                                              onPressed: () {},
+                                              onPressed: () async {
+                                                await context
+                                                    .read<ChatsCubit>()
+                                                    .pinAndUnpinChat();
+                                              },
                                               icon: const Icon(Icons.push_pin),
                                               color: AppColors.PRIMARY_COLOR,
                                             ),
                                             IconButton(
-                                              onPressed: () {},
+                                              onPressed: () async {
+                                                await context
+                                                    .read<ChatsCubit>()
+                                                    .deleteChat();
+                                              },
                                               icon: const Icon(
                                                 Icons.delete_forever,
                                                 color: AppColors.PRIMARY_COLOR,
                                               ),
                                             ),
                                             IconButton(
-                                              onPressed: () {},
+                                              onPressed: () async {
+                                                await context
+                                                    .read<ChatsCubit>()
+                                                    .changeMuteChat();
+                                              },
                                               icon: const Icon(
                                                 Icons.notifications_off,
                                                 color: AppColors.PRIMARY_COLOR,
@@ -430,7 +442,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                               onPressed: () async {
                                                 await context
                                                     .read<ChatsCubit>()
-                                                    .changeActiveChat();
+                                                    .changeArchiveChat();
                                               },
                                               icon: const Icon(
                                                 Icons.archive,
@@ -852,9 +864,11 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
   Widget _buildCategoryChats({bool isSecret = false}) {
     return BlocBuilder<ChatsCubit, ChatsState>(builder: (context, state) {
       return state.chats == null || state.isLoading
-          ? const Center(
-              child: CircularProgressIndicator.adaptive(),
-            )
+          ?
+          // const Center(
+          //     child: CircularProgressIndicator.adaptive(),
+          //   )
+          const SizedBox()
           : state.chats!.isEmpty
               ? Center(
                   child: Label(

@@ -16,6 +16,7 @@ class ChatEntity {
   bool online;
   MessageEntity? lastMessage;
   bool isSelected = false;
+  bool isPinned = false;
 
   ChatEntity({
     required this.id,
@@ -33,5 +34,6 @@ class ChatEntity {
     required this.online,
     this.lastMessage,
     this.isSelected = false,
+    this.isPinned = false,
   });
 }

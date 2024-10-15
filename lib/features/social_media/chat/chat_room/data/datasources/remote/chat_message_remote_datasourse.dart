@@ -70,9 +70,12 @@ class MessagesRemoteDataSourceImplementation
   @override
   void listenToNewMessages(Function(MessageEntity message) params) {
     try {
+      
       _socket.connect();
       _socket.on(SocketIOListeners.newMessageFromMe, (data) {
         final decodedData = jsonDecode(data);
+        log("listenToNewMessagesssssssssssss");
+        log("listenToNewMessagesssssssssssss $decodedData");
         if (decodedData is List) {
           data = decodedData[0];
         } else {
@@ -98,75 +101,75 @@ class MessagesRemoteDataSourceImplementation
     }
   }
 
-  // @override
-  // Future<Either<Failure, bool>> sendMessage(SendMessageParams params) async {
-  //   try {
-  //     _socket.connect();
-  //     CliLogger.info('you send message : ${params.toString()}');
-  //     List<String> mediaIds = [];
-  //     for (var file in params.media) {
-  //       final id = await UploadFile.uploadPickedFile(
-  //           file: file, subCategoryId: params.chat.categoryId);
-  //       if (id != null) {
-  //         mediaIds.add(id);
-  //       }
-  //     }
-  //     _socket.emit(
-  //         SocketIOEvents.sendMessage,
-  //         jsonEncode({
-  //           "chatId": params.chat.id,
-  //           "type": 1,
-  //           "mediaIds": mediaIds,
-  //           "text": params.message,
-  //           "groupId": null,
-  //           "replyMessageId": params.replyMessageId,
-  //           "oneTimeView": params.oneTimeView,
-  //         }));
-  //     return const Right(true);
-  //   } catch (e) {
-  //     CliLogger.error('can\'t send error $e');
-  //     return const Left(ServerFailure(message: "can't send message "));
-  //   }
-  // }
-
   @override
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params) async {
     try {
       _socket.connect();
-      CliLogger.info('You are sending message: ${params.toString()}');
-
+      CliLogger.info('you send message : ${params.toString()}');
       List<String> mediaIds = [];
       for (var file in params.media) {
         final id = await UploadFile.uploadPickedFile(
-          file: file,
-          subCategoryId: params.chat.categoryId,
-        );
+            file: file, subCategoryId: params.chat.categoryId);
         if (id != null) {
           mediaIds.add(id);
         }
       }
-
-      _socket.connect();
       _socket.emit(
-        SocketIOEvents.sendMessage,
-        jsonEncode({
-          "chatId": params.chat.id,
-          "type": 1,
-          "mediaIds": mediaIds,
-          "text": params.message,
-          "groupId": null,
-          "replyMessageId": params.replyMessageId,
-          "oneTimeView": params.oneTimeView,
-          "sharedContacts":
-              params.sharedContacts.map((contact) => contact.toJson()).toList(),
-        }),
-      );
+          SocketIOEvents.sendMessage,
+          jsonEncode({
+            "chatId": params.chat.id,
+            "type": 1,
+            "mediaIds": mediaIds,
+            "text": params.message,
+            "groupId": null,
+            "replyMessageId": params.replyMessageId,
+            "oneTimeView": params.oneTimeView,
+          }));
       return const Right(true);
     } catch (e) {
-      CliLogger.error('Can\'t send message: $e');
-      return const Left(ServerFailure(message: "Can't send message"));
+      CliLogger.error('can\'t send error $e');
+      return const Left(ServerFailure(message: "can't send message "));
     }
   }
+
+  // @override
+  // Future<Either<Failure, bool>> sendMessage(SendMessageParams params) async {
+  //   try {
+  //     _socket.connect();
+  //     CliLogger.info('You are sending message: ${params.toString()}');
+
+  //     List<String> mediaIds = [];
+  //     for (var file in params.media) {
+  //       final id = await UploadFile.uploadPickedFile(
+  //         file: file,
+  //         subCategoryId: params.chat.categoryId,
+  //       );
+  //       if (id != null) {
+  //         mediaIds.add(id);
+  //       }
+  //     }
+
+  //     _socket.connect();
+  //     _socket.emit(
+  //       SocketIOEvents.sendMessage,
+  //       jsonEncode({
+  //         "chatId": params.chat.id,
+  //         "type": 1,
+  //         "mediaIds": mediaIds,
+  //         "text": params.message,
+  //         "groupId": null,
+  //         "replyMessageId": params.replyMessageId,
+  //         "oneTimeView": params.oneTimeView,
+  //         "sharedContacts":
+  //             params.sharedContacts.map((contact) => contact.toJson()).toList(),
+  //       }),
+  //     );
+  //     return const Right(true);
+  //   } catch (e) {
+  //     CliLogger.error('Can\'t send message: $e');
+  //     return const Left(ServerFailure(message: "Can't send message"));
+  //   }
+  // }
 
   @override
   void stopListenToMessages() {

@@ -76,19 +76,27 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                       return Row(
                         children: [
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await context
+                                  .read<ChatsCubit>()
+                                  .pinAndUnpinChat();
+                            },
                             icon: const Icon(Icons.push_pin),
                             color: AppColors.BACKGROUND_COLOR,
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await context.read<ChatsCubit>().deleteChat();
+                            },
                             icon: const Icon(
                               Icons.delete_forever,
                               color: AppColors.BACKGROUND_COLOR,
                             ),
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await context.read<ChatsCubit>().changeMuteChat();
+                            },
                             icon: const Icon(
                               Icons.notifications_off,
                               color: AppColors.BACKGROUND_COLOR,
@@ -98,7 +106,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                             onPressed: () async {
                               await context
                                   .read<ChatsCubit>()
-                                  .changeActiveChat();
+                                  .changeArchiveChat();
                             },
                             icon: const Icon(
                               Icons.unarchive,
