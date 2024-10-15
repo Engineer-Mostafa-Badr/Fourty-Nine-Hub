@@ -608,6 +608,7 @@
 //   }
 // }
 
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -621,6 +622,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/profile_buttom_sheet.dart';
@@ -635,7 +637,10 @@ import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../zoom/presentation/controller/stream_cubit.dart';
+import '../../../../zoom/presentation/widgets/join_meeting_screen.dart';
 
 // Entry point of the reels view
 class ReelView extends StatelessWidget {
@@ -1300,7 +1305,7 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
                   });
                 },
                 iconSize: 200,
-                animationDuration: Duration(seconds: 1),
+                animationDuration: const Duration(seconds: 1),
                 heartIcon: Icons.favorite,
                 iconColor: Colors.pink,
                 child: Container(
@@ -1693,7 +1698,11 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
   }
-
+  int get generateRandom9DigitNumber {
+    Random random = Random();
+    // Generate a number between 100000000 and 999999999
+    return 100000000 + random.nextInt(900000000);
+  }
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -1723,7 +1732,45 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               // LIVE Icon with Glow Effect
               const Sizer(),
               _buildLiveIcon(onTap: () {
-                context.push(Routes.LIVE);
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Wrap(
+                        children: [
+                          ListTile(
+                              onTap: () async {
+                                await context
+                                    .read<StreamCubit>()
+                                    .createLive(title: '',roomId: generateRandom9DigitNumber.toString());
+                                if (context.mounted) {
+                                  context.pop();
+
+                                  context.push(Routes.LIVEView,
+                                      extra: ZegoArgs(
+                                          context
+                                              .read<StreamCubit>()
+                                              .state
+                                              .liveCreateResponseEntity!
+                                              .id,
+                                          true,
+                                          context
+                                              .read<UserCubit>()
+                                              .state
+                                              .data!
+                                              .fullName));
+                                }
+                              },
+                              title: const Label(text: 'Create Live')),
+                          ListTile(
+                            onTap: () {
+                              context.pop();
+                              context.push(Routes.LIVE);
+                            },
+                            title: Label(text:'Watch'),
+                          )
+                        ],
+                      );
+                    });
               }),
               const Spacer(), // Explore Tab
               _buildTab("Spotlight", 0, onTap: () {
@@ -2246,4 +2293,5 @@ class _CustomProgressBarState extends State<CustomProgressBar> {
       },
     );
   }
+
 }

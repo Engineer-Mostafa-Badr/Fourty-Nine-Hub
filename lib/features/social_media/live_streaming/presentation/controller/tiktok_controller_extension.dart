@@ -95,7 +95,7 @@ extension TiktokControllerExtension on StreamCubit {
     ));
   }
 
-  Future<void> createLive({required String title}) async {
+  Future<void> createLive({required String title,required String roomId}) async {
     emit(state.copyWith(status: StreamsStates.loading));
     //extract data from state
     final List<GoalParams> goalParamsList = state.selectedGifts.map((gift) {
@@ -104,7 +104,7 @@ extension TiktokControllerExtension on StreamCubit {
 
     final result = await createLiveUseCase(CreateLiveParams(
       title: title,
-      topicId: '66ec0328a2c474341310cbc3',
+      roomID:roomId,
       description: state.goalDescription!,
       goals: goalParamsList,
     ));

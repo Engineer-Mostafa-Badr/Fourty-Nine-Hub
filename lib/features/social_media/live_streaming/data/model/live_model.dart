@@ -11,6 +11,7 @@ class LiveModel extends LiveEntity {
     required super.gift,
     required super.description,
     required super.members,
+    required super.roomId,
   });
 
   //from json
@@ -24,6 +25,7 @@ class LiveModel extends LiveEntity {
       members: List.from(json['members'])
           .map((e) => MembersModel.fromJson(e))
           .toList(),
+      roomId: json['roomId'],
     );
   }
 }

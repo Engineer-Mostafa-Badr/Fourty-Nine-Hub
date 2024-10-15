@@ -3,19 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
 import '../../../../zoom/presentation/controller/stream_state.dart';
 import '../../domain/entity/live_entity.dart';
 import '../widgets/live_card.dart';
@@ -30,7 +26,7 @@ class LiveStreamHomeScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 0,
-          // leading: BackButton(),
+          leading: const BackButton(),
           bottom: TabBar(
             indicatorColor:
                 context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
@@ -57,29 +53,6 @@ class LiveStreamHomeScreen extends StatelessWidget {
       onRefresh: () async => context.read<StreamCubit>().loadLives(),
       child: Scaffold(
         body: _buildLivePages(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            await context
-                .read<StreamCubit>()
-                .createLive(title: 'Mo Salama Mo Salama');
-            if (context.mounted) {
-              context.push(Routes.LIVEView,
-                  extra: ZegoArgs(
-                      context
-                          .read<StreamCubit>()
-                          .state
-                          .liveCreateResponseEntity!
-                          .id,
-                      true,
-                      context.read<UserCubit>().state.data!.fullName));
-            }
-          },
-          backgroundColor: Colors.red,
-          child: const Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
-        ),
       ),
     );
   }
@@ -89,6 +62,7 @@ class LiveStreamHomeScreen extends StatelessWidget {
       builder: (context, state) {
         var cubit = context.read<StreamCubit>();
         return PagedListView(
+          shrinkWrap: true,
           pagingController: cubit.roomsPagingController,
           scrollDirection: Axis.vertical,
           physics: const BouncingScrollPhysics(),
@@ -121,3 +95,19 @@ class LiveStreamHomeScreen extends StatelessWidget {
     );
   }
 }
+/*
+await context
+                .read<StreamCubit>()
+                .createLive(title: 'Mo Salama Mo Salama');
+            if (context.mounted) {
+              context.push(Routes.LIVEView,
+                  extra: ZegoArgs(
+                      context
+                          .read<StreamCubit>()
+                          .state
+                          .liveCreateResponseEntity!
+                          .id,
+                      true,
+                      context.read<UserCubit>().state.data!.fullName));
+            }
+ */
