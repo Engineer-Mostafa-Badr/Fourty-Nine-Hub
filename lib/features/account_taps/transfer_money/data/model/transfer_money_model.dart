@@ -8,14 +8,19 @@ class TransferMoneyModel extends TransferMoneyEntity {
       required super.toUsername,
       required super.amount,
       required super.currency,
-      required super.date});
+      required super.date,
+      required super.fromEmail,
+      required super.toEmail,
+      });
 
   factory TransferMoneyModel.fromJson(Map<String, dynamic> json) {
     return TransferMoneyModel(
       from: json['from'] ??'',
       fromUsername: json['fromUsername'] ??'',
+      fromEmail: json['fromEmail'] ??'',
       to: json['to'] ??'',
       toUsername: json['toUsername'] ??'',
+      toEmail: json['toEmail'] ??'',
       amount: json['amount'] ??0,
       currency: json['currency'] ??'',
       date: json['date'] ??'',

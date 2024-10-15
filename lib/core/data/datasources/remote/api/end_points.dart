@@ -120,6 +120,8 @@ class EndPoints {
   static const clickGlobal='/global/click';
   static String deleteMyTripJoin({required String id}) =>
       '/ride/come-with-you/Delete/$id';
+  static String getMyAdsWithId({required String id}) =>
+      '/ads/getAd/$id';
   static String deleteMyInstallment({required String id}) =>
       '/ads/deleteAd/$id';
   static String getAllCount(Params params) =>

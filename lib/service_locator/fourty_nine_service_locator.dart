@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/account_taps/my_adds/data/repositories/my
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/repositories/my_ads_repo.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/accept_come_with_me_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/accept_pick_me_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/fetch_my_ads_by_id_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/get_my_ads_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/reject_come_with_me_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/reject_pick_me_usecase.dart';
@@ -298,6 +299,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<FetchMyAdsByIdUseCase>(
+          () => FetchMyAdsByIdUseCase(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<DeleteMyTripJoinUseCase>(
           () => DeleteMyTripJoinUseCase(
         serviceLocator(),
@@ -407,6 +413,7 @@ serviceLocator.registerLazySingleton<FilterAdUseCase>(
 
     serviceLocator.registerFactory<MyAddsCubit>(
       () => MyAddsCubit(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

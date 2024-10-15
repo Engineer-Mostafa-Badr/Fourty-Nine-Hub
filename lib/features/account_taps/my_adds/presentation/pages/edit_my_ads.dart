@@ -154,7 +154,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                                       ? AppColors.PRIMARY_COLOR
                                       : Colors.white,
                                   borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(
+                                    border: Border.all(
                                       color: AppColors.PRIMARY_COLOR)),
                               alignment: AlignmentDirectional.center,
                               child: Text(
@@ -417,7 +417,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                       ),
                       const Sizer(),
                       DefaultButton(
-                          label: LocaleKeys.publish.localize,
+                          label: LocaleKeys.edit.localize,
                           onPressed: () {
                             // controller.createAd(
                             //     categorize: widget.categorization,

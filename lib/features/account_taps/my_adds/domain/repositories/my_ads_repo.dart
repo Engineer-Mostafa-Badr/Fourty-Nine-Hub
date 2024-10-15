@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/get_all_count_ads_entity.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/edit_my_ads_entity.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
@@ -37,4 +38,5 @@ abstract class MyAdsRepo {
   Future<Either<Failure, bool>> updateMyAds(UpdateMyAdsParams params);
   Future<Either<Failure, bool>> editMyAds(EditParams params);
   Future<Either<Failure, ClickEntity>> click(ClickParams params);
+  Future<Either<Failure, EditMyAdsEntity>> fetchMyAdsById({required String id});
 }
