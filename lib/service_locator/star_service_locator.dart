@@ -1,6 +1,7 @@
 import 'package:fourtyninehub/features/star_feature/data/data_source/star_remote_data_source.dart';
 import 'package:fourtyninehub/features/star_feature/data/repository/star_repository_impl.dart';
 import 'package:fourtyninehub/features/star_feature/domain/repository/star_repository.dart';
+import 'package:fourtyninehub/features/star_feature/domain/use_case/delete_my_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_myl_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
@@ -29,6 +30,10 @@ class StarServiceLocator {
             ));
     serviceLocator.registerLazySingleton<UploadMyStarUseCase>(
         () => UploadMyStarUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<DeleteMyStarUseCase>(
+        () => DeleteMyStarUseCase(
               serviceLocator(),
             ));
 

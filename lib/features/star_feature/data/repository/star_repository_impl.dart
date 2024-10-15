@@ -24,4 +24,9 @@ class StarRepositoryImpl extends StarRepository{
     return _remoteDataSource.uploadMyStar(params);
   }
 
+  @override
+  Future<Either<Failure, bool>> deleteMyStar({required String id}) {
+    return _remoteDataSource.deleteMyStar(id: id);
+  }
+
 }

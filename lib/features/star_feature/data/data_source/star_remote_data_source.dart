@@ -12,6 +12,7 @@ abstract class StarRemoteDataSource {
   Future<Either<Failure, List<StarEntity>>> fetchMyStar();
 
   Future<Either<Failure, bool>> uploadMyStar(StarParams params);
+  Future<Either<Failure, bool>> deleteMyStar({required String id});
 }
 
 class StarRemoteDataSourceImpl extends StarRemoteDataSource {
@@ -55,6 +56,19 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
     return response.fold(
       (failure) => Left(failure),
       (response) {
+        return Right((response['status']));
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteMyStar({required String id}) async {
+    final response =
+    await _apiConsumer.delete(EndPoints.deleteMyStar(id: id),);
+
+    return response.fold(
+          (failure) => Left(failure),
+          (response) {
         return Right((response['status']));
       },
     );

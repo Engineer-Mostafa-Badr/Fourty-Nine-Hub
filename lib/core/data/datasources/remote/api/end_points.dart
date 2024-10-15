@@ -121,6 +121,8 @@ class EndPoints {
   static const allStar = '/talent/';
   static const myStar = '/talent/my-talent';
   static const uploadStar = '/talent/upload';
+  static String deleteMyStar({required String id}) =>
+      '/talent/$id';
 
   //My Ads
   static const myAdsAuction='/ads/allMyAds/auction';

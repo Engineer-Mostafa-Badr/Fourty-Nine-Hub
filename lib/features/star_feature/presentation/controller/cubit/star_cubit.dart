@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
+import 'package:fourtyninehub/features/star_feature/domain/use_case/delete_my_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_myl_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
@@ -12,9 +13,10 @@ class StarCubit extends Cubit<StarState> {
   final FetchAllStarUseCase _allStarUseCase;
   final FetchMylStarUseCase _fetchMylStarUseCase;
   final UploadMyStarUseCase _uploadMyStarUseCase;
+  final DeleteMyStarUseCase _deleteMyStarUseCase;
 
   StarCubit(this._allStarUseCase, this._fetchMylStarUseCase,
-      this._uploadMyStarUseCase)
+      this._uploadMyStarUseCase, this._deleteMyStarUseCase)
       : super(StarState());
 
   TextEditingController starController = TextEditingController();
@@ -114,6 +116,24 @@ class StarCubit extends Cubit<StarState> {
     emit(state.copyWith(status: StarStates.loading));
 
     final response = await _uploadMyStarUseCase(params);
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: StarStates.error));
+      },
+          (data) {
+        emit(state.copyWith(
+          status: StarStates.success,
+        ));
+      },
+    );
+  }
+  Future<void> deleteMyStar({
+    required String id,
+  }) async {
+    emit(state.copyWith(status: StarStates.loading));
+
+    final response = await _deleteMyStarUseCase(id);
 
     response.fold(
           (failure) {

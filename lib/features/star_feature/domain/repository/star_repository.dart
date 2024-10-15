@@ -7,4 +7,5 @@ abstract class StarRepository{
   Future<Either<Failure,List<StarEntity>>> fetchAllStar();
   Future<Either<Failure,List<StarEntity>>> fetchMyStar();
   Future<Either<Failure,bool>> uploadMyStar(StarParams params);
+  Future<Either<Failure,bool>> deleteMyStar({required String id});
 }
