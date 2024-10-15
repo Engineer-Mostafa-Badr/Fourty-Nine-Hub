@@ -5,13 +5,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
+import '../../../domain/use_cases/cache_out/pay_out_request_use_case.dart';
 import '../../../domain/use_cases/cache_out/request_yellow_card_use_case.dart';
 import '../../cache_out_cubit/payment_cubit.dart'; // For image picking
 
@@ -27,6 +28,10 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
   bool isRequestingYellowCard = false;
   final TextEditingController yellowCardNumberController =
       TextEditingController();
+  final TextEditingController amountController = TextEditingController();
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController nationalIdController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -39,11 +44,16 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) =>
-          serviceLocator<PaymentCacheOutCubit>()..getWallet(),
+          serviceLocator<PaymentCacheOutCubit>()..loadData(),
       child: BlocConsumer<PaymentCacheOutCubit, PaymentCacheOutState>(
         listener: (BuildContext context, PaymentCacheOutState state) {
           if (state.status == StateStatus.success) {
-            showSuccessMessage(context, LocaleKeys.receiveFawry.localize);
+            if(hasYellowCard)
+              {showSuccessMessage(context, LocaleKeys.yellowCardSuccess.localize);
+              }else{
+              showSuccessMessage(context, LocaleKeys.receiveFawry.localize);
+            }
+
           }
           if (state.status == StateStatus.error) {
             showErrorMessage(
@@ -68,6 +78,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                     title: Label(text: LocaleKeys.doYellowCard.localize),
                     value: hasYellowCard,
                     activeTrackColor: AppColors.SECONDARY_COLOR,
+                    activeColor: AppColors.AUTH_CONTAINER_COLOR,
                     inactiveTrackColor: AppColors.GREY_NORMAL_COLOR,
                     onChanged: (value) {
                       setState(() {
@@ -78,33 +89,46 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                   if (hasYellowCard) ...[
                     Column(
                       children: [
-                        TextFormField(
-                          controller: yellowCardNumberController,
-                          decoration: InputDecoration(
-                            labelText: LocaleKeys
-                                .yellowCardNumber.localize, // Localized text
-                          ),
-                          keyboardType: TextInputType.phone,
+                        buildInputField(
+                          controller: amountController,
+                          labelText: LocaleKeys.amount.localize,
+                          keyboardType: TextInputType.number,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return LocaleKeys.pleaseEnterYourPhoneNumber
-                                  .localize; // Please enter a phone number
+                              return LocaleKeys.pleaseEnterTheAmount.localize;
                             }
-                            // Regex for Egyptian phone number
-                            final RegExp phoneRegExp =
-                                RegExp(r'^(01)[0-9]{9}$');
-                            if (!phoneRegExp.hasMatch(value)) {
-                              return LocaleKeys.invalidPhoneNumber
-                                  .localize; // Invalid phone number
-                            }
-                            return null; // Valid
+                            return null;
                           },
+                        ),
+                        const Sizer(),
+                        buildInputField(
+                          controller: yellowCardNumberController,
+                          labelText: LocaleKeys.yellowCardNumber.localize,
+                          keyboardType: TextInputType.phone,
+                          validator: _validatePhoneNumber,
                         ),
                         const Sizer(),
                         InkWell(
                           onTap: () {
                             if (formKey.currentState!.validate()) {
-                              //  showSuccessMessage(context, 'رقم الهاتف صحيح');
+                              showAreYouSure(
+                                  title: LocaleKeys.alert.localize,
+                                  subTitle:
+                                      LocaleKeys.sureWithdrawMoney.localize,
+                                  action: () {
+                                    context
+                                        .read<PaymentCacheOutCubit>()
+                                        .payOutRequest(
+                                            params: PayoutRequestParams(
+                                          amount: double.parse(
+                                              amountController.text),
+                                          payoutMethod: 'fawry_card',
+                                          phoneNumber:
+                                              yellowCardNumberController.text,
+                                          payoutSource: 'main_wallet',
+                                        ));
+                                  },
+                                  context: context);
                             }
                           },
                           child: Container(
@@ -144,7 +168,8 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                         ),
                         child: Center(
                           child: Label(
-                            text: LocaleKeys.WillBeDeducted.localize,
+                            text:
+                                '${LocaleKeys.requestYellowCard.localize} (${state.price?.yellowCardCharge} ${state.price?.currency} ${LocaleKeys.deducted.localize})',
                             maxLines: 2,
                             color: AppColors.AUTH_CONTAINER_COLOR,
                           ),
@@ -152,7 +177,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                       ),
                     ),
                   ],
-                  if (isRequestingYellowCard) ...[
+                  if (isRequestingYellowCard && !hasYellowCard) ...[
                     Sizer(height: 50.h),
                     Text(
                       LocaleKeys.iDFrontAndBack.localize,
@@ -218,6 +243,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                                   ),
                                 ),
                               ),
+                              const Sizer(),
                               if (state.frontImage != null &&
                                   state.frontImage?.file != null)
                                 Column(
@@ -311,6 +337,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                                   ),
                                 ),
                               ),
+                              const Sizer(),
                               if (state.backImage != null &&
                                   state.backImage?.file != null)
                                 Column(
@@ -346,6 +373,38 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                         ),
                       ],
                     ),
+                    const Sizer(),
+                    buildInputField(
+                      controller: fullNameController,
+                      labelText: LocaleKeys.fullName.localize,
+                      keyboardType: TextInputType.name,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return LocaleKeys.pleaseEnterFullName.localize;
+                        }
+                        return null;
+                      },
+                    ),
+                    const Sizer(),
+                    buildInputField(
+                      controller: phoneController,
+                      labelText: LocaleKeys.phoneNumber.localize,
+                      validator: _validatePhoneNumber,
+                    ),
+                    const Sizer(),
+                    buildInputField(
+                      controller: nationalIdController,
+                      labelText: LocaleKeys.nationalIdNumber.localize,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return LocaleKeys.pleaseEnterNationalId.localize;
+                        }
+                        if (!RegExp(r'^[0-9]{14}$').hasMatch(value)) {
+                          return LocaleKeys.pleaseEnter14Digit.localize;
+                        }
+                        return null;
+                      },
+                    ),
                     Sizer(height: 30.h),
                     InkWell(
                       onTap: () {
@@ -355,16 +414,23 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                             state.wallet!.realAmount >= 300) {
                           if (state.frontImage?.mediaId != null &&
                               state.backImage?.mediaId != null) {
-                            context
-                                .read<PaymentCacheOutCubit>()
-                                .requestYellowCard(
-                                    params: RequestYellowCardParams(
-                                  nationalIdBack: state.frontImage!.mediaId,
-                                  nationalIdFront: state.backImage!.mediaId,
-                                ));
-                            print('FFFFFFFFFFFFFFFFFFFFFF');
-                            print(state.frontImage?.mediaId);
-                            print(state.backImage?.mediaId);
+                            if (formKey.currentState!.validate()) {
+                              context
+                                  .read<PaymentCacheOutCubit>()
+                                  .requestYellowCard(
+                                      params: RequestYellowCardParams(
+                                          nationalIdBack:
+                                              state.frontImage!.mediaId,
+                                          nationalIdFront:
+                                              state.backImage!.mediaId,
+                                          fullName: fullNameController.text,
+                                          nationalIdNumber:
+                                              nationalIdController.text,
+                                          phoneNumber: phoneController.text));
+                              print('FFFFFFFFFFFFFFFFFFFFFF');
+                              print(state.frontImage?.mediaId);
+                              print(state.backImage?.mediaId);
+                            }
                           } else {
                             showErrorMessage(
                               context,
@@ -398,5 +464,41 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
         },
       ),
     );
+  }
+
+  Widget buildInputField({
+    required TextEditingController controller,
+    required String labelText,
+    TextInputType keyboardType = TextInputType.text,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: labelText,
+        fillColor: Colors.transparent,
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+        ),
+      ),
+      keyboardType: keyboardType,
+      validator: validator,
+    );
+  }
+
+  String? _validatePhoneNumber(String? value) {
+    if (value == null || value.isEmpty) {
+      return LocaleKeys
+          .pleaseEnterYourPhoneNumber.localize; // Please enter a phone number
+    }
+    // Regex for Egyptian phone number
+    final RegExp phoneRegExp = RegExp(r'^(01)[0-9]{9}$');
+    if (!phoneRegExp.hasMatch(value)) {
+      return LocaleKeys.invalidPhoneNumber.localize; // Invalid phone number
+    }
+    return null;
   }
 }

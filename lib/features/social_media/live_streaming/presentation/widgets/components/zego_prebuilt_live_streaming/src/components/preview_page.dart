@@ -41,7 +41,6 @@ import '../../../../../../../social_posts/presentation/widgets/facebook_widgets/
 import '../../../../../../../tinder/data/shared/shared.dart';
 import '../../../../../../../tinder/presentation/cubit/gift_cubit.dart';
 import '../../../../../../domain/entity/topic_entity.dart';
-import '../../../../liveview/gifts/simple_gifts_sheet.dart';
 import '../config.dart';
 import 'select_live_goals_screen.dart';
 
@@ -271,12 +270,13 @@ class _ZegoLiveStreamingPreviewPageState
                             builder: (context, state) {
                               print(state.topicId);
                               print(state.topic);
-                              return Text(
-                                state.topic.isEmpty
+                              return Label(
+                                text: state.topic.isEmpty
                                     ? LocaleKeys.addTopic.localize
                                     : state.topic,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: Colors.white,
+                                  fontSize: 25.sp,
                                 ),
                               );
                             },
@@ -294,8 +294,6 @@ class _ZegoLiveStreamingPreviewPageState
                       //     receiverId: '', forSelect: true);
                       Navigator.of(context).push(createCustomTransitionRoute(
                         MultiBlocProvider(providers: [
-                          BlocProvider.value(
-                              value: serviceLocator<StreamCubit>()),
                           BlocProvider(
                               create: (context) =>
                                   serviceLocator<GiftsCubit>()..fetchGifts()),
@@ -316,12 +314,15 @@ class _ZegoLiveStreamingPreviewPageState
                             'assets/49-New-icons/goal.png',
                             width: 25,
                           ),
-                          const SizedBox(
-                            width: 5,
+                          SizedBox(
+                            width: 5.w,
                           ),
-                          Text(
-                            LocaleKeys.addLiveGoal.localize,
-                            style: const TextStyle(color: Colors.white),
+                          Label(
+                            text: LocaleKeys.addLiveGoal.localize,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25.sp,
+                                fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -340,33 +341,29 @@ class _ZegoLiveStreamingPreviewPageState
       context: context,
       builder: (context) => Padding(
         padding: const EdgeInsets.all(16.0),
-        child: BlocProvider.value(
-          value: serviceLocator<StreamCubit>(),
-          child:
-              BlocBuilder<StreamCubit, StreamState>(builder: (context, state) {
-            return Column(mainAxisSize: MainAxisSize.min, children: [
-              Label(
-                text: LocaleKeys.selectATopic.localize,
-                style: Styles.headerText(
-                  fontWeight: FontWeight.bold,
-                ),
+        child: BlocBuilder<StreamCubit, StreamState>(builder: (context, state) {
+          return Column(mainAxisSize: MainAxisSize.min, children: [
+            Label(
+              text: LocaleKeys.selectATopic.localize,
+              style: Styles.headerText(
+                fontWeight: FontWeight.bold,
               ),
-              ...topics.map((topic) {
-                return RadioListTile<String>(
-                  title: Label(text: topic.name),
-                  value: topic.name,
-                  groupValue: state.topic.isEmpty ? null : state.topic,
-                  onChanged: (value) {
-                    context.read<StreamCubit>().setTopic(topic.name, topic.id);
-                    Future.delayed(
-                        const Duration(milliseconds: 100), () => context.pop());
-                    // print('new topic is ${state.topic}');
-                  },
-                );
-              }),
-            ]);
-          }),
-        ),
+            ),
+            ...topics.map((topic) {
+              return RadioListTile<String>(
+                title: Label(text: topic.name),
+                value: topic.name,
+                groupValue: state.topic.isEmpty ? null : state.topic,
+                onChanged: (value) {
+                  context.read<StreamCubit>().setTopic(topic.name, topic.id);
+                  Future.delayed(
+                      const Duration(milliseconds: 100), () => context.pop());
+                  // print('new topic is ${state.topic}');
+                },
+              );
+            }),
+          ]);
+        }),
       ),
     );
   }
@@ -509,28 +506,43 @@ class _ZegoLiveStreamingPreviewPageState
               ),
             ),
             const Expanded(child: SizedBox()),
-            Container(
-              // padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              margin: const EdgeInsets.all(25),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.grey.withOpacity(0.7),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget liveBottomBar() {
+    if (!widget.config.preview.bottomBar.isVisible) {
+      return Container();
+    }
+
+    final buttonSize = Size(88.zR, 88.zR);
+    final iconSize = Size(56.zR, 56.zR);
+
+    final beautyButtonPlaceHolder =
+        SizedBox(width: buttonSize.width, height: buttonSize.height);
+
+    return Positioned(
+      bottom: 50,
+      left: 0,
+      right: 0,
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: 89.zR,
+            top: 0,
+            right: 89.zR,
+            bottom: 0.zR,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              widget.config.preview.bottomBar.showBeautyEffectButton
+                  ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // ZegoSwitchCameraButton(
-                  //   buttonSize: buttonSize,
-                  //   iconSize: iconSize,
-                  //   icon: ButtonIcon(
-                  //     icon: const Icon(Icons.switch_camera, size: 20),
-                  //     backgroundColor: Colors.transparent,
-                  //   ),
-                  //   defaultUseFrontFacingCamera: ZegoUIKit()
-                  //       .getUseFrontFacingCameraStateNotifier(
-                  //           ZegoUIKit().getLocalUser().id)
-                  //       .value,
-                  // ),
                   ZegoToggleMicrophoneButton(
                     buttonSize: buttonSize,
                     iconSize: iconSize,
@@ -584,55 +596,18 @@ class _ZegoLiveStreamingPreviewPageState
                       backgroundColor: Colors.transparent,
                     ),
                   ),
+                  ZegoLiveStreamingBeautyEffectButton(
+                    translationText: widget.config.innerText,
+                    rootNavigator: widget.config.rootNavigator,
+                    effectConfig: widget.config.effect,
+                    buttonSize: buttonSize,
+                    iconSize: iconSize,
+                    icon: ButtonIcon(
+                      icon: const Icon(Icons.edit),
+                    ),
+                  )
                 ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget liveBottomBar() {
-    if (!widget.config.preview.bottomBar.isVisible) {
-      return Container();
-    }
-
-    final buttonSize = Size(88.zR, 88.zR);
-    final iconSize = Size(56.zR, 56.zR);
-
-    final beautyButtonPlaceHolder =
-        SizedBox(width: buttonSize.width, height: buttonSize.height);
-
-    return Positioned(
-      bottom: 50,
-      left: 0,
-      right: 0,
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: 89.zR,
-            top: 0,
-            right: 89.zR,
-            bottom: 0.zR,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              widget.config.preview.bottomBar.showBeautyEffectButton
-                  ? ZegoLiveStreamingBeautyEffectButton(
-                      translationText: widget.config.innerText,
-                      rootNavigator: widget.config.rootNavigator,
-                      effectConfig: widget.config.effect,
-                      buttonSize: buttonSize,
-                      iconSize: iconSize,
-                      icon: widget.config.preview.beautyEffectIcon != null
-                          ? ButtonIcon(
-                              icon: widget.config.preview.beautyEffectIcon,
-                            )
-                          : null,
-                    )
+              )
                   : beautyButtonPlaceHolder,
               SizedBox(width: 48.zR),
               startButton(),
@@ -675,7 +650,6 @@ class _ZegoLiveStreamingPreviewPageState
             return;
           }
           if (title != null && title.isNotEmpty) {
-            await context.read<StreamCubit>().createLive(title: title);
             widget.startedNotifier.value = true;
           } else {
             showErrorMessage(context, 'Please enter simple title');

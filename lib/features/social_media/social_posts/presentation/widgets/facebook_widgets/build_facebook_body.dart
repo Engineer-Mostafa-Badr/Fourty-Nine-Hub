@@ -38,7 +38,9 @@ class FacebookBody extends StatelessWidget {
           create: (_) => serviceLocator()..loadData(),
         ),
         BlocProvider(
-          create: (context) => serviceLocator<StoryCubit>()..fetchStories(),
+          create: (context) => serviceLocator<StoryCubit>()
+            ..fetchStories()
+            ..getMutedStories(),
           // create: (context) => serviceLocator<StoryCubit>(),
         ),
       ],
@@ -57,7 +59,9 @@ class FacebookBody extends StatelessWidget {
         final controller = context.read<SocialPostsCubit>();
         return RefreshIndicator(
           onRefresh: () async {
-            context.read<StoryCubit>().fetchStories(loadMore: true);
+            context.read<StoryCubit>()
+              ..fetchStories(loadMore: true)
+              ..getMutedStories();
             controller.onRefresh();
           },
           child: CustomScrollView(

@@ -49,6 +49,7 @@ import 'package:fourtyninehub/features/social_media/reels/data/models/save_reel_
 import 'package:fourtyninehub/features/social_media/reels/data/models/share_reel_model.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../../core/utils/shared_pref.dart';
 import '../../../data/models/new_reels_model.dart';
 import '../../../data/repositories/reels_repository_impl.dart';
@@ -101,7 +102,15 @@ class ReelsState {
   final String? uploadReelErrorMessage;
   final bool? uploadReelSuccess;
 
+  // Fields for Reel View operation (ReelViewState)
+  final bool? isCreatingReelView;
+  final String? reelViewErrorMessage;
+  final bool? reelViewSuccess;
+
   ReelsState({
+    this.isCreatingReelView,
+    this.reelViewErrorMessage,
+    this.reelViewSuccess,
     required this.reelsForFollower,
     this.reelsForFollowerIsLoading = false,
     this.reelsForFollowerHasReachedMax = false,
@@ -135,6 +144,9 @@ class ReelsState {
   });
 
   ReelsState copyWith({
+    bool? isCreatingReelView,
+    String? reelViewErrorMessage,
+    bool? reelViewSuccess,
     List<Reel>? reelsForFollower,
     bool? reelsForFollowerIsLoading,
     bool? reelsForFollowerHasReachedMax,
@@ -167,6 +179,9 @@ class ReelsState {
     bool? uploadReelSuccess,
   }) {
     return ReelsState(
+        isCreatingReelView: isCreatingReelView ?? this.isCreatingReelView,
+        reelViewErrorMessage: reelViewErrorMessage ?? this.reelViewErrorMessage,
+        reelViewSuccess: reelViewSuccess ?? this.reelViewSuccess,
         isLikingComment: isLikingComment ?? this.isLikingComment,
         likeReelCommentErrorMessage:
             likeReelCommentErrorMessage ?? this.likeReelCommentErrorMessage,
@@ -210,8 +225,9 @@ class ReelsState {
 
 class ReelsCubit extends Cubit<ReelsState> {
   final ReelsRepository repository;
+  final ApiConsumer apiConsumer;
 
-  ReelsCubit({required this.repository})
+  ReelsCubit(this.apiConsumer, {required this.repository})
       : super(ReelsState(
             reelsForFollower: [],
             reelSaveResponse: ReelSaveResponse(),
@@ -220,6 +236,36 @@ class ReelsCubit extends Cubit<ReelsState> {
             globalReelsIsLoading: false,
             globalReelsHasReachedMax: false,
             globalReelsCurrentPage: 0));
+
+//---------------------------------------------------------------------------------------
+
+  var pauseChild = false;
+
+  pauseChildVideo({bool pause = false}) {
+    pauseChild = pause;
+    print(pauseChild.toString() + "asfsldhfnsd");
+
+    emit(state);
+  }
+
+  Future<void> createReelView(String reelId, int duration) async {
+    emit(state.copyWith(isCreatingReelView: true));
+
+    final String url = 'https://49dev.com/api/v1/reels/views/$reelId';
+
+    final result = await apiConsumer.post(
+      url,
+      data: {
+        "duration": duration,
+      },
+    );
+
+    result.fold(
+      (failure) =>
+          emit(state.copyWith(reelViewErrorMessage: failure.toString())),
+      (data) => emit(state.copyWith(reelViewSuccess: true)),
+    );
+  }
 
 //---------------------------------------------------------------------------------------
 
@@ -337,6 +383,7 @@ class ReelsCubit extends Cubit<ReelsState> {
         page: state.globalReelsCurrentPage + 1,
       );
 
+      print(response.data.reels.length.toString() + "asfadjcbalc");
       emit(state.copyWith(
         reels: [...state.globalReels, ...response.data.reels],
         isLoading: false,
@@ -419,13 +466,14 @@ class ReelsCubit extends Cubit<ReelsState> {
   }
 
 //--------------------------------------------------------------------------------------------
-  Future<void> likeReel(String reelId) async {
+  Future<String> likeReel(String reelId) async {
     try {
       emit(state.copyWith(
           isLikingReel: false, likeReelErrorMessage: 'loadingLike'));
 
       final response = await repository.likeReel(reelId);
 
+      print(response.message+"dsfdvsdvsdv");
       // Assuming you might want to update the specific reel in the list with the like status
       List<Reel> updatedReels = state.globalReels.map((reel) {
         if (reel.id == reelId) {
@@ -438,12 +486,14 @@ class ReelsCubit extends Cubit<ReelsState> {
           likeReelResponse: response,
           isLikingReel:
               response.message == "Reel liked successfully" ? true : false));
+      return  response.message;
     } catch (e) {
       emit(state.copyWith(
           isLikingReel: false,
           likeReelErrorMessage:
               'errorLike')); // Handle the error, possibly update the UI state or show an error message
     }
+    return '';
   }
 
   //======================================================================================

@@ -136,6 +136,8 @@
 
 import 'dart:convert';
 import 'dart:developer';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/audio_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
@@ -143,6 +145,7 @@ import 'package:fourtyninehub/features/social_media/reels/data/models/like_model
 import 'package:fourtyninehub/features/social_media/reels/data/models/save_reel_model.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/utils/shared_pref.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
@@ -152,7 +155,7 @@ import '../models/share_reel_model.dart';
 class ReelsRepository {
   String? token;
 
-  ReelsRepository() {
+  ReelsRepository(this.apiConsumer) {
     _initializeToken();
   }
 
@@ -164,39 +167,83 @@ class ReelsRepository {
     token ??= await TokenManager.getAccessToken();
   }
 
-  Future<http.Response?> _makeGetRequest({
+  // Future<http.Response?> _makeGetRequest({
+  //   required String url,
+  //   required String fromMethod,
+  // }) async {
+  //   await _ensureTokenInitialized();
+  //   try {
+  //     final response = await http.get(
+  //       Uri.parse(url),
+  //       headers: {
+  //         'Authorization': 'Bearer $token',
+  //         'Content-Type': 'application/json',
+  //       },
+  //     );
+  //     var responseData = json.decode(response.body);
+  //     log("from ReelsRepository");
+  //     if (responseData['endPointSubscription'] != null &&
+  //         responseData['endPointSubscription'] == true &&
+  //         responseData['userSubscription'] == false) {
+  //       List<WalletTypes> wallets = (responseData['paymentMethod'] as List)
+  //           .map((e) => (e as String).toWalletType)
+  //           .toList();
+  //       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
+  //           subCategoryId: responseData['subCategoryId'],
+  //           wallets: wallets,
+  //           title: 'Reels Subscription');
+  //     }
+  //     if (response.statusCode >= 200 && response.statusCode < 300) {
+  //       return response;
+  //     } else {
+  //       log("Failed to load data from -----$fromMethod -------------: ${response.statusCode} ${response.body}");
+  //     }
+  //   } catch (e) {
+  //     log("Error fetching data: $e");
+  //   }
+  //   return null;
+  // }
+  final ApiConsumer apiConsumer;
+
+  _makeGetRequest({
     required String url,
     required String fromMethod,
   }) async {
-    await _ensureTokenInitialized();
+    // await _ensureTokenInitialized();
+    Map<String, dynamic>? res;
     try {
-      final response = await http.get(
-        Uri.parse(url),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
+      final response = await apiConsumer.get(
+        url,
       );
-      var responseData = json.decode(response.body);
-      log("from ReelsRepository");
-      if (responseData['endPointSubscription'] != null &&
-          responseData['endPointSubscription'] == true &&
-          responseData['userSubscription'] == false) {
-        List<WalletTypes> wallets = (responseData['paymentMethod'] as List)
-            .map((e) => (e as String).toWalletType)
-            .toList();
-        await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-            subCategoryId: responseData['subCategoryId'], wallets: wallets);
-      }
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        return response;
-      } else {
-        log("Failed to load data from -----$fromMethod -------------: ${response.statusCode} ${response.body}");
-      }
+
+      response.fold((l) => (l) {}, (r) async {
+        log("from ReelsRepository${r.toString()}");
+        if (r['endPointSubscription'] != null &&
+            r['endPointSubscription'] == true &&
+            r['userSubscription'] == false) {
+          List<WalletTypes> wallets = (r['paymentMethod'] as List)
+              .map((e) => (e as String).toWalletType)
+              .toList();
+          await serviceLocator<SubscriptionController>().showSubscriptionPlans(
+              subCategoryId: r['subCategoryId'],
+              wallets: wallets,
+              title: 'Reels Subscription');
+        }
+        log("${r.toString()} knsaln");
+        res = r;
+      });
+      // var responseData = json.decode(response.body);
+
+      // if (response.statusCode >= 200 && response.statusCode < 300) {
+      //   return response;
+      // } else {
+      //   log("Failed to load data from -----$fromMethod -------------: ${response.statusCode} ${response.body}");
+      // }
+      return res;
     } catch (e) {
       log("Error fetching data: $e");
     }
-    return null;
+    return res;
   }
 
   Future<http.Response?> _makePostRequest({
@@ -253,17 +300,17 @@ class ReelsRepository {
 
   Future<ReelsResponse> fetchReels({int page = 1, int limit = 3}) async {
     final url =
-        'https://49dev.com/api/v1/reels/explore?page=$page&limit=$limit&subCategory=66684135dbb427ee42aa0141';
-    final response = await _makeGetRequest(url: url, fromMethod: 'fetchReels');
-    if (response != null) {
-      var responseData = json.decode(response.body);
-      log("from ReelsRepository");
-
-      return ReelsResponse.fromJson(responseData);
-    } else {
-      log("from ReelsRepository Failed to load reels--------------");
-      throw Exception('Failed to load reels');
+        'https://49dev.com/api/v1/reels/explore?page=$page&limit=$limit&subCategory=66684135dbb427ee42aa0141&userId=${serviceLocator<UserCubit>().state.data?.id ?? ''}';
+    var response = await _makeGetRequest(url: url, fromMethod: 'fetchReels');
+    print("${response['data']['reels'].isEmpty}assss");
+    if (response['data']['reels'].isEmpty) {
+      response = await _makeGetRequest(
+          url:
+              'https://49dev.com/api/v1/reels/explore?page=$page&limit=$limit&subCategory=66684135dbb427ee42aa0141',
+          fromMethod: 'fetchReels');
     }
+    log("from ReelsRepository${ReelsResponse.fromJson(response).message}");
+    return ReelsResponse.fromJson(response);
   }
 
   Future<ReelsResponse> fetchReelsForFollowers(
@@ -347,6 +394,10 @@ class ReelsRepository {
 
     final response =
         await _makeGetRequest(url: url, fromMethod: 'fetchComments');
+    log("${response} from fetchComments repo *******************************************************************");
+
+    return GetCommentsResponse.fromJson(response);
+
     if (response != null) {
       log("${response.body} from fetchComments repo *******************************************************************");
       return GetCommentsResponse.fromJson(jsonDecode(response.body));

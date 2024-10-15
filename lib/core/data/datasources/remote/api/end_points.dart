@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
@@ -12,10 +13,12 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
+import '../../../../../features/account_taps/my_adds/domain/usecases/edit_my_ads_use_case.dart';
 import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_counts_ads_usecase.dart';
 import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_counts_usecase.dart';
 import '../../../../../features/account_taps/my_adds/domain/usecases/update_my_ads_usecase.dart';
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
+import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_main_category.dart';
 
 class EndPoints {
   static const pageSize = 20;
@@ -113,11 +116,11 @@ class EndPoints {
   static const favouriteCat = '/navigators/navigateCategories';
 
   //My Ads
-  static const myAdsAuction = '/ads/allMyAds/auction';
-  static const myAdsInstallment = '/ads/allMyAds/installment';
-  static const myAdsOther = '/ads/allMyAds/other';
-  static const myAdsTripJoin =
-      '/ride/come-with-you/my?subCategory=62ea00e269ea29c91dfc390c';
+  static const myAdsAuction='/ads/allMyAds/auction';
+  static const myAdsInstallment='/ads/allMyAds/installment';
+  static const myAdsOther='/ads/allMyAds/other';
+  static const myAdsTripJoin='/ride/come-with-you/my?subCategory=62ea00e269ea29c91dfc390c';
+  static const clickGlobal='/global/click';
   static String deleteMyTripJoin({required String id}) =>
       '/ride/come-with-you/Delete/$id';
   static String deleteMyInstallment({required String id}) =>
@@ -127,6 +130,8 @@ class EndPoints {
   static String getAllAdsCount(CountAdsParams params) =>
       '/ads/users-ads-field/${params.id}?field=${params.status}';
   static String updateMyAds(UpdateMyAdsParams params) =>
+      '/ads/update-ads/${params.id}';
+  static String editMyAds(EditParams params) =>
       '/ads/update-ads/${params.id}';
 
   static const getWallet = '/main-wallet/user-wallet';
@@ -254,6 +259,11 @@ class EndPoints {
   //  Payment Cache Out
   static const instaPay = '/payment-profile';
   static const requestYellowCard = '/payout/yellow-card';
+  static const banks = '/banks';
+  static const payout = '/payout/request';
+  static const requestInstapay = '/payout/request-instapay';
+  static const yellowCardPrice = '/payout/yellow-card/price';
+  static const payoutMethod = '/payout/methods';
 
   static String doctorAcceptAppointment(String appointmentId) =>
       '/health/book-appointment/approve/$appointmentId';
@@ -642,6 +652,7 @@ class EndPoints {
   }
 
   static const createAd = '/ads/create-ads';
+  static filterAd (FilterModel filter)=> '/ads/filter-ads/${filter.subCategoryId}?government=${filter.governorateId}&city=${filter.cityId}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
   static const myAds = '/ads/allMyAds?limit=100';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const favouriteAds = '/ads-favourites/allFavouriteAds';
@@ -831,6 +842,15 @@ class EndPoints {
   static String getRequest(String id) =>
       '/ride/come-with-you/trip/requests//$id';
   static String carpoolRoutePrice = '/carpool/price';
+
+  // Chance
+  static String chance = '/chance-ads/my-ads';
+  static String addChance = '/chance-ads';
+  static String subCatChance = '/categories/main/has-auction?page=1&limit=100';
+  static String rateChance(String id ) => '/chance-ads/contribution-percentage/$id';
+  static String mainCatChance(MainCategoryChanceParams params) {
+    return '/categories/main/has-auction?page=${params.paginationParams.page}&limit=${params.paginationParams.limit}';
+  }
   static String joinTripCarPool = '/carpool/joinCompleteBus';
   static String createCarPool = '/carpool/create';
 }

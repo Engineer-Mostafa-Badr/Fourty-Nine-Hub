@@ -30,18 +30,21 @@ class CreateAdState {
   final List<MainCategoryEntity>? mainCategories;
   final List<SubCategoryEntity>? subCategories;
   final List<AdPropertiesEntity>? adProperties;
+  final List<AdPropertiesEntity>? filterAdProperties;
   final List<SelectionEntity>? selections;
   final MainCategoryEntity? selectedCategory;
   final SubCategoryEntity? selectedSubCategory;
   final List<GovernorateEntity>? governorates;
   bool? isUser;
   bool? isSale;
+  bool? isMale;
   final List<UploadFileEntity>? images;
 
   CreateAdState(
       {this.failure,
       this.mainCategories,
       this.adProperties,
+      this.filterAdProperties,
       this.selectedCategory,
       this.selections,
       this.selectedSubCategory,
@@ -52,6 +55,7 @@ class CreateAdState {
       this.isUser = true,
       this.isSale = true,
       this.isPrice = true,
+      this.isMale = true,
       this.images,
       this.governorate='',
       this.subCategories});
@@ -62,11 +66,13 @@ class CreateAdState {
     List<MainCategoryEntity>? mainCategories,
     List<SubCategoryEntity>? subCategories,
     List<AdPropertiesEntity>? adProperties,
+    List<AdPropertiesEntity>? filterAdProperties,
     MainCategoryEntity? selectedCategory,
     List<SelectionEntity>? selections,
     List<GovernorateEntity>? governorates,
     bool? isUser,
     bool? isSale,
+    bool? isMale,
     bool? isPrice,
     String? city,
     String? governorate,
@@ -79,6 +85,7 @@ class CreateAdState {
       status: status ?? this.status,
       failure: failure ?? this.failure,
       adProperties: adProperties ?? this.adProperties,
+      filterAdProperties: filterAdProperties ?? this.filterAdProperties,
       mainCategories: mainCategories ?? this.mainCategories,
       subCategories: subCategories ?? this.subCategories,
       selectedCategory: selectedCategory ?? this.selectedCategory,
@@ -86,6 +93,7 @@ class CreateAdState {
       images: images ?? this.images,
       isUser: isUser ?? this.isUser,
       isSale: isSale ?? this.isSale,
+      isMale: isMale ?? this.isMale,
       isPrice: isPrice ?? this.isPrice,
       cities: cities ?? this.cities,
       city: city ?? this.city,

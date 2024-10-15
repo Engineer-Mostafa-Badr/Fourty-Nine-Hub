@@ -96,4 +96,13 @@ class JsonParser implements ApiConsumer {
     }
     return UnknownFailure(e);
   }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> patch(String url,
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) {
+    // TODO: implement patch
+    throw UnimplementedError();
+  }
 }

@@ -10,6 +10,7 @@ class BalanceDataEntity {
   final bool? tenYearsTransfer;
   final num? fiveYearsLeft;
   final num? tenYearsLeft;
+  final String? currency;
 
   BalanceDataEntity({
     required this.balance,
@@ -23,5 +24,6 @@ class BalanceDataEntity {
     required this.tenYearsLeft,
     required this.fiveYearsComplete,
     required this.tenYearsComplete,
+    required this.currency,
   });
 }

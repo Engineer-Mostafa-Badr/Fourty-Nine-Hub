@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -10,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 
 part 'chats_state.dart';
@@ -19,6 +21,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   final StopListenToMessagesUseCase _stopListenToMessagesUseCase;
   final MarkMessagesAsDeliveredUseCase _markMeesagesAsDeliveredUseCase;
   final GetChatsUseCase _getChatsUseCase;
+  final ChangeChatToArchiveOrNormalUseCase _changeChatToArchiveOrNormalUseCase;
   final Map<String, ChatEntity> _chats = {};
   ChatCategories _selectedChatCategory = ChatCategories.values.first;
   late ChatEntity _selectedChat;
@@ -29,6 +32,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._listenToNewMessageUseCase,
     this._stopListenToMessagesUseCase,
     this._markMeesagesAsDeliveredUseCase,
+    this._changeChatToArchiveOrNormalUseCase,
   ) : super(const ChatsState());
 
   // Selected Chats
@@ -163,5 +167,21 @@ class ChatsCubit extends Cubit<ChatsState> {
   Future<void> close() {
     _stopListenToMessagesUseCase(const NoParams());
     return super.close();
+  }
+
+  Future<void> changeActiveChat() async {
+    for (var chat in selectedChats) {
+      // chat.archived = !chat.archived;
+      log("archived = ${chat.archived}");
+      final respons = await _changeChatToArchiveOrNormalUseCase(chat.id);
+      respons.fold((l) => null, (r) {
+        if (_chats.containsKey(chat.id)) {
+          _chats[chat.id]?.archived = !(_chats[chat.id]!.archived);
+        }
+      });
+      chat.isSelected = false; // setter getter in chatsEntity
+    }
+    selectedChats.clear();
+    await getArchivedChats();
   }
 }

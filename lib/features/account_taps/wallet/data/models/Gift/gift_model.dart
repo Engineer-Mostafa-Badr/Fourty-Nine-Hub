@@ -9,20 +9,19 @@ class GiftModelModel extends GiftEntity {
     required super.id,
     required super.amount,
     required super.wheelWinner,
+    required super.currency,
   });
 
   factory GiftModelModel.fromJson(Map<String, dynamic> json) {
     return GiftModelModel(
       giftWallet: GiftWalletModel.fromJson(json['giftWallet']),
       id: json['wheelWallet']['_id'] ?? '',
+      currency: json['wheelWallet']['currency'] ?? '',
       amount: json['wheelWallet']['amount'] ?? 0,
       wheelWinner: json['wheelWinner'] ?? false,
-      competitionsWallet: json['competitionsWallet'] != null
-          ? (json['competitionsWallet'] as List)
-              .map((e) =>
-                  CompetitionsWalletModel.fromJson(e as Map<String, dynamic>))
-              .toList()
-          : [],
+      competitionsWallet: (json['competitionWallets'] as List)
+        .map((e) => CompetitionsWalletModel.fromJson(e))
+        .toList(),
     );
   }
 }

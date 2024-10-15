@@ -347,6 +347,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_items.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -943,7 +944,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                 () async {
                   try {
                     context.read<ReelsCubit>().saveReel(widget.reel.id).then(
-                        (val) => showSnackBarAfterBuild(context,
+                        (val) => showSnackBarAfterBuild(context: context,
                             message: val == 'unsaved successfully'
                                 ? LocaleKeys.reel_unsaved.tr()
                                 : LocaleKeys.reel_saved.tr(),
@@ -962,14 +963,22 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
           _buildActionButton(
             Icons.report_outlined,
             iconColor: AppColors.PRIMARY_COLOR_DARK,
-            () {
-              bottomSheet(
-                context: context,
-                widget: ReportView(
-                  id: widget.reel.id,
-                  categoryId: '66684135dbb427ee42aa0141',
-                ),
+            () async {
+              await showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (context) {
+                return SizedBox(
+                  height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+                  child: ReportView(
+                    id: widget.reel.id,
+                    categoryId: '66684135dbb427ee42aa0141',
+                  ),
+                );
+              },
               );
+
             },
           ),
           const SizedBox(width: 8),

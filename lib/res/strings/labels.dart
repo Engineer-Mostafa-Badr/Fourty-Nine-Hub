@@ -18,6 +18,7 @@ abstract class Labels {
   static const details = 'Details';
   static const description = 'Cargo Description';
   static const buyWithInstallment = 'Buy with installment';
+
   // doctors
   static const languages = 'Languages';
   static const price = 'Price';
@@ -37,6 +38,7 @@ abstract class Labels {
   static const bookNow = 'Book Now';
   static const availableTimes = 'Available Times';
   static const available = 'Available';
+  static const notAvailable = 'Not Available';
   static const shouldLoginFirst = 'Should Login First';
   static const requestsHistory = 'Requests History';
   static const bookingApproved = 'Booking Approved Successfully!';
@@ -163,7 +165,8 @@ abstract class Labels {
   static const thePremiumPackageGivesYou =
       'The Premium Package gives you the opportunity to be more visible and get more cashback.';
   static const freeCancellation = 'Free cancellation';
-  static const paymentInCash='Payment in cash, and client pay the cost of the gates';
+  static const paymentInCash =
+      'Payment in cash, and client pay the cost of the gates';
   static const request = 'Request';
   static const driverDashboard = 'Driver dashboard';
   static const premiumRequest = 'Premium Request';

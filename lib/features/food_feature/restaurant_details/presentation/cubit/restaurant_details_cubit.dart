@@ -33,7 +33,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
       this._getRestaurantDetailsUseCase, this.apiConsumer)
       : super(const RestaurantDetailsState());
 
-  void loadData({required String id}) async {
+  loadData({required String id}) async {
     await getRestaurantDetails(id: id);
     await getMeals(id: id);
   }
@@ -116,6 +116,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
       response.fold(
         (failure) {
           emit(state.copyWith(status: RestaurantDetailsStates.error));
+
           log('Failed to load cart: ${failure.toString()}');
         },
         (data) {
@@ -188,7 +189,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
 
     final data = {
       "cartId": cartId,
-      "address": address,
+      // "address": address,
       "phone": phone,
     };
 
@@ -271,7 +272,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
 
     final data = {
       "cartId": cartId,
-      "address": address,
+      // "address": address,
       "phone": phone,
     };
 

@@ -210,6 +210,7 @@ import '../firebase_options.dart';
 import 'account_service_locator.dart';
 import 'auction_service_locator.dart';
 import 'balance_service_locator.dart';
+import 'chance_service_locator.dart';
 import 'company_add_service_locator.dart';
 import 'custom_page_service_locator.dart';
 import 'food_service_locator.dart';
@@ -293,12 +294,13 @@ class DI {
     // serviceLocator.registerLazySingleton<CompanyAdvertiseRepoImpl>(() => CompanyAdvertiseRepoImpl(ApiService(Dio())),);
     // Register the ReelsRepository
     serviceLocator.registerLazySingleton<ReelsRepository>(
-      () => ReelsRepository(),
+      () => ReelsRepository(serviceLocator()),
     );
 
     // Register the ReelsCubit
     serviceLocator.registerFactory<ReelsCubit>(
-      () => ReelsCubit(repository: serviceLocator<ReelsRepository>()),
+      () => ReelsCubit(serviceLocator(),
+          repository: serviceLocator<ReelsRepository>()),
     );
 
     // Register the StoryRepository
@@ -308,7 +310,7 @@ class DI {
 
     // Register the StoryCubit
     serviceLocator.registerFactory<StoryCubit>(
-      () => StoryCubit(serviceLocator<StoryRepository>()),
+      () => StoryCubit(serviceLocator<StoryRepository>(),serviceLocator()),
     );
     // serviceLocator
     //     .registerFactory<SliderCubit>(() => SliderCubit(serviceLocator()));

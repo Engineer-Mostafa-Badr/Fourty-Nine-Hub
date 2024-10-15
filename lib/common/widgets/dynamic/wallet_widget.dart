@@ -65,7 +65,8 @@ class WalletWidget extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => const BalanceWalletView()));
-                }, LocaleKeys.balance.tr(), '${state.wallet?.balance ?? ''}'),
+                }, LocaleKeys.balance.tr(), '${state.wallet?.balance ?? ''} ',
+                    state.wallet?.currency ?? ''),
                 Container(
                   width: 2.w,
                   margin: EdgeInsets.symmetric(horizontal: 5.w),
@@ -77,17 +78,14 @@ class WalletWidget extends StatelessWidget {
                   backgroundColor: AppColors.SECONDARY_COLOR,
                 ),
                 const Sizer(),
-                buildItem(
-                  () {
-                    //context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const GiftWalletView()));
-                  },
-                  LocaleKeys.gift.tr(),
-                  '${state.wallet?.giftWallet ?? ''}',
-                ),
+                buildItem(() {
+                  //context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const GiftWalletView()));
+                }, LocaleKeys.gift.tr(), '${state.wallet?.giftWallet ?? ''} ',
+                    state.wallet?.currency ?? ''),
                 Container(
                   width: 2.h,
                   margin: EdgeInsets.symmetric(horizontal: 5.w),
@@ -101,8 +99,10 @@ class WalletWidget extends StatelessWidget {
                 const Sizer(),
                 buildItem(() {
                   context.push(Routes.WALLET, extra: WalletTypes.mainWallet);
-                }, LocaleKeys.wallet.tr(),
-                    '${state.wallet?.realAmount.floor() ?? ''}'),
+                },
+                    LocaleKeys.wallet.tr(),
+                    '${state.wallet?.realAmount.floor() ??''} ',
+                    state.wallet?.currency ?? ''),
               ],
             ),
           );
@@ -111,7 +111,8 @@ class WalletWidget extends StatelessWidget {
     );
   }
 
-  Widget buildItem(Function function, String title, String amount) => Expanded(
+  Widget buildItem(Function function, String title, String amount, currency) =>
+      Expanded(
           child: InkWell(
         onTap: () {
           function();
@@ -124,12 +125,24 @@ class WalletWidget extends StatelessWidget {
                 style: Styles.mediumText(
                   fontWeight: FontWeight.bold,
                 )),
-            Expanded(
-              child: Label(
-                  text: amount,
-                  style: Styles.mediumText(
-                    fontWeight: FontWeight.bold,
-                  )),
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Label(
+                      text: amount,
+                      style: Styles.mediumText(
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+                Expanded(
+                  child: Label(
+                      text: currency,
+                      style: Styles.mediumText(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.SECONDARY_COLOR)),
+                ),
+              ],
             ),
           ],
         ),

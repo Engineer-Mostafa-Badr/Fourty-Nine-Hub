@@ -2094,11 +2094,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_items.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -2106,7 +2105,6 @@ import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../reels/data/models/new_reels_model.dart';
 import '../../../reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
-import '../../../reels/presentation/pages/recording/recording_shared.dart';
 import '../../../reels/presentation/widgets/comments.dart';
 import '../../../stories/presentation/cubit/stories_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -2276,6 +2274,7 @@ class _SpotlightViewState extends State<SpotlightView> {
 
   void _fetchInitialData() {
     context.read<StoryCubit>().fetchStories();
+    context.read<StoryCubit>().getMutedStories();
     context.read<ReelsCubit>().fetchReels();
     context.read<ReelsCubit>().fetchReelsForFollowers();
   }
@@ -2399,7 +2398,9 @@ class FriendsList extends StatelessWidget {
             ),
           ),
           BlocProvider<StoryCubit>(
-            create: (_) => serviceLocator()..fetchStories(),
+            create: (_) => serviceLocator()
+              ..fetchStories()
+              ..getMutedStories(),
             child: const ChatStories(),
           ),
         ],
@@ -2557,64 +2558,63 @@ class _FollowingSectionState extends State<FollowingSection> {
             builder: (context) => BlocProvider.value(
                 value: serviceLocator<ReelsCubit>(),
                 child: Scaffold(
-                    extendBodyBehindAppBar: true,
-                    extendBody: true,
-                    appBar: AppBar(
-                      backgroundColor: Colors.transparent,
-                      elevation: 0,
-                      leading: IconAppButton(
-                        icon: Icons.arrow_back,
-                        size: 50.h,
-                        color:
-                            isDarkTheme(context) ? Colors.white : Colors.grey,
-                        onPressed: () => context.pop(),
-                      ),
-                      actions: [
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: IconButton(
-                            onPressed: () async {
-                              // context.pop();
-                              await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ReelsRecordingScreen(
-                                            // advertisementType: 'reel',
-                                            // comeFromCompany: 'company',
-                                            // totalPrice: '500',
-                                            ),
-                                  ));
-                            },
-                            icon: FaIcon(
-                              Icons.camera_alt_outlined,
-                              color: isDarkTheme(context)
-                                  ? Colors.white
-                                  : Colors.grey,
-                              size: 50.h,
-                            ),
-                          ),
-                        )
-                      ],
+                  extendBodyBehindAppBar: true,
+                  extendBody: true,
+                  appBar: AppBar(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    leading: IconAppButton(
+                      icon: Icons.arrow_back,
+                      size: 50.h,
+                      color: isDarkTheme(context) ? Colors.white : Colors.grey,
+                      onPressed: () => context.pop(),
                     ),
-                    body: UnifiedReelItem(
-                      reel: reel,
-                      isVisible: true,
-                      itemType: ReelItemType.spotlight,
-                    ),
-                    // MainReelItem(
-                    //   key: ValueKey(reel.id),
-                    //   reel: reel,
-                    //   fromSpotlight: true,
-                    //   isVisible: true,
-                    // )
-                    // SpotlightReelItem(
-                    //   key: ValueKey(reel.id),
-                    //   reel: reel,
-                    //   isVisible: true,
-                    // ),,
-                    )),
+                    actions: [
+                      // const Spacer(),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: IconButton(
+                      //     onPressed: () async {
+                      //       // context.pop();
+                      //       await Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder: (context) =>
+                      //                 const ReelsRecordingScreen(
+                      //                     // advertisementType: 'reel',
+                      //                     // comeFromCompany: 'company',
+                      //                     // totalPrice: '500',
+                      //                     ),
+                      //           ));
+                      //     },
+                      //     icon: FaIcon(
+                      //       Icons.camera_alt_outlined,
+                      //       color: isDarkTheme(context)
+                      //           ? Colors.white
+                      //           : Colors.grey,
+                      //       size: 50.h,
+                      //     ),
+                      //   ),
+                      // )
+                    ],
+                  ),
+                  body: UnifiedReelItem(
+                    reel: reel,
+                    isVisible: true,
+                    itemType: ReelItemType.spotlight,
+                  ),
+                  // MainReelItem(
+                  //   key: ValueKey(reel.id),
+                  //   reel: reel,
+                  //   fromSpotlight: true,
+                  //   isVisible: true,
+                  // )
+                  // SpotlightReelItem(
+                  //   key: ValueKey(reel.id),
+                  //   reel: reel,
+                  //   isVisible: true,
+                  // ),,
+                )),
           ),
         );
       },
@@ -2734,57 +2734,57 @@ class DiscoverSectionState extends State<DiscoverSection> {
             builder: (context) => BlocProvider.value(
               value: serviceLocator<ReelsCubit>(),
               child: Scaffold(
-                  extendBodyBehindAppBar: true,
-                  extendBody: true,
-                  appBar: AppBar(
-                    backgroundColor: Colors.transparent,
-                    elevation: 0,
-                    leading: IconAppButton(
-                      icon: Icons.arrow_back,
-                      size: 50.h,
-                      color: isDarkTheme(context) ? Colors.white : Colors.grey,
-                      onPressed: () => context.pop(),
-                    ),
-                    actions: [
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: IconButton(
-                          onPressed: () async {
-                            // context.pop();
-                            await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ReelsRecordingScreen(
-                                          // advertisementType: 'reel',
-                                          // comeFromCompany: 'company',
-                                          // totalPrice: '500',
-                                          ),
-                                ));
-                          },
-                          icon: FaIcon(
-                            Icons.camera_alt_outlined,
-                            color: isDarkTheme(context)
-                                ? Colors.white
-                                : Colors.grey,
-                            size: 50.h,
-                          ),
-                        ),
-                      )
-                    ],
+                extendBodyBehindAppBar: true,
+                extendBody: true,
+                appBar: AppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  leading: IconAppButton(
+                    icon: Icons.arrow_back,
+                    size: 50.h,
+                    color: isDarkTheme(context) ? Colors.white : Colors.grey,
+                    onPressed: () => context.pop(),
                   ),
-                  body: UnifiedReelItem(
-                    reel: reel,
-                    isVisible: true,
-                    itemType: ReelItemType.spotlight,
-                  ),
-                  // SpotlightReelItem(
-                  //   key: ValueKey(reel.id),
-                  //   reel: reel,
-                  //   isVisible: true,
-                  // ),,
-                  ),
+                  actions: [
+                    // const Spacer(),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: IconButton(
+                    //     onPressed: () async {
+                    //       // context.pop();
+                    //       await Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //             builder: (context) =>
+                    //                 const ReelsRecordingScreen(
+                    //                     // advertisementType: 'reel',
+                    //                     // comeFromCompany: 'company',
+                    //                     // totalPrice: '500',
+                    //                     ),
+                    //           ));
+                    //     },
+                    //     icon: FaIcon(
+                    //       Icons.camera_alt_outlined,
+                    //       color: isDarkTheme(context)
+                    //           ? Colors.white
+                    //           : Colors.grey,
+                    //       size: 50.h,
+                    //     ),
+                    //   ),
+                    // )
+                  ],
+                ),
+                body: UnifiedReelItem(
+                  reel: reel,
+                  isVisible: true,
+                  itemType: ReelItemType.spotlight,
+                ),
+                // SpotlightReelItem(
+                //   key: ValueKey(reel.id),
+                //   reel: reel,
+                //   isVisible: true,
+                // ),,
+              ),
             ),
           ),
         );

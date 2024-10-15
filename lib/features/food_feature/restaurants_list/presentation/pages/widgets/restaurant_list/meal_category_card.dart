@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../../../common/theme/cubit/cubit.dart';
 import '../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../res/style/app_colors.dart';
+import '../../../../../../social_media/reels/presentation/widgets/comments.dart';
 import '../../../cubit/restaurants_list_cubit.dart';
 
 class MealCategoryCard extends StatelessWidget {
@@ -25,15 +26,25 @@ class MealCategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return FittedBox(
       child: Card(
-        color: Colors.white,
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: InkWell(
-          onTap: () => onTap(subCategory?.id ?? ""),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+        clipBehavior: Clip.hardEdge,
+        // decoration: BoxDecoration(
+        //     color: isDarkTheme(context) ? Colors.transparent : Colors.white,
+        //     boxShadow: [
+        //       BoxShadow(
+        //           color: isDarkTheme(context) ? Colors.black54 : Colors.grey,
+        //           blurRadius: 2.0,
+        //           offset: Offset(1, 1))
+        //     ]),
+        // // elevation: 2,
+        // // shape: RoundedRectangleBorder(
+        // //   borderRadius: BorderRadius.circular(15.0),
+        // // ),
+        child: Container(
+          width: 0.38.sw,
+          color: Colors.white70,
+
+          child: InkWell(
+            onTap: () => onTap(subCategory?.id ?? ""),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,9 +75,7 @@ class MealCategoryCard extends StatelessWidget {
                           icon: subCategory?.isFavorite ?? false
                               ? Icons.favorite
                               : Icons.favorite_border,
-                          color: ThemeCubit.get(context).isDarkTheme
-                              ? Theme.of(context).scaffoldBackgroundColor
-                              : AppColors.PRIMARY_COLOR_DARK,
+                          color: AppColors.PRIMARY_COLOR_DARK,
                           onPressed: () {
                             context
                                 .read<RestaurantsCubit>()
@@ -77,21 +86,23 @@ class MealCategoryCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-                Label(
-                  text: (getLang() == "ar"
-                          ? subCategory?.nameAr
-                          : subCategory?.nameEn) ??
-                      "",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 45.sp,
-                      color: Colors.black),
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Label(
+                    text: (getLang() == "ar"
+                            ? subCategory?.nameAr
+                            : subCategory?.nameEn) ??
+                        "",
+                    style: Styles.headerText(),
+                  ),
                 ),
-                Label(
-                  text:
-                      '${subCategory?.numberOfRestaurant ?? "0"} ${LocaleKeys.restaurants.tr()}',
-                  style: TextStyle(
-                      fontSize: 35.sp, color: Colors.black.withOpacity(0.8)),
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Label(
+                    text:
+                        '${subCategory?.numberOfRestaurant ?? "0"} ${LocaleKeys.restaurants.tr()}',
+                    style: Styles.mediumText(),
+                  ),
                 ),
               ],
             ),

@@ -25,7 +25,6 @@ class WalletCubit extends Cubit<WalletState> {
   final SubCategoryUseCase _subCategoryUseCase;
   final DeleteSubscriptionUseCase _deleteSubscriptionUseCase;
   final AddSubscriptionUseCase _addSubscriptionUseCase;
-
   WalletCubit(
       this._getWalletUseCase,
       this._walletHistoryUseCase,
@@ -83,7 +82,6 @@ class WalletCubit extends Cubit<WalletState> {
       emit(state.copyWith(subscription: data));
     });
   }
-
   Future<List<MainCategoryWalletEntity>> fetchMainCategoryWallet(
       {required PaginationParams paginationParams}) async {
     List<MainCategoryWalletEntity> category = [];

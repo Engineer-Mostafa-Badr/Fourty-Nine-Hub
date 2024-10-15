@@ -11,6 +11,7 @@ import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
+import 'package:fourtyninehub/features/chance_feature/presentation/controller/cubit/chance_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
@@ -22,6 +23,8 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_c
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'core/service/background_service.dart';
@@ -88,7 +91,7 @@ class _MyAppState extends State<MyApp> {
           create: (context) => serviceLocator<UserCubit>(),
         ),
         BlocProvider(
-          create: (context) => serviceLocator<SecretsCubit>(),
+          create: (context) => serviceLocator<SecretsCubit>()..getAllSecrets(),
         ),
         BlocProvider(
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
@@ -118,6 +121,9 @@ class _MyAppState extends State<MyApp> {
         // ),
         BlocProvider(
           create: (context) => ThemeCubit(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<StreamCubit>()..loadLives()..getScheduledMeetings()..getTopics(),
         ),
         BlocProvider<FirebaseNotficationsCubit>(
           create: (context) => FirebaseNotficationsCubit(serviceLocator()),

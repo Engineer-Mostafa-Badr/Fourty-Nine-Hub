@@ -821,7 +821,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 .createAnonymousChat(widget.userId);
                             if (result == true) {
                               context.pop();
-                              context.push(Routes.CHAT);
+                              context.push(Routes.CHATROOM);
                             } else {
                               showErrorMessage(context,
                                   getFailureMessage(state.failure!, context));

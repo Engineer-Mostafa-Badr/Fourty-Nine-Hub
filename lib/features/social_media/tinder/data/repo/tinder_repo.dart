@@ -247,6 +247,8 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_category_model.dart';
+import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:http/http.dart' as http;
 import 'package:fourtyninehub/features/social_media/tinder/data/models/anonymous_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
@@ -257,9 +259,11 @@ import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_mode
 import 'package:fourtyninehub/features/social_media/tinder/data/models/last_seen_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/near_by_model.dart';
 
+import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/utils/shared_pref.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../models/tinder_person_model.dart';
-import '../models/tinder_subcategory_model.dart';
 
 class TinderRepository {
   String? token;
@@ -289,7 +293,16 @@ class TinderRepository {
           'Content-Type': 'application/json',
         },
       );
-
+      var responseData = json.decode(response.body);
+      if (responseData['endPointSubscription'] != null &&
+          responseData['endPointSubscription'] == true &&
+          responseData['userSubscription'] == false) {
+        List<WalletTypes> wallets = (responseData['paymentMethod'] as List)
+            .map((e) => (e as String).toWalletType)
+            .toList();
+        await serviceLocator<SubscriptionController>().showSubscriptionPlans(
+            subCategoryId: responseData['subCategoryId'], wallets: wallets);
+      }
       if (response.statusCode == 200) {
         return response;
       } else {
@@ -315,7 +328,16 @@ class TinderRepository {
         },
         body: body,
       );
-
+      // var responseData = json.decode(response.body);
+      // if (responseData['endPointSubscription'] != null &&
+      //     responseData['endPointSubscription'] == true &&
+      //     responseData['userSubscription'] == false) {
+      //   List<WalletTypes> wallets = (responseData['paymentMethod'] as List)
+      //       .map((e) => (e as String).toWalletType)
+      //       .toList();
+      //   await serviceLocator<SubscriptionController>().showSubscriptionPlans(
+      //       subCategoryId: responseData['subCategoryId'], wallets: wallets,title: 'hhh');
+      // }
       if (response.statusCode == 200) {
         return response;
       } else {
@@ -330,7 +352,8 @@ class TinderRepository {
 
   Future<MainCategoryResponse?> fetchMainCategoryById(String id) async {
     final url = 'https://49dev.com/api/v1/categories/main/$id';
-    final response = await _makeGetRequest(url: url, fromMethod: 'fetchMainCategoryById');
+    final response =
+        await _makeGetRequest(url: url, fromMethod: 'fetchMainCategoryById');
     if (response != null) {
       final data = json.decode(response.body);
       return MainCategoryResponse.fromJson(data);
@@ -338,8 +361,10 @@ class TinderRepository {
     return null;
   }
 
-  Future<NormalChatResponse?> startNormalChat(String receiverId, String subCategoryId) async {
-    final url = 'https://49dev.com/api/v1/chat/start-chat/$receiverId?categoryId=$subCategoryId';
+  Future<NormalChatResponse?> startNormalChat(
+      String receiverId, String subCategoryId) async {
+    final url =
+        'https://49dev.com/api/v1/chat/start-chat/$receiverId?categoryId=$subCategoryId';
     final response = await _makePostRequest(url: url, body: '{}');
     if (response != null) {
       final data = json.decode(response.body);
@@ -349,7 +374,8 @@ class TinderRepository {
   }
 
   Future<AnonymousChatResponse?> startAnonymousChat(String receiverId) async {
-    final url = 'https://49dev.com/api/v1/chat/start-anonymous-chat/$receiverId';
+    final url =
+        'https://49dev.com/api/v1/chat/start-anonymous-chat/$receiverId';
     final response = await _makePostRequest(url: url, body: '{}');
     if (response != null) {
       final data = json.decode(response.body);
@@ -361,7 +387,8 @@ class TinderRepository {
   Future<ProfileUserModel?> fetchUserProfile(String userId) async {
     final uri = Uri.parse('https://49dev.com/api/v1/tinder/get-profile/$userId')
         .replace(queryParameters: {'subCategory': '66b2683f3a360fbdbf110767'});
-    final response = await _makeGetRequest(url: uri.toString(), fromMethod: 'fetchUserProfile');
+    final response = await _makeGetRequest(
+        url: uri.toString(), fromMethod: 'fetchUserProfile');
     if (response != null) {
       final data = json.decode(response.body);
       print("${response.body}fetchUserProfile");
@@ -372,7 +399,8 @@ class TinderRepository {
 
   Future<SubFavoritesResponse?> fetchFavorites() async {
     const url = 'https://49dev.com/api/v1/favorite-sub-category';
-    final response = await _makeGetRequest(url: url, fromMethod: 'fetchFavorites');
+    final response =
+        await _makeGetRequest(url: url, fromMethod: 'fetchFavorites');
     if (response != null) {
       final data = json.decode(response.body);
       return SubFavoritesResponse.fromJson(data);
@@ -382,7 +410,8 @@ class TinderRepository {
 
   Future<CategoryFavoritesResponse?> fetchFavoritesCategory() async {
     const url = 'https://49dev.com/api/v1/favorite-category';
-    final response = await _makeGetRequest(url: url, fromMethod: 'fetchFavorites');
+    final response =
+        await _makeGetRequest(url: url, fromMethod: 'fetchFavorites');
     if (response != null) {
       final data = json.decode(response.body);
       return CategoryFavoritesResponse.fromJson(data);
@@ -398,7 +427,8 @@ class TinderRepository {
 
   Future<LastSeenModel?> fetchLastSeen(String userId) async {
     final url = 'https://49dev.com/api/v1/users/last-seen/$userId';
-    final response = await _makeGetRequest(url: url, fromMethod: 'fetchLastSeen');
+    final response =
+        await _makeGetRequest(url: url, fromMethod: 'fetchLastSeen');
     if (response != null) {
       final data = json.decode(response.body);
       print("${response.body}vvvvvvvvvvvvvvvvv");
@@ -407,15 +437,28 @@ class TinderRepository {
     return null;
   }
 
-  Future<dynamic> sendGift(String receiverId, String giftId, String subCategoryId) async {
-    const url = 'https://49dev.com/api/v1/tinder/sendGifts?subCategory=66af974f8bf69f9469944746';
+  Future<dynamic> sendGift(
+      String receiverId, String giftId, String subCategoryId) async {
+    const url =
+        'https://49dev.com/api/v1/tinder/sendGifts?subCategory=66af974f8bf69f9469944746';
     final data = jsonEncode({
       "receiverId": receiverId,
       "giftId": giftId,
     });
     final response = await _makePostRequest(url: url, body: data);
     final s = await json.decode(response!.body);
-
+    var responseData = json.decode(response.body);
+    if (responseData['endPointSubscription'] != null &&
+        responseData['endPointSubscription'] == true &&
+        responseData['userSubscription'] == false) {
+      List<WalletTypes> wallets = (responseData['paymentMethod'] as List)
+          .map((e) => (e as String).toWalletType)
+          .toList();
+      await serviceLocator<SubscriptionController>().showSubscriptionPlans(
+          subCategoryId: responseData['subCategoryId'],
+          wallets: wallets,
+          title: 'Gift Subscription');
+    }
     log('-------->${s["success"]}');
     return s;
   }
@@ -432,8 +475,10 @@ class TinderRepository {
   }
 
   Future<NearByModel?> checkUserNearby(String cardUserId) async {
-    final url = 'https://49dev.com/api/v1/tinder/check-distance/$cardUserId?subCategory=66af974f8bf69f9469944746';
-    final response = await _makeGetRequest(url: url, fromMethod: 'checkUserNearby');
+    final url =
+        'https://49dev.com/api/v1/tinder/check-distance/$cardUserId?subCategory=66af974f8bf69f9469944746';
+    final response =
+        await _makeGetRequest(url: url, fromMethod: 'checkUserNearby');
     if (response != null) {
       final data = json.decode(response.body);
       return NearByModel.fromJson(data);
@@ -441,12 +486,15 @@ class TinderRepository {
     return null;
   }
 
-  Future<List<SubCategoryData>?> fetchSubCategoryData() async {
+  Future<List<SubCategoryEntity>?> fetchSubCategoryData() async {
     const url = 'https://49dev.com/api/v1/tinder/subCategories';
-    final response = await _makeGetRequest(url: url, fromMethod: 'fetchSubCategoryData');
+    final response =
+        await _makeGetRequest(url: url, fromMethod: 'fetchSubCategoryData');
     if (response != null) {
       final List<dynamic> responseData = jsonDecode(response.body)['data'];
-      return responseData.map<SubCategoryData>((data) => SubCategoryData.fromJson(data)).toList();
+      return responseData
+          .map<SubCategoryEntity>((data) => SubCategoryModel.fromJson(data))
+          .toList();
     }
     return null;
   }
@@ -455,18 +503,22 @@ class TinderRepository {
     final url =
         'https://49dev.com/api/v1/tinder/?gender=$gender&page=$page&subCategory=66af974f8bf69f9469944746&limit=20';
 
-    final response = await _makeGetRequest(url: url, fromMethod: 'fetchUserData');
+    final response =
+        await _makeGetRequest(url: url, fromMethod: 'fetchUserData');
 
     if (response != null) {
       final List<dynamic> responseData = jsonDecode(response.body)['data'];
       log("from fetchUserData repo  -----------------------------------------");
-      return responseData.map<UserData>((data) => UserData.fromJson(data)).toList();
+      return responseData
+          .map<UserData>((data) => UserData.fromJson(data))
+          .toList();
     }
     return null;
   }
 
   Future<void> uploadPictures(List<String> pictures) async {
-    const url = 'https://49dev.com/api/v1/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
+    const url =
+        'https://49dev.com/api/v1/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
     await _makePostRequest(url: url, body: jsonEncode({'pictures': pictures}));
   }
 }
