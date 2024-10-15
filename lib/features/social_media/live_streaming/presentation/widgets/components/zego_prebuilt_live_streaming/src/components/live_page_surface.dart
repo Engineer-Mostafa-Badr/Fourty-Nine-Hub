@@ -354,7 +354,8 @@ class _ZegoLiveStreamingLivePageSurfaceState
                               ),
                         participants()
                       ],
-                      participants(),
+                      if (widget.config.role != ZegoLiveStreamingRole.host)
+                        participants(),
                     ],
                   ),
                 ),
