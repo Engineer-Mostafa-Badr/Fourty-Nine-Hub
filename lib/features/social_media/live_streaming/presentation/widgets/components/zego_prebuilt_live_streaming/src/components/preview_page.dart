@@ -41,7 +41,6 @@ import '../../../../../../../social_posts/presentation/widgets/facebook_widgets/
 import '../../../../../../../tinder/data/shared/shared.dart';
 import '../../../../../../../tinder/presentation/cubit/gift_cubit.dart';
 import '../../../../../../domain/entity/topic_entity.dart';
-import '../../../../liveview/gifts/simple_gifts_sheet.dart';
 import '../config.dart';
 import 'select_live_goals_screen.dart';
 
