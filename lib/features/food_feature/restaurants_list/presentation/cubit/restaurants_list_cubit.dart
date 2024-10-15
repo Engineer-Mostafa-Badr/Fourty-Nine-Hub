@@ -75,21 +75,25 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
 
   Future<void> loadData() async {
     await _getUser();
-
     if (serviceLocator<UserCubit>().isLoggedIn) {
-      Future.wait([
-        _getMainCategoryDetails(),
-        isRestaurant(),
-        _getMealCategoriesWithCountRestaurants(),
-        getAllRestaurant(),
-        _getNumOfRestaurants(),
-      ]);
+      await isRestaurant();
+      await _getMainCategoryDetails();
+      await _getMealCategoriesWithCountRestaurants();
+      await _getNumOfRestaurants();
+      await getAllRestaurant();
+
+      // Future.wait([
+      //   _getMainCategoryDetails(),
+      //   isRestaurant(),
+      //   _getMealCategoriesWithCountRestaurants(),
+      //   getAllRestaurant(),
+      //   _getNumOfRestaurants(),
+      // ]);
     }
   }
 
   Future<void> _getUser() async {
-    await AppPages.router.routerDelegate.navigatorKey.currentContext!
-        .read<UserCubit>()
+    await serviceLocator<UserCubit>()
         .getUser()
         .then((Either<Failure, UserEntity>? value) {
       value?.fold(
@@ -137,12 +141,26 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
       response.fold(
           (failure) =>
               emit(state.copyWith(status: RestaurantsListStates.error)),
-          (data) => emit(state.copyWith(isRestaurant: data)));
+          (data) {
+        print('sadafasfasvsdvd$data');
+        emit(state.copyWith(isRestaurant: data));
+      });
     } else {
       emit(state.copyWith(
           isRestaurant:
               IsRestaurantModel(isRestaurant: false, approved: false)));
     }
+  }
+
+  Future<void> changeConnectivityStatus(isActive) async {
+    const url = 'https://49dev.com/api/v1/restaurants/modify-active';
+
+    await apiConsumer.patch(url, data: {
+      'isActive': isActive ,
+    });
+
+    await isRestaurant();
+    emit(state);
   }
 
   Future<void> getBannerById() async {

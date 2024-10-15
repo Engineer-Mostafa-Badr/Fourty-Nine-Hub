@@ -28,16 +28,25 @@ class _RestaurantForSelectedMealState extends State<RestaurantForSelectedMeal> {
         child: BlocBuilder<RestaurantsCubit, RestaurantsListState>(
           builder: (context, state) {
             final subCategories = state.subCategories ?? [];
-            return ListView.separated(
-              padding: const EdgeInsets.all(8.0),
+            return GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                childAspectRatio: 1.001,
+              ),
               itemCount: subCategories.length,
               itemBuilder: (context, index) {
-                return SubCategoriesRestaurantCard(
-                  item: subCategories[index],
-                  mealId: widget.mealId,
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SubCategoriesRestaurantCard(
+                    item: subCategories[index],
+                    mealId: widget.mealId,
+                  ),
                 );
               },
-              separatorBuilder: (context, index) => const Sizer(),
             );
           },
         ),

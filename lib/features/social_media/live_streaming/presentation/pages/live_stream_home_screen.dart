@@ -18,7 +18,7 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../zoom/presentation/controller/stream_state.dart';
 import '../../domain/entity/live_entity.dart';
-import '../widgets/liveview/live_card.dart';
+import '../widgets/live_card.dart';
 
 class LiveStreamHomeScreen extends StatelessWidget {
   const LiveStreamHomeScreen({super.key});
@@ -58,10 +58,21 @@ class LiveStreamHomeScreen extends StatelessWidget {
       child: Scaffold(
         body: _buildLivePages(),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            context.push(Routes.LIVEView,
-                extra: ZegoArgs('123', true,
-                    context.read<UserCubit>().state.data!.fullName));
+          onPressed: () async {
+            await context
+                .read<StreamCubit>()
+                .createLive(title: 'Mo Salama Mo Salama');
+            if (context.mounted) {
+              context.push(Routes.LIVEView,
+                  extra: ZegoArgs(
+                      context
+                          .read<StreamCubit>()
+                          .state
+                          .liveCreateResponseEntity!
+                          .id,
+                      true,
+                      context.read<UserCubit>().state.data!.fullName));
+            }
           },
           backgroundColor: Colors.red,
           child: const Icon(
@@ -77,23 +88,18 @@ class LiveStreamHomeScreen extends StatelessWidget {
     return BlocBuilder<StreamCubit, StreamState>(
       builder: (context, state) {
         var cubit = context.read<StreamCubit>();
-        return PagedPageView(
+        return PagedListView(
           pagingController: cubit.roomsPagingController,
           scrollDirection: Axis.vertical,
           physics: const BouncingScrollPhysics(),
           builderDelegate: PagedChildBuilderDelegate<LiveEntity>(
               itemBuilder: (context, item, index) {
                 if (state.live == null && item != state.live) {
-                  print('state is updated to have same paging controller');
                   context.read<StreamCubit>().updateLiveIndex(item);
                 }
-                print('live item is  ${item.toString()}');
-                print(
-                    'live item is from state  ${state.allLives[index].toString()}');
                 return LiveCard(live: item);
               },
               noItemsFoundIndicatorBuilder: (context) {
-                print(cubit.roomsPagingController.itemList?.length);
                 return Center(
                   child: Label(
                     text: LocaleKeys.noRooms.localize,

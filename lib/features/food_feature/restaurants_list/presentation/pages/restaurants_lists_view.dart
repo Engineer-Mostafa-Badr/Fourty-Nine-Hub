@@ -646,6 +646,8 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.d
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/views/create_resturant_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/expired_request_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/banner.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_categories.dart';
@@ -702,31 +704,31 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<RestaurantsCubit>().state;
     return Scaffold(
-      body: BlocProvider<RestaurantsCubit>(
-        create: (_) => serviceLocator<RestaurantsCubit>()..loadData(),
-        child: SharedScaffold(
-          mainCategoryId: 1,
-          body: RefreshIndicator(
-            onRefresh: () async {
-              if (context.read<UserCubit>().isLoggedIn) {
+      body: SharedScaffold(
+        mainCategoryId: 1,
+        body: RefreshIndicator(
+          onRefresh: () async {
+            if (context.read<UserCubit>().isLoggedIn) {
+              setState(() {
                 context.read<RestaurantsCubit>().loadData();
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: BlocBuilder<RestaurantsCubit, RestaurantsListState>(
-                builder: (context, state) {
-                  if (!context.watch<UserCubit>().isLoggedIn) {
-                    return _buildNotLoggedInView(context);
-                  }
-                  if (state.isLoading) {
-                    return const Center(
-                        child: CircularProgressIndicator.adaptive());
-                  }
-                  return _buildLoggedInView(state);
-                },
-              ),
+              });
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Builder(
+              builder: (context) {
+                if (!context.watch<UserCubit>().isLoggedIn) {
+                  return _buildNotLoggedInView(context);
+                }
+                if (state.isLoading) {
+                  return const Center(
+                      child: CircularProgressIndicator.adaptive());
+                }
+                return _buildLoggedInView(state);
+              },
             ),
           ),
         ),
@@ -831,23 +833,24 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
   }
 
   Widget _buildLoggedInView(RestaurantsListState state) {
+    print(
+        "${state.isResturant!.isRestaurant! && state.isResturant!.approved!}asfafasdfasdfafdadsf");
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
           child: Column(
             children: [
               const MealBanner(),
-              if (!(state.isResturant?.isRestaurant ?? false))
-                _buildRegisterRestaurantPrompt(),
+              if (!(state.isResturant!.isRestaurant!))
+                _buildRegisterRestaurantPrompt(state),
               const Sizer(),
-              if ((state.isResturant?.isRestaurant ?? false) &&
-                  (state.isResturant?.approved ?? false))
+              if (state.isResturant!.isRestaurant! &&
+                  state.isResturant!.approved!)
                 const ResturantDashboardButton(),
               const Sizer(),
               _buildSearchAndExpiredRequests(),
               const Sizer(),
-              if (state.mealCategories?.isNotEmpty ?? false)
-                MealCategories(),
+              if (state.mealCategories?.isNotEmpty ?? false) MealCategories(),
               if (state.loadingSubCategories)
                 _buildLoadingSubCategoriesPlaceholder(),
               const Sizer(),
@@ -862,15 +865,27 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
           ),
         ),
         SliverToBoxAdapter(
-          child: _buildAllRestaurants(),
+          child: _buildAllRestaurants(state),
         ),
       ],
     );
   }
 
-  Widget _buildRegisterRestaurantPrompt() {
+  Widget _buildRegisterRestaurantPrompt(RestaurantsListState state) {
     return GestureDetector(
-      onTap: () => context.push(Routes.CREATERESTURANT),
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BlocProvider<CreateRestaurantCubit>(
+                create: (context) => serviceLocator()..loadData(),
+                child: CreateRestaurantForm(
+                  from: 'create',
+                  restaurantId: state.isResturant!.restaurantId!,
+                ),
+              ),
+            ));
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: Text(
@@ -960,9 +975,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
     );
   }
 
-  Widget _buildAllRestaurants() {
-    return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
-      builder: (context, state) {
+  Widget _buildAllRestaurants(state) {
+    return Builder(
+      builder: (context) {
         final restaurants = state.allRestaurant ?? [];
         return GridView.builder(
           shrinkWrap: true,
@@ -971,7 +986,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
             crossAxisCount: 1,
             mainAxisSpacing: 8,
             crossAxisSpacing: 8,
-            childAspectRatio: 0.7,
+            childAspectRatio: 1.001,
           ),
           itemCount: restaurants.length,
           itemBuilder: (context, index) => Padding(

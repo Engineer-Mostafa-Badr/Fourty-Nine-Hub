@@ -119,7 +119,7 @@ class RestaurantStatisticsView extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 0.06.sw,
+            width: 0.04.sw,
           )
         ],
       ),

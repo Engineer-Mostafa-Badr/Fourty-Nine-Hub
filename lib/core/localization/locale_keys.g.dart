@@ -587,8 +587,16 @@ abstract class  LocaleKeys {
   static const comfort = 'comfort';
   static const egp = 'egp';
   static const minutesAgo = 'minutesAgo';
+  static const expiredRequests = 'expiredRequests';
   static const womenOnly = 'womenOnly';
+  static const paymentOption = 'paymentOption';
   static const bookSeat = 'bookSeat';
+  static const welcomeToCarPool = 'welcomeToCarPool';
+  static const youDontHaveCarMessage = 'youDontHaveCarMessage';
+  static const createRoute = 'createRoute';
+  static const womenDriverOnly = 'womenDriverOnly';
+  static const newRoute = 'newRoute';
+  static const youWillFindFewerOption = 'youWillFindFewerOption';
   static const pricePerSeat = 'pricePerSeat';
   static const book = 'book';
   static const comments_header = 'comments_header';
@@ -856,6 +864,9 @@ abstract class  LocaleKeys {
   static const enterYourRoute = 'enterYourRoute';
   static const whereToDeliver = 'whereToDeliver';
   static const toAddress = 'toAddress';
+  static const myBookings = 'myBookings';
+  static const runningTrips = 'runningTrips';
+  static const expiredTrips = 'expiredTrips';
   static const entrance = 'entrance';
   static const whatToDeliver = 'whatToDeliver';
   static const notes = 'notes';
@@ -874,7 +885,6 @@ abstract class  LocaleKeys {
   static const licenseFrontAndBack = 'licenseFrontAndBack';
   static const subscribed = 'subscribed';
   static const unsubscribed = 'unsubscribed';
-  static const expiredRequests = 'expiredRequests';
   static const filter = 'filter';
   static const beAStar = 'beAStar';
   static const pleaseEnterTheAmount = 'pleaseEnterTheAmount';

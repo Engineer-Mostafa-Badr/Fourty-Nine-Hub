@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_cubit.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_state.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/car_pool_body.dart';
-import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/car_pool_floating_action_button.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class CarPoolView extends StatelessWidget {
   const CarPoolView({super.key});
@@ -16,12 +19,15 @@ class CarPoolView extends StatelessWidget {
           title: Transform(
             transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
             child: Text(
-              'Carpool',
+              LocaleKeys.carpool.localize,
               style: Styles.headerText(),
             ),
           ),
         ),
-        body: const CarPoolBody(),
+        body: BlocProvider(
+          create: (context) => GetAllTripsCubit(serviceLocator()),
+          child: const CarPoolBody(),
+        ),
       ),
     );
   }

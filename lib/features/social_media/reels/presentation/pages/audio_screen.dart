@@ -963,14 +963,22 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
           _buildActionButton(
             Icons.report_outlined,
             iconColor: AppColors.PRIMARY_COLOR_DARK,
-            () {
-              bottomSheet(
-                context: context,
-                widget: ReportView(
-                  id: widget.reel.id,
-                  categoryId: '66684135dbb427ee42aa0141',
-                ),
+            () async {
+              await showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (context) {
+                return SizedBox(
+                  height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+                  child: ReportView(
+                    id: widget.reel.id,
+                    categoryId: '66684135dbb427ee42aa0141',
+                  ),
+                );
+              },
               );
+
             },
           ),
           const SizedBox(width: 8),

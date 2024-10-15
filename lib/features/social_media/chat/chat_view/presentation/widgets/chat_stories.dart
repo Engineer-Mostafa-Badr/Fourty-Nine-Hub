@@ -475,8 +475,10 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/pages/create_story_screen.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/pages/muted_stories.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:story_view/controller/story_controller.dart';
@@ -506,7 +508,24 @@ class ChatStories extends StatelessWidget {
             ),
             _createMyStory(context),
             const SizedBox(
-              width: 4,
+              width: 12,
+            ),
+            BlocConsumer<StoryCubit, StoryState>(
+              listener: (context, state) {
+                // TODO: implement listener
+              },
+              builder: (context, state) {
+                if (state.mutedStoriesResponse != null) {
+                  return _mutedStories(context);
+                }
+                return const SizedBox(
+                  height: 0,
+                  width: 0,
+                );
+              },
+            ),
+            const Sizer(
+              width: 12,
             ),
             BlocBuilder<StoryCubit, StoryState>(
               builder: (context, state) {
@@ -555,7 +574,9 @@ class ChatStories extends StatelessWidget {
               builder: (context) => const CameraScreen(),
             ),
           );
-          await BlocProvider.of<StoryCubit>(context).fetchStories();
+          BlocProvider.of<StoryCubit>(context)
+            ..fetchStories()
+            ..getMutedStories();
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -602,12 +623,58 @@ class ChatStories extends StatelessWidget {
             ),
             FittedBox(
               child: Text(
-                LocaleKeys.add_story.tr() + "\n", // Localized text
+                LocaleKeys.add_story.tr(), // Localized text
                 textScaler: TextScaler.noScaling,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38.sp),
                 textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _mutedStories(BuildContext context) {
+    return FittedBox(
+      child: GestureDetector(
+        onTap: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BlocProvider.value(
+                value: serviceLocator<StoryCubit>(),
+                child: MutedStories(),
+              ),
+            ),
+          );
+          context.read<StoryCubit>()
+            ..fetchStories()
+            ..getMutedStories();
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              radius:
+                  MediaQuery.of(context).size.width * 0.08, // Responsive radius
+              backgroundColor: Colors.black12,
+
+              child: const Icon(Icons.notifications_off_outlined,
+                  color: Colors.black54),
+              // child: Icon(icon)
+            ),
+            const SizedBox(
+              height: 2,
+            ),
+            FittedBox(
+              child: Text(
+                'Muted',
+                style: Styles.headerText(
+                    color: Colors.black.withOpacity(0.68),
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -625,12 +692,18 @@ class ChatStories extends StatelessWidget {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => StoryViewScreen(
-                stories: state.users,
-                initialUserIndex: index,
+              builder: (context) => BlocProvider.value(
+                value: serviceLocator<StoryCubit>(),
+                child: StoryViewScreen(
+                  stories: state.users,
+                  initialUserIndex: index,
+                ),
               ),
             ),
           );
+          BlocProvider.of<StoryCubit>(context)
+            ..fetchStories()
+            ..getMutedStories();
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -689,10 +762,10 @@ class ChatStories extends StatelessWidget {
             FittedBox(
               child: Text(
                 capitalizeAndSplit2Only(
-                  "${state.users[index].user!.firstName}\n",
+                  "${state.users[index].user!.firstName}",
                 ),
                 textScaler: TextScaler.noScaling,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.sp),
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

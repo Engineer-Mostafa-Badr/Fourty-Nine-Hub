@@ -104,7 +104,7 @@ extension TiktokControllerExtension on StreamCubit {
 
     final result = await createLiveUseCase(CreateLiveParams(
       title: title,
-      topicId: state.topicId,
+      topicId: '66ec0328a2c474341310cbc3',
       description: state.goalDescription!,
       goals: goalParamsList,
     ));

@@ -1,37 +1,89 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/available_routes_card_entity.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_cubit.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_state.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/available_routes_card.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class AvailableRoutesBuilder extends StatefulWidget {
-  const AvailableRoutesBuilder({super.key});
-
+  const AvailableRoutesBuilder({super.key, required this.type});
+  final String type;
   @override
   State<AvailableRoutesBuilder> createState() => _AvailableRoutesBuilderState();
 }
 
 class _AvailableRoutesBuilderState extends State<AvailableRoutesBuilder> {
   @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<GetAllTripsCubit>(context).fetchAllCarpoolTrips();
+  }
+
+  final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
+
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20.h),
-      child: ListView.builder(
-        shrinkWrap: true,
-        // physics: const NeverScrollableScrollPhysics(),
-        itemCount: cards.length,
-        itemBuilder: (context, index) {
-          final entity = cards[index];
-          return AvaiableRoutesCard(entity: entity);
-        },
-      ),
+    return BlocBuilder<GetAllTripsCubit, GetAllTripsState>(
+      builder: (context, state) {
+        if (state is GetAllTripsLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is GetAllTripsSuccess) {
+          print("hello bro");
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: 20.h),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: state.trips.length,
+              itemBuilder: (context, index) {
+                // print(state.trips.length);
+                final trip = state.trips[index];
+                // print("Sucesss \n");
+                // final int time = ;
+                // print("time $time \n");
+                if (widget.type == "expired" &&
+                    DateTime.now()
+                            .difference(DateTime.parse(
+                                state.trips[index].createdAt.toString()))
+                            .inMinutes >
+                        60) {
+                  return AvaiableRoutesCard(entity: trip);
+                }
+                if (widget.type == "available" &&
+                    DateTime.now()
+                            .difference(
+                                DateTime.parse(trip.createdAt.toString()))
+                            .inMinutes <
+                        60) {
+                  return AvaiableRoutesCard(entity: trip);
+                }
+
+                if (widget.type == "myBookings" &&
+                    (trip.ownerId == userId ||
+                        trip.locations[0].bookedUser?.id == userId ||
+                        trip.locations[1].bookedUser?.id == userId ||
+                        trip.locations[2].bookedUser?.id == userId)) {
+                  return AvaiableRoutesCard(entity: trip);
+                }
+                return const SizedBox();
+              },
+            ),
+          );
+        } else if (state is GetAllTripsFailure) {
+          return Center(child: Text("Error: ${state.errorMessage}"));
+        } else {
+          return const Center(child: Text("No trips available"));
+        }
+      },
     );
   }
 }
@@ -97,7 +149,8 @@ class _AvailableRoutesBottomSheetState
                       setState(() {});
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
-                    trackColor: const MaterialStatePropertyAll(AppColors.SECONDARY_COLOR),
+                    trackColor: const MaterialStatePropertyAll(
+                        AppColors.SECONDARY_COLOR),
                     inactiveThumbColor: Colors.grey,
                   ),
                 ),
@@ -121,7 +174,8 @@ class _AvailableRoutesBottomSheetState
                       setState(() {});
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
-                    trackColor: const MaterialStatePropertyAll(AppColors.SECONDARY_COLOR),
+                    trackColor: const MaterialStatePropertyAll(
+                        AppColors.SECONDARY_COLOR),
                     inactiveThumbColor: Colors.grey,
                   ),
                 ),
@@ -147,7 +201,8 @@ class _AvailableRoutesBottomSheetState
                           setState(() {});
                         },
                         activeColor: AppColors.PRIMARY_COLOR,
-                        trackColor: const MaterialStatePropertyAll(AppColors.SECONDARY_COLOR),
+                        trackColor: const MaterialStatePropertyAll(
+                            AppColors.SECONDARY_COLOR),
                         inactiveThumbColor: Colors.grey,
                       ),
                     ),
@@ -206,41 +261,41 @@ class _AvailableRoutesBottomSheetState
   }
 }
 
-List<AvailableRoutesCardEntity> cards = List.generate(
-  10,
-  (index) {
-    return AvailableRoutesCardEntity(
-      price: 100,
-      timeLeft: 20,
-      onlyWomanAllowed: index.isEven,
-      pointOne: PointLocationEntity(
-        isMale: index.isOdd,
-        booked: true,
-        number: 1,
-        addressEn: 'Mansoura, Samya Gamal street near Egyption hospital',
-        addressAr: '',
-      ),
-      pointTwo: PointLocationEntity(
-        isMale: index.isOdd,
-        booked: index.isEven,
-        number: 1,
-        addressEn: 'Mansoura, Samya Gamal street near Egyption hospital',
-        addressAr: '',
-      ),
-      pointThree: PointLocationEntity(
-        isMale: index.isOdd,
-        booked: index.isOdd,
-        number: 1,
-        addressEn: 'Mansoura, Samya Gamal street near Egyption hospital',
-        addressAr: '',
-      ),
-      pointFour: PointLocationEntity(
-        isMale: index.isEven,
-        booked: index.isEven,
-        number: 1,
-        addressEn: 'Mansoura, Samya Gamal street near Egyption hospital',
-        addressAr: '',
-      ),
-    );
-  },
-);
+// List<AvailableRoutesCardEntity> cards = List.generate(
+//   10,
+//   (index) {
+//     return AvailableRoutesCardEntity(
+//       price: 100,
+//       timeLeft: 20,
+//       onlyWomanAllowed: index.isEven,
+//       pointOne: PointLocationEntity(
+//         isMale: index.isOdd,
+//         booked: true,
+//         number: 1,
+//         addressEn: 'Mansoura, Samya Gamal street near Egyption hospital',
+//         addressAr: '',
+//       ),
+//       pointTwo: PointLocationEntity(
+//         isMale: index.isOdd,
+//         booked: index.isEven,
+//         number: 1,
+//         addressEn: 'Mansoura, Samya Gamal street near Egyption hospital',
+//         addressAr: '',
+//       ),
+//       pointThree: PointLocationEntity(
+//         isMale: index.isOdd,
+//         booked: index.isOdd,
+//         number: 1,
+//         addressEn: 'Mansoura, Samya Gamal street near Egyption hospital',
+//         addressAr: '',
+//       ),
+//       pointFour: PointLocationEntity(
+//         isMale: index.isEven,
+//         booked: index.isEven,
+//         number: 1,
+//         addressEn: 'Mansoura, Samya Gamal street near Egyption hospital',
+//         addressAr: '',
+//       ),
+//     );
+//   },
+// );
