@@ -255,13 +255,16 @@ class DI {
             .setExtraHeaders({'Authorization': token}) // optional
             .build()));
     // database
-    serviceLocator.registerLazySingleton<Database>(() => SQFLiteDataSource.instance.database);
+    serviceLocator.registerLazySingleton<Database>(
+        () => SQFLiteDataSource.instance.database);
 
     // dio
     serviceLocator.registerLazySingleton<Dio>(
       () => Dio(
         BaseOptions(
-          baseUrl: kReleaseMode ? EndPoints.productionBaseUrl : EndPoints.developmentBaseUrl,
+          baseUrl: kReleaseMode
+              ? EndPoints.productionBaseUrl
+              : EndPoints.developmentBaseUrl,
           connectTimeout: const Duration(seconds: 60),
           headers: {
             'Accept': 'application/json',
@@ -296,7 +299,8 @@ class DI {
 
     // Register the ReelsCubit
     serviceLocator.registerFactory<ReelsCubit>(
-      () => ReelsCubit(serviceLocator(),repository: serviceLocator<ReelsRepository>()),
+      () => ReelsCubit(serviceLocator(),
+          repository: serviceLocator<ReelsRepository>()),
     );
 
     // Register the StoryRepository
@@ -306,7 +310,7 @@ class DI {
 
     // Register the StoryCubit
     serviceLocator.registerFactory<StoryCubit>(
-      () => StoryCubit(serviceLocator<StoryRepository>()),
+      () => StoryCubit(serviceLocator<StoryRepository>(),serviceLocator()),
     );
     // serviceLocator
     //     .registerFactory<SliderCubit>(() => SliderCubit(serviceLocator()));
@@ -330,11 +334,12 @@ class DI {
     // );
 
     // Register the TinderRepository as a singleton
-    serviceLocator.registerLazySingleton<TinderRepository>(() => TinderRepository());
+    serviceLocator
+        .registerLazySingleton<TinderRepository>(() => TinderRepository());
 
     // Register the TinderViewCubit and inject the TinderRepository dependency
-    serviceLocator
-        .registerFactory<TinderViewCubit>(() => TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
+    serviceLocator.registerFactory<TinderViewCubit>(() =>
+        TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
 
     // Register other dependencies...
     // serviceLocator

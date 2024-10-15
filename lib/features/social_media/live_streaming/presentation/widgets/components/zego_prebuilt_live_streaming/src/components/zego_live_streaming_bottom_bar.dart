@@ -201,40 +201,38 @@ class FakeTextFieldBuilder extends StatelessWidget {
       child: Row(
         children: [
 
-          Expanded(
-            child: ZoomChatBuilder(
-              widget: widget,
-              child: ZegoLiveStreamingInRoomMessageInputBoardButton(
-                  translationText: widget.config.innerText,
-                  hostManager: widget.hostManager,
-                  onSheetPopUp: (int key) {
-                    widget.popUpManager.addAPopUpSheet(key);
-                  },
-                  onSheetPop: (int key) {
-                    widget.popUpManager.removeAPopUpSheet(key);
-                  },
-                  buttonSize: Size(context.screenWidth * 0.8, 40),
-                  iconSize: Size(context.screenWidth * 0.8, 40),
-                  enabledIcon: ButtonIcon(
-                      icon: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
+          ZoomChatBuilder(
+            widget: widget,
+            child: ZegoLiveStreamingInRoomMessageInputBoardButton(
+                translationText: widget.config.innerText,
+                hostManager: widget.hostManager,
+                onSheetPopUp: (int key) {
+                  widget.popUpManager.addAPopUpSheet(key);
+                },
+                onSheetPop: (int key) {
+                  widget.popUpManager.removeAPopUpSheet(key);
+                },
+                buttonSize: Size(context.screenWidth * 0.5, 40),
+                iconSize: Size(context.screenWidth * 0.5, 40),
+                enabledIcon: ButtonIcon(
+                    icon: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Label(
+                      text: LocaleKeys.comment.localize,
+                      color: Colors.grey,
+                      textAlign: TextAlign.center,
                     ),
-                    child: Center(
-                      child: Label(
-                        text: LocaleKeys.comment.localize,
-                        color: Colors.grey,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ))),
-            ),
+                  ),
+                ))),
           ),
           IconButton(onPressed: (){
             var cubit = context.read<StreamCubit>();
             cubit.requestBattle('6706b17a84a6fa95c2c0621b','66cc7223f3e66376f188c48b');
-          }, icon: const Icon(Icons.person_2))
+          }, icon: const Icon(Icons.person_2,color: Colors.white,))
         ],
       ),
     );

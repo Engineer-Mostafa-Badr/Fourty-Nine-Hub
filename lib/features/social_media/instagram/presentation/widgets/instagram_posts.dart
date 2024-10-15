@@ -106,7 +106,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
           slivers: [
             SliverToBoxAdapter(
               child: BlocProvider<StoryCubit>(
-                create: (_) => serviceLocator()..fetchStories(),
+                create: (_) => serviceLocator()..fetchStories()..getMutedStories(),
                 child: const ChatStories(),
               ),
             ),

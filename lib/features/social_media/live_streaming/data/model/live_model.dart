@@ -9,7 +9,8 @@ class LiveModel extends LiveEntity {
     required super.title,
     required super.topicName,
     required super.gift,
-    required super.description, required super.members,
+    required super.description,
+    required super.members,
   });
 
   //from json
@@ -20,7 +21,9 @@ class LiveModel extends LiveEntity {
       topicName: json['topicName'],
       gift: List.from(json['goals']).map((e) => GoalModel.fromJson(e)).toList(),
       description: json['description'],
-      members: List.from(json['members']).map((e) => MembersModel.fromJson(e)).toList(),
+      members: List.from(json['members'])
+          .map((e) => MembersModel.fromJson(e))
+          .toList(),
     );
   }
 }
