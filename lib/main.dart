@@ -10,6 +10,7 @@ import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
@@ -121,6 +122,10 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<FirebaseNotficationsCubit>(
           create: (context) => FirebaseNotficationsCubit(serviceLocator()),
         ),
+        BlocProvider<JoinTripCarPoolCubit>(
+            create: (context) =>
+                JoinTripCarPoolCubit(joinTripCarpoolUsecase: serviceLocator())),
+
         BlocProvider<GetUnreadNotificationsCountCubit>(
           create: (context) => GetUnreadNotificationsCountCubit(
             getUnreadNotificationsCountUseCase: serviceLocator(),

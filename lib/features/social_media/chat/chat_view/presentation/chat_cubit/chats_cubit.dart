@@ -58,17 +58,17 @@ class ChatsCubit extends Cubit<ChatsState> {
       case ChatCategories.social:
         return _getSocialChats();
       // case ChatCategories.greet:
-        // return getGreetChats();
+      // return getGreetChats();
       case ChatCategories.service:
         return _getServicesChats();
       // case ChatCategories.anonymous:
-        // return getAnonymousChats();
+      // return getAnonymousChats();
       // case ChatCategories.locked:
-        // return getLockedChats();
+      // return getLockedChats();
       case ChatCategories.unread:
         return _getUnreadChats();
       // case ChatCategories.archived:
-        // return getArchivedChats();
+      // return getArchivedChats();
       default:
         return _getSocialChats();
     }

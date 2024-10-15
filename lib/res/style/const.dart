@@ -40,7 +40,7 @@ class UIConst {
 
   // static const String googleGeocodingApiKey = 'AIzaSyCSzHt1y3RDKvC2D67mF-WJdyZKE9hBIxA';
   static const String googleGeocodingApiKey =
-      'AIzaSyBMtQpwW-qKq89zuXJr62e9iQC5cVmvsWg';
+      'AIzaSyBBHEFa7D7qMSL4ivZhCqRQ4ok4sQN-Egc';
   static const String tripJoinCategoryId = '62ea00e269ea29c91dfc390c';
   static const String pickmeCategoryId = '62ea008d69ea29c91dfc3908';
   static const String addTripJoinCategoryId = '62ea00e269ea29c91dfc390c';

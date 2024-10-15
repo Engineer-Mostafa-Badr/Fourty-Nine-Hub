@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/available_routes_card_entity.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/get_all_trips_entity.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/available_routes_point_widget.dart';
 
 class AvilableRoutesBarInfo extends StatelessWidget {
@@ -9,7 +10,7 @@ class AvilableRoutesBarInfo extends StatelessWidget {
     required this.entity,
   });
 
-  final AvailableRoutesCardEntity entity;
+  final CarpoolTripParam entity;
 
   @override
   Widget build(BuildContext context) {
@@ -19,27 +20,32 @@ class AvilableRoutesBarInfo extends StatelessWidget {
         children: [
           Expanded(
             child: AvailableRoutesPointInfo(
-              dotNumber: 1,
-              status: entity.pointOne?.booked == true ? 'Booked' : 'Free',
-              gender: entity.pointOne?.isMale == true ? 'male' : 'female',
-            ),
+                isComfort: entity.comfort,
+                price: entity.priceForEveryUser,
+                dotNumber: 1,
+                status: entity.locations[0].booked ? 'Booked' : 'Free',
+                gender: entity.locations[0].bookedUser?.gender ?? "NA"),
           ),
           Expanded(
             child: AvailableRoutesPointInfo(
-              dotNumber: 2,
-              status: entity.pointTwo?.booked == true ? 'Booked' : 'Free',
-              gender: entity.pointTwo?.isMale == true ? 'male' : 'female',
-            ),
+                isComfort: entity.comfort,
+                price: entity.priceForEveryUser,
+                dotNumber: 2,
+                status: entity.locations[1].booked ? 'Booked' : 'Free',
+                gender: entity.locations[1].bookedUser?.gender ?? "NA"),
           ),
           Expanded(
             child: AvailableRoutesPointInfo(
-              dotNumber: 3,
-              status: entity.pointThree?.booked == true ? 'Booked' : 'Free',
-              gender: entity.pointThree?.isMale == true ? 'male' : 'female',
-            ),
+                isComfort: entity.comfort,
+                price: entity.priceForEveryUser,
+                dotNumber: 3,
+                status: entity.locations[2].booked ? 'Booked' : 'Free',
+                gender: entity.locations[2].bookedUser?.gender ?? "NA"),
           ),
-          const Expanded(
+          Expanded(
             child: AvailableRoutesPointInfo(
+              isComfort: entity.comfort,
+              price: entity.priceForEveryUser,
               dotNumber: 4,
               status: '',
               inProgress: true,

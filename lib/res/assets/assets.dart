@@ -25,6 +25,7 @@ abstract class Assets {
   static String tinder = 'assets/images/tinder.svg';
   static String social = 'assets/images/social.svg';
   static String hand = 'assets/images/hand.png';
+
   static String fawry = 'assets/images/fawry.png';
   static String instaPay = 'assets/images/instapay.png';
   static String paymob = 'assets/images/paymob.png';
@@ -79,13 +80,17 @@ abstract class Assets {
   static String femaleImagePlacehlder = 'assets/images/female_image.png';
   static String autoComplete = 'assets/images/autocomplete.png';
   static String tripjoin = 'assets/images/tripjoin.png';
+  static String carpool = "assets/images/carpool.png";
+  static String tripJoin = "assets/images/tripjoincar.png";
 
   //drawer
   static String contact_us_icon = 'assets/settings/contact_us_icon.png';
   static String dashbboard_icon = 'assets/settings/dashbboard_icon.png';
   static String favorite_ad_icon = 'assets/settings/Icon awesome-heart.png';
-  static String favorite_main_category_icon = 'assets/settings/favorite_main_category_icon.png';
-  static String favorite_sub_category_icon = 'assets/settings/favorite_sub_category_icon.png';
+  static String favorite_main_category_icon =
+      'assets/settings/favorite_main_category_icon.png';
+  static String favorite_sub_category_icon =
+      'assets/settings/favorite_sub_category_icon.png';
   static String lists_icon = 'assets/settings/lists_icon.png';
   static String my_ads_icon = 'assets/settings/my_ads_icon.png';
   static String privacy_icon = 'assets/settings/privacy_icon.png';
@@ -112,5 +117,6 @@ abstract class Assets {
 
   //! audio
   static String notificationAudioApp = 'audio/notification.mp3';
-  static String notificationAudioServieAndSocial = 'audio/notification_social.mp3';
+  static String notificationAudioServieAndSocial =
+      'audio/notification_social.mp3';
 }
