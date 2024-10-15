@@ -1741,10 +1741,8 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                               onTap: () async {
                                 await context
                                     .read<StreamCubit>()
-                                    .createLive(title: '',roomId: generateRandom9DigitNumber.toString());
+                                    .createLive(title: 'create live',roomId: generateRandom9DigitNumber.toString());
                                 if (context.mounted) {
-                                  context.pop();
-
                                   context.push(Routes.LIVEView,
                                       extra: ZegoArgs(
                                           context
