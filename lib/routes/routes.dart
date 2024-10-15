@@ -6,6 +6,7 @@ abstract class Routes {
   static const HOME = '/';
   static const MAINCATEGORIESCARDS = '/MainCategoriesCards';
   static const RESTAURANTORDERS = '/RestaurantOrders';
+  static const EditFoodView = '/EditFoodView';
   static const MAINCATEGORIESTREE = '/MainCategoriesTree';
   static const SUBCATEGORIES = '/Subcategories';
   static const ADS = '/Subcategories/ADS';
@@ -83,7 +84,7 @@ abstract class Routes {
   static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
   static const CusineRestaurants = '/Food/Cusine-Restaurants';
   static const SEARCHMEALS = '/Food/SearchMeals';
-  static const RestaurantDashboard = '/Food/RestaurantDashboard';
+  static const RestaurantDashboard = '/RestaurantDashboard';
   static const CREATERESTURANT = '/Food/CreateResturant';
 
   static const FOODCART = '/Food/RetaurantDetails/FoodCart';
@@ -164,6 +165,7 @@ abstract class Paths {
   static const HOME = '/';
   static const MAINCATEGORIESCARDS = 'MainCategoriesCards';
   static const RESTAURANTORDERS = 'RestaurantOrders';
+  static const EditFoodView = 'EditFoodView';
   static const MAINCATEGORIESTREE = 'MainCategoriesTree';
   static const SUBCATEGORIES = 'Subcategories';
   static const FILTERADS = 'FilterAds';

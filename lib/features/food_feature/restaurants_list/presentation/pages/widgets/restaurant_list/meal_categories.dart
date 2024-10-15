@@ -10,9 +10,15 @@ import '../../../../../../../res/style/app_colors.dart';
 import '../../../cubit/restaurants_list_cubit.dart';
 import '../../restaurant_for_meal.dart';
 
-class MealCategories extends StatelessWidget {
+class MealCategories extends StatefulWidget {
   MealCategories({Key? key}) : super(key: key);
-  late ScrollController _scrollController = ScrollController();
+
+  @override
+  State<MealCategories> createState() => _MealCategoriesState();
+}
+
+class _MealCategoriesState extends State<MealCategories> {
+   final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {

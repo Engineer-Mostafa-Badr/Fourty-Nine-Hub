@@ -13,7 +13,7 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final createResturantCubit = context.read<CreateRestaurantCubit>();
-    return BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
+    return BlocConsumer<CreateRestaurantCubit, CreateRestaurantState>(
       buildWhen: (previous, current) =>
           current is CreateResturantSubCategoriesLoaded,
       builder: (context, state) {
@@ -98,7 +98,7 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
         } else {
           return const SizedBox.shrink();
         }
-      },
+      }, listener: (BuildContext context, CreateRestaurantState state) {  },
     );
   }
 }

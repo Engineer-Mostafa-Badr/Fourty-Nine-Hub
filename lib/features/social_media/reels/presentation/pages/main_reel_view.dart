@@ -615,6 +615,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -787,7 +788,7 @@ class ReelsScreenState extends State<ReelsScreen>
               ),
             ),
             Positioned(
-                top: kToolbarHeight * 0.8,
+                top: kToolbarHeight * 0.5,
                 right: 4,
                 left: 4,
                 child: AdvancedTikTokTabBar()
@@ -1695,49 +1696,70 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // color: Colors.red,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Column(
         children: [
-          // LIVE Icon with Glow Effect
-          const Sizer(),
-          _buildLiveIcon(onTap: () {
-            context.push(Routes.LIVE);
-          }),
-          const Spacer(), // Explore Tab
-          _buildTab("Spotlight", 0, onTap: () {
-            setState(() {
-              _selectedIndex = 0;
-            });
-            context.push(Routes.SPOTLIGHT);
-          }),
-          // Following Tab
-          _buildTab("Snap", 1, onTap: () {
-            setState(() {
-              _selectedIndex = 1;
-            });
-            context.push(Routes.SNAP);
-          }),
+          Container(
+              alignment: Alignment.centerLeft,
+              // color: Colors.red,
+              child: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    size: 0.08.sw,
+                    color: Colors.white,
+                    shadows: const [
+                      Shadow(
+                        color: Colors.black,
+                        offset: Offset(1, 1),
+                        blurRadius: 5.0,
+                      )
+                    ],
+                  ))),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              // LIVE Icon with Glow Effect
+              const Sizer(),
+              _buildLiveIcon(onTap: () {
+                context.push(Routes.LIVE);
+              }),
+              const Spacer(), // Explore Tab
+              _buildTab("Spotlight", 0, onTap: () {
+                setState(() {
+                  _selectedIndex = 0;
+                });
+                context.push(Routes.SPOTLIGHT);
+              }),
+              // Following Tab
+              _buildTab("Snap", 1, onTap: () {
+                setState(() {
+                  _selectedIndex = 1;
+                });
+                context.push(Routes.SNAP);
+              }),
 
-          // For You Tab with rounded underline
-          _buildTab("Reels", 2, onTap: () {
-            setState(() {
-              _selectedIndex = 2;
-            });
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ReelsRecordingScreen(),
-              ),
-            );
-          }),
-          const Spacer(),
-          // Search Icon with custom SVG
-          _buildSearchIcon(onTap: () {
-            context.push(Routes.Tinder);
-          }),
-          const Sizer(),
+              // For You Tab with rounded underline
+              _buildTab("Reels", 2, onTap: () {
+                setState(() {
+                  _selectedIndex = 2;
+                });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ReelsRecordingScreen(),
+                  ),
+                );
+              }),
+              const Spacer(),
+              // Search Icon with custom SVG
+              _buildSearchIcon(onTap: () {
+                context.push(Routes.Tinder);
+              }),
+              const Sizer(),
+            ],
+          ),
         ],
       ),
     );
@@ -1894,8 +1916,8 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
           size: 0.08.sw,
           FontAwesomeIcons.magnifyingGlass,
           color: Colors.white,
-          shadows: [
-            const Shadow(
+          shadows: const [
+            Shadow(
               color: Colors.black,
               offset: Offset(1, 1),
               blurRadius: 5.0,

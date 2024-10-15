@@ -3,18 +3,86 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_view/story_view.dart';
-import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../res/style/const.dart';
 import '../../../tinder/data/shared/shared.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import '../cubit/stories_cubit.dart';
+
+class EnhancedInputWidget extends StatelessWidget {
+  const EnhancedInputWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.blueGrey.shade900,
+          borderRadius: BorderRadius.circular(30.0),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 10.0,
+              spreadRadius: 1.0,
+              offset: Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                icon: const Icon(Icons.favorite_border, color: Colors.white),
+                onPressed: () {
+                  // Handle favorite button press
+                },
+              ),
+            ),
+            Expanded(
+              child: TextField(
+                decoration: InputDecoration(
+                  disabledBorder: InputBorder.none,
+                  border: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedErrorBorder: InputBorder.none,
+                  hintText: context.isArabic ? 'رد' : 'Replay',
+                  hintStyle: const TextStyle(color: Colors.white70),
+                  filled: false,
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 15.0, horizontal: 10.0),
+                ),
+                style: const TextStyle(color: Colors.white, fontSize: 16.0),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                icon: const Icon(Icons.send, color: Colors.white),
+                onPressed: () {
+                  // Handle send button press
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class ReactionWidget extends StatelessWidget {
   final List<Map<String, dynamic>> reactions = [
@@ -25,6 +93,8 @@ class ReactionWidget extends StatelessWidget {
     {'icon': '😢', 'color': Colors.orange, 'label': 'Sad'},
     {'icon': '😠', 'color': Colors.redAccent, 'label': 'Angry'},
   ];
+
+  ReactionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -103,10 +173,13 @@ class StoryViewScreen extends StatefulWidget {
   final int initialUserIndex;
   final List<UserStories> stories;
 
+  final List<UserStories>? mutedStories;
+
   const StoryViewScreen({
     super.key,
     this.initialUserIndex = 0,
     required this.stories,
+    this.mutedStories,
   });
 
   @override
@@ -156,25 +229,47 @@ class StoryViewScreenState extends State<StoryViewScreen> {
       data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        body: widget.stories.isNotEmpty
-            ? PageView.builder(
-                controller: _pageController,
-                itemCount: widget.stories.length,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentUserIndex = index;
-                  });
-                },
-                itemBuilder: (context, index) {
-                  return UserStoryView(
-                    currentUserId: serviceLocator<UserCubit>().state.data!.id,
-                    userStory: widget.stories[index],
-                    onComplete: _navigateToNextUser,
-                    onPrevious: _navigateToPreviousUser,
-                  );
-                },
-              )
-            : const Sizer(),
+        body: Builder(builder: (context) {
+          if (widget.stories.isNotEmpty) {
+            return PageView.builder(
+              controller: _pageController,
+              itemCount: widget.stories.length,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentUserIndex = index;
+                });
+              },
+              itemBuilder: (context, index) {
+                return UserStoryView(
+                  currentUserId: serviceLocator<UserCubit>().state.data!.id,
+                  userStory: widget.stories[index],
+                  onComplete: _navigateToNextUser,
+                  onPrevious: _navigateToPreviousUser,
+                );
+              },
+            );
+          }
+          if (widget.mutedStories!.isNotEmpty) {
+            return PageView.builder(
+              controller: _pageController,
+              itemCount: widget.mutedStories!.length,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentUserIndex = index;
+                });
+              },
+              itemBuilder: (context, index) {
+                return UserStoryView(
+                  currentUserId: serviceLocator<UserCubit>().state.data!.id,
+                  userStory: widget.mutedStories![index],
+                  onComplete: _navigateToNextUser,
+                  onPrevious: _navigateToPreviousUser,
+                );
+              },
+            );
+          }
+          return const Sizer();
+        }),
       ),
     );
   }
@@ -208,7 +303,7 @@ class UserStoryViewState extends State<UserStoryView> {
     super.initState();
     _storyController = StoryController();
     _currentStoryCreatedAtNotifier =
-        ValueNotifier<DateTime>(widget.userStory.userStories!.first.createdAt!);
+        ValueNotifier<DateTime>(widget.userStory.stories!.first.createdAt!);
     _currentStoryIdNotifier = ValueNotifier<String>('');
   }
 
@@ -227,35 +322,118 @@ class UserStoryViewState extends State<UserStoryView> {
         _buildStoryView(),
         _buildUserInfoBar(),
         _buildNavigationOverlay(),
-        Positioned(
-          bottom: 8,
-          right: 0,
-          left: 0,
-          child: SizedBox(
-            height: kToolbarHeight,
-            child: ReactionWidget(),
+        // Positioned(
+        //     bottom: 100,
+        //     top: 100,
+        //     right: 50,
+        //     left: 50,
+        //     child: BlocConsumer<StoryCubit, StoryState>(
+        //       listener: (context, state) {
+        //         // TODO: implement listener
+        //       },
+        //       builder: (context, state) {
+        //         return Text(state.viewersResponse != null
+        //             ? state.viewersResponse!.data.length.toString()
+        //             : 'asasad');
+        //       },
+        //     )),
+        if (widget.userStory.user!.id !=
+            serviceLocator<UserCubit>().state.data!.id)
+          const Positioned(
+            bottom: 8,
+            right: 0,
+            left: 0,
+            child: SizedBox(
+              height: kToolbarHeight,
+              child: EnhancedInputWidget(),
+            ),
+          )
+        else
+          BlocBuilder<StoryCubit, StoryState>(
+            // listener: (context, state) {
+            //   TODO: implement listener
+            // },
+            builder: (context, state) {
+              return Positioned(
+                bottom: 8,
+                right: 0,
+                left: 0,
+                child: SizedBox(
+                  height: kToolbarHeight,
+                  width: 0.1.sw,
+                  child: InkWell(
+                    onTap: () async {
+                      _storyController.pause();
+
+                      await showViewerList(context, state.viewersResponse!);
+                      _storyController.play();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.remove_red_eye_outlined,
+                            size: 0.08.sw,
+                            color: Colors.white,
+                            shadows: const [
+                              Shadow(
+                                color: Colors.black,
+                                offset: Offset(1, 1),
+                                blurRadius: 5.0,
+                              )
+                            ]),
+                        const SizedBox(
+                          width: 2,
+                        ),
+                        Text(
+                          state.viewersResponse != null
+                              ? state.viewersResponse!.data.length.toString()
+                              : '',
+                          style: Styles.mediumText(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              shadows: const [
+                                Shadow(
+                                  color: Colors.black,
+                                  offset: Offset(1, 1),
+                                  blurRadius: 5.0,
+                                )
+                              ]),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
-        ),
       ],
     );
   }
 
   Widget _buildStoryView() {
     return StoryView(
-      storyItems: widget.userStory.userStories
+      storyItems: widget.userStory.stories
               ?.map(
                   (story) => createStoryItem(context, story, _storyController))
               .toList() ??
           [],
       onStoryShow: (storyItem, index) {
+        context.read<StoryCubit>().makeView(
+            context: context, storyId: widget.userStory.stories![index].id);
         _currentStoryCreatedAtNotifier.value =
-            widget.userStory.userStories![index].createdAt!;
+            widget.userStory.stories![index].createdAt!;
         _currentStoryIdNotifier.value =
-            widget.userStory.userStories![index].id ?? '';
+            widget.userStory.stories![index].id ?? '';
+        // context.read<StoryCubit>().getViewersInStory(
+        //     context: context, storyId: widget.userStory.userStories![index].id);
       },
       controller: _storyController,
       onComplete: widget.onComplete,
       onVerticalSwipeComplete: (direction) {
+        // _storyController.pause();
+
         if (direction == Direction.down) {
           Navigator.of(context).pop();
         }
@@ -278,11 +456,11 @@ class UserStoryViewState extends State<UserStoryView> {
               return BlocProvider(
                 create: (context) => serviceLocator<StoryCubit>(),
                 child: UserInfoBar(
-                  currentUserId: widget.currentUserId,
-                  userStory: widget.userStory,
-                  createdAt: createdAt,
-                  currentStoryId: value,
-                ),
+                    currentUserId: widget.currentUserId,
+                    userStory: widget.userStory,
+                    createdAt: createdAt,
+                    currentStoryId: value,
+                    controller: _storyController),
               );
             },
           );
@@ -336,6 +514,7 @@ class UserInfoBar extends StatefulWidget {
   final DateTime createdAt;
   final String currentUserId;
   final String currentStoryId;
+  final StoryController controller;
 
   const UserInfoBar({
     super.key,
@@ -343,6 +522,7 @@ class UserInfoBar extends StatefulWidget {
     required this.createdAt,
     required this.currentUserId,
     required this.currentStoryId,
+    required this.controller,
   });
 
   @override
@@ -421,6 +601,10 @@ class _UserInfoBarState extends State<UserInfoBar> {
         color: Colors.white,
         size: 35,
       ),
+      onOpened: () {
+        widget.controller.pause();
+      },
+      onCanceled: () => widget.controller.play(),
       onSelected: (String value) async {
         if (value == 'delete') {
           debugPrint('Deleting story with ID: ${widget.currentStoryId}');
@@ -428,13 +612,23 @@ class _UserInfoBarState extends State<UserInfoBar> {
               .deleteStory(widget.currentStoryId);
           Navigator.of(context).pop();
         } else if (value == 'report') {
-          bottomSheet(
+          await showModalBottomSheet(
             context: context,
-            widget: ReportView(
-              id: widget.currentUserId,
-              categoryId: '66684135dbb427ee42aa0141',
-            ),
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (context) {
+              return SizedBox(
+                height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+                child: ReportView(
+                  id: widget.currentStoryId,
+                  categoryId: '668e7b4be8cfec5bcc752af9',
+                ),
+              );
+            },
           );
+        } else if (value == 'Mute') {
+          context.read<StoryCubit>().muteUserStories(
+              context: context, userId: widget.userStory.user!.id ?? '');
         }
       },
       itemBuilder: (BuildContext context) {
@@ -444,7 +638,7 @@ class _UserInfoBarState extends State<UserInfoBar> {
               value: 'delete',
               child: Row(
                 children: [
-                  Icon(Icons.delete, color: Colors.red),
+                  Icon(Icons.delete, color: AppColors.ACCENT_COLOR),
                   SizedBox(width: 10),
                   Text(
                     'Delete',
@@ -458,10 +652,25 @@ class _UserInfoBarState extends State<UserInfoBar> {
               value: 'report',
               child: Row(
                 children: [
-                  Icon(Icons.report, color: Colors.orange),
+                  Icon(Icons.report, color: AppColors.PRIMARY_COLOR_DARK),
                   SizedBox(width: 10),
                   Text(
                     'Report',
+                    textScaler: TextScaler.noScaling,
+                  ),
+                ],
+              ),
+            ),
+          if (widget.userStory.user?.id != widget.currentUserId)
+            const PopupMenuItem<String>(
+              value: 'Mute',
+              child: Row(
+                children: [
+                  Icon(Icons.notifications_off_outlined,
+                      color: AppColors.PRIMARY_COLOR),
+                  SizedBox(width: 10),
+                  Text(
+                    'Mute',
                     textScaler: TextScaler.noScaling,
                   ),
                 ],

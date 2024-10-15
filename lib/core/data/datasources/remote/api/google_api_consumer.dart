@@ -8,6 +8,7 @@ import 'api_consumer.dart';
 
 class GoogleApiConsumer extends ApiConsumer {
   final Dio dio;
+
   GoogleApiConsumer({
     required this.dio,
   });
@@ -85,6 +86,15 @@ class GoogleApiConsumer extends ApiConsumer {
       Map<String, dynamic>? queryParameters,
       Map<String, dynamic>? headers}) {
     // TODO: implement put
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> patch(String url,
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) {
+    // TODO: implement patch
     throw UnimplementedError();
   }
 }
