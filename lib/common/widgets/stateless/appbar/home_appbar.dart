@@ -169,6 +169,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
+      leadingWidth: 70.w,
       elevation: 0,
       titleSpacing: 0,
       //systemOverlayStyle: SystemUiOverlayStyle.light,
