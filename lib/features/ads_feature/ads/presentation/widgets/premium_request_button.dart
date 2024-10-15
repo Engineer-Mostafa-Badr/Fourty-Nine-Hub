@@ -16,8 +16,10 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 class PremiumRequestButton extends StatelessWidget {
-  const PremiumRequestButton({super.key, required this.item});
-  final AdEntity item;
+  const PremiumRequestButton({super.key, required this.subscriptionStatus, required this.subCategoryId, required this.adId, });
+  final String subscriptionStatus;
+  final String subCategoryId;
+  final String adId;
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +27,11 @@ class PremiumRequestButton extends StatelessWidget {
       final controller = context.read<AdvertisementCubit>();
       return AvaialbleTripsButton(
         title: 'Premium Request',
-        color: AppColors.SECONDARY_COLOR,
-        onTap: () {
-          if(item.subscriptionStatus=='premium') {
+        color: subscriptionStatus=='premium'?AppColors.DARK_GRAY_COLOR:AppColors.SECONDARY_COLOR,
+        onTap:() {
+          if(subscriptionStatus!='premium') {
             SubscriptionMethod().subscribe(
-                subscribeId: item.subCategoryId ?? '',
+                subscribeId: subCategoryId ,
                 title: LocaleKeys.premiumRequest.localize);
           }else{
             showModalBottomSheet(
@@ -96,7 +98,7 @@ class PremiumRequestButton extends StatelessWidget {
                                     if (controller.formKey.currentState!
                                         .validate()) {
                                       await controller
-                                          .makeAdPremiumRequest(id: item.id)
+                                          .makeAdPremiumRequest(id: adId)
                                           .then((value) {
                                         if (value == true) {
                                           context.pop();

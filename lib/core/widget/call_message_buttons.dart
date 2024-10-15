@@ -56,7 +56,6 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                   icon: Icons.email,
                   onTap: snap.data == true ? () {} : () {
                     SubscriptionMethod().subscribe(subscribeId: widget.subcategoryId??'', title: LocaleKeys.ads.localize);
-                    context.pop();
                   },
                 ),
               ),

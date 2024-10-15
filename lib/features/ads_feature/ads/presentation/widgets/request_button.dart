@@ -15,8 +15,9 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 class RequestButton extends StatelessWidget {
-  const RequestButton({super.key, required this.item});
-  final AdEntity item;
+  const RequestButton({super.key, required this.adId, required this.subscriptionStatus});
+  final String adId;
+  final String subscriptionStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +27,8 @@ class RequestButton extends StatelessWidget {
 
         return AvaialbleTripsButton(
           title: LocaleKeys.requests.localize,
-          color: AppColors.PRIMARY_COLOR,
-          onTap: () {
+          color:subscriptionStatus=='premium'?AppColors.DARK_GRAY_COLOR: AppColors.PRIMARY_COLOR,
+          onTap:subscriptionStatus=='premium'?null: () {
             showModalBottomSheet(
               backgroundColor: Colors.white,
               context: context,
@@ -95,7 +96,7 @@ class RequestButton extends StatelessWidget {
                                   onTap: () async {
 
                                     if(controller.formKey.currentState!.validate()){
-                                      await controller.makeAdRequest(id: item.id).then((value) {
+                                      await controller.makeAdRequest(id: adId).then((value) {
                                         if(value==true){
                                           context.pop();
                                           showSuccessMessage(context, 'Request Sent Successfully');

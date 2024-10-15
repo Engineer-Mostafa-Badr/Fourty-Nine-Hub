@@ -231,12 +231,12 @@ class _MobileAdCardState extends State<MobileAdCard> {
                     children: [
                       Expanded(
                         flex: 3,
-                        child: PremiumRequestButton(item: widget.item,),
+                        child: PremiumRequestButton(adId:widget.item.id??'',subscriptionStatus: widget.item.subscriptionStatus??'',subCategoryId: widget.item.subCategoryId??'',),
                       ),
                       const Sizer(width: 5),
                       Expanded(
                         flex: 3,
-                        child: RequestButton(item: widget.item,),
+                        child: RequestButton(adId: widget.item.id,subscriptionStatus: widget.item.subscriptionStatus??'',),
                       )
                     ],
                   ),

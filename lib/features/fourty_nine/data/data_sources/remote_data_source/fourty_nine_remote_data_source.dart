@@ -149,7 +149,7 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
 
   @override
   Future<Either<Failure, String>> getCurrency() async{
-    final result = await _apiConsumer.get(EndPoints.getWalletHome);
+    final result = await _apiConsumer.get(EndPoints.getCurrency);
     return result.fold(
           (failure) => Left(failure),
           (data) => Right(data['data']),

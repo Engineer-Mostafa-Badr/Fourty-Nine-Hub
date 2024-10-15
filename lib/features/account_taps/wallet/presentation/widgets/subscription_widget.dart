@@ -27,15 +27,9 @@ class SubscriptionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DateTime createdAt =
-        subscription.isActive == true && subscription.isPremium == true
+        (subscription.isActive == true||subscription.isActive==false) && subscription.isPremium == true
             ? DateTime.parse(subscription.expirePremium ?? '')
-            : subscription.isActive == true ||
-                    subscription.isActive == false &&
-                        subscription.isPremium == false
-                ? DateTime.parse(subscription.expireSubscription ?? '')
-                : DateTime.parse(
-                    subscription.expirePremium ?? '',
-                  );
+                : DateTime.parse(subscription.expireSubscription ?? '');
     // final DateTime createdAt = subscription.isActive == true ||
     //         subscription.isActive == false && subscription.isPremium == false
     //     ? DateTime.parse(subscription.expireSubscription ?? '')

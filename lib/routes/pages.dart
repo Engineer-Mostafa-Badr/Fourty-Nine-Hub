@@ -376,11 +376,11 @@ class AppPages {
                       GoRoute(
                           path: Paths.ADdetails,
                           name: Routes.ADdetails,
-                          builder: (context, state) =>
-                              BlocProvider<AdDetailsCubit>(
-                                create: (_) => serviceLocator(),
-                                child: AdDetailsView(id: state.extra as String),
-                              )),
+                          builder: (context, state) => BlocProvider<AdDetailsCubit>(
+                            create: (_) => serviceLocator(),
+                            child:
+                            AdDetailsView(payload: state.extra ),
+                          )),
                       GoRoute(
                         path: Paths.CREATEAD,
                         name: Routes.CREATEAD,
@@ -788,7 +788,7 @@ class AppPages {
                           create: (_) =>
                               serviceLocator()..getUserProfile(id: id ?? ''),
                           child: OtherAccountView(
-                            userId: id ?? '',
+                            payload: state.extra,
                           ));
                     },
                     routes: [
