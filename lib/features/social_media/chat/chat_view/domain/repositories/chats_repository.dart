@@ -12,6 +12,9 @@ abstract class ChatsRepository {
   Future<Either<Failure, List<ChatEntity>>> getChats(GetChatsParams params);
   Future<Either<Failure, bool>> changeChatMuteState(String chatId);
   Future<Either<Failure, bool>> changeChatToArchiveNormal(String chatId);
+  Future<Either<Failure, bool>> deleteChat({required String chatId});
+  Future<Either<Failure, bool>> pinChat({required String chatId});
+  Future<Either<Failure, bool>> unPinChat({required String chatId});
   Future<Either<Failure, bool>> lockChat(LockChatParams lockChatParams);
   Future<Either<Failure, bool>> unLockChat(LockChatParams lockChatParams);
   Future<Either<Failure, ChatCategoryEntity>> getGroups();
@@ -23,6 +26,6 @@ abstract class ChatsRepository {
   Future<Either<Failure, bool>> createAnonymousChat(
       CreateAnonymousChatParams params);
 
-  void listenToNewChats(Function(ChatEntity) onNewChat);
+  void listenToNewChats(Function(ChatEntity) params);
   void stopListenToNewChats();
 }
