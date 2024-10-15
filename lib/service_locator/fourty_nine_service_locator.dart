@@ -421,7 +421,9 @@ class FourtyNineServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
-        serviceLocator())
+        serviceLocator(),
+        serviceLocator(),
+    )
       ..loadData());
 
     serviceLocator.registerFactory<MainCategoriesCubit>(
