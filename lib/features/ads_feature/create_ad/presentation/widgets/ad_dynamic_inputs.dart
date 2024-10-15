@@ -19,11 +19,12 @@ class AdDynamicInputWidget extends StatefulWidget {
   final AdPropertiesEntity property;
   final Function(SelectionEntity) onChanged;
   final Function(String) onTextChanged;
+  final String selectedProp;
   const AdDynamicInputWidget(
       {super.key,
       required this.property,
       required this.onChanged,
-      required this.onTextChanged});
+      required this.onTextChanged, required this.selectedProp});
 
   @override
   State<AdDynamicInputWidget> createState() => _AdDynamicInputWidgetState();

@@ -85,7 +85,7 @@ class FormTextField extends StatelessWidget {
             maxLength: maxLength,
             onFieldSubmitted: (v) {
               if (onConfirm != null) {
-                onConfirm!();
+                onConfirm!(v);
               }
             },
             validator: validator ??

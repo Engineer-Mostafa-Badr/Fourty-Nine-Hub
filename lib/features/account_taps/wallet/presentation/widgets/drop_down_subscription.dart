@@ -226,7 +226,7 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
 // import '../../../../../core/localization/locales.dart';
 // import '../../../../../service_locator/service_locator.dart';
 // import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
-// import '../cubit/wallet_cubit.dart';
+// import '../cubit/search_cubit.dart';
 //
 // class DropDownSubscription extends StatefulWidget {
 //   @override

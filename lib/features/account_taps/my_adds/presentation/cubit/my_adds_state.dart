@@ -16,6 +16,7 @@ class MyAddsState {
   final List<GetAllCountAdsEntity>? countAds;
   final List<UploadFileEntity>? images;
   final ClickEntity? click;
+  final EditMyAdsEntity? adsById;
 
   const MyAddsState({
     this.status,
@@ -30,7 +31,8 @@ class MyAddsState {
     this.allCounts,
     this.countAds,
     this.images,
-    this.click
+    this.click,
+    this.adsById,
   });
   MyAddsState copyWith({
     MyAddsStates? status,
@@ -46,6 +48,7 @@ class MyAddsState {
     List<GetAllCountAdsEntity>? countAds,
      List<UploadFileEntity>? images,
      ClickEntity? click,
+    EditMyAdsEntity? adsById,
   }) {
     return MyAddsState(
       status: status ?? this.status,
@@ -61,6 +64,7 @@ class MyAddsState {
       countAds: countAds ?? this.countAds,
       images: images ?? this.images,
       click: click ?? this.click,
+      adsById: adsById ?? this.adsById,
     );
   }
 }

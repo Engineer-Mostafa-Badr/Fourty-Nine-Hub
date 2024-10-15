@@ -23,6 +23,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_c
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
+import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
@@ -95,6 +96,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) =>serviceLocator<SearchCubit>(),
         ),
         BlocProvider(
           create: (BuildContext context) =>

@@ -920,5 +920,12 @@ abstract class  LocaleKeys {
   static const editMyAds = 'editMyAds';
   static const requestTripJoin = 'requestTripJoin';
   static const requestAd = 'requestAd';
+  static const removeFavouriteSuccessfully = 'removeFavouriteSuccessfully';
+  static const selectValidUser = 'selectValidUser';
+  static const notEnoughMoneyWallet = 'notEnoughMoneyWallet';
+  static const transactionSuccessful = 'transactionSuccessful';
+  static const yourTransactionWasSuccessful = 'yourTransactionWasSuccessful';
+  static const transferAmount = 'transferAmount';
+  static const shareTransactionDetails = 'shareTransactionDetails';
 
 }

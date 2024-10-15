@@ -47,6 +47,26 @@ class _EditMyAdsState extends State<EditMyAds> {
         .loadData(subCategoryId: widget.categorization.mainCategory.id);
     super.initState();
   }
+  //   @override
+//   void initState() {
+//     super.initState();
+//     // Initialize the controllers with the existing data from widget.item
+//     _titleController = TextEditingController(text: widget.item.title);
+//     _descController = TextEditingController(text: widget.item.desc);
+//     _phoneController = TextEditingController(text: widget.item.phone);
+//     _priceController =
+//         TextEditingController(text: widget.item.price.toString());
+//   }
+//
+//   @override
+//   void dispose() {
+//     // Dispose of the controllers to avoid memory leaks
+//     _titleController.dispose();
+//     _descController.dispose();
+//     _phoneController.dispose();
+//     _priceController.dispose();
+//     super.dispose();
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +92,11 @@ class _EditMyAdsState extends State<EditMyAds> {
                 state.status == CreateAdStates.loadCities ||
                 state.status == CreateAdStates.imageUploading ||
                 state.status == CreateAdStates.initState) {
+
+              controller.titleController.text=widget.categorization.title;
+              controller.descController.text=widget.categorization.desc;
+              controller.phoneController.text=widget.categorization.phone;
+
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Form(
@@ -129,7 +154,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                                       ? AppColors.PRIMARY_COLOR
                                       : Colors.white,
                                   borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(
+                                    border: Border.all(
                                       color: AppColors.PRIMARY_COLOR)),
                               alignment: AlignmentDirectional.center,
                               child: Text(
@@ -193,6 +218,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                       Label(text: LocaleKeys.adTitle.localize),
                       TextFormField(
                         maxLines: null,
+                        controller: controller.titleController,
                         onChanged: (v) => controller.title = v,
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
@@ -214,6 +240,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                       const Sizer(),
                       Label(text: LocaleKeys.desc.localize),
                       TextFormField(
+                        controller: controller.descController,
                         maxLines: null,
                         onChanged: (v) => controller.description = v,
                         style: Styles.headerText(fontSize: 26),
@@ -236,6 +263,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                       const Sizer(),
                       Label(text: LocaleKeys.phone.localize),
                       TextFormField(
+                        controller: controller.phoneController,
                         maxLines: null,
                         onChanged: (v) => controller.phone = v,
                         style: Styles.headerText(fontSize: 26),
@@ -380,6 +408,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                                 controller.onChanged(v: v, index: index),
                             onTextChanged: (String v) =>
                                 controller.onTextChanged(v: v, index: index),
+                            selectedProp: '',
                           );
                         },
                         separatorBuilder: (context, index) => const Sizer(),
@@ -388,7 +417,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                       ),
                       const Sizer(),
                       DefaultButton(
-                          label: LocaleKeys.publish.localize,
+                          label: LocaleKeys.edit.localize,
                           onPressed: () {
                             // controller.createAd(
                             //     categorize: widget.categorization,

@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -134,6 +133,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                           //   const GoogleAddsBanner(),
                           //  Sizer(),
                           //pick me and come with U
+                          _buildStarWidget(),
+                          Sizer(),
                           _pickMeAndComeWithUWidget(subTab),
                           if (subTab.subTab?.carpool == true ||
                               subTab.subTab?.tripJoin == true)
@@ -294,44 +295,52 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
           return Row(
             children: List.generate(
                 2,
-                (index) => Expanded(
-                      child: Shimmer.fromColors(
-                        baseColor: Colors.grey[100]!,
-                        highlightColor: Colors.white24,
-                        child: Container(
-                          width: 100.h,
-                          height: kToolbarHeight * 2.h,
-                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          decoration: BoxDecoration(
-                            color: AppColors.AUTH_CONTAINER_COLOR,
-                            borderRadius: BorderRadius.circular(20.r),
-                            border: Border.all(color: Colors.grey),
-                          ),
-                        ),
+                    (index) => Expanded(
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.grey[100]!,
+                    highlightColor: Colors.white24,
+                    child: Container(
+                      width: 100.h,
+                      height: kToolbarHeight * 2.h,
+                      margin: const EdgeInsets.symmetric(horizontal: 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      decoration: BoxDecoration(
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        borderRadius: BorderRadius.circular(20.r),
+                        border: Border.all(color: Colors.grey),
                       ),
-                    )),
+                    ),
+                  ),
+                )),
           );
         } else if (state.status == StateStatus.success) {
           return Row(
             children: [
               subTab.subTab?.carpool == true
                   ? Expanded(
-                      child: _buildRideSubCategoryItem(
-                        service: state.data![0].service!,
-                        image: state.data![0].image!,
-                      ),
-                    )
+                child: _buildRideSubCategoryItem(
+                  service: state.data?[0].service ?? RideServicesEnum.pickMe,
+                  title: LocaleKeys.carpool.localize,
+                  image: state.data?[0].image ?? '',
+                  // isFavorite: state.data![0].is,
+                  // numberOfAds: state.data![0].numberOfAds?.toInt(),
+                  route: Routes.CAR_POOL,
+                ),
+              )
                   : const SizedBox.shrink(),
               const Sizer(),
               subTab.subTab?.tripJoin == true
                   ? Expanded(
-                      child: _buildRideSubCategoryItem(
-                        service: state.data![1].service!,
-                        image: state.data![1].image!,
-                        route: Routes.AVAILABLE_TRIPS,
-                      ),
-                    )
+                child: _buildRideSubCategoryItem(
+                  service:
+                  state.data?[1].service ?? RideServicesEnum.comeWithYou,
+                  title: LocaleKeys.tripJoin.localize,
+                  image: state.data?[1].image ?? '',
+                  route: Routes.AVAILABLE_TRIPS,
+                  // isFavorite: state.data![1].isFavorite,
+                  // numberOfAds: state.data![1].numberOfAds?.toInt(),
+                ),
+              )
                   : const SizedBox.shrink(),
             ],
           );
@@ -354,8 +363,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
     return Row(
       children: [
         subTab.subTab?.auction == true
-            ? itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
-                () => context.push(Routes.MAZADAT), Icons.group)
+            ?  itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
+            () => context.push(Routes.MAZADAT), Icons.group)
             : const SizedBox.shrink(),
         const Sizer(),
         subTab.subTab?.installment == true
@@ -378,6 +387,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
               Positioned.fill(
                 child: AppButton(
                     color: AppColors.AUTH_CONTAINER_COLOR,
+                    backColor: AppColors.PRIMARY_COLOR,
                     label: label,
                     style: Styles.mediumText(
                       color: AppColors.AUTH_CONTAINER_COLOR,
@@ -420,8 +430,10 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
 
   Widget _buildRideSubCategoryItem({
     required RideServicesEnum service,
+    required String title,
     required String image,
     String? route,
+    bool? isFavorite,
   }) {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),
@@ -451,7 +463,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                   fit: StackFit.expand,
                   children: [
                     SquareImage(
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                       url: image,
                     ),
                     Container(
@@ -467,7 +479,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
               child: Row(
                 children: [
                   Label(
-                    text: service.title(),
+                    // text: service.title(),
+                    text: title,
                     style: Styles.mediumText(
                       color: AppColors.AUTH_CONTAINER_COLOR,
                       fontSize: 65.sp,
@@ -481,18 +494,21 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                         InkWell(
                           onTap: () async {},
                           child: Icon(
-                            Icons.favorite_border,
+                            isFavorite ?? false
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            // Icons.favorite,
                             color: AppColors.SECONDARY_COLOR,
                             size: 38.h,
                           ),
                         ),
-                        const Spacer(),
-                        Label(
-                          text: '4 ${LocaleKeys.ads.tr()}',
-                          style: Styles.mediumText(
-                            color: Colors.white,
-                          ),
-                        ),
+                        // const Spacer(),
+                        // Label(
+                        //   text: '$numberOfAds ${LocaleKeys.ads.tr()}',
+                        //   style: Styles.mediumText(
+                        //     color: Colors.white,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -501,6 +517,52 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
             ),
           ],
         ),
+      ),
+    );
+  }
+  Widget _buildStarWidget() {
+    return SizedBox(
+      height: kToolbarHeight * .9.h,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: AppButton(
+                color: AppColors.AUTH_CONTAINER_COLOR,
+                label: LocaleKeys.beAStar.localize,
+                style: Styles.mediumText(
+                  color: AppColors.AUTH_CONTAINER_COLOR,
+                  fontWeight: FontWeight.bold,
+                ),
+                icon: Icons.star,
+                iconSize: 50.h,
+                onPressed: () {}),
+          ),
+          Positioned(
+              bottom: 5,
+              left: 5,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 0,
+              left: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 15,
+              right: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              ))
+        ],
       ),
     );
   }

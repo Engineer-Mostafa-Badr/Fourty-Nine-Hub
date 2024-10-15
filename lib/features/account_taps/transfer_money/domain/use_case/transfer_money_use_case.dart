@@ -1,15 +1,16 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/account_taps/transfer_money/domain/entities/transfer_money_entity.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/repository/transfer_money_repository.dart';
 
-class TransferMoneyUseCase extends UseCase<bool, TransferMoneyParams> {
+class TransferMoneyUseCase extends UseCase<TransferMoneyEntity, TransferMoneyParams> {
   final TransferMoneyRepository _transferMoneyRepository;
 
   TransferMoneyUseCase(this._transferMoneyRepository);
 
   @override
-  Future<Either<Failure, bool>> call(TransferMoneyParams params) async {
+  Future<Either<Failure, TransferMoneyEntity>> call(TransferMoneyParams params) async {
     return await _transferMoneyRepository.transferMoney(params);
   }
 }
