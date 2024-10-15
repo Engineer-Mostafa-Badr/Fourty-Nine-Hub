@@ -661,7 +661,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return SizedBox(
-      height: screenHeight * 2.5 / 4,
+      height: 0.55.sh,
       child: BlocConsumer<TinderViewCubit, TinderViewState>(
         listener: (context, state) {
           // Handle any errors in a centralized place
@@ -692,7 +692,10 @@ class _TinderCardStackState extends State<TinderCardStack> {
         if (state.userData.length == 1) {
           return false; // Prevent swipe
         }
-
+        setState(() {
+          // Update the UI based on new card index
+          _buildCardWidget(context, state.userData[currentIndex!]);
+        });
         if (currentIndex != null) {
           _fetchUserDataOnSwipe(context, state.userData[currentIndex].id);
 
@@ -878,13 +881,15 @@ class _TinderCardStackState extends State<TinderCardStack> {
 
   getStatus(BuildContext context) {
     final lastSeenModel = context.read<TinderViewCubit>().state.lastSeenModel;
-    if (lastSeenModel != null) {
-      if (lastSeenModel.data?.status == 'offline') {
-        return context.isArabic ? 'غير متصل' : 'offline';
-      }
-      if (lastSeenModel.data?.status == 'online') {
-        return context.isArabic ? 'متصل' : 'online';
-      }
+
+    if (lastSeenModel!.data?.status == 'offline') {
+      return context.isArabic ? 'غير متصل' : 'offline';
+    }
+    if (lastSeenModel.data?.status == 'online') {
+      if (lastSeenModel!.data?.lastSeen != null ||
+          lastSeenModel.data?.lastSeen != '') return '';
+
+      return context.isArabic ? 'متصل' : 'online';
     }
     return '';
   }
@@ -1068,14 +1073,21 @@ class _TinderCardStackState extends State<TinderCardStack> {
     }
   }
 
-  void _showReportBottomSheet(BuildContext context, UserData user) {
-    bottomSheet(
+  Future<void> _showReportBottomSheet(
+      BuildContext context, UserData user) async {
+    await showModalBottomSheet(
       context: context,
-      widget: ReportView(
-        id: user.id!,
-        // id: context.read<UserCubit>().state.data!.id,
-        categoryId: '66af974f8bf69f9469944746',
-      ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return SizedBox(
+          height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+          child: ReportView(
+            id: user.id!,
+            categoryId: '66af974f8bf69f9469944746',
+          ),
+        );
+      },
     );
   }
 }
@@ -1527,7 +1539,7 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
 
   @override
   void initState() {
-    // _currentStoryIndex = 0; // Starts from the first story (dot 0)
+    _currentStoryIndex = 0; // Starts from the first story (dot 0)
     super.initState();
   }
 

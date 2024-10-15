@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/available_routes_card_entity.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/get_all_trips_entity.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/numberwidget.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class AddressInfoList extends StatelessWidget {
   const AddressInfoList({super.key, required this.entity});
-  final AvailableRoutesCardEntity entity;
+  final CarpoolTripParam entity;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        AddressInfoRow(number: 1, address: entity.pointOne?.addressEn ?? ''),
-        AddressInfoRow(number: 2, address: entity.pointTwo?.addressEn ?? ''),
-        AddressInfoRow(number: 3, address: entity.pointThree?.addressEn ?? ''),
-        AddressInfoRow(number: 4, address: entity.pointFour?.addressEn ?? ''),
+        AddressInfoRow(number: 1, address: entity.locations[0].locationTitle),
+        AddressInfoRow(number: 2, address: entity.locations[1].locationTitle),
+        AddressInfoRow(number: 3, address: entity.locations[2].locationTitle),
+        AddressInfoRow(number: 4, address: entity.locations[3].locationTitle),
       ],
     );
   }

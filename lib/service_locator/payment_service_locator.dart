@@ -18,8 +18,11 @@ import 'package:get_it/get_it.dart';
 import '../features/payment/data/data_source/cache_out/payment_cache_out_data_source.dart';
 import '../features/payment/domain/repositories/cache_out/payment_cache_out_repository.dart';
 import '../features/payment/domain/use_cases/cache_out/fetch_all_bank_use_case.dart';
+import '../features/payment/domain/use_cases/cache_out/fetch_price_yellow_use_case.dart';
 import '../features/payment/domain/use_cases/cache_out/instapay_cache_out_use_case.dart';
 import '../features/payment/domain/use_cases/cache_out/pay_out_request_use_case.dart';
+import '../features/payment/domain/use_cases/cache_out/payout_method_use_case.dart';
+import '../features/payment/domain/use_cases/cache_out/request_instapay_use_case.dart';
 import '../features/payment/domain/use_cases/cache_out/request_yellow_card_use_case.dart';
 
 class PaymentProviderServiceLocator {
@@ -73,6 +76,12 @@ class PaymentProviderServiceLocator {
             () => FetchAllBankUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<PayOutRequestUseCase>(
             () => PayOutRequestUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<RequestInstapayUseCase>(
+            () => RequestInstapayUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<FetchPriceYellowUseCase>(
+            () => FetchPriceYellowUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<PayoutMethodBankUseCase>(
+            () => PayoutMethodBankUseCase(serviceLocator()));
 
     serviceLocator.registerFactory<PaymentCubit>(() => PaymentCubit(
           serviceLocator(),
@@ -87,6 +96,9 @@ class PaymentProviderServiceLocator {
         ));
 
     serviceLocator.registerFactory<PaymentCacheOutCubit>(() => PaymentCacheOutCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),

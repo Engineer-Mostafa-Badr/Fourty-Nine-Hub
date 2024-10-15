@@ -9,6 +9,8 @@ import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart'
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/data/models/restaurant_orders_model.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/food_order_entity.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -51,20 +53,13 @@ class RestaurantOrderCard extends StatelessWidget {
                   right: 4,
                   child: Row(
                     children: [
-                      Text(
-                        '${order.total.ceil()} ',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.green,
-                        ),
-                      ),
-                      Text(
-                        order.currency,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: AppColors.SECONDARY_COLOR,
-                        ),
-                      ),
+                      Text('${order.total.ceil()} ',
+                          style: Styles.headerText(
+                              color: AppColors.WHATS_APP_COLOR)),
+                      Text(order.currency,
+                          style: Styles.mediumText(
+                              color: AppColors.PRIMARY_COLOR_DARK,
+                              fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
@@ -78,10 +73,13 @@ class RestaurantOrderCard extends StatelessWidget {
                         Row(
                           children: [
                             //gander image instead of this
-                            const CircleAvatar(
+                            CircleAvatar(
                               radius: 30,
                               backgroundColor: Colors.black,
-                              // backgroundImage: AssetImage(Assets.maleImagePlaceholdere),
+                              backgroundImage: AssetImage(
+                                  order.userInfo.gender == 'male'
+                                      ? Assets.maleImagePlaceholder
+                                      : Assets.femaleImagePlacehlder),
                             ),
                             const SizedBox(width: 15),
                             Column(
@@ -90,7 +88,7 @@ class RestaurantOrderCard extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      user.firstName + "          ",
+                                      user.firstName,
                                       style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
@@ -113,110 +111,46 @@ class RestaurantOrderCard extends StatelessWidget {
                         // Order Details
                         Row(
                           children: [
-                            // Food Image
-                            // ClipRRect(
-                            //   borderRadius: BorderRadius.circular(15),
-                            //   child: Image.network(
-                            //     food.picture.mediaKey,
-                            //     height: 100,
-                            //     width: 100,
-                            //     fit: BoxFit.cover,
-                            //   ),
-                            // ),
-                            // const SizedBox(width: 15),
-                            // Food and Order Information
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text(
                                     // 'Food: ${food.id}',
-                                    'Order: ',
+                                    'Orders:',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
                                     ),
                                   ),
                                   const SizedBox(height: 5),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'kepda',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.grey[700],
-                                        ),
+                                  Column(
+                                    children: List.generate(
+                                      order.orders.length,
+                                      (index) => Row(
+                                        children: [
+                                          Text(
+                                            order.orders[index].foodId.foodName,
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.grey[700],
+                                            ),
+                                          ),
+                                          const Spacer(),
+                                          Text(
+                                            order.orders[index].quantity
+                                                .toString(),
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.grey[700],
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      const Spacer(),
-                                      Text(
-                                        '${order.orders[0].quantity}',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.grey[700],
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'kepda',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.grey[700],
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      Text(
-                                        '${order.orders[0].quantity}',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.grey[700],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'kepda',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.grey[700],
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      Text(
-                                        '${order.orders[0].quantity}',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.grey[700],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'kepda',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.grey[700],
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      Text(
-                                        '${order.orders[0].quantity}',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.grey[700],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Sizer(),
 
-                                  const SizedBox(height: 10),
+                                  const SizedBox(height: 4),
                                   // Phone number
                                   // const Row(
                                   //   children: [
@@ -232,22 +166,22 @@ class RestaurantOrderCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 8),
 
                         // Order Timing Information
 
                         const SizedBox(height: 8),
 
                         CallMessageReportButtons(item: item),
-                        Text(
-                          '                                 ' +
-                              DateFormat('MMM d, yyyy h:mm a')
-                                  .format(order.createdAt),
-                          style: TextStyle(color: Colors.grey[600]),
-                        ),
-                        const Text(
-                          'Please Subscribe to contact the client!',
-                          style: TextStyle(color: Colors.red),
+                        const SizedBox(height: 8),
+
+                        Row(
+                          children: [
+                            Spacer(),
+                            Text(
+                              getTimeAgo(context, order.createdAt.toString()),
+                              style: TextStyle(color: Colors.grey[600]),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -407,35 +341,48 @@ class CallMessageReportButtons extends StatelessWidget {
             label: 'Call',
             icon: Icons.call,
             color: AppColors.GREY_DARK_COLOR,
-            onPressed:
-                true ? () => launchUrlString("tel://${item.phone}") : () {},
+            onPressed: item.openCallAndChat != 'disable'
+                ? () => launchUrlString("tel://${item.phone}")
+                : () {
+                    print('disabled call button');
+                  },
           ),
           const SizedBox(width: 4),
           _buildButtonWithIcon(
             label: 'Message',
             icon: Icons.message,
             color: AppColors.GREY_DARK_COLOR,
-            onPressed: true
+            onPressed: item.openCallAndChat != 'disable'
                 ? () {
-                    BlocProvider.of<RestaurantsCubit>(context)
-                        .getExpiredOrders();
+                    // BlocProvider.of<RestaurantsCubit>(context)
+                    //     .getExpiredOrders();
                     // Implement message functionality here
                   }
-                : () {},
+                : () {
+                    print('disabled chat button');
+                  },
           ),
           const SizedBox(width: 4),
           _buildButtonWithIcon(
             label: 'Report',
             icon: Icons.report,
             color: AppColors.PRIMARY_COLOR_DARK,
-            onPressed: () {
-              bottomSheet(
+            onPressed: () async {
+              await showModalBottomSheet(
                 context: context,
-                widget: ReportView(
-                  id: item.id,
-                  categoryId: item.restaurantId,
-                ),
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) {
+                  return SizedBox(
+                    height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+                    child: ReportView(
+                      id: item.id,
+                      categoryId: item.restaurantId,
+                    ),
+                  );
+                },
               );
+
               // Implement report functionality here
             },
           ),
@@ -459,7 +406,8 @@ class CallMessageReportButtons extends StatelessWidget {
         icon: icon,
         iconSize: 70.h,
         backColor: color,
-        style: Styles.mediumText(color: Colors.white),
+        style:
+            Styles.mediumText(color: Colors.white, fontWeight: FontWeight.bold),
         onPressed: onPressed,
       ),
     );

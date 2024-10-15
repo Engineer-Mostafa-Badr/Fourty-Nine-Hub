@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
 import 'package:fourtyninehub/common/functions/helper/launch_url.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class CallMessageButtons extends StatelessWidget {
-  const CallMessageButtons({super.key, required this.otherUserId, required this.subcategoryId, required this.phone, required this.id, this.hasReport=false});
+  const CallMessageButtons(
+      {super.key,
+      required this.otherUserId,
+      required this.subcategoryId,
+      required this.phone,
+      required this.id,
+      this.hasReport = false});
+
   final String otherUserId;
   final String subcategoryId;
   final String phone;
@@ -22,7 +31,7 @@ class CallMessageButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: ButtonAvailability().isShowButton(
-            otherUserId: otherUserId, subcategoryId: subcategoryId ),
+            otherUserId: otherUserId, subcategoryId: subcategoryId),
         builder: (context, snap) {
           print(snap.data);
           return Row(
@@ -32,13 +41,19 @@ class CallMessageButtons extends StatelessWidget {
                 flex: 3,
                 child: AvaialbleTripsButton(
                   title: LocaleKeys.call.localize,
-                  color: snap.data == true ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                  color: snap.data == true
+                      ? AppColors.SECONDARY_COLOR
+                      : AppColors.DARK_GRAY_COLOR,
                   icon: Icons.call,
-                  onTap: snap.data == true ? () {
-                    LaunchURLHelper().call( phone: phone);
-                  } : () {
-                    SubscriptionMethod().subscribe(subscribeId: subcategoryId??'', title: LocaleKeys.ads.localize);
-                  },
+                  onTap: snap.data == true
+                      ? () {
+                          LaunchURLHelper().call(phone: phone);
+                        }
+                      : () {
+                          SubscriptionMethod().subscribe(
+                              subscribeId: subcategoryId ?? '',
+                              title: LocaleKeys.ads.localize);
+                        },
                 ),
               ),
               const Sizer(width: 5),
@@ -46,28 +61,41 @@ class CallMessageButtons extends StatelessWidget {
                 flex: 3,
                 child: AvaialbleTripsButton(
                   title: LocaleKeys.message.localize,
-                  color: snap.data == true ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                  color: snap.data == true
+                      ? AppColors.SECONDARY_COLOR
+                      : AppColors.DARK_GRAY_COLOR,
                   icon: Icons.email,
                   onTap: snap.data == true ? () {} : () {},
                 ),
               ),
-             if(hasReport==true)...[ const Sizer(width: 5),
-              Expanded(
-                flex: 3,
-                child: AvaialbleTripsButton(
-                  title: LocaleKeys.report.localize,
-                  color: AppColors.SECONDARY_COLOR,
-                  icon: Icons.report,
-                  onTap: () {
-                    bottomSheet(
+              if (hasReport == true) ...[
+                const Sizer(width: 5),
+                Expanded(
+                  flex: 3,
+                  child: AvaialbleTripsButton(
+                    title: LocaleKeys.report.localize,
+                    color: AppColors.SECONDARY_COLOR,
+                    icon: Icons.report,
+                    onTap: () async {
+                      await showModalBottomSheet(
                         context: context,
-                        widget: ReportView(
-                          id: id,
-                          categoryId: subcategoryId,
-                        ));
-                  },
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) {
+                          return SizedBox(
+                            height:
+                                isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+                            child: ReportView(
+                              id: id,
+                              categoryId: subcategoryId,
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-              ),]
+              ]
             ],
           );
         });

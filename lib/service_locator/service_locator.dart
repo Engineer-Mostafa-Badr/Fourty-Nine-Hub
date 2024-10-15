@@ -185,6 +185,7 @@ import 'package:fourtyninehub/service_locator/carpool_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/face_book_service_locator.dart';
 import 'package:fourtyninehub/service_locator/instagram_service_locator.dart';
+import 'package:fourtyninehub/service_locator/join_trip_carpool_service_locator.dart';
 import 'package:fourtyninehub/service_locator/notification_service_locator.dart';
 import 'package:fourtyninehub/service_locator/payment_service_locator.dart';
 import 'package:fourtyninehub/service_locator/privacy_service_locator.dart';
@@ -209,6 +210,7 @@ import '../firebase_options.dart';
 import 'account_service_locator.dart';
 import 'auction_service_locator.dart';
 import 'balance_service_locator.dart';
+import 'chance_service_locator.dart';
 import 'company_add_service_locator.dart';
 import 'custom_page_service_locator.dart';
 import 'food_service_locator.dart';
@@ -253,13 +255,16 @@ class DI {
             .setExtraHeaders({'Authorization': token}) // optional
             .build()));
     // database
-    serviceLocator.registerLazySingleton<Database>(() => SQFLiteDataSource.instance.database);
+    serviceLocator.registerLazySingleton<Database>(
+        () => SQFLiteDataSource.instance.database);
 
     // dio
     serviceLocator.registerLazySingleton<Dio>(
       () => Dio(
         BaseOptions(
-          baseUrl: kReleaseMode ? EndPoints.productionBaseUrl : EndPoints.developmentBaseUrl,
+          baseUrl: kReleaseMode
+              ? EndPoints.productionBaseUrl
+              : EndPoints.developmentBaseUrl,
           connectTimeout: const Duration(seconds: 60),
           headers: {
             'Accept': 'application/json',
@@ -289,12 +294,13 @@ class DI {
     // serviceLocator.registerLazySingleton<CompanyAdvertiseRepoImpl>(() => CompanyAdvertiseRepoImpl(ApiService(Dio())),);
     // Register the ReelsRepository
     serviceLocator.registerLazySingleton<ReelsRepository>(
-      () => ReelsRepository(),
+      () => ReelsRepository(serviceLocator()),
     );
 
     // Register the ReelsCubit
     serviceLocator.registerFactory<ReelsCubit>(
-      () => ReelsCubit(serviceLocator(),repository: serviceLocator<ReelsRepository>()),
+      () => ReelsCubit(serviceLocator(),
+          repository: serviceLocator<ReelsRepository>()),
     );
 
     // Register the StoryRepository
@@ -304,7 +310,7 @@ class DI {
 
     // Register the StoryCubit
     serviceLocator.registerFactory<StoryCubit>(
-      () => StoryCubit(serviceLocator<StoryRepository>()),
+      () => StoryCubit(serviceLocator<StoryRepository>(),serviceLocator()),
     );
     // serviceLocator
     //     .registerFactory<SliderCubit>(() => SliderCubit(serviceLocator()));
@@ -320,6 +326,7 @@ class DI {
     serviceLocator.registerLazySingleton<RequestRiderTripCubit>(
       () => RequestRiderTripCubit(repository: serviceLocator()),
     );
+
     //
     // // Register the TinderCubit
     // serviceLocator.registerFactory<TinderViewCubit>(
@@ -328,11 +335,12 @@ class DI {
     // );
 
     // Register the TinderRepository as a singleton
-    serviceLocator.registerLazySingleton<TinderRepository>(() => TinderRepository());
+    serviceLocator
+        .registerLazySingleton<TinderRepository>(() => TinderRepository());
 
     // Register the TinderViewCubit and inject the TinderRepository dependency
-    serviceLocator
-        .registerFactory<TinderViewCubit>(() => TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
+    serviceLocator.registerFactory<TinderViewCubit>(() =>
+        TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
 
     // Register other dependencies...
     // serviceLocator
@@ -411,5 +419,6 @@ class DI {
     TransferMoneyServiceLocator.execute(serviceLocator: serviceLocator);
     CustomPageServiceLocator.execute(serviceLocator: serviceLocator);
     CarpoolServiceLocator.execute(serviceLocator: serviceLocator);
+    JoinTripCarpoolServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

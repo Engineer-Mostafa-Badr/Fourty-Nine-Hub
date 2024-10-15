@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/pages/muted_stories.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:story_view/controller/story_controller.dart';
@@ -34,6 +35,24 @@ class Stories extends StatelessWidget {
         children: [
           const Sizer(),
           _buildYourStory(context),
+          const Sizer(
+            width: 8,
+          ),
+          const Sizer(),
+          BlocConsumer<StoryCubit, StoryState>(
+            listener: (context, state) {
+              // TODO: implement listener
+            },
+            builder: (context, state) {
+              if (state.mutedStoriesResponse != null) {
+                return _buildMutedStories(context);
+              }
+              return const SizedBox(
+                height: 0,
+                width: 0,
+              );
+            },
+          ),
           const Sizer(
             width: 8,
           ),
@@ -72,7 +91,7 @@ class Stories extends StatelessWidget {
     );
   }
 
-  Widget _buildOthersStories(context, StoryState state, index) {
+  Widget _buildOthersStories(BuildContext context, StoryState state, index) {
     final userController = StoryController();
 
     return ClipRRect(
@@ -82,12 +101,18 @@ class Stories extends StatelessWidget {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => StoryViewScreen(
-                stories: state.users,
-                initialUserIndex: index,
+              builder: (context) => BlocProvider.value(
+                value: serviceLocator<StoryCubit>(),
+                child: StoryViewScreen(
+                  stories: state.users,
+                  initialUserIndex: index,
+                ),
               ),
             ),
           );
+          BlocProvider.of<StoryCubit>(context)
+            ..fetchStories()
+            ..getMutedStories();
         },
         child: Container(
           height: kToolbarHeight * 2.5,
@@ -96,7 +121,8 @@ class Stories extends StatelessWidget {
             color: Colors.white,
           ),
           child: state.users.isNotEmpty &&
-                  state.users[index].userStories!.isNotEmpty
+                  state.users[index].stories != null &&
+                  state.users[index].stories!.isNotEmpty
               ? Stack(
                   children: [
                     Positioned.fill(
@@ -104,11 +130,10 @@ class Stories extends StatelessWidget {
                           indicatorColor: Colors.transparent,
                           indicatorForegroundColor: Colors.transparent,
                           storyItems: [
-                            state.users[index].userStories!.first.type !=
-                                    'video'
+                            state.users[index].stories!.first.type != 'video'
                                 ? createStoryItem(
                                     context,
-                                    state.users[index].userStories!.first,
+                                    state.users[index].stories!.first,
                                     userController)
                                 : StoryItem.pageImage(
                                     loadingWidget:
@@ -204,7 +229,9 @@ class Stories extends StatelessWidget {
             ),
           );
 
-          await BlocProvider.of<StoryCubit>(context).fetchStories();
+          BlocProvider.of<StoryCubit>(context)
+            ..fetchStories()
+            ..getMutedStories();
         },
         child: Container(
           height: kToolbarHeight * 2,
@@ -265,6 +292,57 @@ class Stories extends StatelessWidget {
                   ),
                 ),
               ))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  _buildMutedStories(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(5),
+      child: GestureDetector(
+        onTap: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BlocProvider.value(
+                value: serviceLocator<StoryCubit>(),
+                child: MutedStories(),
+              ),
+            ),
+          );
+
+          BlocProvider.of<StoryCubit>(context)
+            ..fetchStories()
+            ..getMutedStories();
+        },
+        child: Container(
+          height: kToolbarHeight * 2,
+          width: kToolbarHeight * 1.5,
+          decoration: const BoxDecoration(
+            color: Colors.black12,
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 2,
+                left: 2,
+                child: Icon(Icons.notifications_off_outlined,
+                    color: Colors.black54),
+              ),
+              Positioned(
+                bottom: 2,
+                left: 2,
+                // right: 2,
+                child: Text(
+                  'Muted',
+                  style: Styles.headerText(
+                      color: Colors.black.withOpacity(0.68),
+                      fontWeight: FontWeight.bold),
+                ),
+              )
             ],
           ),
         ),

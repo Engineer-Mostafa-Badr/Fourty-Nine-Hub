@@ -6,6 +6,7 @@ abstract class Routes {
   static const HOME = '/';
   static const MAINCATEGORIESCARDS = '/MainCategoriesCards';
   static const RESTAURANTORDERS = '/RestaurantOrders';
+  static const EditFoodView = '/EditFoodView';
   static const MAINCATEGORIESTREE = '/MainCategoriesTree';
   static const SUBCATEGORIES = '/Subcategories';
   static const ADS = '/Subcategories/ADS';
@@ -83,7 +84,7 @@ abstract class Routes {
   static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
   static const CusineRestaurants = '/Food/Cusine-Restaurants';
   static const SEARCHMEALS = '/Food/SearchMeals';
-  static const RestaurantDashboard = '/Food/RestaurantDashboard';
+  static const RestaurantDashboard = '/RestaurantDashboard';
   static const CREATERESTURANT = '/Food/CreateResturant';
 
   static const FOODCART = '/Food/RetaurantDetails/FoodCart';
@@ -132,6 +133,7 @@ abstract class Routes {
   static const FAVOURITECATEGORIES = '/Account/FavouriteCategories';
   static const FAVOURITESUBCATEGORIES = '/Account/FavouriteSubCategories';
   static const MYADDS = '/Account/Myadds';
+  static const EDITAD = '/Account/Myadds/EditAd';
   static const SHAREAPP = '/Account/ShareApp';
   static const NOTIFICATIONS = '/Account/Norifications';
   static const SETTINGS = '/Account/Settings';
@@ -163,6 +165,7 @@ abstract class Paths {
   static const HOME = '/';
   static const MAINCATEGORIESCARDS = 'MainCategoriesCards';
   static const RESTAURANTORDERS = 'RestaurantOrders';
+  static const EditFoodView = 'EditFoodView';
   static const MAINCATEGORIESTREE = 'MainCategoriesTree';
   static const SUBCATEGORIES = 'Subcategories';
   static const FILTERADS = 'FilterAds';
@@ -271,6 +274,7 @@ abstract class Paths {
   static const FAVOURITESUBCATEGORIES = 'FavouriteSubCategories';
 
   static const MYADDS = 'Myadds';
+  static const EDITAD = 'EditAd';
   static const SHAREAPP = 'ShareApp';
   static const NOTIFICATIONS = 'Norifications';
   static const SETTINGS = 'Settings';

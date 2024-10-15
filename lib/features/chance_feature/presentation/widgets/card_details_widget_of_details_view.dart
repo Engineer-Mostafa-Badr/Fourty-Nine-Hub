@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -31,9 +33,9 @@ class CardDetails extends StatelessWidget {
                 fit: BoxFit.fill,
               ),
             ),
-            const SizedBox(height: 20),
-            const Text(
-              "Subscriber Completion Rate",
+            const SizedBox(height: 20,),
+             Text(
+              LocaleKeys.SubscriberCompletionRate.localize,
               style: TextStyle(
                 fontSize: 16,
               ),
@@ -59,7 +61,7 @@ class CardDetails extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Product Description',
+                  LocaleKeys.ProductDescription.localize,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,

@@ -30,6 +30,13 @@ abstract class ApiConsumer {
     Map<String, dynamic>? headers,
   });
 
+  Future<Either<Failure, Map<String, dynamic>>> patch(
+    String url, {
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  });
+
   Future<Either<Failure, Map<String, dynamic>>> put(
     String url, {
     Map<String, dynamic>? data,
@@ -68,6 +75,43 @@ class BaseApiConsumer extends ApiConsumer {
     if (token != null) {
       log(token.accessToken.toString(), name: "Token");
       _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
+    }
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> patch(String url,
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) async {
+    try {
+      final result = await _dio.patch(
+        url,
+        data: data,
+        queryParameters: queryParameters,
+        options: Options(headers: headers),
+      );
+
+      if (result.data['status']) {
+        return Right(result.data as Map<String, dynamic>);
+      } else {
+        return Left(ValidationFailure(
+            result.data['message'] ?? result.data['error']['message']));
+      }
+    } catch (e) {
+      if (e is DioException &&
+          e.response?.statusCode == 401 &&
+          isTokenAttached) {
+        return refreshToken().then(
+          (_) => patch(
+            url,
+            queryParameters: queryParameters,
+            data: data,
+            headers: headers,
+          ),
+        );
+      } else {
+        return Left(_getFailure(e));
+      }
     }
   }
 
@@ -117,15 +161,20 @@ class BaseApiConsumer extends ApiConsumer {
           // }
           // )
           );
-      // log(url);
+      log(result.toString());
       // log(_dio.options.headers['Authorization'], name: "Authorization$url");
+      print('Welcome ${result.data['status']}');
       if (result.data['status']) {
+        print('result os io');
         return Right(result.data as Map<String, dynamic>);
       } else {
+        print('reselt 2');
         return Left(ValidationFailure(
             result.data['message'] ?? result.data['error']['message']));
       }
     } catch (e) {
+      print('result 3');
+      print(e.toString());
       // if (e is DioException &&
       //     e.response?.statusCode == 401 &&
       //     isTokenAttached) {
@@ -263,7 +312,7 @@ class BaseApiConsumer extends ApiConsumer {
         );
       }
     }
-    return UnknownFailure(e);
+    return UnknownFailure(e.toString());
   }
 
   Future<void> refreshToken() async {

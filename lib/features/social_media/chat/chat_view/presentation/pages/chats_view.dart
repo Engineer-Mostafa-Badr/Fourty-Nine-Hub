@@ -543,7 +543,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   floating: true,
                   flexibleSpace: BlocProvider(
                     create: (context) =>
-                        serviceLocator<StoryCubit>()..fetchStories(),
+                        serviceLocator<StoryCubit>()..fetchStories()..getMutedStories(),
                     child: const ChatStories(),
                   ),
                 ),

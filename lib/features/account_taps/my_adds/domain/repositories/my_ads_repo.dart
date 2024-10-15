@@ -4,9 +4,11 @@ import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/get_al
 import '../../../../../core/error/failure.dart';
 import '../../../../ads_feature/ads/domain/entities/ad_entity.dart';
 import '../../../../ride/trip_details/domain/entities/trip_and_request_entity.dart';
+import '../entity/click_entity.dart';
 import '../entity/get_all_counts_trip_join_entity.dart';
 import '../entity/my_ads_auction.dart';
 import '../entity/my_ads_trip_join_entity.dart';
+import '../usecases/click_use_case.dart';
 import '../usecases/edit_my_ads_use_case.dart';
 import '../usecases/get_all_counts_ads_usecase.dart';
 import '../usecases/get_all_counts_usecase.dart';
@@ -34,4 +36,5 @@ abstract class MyAdsRepo {
   Future<Either<Failure, List<GetAllCountAdsEntity>>> getAllCountsAds(CountAdsParams params);
   Future<Either<Failure, bool>> updateMyAds(UpdateMyAdsParams params);
   Future<Either<Failure, bool>> editMyAds(EditParams params);
+  Future<Either<Failure, ClickEntity>> click(ClickParams params);
 }

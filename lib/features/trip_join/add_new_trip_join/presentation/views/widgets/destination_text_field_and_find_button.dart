@@ -4,28 +4,36 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/destination_location_carpool/cubit/map_box_dest_cubit_cubit.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/destination_location_carpool/cubit/map_box_dest_cubit_state.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/mapBox_cubit/cubit/map_box_cubit_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class DestinationTextFieldAndFindButon extends StatefulWidget {
-  const DestinationTextFieldAndFindButon({
-    super.key,
-  });
+  const DestinationTextFieldAndFindButon({super.key});
 
   @override
-  State<DestinationTextFieldAndFindButon> createState() => _DestinationTextFieldAndFindButonState();
+  State<DestinationTextFieldAndFindButon> createState() =>
+      _DestinationTextFieldAndFindButonState();
 }
 
-class _DestinationTextFieldAndFindButonState extends State<DestinationTextFieldAndFindButon> {
+class _DestinationTextFieldAndFindButonState
+    extends State<DestinationTextFieldAndFindButon> {
   late TextEditingController destinationController;
   late final DestinationLocationCubit destinationLocationCubit;
+  late final MapBoxDestCubit mapBoxDestCubit;
+
   final formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
+    super.initState();
+    mapBoxDestCubit = context.read<MapBoxDestCubit>();
+
     destinationLocationCubit = context.read<DestinationLocationCubit>();
     destinationController = TextEditingController();
-    super.initState();
   }
 
   @override
@@ -38,21 +46,23 @@ class _DestinationTextFieldAndFindButonState extends State<DestinationTextFieldA
   Widget build(BuildContext context) {
     return Form(
       key: formKey,
-      child: SizedBox(
-        height: 80.h,
+      child: Container(
+        height: 75.h,
+        margin: EdgeInsets.only(top: 10.h),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: BlocBuilder<DestinationLocationCubit, DestinationLocationState>(
+              child: BlocBuilder<MapBoxDestCubit, MapBoxDestCubitState>(
                 builder: (context, state) {
                   return TextFormField(
                     decoration: InputDecoration(
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)),
                       fillColor: Colors.transparent,
-                      isDense: true, // Added this
+                      isDense: true,
                       contentPadding: const EdgeInsets.all(14),
-                      suffixIcon: _getIcon(state),
+                      suffixIcon: _getIcon(state), // Icon based on state
                       labelText: LocaleKeys.destinationPoint.localize,
                     ),
                     controller: destinationController,
@@ -66,7 +76,8 @@ class _DestinationTextFieldAndFindButonState extends State<DestinationTextFieldA
               title: LocaleKeys.searchFind.localize,
               onTap: () {
                 if (formKey.currentState!.validate()) {
-                  destinationLocationCubit.getDestinationLocation(address: destinationController.text);
+                  mapBoxDestCubit.searchLocationMapBoxDest(
+                      query: destinationController.text);
                 }
               },
               height: double.infinity,
@@ -77,18 +88,18 @@ class _DestinationTextFieldAndFindButonState extends State<DestinationTextFieldA
     );
   }
 
-  Widget? _getIcon(DestinationLocationState state) {
-    if (state is DestinationLocationSuccess) {
+  Widget? _getIcon(MapBoxDestCubitState state) {
+    if (state is MapBoxDestCubitSuccess) {
       return const Icon(
         Icons.check,
         color: AppColors.CHECK_MARK_COLOR,
         size: 30,
       );
     }
-    if (state is DestinationLocationLoading) {
+    if (state is MapBoxDestCubitLoading) {
       return SizedBox(
-        width: 10,
-        height: 10.h,
+        width: 30,
+        height: 30,
         child: const Center(
           child: CircularProgressIndicator(
             color: AppColors.PRIMARY_COLOR,
@@ -97,25 +108,25 @@ class _DestinationTextFieldAndFindButonState extends State<DestinationTextFieldA
         ),
       );
     }
-    if (state is DestinationLocationFailed) {
+    if (state is MapBoxDestCubitFailure) {
       return const Icon(
         Icons.error,
         color: Colors.red,
         size: 30,
       );
     }
-    if (state is DestinationLocationInitial) {
+    if (state is MapBoxDestCubitInitial) {
       return const Icon(
         Icons.error,
         color: Colors.grey,
         size: 30,
       );
     }
-    return null;
+    return null; // Default case
   }
 
   String? _validator(String? value) {
-    if (value == null) {
+    if (value == null || value.isEmpty) {
       return LocaleKeys.youCantLeaveFieldEmpty.localize;
     }
     if (value.length < 10) {

@@ -7,7 +7,7 @@ class LiveCreateResponseModel extends LiveCreateResponseEntity {
   //from json
   factory LiveCreateResponseModel.fromJson(Map<String, dynamic> json) {
     return LiveCreateResponseModel(
-      id: json['stream']['_id'],
+      id: json['_id'],
     );
   }
 }

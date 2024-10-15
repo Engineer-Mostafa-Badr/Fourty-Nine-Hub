@@ -57,9 +57,11 @@ dependencies:
   google_maps_flutter: ^2.6.1
   google_sign_in: ^6.2.1
   google_static_maps_controller: ^1.1.0
-  icons_launcher: ^2.1.7
   image: any
   image_filter_pro: ^0.1.11
+  flutter_map: ^4.0.0
+
+  # latlong2: ^0.8.1
   image_gallery_saver: 2.0.3
   image_picker: ^1.1.2
   infinite_scroll_pagination: ^4.0.0
@@ -106,7 +108,14 @@ dependencies:
   web_socket_channel: ^2.4.5
   zego_express_engine: ^3.16.2
   native_device_orientation: ^2.0.3
-#  win32: ^5.5.1
+  win32: ^5.5.4
+  flutter_osm_plugin: ^0.70.4
+  flutter_mapbox_navigation: ^0.2.2
+  icons_launcher: ^3.0.0
+  readmore: ^3.0.0
+  flutter_animate: ^4.5.0
+  carousel_slider: ^5.0.0
+  
 dependency_overrides:
   http: ^0.13.3
 dev_dependencies:

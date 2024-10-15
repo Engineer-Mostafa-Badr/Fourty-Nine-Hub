@@ -182,9 +182,9 @@ class MyAdCard extends StatelessWidget {
                         onTap: () {
                           context.pop();
                           showAreYouSure(
-                              title: 'Alert',
+                              title: LocaleKeys.alert.localize,
                               subTitle:
-                                  'Are you sure, you want to set this AD as soldout?',
+                              LocaleKeys.adSoldout.localize,
                               action: () => context.pop(),
                               context: context);
                         },
@@ -195,9 +195,9 @@ class MyAdCard extends StatelessWidget {
                         label: LocaleKeys.deactivate.localize,
                         onTap: () {
                           showAreYouSure(
-                              title: 'Alert',
+                              title: LocaleKeys.alert.localize,
                               subTitle:
-                                  'Are you sure, you want to set this AD as soldout?',
+                              LocaleKeys.adSoldout.localize,
                               action: () {},
                               context: context);
                         },

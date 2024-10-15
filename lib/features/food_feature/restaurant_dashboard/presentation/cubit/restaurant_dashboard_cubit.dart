@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../../../core/abstract/use_case.dart';
@@ -68,7 +71,7 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
           final RestaurantOrdersModel ordersResponse =
               RestaurantOrdersModel.fromJson(jsonList[0]);
 
-          print("${ordersResponse.data.length}aaaaaaaaaa");
+          print("${ordersResponse.data.orders.length}aaaaaaaaaa");
           emit(state.copyWith(orders: ordersResponse));
         } else {
           emit(state.copyWith(status: RestaurantDashboardStates.error));
@@ -124,6 +127,41 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
     }
   }
 
+  Future<void> deleteRestaurantById(context, {required String id}) async {
+    emit(state.copyWith(status: RestaurantDashboardStates.initState));
+
+    // The API endpoint URL
+    final String url =
+        'https://49dev.com/api/v1/restaurants/delete-restaurant/$id';
+
+    try {
+      // Make the GET request using ApiConsumer
+      final response = await apiConsumer.delete(
+        url,
+      );
+
+      // Handle the response from the API
+      response.fold(
+        (failure) {
+          // Handle error state
+          showErrorMessage(context, getFailureMessage(failure, context));
+          Navigator.pop(context);
+
+          emit(state.copyWith(status: RestaurantDashboardStates.error));
+        },
+        (jsonList) {
+          showSuccessMessage(context, jsonList['message']);
+          Navigator.pop(context);
+
+          print('${jsonList}1111111111111111');
+        },
+      );
+    } catch (e) {
+      // Handle exceptions
+      emit(state.copyWith(status: RestaurantDashboardStates.error));
+    }
+  }
+
   Future<void> approveRequest({required int id}) async {
     emit(state.copyWith(
         status: RestaurantDashboardStates.success,
@@ -131,7 +169,13 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
     getRestaurantOrders();
   }
 
-  Future<void> changeConnectivityStatus() async {
+  Future<void> changeConnectivityStatus(isActive) async {
+    const url = 'https://49dev.com/api/v1/restaurants/modify-active';
+
+    final res = apiConsumer.patch(url, data: {
+      'isActive': isActive,
+    });
+
     emit(state.copyWith(
       connected: !state.connected,
     ));

@@ -2,4 +2,6 @@
 <resources>
     <string name="facebook_app_id">879543663814829</string>
     <string name="facebook_client_token">7ff8e1ab5abe355ce0a0980a7e4a282d</string>
+        <string name="mapbox_access_token">sk.eyJ1IjoiNDlhcHAiLCJhIjoiY20xem83MGQ5MDg3aDJqczhhYnlmMGI1ZSJ9.8sYHBUyxYXncueYcckCBMg</string>
+
 </resources>
