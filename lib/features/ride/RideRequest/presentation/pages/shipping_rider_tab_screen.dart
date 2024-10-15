@@ -17,7 +17,7 @@ class ShippingRiderTabScreen extends StatelessWidget {
             TabBar(
               tabs: [
                 Text("Ship"),
-                Text("Rider"),
+                Text("Ride"),
               ],
             ),
             Expanded(

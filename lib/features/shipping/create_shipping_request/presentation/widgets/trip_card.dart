@@ -86,7 +86,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
         return GestureDetector(
           onTap: () {
             if (!widget.buttons && !widget.yourRequest) {
-              context.push(Routes.DRIVERREQUESTSDETIALS, extra: widget.model);
+              // context.push(Routes.DRIVERREQUESTSDETIALS, extra: widget.model);
             }
           },
           child: Container(
@@ -110,8 +110,8 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                       children: [
                         Text(
                           widget.title ?? 'New Ride'.tr(),
-                          style: const TextStyle(
-                            color: AppColors.PRIMARY_COLOR,
+                          style:  TextStyle(
+                            color: Theme.of(context).brightness == Brightness.dark? Colors.white:AppColors.PRIMARY_COLOR,
                             fontWeight: FontWeight.bold,
                             fontSize: 22,
                           ),

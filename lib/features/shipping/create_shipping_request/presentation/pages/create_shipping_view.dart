@@ -59,6 +59,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
     final shippingcubit = context.read<ShippingCubit>();
     return BlocConsumer<CreateTripCubit, ShippingState>(
       listener: (context, state) {
+        log(state.toString(), name: "lskdjlskdjflskdjf");
         if (state is SuccessCreateTrip) {
           context.go(Routes.HOME);
           showSuccessMessage(context, state.message);
@@ -153,9 +154,10 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                       DashboardBanner(
                                         onTap: () => context
                                             .push(Routes.DASHBOARDDRIVERSCREEN),
-                                        title: Labels.driverDashboard,
-                                        subTitle: Labels
-                                            .driverDashboardBannerDiscription,
+                                        title: "Driver dashboard".tr(),
+                                        subTitle:
+                                            "New Bookings are waiting you, go to driver dashboard and explore more!"
+                                                .tr(),
                                         route: Routes.DOCTORDASHBOARD,
                                       ),
                                     ],
@@ -443,6 +445,7 @@ class RequestOfferCard extends StatelessWidget {
         if (state is SuccessCompleteTripState) {
           showSuccessMessage(context, "Trip is completed".tr());
           context.read<GetAllRequestByMyTripCubit>().getAllRequest();
+          context.read<ShippingCubit>().getBannerData();
         }
         // if (state is SuccessCancelState) {
         //   showSuccessMessage(context, "تم اغلاق الرحلة بنجاح");
@@ -460,7 +463,9 @@ class RequestOfferCard extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.black38
+                    : Colors.white,
                 border: Border.all(color: AppColors.PRIMARY_COLOR, width: 3),
                 // ignore: prefer_const_literals_to_create_immutables
                 boxShadow: [
@@ -646,7 +651,7 @@ class RequestOfferCard extends StatelessWidget {
                           children: [
                             Expanded(
                               child: AppButton(
-                                label: Labels.call,
+                                label: "Call".tr(),
                                 color: Colors.white,
                                 icon: Icons.call,
                                 backColor: state.data
@@ -662,7 +667,7 @@ class RequestOfferCard extends StatelessWidget {
                             ),
                             Expanded(
                               child: AppButton(
-                                label: Labels.message,
+                                label: "Message".tr(),
                                 icon: Icons.message,
                                 backColor: state.data
                                     ? AppColors.PRIMARY_COLOR
@@ -677,7 +682,7 @@ class RequestOfferCard extends StatelessWidget {
                             ),
                             Expanded(
                               child: AppButton(
-                                label: Labels.report,
+                                label: "Report".tr(),
                                 icon: Icons.report,
                                 backColor: Colors.red,
                                 style: Styles.mediumText(
@@ -707,7 +712,7 @@ class RequestOfferCard extends StatelessWidget {
                           children: [
                             Expanded(
                               child: AppButton(
-                                label: Labels.call,
+                                label: "Call".tr(),
                                 color: Colors.white,
                                 icon: Icons.call,
                                 backColor: AppColors.DARK_GRAY_COLOR,
@@ -730,7 +735,7 @@ class RequestOfferCard extends StatelessWidget {
                             ),
                             Expanded(
                               child: AppButton(
-                                label: Labels.message,
+                                label: "Message".tr(),
                                 icon: Icons.message,
                                 backColor: AppColors.DARK_GRAY_COLOR,
                                 style: Styles.mediumText(
@@ -748,7 +753,7 @@ class RequestOfferCard extends StatelessWidget {
                             ),
                             Expanded(
                               child: AppButton(
-                                label: Labels.report,
+                                label: "Report".tr(),
                                 icon: Icons.report,
                                 backColor: Colors.red,
                                 style: Styles.mediumText(

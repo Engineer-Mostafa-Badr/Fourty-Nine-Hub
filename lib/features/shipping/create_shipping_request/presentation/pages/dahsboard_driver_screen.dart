@@ -20,9 +20,20 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
-class DahsboardDriverScreen extends StatelessWidget {
+class DahsboardDriverScreen extends StatefulWidget {
   const DahsboardDriverScreen({super.key});
 
+  @override
+  State<DahsboardDriverScreen> createState() => _DahsboardDriverScreenState();
+}
+
+class _DahsboardDriverScreenState extends State<DahsboardDriverScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<GetAllTripCubit>().getAllTrips();
+  }
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

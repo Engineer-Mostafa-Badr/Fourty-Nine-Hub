@@ -9,7 +9,6 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/offer_data_model/offer_data_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/success_request_trip_model/success_request_trip_model.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
@@ -512,12 +511,12 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                 //   overlayEntry.remove();
                                                 // });
 
-                                                context
-                                                    .read<
-                                                        RequestRiderTripCubit>()
-                                                    .request(
-                                                        model:
-                                                            TripRequestModel());
+                                                // context
+                                                //     .read<
+                                                //         RequestRiderTripCubit>()
+                                                //     .request(
+                                                //         model:
+                                                //             TripRequestModel());
 
                                                 // context
                                                 //     .read<LocationSocketCubit>()
@@ -528,9 +527,9 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                 //             ?.id ??
                                                 //         "");
 
-                                                // context
-                                                //     .read<GetTripInfoCubit>()
-                                                //     .getTripInfoRequest();
+                                                context
+                                                    .read<GetTripInfoCubit>()
+                                                    .getTripInfoRequest();
                                                 // context
                                                 //     .read<RequestRiderTripCubit>()
                                                 //     .request(
@@ -1392,3 +1391,12 @@ class AcceptOrDeclineTrip extends StatelessWidget {
     }
   }
 }
+
+
+// [lklkkkkkkkkkkkkkkkkkkkkkkjjjjjjjjjjjjj] {
+//   status: true, 
+//   data: {
+//     price: 235.75, 
+//     lowestFare: null, 
+//     from: شارع القنال 92، حي المعادي 11728، 
+//     مصر, to: شارع العيسي ، حي مصر الجديدة 11، مصر, calculate_b: 0, polyline: {coordinates: , type: LineString}}}

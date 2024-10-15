@@ -17,7 +17,7 @@ class AllTripModel {
   String? desc;
   bool? isPremium;
   bool? acceptedReq;
-  int? phone;
+  String? phone;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -60,7 +60,7 @@ class AllTripModel {
       time: json['time'] as String?,
       desc: json['desc'] as String?,
       isPremium: json['isPremium'] as bool?,
-      phone: json['phone'] as int?,
+      phone: json['phone'].toString(),
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),

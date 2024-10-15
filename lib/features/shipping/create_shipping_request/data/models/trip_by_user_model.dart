@@ -11,7 +11,7 @@ class TripByUserModel {
   String? time;
   String? desc;
   bool? isPremium;
-  int? phone;
+  String? phone;
   DateTime? createdAt;
   DateTime? updatedAt;
   List<dynamic>? driverRatingsVirtual;
@@ -48,7 +48,7 @@ class TripByUserModel {
       time: json['time'] as String?,
       desc: json['desc'] as String?,
       isPremium: json['isPremium'] as bool?,
-      phone: json['phone'] as int?,
+      phone: json['phone'].toString(),
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),

@@ -35,7 +35,7 @@ import 'routes/pages.dart';
 // import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mapbox;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  String ACCESS_TOKEN = const String.fromEnvironment("");
+  String accessToken = const String.fromEnvironment("");
   // MapboxOptions.setAccessToken(
       // "sk.eyJ1IjoiNDlhcHAiLCJhIjoiY20xem83MGQ5MDg3aDJqczhhYnlmMGI1ZSJ9.8sYHBUyxYXncueYcckCBMg");
 

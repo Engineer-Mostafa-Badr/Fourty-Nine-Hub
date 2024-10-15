@@ -55,6 +55,7 @@ class DefaultTextFormField extends MainTextFormField {
           // key: key,
           // currentController: currentController,
           // readOnly: readOnly,
+          margin: margin,
           validator:
               validator ?? (isRequired ? Validator().validateEmptyField : null),
           hintText: hint + (isRequired ? '*' : ''),
