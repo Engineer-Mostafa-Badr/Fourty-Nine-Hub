@@ -1,613 +1,4 @@
-// // import 'package:flutter/cupertino.dart';
-// // import 'package:flutter/material.dart';
-// // import 'package:flutter/scheduler.dart';
-// // import 'package:flutter_bloc/flutter_bloc.dart';
-// // import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// // import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-// // import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
-// // import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_items.dart';
-// // import 'package:fourtyninehub/service_locator/service_locator.dart';
-// // import 'package:flutter_screenutil/flutter_screenutil.dart';
-// // import 'package:chewie/chewie.dart';
-// // import 'package:flutter/material.dart';
-// // import 'package:video_player/video_player.dart';
-// //
-// // class ReelView extends StatelessWidget {
-// //   const ReelView({super.key});
-// //
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return Scaffold(
-// //       extendBodyBehindAppBar: true,
-// //       extendBody: true,
-// //       body: MultiBlocProvider(
-// //         providers: [
-// //           BlocProvider(
-// //             create: (context) => serviceLocator<ReelsCubit>(),
-// //           ),
-// //           BlocProvider(
-// //             create: (context) => serviceLocator<UserCubit>(),
-// //           ),
-// //         ],
-// //         child: const ReelsScreen(),
-// //       ),
-// //     );
-// //   }
-// // }
-// //
-// // void showSnackBarAfterBuild(
-// //   BuildContext context, {
-// //   required String message,
-// //   String? actionLabel,
-// //   VoidCallback? onActionPressed,
-// //   IconData? icon,
-// //   Color backgroundColor = Colors.black,
-// //   Color textColor = Colors.red,
-// //   Color actionTextColor = Colors.blue,
-// //   Duration duration = const Duration(seconds: 1),
-// // }) {
-// //   final snackBar = SnackBar(
-// //     content: Row(
-// //       children: [
-// //         Expanded(
-// //           child: Text(
-// //             message,
-// //             textScaler: TextScaler.noScaling,
-// //             style: TextStyle(
-// //               color: textColor,
-// //               fontSize: 30.sp,
-// //               fontWeight: FontWeight.w700,
-// //             ),
-// //           ),
-// //         ),
-// //         if (icon != null)
-// //           Icon(
-// //             icon,
-// //             color: Colors.green,
-// //             size: 50.h,
-// //           ),
-// //       ],
-// //     ),
-// //     backgroundColor: backgroundColor,
-// //     duration: duration,
-// //     action: actionLabel != null
-// //         ? SnackBarAction(
-// //             label: actionLabel,
-// //             onPressed: onActionPressed ?? () {},
-// //             textColor: actionTextColor,
-// //           )
-// //         : null,
-// //     behavior: SnackBarBehavior.floating,
-// //     shape: RoundedRectangleBorder(
-// //       borderRadius: BorderRadius.circular(10),
-// //     ),
-// //     margin: const EdgeInsets.all(16),
-// //     elevation: 10,
-// //   );
-// //   SchedulerBinding.instance.addPostFrameCallback((_) {
-// //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-// //   });
-// // }
-// //
-// // class ReelsScreen extends StatefulWidget {
-// //   const ReelsScreen({super.key});
-// //
-// //   @override
-// //   ReelsScreenState createState() => ReelsScreenState();
-// // }
-// //
-// // class ReelsScreenState extends State<ReelsScreen>
-// //     with AutomaticKeepAliveClientMixin {
-// //   final PageController _pageController = PageController();
-// //   int _currentPage = 0;
-// //
-// //   @override
-// //   bool get wantKeepAlive => true;
-// //
-// //   @override
-// //   void initState() {
-// //     super.initState();
-// //     _fetchInitialReels();
-// //   }
-// //
-// //   void _fetchInitialReels() {
-// //     if (mounted) {
-// //       context.read<ReelsCubit>().fetchReels();
-// //     }
-// //   }
-// //
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     super.build(context);
-// //     return BlocBuilder<ReelsCubit, ReelsState>(
-// //       builder: (context, state) {
-// //         return Stack(
-// //           children: [
-// //             Positioned.fill(
-// //               child: PageView.builder(
-// //                 physics: const BouncingScrollPhysics(),
-// //                 controller: _pageController,
-// //                 scrollDirection: Axis.vertical,
-// //                 itemCount: state.globalReels.length +
-// //                     (state.globalReelsHasReachedMax ? 0 : 1),
-// //                 onPageChanged: _handlePageChange,
-// //                 itemBuilder: (context, index) {
-// //                   if (index >= state.globalReels.length) {
-// //                     return const Center(
-// //                       child: CupertinoActivityIndicator(radius: 25),
-// //                     );
-// //                   }
-// //                   return VideoWidget(
-// //                     url: state.globalReels[index].videoMedia,
-// //                   );
-// //                   // return UnifiedReelItem(
-// //                   //   reel: state.globalReels[index],
-// //                   //   isVisible: _currentPage == index,
-// //                   //   itemType: ReelItemType.main,
-// //                   // );
-// //                 },
-// //               ),
-// //             ),
-// //           ],
-// //         );
-// //       },
-// //     );
-// //   }
-// //
-// //   void _handlePageChange(int index) {
-// //     setState(() => _currentPage = index);
-// //     final reelsCubit = context.read<ReelsCubit>();
-// //     if (index == reelsCubit.state.globalReels.length - 1 && mounted) {
-// //       reelsCubit.fetchReels();
-// //     }
-// //   }
-// //
-// //   @override
-// //   void dispose() {
-// //     _pageController.dispose();
-// //     super.dispose();
-// //   }
-// // }
-// //
-// // class RoundedButtonWithImage extends StatelessWidget {
-// //   final String imagePath;
-// //   final VoidCallback onPressed;
-// //
-// //   const RoundedButtonWithImage({
-// //     super.key,
-// //     required this.imagePath,
-// //     required this.onPressed,
-// //   });
-// //
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return SizedBox(
-// //       width: 100,
-// //       height: 50,
-// //       child: FittedBox(
-// //         child: ElevatedButton.icon(
-// //           onPressed: onPressed,
-// //           style: ButtonStyle(
-// //             backgroundColor: MaterialStatePropertyAll<Color>(
-// //               Colors.blueGrey.withOpacity(0.2),
-// //             ),
-// //           ),
-// //           icon: const Icon(
-// //             FontAwesomeIcons.music,
-// //             color: Colors.white,
-// //           ),
-// //           label: const Text(
-// //             'Audio',
-// //             style: TextStyle(color: Colors.white),
-// //           ),
-// //         ),
-// //       ),
-// //     );
-// //   }
-// // }
-// //
-// // class VideoWidget extends StatefulWidget {
-// //   final String url;
-// //
-// //   const VideoWidget({required this.url});
-// //
-// //   @override
-// //   _VideoWidgetState createState() => _VideoWidgetState();
-// // }
-// //
-// // class _VideoWidgetState extends State<VideoWidget> {
-// //   late VideoPlayerController videoPlayerController;
-// //
-// //   late Future<void> _initializeVideoPlayerFuture;
-// //
-// //   @override
-// //   void initState() {
-// //     super.initState();
-// //     videoPlayerController =
-// //         new VideoPlayerController.networkUrl(Uri.parse(widget.url));
-// //
-// //     _initializeVideoPlayerFuture = videoPlayerController.initialize().then((_) {
-// //       //       Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-// //       setState(() {});
-// //     });
-// //   }
-// //
-// //   @override
-// //   void dispose() {
-// //     videoPlayerController.dispose();
-// //     super.dispose();
-// //   }
-// //
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return FutureBuilder(
-// //       future: _initializeVideoPlayerFuture,
-// //       builder: (context, snapshot) {
-// //         return (snapshot.connectionState == ConnectionState.done)
-// //             ? SizedBox(
-// //                 height: double.infinity,
-// //                 child: Chewie(
-// //                   key: new PageStorageKey(widget.url),
-// //                   controller: ChewieController(
-// //                     videoPlayerController: videoPlayerController,
-// //                     autoInitialize: true,
-// //                     looping: true,
-// //                     showOptions: false,
-// //                     allowFullScreen: false,
-// //                     aspectRatio: 4/2,
-// //                     errorBuilder: (context, errorMessage) {
-// //                       return Center(
-// //                         child: Text(
-// //                           errorMessage,
-// //                           style: TextStyle(color: Colors.white),
-// //                         ),
-// //                       );
-// //                     },
-// //                   ),
-// //                 ),
-// //               )
-// //             : SizedBox(
-// //                 height: 200,
-// //                 child: Center(
-// //                   child: (snapshot.connectionState != ConnectionState.none)
-// //                       ? CircularProgressIndicator()
-// //                       : SizedBox(),
-// //                 ),
-// //               );
-// //       },
-// //     );
-// //   }
-// // }
-//
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter/scheduler.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_items.dart';
-// import 'package:fourtyninehub/routes/routes.dart';
-// import 'package:fourtyninehub/service_locator/service_locator.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:chewie/chewie.dart';
-// import 'package:flutter/material.dart';
-// import 'package:go_router/go_router.dart';
-// import 'package:video_player/video_player.dart';
-// import 'package:visibility_detector/visibility_detector.dart'; // Import the visibility_detector package
-//
-// class ReelView extends StatelessWidget {
-//   const ReelView({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       extendBodyBehindAppBar: true,
-//       extendBody: true,
-//       body: MultiBlocProvider(
-//         providers: [
-//           BlocProvider(
-//             create: (context) => serviceLocator<ReelsCubit>(),
-//           ),
-//           BlocProvider(
-//             create: (context) => serviceLocator<UserCubit>(),
-//           ),
-//         ],
-//         child: const ReelsScreen(),
-//       ),
-//     );
-//   }
-// }
-//
-// void showSnackBarAfterBuild(BuildContext context, {
-//   required String message,
-//   String? actionLabel,
-//   VoidCallback? onActionPressed,
-//   IconData? icon,
-//   Color backgroundColor = Colors.black,
-//   Color textColor = Colors.red,
-//   Color actionTextColor = Colors.blue,
-//   Duration duration = const Duration(seconds: 1),
-// }) {
-//   final snackBar = SnackBar(
-//     content: Row(
-//       children: [
-//         Expanded(
-//           child: Text(
-//             message,
-//             textScaler: TextScaler.noScaling,
-//             style: TextStyle(
-//               color: textColor,
-//               fontSize: 30.sp,
-//               fontWeight: FontWeight.w700,
-//             ),
-//           ),
-//         ),
-//         if (icon != null)
-//           Icon(
-//             icon,
-//             color: Colors.green,
-//             size: 50.h,
-//           ),
-//       ],
-//     ),
-//     backgroundColor: backgroundColor,
-//     duration: duration,
-//     action: actionLabel != null
-//         ? SnackBarAction(
-//       label: actionLabel,
-//       onPressed: onActionPressed ?? () {},
-//       textColor: actionTextColor,
-//     )
-//         : null,
-//     behavior: SnackBarBehavior.floating,
-//     shape: RoundedRectangleBorder(
-//       borderRadius: BorderRadius.circular(10),
-//     ),
-//     margin: const EdgeInsets.all(16),
-//     elevation: 10,
-//   );
-//   SchedulerBinding.instance.addPostFrameCallback((_) {
-//     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-//   });
-// }
-//
-// class ReelsScreen extends StatefulWidget {
-//   const ReelsScreen({super.key});
-//
-//   @override
-//   ReelsScreenState createState() => ReelsScreenState();
-// }
-//
-// class ReelsScreenState extends State<ReelsScreen>
-//     with AutomaticKeepAliveClientMixin {
-//   final PageController _pageController = PageController();
-//   int _currentPage = 0;
-//
-//   @override
-//   bool get wantKeepAlive => true;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _fetchInitialReels();
-//   }
-//
-//   void _fetchInitialReels() {
-//     if (mounted) {
-//       context.read<ReelsCubit>().fetchReels();
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     super.build(context);
-//     return BlocBuilder<ReelsCubit, ReelsState>(
-//       builder: (context, state) {
-//         return Stack(
-//           children: [
-//             Positioned.fill(
-//               child: PageView.builder(
-//                 physics: const BouncingScrollPhysics(),
-//                 controller: _pageController,
-//                 scrollDirection: Axis.vertical,
-//                 itemCount: state.globalReels.length +
-//                     (state.globalReelsHasReachedMax ? 0 : 1),
-//                 onPageChanged: _handlePageChange,
-//                 itemBuilder: (context, index) {
-//                   if (index >= state.globalReels.length) {
-//                     return const Center(
-//                       child: CupertinoActivityIndicator(radius: 25),
-//                     );
-//                   }
-//                   return VideoWidget(
-//                     url: state.globalReels[index].videoMedia,
-//                   );
-//                   // return UnifiedReelItem(
-//                   //   reel: state.globalReels[index],
-//                   //   isVisible: _currentPage == index,
-//                   //   itemType: ReelItemType.main,
-//                   // );
-//                 },
-//               ),
-//             ),
-//             Positioned(
-//               top: 100,
-//               bottom: 100,
-//               right: 0,
-//               child: ElevatedButton(
-//                 onPressed: () {
-//                   context.push(Routes.Tinder);
-//                 },
-//                 child: Text('sfbdfbdb'),
-//               ),
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }
-//
-//   void _handlePageChange(int index) {
-//     setState(() => _currentPage = index);
-//     final reelsCubit = context.read<ReelsCubit>();
-//     if (index == reelsCubit.state.globalReels.length - 1 && mounted) {
-//       reelsCubit.fetchReels();
-//     }
-//   }
-//
-//   @override
-//   void dispose() {
-//     _pageController.dispose();
-//     super.dispose();
-//   }
-// }
-//
-// class RoundedButtonWithImage extends StatelessWidget {
-//   final String imagePath;
-//   final VoidCallback onPressed;
-//
-//   const RoundedButtonWithImage({
-//     super.key,
-//     required this.imagePath,
-//     required this.onPressed,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       width: 100,
-//       height: 50,
-//       child: FittedBox(
-//         child: ElevatedButton.icon(
-//           onPressed: onPressed,
-//           style: ButtonStyle(
-//             backgroundColor: MaterialStatePropertyAll<Color>(
-//               Colors.blueGrey.withOpacity(0.2),
-//             ),
-//           ),
-//           icon: const Icon(
-//             FontAwesomeIcons.music,
-//             color: Colors.white,
-//           ),
-//           label: const Text(
-//             'Audio',
-//             style: TextStyle(color: Colors.white),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
-// class VideoWidget extends StatefulWidget {
-//   final String url;
-//
-//   const VideoWidget({required this.url});
-//
-//   @override
-//   _VideoWidgetState createState() => _VideoWidgetState();
-// }
-//
-// class _VideoWidgetState extends State<VideoWidget> {
-//   late VideoPlayerController videoPlayerController;
-//
-//   late Future<void> _initializeVideoPlayerFuture;
-//   bool _isVisible = false; // Track visibility state
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     videoPlayerController =
-//         VideoPlayerController.networkUrl(Uri.parse(widget.url));
-//
-//     _initializeVideoPlayerFuture = videoPlayerController.initialize().then((_) {
-//       // Ensure the first frame is shown after the video is initialized
-//       setState(() {});
-//     });
-//   }
-//
-//   @override
-//   void dispose() {
-//     videoPlayerController.dispose();
-//     super.dispose();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return VisibilityDetector(
-//       key: Key(widget.url), // Unique key for each video widget
-//       onVisibilityChanged: (visibilityInfo) {
-//         var visiblePercentage = visibilityInfo.visibleFraction * 100;
-//
-//         // Play video when more than 50% is visible
-//         if (visiblePercentage > 50 && !_isVisible) {
-//           setState(() {
-//             _isVisible = true;
-//           });
-//           videoPlayerController.play();
-//         } else if (visiblePercentage <= 50 && _isVisible) {
-//           setState(() {
-//             _isVisible = false;
-//           });
-//           videoPlayerController.pause();
-//         }
-//       },
-//       child: FutureBuilder(
-//         future: _initializeVideoPlayerFuture,
-//         builder: (context, snapshot) {
-//           return (snapshot.connectionState == ConnectionState.done)
-//               ? Container(
-//             height: double.infinity,
-//             color: Colors.black,
-//             child: Stack(
-//               children: [
-//                 Chewie(
-//                   key: PageStorageKey(widget.url),
-//                   controller: ChewieController(
-//                     videoPlayerController: videoPlayerController,
-//                     autoInitialize: true,
-//                     looping: true,
-//                     showOptions: false,
-//                     allowFullScreen: false,
-//                     aspectRatio: 2 / 4,
-//                     errorBuilder: (context, errorMessage) {
-//                       return Center(
-//                         child: Text(
-//                           errorMessage,
-//                           style: TextStyle(color: Colors.white),
-//                         ),
-//                       );
-//                     },
-//                   ),
-//                 ),
-//                 Positioned(
-//                   top: 100,
-//                   bottom: 100,
-//                   child: ElevatedButton(
-//                     onPressed: () {
-//                       context.push(Routes.Tinder);
-//                     },
-//                     child: Text('data'),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           )
-//               : SizedBox(
-//             height: 200,
-//             child: Center(
-//               child: (snapshot.connectionState != ConnectionState.none)
-//                   ? CircularProgressIndicator()
-//                   : SizedBox(),
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
-
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -621,6 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/profile_buttom_sheet.dart';
@@ -635,7 +27,10 @@ import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../zoom/presentation/controller/stream_cubit.dart';
+import '../../../../zoom/presentation/widgets/join_meeting_screen.dart';
 
 // Entry point of the reels view
 class ReelView extends StatelessWidget {
@@ -792,14 +187,7 @@ class ReelsScreenState extends State<ReelsScreen>
                 right: 4,
                 left: 4,
                 child: AdvancedTikTokTabBar()
-                // ElevatedButton(
-                //   onPressed: () {
-                //     videoPlayerController
-                //         .pause(); // Pause video on navigation
-                //     context.push(Routes.Tinder);
-                //   },
-                //   child: const Text('Navigate'),
-                // ),
+
                 ),
           ],
         );
@@ -924,31 +312,6 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
     }
   }
 
-  /// Initializes the video player and Chewie controller.
-  // Future<void> _initializePlayer() async {
-  //   _videoPlayerController =
-  //       VideoPlayerController.network(widget.reel.videoMedia);
-  //   try {
-  //     await _videoPlayerController.initialize();
-  //     _setupChewieController();
-  //     if (mounted) {
-  //       setState(() {
-  //         _isInitialized = true;
-  //         _isPlaying = widget.isVisible;
-  //       });
-  //     }
-  //     if (widget.isVisible) {
-  //       _playVideo();
-  //     }
-  //   } catch (error) {
-  //     if (mounted) {
-  //       setState(() {
-  //         _isInitialized = false;
-  //       });
-  //       _showError('Failed to load video');
-  //     }
-  //   }
-  // }
 
   Future<void> _initializePlayer() async {
     _videoPlayerController =
@@ -976,17 +339,6 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
     }
   }
 
-  /// Sets up the Chewie controller after the video player is initialized.
-  // void _setupChewieController() {
-  //   _chewieController = ChewieController(
-  //     videoPlayerController: _videoPlayerController,
-  //     autoPlay: true,
-  //     looping: true,
-  //     showControls: true,
-  //     hideControlsTimer: const Duration(milliseconds: 500),
-  //     aspectRatio: _videoPlayerController.value.aspectRatio,
-  //   );
-  // }
 
   /// Displays an error message using a SnackBar.
   void _showError(String message) {
@@ -1054,176 +406,11 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
               color: Colors.blue,
             ),
           ),
-        // if (widget.itemType == ReelItemType.main)
-        // Positioned(
-        //   top: 4,
-        //   child: _buildAppBar(context),
-        // ),
+
       ],
     );
   }
 
-/*
-  Widget _buildAppBar(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Back Button Row
-          Row(
-            children: [
-              _buildGradientIconButton(
-                iconData: Icons.arrow_back,
-                onPressed: () => context.pop(),
-              ),
-              const Spacer(),
-            ],
-          ),
-          const Sizer(),
-          // Buttons Row
-          FittedBox(
-            child: Row(
-              // mainAxisSize: MainAxisSize.max,
-              // mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                // Live Button
-                _buildGradientSvgButton(
-                  assetName: 'assets/images/live_icon.svg',
-                  onPressed: () {
-                    _pauseVideo();
-                    context.push(Routes.LIVE);
-                  },
-                ),
-                const Sizer(),
-                // Spotlight Button
-                _buildGradientTextButton(
-                  text: 'Spotlight',
-                  onPressed: () {
-                    _pauseVideo();
-
-                    context.push(Routes.SPOTLIGHT);
-                  },
-                ),
-                const Sizer(),
-                // Snap Button
-                _buildGradientTextButton(
-                  text: 'Snap',
-                  onPressed: () {
-                    _pauseVideo();
-
-                    context.push(Routes.SNAP);
-                  },
-                ),
-                const Sizer(),
-                // Reels Button
-                _buildGradientTextButton(
-                  text: 'Reels',
-                  onPressed: () async {
-                    _pauseVideo();
-
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ReelsRecordingScreen(),
-                      ),
-                    );
-                  },
-                ),
-                const Sizer(),
-                // Search Button
-                _buildGradientIconButton(
-                  iconData: FontAwesomeIcons.magnifyingGlass,
-                  onPressed: () {
-                    _pauseVideo();
-
-                    context.push(Routes.Tinder);
-                  },
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-// Helper method for gradient icon buttons
-  Widget _buildGradientIconButton(
-      {required IconData iconData, required VoidCallback onPressed}) {
-    return Container(
-      height: 70.h,
-      decoration: _buttonDecoration(),
-      child: IconButton(
-        icon: FittedBox(
-          child: Icon(
-            iconData,
-            color: Colors.white,
-          ),
-        ),
-        onPressed: onPressed,
-      ),
-    );
-  }
-
-// Helper method for gradient SVG buttons
-  Widget _buildGradientSvgButton(
-      {required String assetName, required VoidCallback onPressed}) {
-    return Container(
-      height: 70.h,
-      decoration: _buttonDecoration(),
-      child: IconButton(
-        icon: SvgPicture.asset(
-          assetName,
-          fit: BoxFit.fitHeight,
-        ),
-        onPressed: onPressed,
-      ),
-    );
-  }
-
-// Helper method for gradient text buttons
-  Widget _buildGradientTextButton(
-      {required String text, required VoidCallback onPressed}) {
-    return Container(
-      height: 70.h,
-      decoration: _buttonDecoration(),
-      child: TextButton(
-        onPressed: onPressed,
-        child: Text(
-          text,
-          style: Styles.mediumText(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
-  }
-
-// Button decoration with gradient and rounded corners
-  BoxDecoration _buttonDecoration() {
-    return BoxDecoration(
-      gradient: const LinearGradient(
-        colors: [
-          Colors.white10,
-          Colors.black12,
-        ],
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-      ),
-      borderRadius: BorderRadius.circular(12),
-      boxShadow: const [
-        BoxShadow(
-          color: Colors.black26,
-          blurRadius: 2,
-          offset: Offset(0, 2),
-        ),
-      ],
-    );
-  }
-*/
 
   /// Handles vertical drag events for the spotlight item type.
   void _handleVerticalDrag(DragEndDetails details) async {
@@ -1300,7 +487,7 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
                   });
                 },
                 iconSize: 200,
-                animationDuration: Duration(seconds: 1),
+                animationDuration: const Duration(seconds: 1),
                 heartIcon: Icons.favorite,
                 iconColor: Colors.pink,
                 child: Container(
@@ -1650,17 +837,7 @@ class _VideoWidgetState extends State<VideoWidget> {
                       ),
                     ),
                   ),
-                  // Positioned(
-                  //     top: 50, right: 0, left: 0, child: AdvancedTikTokTabBar()
-                  //     // ElevatedButton(
-                  //     //   onPressed: () {
-                  //     //     videoPlayerController
-                  //     //         .pause(); // Pause video on navigation
-                  //     //     context.push(Routes.Tinder);
-                  //     //   },
-                  //     //   child: const Text('Navigate'),
-                  //     // ),
-                  //     ),
+
                 ],
               ),
             );
@@ -1693,7 +870,11 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
   }
-
+  int get generateRandom9DigitNumber {
+    Random random = Random();
+    // Generate a number between 100000000 and 999999999
+    return 100000000 + random.nextInt(900000000);
+  }
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -1723,7 +904,45 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               // LIVE Icon with Glow Effect
               const Sizer(),
               _buildLiveIcon(onTap: () {
-                context.push(Routes.LIVE);
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Wrap(
+                        children: [
+                          ListTile(
+                              onTap: () async {
+                                var result = await context
+                                    .read<StreamCubit>()
+                                    .createLive(title: 'create live',roomId: generateRandom9DigitNumber.toString(), context: context);
+                                if(result==true){
+                                  context.push(Routes.LIVEView,
+                                      extra: ZegoArgs(
+                                          context
+                                              .read<StreamCubit>()
+                                              .state
+                                              .liveCreateResponseEntity!
+                                              .id,
+                                          true,
+                                          context
+                                              .read<UserCubit>()
+                                              .state
+                                              .data!
+                                              .fullName));
+                                }else{
+                                  print("objectFailed");
+                                }
+                              },
+                              title: const Label(text: 'Create Live')),
+                          ListTile(
+                            onTap: () {
+                              context.pop();
+                              context.push(Routes.LIVE);
+                            },
+                            title: Label(text:'Watch'),
+                          )
+                        ],
+                      );
+                    });
               }),
               const Spacer(), // Explore Tab
               _buildTab("Spotlight", 0, onTap: () {
@@ -1805,50 +1024,6 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
     );
   }
 
-  // Widget _buildLiveIcon({required VoidCallback? onTap}) {
-  //   return InkWell(
-  //     onTap: onTap,
-  //     child: SizedBox(
-  //       height: 70.w,
-  //       width: 70.w,
-  //       child: Stack(
-  //         alignment: Alignment.center,
-  //         children: [
-  //           // Shadow layer with blur effect
-  //           Positioned(
-  //             left: 2.0,
-  //             bottom: 2.0,
-  //             right: 2,
-  //             top: 2,
-  //             child: ImageFiltered(
-  //               enabled: true,
-  //               imageFilter: ImageFilter.blur(
-  //                 sigmaX: 0.0,
-  //                 sigmaY: 1.5,
-  //               ),
-  //               child: SvgPicture.asset(
-  //                 'assets/images/live_icon.svg',
-  //                 color: Colors.black87, // Shadow color
-  //                 width: 60.w,
-  //                 height: 60.w,
-  //               ),
-  //             ),
-  //           ),
-  //           // Main icon
-  //           SvgPicture.asset(
-  //             'assets/images/live_icon.svg',
-  //             color: Colors.white, // Main icon color
-  //             width: 60.w,
-  //             fit: BoxFit.scaleDown,
-  //             height: 60.w,
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Method to build each tab with smooth underline animation
   Widget _buildTab(String text, int index,
       {bool hasUnderline = false, required VoidCallback? onTap}) {
     bool isSelected = _selectedIndex == index;
@@ -1946,33 +1121,6 @@ class _CustomChewieControlsState extends State<CustomChewieControls> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // // Play/Pause Button
-        // Align(
-        //   alignment: Alignment.center,
-        //   child: IconButton(
-        //     icon: Icon(
-        //       widget.chewieController.videoPlayerController.value.isPlaying
-        //           ? Icons.pause_circle_filled
-        //           : Icons.play_circle_filled,
-        //       color: Colors.white,
-        //       size: 50.0,
-        //     ),
-        //     onPressed: () {
-        //       if (widget
-        //           .chewieController.videoPlayerController.value.isPlaying) {
-        //         setState(() {
-        //           widget.chewieController.videoPlayerController.pause();
-        //         });
-        //       } else {
-        //         setState(() {
-        //           widget.chewieController.videoPlayerController.play();
-        //         });
-        //       }
-        //     },
-        //   ),
-        // ),
-        //
-        // // Bottom Controls (e.g., Progress Bar, Fullscreen, etc.)
         Positioned(
           bottom: 0,
           left: 10,
@@ -2200,18 +1348,6 @@ class _CustomProgressBarState extends State<CustomProgressBar> {
                             borderRadius: BorderRadius.circular(2),
                           ),
                         ),
-                        // Buffered
-                        // FractionallySizedBox(
-                        //   widthFactor: bufferedPart,
-                        //   child: Container(
-                        //     height: 4,
-                        //     decoration: BoxDecoration(
-                        //       color: Colors.grey[500],
-                        //       borderRadius: BorderRadius.circular(2),
-                        //     ),
-                        //   ),
-                        // ),
-                        // Played
                         FractionallySizedBox(
                           widthFactor: playedPart,
                           child: Container(
@@ -2246,4 +1382,5 @@ class _CustomProgressBarState extends State<CustomProgressBar> {
       },
     );
   }
+
 }

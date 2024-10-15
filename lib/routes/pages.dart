@@ -237,6 +237,7 @@ import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/youtube/presentation/pages/play_video.dart';
 import '../features/youtube/presentation/pages/youtube.dart';
+import '../features/zoom/presentation/controller/stream_cubit.dart';
 import '../features/zoom/presentation/pages/meeting_room.dart';
 import '../features/zoom/presentation/pages/meeting_view.dart';
 import '../service_locator/service_locator.dart';

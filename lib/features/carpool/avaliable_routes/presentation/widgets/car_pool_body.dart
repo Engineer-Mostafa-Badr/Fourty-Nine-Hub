@@ -58,7 +58,7 @@ class _CarPoolBodyState extends State<CarPoolBody> {
               ),
             ),
             Expanded(
-              child: TabBarView(
+              child: TabBarView(physics: const NeverScrollableScrollPhysics(),
                 children: [
                   Stack(
                     children: [
