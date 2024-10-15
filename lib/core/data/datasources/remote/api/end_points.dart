@@ -117,6 +117,11 @@ class EndPoints {
   static const navigateBar = '/navigators/navigatorsBar';
   static const favouriteCat = '/navigators/navigateCategories';
 
+  // Star
+  static const allStar = '/talent/';
+  static const myStar = '/talent/my-talent';
+  static const uploadStar = '/talent/upload';
+
   //My Ads
   static const myAdsAuction='/ads/allMyAds/auction';
   static const myAdsInstallment='/ads/allMyAds/installment';
