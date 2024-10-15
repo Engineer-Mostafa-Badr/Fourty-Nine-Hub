@@ -58,10 +58,19 @@ class LiveStreamHomeScreen extends StatelessWidget {
       child: Scaffold(
         body: _buildLivePages(),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            context.push(Routes.LIVEView,
-                extra: ZegoArgs('123', true,
-                    context.read<UserCubit>().state.data!.fullName));
+          onPressed: () async {
+            await context.read<StreamCubit>().createLive(title: 'Mo Salama Mo Salama');
+            if (context.mounted) {
+              context.push(Routes.LIVEView,
+                  extra: ZegoArgs(
+                      context
+                          .read<StreamCubit>()
+                          .state
+                          .liveCreateResponseEntity!
+                          .id,
+                      true,
+                      context.read<UserCubit>().state.data!.fullName));
+            }
           },
           backgroundColor: Colors.red,
           child: const Icon(
@@ -77,7 +86,7 @@ class LiveStreamHomeScreen extends StatelessWidget {
     return BlocBuilder<StreamCubit, StreamState>(
       builder: (context, state) {
         var cubit = context.read<StreamCubit>();
-        return PagedPageView(
+        return PagedListView(
           pagingController: cubit.roomsPagingController,
           scrollDirection: Axis.vertical,
           physics: const BouncingScrollPhysics(),

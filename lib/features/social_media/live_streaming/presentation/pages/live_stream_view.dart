@@ -118,6 +118,7 @@ class _LiveStreamViewState extends State<LiveStreamView> {
       ..pkBattle = pkConfig();
 
     final userId = context.read<UserCubit>().state.data!.id;
+    print('live id is ${widget.liveID}');
     return SafeArea(
       child: ZegoUIKitPrebuiltLiveStreaming(
         appID: context.read<SecretsCubit>().state.secrets!.zegoAppId,

@@ -101,117 +101,130 @@ class _ZegoLiveStreamingTopBarState extends State<ZegoLiveStreamingTopBar> {
       // color: Colors.red,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Row(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            BlocBuilder<StreamCubit, StreamState>(
-              builder: (context, state) {
-                return IconButton(
-                    style: IconButton.styleFrom(
-                        shape: const CircleBorder(),
-                        backgroundColor: Colors.grey.withOpacity(0.7)),
-                    onPressed: () async {
-                      for (var user in ZegoUIKit().getAllUsers()) {
-                        await ZegoUIKit().removeUserFromRoom([user.id]);
-                      }
-                      if (context.mounted) {
-                        await context.read<StreamCubit>().endLive();
-                        context.pop();
-                      }
+        child: widget.config.role == ZegoLiveStreamingRole.host
+            ? Row(
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BlocBuilder<StreamCubit, StreamState>(
+                    builder: (context, state) {
+                      return IconButton(
+                          style: IconButton.styleFrom(
+                              shape: const CircleBorder(),
+                              backgroundColor: Colors.grey.withOpacity(0.7)),
+                          onPressed: () async {
+                            for (var user in ZegoUIKit().getAllUsers()) {
+                              await ZegoUIKit().removeUserFromRoom([user.id]);
+                            }
+                            if (context.mounted) {
+                              await context.read<StreamCubit>().endLive();
+                              context.pop();
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.close,
+                          ));
+                    },
+                  ),
+                  Expanded(
+                    child: Container(),
+                  ),
+                  Container(
+                    // padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    // margin: const EdgeInsets.all(25),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.grey.withOpacity(0.7),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ZegoSwitchCameraButton(
+                          buttonSize: buttonSize,
+                          iconSize: iconSize,
+                          icon: ButtonIcon(
+                            icon: const Icon(
+                              Icons.switch_camera,
+                            ),
+                            backgroundColor: Colors.transparent,
+                          ),
+                          defaultUseFrontFacingCamera: ZegoUIKit()
+                              .getUseFrontFacingCameraStateNotifier(
+                                  ZegoUIKit().getLocalUser().id)
+                              .value,
+                        ),
+                        ZegoToggleMicrophoneButton(
+                          buttonSize: buttonSize,
+                          iconSize: iconSize,
+                          normalIcon: ButtonIcon(
+                            icon: const Icon(
+                              Icons.mic,
+
+                              // size: 20,
+                            ),
+                            backgroundColor: Colors.transparent,
+                          ),
+                          offIcon: ButtonIcon(
+                            icon: const Icon(
+                              Icons.mic_off_outlined,
+
+                              // size: 20,
+                            ),
+                            backgroundColor: Colors.transparent,
+                          ),
+                        ),
+                        ZegoToggleCameraButton(
+                          buttonSize: buttonSize,
+                          iconSize: iconSize,
+                          normalIcon: ButtonIcon(
+                              icon: const Icon(
+                                Icons.videocam_outlined,
+                                // size: 20,
+                              ),
+                              backgroundColor: Colors.transparent),
+                          offIcon: ButtonIcon(
+                            icon: const Icon(
+                              Icons.videocam_off_outlined,
+
+                              // size: 20,
+                            ),
+                            backgroundColor: Colors.transparent,
+                          ),
+                        ),
+                        ZegoScreenSharingToggleButton(
+                          buttonSize: buttonSize,
+                          iconSize: iconSize,
+                          iconStartSharing: ButtonIcon(
+                            icon: const Icon(
+                              Icons.screen_share_rounded,
+                              // size: 20,
+                            ),
+                            backgroundColor: Colors.transparent,
+                          ),
+                          iconStopSharing: ButtonIcon(
+                            icon: const Icon(
+                              Icons.stop_screen_share_outlined,
+                              // size: 20,
+                            ),
+                            backgroundColor: Colors.transparent,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              )
+            : Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                    onPressed: () {
+                      print(ZegoUIKit.instance.getRoom().id);
+                      context.pop();
                     },
                     icon: const Icon(
                       Icons.close,
-                    ));
-              },
-            ),
-            Expanded(
-              child: Container(),
-            ),
-            Container(
-              // padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              // margin: const EdgeInsets.all(25),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.grey.withOpacity(0.7),
+                      color: Colors.white,
+                    )),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ZegoSwitchCameraButton(
-                    buttonSize: buttonSize,
-                    iconSize: iconSize,
-                    icon: ButtonIcon(
-                      icon: const Icon(
-                        Icons.switch_camera,
-                      ),
-                      backgroundColor: Colors.transparent,
-                    ),
-                    defaultUseFrontFacingCamera: ZegoUIKit()
-                        .getUseFrontFacingCameraStateNotifier(
-                            ZegoUIKit().getLocalUser().id)
-                        .value,
-                  ),
-                  ZegoToggleMicrophoneButton(
-                    buttonSize: buttonSize,
-                    iconSize: iconSize,
-                    normalIcon: ButtonIcon(
-                      icon: const Icon(
-                        Icons.mic,
-
-                        // size: 20,
-                      ),
-                      backgroundColor: Colors.transparent,
-                    ),
-                    offIcon: ButtonIcon(
-                      icon: const Icon(
-                        Icons.mic_off_outlined,
-
-                        // size: 20,
-                      ),
-                      backgroundColor: Colors.transparent,
-                    ),
-                  ),
-                  ZegoToggleCameraButton(
-                    buttonSize: buttonSize,
-                    iconSize: iconSize,
-                    normalIcon: ButtonIcon(
-                        icon: const Icon(
-                          Icons.videocam_outlined,
-                          // size: 20,
-                        ),
-                        backgroundColor: Colors.transparent),
-                    offIcon: ButtonIcon(
-                      icon: const Icon(
-                        Icons.videocam_off_outlined,
-
-                        // size: 20,
-                      ),
-                      backgroundColor: Colors.transparent,
-                    ),
-                  ),
-                  ZegoScreenSharingToggleButton(
-                    buttonSize: buttonSize,
-                    iconSize: iconSize,
-                    iconStartSharing: ButtonIcon(
-                      icon: const Icon(
-                        Icons.screen_share_rounded,
-                        // size: 20,
-                      ),
-                      backgroundColor: Colors.transparent,
-                    ),
-                    iconStopSharing: ButtonIcon(
-                      icon: const Icon(
-                        Icons.stop_screen_share_outlined,
-                        // size: 20,
-                      ),
-                      backgroundColor: Colors.transparent,
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
       ),
     );
   }
