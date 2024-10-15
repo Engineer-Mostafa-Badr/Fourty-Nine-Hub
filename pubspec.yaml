@@ -111,6 +111,9 @@ dependencies:
   flutter_osm_plugin: ^0.70.4
   flutter_mapbox_navigation: ^0.2.2
   icons_launcher: ^3.0.0
+  readmore: ^3.0.0
+  flutter_animate: ^4.5.0
+  carousel_slider: ^5.0.0
   
 dependency_overrides:
   http: ^0.13.3

@@ -20,6 +20,9 @@ class AvilableRoutesBarInfo extends StatelessWidget {
         children: [
           Expanded(
             child: AvailableRoutesPointInfo(
+                seatId: "first",
+                tripId: entity.id,
+                userLocation: const [40.0333486, -3.925665899999999],
                 isComfort: entity.comfort,
                 price: entity.priceForEveryUser,
                 dotNumber: 1,
@@ -30,6 +33,9 @@ class AvilableRoutesBarInfo extends StatelessWidget {
             child: AvailableRoutesPointInfo(
                 isComfort: entity.comfort,
                 price: entity.priceForEveryUser,
+                seatId: "second",
+                tripId: entity.id,
+                userLocation: const [40.0333486, -3.925665899999999],
                 dotNumber: 2,
                 status: entity.locations[1].booked ? 'Booked' : 'Free',
                 gender: entity.locations[1].bookedUser?.gender ?? "NA"),
@@ -39,11 +45,17 @@ class AvilableRoutesBarInfo extends StatelessWidget {
                 isComfort: entity.comfort,
                 price: entity.priceForEveryUser,
                 dotNumber: 3,
+                seatId: "third",
+                tripId: entity.id,
+                userLocation: const [40.0333486, -3.925665899999999],
                 status: entity.locations[2].booked ? 'Booked' : 'Free',
                 gender: entity.locations[2].bookedUser?.gender ?? "NA"),
           ),
           Expanded(
             child: AvailableRoutesPointInfo(
+              seatId: "",
+              tripId: "",
+              userLocation: const [40.0333486, -3.925665899999999],
               isComfort: entity.comfort,
               price: entity.priceForEveryUser,
               dotNumber: 4,

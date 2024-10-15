@@ -1116,15 +1116,15 @@ class AppPages {
                   ),
               routes: [
                 // CusineRestaurantsView
-                GoRoute(
-                  path: Paths.RestaurantDashboard,
-                  name: Routes.RestaurantDashboard,
-                  builder: (context, state) =>
-                      BlocProvider<RestaurantDashboardCubit>(
-                    create: (_) => serviceLocator(),
-                    child:  RestaurantDashboardView(),
-                  ),
-                ),
+                // GoRoute(
+                //   path: Paths.RestaurantDashboard,
+                //   name: Routes.RestaurantDashboard,
+                //   builder: (context, state) =>
+                //       BlocProvider<RestaurantDashboardCubit>(
+                //     create: (_) => serviceLocator(),
+                //     child:  RestaurantDashboardView(),
+                //   ),
+                // ),
                 GoRoute(
                   path: Paths.CusineRestaurants,
                   name: Routes.CusineRestaurants,
@@ -1218,7 +1218,9 @@ class AppPages {
                       create: (context) =>
                           serviceLocator<FavoriteMainCateogryCubit>(),
                     ),
-                    BlocProvider(create: (context) => serviceLocator<RiderTripReelTimeCubit>()),
+                    BlocProvider(
+                        create: (context) =>
+                            serviceLocator<RiderTripReelTimeCubit>()),
                     BlocProvider(
                         create: (context) =>
                             serviceLocator<RiderTripReelTimeCubit>()),

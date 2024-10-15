@@ -17,6 +17,9 @@ class AvailableRoutesPointInfo extends StatelessWidget {
     this.gender = 'male',
     required this.price,
     required this.isComfort,
+    required this.tripId,
+    required this.seatId,
+    required this.userLocation,
   });
   final int dotNumber;
   final String status;
@@ -122,8 +125,11 @@ class AvailableRoutesPointInfo extends StatelessWidget {
       onTap: () {
         if (status.toLowerCase() == 'free') {
           showCreateRouteModalSheet(context,
-          
-              isComfort: isComfort, price: price);
+              seatId: seatId,
+              tripId: tripId,
+              userLocation: userLocation,
+              isComfort: isComfort,
+              price: price);
         }
       },
       child: Container(
