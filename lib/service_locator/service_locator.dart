@@ -185,6 +185,7 @@ import 'package:fourtyninehub/service_locator/carpool_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/face_book_service_locator.dart';
 import 'package:fourtyninehub/service_locator/instagram_service_locator.dart';
+import 'package:fourtyninehub/service_locator/join_trip_carpool_service_locator.dart';
 import 'package:fourtyninehub/service_locator/notification_service_locator.dart';
 import 'package:fourtyninehub/service_locator/payment_service_locator.dart';
 import 'package:fourtyninehub/service_locator/privacy_service_locator.dart';
@@ -325,6 +326,7 @@ class DI {
     serviceLocator.registerLazySingleton<RequestRiderTripCubit>(
       () => RequestRiderTripCubit(repository: serviceLocator()),
     );
+
     //
     // // Register the TinderCubit
     // serviceLocator.registerFactory<TinderViewCubit>(
@@ -417,6 +419,6 @@ class DI {
     TransferMoneyServiceLocator.execute(serviceLocator: serviceLocator);
     CustomPageServiceLocator.execute(serviceLocator: serviceLocator);
     CarpoolServiceLocator.execute(serviceLocator: serviceLocator);
-    ChanceServiceLocator.execute(serviceLocator: serviceLocator);
+    JoinTripCarpoolServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

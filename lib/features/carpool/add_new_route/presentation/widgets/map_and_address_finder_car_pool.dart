@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widgets/carpool_google_map.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widgets/dest_text_field_googlemap.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widgets/dest_text_field_mapbox.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widgets/start_text_field_mapbox.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widgets/starting_text_field_googlemap.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/welcome_text_car_pool.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/destination_text_field_and_find_button.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/start_text_field_and_find_button.dart';
 
 class MapAndAddressFinderCarPool extends StatelessWidget {
-  const MapAndAddressFinderCarPool({
+  MapAndAddressFinderCarPool({
     super.key,
   });
 
@@ -17,10 +19,28 @@ class MapAndAddressFinderCarPool extends StatelessWidget {
       children: [
         ...welcomeTextCarPool(context),
         const CarPoolGoogleMap(),
+
+        // MapboxNavigationWidget(
+        //   origin: WayPoint(
+        //     name: "Alexandria",
+        //     latitude: 31.2001, // Latitude for Alexandria
+        //     longitude: 29.9187, // Longitude for Alexandria
+        //   ),
+        //   destination: WayPoint(
+        //     name: "Cairo",
+        //     latitude: 30.0444, // Latitude for Cairo
+        //     longitude: 31.2357, // Longitude for Cairo
+        //   ),
+        // ),
+
+        // RouteMapWidget(
+        //   startPoint: startPoint,
+        //   endPoint: endPoint,
+        // ),
         const Sizer(height: 20),
-        const StartTextFieldAndFindButon(),
+        const StartTextFieldAndFindButonGoogleMap(),
         const Sizer(height: 20),
-        const DestinationTextFieldAndFindButon(),
+        const DestinationTextFieldAndFindButonGoogleMap(),
         const Sizer(height: 30),
       ],
     );

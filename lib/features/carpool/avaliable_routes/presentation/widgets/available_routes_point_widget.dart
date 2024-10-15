@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/numberwidget.dart';
-import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/show_bottom_sheet.dart';
+import 'package:fourtyninehub/features/carpool/join_trip/presentation/widgets/show_bottom_sheet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -15,11 +15,21 @@ class AvailableRoutesPointInfo extends StatelessWidget {
     this.status = '',
     this.inProgress = true,
     this.gender = 'male',
+    required this.price,
+    required this.isComfort,
+    required this.tripId,
+    required this.seatId,
+    required this.userLocation,
   });
   final int dotNumber;
   final String status;
   final bool inProgress;
   final String gender;
+  final String tripId;
+  final String seatId;
+  final List<double> userLocation;
+  final num price;
+  final bool isComfort;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -113,7 +123,14 @@ class AvailableRoutesPointInfo extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        showCreateRouteModalSheet(context, isComfort: false);
+        if (status.toLowerCase() == 'free') {
+          showCreateRouteModalSheet(context,
+              seatId: seatId,
+              tripId: tripId,
+              userLocation: userLocation,
+              isComfort: isComfort,
+              price: price);
+        }
       },
       child: Container(
         color: Colors.transparent,
@@ -123,8 +140,8 @@ class AvailableRoutesPointInfo extends StatelessWidget {
             // Create the red circular border
             if (status.toLowerCase() == 'free')
               Container(
-                width: 70, // Size of the outer circle (border)
-                height: 70, // Size of the outer circle (border)
+                width: 65, // Size of the outer circle (border)
+                height: 65, // Size of the outer circle (border)
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.red, width: 3), // Red border
@@ -133,12 +150,11 @@ class AvailableRoutesPointInfo extends StatelessWidget {
             // Display the image inside the circle
             Container(
               clipBehavior: Clip.antiAlias,
-              width: 40, // Size of the inner image container
-              height: 40, // Size of the inner image container
               decoration: BoxDecoration(
                 shape: BoxShape.circle, // Circle shape for the image
               ),
               child: Image.asset(
+                width: status.toLowerCase() == 'free' ? 40 : 60,
                 // Use the appropriate image based on status and gender
                 status.toLowerCase() == 'free'
                     ? Assets.tripjoin
