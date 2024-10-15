@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_currency_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
@@ -20,16 +21,18 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       FourtyNineSharedData.instance;
   final ToggleFavoriteCategoryUseCase _toggleFavoriteCategoryUseCase;
   final GetWalletHomeUseCase _getWalletHomeUseCase;
+  final GetCurrencyUseCase _currencyUseCase;
 
   MainCategoriesCubit(
     this._getMainCategoriesUseCase,
     this._toggleFavoriteCategoryUseCase,
-    this._getWalletHomeUseCase,
+    this._getWalletHomeUseCase, this._currencyUseCase,
   ) : super(MainCategoriesState());
   Future<void> loadData() async {
     emit(state.copyWith(status: StateStatus.loading));
     await UserCubit.to.getUser();
     getWallet();
+    getCurrency();
     if (_fourtyNineSharedData.mainCategories.isEmpty) {
       final user = UserCubit.to.state.data?.id;
       print('userId1$user');
@@ -106,7 +109,17 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     response.fold((l) {
       emit(state.copyWith(failure: l, status: StateStatus.error));
     }, (data) {
-      emit(state.copyWith(wallet: data));
+      emit(state.copyWith(wallet: data,));
+      print("state.wallet?.giftWallet ${state.wallet?.giftWallet}");
+    });
+  }
+
+  Future<void> getCurrency() async {
+    final response = await _currencyUseCase.call(const NoParams());
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (data) {
+      emit(state.copyWith(currency: data,));
     });
   }
 }

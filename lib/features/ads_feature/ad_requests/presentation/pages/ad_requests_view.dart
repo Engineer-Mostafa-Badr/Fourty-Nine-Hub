@@ -22,19 +22,17 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-
 import 'package:go_router/go_router.dart';
-
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
-class AdDetailsView extends StatefulWidget {
+class AdRequestsView extends StatefulWidget {
   var id;
 
-  AdDetailsView({super.key, payload}){
+  AdRequestsView({super.key, payload}){
     print("objectitemId$payload");
     if(payload is String){
       id=payload;
@@ -47,10 +45,10 @@ class AdDetailsView extends StatefulWidget {
   }
 
   @override
-  State<AdDetailsView> createState() => _AdDetailsViewState();
+  State<AdRequestsView> createState() => _AdRequestsViewState();
 }
 
-class _AdDetailsViewState extends State<AdDetailsView> {
+class _AdRequestsViewState extends State<AdRequestsView> {
   @override
   void initState() {
     context.read<AdDetailsCubit>().loadData(adId: widget.id);

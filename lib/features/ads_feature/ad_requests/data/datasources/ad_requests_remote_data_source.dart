@@ -5,20 +5,15 @@ import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_mo
 import 'package:fourtyninehub/res/assets/jsons.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../ads/data/models/Ad_model.dart';
-import '../../domain/usecases/make_ad_request_usecase.dart';
 
-abstract class AdDetailsRemoteDataSource {
+abstract class AdRequestsRemoteDataSource {
   Future<Either<Failure, AddDetailsModel>> getAdDetails({required String id});
   Future<Either<Failure, List<AdModel>>> getRelevantAds({required int id});
-  Future<Either<Failure, bool>> makeAdRequest(
-      {required AdRequestParams params});
-  Future<Either<Failure, bool>> makeAdPremiumRequest(
-      {required AdRequestParams params});
 }
 
-class AdDetailsRemoteDataSourceImpl extends AdDetailsRemoteDataSource {
+class AdRequestsRemoteDataSourceImpl extends AdRequestsRemoteDataSource {
   final ApiConsumer _apiConsumer;
-  AdDetailsRemoteDataSourceImpl(this._apiConsumer);
+  AdRequestsRemoteDataSourceImpl(this._apiConsumer);
 
   @override
   Future<Either<Failure, AddDetailsModel>> getAdDetails(
@@ -42,18 +37,5 @@ class AdDetailsRemoteDataSourceImpl extends AdDetailsRemoteDataSource {
             .toList()));
   }
 
-  @override
-  Future<Either<Failure, bool>> makeAdRequest(
-      {required AdRequestParams params}) async {
-    final response =
-        await _apiConsumer.post(EndPoints.makeRequest, data: params.toJson());
-    return response.fold((l) => Left(l), (data) => Right(data['status']));
-  }
-  @override
-  Future<Either<Failure, bool>> makeAdPremiumRequest(
-      {required AdRequestParams params}) async {
-    final response =
-        await _apiConsumer.post(EndPoints.makePremiumRequest, data: params.toJson());
-    return response.fold((l) => Left(l), (data) => Right(data['status']));
-  }
+
 }

@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/ads_feature/ad_details/data/datasources/a
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/repositories/ad_details_repo.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_ad_details_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_relevant_ads_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/make_ad_premium_request_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/make_ad_request_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/datasources/ads_remote_data_source.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/repositories/ads_repo.dart';
@@ -36,6 +37,7 @@ import 'package:fourtyninehub/features/fourty_nine/data/repositories/fourty_nine
 import 'package:fourtyninehub/features/fourty_nine/domain/repositories/fourty_nine_repository.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_banner_by_id_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/add_main_category_to_favorites_usecase.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_currency_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_wallet_home_use_case.dart';
@@ -279,32 +281,32 @@ class FourtyNineServiceLocator {
       ),
     );
     serviceLocator.registerLazySingleton<GetAllCountsUseCase>(
-          () => GetAllCountsUseCase(
+      () => GetAllCountsUseCase(
         serviceLocator(),
       ),
     );
     serviceLocator.registerLazySingleton<GetAllCountsAdsUseCase>(
-          () => GetAllCountsAdsUseCase(
+      () => GetAllCountsAdsUseCase(
         serviceLocator(),
       ),
     );
     serviceLocator.registerLazySingleton<EditMyAdsUseCase>(
-          () => EditMyAdsUseCase(
+      () => EditMyAdsUseCase(
         serviceLocator(),
       ),
     );
     serviceLocator.registerLazySingleton<ClickUseCase>(
-          () => ClickUseCase(
+      () => ClickUseCase(
         serviceLocator(),
       ),
     );
     serviceLocator.registerLazySingleton<DeleteMyTripJoinUseCase>(
-          () => DeleteMyTripJoinUseCase(
+      () => DeleteMyTripJoinUseCase(
         serviceLocator(),
       ),
     );
     serviceLocator.registerLazySingleton<DeleteMyInstallmentUseCase>(
-          () => DeleteMyInstallmentUseCase(
+      () => DeleteMyInstallmentUseCase(
         serviceLocator(),
       ),
     );
@@ -314,7 +316,7 @@ class FourtyNineServiceLocator {
       ),
     );
     serviceLocator.registerLazySingleton<GetMyOtherAdsUseCase>(
-          () => GetMyOtherAdsUseCase(
+      () => GetMyOtherAdsUseCase(
         serviceLocator(),
       ),
     );
@@ -369,44 +371,31 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-serviceLocator.registerLazySingleton<FilterAdUseCase>(
+    serviceLocator.registerLazySingleton<FilterAdUseCase>(
       () => FilterAdUseCase(
         serviceLocator(),
       ),
+    );
+    serviceLocator.registerLazySingleton<GetCurrencyUseCase>(
+      () => GetCurrencyUseCase(serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<MakeAdPremiumRequestUsecase>(
+      () => MakeAdPremiumRequestUsecase(serviceLocator()),
     );
 
     // cubits
     serviceLocator.registerLazySingleton<GetSliderItemsUseCase>(
       () => GetSliderItemsUseCase(serviceLocator()),
     );
-
     serviceLocator.registerSingleton(
-      SliderCubit(
-        serviceLocator(),
-      )..loadData(),
+      SliderCubit(serviceLocator())..loadData(),
     );
     serviceLocator.registerFactory<ThumbnailsCubit>(
-      () => ThumbnailsCubit(
-        serviceLocator(),
-      )..loadData(),
-    );
-    serviceLocator.registerFactory<MainCategoriesTapsCubit>(
-      () => MainCategoriesTapsCubit(
-        serviceLocator(),
-        serviceLocator(),
-      )..loadData(),
-    );
-    // serviceLocator.registerFactory<CreateCompanyAdCubit>(
-    //   () => CreateCompanyAdCubit(
-    //     serviceLocator(),
-    //     serviceLocator(),
-    //     serviceLocator(),
-    //     serviceLocator(),
-    //   )..loadData(),
-    // );
-
-    serviceLocator.registerFactory<MyAddsCubit>(
-      () => MyAddsCubit(
+        () => ThumbnailsCubit(serviceLocator())..loadData());
+    serviceLocator.registerFactory<MainCategoriesTapsCubit>(() =>
+        MainCategoriesTapsCubit(serviceLocator(), serviceLocator())
+          ..loadData());
+    serviceLocator.registerFactory<MyAddsCubit>(() => MyAddsCubit(
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
@@ -426,12 +415,12 @@ serviceLocator.registerLazySingleton<FilterAdUseCase>(
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
-        serviceLocator(),
-      )..loadData(),
-    );
+        serviceLocator())
+      ..loadData());
 
     serviceLocator.registerFactory<MainCategoriesCubit>(
       () => MainCategoriesCubit(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
@@ -440,6 +429,7 @@ serviceLocator.registerLazySingleton<FilterAdUseCase>(
 
     serviceLocator.registerFactory<AdvertisementCubit>(
       () => AdvertisementCubit(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

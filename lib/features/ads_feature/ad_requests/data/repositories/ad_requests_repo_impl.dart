@@ -6,12 +6,12 @@ import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_mo
 
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 
-import '../../domain/repositories/ad_details_repo.dart';
-import '../datasources/ad_details_remote_data_source.dart';
+import '../../domain/repositories/ad_requests_repo.dart';
+import '../datasources/ad_requests_remote_data_source.dart';
 
-class AdDetailsRepoImpl implements AdDetailsRepo {
-  final AdDetailsRemoteDataSource _remoteDataSource;
-  AdDetailsRepoImpl(this._remoteDataSource);
+class AdRequestsRepoImpl implements AdRequestsRepo {
+  final AdRequestsRemoteDataSource _remoteDataSource;
+  AdRequestsRepoImpl(this._remoteDataSource);
   @override
   Future<Either<Failure, AddDetailsModel>> getAdDetails(
       {required String id}) async {
@@ -24,14 +24,5 @@ class AdDetailsRepoImpl implements AdDetailsRepo {
     return await _remoteDataSource.getRelevantAds(id: id);
   }
 
-  @override
-  Future<Either<Failure, bool>> makeAdRequest(
-      {required AdRequestParams params}) {
-    return _remoteDataSource.makeAdRequest(params: params);
-  }
 
-  @override
-  Future<Either<Failure, bool>> makeAdPremiumRequest({required AdRequestParams params}) {
-    return _remoteDataSource.makeAdPremiumRequest(params: params);
-  }
 }

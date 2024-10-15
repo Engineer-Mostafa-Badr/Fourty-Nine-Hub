@@ -26,4 +26,6 @@ abstract class FourtyNineRepository {
   Future<Either<Failure, Banner>> getBannerById({required String id});
 
   Future<Either<Failure, WalletHomeEntity>> getWalletHome();
+  Future<Either<Failure, String>> getCurrency();
+
 }

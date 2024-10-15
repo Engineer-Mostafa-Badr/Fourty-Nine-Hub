@@ -20,11 +20,14 @@ class AdsState {
   final List<TripEntity>? pickMeAds;
   final FilterModel? filterModel;
   final bool? hasFilter;
+  String? city;
+  String? governorate;
   final bool? makeRequest;
-  const AdsState(
+  AdsState(
       {this.ads,
       this.failure,
       this.status,
+        this.city='', this.governorate='',
       this.filterModel,
       this.hasFilter=false,
       this.makeRequest=false,
@@ -37,6 +40,8 @@ class AdsState {
     List<TripEntity>? pickMeAds,
     bool? hasFilter,
     bool? makeRequest,
+    String? city,
+    String? governorate,
     FilterModel? filterModel,
     List<AdModel>? ads,
   }) {
@@ -44,6 +49,8 @@ class AdsState {
         failure: failure ?? this.failure,
         status: status ?? this.status,
         ads: ads ?? this.ads,
+        city: city ?? this.city,
+        governorate: governorate ?? this.governorate,
         hasFilter: hasFilter ?? this.hasFilter,
         pickMeAds: pickMeAds ?? this.pickMeAds,
         filterModel: filterModel ?? this.filterModel,

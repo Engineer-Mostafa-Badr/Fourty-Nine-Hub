@@ -33,6 +33,7 @@ abstract class FourtyNineRemoteDataSource {
   Future<Either<Failure, bool>> removeMainCategoryFromFavorites(String id);
   Future<Either<Failure, BannerModel>> getBannerById({required String id});
   Future<Either<Failure, WalletHomeEntity>> getWalletHome();
+  Future<Either<Failure, String>> getCurrency();
 }
 
 class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
@@ -143,6 +144,15 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
     return result.fold(
       (failure) => Left(failure),
       (data) => Right(WalletHomeModel.fromJson(data['data'])),
+    );
+  }
+
+  @override
+  Future<Either<Failure, String>> getCurrency() async{
+    final result = await _apiConsumer.get(EndPoints.getCurrency);
+    return result.fold(
+          (failure) => Left(failure),
+          (data) => Right(data['data']),
     );
   }
 }

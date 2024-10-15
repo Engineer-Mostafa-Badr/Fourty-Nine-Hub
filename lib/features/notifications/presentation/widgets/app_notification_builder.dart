@@ -108,6 +108,7 @@ class _AppNotificationBuilderState extends State<AppNotificationBuilder> {
                 notificationEntity: notificationEntity,
                 index: index,
                 notificationSeenCallback: () {
+                  print("objectPaaaaaaaaaaaaaaath${notificationEntity.path}");
                   notificationEntity.read = true;
                   notificationSeenCubit
                       .notificationSeen(id: notificationEntity.id ?? '')
