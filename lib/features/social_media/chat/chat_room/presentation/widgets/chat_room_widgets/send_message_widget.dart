@@ -606,34 +606,51 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                 bottom: radius,
               ),
             ),
-            child: TextFormField(
-              controller: _messageTextController,
-              focusNode: _messageFocusNode,
-              onTap: () {
-                _closeEmojiKeyboard();
-                _openTextKeyboard();
-              },
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                filled: true,
-                hintText: LocaleKeys.message.tr(),
-                hintStyle: const TextStyle(color: Colors.grey),
-                contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: topRadius,
-                    bottom: radius,
+            child: Theme(
+              data: ThemeData(
+                inputDecorationTheme: InputDecorationTheme(
+                  fillColor: Colors.white,
+                  filled: true,
+                  hintStyle: const TextStyle(color: Colors.grey),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: topRadius,
+                      bottom: radius,
+                    ),
+                    borderSide: BorderSide.none,
                   ),
-                  borderSide: BorderSide.none,
                 ),
-                prefixIcon:
-                    _showEmojiKeyboard ? _keyboardButton() : _emojiButton(),
-                suffixIcon: _attachmentButton(),
               ),
-              style: const TextStyle(color: Colors.black),
-              keyboardType: TextInputType.multiline,
-              maxLines: 3,
-              minLines: 1,
+              child: TextFormField(
+                controller: _messageTextController,
+                focusNode: _messageFocusNode,
+                onTap: () {
+                  _closeEmojiKeyboard();
+                  _openTextKeyboard();
+                },
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  filled: true,
+                  hintText: LocaleKeys.message.tr(),
+                  hintStyle: const TextStyle(color: Colors.grey),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: topRadius,
+                      bottom: radius,
+                    ),
+                    borderSide: BorderSide.none,
+                  ),
+                  prefixIcon:
+                      _showEmojiKeyboard ? _keyboardButton() : _emojiButton(),
+                  suffixIcon: _attachmentButton(),
+                ),
+                style: const TextStyle(color: Colors.black),
+                keyboardType: TextInputType.multiline,
+                maxLines: 3,
+                minLines: 1,
+              ),
             ),
           ),
         );

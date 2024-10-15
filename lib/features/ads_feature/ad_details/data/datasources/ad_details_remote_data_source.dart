@@ -12,6 +12,8 @@ abstract class AdDetailsRemoteDataSource {
   Future<Either<Failure, List<AdModel>>> getRelevantAds({required int id});
   Future<Either<Failure, bool>> makeAdRequest(
       {required AdRequestParams params});
+  Future<Either<Failure, bool>> makeAdPremiumRequest(
+      {required AdRequestParams params});
 }
 
 class AdDetailsRemoteDataSourceImpl extends AdDetailsRemoteDataSource {
@@ -45,6 +47,13 @@ class AdDetailsRemoteDataSourceImpl extends AdDetailsRemoteDataSource {
       {required AdRequestParams params}) async {
     final response =
         await _apiConsumer.post(EndPoints.makeRequest, data: params.toJson());
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+  @override
+  Future<Either<Failure, bool>> makeAdPremiumRequest(
+      {required AdRequestParams params}) async {
+    final response =
+        await _apiConsumer.post(EndPoints.makePremiumRequest, data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 }

@@ -122,6 +122,8 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                     labelStyle: Styles.headerText(),
                     onTap: (i) {
                       if (i == 1) {
+                        state.city='';
+                        state.governorate='';
                         if(widget.params.mainCategory.nameEn=='Dating'){
                           controller.loadData(
                               subCategoryId: widget.params.subCategory.id,

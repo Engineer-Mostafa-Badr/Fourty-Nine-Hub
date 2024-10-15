@@ -36,8 +36,18 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 
 class OtherAccountView extends StatefulWidget {
-  const OtherAccountView({super.key, required this.userId});
-  final String userId;
+  OtherAccountView({super.key, payload}){
+    print("objectitemId$payload");
+    if(payload is String){
+      userId=payload;
+    }else {
+      print("payloadpayloadpayload $payload");
+      // print(id);
+      // print('itemId${payload['itemId']}');
+      userId=payload['itemId'];
+    }
+  }
+  var userId;
 
   @override
   State<OtherAccountView> createState() => _OtherAccountViewState();
@@ -55,7 +65,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
             builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();
           return state.status == StateStatus.loading
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : state.status == StateStatus.error
                   ? ApiErrorPage(
                       message: getFailureMessage(

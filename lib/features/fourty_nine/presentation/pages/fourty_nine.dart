@@ -147,8 +147,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             Sizer(),
             //pick me and come with U
             _pickMeAndComeWithUWidget(),
-            const Sizer(),
-            _buildChanceWidget(),
+            // const Sizer(),
+            // _buildChanceWidget(),
             const Sizer(),
             _auctionAndInstallmentWidget(),
             const Sizer(),
@@ -310,6 +310,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   service: state.data?[0].service ?? RideServicesEnum.pickMe,
                   title: 'Carpool',
                   image: state.data?[0].image ?? '',
+                  // image: Assets.carpool,
                   // isFavorite: state.data![0].is,
                   // numberOfAds: state.data![0].numberOfAds?.toInt(),
                   route: Routes.CAR_POOL,
@@ -322,6 +323,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                       state.data?[1].service ?? RideServicesEnum.comeWithYou,
                   title: LocaleKeys.tripJoin.localize,
                   image: state.data?[1].image ?? '',
+                  // image: Assets.tripJoin,
+
                   route: Routes.AVAILABLE_TRIPS,
                   // isFavorite: state.data![1].isFavorite,
                   // numberOfAds: state.data![1].numberOfAds?.toInt(),
@@ -546,6 +549,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   children: [
                     SquareImage(
                       fit: BoxFit.cover,
+                      width: 150,
+                      // source: AssetImage(image),
                       url: image,
                     ),
                     Container(

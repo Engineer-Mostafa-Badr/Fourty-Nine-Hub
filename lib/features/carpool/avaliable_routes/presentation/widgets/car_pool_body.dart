@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_cubit.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_state.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/available_routed_builder.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/car_pool_floating_action_button.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -15,6 +21,14 @@ class CarPoolBody extends StatefulWidget {
 class _CarPoolBodyState extends State<CarPoolBody> {
   bool showAvailableRoutes = true;
   @override
+  void initState() {
+    BlocProvider.of<GetCurrencyCubit>(context).getCurrencyData();
+
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 15.h),
@@ -24,21 +38,21 @@ class _CarPoolBodyState extends State<CarPoolBody> {
           children: [
             Transform(
               transform: Matrix4.translationValues(-40.0, 0.0, 0.0),
-              child: const TabBar(
+              child: TabBar(
                 isScrollable: true,
                 dividerColor: Colors.transparent,
                 tabs: [
                   Tab(
-                    child: Text('Available Trips'),
+                    child: Text(LocaleKeys.availableTrips.localize),
                   ),
                   Tab(
-                    child: Text('My Bookings'),
+                    child: Text(LocaleKeys.myBookings.localize),
                   ),
                   Tab(
-                    child: Text('Running Trips'),
+                    child: Text(LocaleKeys.runningTrips.localize),
                   ),
                   Tab(
-                    child: Text('Expired Trips'),
+                    child: Text(LocaleKeys.expiredTrips.localize),
                   ),
                 ],
               ),
@@ -48,8 +62,15 @@ class _CarPoolBodyState extends State<CarPoolBody> {
                 children: [
                   Stack(
                     children: [
-                      const SizedBox(width: double.infinity, height: double.infinity),
-                      const AvailableRoutesBuilder(),
+                      const SizedBox(
+                          width: double.infinity, height: double.infinity),
+                      BlocBuilder<GetAllTripsCubit, GetAllTripsState>(
+                        builder: (context, state) {
+                          return const AvailableRoutesBuilder(
+                            type: "available",
+                          );
+                        },
+                      ),
                       CarpoolFloatingActionButton(
                         onPressed: () {
                           context.push(Routes.ADD_NEW_ROUTE);
@@ -57,14 +78,47 @@ class _CarPoolBodyState extends State<CarPoolBody> {
                       ),
                     ],
                   ),
-                  const Center(
-                    child: Text('My Bookings'),
+                  Stack(
+                    children: [
+                      const SizedBox(
+                          width: double.infinity, height: double.infinity),
+                      const AvailableRoutesBuilder(
+                        type: "myBookings",
+                      ),
+                      CarpoolFloatingActionButton(
+                        onPressed: () {
+                          context.push(Routes.ADD_NEW_ROUTE);
+                        },
+                      ),
+                    ],
                   ),
-                  const Center(
-                    child: Text('Running Trips'),
+                  Stack(
+                    children: [
+                      const SizedBox(
+                          width: double.infinity, height: double.infinity),
+                      const AvailableRoutesBuilder(
+                        type: "running",
+                      ),
+                      CarpoolFloatingActionButton(
+                        onPressed: () {
+                          context.push(Routes.ADD_NEW_ROUTE);
+                        },
+                      ),
+                    ],
                   ),
-                  const Center(
-                    child: Text('Expired Trips'),
+                  Stack(
+                    children: [
+                      const SizedBox(
+                          width: double.infinity, height: double.infinity),
+                      const AvailableRoutesBuilder(
+                        type: "expired",
+                      ),
+                      CarpoolFloatingActionButton(
+                        onPressed: () {
+                          context.push(Routes.ADD_NEW_ROUTE);
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),

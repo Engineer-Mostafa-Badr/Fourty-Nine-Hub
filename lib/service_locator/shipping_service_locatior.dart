@@ -19,7 +19,6 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/update_driver_cubit.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 class ShippingServiceLocatior {
@@ -43,27 +42,7 @@ class ShippingServiceLocatior {
     serviceLocator.registerFactory(
       () => FavoriteShippingCubit(repository: serviceLocator()),
     );
-    serviceLocator.registerFactory(
-      () => TwitterCubit(
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-      ),
-    );
+
     serviceLocator.registerFactory(
       () => AcceptDeclineTripCubit(repository: serviceLocator()),
     );

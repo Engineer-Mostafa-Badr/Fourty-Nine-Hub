@@ -52,6 +52,7 @@ abstract class SocketIOListeners {
   static const String messageDelivered = 'messageDelivered';
   static const String sendPoints = 'Stream:SendPoint';
   static const String requestBattle = 'Stream:SendBattleRequest';
+  static const String creatingNewChat = 'newChat';
 }
 
 abstract class SocketIOEvents {

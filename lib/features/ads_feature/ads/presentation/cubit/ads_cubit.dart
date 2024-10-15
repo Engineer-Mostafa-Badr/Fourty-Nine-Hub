@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/make_ad_premium_request_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/make_ad_request_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/favourite_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_all_comewithme_usecase.dart';
@@ -29,6 +30,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
   final FavouriteAdUseCase _favouriteAdUseCase;
   final FilterAdUseCase _filterAdUseCase;
   final MakeAdRequestUsecase _makeAdRequestUsecase;
+  final MakeAdPremiumRequestUsecase _makeAdPremiumRequestUsecase;
 
   AdvertisementCubit(
       this._getAdsUseCase,
@@ -37,8 +39,8 @@ class AdvertisementCubit extends Cubit<AdsState> {
       this._requestComeWithMeUseCase,
       this._requestPickMeUseCase,
       this._removeFavouriteAdUseCase,
-      this._favouriteAdUseCase, this._filterAdUseCase, this._makeAdRequestUsecase)
-      : super(const AdsState());
+      this._favouriteAdUseCase, this._filterAdUseCase, this._makeAdRequestUsecase, this._makeAdPremiumRequestUsecase)
+      : super( AdsState());
 
   // void loadData({required String subCategoryId,required String filter}) async {
   //   // emit(state.copyWith(status: AdsStates.loading));
@@ -94,7 +96,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
     print(filter);
     print("objectHiiiiiiiiiiii");
 
-    FilterModel filterModel = FilterModel(price: model.price, props: model.props, cityId: model.cityId, governorateId: model.governorateId, limit: 15, page: page, subCategoryId: model.subCategoryId,filter:filter);
+    FilterModel filterModel = FilterModel(price: model.price, props: model.props, cityId: state.city, governorateId: state.governorate, limit: 15, page: page, subCategoryId: model.subCategoryId,filter:filter);
       final response = await _filterAdUseCase(filterModel);
       response.fold(
               (l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
@@ -237,6 +239,24 @@ class AdvertisementCubit extends Cubit<AdsState> {
       });
     return data;
 
+  }
+
+
+  Future<bool> makeAdPremiumRequest({
+    required String id,
+  }) async {
+    bool data = false;
+      print(phone);
+      final response = await _makeAdPremiumRequestUsecase(
+        AdRequestParams(adId: id, phone: phone ?? ''),
+      );
+      response.fold((l) {
+        emit(state.copyWith(failure: l,makeRequest: false,status: AdsStates.error));
+      }, (r) {
+        data=r;
+        emit(state.copyWith(status: AdsStates.requestSuccess,makeRequest: true));
+      });
+    return data;
   }
 
 }

@@ -15,7 +15,8 @@ class GetPriceCarpoolCubit extends Cubit<GetPriceCarpoolState> {
     required this.getPriceCarpoolUsecase,
   }) : super(GetPriceCarpoolInitial());
 
-  Future<void> getPriceCarpool({required GetPriceCarpoolParam getPriceCarpoolParam}) async {
+  Future<void> getPriceCarpool(
+      {required GetPriceCarpoolParam getPriceCarpoolParam}) async {
     emit(GetPriceCarpoolLoading());
     final response = await getPriceCarpoolUsecase.call(
       getPriceCarpoolParam: getPriceCarpoolParam,
@@ -26,7 +27,12 @@ class GetPriceCarpoolCubit extends Cubit<GetPriceCarpoolState> {
       ),
       (data) {
         carpoolRouteInfoModel = data;
+        print("Response 1=============\n");
+        print(carpoolRouteInfoModel);
+        print("Response 2=============\n");
+
         emit(GetPriceCarpoolSuccess(data));
+        print("Response 3=============\n");
       },
     );
   }

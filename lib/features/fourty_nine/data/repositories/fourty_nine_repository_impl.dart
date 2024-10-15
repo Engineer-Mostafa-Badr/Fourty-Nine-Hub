@@ -62,4 +62,9 @@ class FourtyNineRepositoryImpl implements FourtyNineRepository {
   Future<Either<Failure, WalletHomeEntity>> getWalletHome() {
     return _fourtyNineRemoteDataSource.getWalletHome();
   }
+
+  @override
+  Future<Either<Failure, String>> getCurrency() {
+    return _fourtyNineRemoteDataSource.getCurrency();
+  }
 }
