@@ -192,8 +192,8 @@ class _MyAppState extends State<MyApp> {
                     themeMode: snapshot.data!
                         ? ThemeMode.dark
                         : ThemeMode.light,
-                    theme: lightTheme(),
-                    darkTheme: darkTheme(),
+                    theme: lightTheme,
+                    darkTheme: darkTheme,
                     title: '49',
                     debugShowCheckedModeBanner: false,
                     routerConfig: AppPages.router,

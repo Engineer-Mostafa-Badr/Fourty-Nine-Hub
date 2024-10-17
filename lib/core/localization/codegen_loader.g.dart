@@ -81,7 +81,7 @@ class CodegenLoader extends AssetLoader{
   "darkMode": "الوضع الداكن",
   "lightMode": "الوضع الفاتح",
   "voice": "صوت",
-  "meet": "زوم",
+  "meet": "اجتماع",
   "cast": "سرعة",
   "noRooms": "لا توجد غرف صوتيه",
   "selectATopic": "اختر الموضوع",

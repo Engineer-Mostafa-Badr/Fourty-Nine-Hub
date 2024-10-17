@@ -169,7 +169,7 @@ class MeetingView extends StatelessWidget {
             if (state.scheduledMeeting == null) {
               // print('data is null');
               return Container();
-            } else if (state.isGotScheduledMeeting || state.isSuccess) {
+            } else if (state.isSuccess) {
               return ListView.builder(
                   itemCount: state.scheduledMeeting!.length,
                   shrinkWrap: true,

@@ -31,7 +31,7 @@ class StreamServiceLocator {
     serviceLocator
         .registerFactory(() => GetScheduledRoomsUseCase(serviceLocator()));
     //lazy singleton to use it in several places
-    serviceLocator.registerLazySingleton(() => StreamCubit(
+    serviceLocator.registerFactory(() => StreamCubit(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
