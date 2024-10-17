@@ -99,9 +99,9 @@ class _LoginViewState extends State<LoginView> {
               ),
             );
           } else if (state is LoginSuccess) {
-            await TokenManager.saveAccessToken(
+            await CacheManager.saveAccessToken(
                 state.userTokensEntity.accessToken);
-            await TokenManager.saveRefreshToken(
+            await CacheManager.saveRefreshToken(
                 state.userTokensEntity.refreshToken);
             await BackgroundService.reStartWebSocketService(
                 state.userTokensEntity.accessToken);
@@ -111,8 +111,8 @@ class _LoginViewState extends State<LoginView> {
               ..getUser().then((value) async {
                 serviceLocator<GetWalletCubit>().getWallet();
                 serviceLocator<WalletCubit>().getWallet();
-                String? accessToken = await TokenManager.getAccessToken();
-                String? refreshToken = await TokenManager.getRefreshToken();
+                String? accessToken = await CacheManager.getAccessToken();
+                String? refreshToken = await CacheManager.getRefreshToken();
                 debugPrint(
                     '/////////////////////////////////////////////////////////////////////////');
                 debugPrint('Refresh Token: $refreshToken');

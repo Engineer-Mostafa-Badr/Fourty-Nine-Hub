@@ -276,7 +276,7 @@ class ReelsCubit extends Cubit<ReelsState> {
     String? advertisementType,
   }) async {
     // Step 1: Generate Signed URL
-    final token = await TokenManager.getAccessToken();
+    final token = await CacheManager.getAccessToken();
     final response = await http.post(
       Uri.parse(
           'https://49dev.com/api/v1/reels?subCategory=66684135dbb427ee42aa0141'),
@@ -332,7 +332,7 @@ class ReelsCubit extends Cubit<ReelsState> {
 //---------------------------------------------------------------------------------------
   Future<void> createAdvertisement(
       List<String> mediaIds, String type, double totalPrice) async {
-    final token = await TokenManager.getAccessToken();
+    final token = await CacheManager.getAccessToken();
 
     final url = Uri.parse('https://49dev.com/api/v1/advertisementCompany');
     final headers = {

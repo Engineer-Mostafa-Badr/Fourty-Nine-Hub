@@ -56,12 +56,12 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       Response response =
           await _dio.post('${EndPoints.productionBaseUrl}${EndPoints.logout}',
               options: Options(headers: {
-                'Authorization': 'Bearer ${TokenManager.getAccessToken()}',
+                'Authorization': 'Bearer ${CacheManager.getAccessToken()}',
                 'Content-Type': 'application/json',
               }));
       if (response.statusCode == 200) {
         print('logout successfully');
-        result = await TokenManager.deleteAllTokens();
+        result = await CacheManager.deleteAllTokens();
         return result;
       } else {
         return result;

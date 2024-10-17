@@ -91,8 +91,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   // }
 
   void attachToken() async {
-    String? accessToken = await TokenManager.getAccessToken();
-    String? refreshToken = await TokenManager.getRefreshToken();
+    String? accessToken = await CacheManager.getAccessToken();
+    String? refreshToken = await CacheManager.getRefreshToken();
     if (accessToken != null && refreshToken != null) {
       _attachTokenUseCase(UserTokensEntity(
         accessToken: accessToken,

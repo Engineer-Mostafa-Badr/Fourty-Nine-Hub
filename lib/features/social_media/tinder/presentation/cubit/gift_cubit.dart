@@ -113,11 +113,11 @@ class GiftsCubit extends Cubit<GiftsState> {
   }
 
   Future<void> _initializeToken() async {
-    token = await TokenManager.getAccessToken();
+    token = await CacheManager.getAccessToken();
   }
 
   Future<void> _ensureTokenInitialized() async {
-    token ??= await TokenManager.getAccessToken();
+    token ??= await CacheManager.getAccessToken();
   }
 
   void fetchGifts() async {

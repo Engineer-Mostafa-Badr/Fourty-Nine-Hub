@@ -213,7 +213,7 @@ class HealthCubit extends Cubit<HealthState> {
   String? token;
 
   Future<void> _ensureTokenInitialized() async {
-    token ??= await TokenManager.getAccessToken();
+    token ??= await CacheManager.getAccessToken();
   }
 
   Future<void> toggleFavoriteMedicalService(String subcategoryId) async {

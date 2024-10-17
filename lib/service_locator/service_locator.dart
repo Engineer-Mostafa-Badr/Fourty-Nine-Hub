@@ -246,7 +246,7 @@ class DI {
 
     await LocalizationService.init();
     await SQFLiteDataSource.instance.initDatabase();
-    final token = await TokenManager.getAccessToken();
+    final token = await CacheManager.getAccessToken();
     // socket
     serviceLocator.registerLazySingleton<Socket>(() => io(
         'https://49dev.com',
