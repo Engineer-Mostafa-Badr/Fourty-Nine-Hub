@@ -29,9 +29,14 @@ class TokenManager {
   }
 
   // Delete all tokens
-  static Future<void> deleteAllTokens() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_accessTokenKey);
-    await prefs.remove(_refreshTokenKey);
+  static Future<bool> deleteAllTokens() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_accessTokenKey);
+      await prefs.remove(_refreshTokenKey);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

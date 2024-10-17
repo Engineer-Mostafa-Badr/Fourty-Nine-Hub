@@ -75,8 +75,8 @@ class CompetitionId {
   factory CompetitionId.fromJson(Map<String, dynamic> json) {
     return CompetitionId(
       id: json['_id'] as String?,
-      nameAr: json['nameAr'] as String?,
-      nameEn: json['nameEn'] as String?,
+      nameAr: json['nameAr'] as String? ?? "لا توجد بيانات",
+      nameEn: json['nameEn'] as String? ?? "No Title",
       descriptionAr: json['descriptionAr'] as String?,
       descriptionEn: json['descriptionEn'] as String?,
       maxRequests: json['maxRequests'] as int?,

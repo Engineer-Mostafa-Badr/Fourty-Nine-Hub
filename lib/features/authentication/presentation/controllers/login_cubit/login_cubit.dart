@@ -8,6 +8,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../../../../trip_join/helpers/print_helper.dart';
 import '../../../domain/use_cases/apple_sign_in_usecase.dart';
 import '../../../domain/use_cases/login_use_case.dart';
 import '../../../domain/use_cases/save_tokens_use_case.dart';
@@ -54,6 +55,8 @@ class LoginCubit extends Cubit<LoginState> {
             (userToken) {
           _attachToken(userToken); // Attach to dio
           _saveTokens(userToken); // Ensure tokens are saved before proceeding
+          // pr('state token is  ${userToken}');
+
           emit(LoginSuccess(userTokensEntity: userToken));
         },
       );
