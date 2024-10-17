@@ -121,6 +121,7 @@ import 'package:fourtyninehub/features/social_media/spot_light/presentation/page
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/pages/be_star_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_brand_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_model_usecase.dart';
@@ -1469,6 +1470,14 @@ class AppPages {
                 create: (context) => serviceLocator<CreateDoctorCubit>(),
               ),
             ], child: const RegisterShippingScreen()),
+          ),
+          // Be a Star
+          GoRoute(
+            path: Paths.BE_STAR,
+            name: Routes.BE_STAR,
+            builder: (context, state) {
+              return const BeStarView();
+            },
           ),
           // ___________________ trip join ______________
           GoRoute(

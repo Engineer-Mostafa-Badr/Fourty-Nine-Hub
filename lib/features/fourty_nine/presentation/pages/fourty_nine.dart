@@ -428,7 +428,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 ),
                 icon: Icons.star,
                 iconSize: 50.h,
-                onPressed: () {}),
+                onPressed: () {
+                  context.push(Routes.BE_STAR);
+                }),
           ),
           Positioned(
               bottom: 5,

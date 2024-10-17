@@ -147,6 +147,7 @@ abstract class Routes {
   static const EDITDRIVERSCREEN = '/EditDriver';
 
   static const TRIP_JOIN = '/TripJoin';
+  static const BE_STAR = '/BeAStar';
   static const AVAILABLE_TRIPS = '/AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = '/TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = '/TripJoinRequestHistory';
@@ -286,6 +287,7 @@ abstract class Paths {
   static const SUBSCRIPTIONPLANS = 'SubscriptionPlans';
 
   static const TRIP_JOIN = 'TripJoin';
+  static const BE_STAR = 'BeAStar';
   static const AVAILABLE_TRIPS = 'AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = 'TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = 'TripJoinRequestHistory';

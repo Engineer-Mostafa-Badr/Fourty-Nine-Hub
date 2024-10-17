@@ -5,7 +5,7 @@ import 'package:fourtyninehub/features/star_feature/domain/use_case/delete_my_st
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_myl_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/search_cubit.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 class StarServiceLocator {
@@ -38,6 +38,7 @@ class StarServiceLocator {
             ));
 
     serviceLocator.registerFactory<StarCubit>(() => StarCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
