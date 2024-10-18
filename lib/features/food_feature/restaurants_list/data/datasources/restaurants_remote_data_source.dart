@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import '../../../../../res/assets/jsons.dart';
-import '../../domain/entities/restaurant_entity.dart';
 import '../models/food_category_model.dart';
 import '../models/restaurant_model.dart';
 
@@ -117,8 +116,9 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
   @override
   Future<Either<Failure, List<Restaurant2Model>>> getAllRestaurantsWithMenu(
       {required PostCommentsParams params}) async {
-    final response = await _apiConsumer
-        .get(EndPoints.getAllRestaurantWithMenu(params: params),);
+    final response = await _apiConsumer.get(
+      EndPoints.getAllRestaurantWithMenu(params: params),
+    );
     return response.fold(
       (failure) => Left(failure),
       (data) => Right(

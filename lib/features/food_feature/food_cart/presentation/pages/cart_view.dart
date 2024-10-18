@@ -371,19 +371,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../../../core/enums/order_status.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/reels/presentation/widgets/comments.dart';
-import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 
 class FoodCartView extends StatefulWidget {
   const FoodCartView({super.key});

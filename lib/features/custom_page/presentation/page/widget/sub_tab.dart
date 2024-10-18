@@ -77,7 +77,8 @@ class _SubTabState extends State<SubTab> {
             } else if (state.status == CustomPageStates.loading) {
               return const Center(child: CircularProgressIndicator());
             } else {
-              return Center(child: Text(LocaleKeys.failedToLoadCategories.localize));
+              return Center(
+                  child: Text(LocaleKeys.failedToLoadCategories.localize));
             }
           },
         ),
@@ -87,7 +88,8 @@ class _SubTabState extends State<SubTab> {
         child: BlocConsumer<CustomPageCubit, CustomPageState>(
           listener: (BuildContext context, state) {
             if (state.status == CustomPageStates.success) {
-              showSuccessMessage(context, LocaleKeys.updateSuccessfully.localize);
+              showSuccessMessage(
+                  context, LocaleKeys.updateSuccessfully.localize);
             }
           },
           builder: (BuildContext context, state) {
@@ -114,7 +116,8 @@ class _SubTabState extends State<SubTab> {
                   );
                 }
               },
-              child: Icon(Icons.check, color: Theme.of(context).scaffoldBackgroundColor),
+              child: Icon(Icons.check,
+                  color: Theme.of(context).scaffoldBackgroundColor),
             );
           },
         ),

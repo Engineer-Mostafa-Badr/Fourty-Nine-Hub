@@ -357,9 +357,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../routes/routes.dart';
-import '../../../stories/presentation/pages/more_stories.dart';
 import '../../../tinder/data/shared/shared.dart';
-import '../../../tinder/presentation/pages/user_profile.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import '../../data/models/new_reels_model.dart';
 import '../controllers/explore_reels_cubit/explore_reels_cubit.dart';
@@ -1063,7 +1061,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                   child: ElevatedButton(
                     style: const ButtonStyle(
                         backgroundColor:
-                            MaterialStatePropertyAll(AppColors.PRIMARY_COLOR)),
+                            WidgetStatePropertyAll(AppColors.PRIMARY_COLOR)),
                     onPressed: () {
                       _player.dispose();
                       Navigator.push(

@@ -99,7 +99,7 @@ class CompetitionCard extends StatelessWidget {
                 )),
               ],
             ),
-            Sizer(),
+            const Sizer(),
             AppButton(
               label: LocaleKeys.requestWithdraw.localize,
               color: AppColors.AUTH_CONTAINER_COLOR,

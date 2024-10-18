@@ -141,6 +141,7 @@ abstract class Routes {
   static const PAYMENT = '/Payment';
   static const SUBSCRIPTIONPLANS = '/SubscriptionPlans';
   static const DASHBOARDDRIVERSCREEN = '/DASHBOARDDRIVERSCREEN';
+  static const ALLTRIPRIDER = '/Ride/ALLTRIPRIDER';
   static const DRIVERREQUESTSDETIALS = '/DRIVERREQUESTSDETIALS';
   static const MyRating = '/MyRating';
   static const TripRating = '/TripRating';
@@ -301,6 +302,7 @@ abstract class Paths {
 
   static const BROADCAST = 'Broadcast';
   static const DASHBOARDDRIVERSCREEN = 'DASHBOARDDRIVERSCREEN';
+  static const ALLTRIPRIDER = 'ALLTRIPRIDER';
   static const DRIVERREQUESTSDETIALS = 'DRIVERREQUESTSDETIALS';
   static const MyRating = 'MyRating';
   static const TripRating = 'TripRating';

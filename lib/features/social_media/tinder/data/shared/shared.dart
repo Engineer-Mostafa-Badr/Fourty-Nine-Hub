@@ -419,14 +419,11 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_cubit.dart';
@@ -436,7 +433,6 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../zoom/presentation/controller/stream_cubit.dart';
@@ -900,13 +896,13 @@ Future<void> showGiftBottomSheet(BuildContext context,
                           padding: const EdgeInsets.all(4.0),
                           child: OutlinedButton(
                             style: ButtonStyle(
-                              side: const MaterialStatePropertyAll(BorderSide(
+                              side: const WidgetStatePropertyAll(BorderSide(
                                   width: 1, color: AppColors.ACCENT_COLOR)),
                               iconColor:
-                                  const MaterialStatePropertyAll(Colors.white),
+                                  const WidgetStatePropertyAll(Colors.white),
                               backgroundColor: isDarkTheme(context)
-                                  ? const MaterialStatePropertyAll(Colors.black)
-                                  : MaterialStatePropertyAll(
+                                  ? const WidgetStatePropertyAll(Colors.black)
+                                  : WidgetStatePropertyAll(
                                       Colors.grey.withOpacity(0.9)),
                             ),
                             onPressed: () {
@@ -991,7 +987,7 @@ pleaseLoginWidget(context) {
         child: OutlinedButton(
           onPressed: () => context.push(Routes.LOGIN),
           style: ButtonStyle(
-              foregroundColor: MaterialStatePropertyAll(
+              foregroundColor: WidgetStatePropertyAll(
                   isDarkTheme(context) ? Colors.white70 : Colors.black87)),
           child: FittedBox(
             child: Text(

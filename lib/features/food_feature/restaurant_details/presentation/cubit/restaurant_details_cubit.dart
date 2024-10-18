@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
@@ -11,14 +9,11 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/enti
 import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/error/failure.dart';
 
-import '../../../../../core/utils/shared_pref.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../../data/models/cart_model.dart';
 import '../../data/models/selected_meal_model.dart';
 import '../../domain/usecases/add_to_cart_usecase.dart';
 import '../../domain/usecases/get_meals_usecase.dart';
 import '../../domain/usecases/get_restaurant_details_usecase.dart';
-import 'package:http/http.dart' as http;
 
 part 'restaurant_details_state.dart';
 
@@ -201,7 +196,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
     response.fold(
       (failure) {
         emit(state.copyWith(status: RestaurantDetailsStates.error));
-        log('Failed to create order:---------- ${failure}');
+        log('Failed to create order:---------- $failure');
 
         showErrorMessage(context, getFailureMessage(failure, context));
       },
@@ -211,7 +206,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
         final orderData =
             data['data']; // Adjust based on your API response structure
         // final order = Order.fromJson(orderData);
-        log(data['message'].toString() + "ssssssasssssssssssssssssssss");
+        log("${data['message']}ssssssasssssssssssssssssssss");
         Navigator.pop(context);
         showSuccessMessage(context, data['message']);
         // WidgetsBinding.instance.addPostFrameCallback(
@@ -284,7 +279,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
     response.fold(
       (failure) {
         emit(state.copyWith(status: RestaurantDetailsStates.error));
-        log('Failed to create order:---------- ${failure}');
+        log('Failed to create order:---------- $failure');
 
         showErrorMessage(context, getFailureMessage(failure, context));
       },
@@ -294,8 +289,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
         final orderData =
             data['data']; // Adjust based on your API response structure
         // final order = Order.fromJson(orderData);
-        log(data['message'].toString() +
-            "    const url = 'https://49dev.com/api/v1/food/make-order';");
+        log("${data['message']}    const url = 'https://49dev.com/api/v1/food/make-order';");
         Navigator.pop(context);
         showSuccessMessage(context, data['message']);
         // WidgetsBinding.instance.addPostFrameCallback(

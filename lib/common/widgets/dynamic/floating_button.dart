@@ -34,8 +34,7 @@ class FloatingButton extends StatelessWidget {
                   context.push(Routes.HOME);
                 }
               },
-        backgroundColor:
-            Colors.white,
+        backgroundColor: Colors.white,
         child: icon != null
             ? Icon(
                 icon,

@@ -194,8 +194,8 @@ class EndPoints {
   static String expectedPrice = "$developmentBaseUrl/ride/trips/expected/price";
   static String acceptOfferRide =
       "$developmentBaseUrl/ride/offers/accept/offer";
-  static String declineOfferRide =
-      "$developmentBaseUrl/ride/offers/decline/offer";
+  static String declineOfferRide = "$developmentBaseUrl/ride/offers/decline/offer";
+  static String expiredTripRider = "$developmentBaseUrl/ride/trips/user?limit=10&page=1&subCategory=667382a7f87288ce577e723b";
   static String pictureOptional =
       "$developmentBaseUrl/ride/info/picture-optional";
   static String newTripRide = "$developmentBaseUrl/ride/trips/newTrip";
@@ -281,7 +281,13 @@ class EndPoints {
   static const requestInstapay = '/payout/request-instapay';
   static const yellowCardPrice = '/payout/yellow-card/price';
   static const payoutMethod = '/payout/methods';
+  static String doctorAcceptAppointment(String appointmentId) =>
+      '/health/book-appointment/approve/$appointmentId';
 
+  static String doctorRejectAppointment(String appointmentId) =>
+      '/health/book-appointment/reject/$appointmentId';
+  static const getAllDoctorReservations =
+      '/health/dashboard/number-of-reservations';
   static String doctorAcceptAppointment(String appointmentId) =>
       '/health/book-appointment/approve/$appointmentId';
 
@@ -896,4 +902,6 @@ class EndPoints {
 
   static String joinTripCarPool = '/carpool/joinCompleteBus';
   static String createCarPool = '/carpool/create';
+  static String getRequest(String id) =>
+      '/ride/come-with-you/trip/requests//$id';
 }

@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -60,6 +59,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
     final shippingcubit = context.read<ShippingCubit>();
     return BlocConsumer<CreateTripCubit, ShippingState>(
       listener: (context, state) {
+        log(state.toString(), name: "lskdjlskdjflskdjf");
         if (state is SuccessCreateTrip) {
           context.go(Routes.HOME);
           showSuccessMessage(context, state.message);
@@ -88,7 +88,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
             child: SingleChildScrollView(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height, minWidth: MediaQuery.of(context).size.width),
+                    minHeight: MediaQuery.of(context).size.height,
+                    minWidth: MediaQuery.of(context).size.width),
                 child: IntrinsicHeight(
                   child: Column(
                     children: [
@@ -109,10 +110,18 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                     context: context,
                                     builder: (context) => MultiBlocProvider(
                                       providers: [
-                                        BlocProvider(create: (context) => serviceLocator<GetMyTripCubit>()),
-                                        BlocProvider(create: (context) => serviceLocator<TripCubit>()),
-                                        BlocProvider(create: (context) => serviceLocator<GetMyTripCubit>()),
-                                        BlocProvider(create: (context) => serviceLocator<CallMessageCubit>()),
+                                        BlocProvider(
+                                            create: (context) => serviceLocator<
+                                                GetMyTripCubit>()),
+                                        BlocProvider(
+                                            create: (context) =>
+                                                serviceLocator<TripCubit>()),
+                                        BlocProvider(
+                                            create: (context) => serviceLocator<
+                                                GetMyTripCubit>()),
+                                        BlocProvider(
+                                            create: (context) => serviceLocator<
+                                                CallMessageCubit>()),
                                       ],
                                       child: showButtonSheetTrip(),
                                     ),
@@ -131,8 +140,11 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                 // const Sizer(),
                                 // لو هو مسجل
                                 // if (isDriver(state.model))
-                                if ((state.model.mainCategory?.isDriver ?? false) &&
-                                    (state.model.mainCategory?.isDriverApproved ?? false))
+                                if ((state.model.mainCategory?.isDriver ??
+                                        false) &&
+                                    (state.model.mainCategory
+                                            ?.isDriverApproved ??
+                                        false))
                                   // if(!(state.model.mainCategory?.haveTrip??false))
                                   Column(
                                     children: [
@@ -140,9 +152,12 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                         height: 8,
                                       ),
                                       DashboardBanner(
-                                        onTap: () => context.push(Routes.DASHBOARDDRIVERSCREEN),
-                                        title: Labels.driverDashboard,
-                                        subTitle: Labels.driverDashboardBannerDiscription,
+                                        onTap: () => context
+                                            .push(Routes.DASHBOARDDRIVERSCREEN),
+                                        title: "Driver dashboard".tr(),
+                                        subTitle:
+                                            "New Bookings are waiting you, go to driver dashboard and explore more!"
+                                                .tr(),
                                         route: Routes.DOCTORDASHBOARD,
                                       ),
                                     ],
@@ -154,13 +169,20 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                 //     ((state.model.mainCategory?.isDriver ??
                                 //             false)) !=
                                 //         true)
-                                if ((state.model.mainCategory?.isDriver ?? false) != true &&
-                                    (state.model.mainCategory?.isDriverApproved ?? false) != true)
+                                if ((state.model.mainCategory?.isDriver ??
+                                            false) !=
+                                        true &&
+                                    (state.model.mainCategory
+                                                ?.isDriverApproved ??
+                                            false) !=
+                                        true)
                                   GestureDetector(
                                     // onTap: () => context
                                     //     .push(Routes.SHIPPING_REGISTER),
                                     onTap: () {
-                                      if (context.read<UserCubit>().isLoggedIn) {
+                                      if (context
+                                          .read<UserCubit>()
+                                          .isLoggedIn) {
                                         context.push(Routes.SHIPPING_REGISTER);
                                       } else {
                                         // context.push(Routes.SHIPPING_REGISTER);
@@ -181,16 +203,19 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                     ),
                                   ),
                                 (state.model.mainCategory?.haveTrip ?? false)
-                                    ? BlocBuilder<GetAllRequestByMyTripCubit, ShippingState>(
+                                    ? BlocBuilder<GetAllRequestByMyTripCubit,
+                                        ShippingState>(
                                         builder: (context, state) {
-                                          if (state is SuccessGetLoadingTripRequests) {
+                                          if (state
+                                              is SuccessGetLoadingTripRequests) {
                                             if (state.request.isNotEmpty) {
                                               return Column(
                                                 children: [
                                                   ...List.generate(
                                                     state.request.length,
                                                     (index) => RequestOfferCard(
-                                                      model: state.request[index],
+                                                      model:
+                                                          state.request[index],
                                                     ),
                                                   )
                                                 ],
@@ -290,16 +315,19 @@ class _CreateShippingViewState extends State<CreateShippingView> {
         log(state.toString(), name: "lksjdflskdjfslkdjflsdkjfd");
         if (state is SuccessGetMyTripState) {
           return BlocProvider(
-            create: (context) => AcceptDeclineTripCubit(repository: serviceLocator<ShippingRepository>()),
+            create: (context) => AcceptDeclineTripCubit(
+                repository: serviceLocator<ShippingRepository>()),
             child: BlocListener<AcceptDeclineTripCubit, ShippingState>(
               listener: (context, state) {
                 if (state is SuccessCancelState) {
                   context.pop();
 
-                  showSuccessMessage(context, "The trip has been successfully closed.".tr());
+                  showSuccessMessage(
+                      context, "The trip has been successfully closed.".tr());
                 }
                 if (state is FailureShippingState) {
-                  showErrorMessage(context, getFailureMessage(state.failure, context));
+                  showErrorMessage(
+                      context, getFailureMessage(state.failure, context));
                 }
               },
               child: TripCardWidget(
@@ -327,7 +355,13 @@ class _CreateShippingViewState extends State<CreateShippingView> {
 }
 
 class CustomTextField extends StatelessWidget {
-  const CustomTextField({super.key, required this.hint, this.prefixIcon, this.minLines, this.maxLines, this.maxLength});
+  const CustomTextField(
+      {super.key,
+      required this.hint,
+      this.prefixIcon,
+      this.minLines,
+      this.maxLines,
+      this.maxLength});
   final String hint;
   final Icon? prefixIcon;
   final int? minLines;
@@ -341,13 +375,17 @@ class CustomTextField extends StatelessWidget {
       maxLines: maxLines,
       decoration: InputDecoration(
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30), borderSide: const BorderSide(color: Colors.red)),
+            borderRadius: BorderRadius.circular(30),
+            borderSide: const BorderSide(color: Colors.red)),
         focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30), borderSide: const BorderSide(color: Colors.red)),
+            borderRadius: BorderRadius.circular(30),
+            borderSide: const BorderSide(color: Colors.red)),
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30), borderSide: const BorderSide(color: Colors.red)),
+            borderRadius: BorderRadius.circular(30),
+            borderSide: const BorderSide(color: Colors.red)),
         disabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30), borderSide: const BorderSide(color: Colors.red)),
+            borderRadius: BorderRadius.circular(30),
+            borderSide: const BorderSide(color: Colors.red)),
         fillColor: Colors.grey.shade300,
         filled: true,
         prefixIcon: prefixIcon,
@@ -384,7 +422,8 @@ class NotFoundOffers extends StatelessWidget {
 }
 
 class RequestOfferCard extends StatelessWidget {
-  const RequestOfferCard({super.key, required this.model, this.isHistory = false});
+  const RequestOfferCard(
+      {super.key, required this.model, this.isHistory = false});
   final GetRequestsForLoadingModel model;
   final bool isHistory;
   @override
@@ -393,17 +432,20 @@ class RequestOfferCard extends StatelessWidget {
       listener: (context, state) {
         log(state.toString(), name: "loadingState");
         if (state is SuccessAcceptState) {
-          showSuccessMessage(context, "The request has been successfully approved.".tr());
+          showSuccessMessage(
+              context, "The request has been successfully approved.".tr());
           context.read<GetAllRequestByMyTripCubit>().getAllRequest();
           context.pop();
         }
         if (state is SuccessDeclineState) {
-          showSuccessMessage(context, "The request was successfully rejected.".tr());
+          showSuccessMessage(
+              context, "The request was successfully rejected.".tr());
           context.read<GetAllRequestByMyTripCubit>().getAllRequest();
         }
         if (state is SuccessCompleteTripState) {
           showSuccessMessage(context, "Trip is completed".tr());
           context.read<GetAllRequestByMyTripCubit>().getAllRequest();
+          context.read<ShippingCubit>().getBannerData();
         }
         // if (state is SuccessCancelState) {
         //   showSuccessMessage(context, "تم اغلاق الرحلة بنجاح");
@@ -421,7 +463,9 @@ class RequestOfferCard extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.black38
+                    : Colors.white,
                 border: Border.all(color: AppColors.PRIMARY_COLOR, width: 3),
                 // ignore: prefer_const_literals_to_create_immutables
                 boxShadow: [
@@ -438,12 +482,16 @@ class RequestOfferCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 6),
                       child: Text(
                         isHistory ? "" : "New Offer".tr(),
-                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Text(
                       "${model.price}",
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green),
                     ),
                   ],
                 ),
@@ -459,7 +507,13 @@ class RequestOfferCard extends StatelessWidget {
                       decoration: BoxDecoration(
                           color: Colors.red,
                           image: DecorationImage(
-                            image: NetworkImage(model.driverId?.userId?.userProfile?.profilePictureKey?.mediaKey ?? ""),
+                            image: NetworkImage(model
+                                    .driverId
+                                    ?.userId
+                                    ?.userProfile
+                                    ?.profilePictureKey
+                                    ?.mediaKey ??
+                                ""),
                             fit: BoxFit.cover,
                           ),
                           borderRadius: BorderRadius.circular(15)),
@@ -503,7 +557,8 @@ class RequestOfferCard extends StatelessWidget {
                                 Icons.star,
                                 color: Colors.amber,
                               ),
-                              Text("${model.driverId?.rating?.toStringAsFixed(1)}"),
+                              Text(
+                                  "${model.driverId?.rating?.toStringAsFixed(1)}"),
                               const Text(
                                 "(1)",
                                 style: TextStyle(color: Colors.grey),
@@ -529,9 +584,11 @@ class RequestOfferCard extends StatelessWidget {
                           // padding: EdgeInsets.symmetric(vertical: 0),
                           width: double.infinity,
                           onPressed: () {
-                            context.read<AcceptDeclineTripCubit>().complete(loadingTrip: model.loadingTripId ?? "");
+                            context.read<AcceptDeclineTripCubit>().complete(
+                                loadingTrip: model.loadingTripId ?? "");
                           },
-                          style: Styles.mediumText(fontSize: 28, color: Colors.white),
+                          style: Styles.mediumText(
+                              fontSize: 28, color: Colors.white),
                           label: "Complete Trip".tr(),
                           // backgroundColor: Colors.red,
                         )
@@ -544,9 +601,13 @@ class RequestOfferCard extends StatelessWidget {
                                 // padding: EdgeInsets.symmetric(vertical: 0),
                                 width: double.infinity,
                                 onPressed: () {
-                                  context.read<AcceptDeclineTripCubit>().decline(loadingRequestId: model.id ?? "");
+                                  context
+                                      .read<AcceptDeclineTripCubit>()
+                                      .decline(
+                                          loadingRequestId: model.id ?? "");
                                 },
-                                style: Styles.mediumText(fontSize: 28, color: Colors.white),
+                                style: Styles.mediumText(
+                                    fontSize: 28, color: Colors.white),
                                 label: "Decline".tr(),
                                 // backgroundColor: Colors.red,
                               ),
@@ -559,9 +620,12 @@ class RequestOfferCard extends StatelessWidget {
                                 // label: Labels.message,
                                 // icon: Icons.message,
                                 backColor: AppColors.PRIMARY_COLOR,
-                                style: Styles.mediumText(fontSize: 28, color: Colors.white),
+                                style: Styles.mediumText(
+                                    fontSize: 28, color: Colors.white),
                                 onPressed: () {
-                                  context.read<AcceptDeclineTripCubit>().accept(loadingRequestId: model.id ?? "");
+                                  context
+                                      .read<AcceptDeclineTripCubit>()
+                                      .accept(loadingRequestId: model.id ?? "");
                                 },
                                 label: "Accept".tr(),
                               ),
@@ -575,21 +639,27 @@ class RequestOfferCard extends StatelessWidget {
                   BlocBuilder<CallMessageCubit, ShippingState>(
                     builder: (context, state) {
                       if (state is FailureShippingState) {
-                        log(getFailureMessage(state.failure, context), name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                        log(getFailureMessage(state.failure, context),
+                            name: "lskdjflskdjfslkdjfslkdjfslkdjf");
                       }
-                      log(state.toString(), name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                      log(state.toString(),
+                          name: "lskdjflskdjfslkdjfslkdjfslkdjf");
                       if (state is SuccessGetCallMessageState) {
-                        log(state.data.toString(), name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                        log(state.data.toString(),
+                            name: "lskdjflskdjfslkdjfslkdjfslkdjf");
                         return Row(
                           children: [
                             Expanded(
                               child: AppButton(
-                                label: Labels.call,
+                                label: "Call".tr(),
                                 color: Colors.white,
                                 icon: Icons.call,
-                                backColor: state.data ? AppColors.PRIMARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                                backColor: state.data
+                                    ? AppColors.PRIMARY_COLOR
+                                    : AppColors.DARK_GRAY_COLOR,
                                 onPressed: () {},
-                                style: Styles.mediumText(fontSize: 28, color: Colors.white),
+                                style: Styles.mediumText(
+                                    fontSize: 28, color: Colors.white),
                               ),
                             ),
                             const Sizer(
@@ -597,10 +667,13 @@ class RequestOfferCard extends StatelessWidget {
                             ),
                             Expanded(
                               child: AppButton(
-                                label: Labels.message,
+                                label: "Message".tr(),
                                 icon: Icons.message,
-                                backColor: state.data ? AppColors.PRIMARY_COLOR : AppColors.DARK_GRAY_COLOR,
-                                style: Styles.mediumText(fontSize: 15, color: Colors.white),
+                                backColor: state.data
+                                    ? AppColors.PRIMARY_COLOR
+                                    : AppColors.DARK_GRAY_COLOR,
+                                style: Styles.mediumText(
+                                    fontSize: 15, color: Colors.white),
                                 onPressed: () {},
                               ),
                             ),
@@ -609,10 +682,11 @@ class RequestOfferCard extends StatelessWidget {
                             ),
                             Expanded(
                               child: AppButton(
-                                label: Labels.report,
+                                label: "Report".tr(),
                                 icon: Icons.report,
                                 backColor: Colors.red,
-                                style: Styles.mediumText(fontSize: 28, color: Colors.white),
+                                style: Styles.mediumText(
+                                    fontSize: 28, color: Colors.white),
                                 onPressed: () {
                                   // tripCubit.report(
                                   //     loadingTripId: widget.model.id ?? "");
@@ -638,12 +712,13 @@ class RequestOfferCard extends StatelessWidget {
                           children: [
                             Expanded(
                               child: AppButton(
-                                label: Labels.call,
+                                label: "Call".tr(),
                                 color: Colors.white,
                                 icon: Icons.call,
                                 backColor: AppColors.DARK_GRAY_COLOR,
                                 onPressed: () {
-                                  launchUrlString("tel://${model.driverId?.phone}");
+                                  launchUrlString(
+                                      "tel://${model.driverId?.phone}");
                                   // serviceLocator<SubscriptionController>()
                                   //     .showSubscriptionPlans(
                                   //         subCategoryId:
@@ -651,7 +726,8 @@ class RequestOfferCard extends StatelessWidget {
                                   // .showActiveSubscriptionAmounts(
                                   //     walletType: WalletTypes.balance);
                                 },
-                                style: Styles.mediumText(fontSize: 28, color: Colors.white),
+                                style: Styles.mediumText(
+                                    fontSize: 28, color: Colors.white),
                               ),
                             ),
                             const Sizer(
@@ -659,10 +735,11 @@ class RequestOfferCard extends StatelessWidget {
                             ),
                             Expanded(
                               child: AppButton(
-                                label: Labels.message,
+                                label: "Message".tr(),
                                 icon: Icons.message,
                                 backColor: AppColors.DARK_GRAY_COLOR,
-                                style: Styles.mediumText(fontSize: 28, color: Colors.white),
+                                style: Styles.mediumText(
+                                    fontSize: 28, color: Colors.white),
                                 onPressed: () {
                                   // serviceLocator<SubscriptionController>()
                                   //     .showSubscriptionPlans(
@@ -676,10 +753,11 @@ class RequestOfferCard extends StatelessWidget {
                             ),
                             Expanded(
                               child: AppButton(
-                                label: Labels.report,
+                                label: "Report".tr(),
                                 icon: Icons.report,
                                 backColor: Colors.red,
-                                style: Styles.mediumText(fontSize: 28, color: Colors.white),
+                                style: Styles.mediumText(
+                                    fontSize: 28, color: Colors.white),
                                 onPressed: () {
                                   showBottomSheet(
                                     context: context,
@@ -706,7 +784,8 @@ class RequestOfferCard extends StatelessWidget {
                   onTap: () {
                     //هتروح لي صفحه subscription
                     serviceLocator<SubscriptionController>()
-                        .showSubscriptionPlans(subCategoryId: "62c8bab18e28a58a3edf580d");
+                        .showSubscriptionPlans(
+                            subCategoryId: "62c8bab18e28a58a3edf580d");
                   },
                   child: Text(
                     "Subscribe to contact to the driver".tr(),

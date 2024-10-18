@@ -102,7 +102,7 @@ class MyAdsRepoImpl implements MyAdsRepo {
 
   @override
   Future<Either<Failure, bool>> deleteMyInstallment({required String id}) {
-   return _remoteDatasource.deleteMyInstallment(id: id);
+    return _remoteDatasource.deleteMyInstallment(id: id);
   }
 
   @override
@@ -111,7 +111,8 @@ class MyAdsRepoImpl implements MyAdsRepo {
   }
 
   @override
-  Future<Either<Failure, List<GetAllCountsTripJoinEntity>>> getAllCountsTripJoin(Params params) {
+  Future<Either<Failure, List<GetAllCountsTripJoinEntity>>>
+      getAllCountsTripJoin(Params params) {
     return _remoteDatasource.getAllCountsTripJoin(params);
   }
 

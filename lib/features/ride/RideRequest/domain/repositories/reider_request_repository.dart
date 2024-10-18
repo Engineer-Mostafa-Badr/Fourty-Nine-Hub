@@ -9,6 +9,8 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_inf
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/offer_data_model/offer_data_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rider_register_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_response_model/trip_response_model.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 
 class ReiderRequestRepository {
   final RiderDataSource dataSource;
@@ -179,14 +181,47 @@ class ReiderRequestRepository {
       "Ride:sendOffer",
       (data) {
         OfferDataModel model = OfferDataModel.fromJson(jsonDecode(data));
-        
+
         onData(model);
         log("llllllllllllllllllllllllllllllllllllllllllllllllllll");
         log(jsonDecode(data).toString(),
             name: "llllllllllllllllllllllllllllllllllllllllllllllllllll");
-        
       },
     );
     // return data;
   }
+
+  List<TripResponseModel> getAllTripRider() {
+    List<TripResponseModel> list = [];
+    socket.socket.emit("Ride:getAllTrip");
+    socket.socket.on(
+      "Ride:getAllTrip",
+      (data) {
+        log(data.toString(), name: "lksdjfkdjjdjdjdjdjdjdjdjdjjddddd");
+        List response = jsonDecode(extractTextAfterSymbol(data, '[')) ?? [];
+        for (var element in response) {
+          list.add(TripResponseModel.fromJson(element));
+        }
+      },
+    );
+    return list;
+  }
+
+  String extractTextAfterSymbol(String text, String symbol) {
+    int startIndex = text.indexOf(symbol);
+    if (startIndex != -1) {
+      return text.substring(startIndex);
+    } else {
+      return 'Symbol not found';
+    }
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> expiredTrip() {
+    return dataSource.getExpairedTrip();
+  }
+  Future<List<LatLng>> getRoute({required LatLng start, required LatLng end}) {
+    return dataSource.getRoute(start: start, end: end);
+  }
 }
+
+// Future<Either<Failure, Map<String, dynamic>>>
