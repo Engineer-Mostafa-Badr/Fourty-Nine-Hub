@@ -38,8 +38,7 @@ class _OpenRouteTrackingState extends State<OpenRouteTracking> {
             width: 80.0,
             height: 80.0,
             point: LatLng(userLocation.latitude!, userLocation.longitude!),
-            child:
-                const Icon(Icons.my_location, color: Colors.blue, size: 40.0),
+          builder: (_) => const Icon(Icons.location_on, color: Colors.red, size: 40.0),
           ),
         );
       });
@@ -58,7 +57,7 @@ class _OpenRouteTrackingState extends State<OpenRouteTracking> {
     if (currentLocation == null) return;
 
     final start =
-        LatLng(currentLocation!.latitude!, currentLocation!.longitude!);
+    LatLng(currentLocation!.latitude!, currentLocation!.longitude!);
     final response = await http.get(
       Uri.parse(
           'https://api.openrouteservice.org/v2/directions/driving-car?api_key=$orsApiKey&start=${start.longitude},${start.latitude}&end=${destination.longitude},${destination.latitude}'),
@@ -67,7 +66,7 @@ class _OpenRouteTrackingState extends State<OpenRouteTracking> {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final List<dynamic> coords =
-          data['features'][0]['geometry']['coordinates'];
+      data['features'][0]['geometry']['coordinates'];
       setState(() {
         routePoints =
             coords.map((coord) => LatLng(coord[1], coord[0])).toList();
@@ -76,7 +75,7 @@ class _OpenRouteTrackingState extends State<OpenRouteTracking> {
             width: 80.0,
             height: 80.0,
             point: destination,
-            child: const Icon(Icons.location_on, color: Colors.red, size: 40.0),
+            builder: (_) => const Icon(Icons.location_on, color: Colors.red, size: 40.0),
           ),
         );
       });
@@ -93,7 +92,7 @@ class _OpenRouteTrackingState extends State<OpenRouteTracking> {
           width: 80.0,
           height: 80.0,
           point: point,
-          child: const Icon(Icons.location_on, color: Colors.red, size: 40.0),
+          builder: (_) => const Icon(Icons.location_on, color: Colors.red, size: 40.0),
         ),
       );
     });
@@ -109,33 +108,33 @@ class _OpenRouteTrackingState extends State<OpenRouteTracking> {
       body: currentLocation == null
           ? const Center(child: CircularProgressIndicator())
           : FlutterMap(
-              mapController: mapController,
-              options: MapOptions(
-                initialCenter: LatLng(
-                    currentLocation!.latitude!, currentLocation!.longitude!),
-                initialZoom: 15.0,
-                onTap: (tapPosition, point) => _addDestinationMarker(point),
+        mapController: mapController,
+        options: MapOptions(
+          // initialCenter: LatLng(
+          //     currentLocation!.latitude!, currentLocation!.longitude!),
+          // initialZoom: 15.0,
+          onTap: (tapPosition, point) => _addDestinationMarker(point),
+        ),
+        children: [
+          TileLayer(
+            urlTemplate:
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            subdomains: const ['a', 'b', 'c'],
+          ),
+          MarkerLayer(
+            markers: markers,
+          ),
+          PolylineLayer(
+            polylines: [
+              Polyline(
+                points: routePoints,
+                strokeWidth: 4.0,
+                color: Colors.blue,
               ),
-              children: [
-                TileLayer(
-                  urlTemplate:
-                      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                  subdomains: const ['a', 'b', 'c'],
-                ),
-                MarkerLayer(
-                  markers: markers,
-                ),
-                PolylineLayer(
-                  polylines: [
-                    Polyline(
-                      points: routePoints,
-                      strokeWidth: 4.0,
-                      color: Colors.blue,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            ],
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (currentLocation != null) {

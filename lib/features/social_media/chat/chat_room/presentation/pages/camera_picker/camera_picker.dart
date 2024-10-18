@@ -20,13 +20,9 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:pro_image_editor/pro_image_editor.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:image/image.dart' as img;
 import 'package:video_player/video_player.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 // import 'package:video_trimmer/video_trimmer.dart';
 
 part 'media_slider.dart';

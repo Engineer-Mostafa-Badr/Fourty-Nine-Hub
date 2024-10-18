@@ -288,13 +288,9 @@ class EndPoints {
       '/health/book-appointment/reject/$appointmentId';
   static const getAllDoctorReservations =
       '/health/dashboard/number-of-reservations';
-  static String doctorAcceptAppointment(String appointmentId) =>
-      '/health/book-appointment/approve/$appointmentId';
 
-  static String doctorRejectAppointment(String appointmentId) =>
-      '/health/book-appointment/reject/$appointmentId';
-  static const getAllDoctorReservations =
-      '/health/dashboard/number-of-reservations';
+
+
   static const isDoctorApproval = '/health/check-doctor-approval';
   static const getDoctorProfile = '/health/doctor-profile';
   static const updateDoctorProfilePhoto = '/health/doctor/picture';
@@ -902,6 +898,5 @@ class EndPoints {
 
   static String joinTripCarPool = '/carpool/joinCompleteBus';
   static String createCarPool = '/carpool/create';
-  static String getRequest(String id) =>
-      '/ride/come-with-you/trip/requests//$id';
+
 }

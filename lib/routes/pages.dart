@@ -31,7 +31,6 @@ import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widg
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/map_box_location_test.dart';
 import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubits/cubit/create_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
-import 'package:fourtyninehub/features/carpool/presentation/views/carpool_view.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
@@ -323,10 +322,7 @@ class AppPages {
                 ContactsView(
                   contactsViewParams: state.extra as ContactsViewParams,
                 ),
-            builder: (context, state) =>
-                ContactsView(
-                  contactsViewParams: state.extra as ContactsViewParams,
-                ),
+
           ),
           GoRoute(
             path: Paths.ARCHIVEDCHATS,
@@ -1767,8 +1763,6 @@ class AppPages {
                 BlocProvider<GetPriceCarpoolCubit>(
                   create: (context) => GetPriceCarpoolCubit(
                       getPriceCarpoolUsecase: serviceLocator()),
-                  create: (context) => DestinationLocationCubit(
-                      fetchLocationCordinatesUseCase: serviceLocator()),
                 ),
                 BlocProvider<CreateCarPoolCubit>(
                   create: (context) => CreateCarPoolCubit(
